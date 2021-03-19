@@ -63,7 +63,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 color: Theme.of(context).accentColor,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
+                  child: SelectableText(
                     widget._unusedAddress,
                     style: TextStyle(color: Colors.white),
                   ),
