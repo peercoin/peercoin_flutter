@@ -1,5 +1,5 @@
 # peercoin-flutter
-Wallet for Peercoin and Peercoin Testnet.
+Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.
 **Early alpha**. 
 Basic testing successfull on iOS 14.4 and Android 10. 
 **Use at own risk.**
