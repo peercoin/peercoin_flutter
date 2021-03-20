@@ -364,8 +364,7 @@ class ActiveWallets with ChangeNotifier {
 
         final intermediate = tx.build();
         var number = ((intermediate.txSize) / 1000 * coin.feePerKb)
-            .toStringAsFixed(
-                coin.fractions - 1); //yep -1 is a bit of a magic number here...
+            .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * 1000000;
         int requiredFeeInSatoshis = asDouble.toInt();
         print("fee $requiredFeeInSatoshis, size: ${intermediate.txSize}");
@@ -376,7 +375,10 @@ class ActiveWallets with ChangeNotifier {
         //generate new wallet addr
         await generateUnusedAddress(identifier);
         return {
-          "fee": requiredFeeInSatoshis,
+          "fee": dryRun == false
+              ? requiredFeeInSatoshis
+              : requiredFeeInSatoshis +
+                  0, //TODO 10 bytes added here because tx virtualsize out of bitcoin_flutter varies by 1 byte
           "hex": _hex,
           "id": intermediate.getId(),
           "destroyedChange": _destroyedChange
