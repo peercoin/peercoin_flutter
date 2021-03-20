@@ -378,7 +378,7 @@ class ActiveWallets with ChangeNotifier {
           "fee": dryRun == false
               ? requiredFeeInSatoshis
               : requiredFeeInSatoshis +
-                  0, //TODO 10 bytes added here because tx virtualsize out of bitcoin_flutter varies by 1 byte
+                  10, //TODO 10 satoshis added here because tx virtualsize out of bitcoin_flutter varies by 1 byte
           "hex": _hex,
           "id": intermediate.getId(),
           "destroyedChange": _destroyedChange
