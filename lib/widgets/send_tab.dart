@@ -256,10 +256,6 @@ class _SendTabState extends State<SendTab> {
                                                   "outFees":
                                                       _txFee + _destroyedChange
                                                 });
-                                            //pop message
-                                            Navigator.of(context).pop();
-                                            //navigate back to tx list
-                                            widget.changeIndex(1);
                                             //broadcast
                                             Provider.of<ElectrumConnection>(
                                                     context,
@@ -267,6 +263,10 @@ class _SendTabState extends State<SendTab> {
                                                 .broadcastTransaction(
                                                     _buildResult["hex"],
                                                     _buildResult["id"]);
+                                            //pop message
+                                            Navigator.of(context).pop();
+                                            //navigate back to tx list
+                                            widget.changeIndex(1);
                                           } catch (e) {
                                             print("error $e");
                                             ScaffoldMessenger.of(context)

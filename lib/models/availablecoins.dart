@@ -19,7 +19,8 @@ class AvailableCoins {
             wif: 0xb7),
         fractions: 6,
         minimumTxValue: 10000,
-        feePerKb: 0.01),
+        feePerKb: 0.01,
+        explorerTxDetailUrl: "https://blockbook.peercoin.net/tx/"),
     "peercoinTestnet": Coin(
         name: "peercoinTestnet",
         displayName: "Peercoin Testnet",
@@ -36,7 +37,8 @@ class AvailableCoins {
             wif: 0xef),
         fractions: 6,
         minimumTxValue: 10000,
-        feePerKb: 0.01)
+        feePerKb: 0.01,
+        explorerTxDetailUrl: "https://tblockbook.peercoin.net/tx/"),
   };
 
   Map<String, Coin> get availableCoins {

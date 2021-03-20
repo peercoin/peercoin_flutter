@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
+import 'package:peercoin/screens/transaction_details.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class TransactionList extends StatelessWidget {
@@ -23,6 +24,11 @@ class TransactionList extends StatelessWidget {
 
                 return Card(
                   child: ListTile(
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(TransactionDetails.routeName, arguments: [
+                      _flippedTx[i],
+                      ModalRoute.of(context).settings.arguments
+                    ]),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
