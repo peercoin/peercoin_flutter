@@ -10,6 +10,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/screens/qrcodescanner.dart';
+import 'package:peercoin/screens/transaction_details.dart';
 import 'package:peercoin/screens/wallet_home.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Peercoin Testnet Wallet',
+        title: 'Peercoin',
         theme: ThemeData(
           primaryColor: Color.fromRGBO(60, 176, 84, 1),
           accentColor: Colors.grey,
@@ -76,7 +77,8 @@ class MyApp extends StatelessWidget {
           WalletListScreen.routeName: (ctx) => WalletListScreen(),
           WalletHomeScreen.routeName: (ctx) => WalletHomeScreen(),
           NewWalletScreen.routeName: (ctx) => NewWalletScreen(),
-          QRScanner.routeName: (ctx) => QRScanner()
+          QRScanner.routeName: (ctx) => QRScanner(),
+          TransactionDetails.routeName: (ctx) => TransactionDetails()
         },
       ),
     );
