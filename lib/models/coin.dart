@@ -12,6 +12,7 @@ class Coin {
   final int fractions;
   final int minimumTxValue;
   final double feePerKb;
+  final String explorerTxDetailUrl;
 
   Coin({
     @required this.name,
@@ -24,5 +25,6 @@ class Coin {
     @required this.fractions,
     @required this.minimumTxValue,
     @required this.feePerKb,
+    @required this.explorerTxDetailUrl,
   });
 }
