@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Peercoin Testnet Wallet',
+        title: 'Peercoin',
         theme: ThemeData(
           primaryColor: Color.fromRGBO(60, 176, 84, 1),
           accentColor: Colors.grey,

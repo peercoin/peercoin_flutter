@@ -24,9 +24,11 @@ class TransactionList extends StatelessWidget {
 
                 return Card(
                   child: ListTile(
-                    onTap: () => Navigator.of(context).pushNamed(
-                        TransactionDetails.routeName,
-                        arguments: _flippedTx[i]),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(TransactionDetails.routeName, arguments: [
+                      _flippedTx[i],
+                      ModalRoute.of(context).settings.arguments
+                    ]),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
