@@ -9,7 +9,7 @@ Basic testing successfull on iOS 14.4 and Android 10.
 
 ## Development
 This repository currently relies on a fork of bitcoin_flutter, which can be found here: 
-[github.com/peercoin/bitcoin_flutter](github.com/peercoin/bitcoin_flutter "github.com/peercoin/bitcoin_flutter")
+[peercoin/bitcoin_flutter](https://github.com/peercoin/bitcoin_flutter "github.com/peercoin/bitcoin_flutter")
 
 The original library is not compatible, due to transaction timestamp incompability. 
 
