@@ -56,7 +56,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 40),
             Center(
               child: SelectableText(
                 seed,
@@ -66,7 +66,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                     wordSpacing: 10),
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 40),
             Text(
               "Make sure to keep it safe.\nTreat it like a password.\nThose 12 simple words give full access to your wallet.",
               style: TextStyle(color: Colors.white),

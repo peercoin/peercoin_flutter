@@ -3,7 +3,7 @@ description: A new Peercoin wallet.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.1+1
+version: 0.1.2+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -26,7 +26,7 @@ dependencies:
   web_socket_channel: ^1.2.0
   crypto: ^2.0.3
   bip39: ^1.0.3
-  bitcoin_flutter: 
+  bitcoin_flutter:
     path: ../bitcoin_flutter
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
@@ -61,14 +61,13 @@ flutter_icons:
   name: "Peercoin"
 
 flutter_native_splash:
-    color: "#FFFFFF"
-    image: assets/icon/ppc-icon-256.png
+  color: "#FFFFFF"
+  image: assets/icon/ppc-icon-256.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

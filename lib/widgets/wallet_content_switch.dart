@@ -25,8 +25,7 @@ class WalletContentSwitch extends StatelessWidget {
       case 1:
         return TransactionList(walletTransactions);
       case 2:
-        return Expanded(
-            child: SingleChildScrollView(child: SendTab(changeIndex)));
+        return SendTab(changeIndex);
       default:
         return Container();
     }
