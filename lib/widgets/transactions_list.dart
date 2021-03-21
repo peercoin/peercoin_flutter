@@ -68,18 +68,21 @@ class TransactionList extends StatelessWidget {
                                   ? FontWeight.w500
                                   : FontWeight.w300,
                             ),
+                            textScaleFactor: 0.9,
                           )
                         ]),
                     title: Center(
                       child: Text(
                         _flippedTx[i].txid,
                         overflow: TextOverflow.ellipsis,
+                        textScaleFactor: 1,
                       ),
                     ),
                     subtitle: Center(
                       child: Text(
                         _flippedTx[i].address,
                         overflow: TextOverflow.ellipsis,
+                        textScaleFactor: 1,
                       ),
                     ),
                     trailing: Column(
