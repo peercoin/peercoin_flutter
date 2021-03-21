@@ -133,7 +133,7 @@ class _TransactionListState extends State<TransactionList> {
                                       ? FontWeight.w500
                                       : FontWeight.w300,
                                 ),
-                                textScaleFactor: 0.9,
+                                textScaleFactor: 0.8,
                               )
                             ]),
                         title: Center(
