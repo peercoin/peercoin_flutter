@@ -39,16 +39,19 @@ class _TransactionListState extends State<TransactionList> {
           spacing: 8.0,
           children: <Widget>[
             ChoiceChip(
-              label: Text('In'),
+              visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
+              label: Container(child: Text('In')),
               selected: _filterChoice == "in",
               onSelected: (_) => _handleSelect("in"),
             ),
             ChoiceChip(
+              visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label: Text('All'),
               selected: _filterChoice == "all",
               onSelected: (_) => _handleSelect("all"),
             ),
             ChoiceChip(
+              visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label: Text('Out'),
               selected: _filterChoice == "out",
               onSelected: (_) => _handleSelect("out"),
