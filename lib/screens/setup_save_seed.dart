@@ -41,29 +41,38 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30),
         color: Theme.of(context).primaryColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset("assets/icon/ppc-icon-white-48.png"),
+            SizedBox(height: 30),
             Container(
               alignment: Alignment.center,
               width: double.infinity,
               child: const Text(
-                "Save your seed",
+                "This is your wallet seed:",
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.all(50),
-                child: SelectableText(
-                  seed,
-                  style: TextStyle(color: Colors.white70, wordSpacing: 10),
-                ),
+            SizedBox(height: 30),
+            Center(
+              child: SelectableText(
+                seed,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    wordSpacing: 10),
               ),
             ),
+            SizedBox(height: 30),
+            Text(
+              "Make sure to keep it safe.\nTreat it like a password.\nThose 12 simple words give full access to your wallet.",
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 30),
             sharedYet
                 ? TextButton(
                     onPressed: () async {
@@ -74,11 +83,17 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       Navigator.popAndPushNamed(
                           context, WalletListScreen.routeName);
                     },
-                    child: const Text("Continue"),
+                    child: const Text(
+                      "Continue",
+                      style: TextStyle(fontSize: 18),
+                    ),
                   )
                 : TextButton(
                     onPressed: () => shareSeed(seed),
-                    child: const Text("Export"),
+                    child: const Text(
+                      "Export now",
+                      style: TextStyle(fontSize: 18),
+                    ),
                   )
           ],
         ),

@@ -27,23 +27,32 @@ class _SetupScreenState extends State<SetupScreen> {
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              child: const Text(
-                "Setup",
-                style: TextStyle(color: Colors.white),
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/icon/ppc-icon-white-48.png"),
+              SizedBox(height: 60),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                child: const Text(
+                  "Create all the necessary files to get started with your wallet.",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            TextButton(
-              onPressed: () => {createWallet(context)},
-              child: _loading ? LoadingIndicator() : Text("Create Wallet"),
-            )
-          ],
+              SizedBox(height: 30),
+              TextButton(
+                onPressed: () => {createWallet(context)},
+                child: _loading
+                    ? LoadingIndicator()
+                    : Text(
+                        "Create Wallet",
+                        style: TextStyle(fontSize: 18),
+                      ),
+              )
+            ],
+          ),
         ),
       ),
     );

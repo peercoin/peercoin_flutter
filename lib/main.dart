@@ -64,6 +64,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Peercoin',
         theme: ThemeData(
+          textTheme: Theme.of(context).textTheme.apply(
+                fontSizeFactor: 1.1,
+                fontSizeDelta: 2.0,
+              ),
           primaryColor: Color.fromRGBO(60, 176, 84, 1),
           accentColor: Colors.grey,
           errorColor: Colors.red,

@@ -177,7 +177,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     Text(
                       _wallet.letterCode,
                       style: TextStyle(
-                          fontSize: 24, color: Theme.of(context).accentColor),
+                          fontSize: 26, color: Theme.of(context).accentColor),
                     ),
                     Column(
                       children: [
@@ -186,7 +186,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                           child: Text(
                             (_wallet.balance / 1000000).toString(),
                             style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                                fontSize: 26, fontWeight: FontWeight.bold),
                           ),
                         ),
                         _wallet.unconfirmedBalance > 0
@@ -194,7 +194,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                                 (_wallet.unconfirmedBalance / 1000000)
                                     .toString(),
                                 style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 14,
                                     color: Theme.of(context).accentColor),
                               )
                             : Container(),
@@ -225,10 +225,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
                                             ),
                                           ),
                                         ),
-                                        SelectableText(
-                                          _unusedAddress,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: FittedBox(
+                                            child: SelectableText(
+                                              _unusedAddress,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
                                         )
                                       ]))
                                     ]);
@@ -254,7 +259,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                             "connected",
                             style: TextStyle(
                                 color: Theme.of(context).accentColor,
-                                fontSize: 10),
+                                fontSize: 12),
                           ),
                         ],
                       )
