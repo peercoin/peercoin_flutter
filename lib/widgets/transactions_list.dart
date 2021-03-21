@@ -10,6 +10,7 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<WalletTransaction> _flippedTx = _walletTransactions.reversed.toList();
     return Expanded(
       child: _walletTransactions.length == 0
           ? Center(
@@ -18,10 +19,7 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemCount: _walletTransactions.length,
               itemBuilder: (_, i) {
-                List<WalletTransaction> _flippedTx =
-                    _walletTransactions.reversed.toList();
                 int currentConfirmations = _flippedTx[i].confirmations;
-
                 return Card(
                   child: ListTile(
                     onTap: () => Navigator.of(context)
@@ -42,8 +40,8 @@ class TransactionList extends StatelessWidget {
                               duration: Duration(milliseconds: 500),
                               child: _flippedTx[i].broadCasted == false
                                   ? Text("?",
+                                      textScaleFactor: 0.9,
                                       style: TextStyle(
-                                          fontSize: 16,
                                           color: Theme.of(context).accentColor))
                                   : CircularStepProgressIndicator(
                                       totalSteps: 6,
