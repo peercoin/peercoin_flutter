@@ -67,15 +67,12 @@ class _TransactionListState extends State<TransactionList> {
                 onHorizontalDragEnd: (dragEndDetails) {
                   if (dragEndDetails.primaryVelocity < 0) {
                     //left swipe
-                    print("left swipe");
-
                     if (_filterChoice == "out") {
                       _handleSelect("all");
                     } else if (_filterChoice == "all") {
                       _handleSelect("in");
                     }
                   } else if (dragEndDetails.primaryVelocity > 0) {
-                    print("right swipe");
                     //right swipe
                     if (_filterChoice == "in") {
                       _handleSelect("all");
