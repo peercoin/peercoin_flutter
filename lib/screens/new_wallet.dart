@@ -16,7 +16,7 @@ Map<String, Coin> availableCoins = AvailableCoins().availableCoins;
 List activeCoins = [];
 
 class _NewWalletScreenState extends State<NewWalletScreen> {
-  String _coin;
+  String _coin = "";
 
   addWallet(ctx) async {
     try {
@@ -26,7 +26,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          "Adding wallet failed!",
+          _coin == "" ? "Please select a coin" : "Adding wallet failed!",
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),

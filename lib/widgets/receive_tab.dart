@@ -53,19 +53,45 @@ class _ReceiveTabState extends State<ReceiveTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              QrImage(
-                data: _qrString ?? widget._unusedAddress,
-                size: MediaQuery.of(context).size.width * 0.3,
-                padding: EdgeInsets.all(1),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SimpleDialog(children: [
+                        Center(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.33,
+                            width: MediaQuery.of(context).size.width * 1,
+                            child: Center(
+                              child: QrImage(
+                                data: _qrString ?? widget._unusedAddress,
+                              ),
+                            ),
+                          ),
+                        )
+                      ]);
+                    },
+                  );
+                },
+                child: QrImage(
+                  data: _qrString ?? widget._unusedAddress,
+                  size: MediaQuery.of(context).size.width * 0.3,
+                  padding: EdgeInsets.all(1),
+                ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Container(
-                color: Theme.of(context).accentColor,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SelectableText(
-                    widget._unusedAddress,
-                    style: TextStyle(color: Colors.white),
+                  child: FittedBox(
+                    child: SelectableText(
+                      widget._unusedAddress,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),

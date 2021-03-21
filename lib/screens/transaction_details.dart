@@ -96,6 +96,7 @@ class TransactionDetails extends StatelessWidget {
               SelectableText(_tx.confirmations.toString())
             ],
           ),
+          SizedBox(height: 20),
           Center(
             child: TextButton.icon(
                 onPressed: () => _launchURL(baseUrl + "${_tx.txid}"),
