@@ -21,4 +21,3 @@ The original library is not compatible, due to transaction timestamp incompabili
 
 **Update splash screen**
 ` flutter pub run flutter_native_splash:create`
-
