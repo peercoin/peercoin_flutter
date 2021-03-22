@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:peercoin/app_localizations.dart';
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -19,11 +21,34 @@ class _WalletListScreenState extends State<WalletListScreen> {
   bool _initial = true;
   ActiveWallets _activeWallets;
 
+  Future<void> localAuth(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    final didAuthenticate = await localAuth.authenticate(
+        biometricOnly: true, localizedReason: 'Please authenticate');
+    if (didAuthenticate) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.init();
+      await screenLock(
+        context: context,
+        correctString: '1234',
+        canCancel: false,
+        customizedButtonChild: Icon(
+          Icons.fingerprint,
+        ),
+        customizedButtonTap: () async {
+          await localAuth(context);
+        },
+        didOpened: () async {
+          await localAuth(context);
+        },
+      );
       setState(() {
         _initial = false;
       });
@@ -37,7 +62,9 @@ class _WalletListScreenState extends State<WalletListScreen> {
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
-        title: Center(child: Text(AppLocalizations.instance.translate('wallets_list',null))),
+        title: Center(
+            child: Text(
+                AppLocalizations.instance.translate('wallets_list', null))),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -68,7 +95,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
                       if (snapshot.data == null || snapshot.data.isEmpty) {
                         return Column(children: [
                           SizedBox(height: 30),
-                          Text(AppLocalizations.instance.translate('wallets_none',null)),
+                          Text(AppLocalizations.instance
+                              .translate('wallets_none', null)),
                           SizedBox(height: 30)
                         ]);
                       }
