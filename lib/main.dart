@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/models/walletaddress.dart';
-import 'package:peercoin/models/wallettransaction.dart';
-import 'package:peercoin/models/walletutxo.dart';
-import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/providers/electrumconnection.dart';
-import 'package:peercoin/screens/new_wallet.dart';
-import 'package:peercoin/screens/qrcodescanner.dart';
-import 'package:peercoin/screens/transaction_details.dart';
-import 'package:peercoin/screens/wallet_home.dart';
-import 'package:provider/provider.dart';
+import 'package:peercoin/models/notification.dart';
+import 'package:peercoin/screens/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+
+import './models/coinwallet.dart';
+import './models/walletaddress.dart';
+import './models/wallettransaction.dart';
+import './models/walletutxo.dart';
+import './providers/activewallets.dart';
+import './providers/electrumconnection.dart';
 import './providers/encryptedbox.dart';
 import './providers/options.dart';
+import './screens/new_wallet.dart';
+import './screens/qrcodescanner.dart';
+import './screens/transaction_details.dart';
+import './screens/wallet_home.dart';
 import './screens/setup_save_seed.dart';
-import 'screens/setup.dart';
-import 'screens/wallet_list.dart';
+import './screens/setup.dart';
+import './screens/wallet_list.dart';
 
 bool setupFinished;
 
@@ -34,8 +37,37 @@ void main() async {
   Hive.registerAdapter(WalletTransactionAdapter());
   Hive.registerAdapter(WalletAddressAdapter());
   Hive.registerAdapter(WalletUtxoAdapter());
-  //
 
+  //init notifications
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@drawable/splash');
+  final IOSInitializationSettings initializationSettingsIOS =
+      IOSInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+  });
+
+  //run
   runApp(MyApp());
 }
 
@@ -82,7 +114,8 @@ class MyApp extends StatelessWidget {
           WalletHomeScreen.routeName: (ctx) => WalletHomeScreen(),
           NewWalletScreen.routeName: (ctx) => NewWalletScreen(),
           QRScanner.routeName: (ctx) => QRScanner(),
-          TransactionDetails.routeName: (ctx) => TransactionDetails()
+          TransactionDetails.routeName: (ctx) => TransactionDetails(),
+          AppSettingsScreen.routeName: (ctx) => AppSettingsScreen()
         },
       ),
     );
