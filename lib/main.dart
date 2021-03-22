@@ -1,4 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/models/coinwallet.dart';
+import 'package:peercoin/models/walletaddress.dart';
+import 'package:peercoin/models/wallettransaction.dart';
+import 'package:peercoin/models/walletutxo.dart';
+import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/screens/new_wallet.dart';
+import 'package:peercoin/screens/qrcodescanner.dart';
+import 'package:peercoin/screens/transaction_details.dart';
+import 'package:peercoin/screens/wallet_home.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -95,6 +110,15 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Peercoin',
+        supportedLocales: [
+          const Locale('en', 'US'), // default
+          const Locale('nl', 'NL'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          //GlobalWidgetsLocalizations.delegate,
+        ],
         theme: ThemeData(
           textTheme: Theme.of(context).textTheme.apply(
                 fontSizeFactor: 1.1,

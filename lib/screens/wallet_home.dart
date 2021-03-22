@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
@@ -256,7 +257,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                             color: Theme.of(context).primaryColor,
                           ),
                           Text(
-                            "connected",
+                            AppLocalizations.instance.translate('wallet_connected',null),
                             style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontSize: 12),

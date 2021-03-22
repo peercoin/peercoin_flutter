@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -187,7 +188,7 @@ class _SendTabState extends State<SendTab> {
                                   _totalValue - _txFee + _destroyedChange;
                             }
                             return SimpleDialog(
-                              title: const Text('Please confirm transaction'),
+                              title: Text(AppLocalizations.instance.translate('send_confirm_transaction',null)),
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -197,7 +198,7 @@ class _SendTabState extends State<SendTab> {
                                       RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
-                                          text: 'Transferring ',
+                                          text: AppLocalizations.instance.translate('send_transferring',null),
                                           style: DefaultTextStyle.of(context)
                                               .style,
                                           children: <TextSpan>[
@@ -207,7 +208,7 @@ class _SendTabState extends State<SendTab> {
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            TextSpan(text: ' to '),
+                                            TextSpan(text: AppLocalizations.instance.translate('send_to',null)),
                                             TextSpan(
                                                 text: _addressKey
                                                     .currentState.value,
@@ -219,16 +220,16 @@ class _SendTabState extends State<SendTab> {
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                          "Fee: -${_txFee / 1000000} ${_wallet.letterCode}"),
+                                          AppLocalizations.instance.translate('send_fee',{'amount': "${_txFee / 1000000}",'letter_code':"${_wallet.letterCode}"})),
                                       if (_destroyedChange > 0)
                                         Text(
-                                          "Dust -${_destroyedChange / 1000000} ${_wallet.letterCode}",
+                                          AppLocalizations.instance.translate('send_dust',{'amount': "${_destroyedChange / 1000000}",'letter_code':"${_wallet.letterCode}"}),
                                           style: TextStyle(
                                               color:
                                                   Theme.of(context).errorColor),
                                         ),
                                       Text(
-                                          "Total: ${_totalValue / 1000000} ${_wallet.letterCode}",
+                                          AppLocalizations.instance.translate('send_total',{'amount': "${_totalValue / 1000000}",'letter_code':"${_wallet.letterCode}"}),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       SizedBox(height: 20),
@@ -237,7 +238,7 @@ class _SendTabState extends State<SendTab> {
                                           primary:
                                               Theme.of(context).primaryColor,
                                         ),
-                                        label: Text("Confirm & Send"),
+                                        label: Text(AppLocalizations.instance.translate('send_confirm_send',null)),
                                         icon: Icon(Icons.send),
                                         onPressed: () async {
                                           try {
@@ -272,7 +273,7 @@ class _SendTabState extends State<SendTab> {
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                    'Something went wrong, please try again'),
+                                                    AppLocalizations.instance.translate('send_oops',null)),
                                               ),
                                             );
                                           }
@@ -287,11 +288,11 @@ class _SendTabState extends State<SendTab> {
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please resolve errors ... ')));
+                        SnackBar(content: Text(AppLocalizations.instance.translate('send_errors_solve',null))));
                   }
                 },
                 icon: Icon(Icons.send),
-                label: const Text("Send"),
+                label: Text(AppLocalizations.instance.translate('send',null)),
               ),
               IconButton(
                   icon: Icon(
