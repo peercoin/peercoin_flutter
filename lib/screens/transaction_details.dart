@@ -94,7 +94,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Confirmations",
+              const Text("Minimum Confirmations",
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.confirmations.toString())
             ],
