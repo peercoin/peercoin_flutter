@@ -145,9 +145,7 @@ class _TransactionListState extends State<TransactionList> {
                         ),
                         subtitle: Center(
                           child: Text(
-                            _filteredTx[i].address +
-                                "\n" +
-                                _filteredTx[i].address,
+                            _filteredTx[i].address,
                             overflow: TextOverflow.ellipsis,
                             textScaleFactor: 1,
                           ),
