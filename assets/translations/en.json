@@ -8,6 +8,8 @@
   "no_new_wallet": "No new wallets available at this time.",
   "scan_qr": "Scan QR-Code",
   "setup_files_for_wallet": "Create all the necessary files to get started with your wallet.",
+  "setup_pin": "Please set a PIN before you continue.",
+  "setup_create_pin": "Create PIN",
   "create_wallet": "Create Wallet",
   "label_wallet_seed": "This is your wallet seed:",
   "label_keep_seed_safe": "Make sure to keep it safe.\nTreat it like a password.\nThose 12 simple words give full access to your wallet.",

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/options.dart';
+import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -22,7 +23,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
   Future<void> shareSeed(seed) async {
     await Share.share(seed);
     Timer(
-      Duration(seconds: 2),
+      Duration(seconds: 1),
       () => setState(() {
         sharedYet = true;
       }),
@@ -47,13 +48,16 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/icon/ppc-icon-white-48.png"),
-            SizedBox(height: 30),
+            Image.asset(
+              "assets/icon/ppc-icon-white-256.png",
+              width: 50,
+            ),
+            SizedBox(height: 60),
             Container(
               alignment: Alignment.center,
               width: double.infinity,
               child: Text(
-                AppLocalizations.instance.translate('label_wallet_seed',null),
+                AppLocalizations.instance.translate('label_wallet_seed', null),
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -70,30 +74,26 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             ),
             SizedBox(height: 40),
             Text(
-              AppLocalizations.instance.translate('label_keep_seed_safe',null),
+              AppLocalizations.instance.translate('label_keep_seed_safe', null),
               style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 30),
             sharedYet
                 ? TextButton(
-                    onPressed: () async {
-                      var prefs =
-                          await Provider.of<Options>(context, listen: false)
-                              .prefs;
-                      await prefs.setBool("setupFinished", true);
+                    onPressed: () {
                       Navigator.popAndPushNamed(
-                          context, WalletListScreen.routeName);
+                          context, SetupPinCodeScreen.routeName);
                     },
                     child: Text(
-                      AppLocalizations.instance.translate('continue',null),
+                      AppLocalizations.instance.translate('continue', null),
                       style: TextStyle(fontSize: 18),
                     ),
                   )
                 : TextButton(
-                    onPressed: () => shareSeed(seed),
+                    onPressed: () async => await shareSeed(seed),
                     child: Text(
-                      AppLocalizations.instance.translate('export_now',null),
+                      AppLocalizations.instance.translate('export_now', null),
                       style: TextStyle(fontSize: 18),
                     ),
                   )

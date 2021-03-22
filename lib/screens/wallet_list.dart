@@ -5,6 +5,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
@@ -37,7 +38,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
       await _activeWallets.init();
       await screenLock(
         context: context,
-        correctString: '123456',
+        correctString:
+            await Provider.of<EncryptedBox>(context, listen: false).passCode,
         digits: 6,
         canCancel: false,
         customizedButtonChild: Icon(

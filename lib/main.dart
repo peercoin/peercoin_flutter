@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -120,12 +121,13 @@ class MyApp extends StatelessWidget {
         home: setupFinished ? WalletListScreen() : SetupScreen(),
         routes: {
           SetupSaveScreen.routeName: (ctx) => SetupSaveScreen(),
+          SetupPinCodeScreen.routeName: (ctx) => SetupPinCodeScreen(),
           WalletListScreen.routeName: (ctx) => WalletListScreen(),
           WalletHomeScreen.routeName: (ctx) => WalletHomeScreen(),
           NewWalletScreen.routeName: (ctx) => NewWalletScreen(),
           QRScanner.routeName: (ctx) => QRScanner(),
           TransactionDetails.routeName: (ctx) => TransactionDetails(),
-          AppSettingsScreen.routeName: (ctx) => AppSettingsScreen()
+          AppSettingsScreen.routeName: (ctx) => AppSettingsScreen(),
         },
       ),
     );
