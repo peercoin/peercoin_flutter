@@ -45,7 +45,6 @@ class _ReceiveTabState extends State<ReceiveTab> {
 
   @override
   Widget build(BuildContext context) {
-    print(_qrString);
     return Container(
       child: Padding(
         padding: EdgeInsets.all(20),

@@ -10,8 +10,11 @@ class TransactionDetails extends StatelessWidget {
   static const routeName = "/tx-detail";
 
   void _launchURL(_url) async {
-    print(_url);
-    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+    await canLaunch(_url)
+        ? await launch(
+            _url,
+          )
+        : throw 'Could not launch $_url';
   }
 
   @override

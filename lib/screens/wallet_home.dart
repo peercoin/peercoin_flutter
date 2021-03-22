@@ -95,7 +95,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_connectionProvider.latestBlock != null) {
         if (_connectionProvider.latestBlock > _latestBlock) {
           //new block
-          print(_connectionProvider.latestBlock);
+          print("new block ${_connectionProvider.latestBlock}");
           _latestBlock = _connectionProvider.latestBlock;
 
           var unconfirmedTx =

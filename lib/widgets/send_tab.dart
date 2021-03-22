@@ -59,7 +59,6 @@ class _SendTabState extends State<SendTab> {
   void parseQrResult(String code) {
     var parsed = Uri.parse(code);
     parsed.queryParameters.forEach((key, value) {
-      print(key);
       if (key == "amount") {
         amountController.text = value;
       } else if (key == "label") {

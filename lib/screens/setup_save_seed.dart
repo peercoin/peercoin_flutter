@@ -61,6 +61,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             Center(
               child: SelectableText(
                 seed,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
