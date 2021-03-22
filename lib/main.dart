@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/notification.dart';
+import 'package:peercoin/screens/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -113,7 +114,8 @@ class MyApp extends StatelessWidget {
           WalletHomeScreen.routeName: (ctx) => WalletHomeScreen(),
           NewWalletScreen.routeName: (ctx) => NewWalletScreen(),
           QRScanner.routeName: (ctx) => QRScanner(),
-          TransactionDetails.routeName: (ctx) => TransactionDetails()
+          TransactionDetails.routeName: (ctx) => TransactionDetails(),
+          AppSettingsScreen.routeName: (ctx) => AppSettingsScreen()
         },
       ),
     );
