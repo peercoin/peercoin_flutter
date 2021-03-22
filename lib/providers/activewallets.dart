@@ -3,10 +3,12 @@ import 'dart:typed_data';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
+import 'package:peercoin/models/notification.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/models/walletutxo.dart';
@@ -230,7 +232,6 @@ class ActiveWallets with ChangeNotifier {
     });
     //it's not in wallet yet
     if (!isInWallet) {
-      //TODO: Play sound! / notification
       var utxoInWallet = openWallet.utxos
           .firstWhere((elem) => elem.hash == tx["txid"], orElse: () => null);
       String direction = utxoInWallet == null ? "out" : "in";
@@ -244,6 +245,18 @@ class ActiveWallets with ChangeNotifier {
         broadCasted: direction == "in" ? true : false,
         broadcastHex: direction == "in" ? "" : tx["hex"],
       ));
+      // trigger notification
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+          FlutterLocalNotificationsPlugin();
+
+      if (direction == "in")
+        await flutterLocalNotificationsPlugin.show(
+          0,
+          'New transaction received',
+          tx["txid"],
+          LocalNotificationSettings.platformChannelSpecifics,
+          payload: identifier,
+        );
     }
     notifyListeners();
     await openWallet.save();
