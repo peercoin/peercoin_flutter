@@ -37,7 +37,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
       await _activeWallets.init();
       await screenLock(
         context: context,
-        correctString: '1234',
+        correctString: '123456',
+        digits: 6,
         canCancel: false,
         customizedButtonChild: Icon(
           Icons.fingerprint,

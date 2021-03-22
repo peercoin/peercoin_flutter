@@ -49,7 +49,7 @@ class _SendTabState extends State<SendTab> {
   Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
     return await _activeWallets.buildTransaction(
       _wallet.name,
-      _addressKey.currentState.value,
+      _addressKey.currentState.value.trim(),
       _amountKey.currentState.value,
       fee,
       dryrun,
@@ -93,8 +93,9 @@ class _SendTabState extends State<SendTab> {
                 if (value.isEmpty) {
                   return 'Please enter an address';
                 }
+                String sanitized = value.trim();
                 if (Address.validateAddress(
-                        value, _availableCoin.networkType) ==
+                        sanitized, _availableCoin.networkType) ==
                     false) {
                   return "Invalid address";
                 }
