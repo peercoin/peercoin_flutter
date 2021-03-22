@@ -2,25 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:peercoin/app_localizations.dart';
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/models/walletaddress.dart';
-import 'package:peercoin/models/wallettransaction.dart';
-import 'package:peercoin/models/walletutxo.dart';
-import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/providers/electrumconnection.dart';
-import 'package:peercoin/screens/new_wallet.dart';
-import 'package:peercoin/screens/qrcodescanner.dart';
-import 'package:peercoin/screens/transaction_details.dart';
-import 'package:peercoin/screens/wallet_home.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:peercoin/models/notification.dart';
-import 'package:peercoin/screens/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
 
 import './models/coinwallet.dart';
 import './models/walletaddress.dart';
@@ -37,6 +21,8 @@ import './screens/wallet_home.dart';
 import './screens/setup_save_seed.dart';
 import './screens/setup.dart';
 import './screens/wallet_list.dart';
+import './screens/app_settings.dart';
+import './app_localizations.dart';
 
 bool setupFinished;
 
