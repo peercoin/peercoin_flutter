@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -26,7 +27,9 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          _coin == "" ? "Please select a coin" : "Adding wallet failed!",
+          _coin == ""
+              ? AppLocalizations.instance.translate('select_coin',null)
+              : AppLocalizations.instance.translate('add_coin_failed',null),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -58,7 +61,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add new wallet"),
+        title: Text(AppLocalizations.instance.translate('add_new_wallet',null)),
         actions: [
           if (actualAvailableWallets.isNotEmpty)
             Padding(
@@ -72,7 +75,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
       body: Container(
         child: actualAvailableWallets.isEmpty
             ? Center(
-                child: const Text("No new wallets available at this time."),
+                child: Text(AppLocalizations.instance.translate('no_new_wallet',null)),
               )
             : Column(children: [
                 Expanded(

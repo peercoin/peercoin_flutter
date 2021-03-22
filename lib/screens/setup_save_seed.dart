@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/options.dart';
 import 'package:peercoin/screens/wallet_list.dart';
@@ -51,8 +52,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             Container(
               alignment: Alignment.center,
               width: double.infinity,
-              child: const Text(
-                "This is your wallet seed:",
+              child: Text(
+                AppLocalizations.instance.translate('label_wallet_seed',null),
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -68,7 +69,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             ),
             SizedBox(height: 40),
             Text(
-              "Make sure to keep it safe.\nTreat it like a password.\nThose 12 simple words give full access to your wallet.",
+              AppLocalizations.instance.translate('label_keep_seed_safe',null),
               style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
@@ -83,15 +84,15 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       Navigator.popAndPushNamed(
                           context, WalletListScreen.routeName);
                     },
-                    child: const Text(
-                      "Continue",
+                    child: Text(
+                      AppLocalizations.instance.translate('continue',null),
                       style: TextStyle(fontSize: 18),
                     ),
                   )
                 : TextButton(
                     onPressed: () => shareSeed(seed),
-                    child: const Text(
-                      "Export now",
+                    child: Text(
+                      AppLocalizations.instance.translate('export_now',null),
                       style: TextStyle(fontSize: 18),
                     ),
                   )

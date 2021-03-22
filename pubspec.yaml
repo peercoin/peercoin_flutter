@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   web_socket_channel: ^1.2.0
   crypto: ^2.0.3
   bip39: ^1.0.3
@@ -79,6 +81,8 @@ flutter:
     - assets/icon/ppc-icon-256.png
     - assets/icon/ppc-icon-48.png
     - assets/icon/ppc-icon-white-48.png
+    - assets/translations/en.json
+    - assets/translations/nl.json
     # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

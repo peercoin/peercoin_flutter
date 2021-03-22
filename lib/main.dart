@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/app_localizations.dart';
 
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/walletaddress.dart';
@@ -63,6 +65,15 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Peercoin',
+        supportedLocales: [
+          const Locale('en', 'US'), // default
+          const Locale('nl', 'NL'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          //GlobalWidgetsLocalizations.delegate,
+        ],
         theme: ThemeData(
           textTheme: Theme.of(context).textTheme.apply(
                 fontSizeFactor: 1.1,

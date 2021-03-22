@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -36,7 +37,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
-        title: Center(child: const Text("Your wallets")),
+        title: Center(child: Text(AppLocalizations.instance.translate('wallets_list',null))),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -67,7 +68,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                       if (snapshot.data == null || snapshot.data.isEmpty) {
                         return Column(children: [
                           SizedBox(height: 30),
-                          const Text("You have no active wallets"),
+                          Text(AppLocalizations.instance.translate('wallets_none',null)),
                           SizedBox(height: 30)
                         ]);
                       }

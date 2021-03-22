@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/screens/setup_save_seed.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
@@ -36,8 +37,8 @@ class _SetupScreenState extends State<SetupScreen> {
               SizedBox(height: 60),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
-                child: const Text(
-                  "Create all the necessary files to get started with your wallet.",
+                child: Text(
+                  AppLocalizations.instance.translate('setup_files_for_wallet',null),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -47,7 +48,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 child: _loading
                     ? LoadingIndicator()
                     : Text(
-                        "Create Wallet",
+                        AppLocalizations.instance.translate('create_wallet',null),
                         style: TextStyle(fontSize: 18),
                       ),
               )
