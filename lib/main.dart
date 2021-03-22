@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_screen_lock/functions.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './models/coinwallet.dart';
@@ -134,5 +132,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO: Setup LocalAuth
 //TODO: null safety when bitcoin_flutter is null_safe as well (crypto^3.0.0)

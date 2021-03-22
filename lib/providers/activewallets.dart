@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
@@ -243,7 +242,6 @@ class ActiveWallets with ChangeNotifier {
         List voutList = tx["vout"].toList();
         voutList.forEach((vOut) {
           final asMap = vOut as Map;
-          print("achtung");
           asMap["scriptPubKey"]["addresses"].forEach((addr) {
             if (openWallet.addresses.firstWhere(
                     (element) => element.address == addr,

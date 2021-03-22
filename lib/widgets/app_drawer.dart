@@ -21,7 +21,7 @@ class AppDrawer extends StatelessWidget {
           ),
           title: Text(AppLocalizations.instance.translate('app_wallets', null)),
         ),
-        Divider(), //TODO add
+        Divider(),
         ListTile(
             leading: Icon(Icons.app_settings_alt),
             title:

@@ -188,7 +188,8 @@ class _SendTabState extends State<SendTab> {
                                   _totalValue - _txFee + _destroyedChange;
                             }
                             return SimpleDialog(
-                              title: Text(AppLocalizations.instance.translate('send_confirm_transaction',null)),
+                              title: Text(AppLocalizations.instance
+                                  .translate('send_confirm_transaction', null)),
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -198,7 +199,9 @@ class _SendTabState extends State<SendTab> {
                                       RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
-                                          text: AppLocalizations.instance.translate('send_transferring',null),
+                                          text: AppLocalizations.instance
+                                              .translate(
+                                                  'send_transferring', null),
                                           style: DefaultTextStyle.of(context)
                                               .style,
                                           children: <TextSpan>[
@@ -208,7 +211,10 @@ class _SendTabState extends State<SendTab> {
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            TextSpan(text: AppLocalizations.instance.translate('send_to',null)),
+                                            TextSpan(
+                                                text: AppLocalizations.instance
+                                                    .translate(
+                                                        'send_to', null)),
                                             TextSpan(
                                                 text: _addressKey
                                                     .currentState.value,
@@ -219,17 +225,32 @@ class _SendTabState extends State<SendTab> {
                                         ),
                                       ),
                                       SizedBox(height: 10),
-                                      Text(
-                                          AppLocalizations.instance.translate('send_fee',{'amount': "${_txFee / 1000000}",'letter_code':"${_wallet.letterCode}"})),
+                                      Text(AppLocalizations.instance.translate(
+                                          'send_fee', {
+                                        'amount': "${_txFee / 1000000}",
+                                        'letter_code': "${_wallet.letterCode}"
+                                      })),
                                       if (_destroyedChange > 0)
                                         Text(
-                                          AppLocalizations.instance.translate('send_dust',{'amount': "${_destroyedChange / 1000000}",'letter_code':"${_wallet.letterCode}"}),
+                                          AppLocalizations.instance
+                                              .translate('send_dust', {
+                                            'amount':
+                                                "${_destroyedChange / 1000000}",
+                                            'letter_code':
+                                                "${_wallet.letterCode}"
+                                          }),
                                           style: TextStyle(
                                               color:
                                                   Theme.of(context).errorColor),
                                         ),
                                       Text(
-                                          AppLocalizations.instance.translate('send_total',{'amount': "${_totalValue / 1000000}",'letter_code':"${_wallet.letterCode}"}),
+                                          AppLocalizations.instance.translate(
+                                              'send_total', {
+                                            'amount':
+                                                "${_totalValue / 1000000}",
+                                            'letter_code':
+                                                "${_wallet.letterCode}"
+                                          }),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       SizedBox(height: 20),
@@ -238,7 +259,9 @@ class _SendTabState extends State<SendTab> {
                                           primary:
                                               Theme.of(context).primaryColor,
                                         ),
-                                        label: Text(AppLocalizations.instance.translate('send_confirm_send',null)),
+                                        label: Text(AppLocalizations.instance
+                                            .translate(
+                                                'send_confirm_send', null)),
                                         icon: Icon(Icons.send),
                                         onPressed: () async {
                                           try {
@@ -272,8 +295,10 @@ class _SendTabState extends State<SendTab> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
-                                                content: Text(
-                                                    AppLocalizations.instance.translate('send_oops',null)),
+                                                content: Text(AppLocalizations
+                                                    .instance
+                                                    .translate(
+                                                        'send_oops', null)),
                                               ),
                                             );
                                           }
@@ -287,12 +312,13 @@ class _SendTabState extends State<SendTab> {
                           });
                     });
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppLocalizations.instance.translate('send_errors_solve',null))));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(AppLocalizations.instance
+                            .translate('send_errors_solve', null))));
                   }
                 },
                 icon: Icon(Icons.send),
-                label: Text(AppLocalizations.instance.translate('send',null)),
+                label: Text(AppLocalizations.instance.translate('send', null)),
               ),
               IconButton(
                   icon: Icon(
