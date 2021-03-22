@@ -295,7 +295,7 @@ class ActiveWallets with ChangeNotifier {
     if (_txAmount == openWallet.balance) {
       _needsChange = false;
       print("needschange $_needsChange, fee $fee");
-      print(_txAmount - fee);
+      print("change needed $_txAmount - $fee");
     }
     if (_txAmount <= openWallet.balance) {
       if (openWallet.utxos.length >= 1) {
@@ -369,7 +369,7 @@ class ActiveWallets with ChangeNotifier {
         int requiredFeeInSatoshis = asDouble.toInt();
         print("fee $requiredFeeInSatoshis, size: ${intermediate.txSize}");
         if (dryRun == false) {
-          print(intermediate.txSize);
+          print("intermediate size: ${intermediate.txSize}");
           _hex = intermediate.toHex();
         }
         //generate new wallet addr

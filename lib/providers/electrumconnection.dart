@@ -46,7 +46,7 @@ class ElectrumConnection with ChangeNotifier {
           onError: (error) => print("error: $error"),
           onDone: () {
             cleanUpOnDone();
-            print("done");
+            print("connection done");
           });
       tryHandShake();
       startPingTimer();
