@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
@@ -5,15 +6,16 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
-import 'package:peercoin/models/availablecoins.dart';
-import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/models/notification.dart';
-import 'package:peercoin/models/walletaddress.dart';
-import 'package:peercoin/models/wallettransaction.dart';
-import 'package:peercoin/models/walletutxo.dart';
-import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:bip39/bip39.dart' as bip39;
+
+import '../models/availablecoins.dart';
+import '../models/coin.dart';
+import '../models/coinwallet.dart';
+import '../models/notification.dart';
+import '../models/walletaddress.dart';
+import '../models/wallettransaction.dart';
+import '../models/walletutxo.dart';
+import '../providers/encryptedbox.dart';
 
 class ActiveWallets with ChangeNotifier {
   EncryptedBox _encryptedBox;
@@ -209,7 +211,7 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> putTx(String identifier, String address, Map tx) async {
     CoinWallet openWallet = getSpecificCoinWallet(identifier);
-    print("$address puttx: $tx");
+    // log("$address puttx: $tx");
 
     //check if that tx is already in the db
     List<WalletTransaction> txInWallet = openWallet.transactions;
@@ -232,19 +234,49 @@ class ActiveWallets with ChangeNotifier {
     });
     //it's not in wallet yet
     if (!isInWallet) {
+      //check if that tx addresses more than one of our addresses
       var utxoInWallet = openWallet.utxos
           .firstWhere((elem) => elem.hash == tx["txid"], orElse: () => null);
       String direction = utxoInWallet == null ? "out" : "in";
-      openWallet.putTransaction(WalletTransaction(
-        txid: tx["txid"],
-        timestamp: tx["blocktime"],
-        value: direction == "in" ? utxoInWallet.value : tx["outValue"],
-        fee: direction == "in" ? 0 : tx["outFees"],
-        address: address,
-        direction: direction,
-        broadCasted: direction == "in" ? true : false,
-        broadcastHex: direction == "in" ? "" : tx["hex"],
-      ));
+
+      if (direction == "in") {
+        List voutList = tx["vout"].toList();
+        voutList.forEach((vOut) {
+          final asMap = vOut as Map;
+          print("achtung");
+          asMap["scriptPubKey"]["addresses"].forEach((addr) {
+            if (openWallet.addresses.firstWhere(
+                    (element) => element.address == addr,
+                    orElse: () => null) !=
+                null) {
+              //address is ours, add new tx
+              final txValue = (vOut["value"] * 1000000).toInt();
+
+              openWallet.putTransaction(WalletTransaction(
+                  txid: tx["txid"],
+                  timestamp: tx["blocktime"],
+                  value: txValue,
+                  fee: 0,
+                  address: addr,
+                  direction: direction,
+                  broadCasted: true,
+                  broadcastHex: ""));
+            }
+          });
+        });
+      } else {
+        openWallet.putTransaction(WalletTransaction(
+          txid: tx["txid"],
+          timestamp: tx["blocktime"],
+          value: tx["outValue"],
+          fee: tx["outFees"],
+          address: address,
+          direction: direction,
+          broadCasted: false,
+          broadcastHex: tx["hex"],
+        ));
+      }
+
       // trigger notification
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
           FlutterLocalNotificationsPlugin();
@@ -260,8 +292,6 @@ class ActiveWallets with ChangeNotifier {
     }
     notifyListeners();
     await openWallet.save();
-
-    //TODO won't handle TX with multiple outputs to our addresses correctly - utxo will work fine - "only" display issue
   }
 
   Future<void> updateAddressStatus(
