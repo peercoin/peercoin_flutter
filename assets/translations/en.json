@@ -55,5 +55,5 @@
   "transactions_all": "All",
   "transactions_out": "Out",
   "transactions_none": "No transactions yet",
-  "transactions_fee": "-&amount \nFee"
+  "transactions_fee": "-$amount \nFee"
 }
