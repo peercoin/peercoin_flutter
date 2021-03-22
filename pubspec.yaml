@@ -31,7 +31,7 @@ dependencies:
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
   hive_generator: ^0.8.2
-  flutter_secure_storage: ^3.3.5
+  flutter_secure_storage: ^4.1.0
   shared_preferences: ^2.0.5
   provider: ^5.0.0
   share: ^0.6.5+4
