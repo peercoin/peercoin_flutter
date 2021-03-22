@@ -154,7 +154,7 @@ class _SendTabState extends State<SendTab> {
                           return Center(child: LoadingIndicator());
                         });
                     Map _buildResult;
-                    Timer(Duration(milliseconds: 500), () async {
+                    Timer(Duration(milliseconds: 100), () async {
                       //TODO: this feels _very_ hacky - not very asyncy
                       _buildResult = await buildTx(true);
                       Navigator.of(dialogContext).pop();
