@@ -9,6 +9,7 @@ import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/providers/options.dart';
 import 'package:peercoin/screens/qrcodescanner.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -31,14 +32,15 @@ class _SendTabState extends State<SendTab> {
   ActiveWallets _activeWallets;
   int _txFee = 0;
   int _totalValue = 0;
-
+  bool _showMetadata = false;
+  
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_initial == true) {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
-
+      _showMetadata = await Provider.of<Options>(context, listen: false).allowMetaData;
       setState(() {
         _initial = false;
       });
@@ -136,6 +138,14 @@ class _SendTabState extends State<SendTab> {
                   }
                   return null;
                 }),
+                (_showMetadata)
+                    ? TextFormField(//todo
+                        decoration: InputDecoration(
+                            icon: Icon(Icons.ad_units_sharp),
+                            labelText: 'Enter op_return'
+                        ),
+                      )
+                    : Center(),
             SizedBox(height: 30),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               ElevatedButton.icon(

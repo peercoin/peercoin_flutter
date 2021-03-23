@@ -112,7 +112,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   autocorrect: false,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r'^([1-9]{1}[0-9]{0,6}(,[0-9]{3})*(.[0-9]{0,6})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,6})?|0(.[0-9]{0,6})?|(.[0-9]{1,6})?)$')), 
+                        RegExp(r'^([1-9]{1}[0-9]{0,6}(,[0-9]{3})*(.[0-9]{0,6})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,6})?|0(.[0-9]{0,6})?|(.[0-9]{1,6})?)$')),
                   ],
                   keyboardType: TextInputType.numberWithOptions(signed: true),
                   decoration: InputDecoration(

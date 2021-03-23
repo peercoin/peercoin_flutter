@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/options.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -13,11 +15,14 @@ class AppSettingsScreen extends StatefulWidget {
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   String _seedPhrase = "";
+  bool _showMetadata = false;
+
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
       _seedPhrase =
           await Provider.of<ActiveWallets>(context, listen: false).seedPhrase;
+      _showMetadata = await Provider.of<Options>(context, listen: false).allowMetaData;
       setState(() {
         _initial = false;
       });
@@ -30,7 +35,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("App Settings"),
+        title: Text(AppLocalizations.instance.translate('setting_title', null)),
       ),
       drawer: AppDrawer(),
       body: Padding(
@@ -38,10 +43,25 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         child: Column(
           children: [
             Text(
-              "Your seed phrase:\n",
+              AppLocalizations.instance.translate('setting_seed', null),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SelectableText(_seedPhrase)
+            SelectableText(_seedPhrase),
+            CheckboxListTile(
+              value: _showMetadata,
+              onChanged: (value) {
+                setState(() {
+                  _showMetadata = value;
+                  Provider.of<Options>(context, listen: false).setAllowMetaData(value);
+                });
+              },
+              title: Text(AppLocalizations.instance.translate('setting_metadata', null)),
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10
+              ),
+              activeColor: Colors.green,
+            ),
           ],
         ),
       ),
