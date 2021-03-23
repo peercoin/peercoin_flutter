@@ -138,6 +138,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return Scaffold(
       drawer: AppDrawer(),
       bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Theme.of(context).primaryColor,
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [
