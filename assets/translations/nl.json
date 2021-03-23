@@ -41,7 +41,7 @@
   "send_enter_amount": "Voer een bedrag in",
   "send_amount_small": "Bedrag te klein",
   "send_amount_exceeds": "Bedrag overschrijdt balans",
-  "send_amount_below_minimum": "$amount is het minimum. \nU heeft onvoldoende bedragen om de contibutie te betalen.",
+  "send_amount_below_minimum": "$amount is het minimum. \\nU heeft onvoldoende bedragen om de contibutie te betalen.",
   "send_confirm_transaction": "Bevestig de transactie",
   "send_transferring": "Aan het verzenden ",
   "send_to": " naar ",
@@ -56,8 +56,5 @@
   "transactions_all": "Alle",
   "transactions_out": "Uit",
   "transactions_none": "Geen transacties gevonden",
-  "transactions_fee": "-$amount \nContributie",
-  "setting_title": "App Instellingen",
-  "setting_seed": "Uw seed woorden:\n",
-  "setting_metadata": "Metadata"
+  "transactions_fee": "-$amount \nContributie"
 }

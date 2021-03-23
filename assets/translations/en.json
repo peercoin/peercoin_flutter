@@ -41,7 +41,7 @@
   "send_enter_amount": "Please enter an amount",
   "send_amount_small": "Amount too small",
   "send_amount_exceeds": "Amount exceeds balance",
-  "send_amount_below_minimum": "$amount is the minimum output. \nYou don't have enough funds to pay for the fees.",
+  "send_amount_below_minimum": "$amount is the minimum output. \\nYou don't have enough funds to pay for the fees.",
   "send_confirm_transaction": "Please confirm transaction",
   "send_transferring": "Transferring ",
   "send_to": " to ",
@@ -56,8 +56,5 @@
   "transactions_all": "All",
   "transactions_out": "Out",
   "transactions_none": "No transactions yet",
-  "transactions_fee": "-$amount \nFee",
-  "setting_title": "App Settings",
-  "setting_seed": "Your seed phrase:\n",
-  "setting_metadata": "Metadata"
+  "transactions_fee": "-$amount \nFee"
 }
