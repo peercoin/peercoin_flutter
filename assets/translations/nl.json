@@ -37,6 +37,7 @@
   "send_address": "Adres",
   "send_enter_address": "Voer een adres in",
   "send_invalid_address": "Ongeldig adres",
+  "send_amount": "Bedrag",
   "send_enter_amount": "Voer een bedrag in",
   "send_amount_small": "Bedrag te klein",
   "send_amount_exceeds": "Bedrag overschrijdt balans",
