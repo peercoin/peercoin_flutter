@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -8,6 +8,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -22,38 +23,12 @@ class _WalletListScreenState extends State<WalletListScreen> {
   bool _initial = true;
   ActiveWallets _activeWallets;
 
-  Future<void> localAuth(BuildContext context) async {
-    final localAuth = LocalAuthentication();
-    final didAuthenticate = await localAuth.authenticate(
-        biometricOnly: true,
-        localizedReason: 'Please authenticate',
-        stickyAuth: true);
-    if (didAuthenticate) {
-      Navigator.pop(context);
-    }
-  }
-
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.init();
-      await screenLock(
-        context: context,
-        correctString:
-            await Provider.of<EncryptedBox>(context, listen: false).passCode,
-        digits: 6,
-        canCancel: false,
-        customizedButtonChild: Icon(
-          Icons.fingerprint,
-        ),
-        customizedButtonTap: () async {
-          await localAuth(context);
-        },
-        didOpened: () async {
-          await localAuth(context);
-        },
-      );
+      await Auth.requireAuth(context);
       setState(() {
         _initial = false;
       });

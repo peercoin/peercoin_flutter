@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';

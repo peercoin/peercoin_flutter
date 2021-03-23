@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/options.dart';
 import 'package:peercoin/screens/setup_pin_code.dart';

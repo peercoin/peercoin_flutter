@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/screens/transaction_details.dart';
@@ -41,19 +41,23 @@ class _TransactionListState extends State<TransactionList> {
           children: <Widget>[
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Container(child: Text(AppLocalizations.instance.translate('transactions_in',null))),
+              label: Container(
+                  child: Text(AppLocalizations.instance
+                      .translate('transactions_in', null))),
               selected: _filterChoice == "in",
               onSelected: (_) => _handleSelect("in"),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(AppLocalizations.instance.translate('transactions_all',null)),
+              label: Text(AppLocalizations.instance
+                  .translate('transactions_all', null)),
               selected: _filterChoice == "all",
               onSelected: (_) => _handleSelect("all"),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(AppLocalizations.instance.translate('transactions_out',null)),
+              label: Text(AppLocalizations.instance
+                  .translate('transactions_out', null)),
               selected: _filterChoice == "out",
               onSelected: (_) => _handleSelect("out"),
             ),
@@ -62,7 +66,8 @@ class _TransactionListState extends State<TransactionList> {
       Expanded(
         child: widget._walletTransactions.length == 0
             ? Center(
-                child: Text(AppLocalizations.instance.translate('transactions_none',null)),
+                child: Text(AppLocalizations.instance
+                    .translate('transactions_none', null)),
               )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {
@@ -166,7 +171,11 @@ class _TransactionListState extends State<TransactionList> {
                                       : Colors.black),
                             ),
                             if (_filteredTx[i].direction == "out")
-                              Text(AppLocalizations.instance.translate('transactions_fee',{'amount': "${_filteredTx[i].fee / 1000000}"}),
+                              Text(
+                                AppLocalizations.instance.translate(
+                                    'transactions_fee', {
+                                  'amount': "${_filteredTx[i].fee / 1000000}"
+                                }),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 12,

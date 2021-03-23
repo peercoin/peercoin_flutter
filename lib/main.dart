@@ -23,7 +23,7 @@ import './screens/setup_save_seed.dart';
 import './screens/setup.dart';
 import './screens/wallet_list.dart';
 import './screens/app_settings.dart';
-import './app_localizations.dart';
+import 'tools/app_localizations.dart';
 
 bool setupFinished;
 

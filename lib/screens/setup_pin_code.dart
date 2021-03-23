@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/options.dart';
 import 'package:peercoin/screens/wallet_list.dart';

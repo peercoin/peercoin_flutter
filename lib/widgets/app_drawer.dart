@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/screens/app_settings.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 
