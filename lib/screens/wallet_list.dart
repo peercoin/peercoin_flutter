@@ -25,7 +25,9 @@ class _WalletListScreenState extends State<WalletListScreen> {
   Future<void> localAuth(BuildContext context) async {
     final localAuth = LocalAuthentication();
     final didAuthenticate = await localAuth.authenticate(
-        biometricOnly: true, localizedReason: 'Please authenticate');
+        biometricOnly: true,
+        localizedReason: 'Please authenticate',
+        stickyAuth: true);
     if (didAuthenticate) {
       Navigator.pop(context);
     }
