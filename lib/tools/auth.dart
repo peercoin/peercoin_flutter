@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
@@ -34,6 +35,11 @@ class Auth {
       digits: 6,
       maxRetries: 3,
       canCancel: false,
+      title: HeadingTitle(
+          text: AppLocalizations.instance.translate("authenticate_title")),
+      confirmTitle: HeadingTitle(
+          text: AppLocalizations.instance
+              .translate("authenticate_confirm_title")),
       customizedButtonChild: Icon(
         Icons.fingerprint,
       ),

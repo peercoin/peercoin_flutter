@@ -60,5 +60,7 @@
   "transactions_fee": "-&amount \nFee",
   "authenticate_biometric_reason" : "Please authenticate.",
   "authenticate_biometric_hint" : "Verify identity",
-  "authenticate_biometric_title" : "Authentication required"
+  "authenticate_biometric_title" : "Authentication required",
+  "authenticate_title" : "Please enter your PIN",
+  "authenticate_confirm_title" : "Re-enter your PIN"
 }
