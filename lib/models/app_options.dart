@@ -5,10 +5,10 @@ part "app_options.g.dart";
 class AppOptionsStore extends HiveObject {
   @HiveField(0)
   Map<String, bool> _authenticationOptions = {
-    "walletList": true,
-    "walletHome": true,
+    "walletList": false,
+    "walletHome": false,
     "sendTransaction": true,
-    "newWallet": true,
+    "newWallet": false,
   };
 
   @HiveField(1)
