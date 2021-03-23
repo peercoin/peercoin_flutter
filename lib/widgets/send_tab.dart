@@ -319,7 +319,7 @@ class _SendTabState extends State<SendTab> {
                   }
                 },
                 icon: Icon(Icons.send),
-                label: Text(AppLocalizations.instance.translate('send', null)),
+                label: Text(AppLocalizations.instance.translate('send')),
               ),
               IconButton(
                   icon: Icon(

@@ -57,7 +57,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
               alignment: Alignment.center,
               width: double.infinity,
               child: Text(
-                AppLocalizations.instance.translate('label_wallet_seed', null),
+                AppLocalizations.instance.translate('label_wallet_seed'),
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -74,7 +74,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             ),
             SizedBox(height: 40),
             Text(
-              AppLocalizations.instance.translate('label_keep_seed_safe', null),
+              AppLocalizations.instance.translate('label_keep_seed_safe'),
               style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
@@ -86,14 +86,14 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                           context, SetupPinCodeScreen.routeName);
                     },
                     child: Text(
-                      AppLocalizations.instance.translate('continue', null),
+                      AppLocalizations.instance.translate('continue'),
                       style: TextStyle(fontSize: 18),
                     ),
                   )
                 : TextButton(
                     onPressed: () async => await shareSeed(seed),
                     child: Text(
-                      AppLocalizations.instance.translate('export_now', null),
+                      AppLocalizations.instance.translate('export_now'),
                       style: TextStyle(fontSize: 18),
                     ),
                   )

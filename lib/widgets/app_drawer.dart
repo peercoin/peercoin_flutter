@@ -9,8 +9,7 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: (Column(children: [
         AppBar(
-          title:
-              Text(AppLocalizations.instance.translate('app_navigation', null)),
+          title: Text(AppLocalizations.instance.translate('app_navigation')),
           automaticallyImplyLeading: false,
         ),
         ListTile(
@@ -19,13 +18,12 @@ class AppDrawer extends StatelessWidget {
           leading: Icon(
             Icons.account_balance_wallet,
           ),
-          title: Text(AppLocalizations.instance.translate('app_wallets', null)),
+          title: Text(AppLocalizations.instance.translate('app_wallets')),
         ),
         Divider(),
         ListTile(
             leading: Icon(Icons.app_settings_alt),
-            title:
-                Text(AppLocalizations.instance.translate('app_settings', null)),
+            title: Text(AppLocalizations.instance.translate('app_settings')),
             onTap: () => Navigator.of(context)
                 .pushReplacementNamed(AppSettingsScreen.routeName))
       ])),

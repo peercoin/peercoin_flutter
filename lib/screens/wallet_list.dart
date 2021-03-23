@@ -1,11 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:flutter_screen_lock/functions.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/auth.dart';
@@ -43,8 +40,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
       drawer: AppDrawer(),
       appBar: AppBar(
         title: Center(
-            child: Text(
-                AppLocalizations.instance.translate('wallets_list', null))),
+            child: Text(AppLocalizations.instance.translate('wallets_list'))),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),

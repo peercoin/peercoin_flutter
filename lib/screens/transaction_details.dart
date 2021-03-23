@@ -28,7 +28,7 @@ class TransactionDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        AppLocalizations.instance.translate('transaction_details', null),
+        AppLocalizations.instance.translate('transaction_details'),
       )),
       body: ListView(
         padding: EdgeInsets.all(20),
@@ -36,7 +36,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('id', null),
+              Text(AppLocalizations.instance.translate('id'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.txid)
             ],
@@ -45,12 +45,12 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('time', null),
+              Text(AppLocalizations.instance.translate('time'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.timestamp != null
                   ? DateFormat().format(
                       DateTime.fromMillisecondsSinceEpoch(_tx.timestamp * 1000))
-                  : AppLocalizations.instance.translate('unconfirmed', null))
+                  : AppLocalizations.instance.translate('unconfirmed'))
             ],
           ),
           Divider(),
@@ -58,7 +58,7 @@ class TransactionDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.instance.translate('tx_value', null),
+                AppLocalizations.instance.translate('tx_value'),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SelectableText((_tx.value / 1000000).toString() +
@@ -70,7 +70,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_fee', null),
+              Text(AppLocalizations.instance.translate('tx_fee'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(
                   (_tx.fee / 1000000).toString() + " " + _coinWallet.letterCode)
@@ -80,7 +80,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_address', null),
+              Text(AppLocalizations.instance.translate('tx_address'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.address)
             ],
@@ -89,7 +89,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_direction', null),
+              Text(AppLocalizations.instance.translate('tx_direction'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.direction)
             ],
@@ -98,8 +98,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                  AppLocalizations.instance.translate('tx_confirmations', null),
+              Text(AppLocalizations.instance.translate('tx_confirmations'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.confirmations.toString())
             ],

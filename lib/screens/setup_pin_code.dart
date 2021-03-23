@@ -25,7 +25,7 @@ class SetupPinCodeScreen extends StatelessWidget {
               width: 50,
             ),
             SizedBox(height: 60),
-            Text(AppLocalizations.instance.translate('setup_pin', null),
+            Text(AppLocalizations.instance.translate('setup_pin'),
                 style: TextStyle(color: Colors.white)),
             SizedBox(height: 30),
             TextButton(
@@ -50,7 +50,7 @@ class SetupPinCodeScreen extends StatelessWidget {
                 );
               },
               child: Text(
-                AppLocalizations.instance.translate('setup_create_pin', null),
+                AppLocalizations.instance.translate('setup_create_pin'),
                 style: TextStyle(fontSize: 18),
               ),
             )

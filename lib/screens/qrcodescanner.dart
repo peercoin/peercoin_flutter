@@ -34,7 +34,7 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.instance.translate('scan_qr', null)),
+        title: Text(AppLocalizations.instance.translate('scan_qr')),
       ),
       body: Column(
         children: <Widget>[
