@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/providers/options.dart';
+import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 import 'package:provider/provider.dart';

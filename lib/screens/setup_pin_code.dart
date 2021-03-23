@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
-import 'package:peercoin/providers/options.dart';
+import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 import 'package:provider/provider.dart';
 
@@ -40,9 +40,9 @@ class SetupPinCodeScreen extends StatelessWidget {
                   didConfirmed: (matchedText) async {
                     Provider.of<EncryptedBox>(context, listen: false)
                         .setPassCode(matchedText);
-                    var prefs =
-                        await Provider.of<Options>(context, listen: false)
-                            .prefs;
+                    var prefs = await Provider.of<UnencryptedOptions>(context,
+                            listen: false)
+                        .prefs;
                     await prefs.setBool("setupFinished", true);
                     Navigator.popAndPushNamed(
                         context, WalletListScreen.routeName);

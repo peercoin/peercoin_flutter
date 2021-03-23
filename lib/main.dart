@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +15,7 @@ import './models/walletutxo.dart';
 import './providers/activewallets.dart';
 import './providers/electrumconnection.dart';
 import './providers/encryptedbox.dart';
-import './providers/options.dart';
+import 'providers/unencryptedOptions.dart';
 import './screens/new_wallet.dart';
 import './screens/qrcodescanner.dart';
 import './screens/transaction_details.dart';
@@ -39,6 +40,7 @@ void main() async {
   Hive.registerAdapter(WalletTransactionAdapter());
   Hive.registerAdapter(WalletAddressAdapter());
   Hive.registerAdapter(WalletUtxoAdapter());
+  Hive.registerAdapter(AppOptionsAdapter());
 
   //init notifications
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -78,7 +80,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: Options()),
+        Provider(create: (context) {
+          return UnencryptedOptions();
+        }),
         ChangeNotifierProvider.value(value: EncryptedBox()),
         ChangeNotifierProvider(
           create: (context) {
