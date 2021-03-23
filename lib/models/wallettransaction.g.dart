@@ -25,7 +25,8 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
       direction: fields[5] as String,
       broadCasted: fields[7] as bool,
       broadcastHex: fields[8] as String,
-    )..confirmations = fields[6] as int;
+      confirmations: fields[6] as int,
+    );
   }
 
   @override

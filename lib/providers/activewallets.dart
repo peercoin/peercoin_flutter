@@ -251,18 +251,21 @@ class ActiveWallets with ChangeNotifier {
               final txValue = (vOut["value"] * 1000000).toInt();
 
               openWallet.putTransaction(WalletTransaction(
-                  txid: tx["txid"],
-                  timestamp: tx["blocktime"],
-                  value: txValue,
-                  fee: 0,
-                  address: addr,
-                  direction: direction,
-                  broadCasted: true,
-                  broadcastHex: ""));
+                txid: tx["txid"],
+                timestamp: tx["blocktime"],
+                value: txValue,
+                fee: 0,
+                address: addr,
+                direction: direction,
+                broadCasted: true,
+                confirmations: tx["confirmations"],
+                broadcastHex: "",
+              ));
             }
           });
         });
       } else {
+        //outgoing tx
         openWallet.putTransaction(WalletTransaction(
           txid: tx["txid"],
           timestamp: tx["blocktime"],
@@ -271,6 +274,7 @@ class ActiveWallets with ChangeNotifier {
           address: address,
           direction: direction,
           broadCasted: false,
+          confirmations: 0,
           broadcastHex: tx["hex"],
         ));
       }
