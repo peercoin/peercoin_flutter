@@ -38,7 +38,8 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
             SizedBox(height: 30),
             SwitchListTile(
                 subtitle: Text(
-                    AppLocalizations.instance.translate('setup_pin_biometrics'),
+                    AppLocalizations.instance
+                        .translate('app_settings_biometrics'),
                     style: TextStyle(color: Colors.white)),
                 value: _biometricsAllowed,
                 activeColor: Colors.white,
