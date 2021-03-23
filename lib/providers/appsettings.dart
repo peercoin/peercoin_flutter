@@ -26,4 +26,13 @@ class AppSettings with ChangeNotifier {
     _appOptions.allowBiometrics = newStatus;
     notifyListeners();
   }
+
+  Map<String, bool> get authenticationOptions {
+    return _appOptions.authenticationOptions;
+  }
+
+  void setAuthenticationOptions(String field, bool newStatus) {
+    _appOptions.changeAuthenticationOptions(field, newStatus);
+    notifyListeners();
+  }
 }

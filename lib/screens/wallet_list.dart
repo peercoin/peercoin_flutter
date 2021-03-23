@@ -20,16 +20,18 @@ class _WalletListScreenState extends State<WalletListScreen> {
   bool _isLoading = false;
   bool _initial = true;
   ActiveWallets _activeWallets;
-  AppSettings _appSettings;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _appSettings = Provider.of<AppSettings>(context);
-      _appSettings.init(); //only required in home widget
+      AppSettings _appSettings =
+          Provider.of<AppSettings>(context, listen: false);
+      await _appSettings.init(); //only required in home widget
+      if (_appSettings.authenticationOptions["walletList"])
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+
       await _activeWallets.init();
-      await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       setState(() {
         _initial = false;
       });

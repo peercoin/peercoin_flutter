@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
@@ -10,6 +11,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/screens/qrcodescanner.dart';
+import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -33,11 +35,17 @@ class _SendTabState extends State<SendTab> {
   int _totalValue = 0;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_initial == true) {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
+
+      //check for required auth
+      AppSettings _appSettings =
+          Provider.of<AppSettings>(context, listen: false);
+      if (_appSettings.authenticationOptions["sendTransaction"])
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
 
       setState(() {
         _initial = false;

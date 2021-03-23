@@ -8,7 +8,8 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class Auth {
-  static Future<void> localAuth(BuildContext context) async {
+  static Future<void> localAuth(BuildContext context,
+      [Function callback]) async {
     final localAuth = LocalAuthentication();
     final authStrings = AndroidAuthMessages(
       signInTitle:
@@ -24,6 +25,7 @@ class Auth {
               .translate('authenticate_biometric_reason'),
           stickyAuth: true);
       if (didAuthenticate) {
+        if (callback != null) callback();
         Navigator.pop(context);
       }
     } catch (e) {
@@ -31,8 +33,8 @@ class Auth {
     }
   }
 
-  static Future<bool> requireAuth(
-      BuildContext context, bool biometricsAllowed) async {
+  static Future<void> requireAuth(BuildContext context, bool biometricsAllowed,
+      [Function callback]) async {
     if (biometricsAllowed) {
       await screenLock(
         context: context,
@@ -50,20 +52,12 @@ class Auth {
           Icons.fingerprint,
         ),
         customizedButtonTap: () async {
-          await localAuth(context);
+          await localAuth(context, callback);
         },
         didOpened: () async {
-          await localAuth(context);
-        },
-        didUnlocked: () {
-          Navigator.pop(context);
-          return true;
-        },
-        didMaxRetries: (_) {
-          return false;
+          await localAuth(context, callback);
         },
       );
-      return false;
     } else {
       await screenLock(
         context: context,
@@ -78,14 +72,10 @@ class Auth {
             text: AppLocalizations.instance
                 .translate("authenticate_confirm_title")),
         didUnlocked: () {
+          if (callback != null) callback();
           Navigator.pop(context);
-          return true;
-        },
-        didMaxRetries: (_) {
-          return false;
         },
       );
-      return false;
     }
   }
 }
