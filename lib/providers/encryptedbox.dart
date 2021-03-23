@@ -10,7 +10,6 @@ class EncryptedBox with ChangeNotifier {
   Map<String, Box> _cryptoBox = {};
   Uint8List _encryptionKey;
   String _passCode;
-  String _biometrickUnlock;
   FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<Uint8List> get key async {
@@ -35,22 +34,6 @@ class EncryptedBox with ChangeNotifier {
   Future<bool> setPassCode(passCode) async {
     if (_passCode == null) {
       await _secureStorage.write(key: "passCode", value: passCode);
-      return true;
-    }
-    return false;
-  }
-
-  Future<String> get biometricsEnabled async {
-    if (_biometrickUnlock == null) {
-      _biometrickUnlock = await _secureStorage.read(key: "biometrickUnlock");
-    }
-    return _biometrickUnlock;
-  }
-
-  Future<bool> setBiometricsEnabled(biometrickUnlock) async {
-    if (_biometrickUnlock == null) {
-      await _secureStorage.write(
-          key: "biometrickUnlock", value: biometrickUnlock);
       return true;
     }
     return false;

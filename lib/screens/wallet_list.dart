@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -19,13 +20,16 @@ class _WalletListScreenState extends State<WalletListScreen> {
   bool _isLoading = false;
   bool _initial = true;
   ActiveWallets _activeWallets;
+  AppSettings _appSettings;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _appSettings = Provider.of<AppSettings>(context);
+      _appSettings.init(); //only required in home widget
       await _activeWallets.init();
-      await Auth.requireAuth(context);
+      await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       setState(() {
         _initial = false;
       });

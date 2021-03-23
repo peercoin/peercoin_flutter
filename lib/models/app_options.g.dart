@@ -6,26 +6,29 @@ part of 'app_options.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AppOptionsAdapter extends TypeAdapter<AppOptions> {
+class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
   @override
   final int typeId = 5;
 
   @override
-  AppOptions read(BinaryReader reader) {
+  AppOptionsStore read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AppOptions()
-      .._authenticationOptions = (fields[0] as Map)?.cast<String, bool>();
+    return AppOptionsStore(
+      fields[1] as bool,
+    ).._authenticationOptions = (fields[0] as Map)?.cast<String, bool>();
   }
 
   @override
-  void write(BinaryWriter writer, AppOptions obj) {
+  void write(BinaryWriter writer, AppOptionsStore obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj._authenticationOptions);
+      ..write(obj._authenticationOptions)
+      ..writeByte(1)
+      ..write(obj._allowBiometrics);
   }
 
   @override
@@ -34,7 +37,7 @@ class AppOptionsAdapter extends TypeAdapter<AppOptions> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppOptionsAdapter &&
+      other is AppOptionsStoreAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

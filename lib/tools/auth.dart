@@ -16,47 +16,76 @@ class Auth {
       biometricHint:
           AppLocalizations.instance.translate('authenticate_biometric_hint'),
     );
-    final didAuthenticate = await localAuth.authenticate(
-        androidAuthStrings: authStrings,
-        biometricOnly: true,
-        localizedReason: AppLocalizations.instance
-            .translate('authenticate_biometric_reason'),
-        stickyAuth: true);
-    if (didAuthenticate) {
-      Navigator.pop(context);
+    try {
+      final didAuthenticate = await localAuth.authenticate(
+          androidAuthStrings: authStrings,
+          biometricOnly: true,
+          localizedReason: AppLocalizations.instance
+              .translate('authenticate_biometric_reason'),
+          stickyAuth: true);
+      if (didAuthenticate) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      localAuth.stopAuthentication();
     }
   }
 
-  static Future<bool> requireAuth(context) async {
-    await screenLock(
-      context: context,
-      correctString:
-          await Provider.of<EncryptedBox>(context, listen: false).passCode,
-      digits: 6,
-      maxRetries: 3,
-      canCancel: false,
-      title: HeadingTitle(
-          text: AppLocalizations.instance.translate("authenticate_title")),
-      confirmTitle: HeadingTitle(
-          text: AppLocalizations.instance
-              .translate("authenticate_confirm_title")),
-      customizedButtonChild: Icon(
-        Icons.fingerprint,
-      ),
-      customizedButtonTap: () async {
-        await localAuth(context);
-      },
-      didOpened: () async {
-        await localAuth(context);
-      },
-      didUnlocked: () {
-        Navigator.pop(context);
-        return true;
-      },
-      didMaxRetries: (_) {
-        return false;
-      },
-    );
-    return false;
+  static Future<bool> requireAuth(
+      BuildContext context, bool biometricsAllowed) async {
+    if (biometricsAllowed) {
+      await screenLock(
+        context: context,
+        correctString:
+            await Provider.of<EncryptedBox>(context, listen: false).passCode,
+        digits: 6,
+        maxRetries: 3,
+        canCancel: false,
+        title: HeadingTitle(
+            text: AppLocalizations.instance.translate("authenticate_title")),
+        confirmTitle: HeadingTitle(
+            text: AppLocalizations.instance
+                .translate("authenticate_confirm_title")),
+        customizedButtonChild: Icon(
+          Icons.fingerprint,
+        ),
+        customizedButtonTap: () async {
+          await localAuth(context);
+        },
+        didOpened: () async {
+          await localAuth(context);
+        },
+        didUnlocked: () {
+          Navigator.pop(context);
+          return true;
+        },
+        didMaxRetries: (_) {
+          return false;
+        },
+      );
+      return false;
+    } else {
+      await screenLock(
+        context: context,
+        correctString:
+            await Provider.of<EncryptedBox>(context, listen: false).passCode,
+        digits: 6,
+        maxRetries: 3,
+        canCancel: false,
+        title: HeadingTitle(
+            text: AppLocalizations.instance.translate("authenticate_title")),
+        confirmTitle: HeadingTitle(
+            text: AppLocalizations.instance
+                .translate("authenticate_confirm_title")),
+        didUnlocked: () {
+          Navigator.pop(context);
+          return true;
+        },
+        didMaxRetries: (_) {
+          return false;
+        },
+      );
+      return false;
+    }
   }
 }

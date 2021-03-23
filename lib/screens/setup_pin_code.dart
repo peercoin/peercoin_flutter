@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/heading_title.dart';
+import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 import 'package:provider/provider.dart';
 
-class SetupPinCodeScreen extends StatelessWidget {
+class SetupPinCodeScreen extends StatefulWidget {
   static const routeName = "/setup-pin";
 
+  @override
+  _SetupPinCodeScreenState createState() => _SetupPinCodeScreenState();
+}
+
+class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
+  bool _biometricsAllowed = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +36,28 @@ class SetupPinCodeScreen extends StatelessWidget {
             Text(AppLocalizations.instance.translate('setup_pin'),
                 style: TextStyle(color: Colors.white)),
             SizedBox(height: 30),
+            SwitchListTile(
+                subtitle: Text(
+                    AppLocalizations.instance.translate('setup_pin_biometrics'),
+                    style: TextStyle(color: Colors.white)),
+                value: _biometricsAllowed,
+                activeColor: Colors.white,
+                inactiveThumbColor: Colors.grey,
+                onChanged: (newState) {
+                  setState(() {
+                    _biometricsAllowed = newState;
+                  });
+                }),
+            SizedBox(height: 30),
             TextButton(
               onPressed: () async {
                 await screenLock(
-                  title: Text("TestTitle"), //TODO
-                  confirmTitle: Text("TestConfirm"), //TODO
+                  title: HeadingTitle(
+                      text: AppLocalizations.instance
+                          .translate("authenticate_title")),
+                  confirmTitle: HeadingTitle(
+                      text: AppLocalizations.instance
+                          .translate("authenticate_confirm_title")),
                   context: context,
                   correctString: '',
                   digits: 6,
@@ -40,6 +65,11 @@ class SetupPinCodeScreen extends StatelessWidget {
                   didConfirmed: (matchedText) async {
                     Provider.of<EncryptedBox>(context, listen: false)
                         .setPassCode(matchedText);
+
+                    AppSettings settings =
+                        Provider.of<AppSettings>(context, listen: false);
+                    settings.createInitialSettings(_biometricsAllowed);
+
                     var prefs = await Provider.of<UnencryptedOptions>(context,
                             listen: false)
                         .prefs;

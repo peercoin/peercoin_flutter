@@ -9,6 +9,7 @@
   "scan_qr": "Scan QR-Code",
   "setup_files_for_wallet": "Create all the necessary files to get started with your wallet.",
   "setup_pin": "Please set a PIN before you continue.",
+  "setup_pin_biometrics": "Allow biometric authentification",
   "setup_create_pin": "Create PIN",
   "create_wallet": "Create Wallet",
   "label_wallet_seed": "This is your wallet seed:",
