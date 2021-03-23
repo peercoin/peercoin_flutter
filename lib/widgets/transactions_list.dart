@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/screens/transaction_details.dart';

@@ -48,5 +48,7 @@
 		</array>
 		<key>NSCameraUsageDescription</key>
 		<string>Can we access your camera in order to scan barcodes?</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>FaceID protects your wallet from unauthorized use.</string>
 	</dict>
 </plist>

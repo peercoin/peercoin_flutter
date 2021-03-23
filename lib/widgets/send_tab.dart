@@ -3,13 +3,15 @@ import 'dart:async';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/screens/qrcodescanner.dart';
+import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -33,11 +35,17 @@ class _SendTabState extends State<SendTab> {
   int _totalValue = 0;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_initial == true) {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
+
+      //check for required auth
+      AppSettings _appSettings =
+          Provider.of<AppSettings>(context, listen: false);
+      if (_appSettings.authenticationOptions["sendTransaction"])
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
 
       setState(() {
         _initial = false;
@@ -49,7 +57,7 @@ class _SendTabState extends State<SendTab> {
   Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
     return await _activeWallets.buildTransaction(
       _wallet.name,
-      _addressKey.currentState.value,
+      _addressKey.currentState.value.trim(),
       _amountKey.currentState.value,
       fee,
       dryrun,
@@ -93,8 +101,9 @@ class _SendTabState extends State<SendTab> {
                 if (value.isEmpty) {
                   return 'Please enter an address';
                 }
+                String sanitized = value.trim();
                 if (Address.validateAddress(
-                        value, _availableCoin.networkType) ==
+                        sanitized, _availableCoin.networkType) ==
                     false) {
                   return "Invalid address";
                 }
@@ -154,7 +163,7 @@ class _SendTabState extends State<SendTab> {
                           return Center(child: LoadingIndicator());
                         });
                     Map _buildResult;
-                    Timer(Duration(milliseconds: 500), () async {
+                    Timer(Duration(milliseconds: 100), () async {
                       //TODO: this feels _very_ hacky - not very asyncy
                       _buildResult = await buildTx(true);
                       Navigator.of(dialogContext).pop();
@@ -188,7 +197,8 @@ class _SendTabState extends State<SendTab> {
                                   _totalValue - _txFee + _destroyedChange;
                             }
                             return SimpleDialog(
-                              title: Text(AppLocalizations.instance.translate('send_confirm_transaction',null)),
+                              title: Text(AppLocalizations.instance
+                                  .translate('send_confirm_transaction', null)),
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -198,7 +208,9 @@ class _SendTabState extends State<SendTab> {
                                       RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
-                                          text: AppLocalizations.instance.translate('send_transferring',null),
+                                          text: AppLocalizations.instance
+                                              .translate(
+                                                  'send_transferring', null),
                                           style: DefaultTextStyle.of(context)
                                               .style,
                                           children: <TextSpan>[
@@ -208,7 +220,10 @@ class _SendTabState extends State<SendTab> {
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            TextSpan(text: AppLocalizations.instance.translate('send_to',null)),
+                                            TextSpan(
+                                                text: AppLocalizations.instance
+                                                    .translate(
+                                                        'send_to', null)),
                                             TextSpan(
                                                 text: _addressKey
                                                     .currentState.value,
@@ -219,17 +234,32 @@ class _SendTabState extends State<SendTab> {
                                         ),
                                       ),
                                       SizedBox(height: 10),
-                                      Text(
-                                          AppLocalizations.instance.translate('send_fee',{'amount': "${_txFee / 1000000}",'letter_code':"${_wallet.letterCode}"})),
+                                      Text(AppLocalizations.instance.translate(
+                                          'send_fee', {
+                                        'amount': "${_txFee / 1000000}",
+                                        'letter_code': "${_wallet.letterCode}"
+                                      })),
                                       if (_destroyedChange > 0)
                                         Text(
-                                          AppLocalizations.instance.translate('send_dust',{'amount': "${_destroyedChange / 1000000}",'letter_code':"${_wallet.letterCode}"}),
+                                          AppLocalizations.instance
+                                              .translate('send_dust', {
+                                            'amount':
+                                                "${_destroyedChange / 1000000}",
+                                            'letter_code':
+                                                "${_wallet.letterCode}"
+                                          }),
                                           style: TextStyle(
                                               color:
                                                   Theme.of(context).errorColor),
                                         ),
                                       Text(
-                                          AppLocalizations.instance.translate('send_total',{'amount': "${_totalValue / 1000000}",'letter_code':"${_wallet.letterCode}"}),
+                                          AppLocalizations.instance.translate(
+                                              'send_total', {
+                                            'amount':
+                                                "${_totalValue / 1000000}",
+                                            'letter_code':
+                                                "${_wallet.letterCode}"
+                                          }),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       SizedBox(height: 20),
@@ -238,7 +268,9 @@ class _SendTabState extends State<SendTab> {
                                           primary:
                                               Theme.of(context).primaryColor,
                                         ),
-                                        label: Text(AppLocalizations.instance.translate('send_confirm_send',null)),
+                                        label: Text(AppLocalizations.instance
+                                            .translate(
+                                                'send_confirm_send', null)),
                                         icon: Icon(Icons.send),
                                         onPressed: () async {
                                           try {
@@ -272,8 +304,10 @@ class _SendTabState extends State<SendTab> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
-                                                content: Text(
-                                                    AppLocalizations.instance.translate('send_oops',null)),
+                                                content: Text(AppLocalizations
+                                                    .instance
+                                                    .translate(
+                                                        'send_oops', null)),
                                               ),
                                             );
                                           }
@@ -287,12 +321,13 @@ class _SendTabState extends State<SendTab> {
                           });
                     });
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppLocalizations.instance.translate('send_errors_solve',null))));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(AppLocalizations.instance
+                            .translate('send_errors_solve', null))));
                   }
                 },
                 icon: Icon(Icons.send),
-                label: Text(AppLocalizations.instance.translate('send',null)),
+                label: Text(AppLocalizations.instance.translate('send')),
               ),
               IconButton(
                   icon: Icon(

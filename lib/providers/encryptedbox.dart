@@ -7,28 +7,44 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:peercoin/models/coinwallet.dart';
 
 class EncryptedBox with ChangeNotifier {
-  Map<String, Box> cryptoBox = {};
-  Uint8List encryptionKey;
+  Map<String, Box> _cryptoBox = {};
+  Uint8List _encryptionKey;
+  String _passCode;
+  FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<Uint8List> get key async {
-    if (encryptionKey == null) {
-      final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-      var containsEncryptionKey = await secureStorage.containsKey(key: 'key');
+    if (_encryptionKey == null) {
+      var containsEncryptionKey = await _secureStorage.containsKey(key: 'key');
       if (!containsEncryptionKey) {
         var key = Hive.generateSecureKey();
-        await secureStorage.write(key: 'key', value: base64UrlEncode(key));
+        await _secureStorage.write(key: 'key', value: base64UrlEncode(key));
       }
-      encryptionKey = base64Url.decode(await secureStorage.read(key: 'key'));
+      _encryptionKey = base64Url.decode(await _secureStorage.read(key: 'key'));
     }
-    return encryptionKey;
+    return _encryptionKey;
+  }
+
+  Future<String> get passCode async {
+    if (_passCode == null) {
+      _passCode = await _secureStorage.read(key: "passCode");
+    }
+    return _passCode;
+  }
+
+  Future<bool> setPassCode(passCode) async {
+    if (_passCode == null) {
+      await _secureStorage.write(key: "passCode", value: passCode);
+      return true;
+    }
+    return false;
   }
 
   Future<Box> getGenericBox(String name) async {
-    cryptoBox[name] = await Hive.openBox(
+    _cryptoBox[name] = await Hive.openBox(
       name,
       encryptionCipher: HiveAesCipher(await key),
     );
-    return cryptoBox[name];
+    return _cryptoBox[name];
   }
 
   Future<Box> getWalletBox() async {
