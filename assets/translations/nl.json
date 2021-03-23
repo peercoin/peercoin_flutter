@@ -55,5 +55,5 @@
   "transactions_all": "Alle",
   "transactions_out": "Uit",
   "transactions_none": "Geen transacties gevonden",
-  "transactions_fee": "-&amount \nContributie"
+  "transactions_fee": "-$amount \nContributie"
 }
