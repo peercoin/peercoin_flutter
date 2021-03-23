@@ -119,6 +119,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 AppLocalizations.instance.translate('app_settings_seed'),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 10),
               _seedPhrase == ""
                   ? TextButton(
                       onPressed: () =>
