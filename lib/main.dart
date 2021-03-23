@@ -76,6 +76,23 @@ void main() async {
   runApp(MyApp());
 }
 
+const MaterialColor peercoinGreen = MaterialColor(
+  _peercoinGreenValue,
+  <int, Color>{
+    50: Color(0xff3cb054),
+    100: Color(0xff3cb054),
+    200: Color(0xff3cb054),
+    300: Color(0xff3cb054),
+    400: Color(0xff3cb054),
+    500: Color(0xff3cb054),
+    600: Color(0xff3cb054),
+    700: Color(0xff3cb054),
+    800: Color(0xff3cb054),
+    900: Color(0xff3cb054),
+  },
+);
+const int _peercoinGreenValue = 0xff3cb054;
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -116,16 +133,16 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
-          //GlobalWidgetsLocalizations.delegate,
         ],
         theme: ThemeData(
           textTheme: Theme.of(context).textTheme.apply(
                 fontSizeFactor: 1.1,
                 fontSizeDelta: 2.0,
               ),
-          primaryColor: Color.fromRGBO(60, 176, 84, 1),
+          primaryColor: peercoinGreen,
           accentColor: Colors.grey,
           errorColor: Colors.red,
+          primarySwatch: peercoinGreen,
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(primary: Colors.white),
           ),
