@@ -43,6 +43,18 @@ class _ReceiveTabState extends State<ReceiveTab> {
     });
   }
 
+
+  RegExp getValidator(int fractions){
+    String expression = r'^([1-9]{1}[0-9]{0,' + fractions.toString() +
+        r'}(,[0-9]{3})*(.[0-9]{0,'+ fractions.toString() +
+        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,'+ fractions.toString() +
+        r'})?|0(.[0-9]{0,'+ fractions.toString() +
+        r'})?|(.[0-9]{1,'+ fractions.toString() +
+        r'})?)$';
+
+    return new RegExp(expression);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -112,7 +124,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   autocorrect: false,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r'(^\d*\.?\d*)')), //TODO accepts 00.0123
+                        getValidator(_availableCoin.fractions)
+                    ),
                   ],
                   keyboardType: TextInputType.numberWithOptions(signed: true),
                   decoration: InputDecoration(

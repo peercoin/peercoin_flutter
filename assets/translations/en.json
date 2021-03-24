@@ -46,6 +46,7 @@
   "send_address": "Address",
   "send_enter_address": "Please enter an address",
   "send_invalid_address": "Invalid address",
+  "send_amount": "Amount",
   "send_enter_amount": "Please enter an amount",
   "send_amount_small": "Amount too small",
   "send_amount_exceeds": "Amount exceeds balance",

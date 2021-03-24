@@ -76,6 +76,17 @@ class _SendTabState extends State<SendTab> {
     addressController.text = parsed.path;
   }
 
+  RegExp getValidator(int fractions){
+    String expression = r'^([1-9]{1}[0-9]{0,' + fractions.toString() +
+        r'}(,[0-9]{3})*(.[0-9]{0,'+ fractions.toString() +
+        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,'+ fractions.toString() +
+        r'})?|0(.[0-9]{0,'+ fractions.toString() +
+        r'})?|(.[0-9]{1,'+ fractions.toString() +
+        r'})?)$';
+
+    return new RegExp(expression);
+  }
+
   var addressController = TextEditingController();
   var amountController = TextEditingController();
 
@@ -93,19 +104,19 @@ class _SendTabState extends State<SendTab> {
               controller: addressController,
               textInputAction: TextInputAction.next,
               autocorrect: false,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 icon: Icon(Icons.shuffle),
-                labelText: 'Address',
+                labelText: AppLocalizations.instance.translate('tx_address', null),
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return 'Please enter an address';
+                  return AppLocalizations.instance.translate('receive_enter_amount', null);
                 }
                 String sanitized = value.trim();
                 if (Address.validateAddress(
                         sanitized, _availableCoin.networkType) ==
                     false) {
-                  return "Invalid address";
+                  return AppLocalizations.instance.translate('send_invalid_address', null);
                 }
                 return null;
               },
@@ -117,31 +128,32 @@ class _SendTabState extends State<SendTab> {
                 autocorrect: false,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
-                      RegExp(r'(^\d*\.?\d*)')), //TODO accepts 00.0123
+                      getValidator(_availableCoin.fractions)
+                  ),
                 ],
                 keyboardType: TextInputType.numberWithOptions(signed: true),
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
-                  labelText: 'Amount',
+                  labelText: AppLocalizations.instance.translate('send_amount', null),
                   suffix: Text(_wallet.letterCode),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter an amount';
+                    return AppLocalizations.instance.translate('send_enter_amount', null);
                   }
                   int txValueInSatoshis =
                       (double.parse(value) * 1000000).toInt();
                   print("req value $txValueInSatoshis - ${_wallet.balance}");
                   if (value.contains(".") &&
                       value.split(".")[1].length > _availableCoin.fractions) {
-                    return "Amount too small";
+                    return AppLocalizations.instance.translate('send_amount_small', null);
                   }
                   if (txValueInSatoshis > _wallet.balance) {
-                    return "Amount exceeds balance";
+                    return AppLocalizations.instance.translate('send_amount_exceeds', null);
                   }
                   if (txValueInSatoshis == _availableCoin.minimumTxValue &&
                       txValueInSatoshis == _wallet.balance) {
-                    return "${_availableCoin.minimumTxValue * 1000000} is the minimum output. \nYou don't have enough funds to pay for the fees.";
+                    return AppLocalizations.instance.translate('send_amount_below_minimum',{'amount': "${_availableCoin.minimumTxValue * 1000000}"});
                   }
                   return null;
                 }),
