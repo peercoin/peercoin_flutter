@@ -210,7 +210,7 @@ class _SendTabState extends State<SendTab> {
                             }
                             return SimpleDialog(
                               title: Text(AppLocalizations.instance
-                                  .translate('send_confirm_transaction', null)),
+                                  .translate('send_confirm_transaction')),
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -221,8 +221,7 @@ class _SendTabState extends State<SendTab> {
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
                                           text: AppLocalizations.instance
-                                              .translate(
-                                                  'send_transferring', null),
+                                              .translate('send_transferring'),
                                           style: DefaultTextStyle.of(context)
                                               .style,
                                           children: <TextSpan>[
@@ -234,8 +233,7 @@ class _SendTabState extends State<SendTab> {
                                                         FontWeight.bold)),
                                             TextSpan(
                                                 text: AppLocalizations.instance
-                                                    .translate(
-                                                        'send_to', null)),
+                                                    .translate('send_to')),
                                             TextSpan(
                                                 text: _addressKey
                                                     .currentState.value,
@@ -281,8 +279,7 @@ class _SendTabState extends State<SendTab> {
                                               Theme.of(context).primaryColor,
                                         ),
                                         label: Text(AppLocalizations.instance
-                                            .translate(
-                                                'send_confirm_send', null)),
+                                            .translate('send_confirm_send')),
                                         icon: Icon(Icons.send),
                                         onPressed: () async {
                                           try {
@@ -319,7 +316,8 @@ class _SendTabState extends State<SendTab> {
                                                 content: Text(AppLocalizations
                                                     .instance
                                                     .translate(
-                                                        'send_oops', null)),
+                                                  'send_oops',
+                                                )),
                                               ),
                                             );
                                           }
@@ -334,8 +332,9 @@ class _SendTabState extends State<SendTab> {
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(AppLocalizations.instance
-                            .translate('send_errors_solve', null))));
+                        content: Text(AppLocalizations.instance.translate(
+                      'send_errors_solve',
+                    ))));
                   }
                 },
                 icon: Icon(Icons.send),
