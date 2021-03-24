@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class NewWalletScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ List activeCoins = [];
 
 class _NewWalletScreenState extends State<NewWalletScreen> {
   String _coin = "";
-
+  bool _initial = true;
   addWallet(ctx) async {
     try {
       await Provider.of<ActiveWallets>(context, listen: false).addWallet(_coin,
@@ -28,8 +30,8 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           _coin == ""
-              ? AppLocalizations.instance.translate('select_coin',null)
-              : AppLocalizations.instance.translate('add_coin_failed',null),
+              ? AppLocalizations.instance.translate('select_coin')
+              : AppLocalizations.instance.translate('add_coin_failed'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -39,6 +41,15 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
 
   @override
   void didChangeDependencies() async {
+    if (_initial) {
+      AppSettings _appSettings =
+          Provider.of<AppSettings>(context, listen: false);
+      if (_appSettings.authenticationOptions["newWallet"])
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+      setState(() {
+        _initial = false;
+      });
+    }
     var activeWalletList =
         await Provider.of<ActiveWallets>(context, listen: false)
             .activeWalletsKeys;
@@ -61,7 +72,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.instance.translate('add_new_wallet',null)),
+        title: Text(AppLocalizations.instance.translate('add_new_wallet')),
         actions: [
           if (actualAvailableWallets.isNotEmpty)
             Padding(
@@ -75,7 +86,8 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
       body: Container(
         child: actualAvailableWallets.isEmpty
             ? Center(
-                child: Text(AppLocalizations.instance.translate('no_new_wallet',null)),
+                child:
+                    Text(AppLocalizations.instance.translate('no_new_wallet')),
               )
             : Column(children: [
                 Expanded(

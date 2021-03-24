@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,12 @@ class _WalletListScreenState extends State<WalletListScreen> {
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
+      AppSettings _appSettings =
+          Provider.of<AppSettings>(context, listen: false);
+      await _appSettings.init(); //only required in home widget
+      if (_appSettings.authenticationOptions["walletList"])
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+
       await _activeWallets.init();
       setState(() {
         _initial = false;
@@ -37,7 +45,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
-        title: Center(child: Text(AppLocalizations.instance.translate('wallets_list',null))),
+        title: Center(
+            child: Text(AppLocalizations.instance.translate('wallets_list'))),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -68,7 +77,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
                       if (snapshot.data == null || snapshot.data.isEmpty) {
                         return Column(children: [
                           SizedBox(height: 30),
-                          Text(AppLocalizations.instance.translate('wallets_none',null)),
+                          Text(AppLocalizations.instance
+                              .translate('wallets_none', null)),
                           SizedBox(height: 30)
                         ]);
                       }

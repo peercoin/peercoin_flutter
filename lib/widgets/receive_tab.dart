@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -117,12 +117,14 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   keyboardType: TextInputType.numberWithOptions(signed: true),
                   decoration: InputDecoration(
                     icon: Icon(Icons.money),
-                    labelText: AppLocalizations.instance.translate('receive_requested_amount',null),
+                    labelText: AppLocalizations.instance
+                        .translate('receive_requested_amount', null),
                     suffix: Text(_wallet.letterCode),
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
-                      return AppLocalizations.instance.translate('receive_enter_amount',null);
+                      return AppLocalizations.instance
+                          .translate('receive_enter_amount', null);
                     }
                     return null;
                   }),

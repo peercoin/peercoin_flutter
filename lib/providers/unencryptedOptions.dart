@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Options with ChangeNotifier {
+class UnencryptedOptions {
   Future<SharedPreferences> get prefs async {
     return await SharedPreferences.getInstance();
   }

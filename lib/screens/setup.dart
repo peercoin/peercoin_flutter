@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:peercoin/app_localizations.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/screens/setup_save_seed.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
@@ -33,12 +33,16 @@ class _SetupScreenState extends State<SetupScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("assets/icon/ppc-icon-white-48.png"),
+              Image.asset(
+                "assets/icon/ppc-icon-white-256.png",
+                width: 50,
+              ),
               SizedBox(height: 60),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Text(
-                  AppLocalizations.instance.translate('setup_files_for_wallet',null),
+                  AppLocalizations.instance
+                      .translate('setup_files_for_wallet', null),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -48,7 +52,8 @@ class _SetupScreenState extends State<SetupScreen> {
                 child: _loading
                     ? LoadingIndicator()
                     : Text(
-                        AppLocalizations.instance.translate('create_wallet',null),
+                        AppLocalizations.instance
+                            .translate('create_wallet', null),
                         style: TextStyle(fontSize: 18),
                       ),
               )

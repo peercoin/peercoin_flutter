@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/app_localizations.dart';
-import 'package:peercoin/screens/app_settings.dart';
+import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/screens/app_settings_screen.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -9,8 +9,7 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: (Column(children: [
         AppBar(
-          title:
-              Text(AppLocalizations.instance.translate('app_navigation', null)),
+          title: Text(AppLocalizations.instance.translate('app_navigation')),
           automaticallyImplyLeading: false,
         ),
         ListTile(
@@ -19,13 +18,12 @@ class AppDrawer extends StatelessWidget {
           leading: Icon(
             Icons.account_balance_wallet,
           ),
-          title: Text(AppLocalizations.instance.translate('app_wallets', null)),
+          title: Text(AppLocalizations.instance.translate('app_wallets')),
         ),
-        Divider(), //TODO add
+        Divider(),
         ListTile(
             leading: Icon(Icons.app_settings_alt),
-            title:
-                Text(AppLocalizations.instance.translate('app_settings', null)),
+            title: Text(AppLocalizations.instance.translate('app_settings')),
             onTap: () => Navigator.of(context)
                 .pushReplacementNamed(AppSettingsScreen.routeName))
       ])),

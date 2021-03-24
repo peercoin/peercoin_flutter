@@ -32,6 +32,7 @@ class WalletTransaction extends HiveObject {
     @required this.direction,
     @required this.broadCasted,
     @required this.broadcastHex,
+    @required this.confirmations,
   });
 
   set newTimestamp(int newTime) {
