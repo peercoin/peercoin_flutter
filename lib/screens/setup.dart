@@ -41,22 +41,41 @@ class _SetupScreenState extends State<SetupScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Text(
-                  AppLocalizations.instance
-                      .translate('setup_files_for_wallet', null),
+                  AppLocalizations.instance.translate('setup_files_for_wallet'),
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
               SizedBox(height: 30),
-              TextButton(
-                onPressed: () => {createWallet(context)},
-                child: _loading
-                    ? LoadingIndicator()
-                    : Text(
-                        AppLocalizations.instance
-                            .translate('create_wallet', null),
-                        style: TextStyle(fontSize: 18),
-                      ),
-              )
+              _loading
+                  ? LoadingIndicator()
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () => {createWallet(context)},
+                          child: Text(
+                            AppLocalizations.instance.translate(
+                              'create_wallet_new_seed',
+                            ),
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        Text(
+                            AppLocalizations.instance.translate(
+                              'create_wallet_or',
+                            ),
+                            style: TextStyle(color: Colors.white)),
+                        TextButton(
+                          onPressed: () => {createWallet(context)},
+                          child: Text(
+                            AppLocalizations.instance
+                                .translate('create_wallet_existing_seed'),
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        )
+                      ],
+                    )
             ],
           ),
         ),

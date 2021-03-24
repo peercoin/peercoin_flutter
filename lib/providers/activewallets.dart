@@ -50,10 +50,14 @@ class ActiveWallets with ChangeNotifier {
     return bip39.mnemonicToSeed(words);
   }
 
-  Future<void> createPhrase() async {
-    var mnemonicSeed = bip39.generateMnemonic();
-    await _vaultBox.put('mnemonicSeed', mnemonicSeed);
-    _seedPhrase = mnemonicSeed;
+  Future<void> createPhrase([String providedPhrase]) async {
+    if (providedPhrase == null) {
+      var mnemonicSeed = bip39.generateMnemonic();
+      await _vaultBox.put('mnemonicSeed', mnemonicSeed);
+      _seedPhrase = mnemonicSeed;
+    } else {
+      //implement
+    }
   }
 
   Future<List> get activeWalletsValues async {
