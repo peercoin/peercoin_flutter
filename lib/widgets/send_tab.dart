@@ -76,6 +76,17 @@ class _SendTabState extends State<SendTab> {
     addressController.text = parsed.path;
   }
 
+  RegExp getValidator(int fractions){
+    String expression = r'^([1-9]{1}[0-9]{0,' + fractions.toString() +
+        r'}(,[0-9]{3})*(.[0-9]{0,'+ fractions.toString() +
+        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,'+ fractions.toString() +
+        r'})?|0(.[0-9]{0,'+ fractions.toString() +
+        r'})?|(.[0-9]{1,'+ fractions.toString() +
+        r'})?)$';
+
+    return new RegExp(expression);
+  }
+
   var addressController = TextEditingController();
   var amountController = TextEditingController();
 
@@ -117,7 +128,8 @@ class _SendTabState extends State<SendTab> {
                 autocorrect: false,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
-                      RegExp(r'^([1-9]{1}[0-9]{0,6}(,[0-9]{3})*(.[0-9]{0,6})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,6})?|0(.[0-9]{0,6})?|(.[0-9]{1,6})?)$')),
+                      getValidator(_availableCoin.fractions)
+                  ),
                 ],
                 keyboardType: TextInputType.numberWithOptions(signed: true),
                 decoration: InputDecoration(
