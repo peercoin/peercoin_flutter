@@ -41,6 +41,7 @@
   "app_settings_newWallet": "Require to add new wallet",
   "app_settings_revealButton": "Reveal seed phrase",
   "app_settings_seed": "Seed phrase",
+  "app_settings_shareSeed": "Share seed",
   "receive_requested_amount": "Requested amount",
   "receive_enter_amount": "Please enter an amount",
   "send_address": "Address",
