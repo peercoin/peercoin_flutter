@@ -5,6 +5,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class AppSettingsScreen extends StatefulWidget {
   static const routeName = "/app-settings";
@@ -129,10 +130,21 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               .translate('app_settings_revealButton'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor)))
-                  : SelectableText(
-                      _seedPhrase,
-                      textAlign: TextAlign.center,
-                    )
+                  : Column(children: [
+                      SelectableText(
+                        _seedPhrase,
+                        textAlign: TextAlign.center,
+                      ),
+                      TextButton(
+                        onPressed: () => Share.share(_seedPhrase),
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('app_settings_shareSeed'),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      )
+                    ])
             ],
           ),
         ),
