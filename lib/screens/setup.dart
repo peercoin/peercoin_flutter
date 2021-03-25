@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/screens/setup_save_seed.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class _SetupScreenState extends State<SetupScreen> {
         Provider.of<ActiveWallets>(context, listen: false);
     await _activeWallets.init();
     await _activeWallets.createPhrase();
-    await Navigator.of(context).popAndPushNamed(SetupSaveScreen.routeName);
+    await Navigator.of(context).popAndPushNamed(Routes.SetupScreen);
   }
 
   @override

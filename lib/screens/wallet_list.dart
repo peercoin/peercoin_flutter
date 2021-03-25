@@ -4,15 +4,13 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/screens/new_wallet.dart';
-import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 class WalletListScreen extends StatefulWidget {
-  static const routeName = "/wallet-list";
   _WalletListScreenState createState() => _WalletListScreenState();
 }
 
@@ -52,7 +50,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
               onPressed: () =>
-                  Navigator.of(context).pushNamed(NewWalletScreen.routeName),
+                  Navigator.of(context).pushNamed(Routes.NewWallet),
               icon: Icon(Icons.add),
             ),
           )
@@ -97,7 +95,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                                         });
                                         await Navigator.of(context)
                                             .pushReplacementNamed(
-                                          WalletHomeScreen.routeName,
+                                          Routes.WalletHome,
                                           arguments: _wallet,
                                         );
                                       },

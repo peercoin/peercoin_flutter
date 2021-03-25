@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
-import 'package:peercoin/screens/transaction_details.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class TransactionList extends StatefulWidget {
@@ -93,12 +93,11 @@ class _TransactionListState extends State<TransactionList> {
                     int currentConfirmations = _filteredTx[i].confirmations;
                     return Card(
                       child: ListTile(
-                        onTap: () => Navigator.of(context).pushNamed(
-                            TransactionDetails.routeName,
-                            arguments: [
-                              _filteredTx[i],
-                              ModalRoute.of(context).settings.arguments
-                            ]),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(Routes.Transaction, arguments: [
+                          _filteredTx[i],
+                          ModalRoute.of(context).settings.arguments
+                        ]),
                         leading: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

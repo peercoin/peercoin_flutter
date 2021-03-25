@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,15 +16,10 @@ import './providers/activewallets.dart';
 import './providers/electrumconnection.dart';
 import './providers/encryptedbox.dart';
 import 'providers/unencryptedOptions.dart';
-import './screens/new_wallet.dart';
-import './screens/qrcodescanner.dart';
-import './screens/transaction_details.dart';
-import './screens/wallet_home.dart';
-import './screens/setup_save_seed.dart';
 import './screens/setup.dart';
 import './screens/wallet_list.dart';
-import 'screens/app_settings_screen.dart';
 import 'tools/app_localizations.dart';
+import 'tools/app_routes.dart';
 
 bool setupFinished;
 
@@ -148,16 +142,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: setupFinished ? WalletListScreen() : SetupScreen(),
-        routes: {
-          SetupSaveScreen.routeName: (ctx) => SetupSaveScreen(),
-          SetupPinCodeScreen.routeName: (ctx) => SetupPinCodeScreen(),
-          WalletListScreen.routeName: (ctx) => WalletListScreen(),
-          WalletHomeScreen.routeName: (ctx) => WalletHomeScreen(),
-          NewWalletScreen.routeName: (ctx) => NewWalletScreen(),
-          QRScanner.routeName: (ctx) => QRScanner(),
-          TransactionDetails.routeName: (ctx) => TransactionDetails(),
-          AppSettingsScreen.routeName: (ctx) => AppSettingsScreen(),
-        },
+        routes: Routes.getRoutes(),
       ),
     );
   }

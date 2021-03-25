@@ -8,8 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class AppSettingsScreen extends StatefulWidget {
-  static const routeName = "/app-settings";
-
   @override
   _AppSettingsScreenState createState() => _AppSettingsScreenState();
 }
@@ -24,7 +22,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      ;
+      // do things
       setState(() {
         _initial = false;
       });
