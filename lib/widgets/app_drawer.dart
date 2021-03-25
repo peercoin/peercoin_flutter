@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/screens/app_settings_screen.dart';
-import 'package:peercoin/screens/wallet_list.dart';
+import 'package:peercoin/tools/app_routes.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -14,7 +13,7 @@ class AppDrawer extends StatelessWidget {
         ),
         ListTile(
           onTap: () => Navigator.of(context)
-              .pushReplacementNamed(WalletListScreen.routeName),
+              .pushReplacementNamed(Routes.WalletList),
           leading: Icon(
             Icons.account_balance_wallet,
           ),
@@ -25,7 +24,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.app_settings_alt),
             title: Text(AppLocalizations.instance.translate('app_settings')),
             onTap: () => Navigator.of(context)
-                .pushReplacementNamed(AppSettingsScreen.routeName))
+                .pushReplacementNamed(Routes.AppSettings))
       ])),
     );
   }

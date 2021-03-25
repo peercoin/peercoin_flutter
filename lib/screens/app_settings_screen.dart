@@ -7,7 +7,6 @@ import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsScreen extends StatefulWidget {
-  static const routeName = "/app-settings";
 
   @override
   _AppSettingsScreenState createState() => _AppSettingsScreenState();

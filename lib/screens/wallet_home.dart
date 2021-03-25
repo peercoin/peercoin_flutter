@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class WalletHomeScreen extends StatefulWidget {
-  static const routeName = "/wallet-home";
+
   @override
   _WalletHomeState createState() => _WalletHomeState();
 }

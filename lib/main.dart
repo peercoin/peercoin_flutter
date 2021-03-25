@@ -26,6 +26,7 @@ import './screens/setup.dart';
 import './screens/wallet_list.dart';
 import 'screens/app_settings_screen.dart';
 import 'tools/app_localizations.dart';
+import 'tools/app_routes.dart';
 
 bool setupFinished;
 
@@ -148,16 +149,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: setupFinished ? WalletListScreen() : SetupScreen(),
-        routes: {
-          SetupSaveScreen.routeName: (ctx) => SetupSaveScreen(),
-          SetupPinCodeScreen.routeName: (ctx) => SetupPinCodeScreen(),
-          WalletListScreen.routeName: (ctx) => WalletListScreen(),
-          WalletHomeScreen.routeName: (ctx) => WalletHomeScreen(),
-          NewWalletScreen.routeName: (ctx) => NewWalletScreen(),
-          QRScanner.routeName: (ctx) => QRScanner(),
-          TransactionDetails.routeName: (ctx) => TransactionDetails(),
-          AppSettingsScreen.routeName: (ctx) => AppSettingsScreen(),
-        },
+        routes: Routes.getRoutes(),
       ),
     );
   }

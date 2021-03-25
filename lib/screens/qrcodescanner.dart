@@ -10,7 +10,6 @@ class QRScanner extends StatefulWidget {
     Key key,
   }) : super(key: key);
 
-  static const routeName = "/qr-scan";
 
   @override
   State<StatefulWidget> createState() => _QRScannerState();
