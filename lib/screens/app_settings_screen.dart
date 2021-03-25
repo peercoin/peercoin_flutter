@@ -7,7 +7,6 @@ import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsScreen extends StatefulWidget {
-
   @override
   _AppSettingsScreenState createState() => _AppSettingsScreenState();
 }
@@ -22,7 +21,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      ;
+      // do things
       setState(() {
         _initial = false;
       });
