@@ -117,14 +117,14 @@ class _SendTabState extends State<SendTab> {
               validator: (value) {
                 if (value.isEmpty) {
                   return AppLocalizations.instance
-                      .translate('receive_enter_amount', null);
+                      .translate('receive_enter_amount');
                 }
                 String sanitized = value.trim();
                 if (Address.validateAddress(
                         sanitized, _availableCoin.networkType) ==
                     false) {
                   return AppLocalizations.instance
-                      .translate('send_invalid_address', null);
+                      .translate('send_invalid_address');
                 }
                 return null;
               },
@@ -141,14 +141,13 @@ class _SendTabState extends State<SendTab> {
                 keyboardType: TextInputType.numberWithOptions(signed: true),
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
-                  labelText:
-                      AppLocalizations.instance.translate('send_amount', null),
+                  labelText: AppLocalizations.instance.translate('send_amount'),
                   suffix: Text(_wallet.letterCode),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
                     return AppLocalizations.instance
-                        .translate('send_enter_amount', null);
+                        .translate('send_enter_amount');
                   }
                   int txValueInSatoshis =
                       (double.parse(value) * 1000000).toInt();
@@ -156,11 +155,11 @@ class _SendTabState extends State<SendTab> {
                   if (value.contains(".") &&
                       value.split(".")[1].length > _availableCoin.fractions) {
                     return AppLocalizations.instance
-                        .translate('send_amount_small', null);
+                        .translate('send_amount_small');
                   }
                   if (txValueInSatoshis > _wallet.balance) {
                     return AppLocalizations.instance
-                        .translate('send_amount_exceeds', null);
+                        .translate('send_amount_exceeds');
                   }
                   if (txValueInSatoshis == _availableCoin.minimumTxValue &&
                       txValueInSatoshis == _wallet.balance) {
