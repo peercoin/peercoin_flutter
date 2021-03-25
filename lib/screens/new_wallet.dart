@@ -9,7 +9,6 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class NewWalletScreen extends StatefulWidget {
-  static const routeName = "/new-wallet";
 
   @override
   _NewWalletScreenState createState() => _NewWalletScreenState();

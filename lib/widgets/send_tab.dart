@@ -11,6 +11,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/screens/qrcodescanner.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -349,7 +350,7 @@ class _SendTabState extends State<SendTab> {
                   ),
                   onPressed: () async {
                     final result = await Navigator.of(context)
-                        .pushNamed(QRScanner.routeName);
+                        .pushNamed(Routes.QRScan);
                     if (result != null) parseQrResult(result);
                   }),
             ]),

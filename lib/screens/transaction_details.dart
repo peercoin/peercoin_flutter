@@ -7,7 +7,6 @@ import 'package:peercoin/models/wallettransaction.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetails extends StatelessWidget {
-  static const routeName = "/tx-detail";
 
   void _launchURL(_url) async {
     await canLaunch(_url)
