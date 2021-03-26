@@ -131,13 +131,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   decoration: InputDecoration(
                     icon: Icon(Icons.money),
                     labelText: AppLocalizations.instance
-                        .translate('receive_requested_amount', null),
+                        .translate('receive_requested_amount'),
                     suffix: Text(_wallet.letterCode),
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
                       return AppLocalizations.instance
-                          .translate('receive_enter_amount', null);
+                          .translate('receive_enter_amount');
                     }
                     return null;
                   }),

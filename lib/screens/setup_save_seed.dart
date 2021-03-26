@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class SetupSaveScreen extends StatefulWidget {
-
   @override
   _SetupSaveScreenState createState() => _SetupSaveScreenState();
 }
@@ -80,8 +78,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             sharedYet
                 ? TextButton(
                     onPressed: () {
-                      Navigator.popAndPushNamed(
-                          context, Routes.SetUpPin);
+                      Navigator.popAndPushNamed(context, Routes.SetUpPin);
                     },
                     child: Text(
                       AppLocalizations.instance.translate('continue'),

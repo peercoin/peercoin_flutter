@@ -10,7 +10,6 @@ import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
-import 'package:peercoin/screens/qrcodescanner.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
@@ -77,12 +76,17 @@ class _SendTabState extends State<SendTab> {
     addressController.text = parsed.path;
   }
 
-  RegExp getValidator(int fractions){
-    String expression = r'^([1-9]{1}[0-9]{0,' + fractions.toString() +
-        r'}(,[0-9]{3})*(.[0-9]{0,'+ fractions.toString() +
-        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,'+ fractions.toString() +
-        r'})?|0(.[0-9]{0,'+ fractions.toString() +
-        r'})?|(.[0-9]{1,'+ fractions.toString() +
+  RegExp getValidator(int fractions) {
+    String expression = r'^([1-9]{1}[0-9]{0,' +
+        fractions.toString() +
+        r'}(,[0-9]{3})*(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|0(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|(.[0-9]{1,' +
+        fractions.toString() +
         r'})?)$';
 
     return new RegExp(expression);
@@ -107,17 +111,20 @@ class _SendTabState extends State<SendTab> {
               autocorrect: false,
               decoration: InputDecoration(
                 icon: Icon(Icons.shuffle),
-                labelText: AppLocalizations.instance.translate('tx_address', null),
+                labelText:
+                    AppLocalizations.instance.translate('tx_address', null),
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return AppLocalizations.instance.translate('receive_enter_amount', null);
+                  return AppLocalizations.instance
+                      .translate('receive_enter_amount');
                 }
                 String sanitized = value.trim();
                 if (Address.validateAddress(
                         sanitized, _availableCoin.networkType) ==
                     false) {
-                  return AppLocalizations.instance.translate('send_invalid_address', null);
+                  return AppLocalizations.instance
+                      .translate('send_invalid_address');
                 }
                 return null;
               },
@@ -129,32 +136,37 @@ class _SendTabState extends State<SendTab> {
                 autocorrect: false,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
-                      getValidator(_availableCoin.fractions)
-                  ),
+                      getValidator(_availableCoin.fractions)),
                 ],
                 keyboardType: TextInputType.numberWithOptions(signed: true),
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
-                  labelText: AppLocalizations.instance.translate('send_amount', null),
+                  labelText: AppLocalizations.instance.translate('send_amount'),
                   suffix: Text(_wallet.letterCode),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return AppLocalizations.instance.translate('send_enter_amount', null);
+                    return AppLocalizations.instance
+                        .translate('send_enter_amount');
                   }
                   int txValueInSatoshis =
                       (double.parse(value) * 1000000).toInt();
                   print("req value $txValueInSatoshis - ${_wallet.balance}");
                   if (value.contains(".") &&
                       value.split(".")[1].length > _availableCoin.fractions) {
-                    return AppLocalizations.instance.translate('send_amount_small', null);
+                    return AppLocalizations.instance
+                        .translate('send_amount_small');
                   }
                   if (txValueInSatoshis > _wallet.balance) {
-                    return AppLocalizations.instance.translate('send_amount_exceeds', null);
+                    return AppLocalizations.instance
+                        .translate('send_amount_exceeds');
                   }
                   if (txValueInSatoshis == _availableCoin.minimumTxValue &&
                       txValueInSatoshis == _wallet.balance) {
-                    return AppLocalizations.instance.translate('send_amount_below_minimum',{'amount': "${_availableCoin.minimumTxValue * 1000000}"});
+                    return AppLocalizations.instance.translate(
+                        'send_amount_below_minimum', {
+                      'amount': "${_availableCoin.minimumTxValue * 1000000}"
+                    });
                   }
                   return null;
                 }),
@@ -349,8 +361,8 @@ class _SendTabState extends State<SendTab> {
                     size: 40,
                   ),
                   onPressed: () async {
-                    final result = await Navigator.of(context)
-                        .pushNamed(Routes.QRScan);
+                    final result =
+                        await Navigator.of(context).pushNamed(Routes.QRScan);
                     if (result != null) parseQrResult(result);
                   }),
             ]),

@@ -5,12 +5,10 @@ import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
-import 'package:peercoin/screens/wallet_list.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:provider/provider.dart';
 
 class SetupPinCodeScreen extends StatefulWidget {
-
   @override
   _SetupPinCodeScreenState createState() => _SetupPinCodeScreenState();
 }
@@ -75,8 +73,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                             listen: false)
                         .prefs;
                     await prefs.setBool("setupFinished", true);
-                    Navigator.popAndPushNamed(
-                        context, Routes.WalletList);
+                    Navigator.popAndPushNamed(context, Routes.WalletList);
                   },
                 );
               },
