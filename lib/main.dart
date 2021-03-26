@@ -114,7 +114,7 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
         ],
         themeMode: ThemeMode.system, // Default
-        theme: MyTheme.getTheme(ThemeMode.dark),
+        theme: MyTheme.getTheme(ThemeMode.light),
         darkTheme: MyTheme.getTheme(ThemeMode.dark),
         home: setupFinished ? WalletListScreen() : SetupScreen(),
         routes: Routes.getRoutes(),
