@@ -71,22 +71,6 @@ void main() async {
   runApp(MyApp());
 }
 
-const MaterialColor peercoinGreen = MaterialColor(
-  _peercoinGreenValue,
-  <int, Color>{
-    50: Color(0xff3cb054),
-    100: Color(0xff3cb054),
-    200: Color(0xff3cb054),
-    300: Color(0xff3cb054),
-    400: Color(0xff3cb054),
-    500: Color(0xff3cb054),
-    600: Color(0xff3cb054),
-    700: Color(0xff3cb054),
-    800: Color(0xff3cb054),
-    900: Color(0xff3cb054),
-  },
-);
-const int _peercoinGreenValue = 0xff3cb054;
 
 class MyApp extends StatelessWidget {
   @override
@@ -130,8 +114,8 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
         ],
         themeMode: ThemeMode.system, // Default
-        theme: appThemes[ThemeMode.light],
-        darkTheme: appThemes[ThemeMode.dark],
+        theme: MyTheme.getTheme(ThemeMode.dark),
+        darkTheme: MyTheme.getTheme(ThemeMode.dark),
         home: setupFinished ? WalletListScreen() : SetupScreen(),
         routes: Routes.getRoutes(),
       ),

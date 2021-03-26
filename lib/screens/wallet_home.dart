@@ -229,6 +229,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
                                           child: Center(
                                             child: QrImage(
                                               data: _unusedAddress,
+                                              backgroundColor: Colors.white,
+                                              foregroundColor: Colors.black,
                                             ),
                                           ),
                                         ),
@@ -250,6 +252,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
                               data: _unusedAddress,
                               size: 60.0,
                               padding: EdgeInsets.all(1),
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
                             ),
                           )
                   ],
