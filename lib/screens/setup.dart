@@ -67,7 +67,8 @@ class _SetupScreenState extends State<SetupScreen> {
                             ),
                             style: TextStyle(color: Colors.white)),
                         TextButton(
-                          onPressed: () => {createWallet(context)},
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(Routes.SetupImport),
                           child: Text(
                             AppLocalizations.instance
                                 .translate('create_wallet_existing_seed'),

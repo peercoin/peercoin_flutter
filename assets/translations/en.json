@@ -12,7 +12,7 @@
   "setup_create_pin": "Create PIN",
   "create_wallet_new_seed": "Create wallet from new seed",
   "create_wallet_or": "or",
-  "create_wallet_existing_seed": "Create wallet from existing seed",
+  "create_wallet_existing_seed": "Import existing seed",
   "label_wallet_seed": "This is your wallet seed:",
   "label_keep_seed_safe": "Make sure to keep it safe.\nTreat it like a password.\nThose 12 simple words give full access to your wallet.",
   "continue": "Continue",
