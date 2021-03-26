@@ -20,6 +20,7 @@ import './screens/setup.dart';
 import './screens/wallet_list.dart';
 import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
+import 'tools/app_themes.dart';
 
 bool setupFinished;
 
@@ -128,19 +129,9 @@ class MyApp extends StatelessWidget {
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
         ],
-        theme: ThemeData(
-          textTheme: Theme.of(context).textTheme.apply(
-                fontSizeFactor: 1.1,
-                fontSizeDelta: 2.0,
-              ),
-          primaryColor: peercoinGreen,
-          accentColor: Colors.grey,
-          errorColor: Colors.red,
-          primarySwatch: peercoinGreen,
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(primary: Colors.white),
-          ),
-        ),
+        themeMode: ThemeMode.system, // Default
+        theme: appThemes[ThemeMode.light],
+        darkTheme: appThemes[ThemeMode.dark],
         home: setupFinished ? WalletListScreen() : SetupScreen(),
         routes: Routes.getRoutes(),
       ),
