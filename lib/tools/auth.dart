@@ -14,6 +14,8 @@ class Auth {
       Navigator.pop(context);
       await callback();
       //TODO having a loading animation here would be nicer
+    } else {
+      Navigator.pop(context);
     }
   }
 
