@@ -70,6 +70,7 @@ class _SetupImportSeedState extends State<SetupImportSeed> {
                       }
                       return null;
                     },
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                           onPressed: () async {
