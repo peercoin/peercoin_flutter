@@ -104,7 +104,7 @@ class ActiveWallets with ChangeNotifier {
       //wallet is not brand new, lets find an unused address
       var unusedAddr;
       openWallet.addresses.forEach((walletAddr) {
-        if (walletAddr.used == false) {
+        if (walletAddr.used == false && walletAddr.status == null) {
           unusedAddr = walletAddr.address;
         }
       });

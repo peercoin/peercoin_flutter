@@ -78,5 +78,7 @@
   "authenticate_biometric_hint" : "Verify identity",
   "authenticate_biometric_title" : "Authentication required",
   "authenticate_title" : "Please enter your PIN",
-  "authenticate_confirm_title" : "Re-enter your PIN"
+  "authenticate_confirm_title" : "Re-enter your PIN",
+  "wallet_scan_appBar_title": "Scanning your imported seed",
+  "wallet_scan_notice": "This might take a while. Don't close this screen!"
 }

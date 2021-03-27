@@ -29,12 +29,14 @@ class ElectrumConnection with ChangeNotifier {
   ElectrumConnection(this._activeWallets);
   int _latestBlock;
   bool _closedIntentionally = false;
+  bool _scanMode = false;
 
-  bool init(walletName) {
+  bool init(walletName, [bool scanMode = false]) {
     if (_connection == null) {
       _coinName = walletName;
       _connectionState = "waiting";
       _closedIntentionally = false;
+      _scanMode = scanMode;
       print("init server connection");
       connect();
       Stream stream = _connection.stream;
@@ -73,6 +75,10 @@ class ElectrumConnection with ChangeNotifier {
     notifyListeners();
   }
 
+  set scanMode(bool newScanMode) {
+    _scanMode = newScanMode;
+  }
+
   String get connectionState {
     return _connectionState;
   }
@@ -104,6 +110,7 @@ class ElectrumConnection with ChangeNotifier {
     _connection = null;
     _addresses = {};
     _latestBlock = null;
+    _scanMode = false;
     if (_closedIntentionally == false)
       Timer(Duration(seconds: 10),
           () => init(_coinName)); //retry if not intentional
@@ -223,12 +230,14 @@ class ElectrumConnection with ChangeNotifier {
       "utxo_$address",
       [hashId],
     );
-    //fire get_history
-    sendMessage(
-      "blockchain.scripthash.get_history",
-      "history_$address",
-      [hashId],
-    );
+    if (_scanMode == false) {
+      //fire get_history
+      sendMessage(
+        "blockchain.scripthash.get_history",
+        "history_$address",
+        [hashId],
+      );
+    }
   }
 
   void handleUtxo(String id, List utxos) async {

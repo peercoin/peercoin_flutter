@@ -143,15 +143,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_left),
-            label: 'Receive',
+            label: 'Receive', //TODO i18n
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Transactions',
+            label: 'Transactions', //TODO i18n
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_right),
-            label: 'Send',
+            label: 'Send', //TODO i18n
           )
         ],
       ),
@@ -267,7 +267,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                           ),
                           Text(
                             AppLocalizations.instance
-                                .translate('wallet_connected', null),
+                                .translate('wallet_connected'),
                             style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontSize: 12),

@@ -42,22 +42,22 @@ class _TransactionListState extends State<TransactionList> {
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label: Container(
-                  child: Text(AppLocalizations.instance
-                      .translate('transactions_in', null))),
+                  child: Text(
+                      AppLocalizations.instance.translate('transactions_in'))),
               selected: _filterChoice == "in",
               onSelected: (_) => _handleSelect("in"),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(AppLocalizations.instance
-                  .translate('transactions_all', null)),
+              label:
+                  Text(AppLocalizations.instance.translate('transactions_all')),
               selected: _filterChoice == "all",
               onSelected: (_) => _handleSelect("all"),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(AppLocalizations.instance
-                  .translate('transactions_out', null)),
+              label:
+                  Text(AppLocalizations.instance.translate('transactions_out')),
               selected: _filterChoice == "out",
               onSelected: (_) => _handleSelect("out"),
             ),
@@ -66,8 +66,8 @@ class _TransactionListState extends State<TransactionList> {
       Expanded(
         child: widget._walletTransactions.length == 0
             ? Center(
-                child: Text(AppLocalizations.instance
-                    .translate('transactions_none', null)),
+                child: Text(
+                    AppLocalizations.instance.translate('transactions_none')),
               )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {

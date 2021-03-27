@@ -8,12 +8,12 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
-class SetupImportSeed extends StatefulWidget {
+class SetupImportSeedScreen extends StatefulWidget {
   @override
   _SetupImportSeedState createState() => _SetupImportSeedState();
 }
 
-class _SetupImportSeedState extends State<SetupImportSeed> {
+class _SetupImportSeedState extends State<SetupImportSeedScreen> {
   var _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
@@ -80,8 +80,8 @@ class _SetupImportSeedState extends State<SetupImportSeed> {
                         onPressed: () async {
                           ClipboardData data =
                               await Clipboard.getData('text/plain');
-
                           _controller.text = data.text;
+                          FocusScope.of(context).unfocus(); //hide keyboard
                         },
                         icon: Icon(Icons.paste,
                             color: Theme.of(context).primaryColor),
