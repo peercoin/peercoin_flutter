@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -77,7 +78,11 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             SizedBox(height: 30),
             sharedYet
                 ? TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var prefs = await Provider.of<UnencryptedOptions>(context,
+                              listen: false)
+                          .prefs;
+                      await prefs.setBool("importedSeed", false);
                       Navigator.popAndPushNamed(context, Routes.SetUpPin);
                     },
                     child: Text(

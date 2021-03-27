@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
@@ -25,6 +26,9 @@ class _SetupImportSeedState extends State<SetupImportSeed> {
         Provider.of<ActiveWallets>(context, listen: false);
     await _activeWallets.init();
     await _activeWallets.createPhrase(_controller.text);
+    var prefs =
+        await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
+    await prefs.setBool("importedSeed", true);
     await Navigator.of(context).popAndPushNamed(Routes.SetUpPin);
   }
 
