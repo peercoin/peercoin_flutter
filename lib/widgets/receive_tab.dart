@@ -73,10 +73,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                       return SimpleDialog(children: [
                         Center(
                           child: SizedBox(
+
                             height: MediaQuery.of(context).size.height * 0.33,
                             width: MediaQuery.of(context).size.width * 1,
                             child: Center(
                               child: QrImage(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
                                 data: _qrString ?? widget._unusedAddress,
                               ),
                             ),
@@ -90,6 +93,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   data: _qrString ?? widget._unusedAddress,
                   size: MediaQuery.of(context).size.width * 0.3,
                   padding: EdgeInsets.all(1),
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
                 ),
               ),
               SizedBox(height: 20),
