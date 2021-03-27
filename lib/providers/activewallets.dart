@@ -56,7 +56,8 @@ class ActiveWallets with ChangeNotifier {
       await _vaultBox.put('mnemonicSeed', mnemonicSeed);
       _seedPhrase = mnemonicSeed;
     } else {
-      //implement
+      await _vaultBox.put('mnemonicSeed', providedPhrase);
+      _seedPhrase = providedPhrase;
     }
   }
 
