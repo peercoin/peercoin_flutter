@@ -5,24 +5,15 @@ import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 class Auth {
   static Future<void> executeCallback(
       BuildContext context, Function callback) async {
     if (callback != null) {
-      // BuildContext dialogContext;
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: false,
-      //     builder: (BuildContext context) {
-      //       dialogContext = context;
-      //       return Center(child: LoadingIndicator());
-      //     });
       Navigator.pop(context);
       await callback();
-      // Navigator.of(dialogContext).pop();
+      //TODO having a loading animation here would be nicer
     }
   }
 
