@@ -73,13 +73,15 @@ class _SetupImportSeedState extends State<SetupImportSeed> {
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
-                          onPressed: () async {
-                            ClipboardData data =
-                                await Clipboard.getData('text/plain');
+                        onPressed: () async {
+                          ClipboardData data =
+                              await Clipboard.getData('text/plain');
 
-                            _controller.text = data.text;
-                          },
-                          icon: Icon(Icons.paste)),
+                          _controller.text = data.text;
+                        },
+                        icon: Icon(Icons.paste,
+                            color: Theme.of(context).primaryColor),
+                      ),
                     ),
                     keyboardType: TextInputType.multiline,
                     minLines: 5,
