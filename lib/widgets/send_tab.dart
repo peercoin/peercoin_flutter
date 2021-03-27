@@ -40,13 +40,6 @@ class _SendTabState extends State<SendTab> {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
-
-      //check for required auth
-      AppSettings _appSettings =
-          Provider.of<AppSettings>(context, listen: false);
-      if (_appSettings.authenticationOptions["sendTransaction"])
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
-
       setState(() {
         _initial = false;
       });
@@ -90,6 +83,125 @@ class _SendTabState extends State<SendTab> {
         r'})?)$';
 
     return new RegExp(expression);
+  }
+
+  void showTransactionConfirmation(context) async {
+    Map _buildResult;
+    _buildResult = await buildTx(true);
+
+    int _destroyedChange = _buildResult["destroyedChange"];
+    _txFee = _buildResult["fee"];
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String _displayValue = _amountKey.currentState.value;
+          _totalValue =
+              (double.parse(_amountKey.currentState.value) * 1000000).toInt();
+          if (_totalValue == _wallet.balance) {
+            double newValue = double.parse(_amountKey.currentState.value) -
+                (_txFee / 1000000);
+            _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
+          } else {
+            _totalValue = _totalValue + _txFee;
+          }
+          if (_destroyedChange > 0) {
+            double newValue = (double.parse(_amountKey.currentState.value) -
+                (_txFee / 1000000));
+            _displayValue = newValue.toString();
+            _totalValue = _totalValue - _txFee + _destroyedChange;
+          }
+          return SimpleDialog(
+            title: Text(AppLocalizations.instance
+                .translate('send_confirm_transaction')),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Column(
+                  children: [
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: AppLocalizations.instance
+                            .translate('send_transferring'),
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "$_displayValue ${_wallet.letterCode}",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: AppLocalizations.instance
+                                  .translate('send_to')),
+                          TextSpan(
+                              text: _addressKey.currentState.value,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(AppLocalizations.instance.translate('send_fee', {
+                      'amount': "${_txFee / 1000000}",
+                      'letter_code': "${_wallet.letterCode}"
+                    })),
+                    if (_destroyedChange > 0)
+                      Text(
+                        AppLocalizations.instance.translate('send_dust', {
+                          'amount': "${_destroyedChange / 1000000}",
+                          'letter_code': "${_wallet.letterCode}"
+                        }),
+                        style: TextStyle(color: Theme.of(context).errorColor),
+                      ),
+                    Text(
+                        AppLocalizations.instance.translate('send_total', {
+                          'amount': "${_totalValue / 1000000}",
+                          'letter_code': "${_wallet.letterCode}"
+                        }),
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                      ),
+                      label: Text(AppLocalizations.instance
+                          .translate('send_confirm_send')),
+                      icon: Icon(Icons.send),
+                      onPressed: () async {
+                        try {
+                          Map _buildResult = await buildTx(false, _txFee);
+                          //write tx to history
+                          await _activeWallets.putTx(
+                              _wallet.name, _addressKey.currentState.value, {
+                            "txid": _buildResult["id"],
+                            "hex": _buildResult["hex"],
+                            "outValue": _totalValue - _txFee,
+                            "outFees": _txFee + _destroyedChange
+                          });
+                          //broadcast
+                          Provider.of<ElectrumConnection>(context,
+                                  listen: false)
+                              .broadcastTransaction(
+                                  _buildResult["hex"], _buildResult["id"]);
+                          //pop message
+                          Navigator.of(context).pop();
+                          //navigate back to tx list
+                          widget.changeIndex(1);
+                        } catch (e) {
+                          print("error $e");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(AppLocalizations.instance.translate(
+                                'send_oops',
+                              )),
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   var addressController = TextEditingController();
@@ -178,171 +290,19 @@ class _SendTabState extends State<SendTab> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    BuildContext dialogContext;
                     _formKey.currentState.save();
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          dialogContext = context;
-                          return Center(child: LoadingIndicator());
-                        });
-                    Map _buildResult;
-                    Timer(Duration(milliseconds: 100), () async {
-                      //TODO: this feels _very_ hacky - not very asyncy
-                      _buildResult = await buildTx(true);
-                      Navigator.of(dialogContext).pop();
-
-                      int _destroyedChange = _buildResult["destroyedChange"];
-                      _txFee = _buildResult["fee"];
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            String _displayValue =
-                                _amountKey.currentState.value;
-                            _totalValue =
-                                (double.parse(_amountKey.currentState.value) *
-                                        1000000)
-                                    .toInt();
-                            if (_totalValue == _wallet.balance) {
-                              double newValue =
-                                  double.parse(_amountKey.currentState.value) -
-                                      (_txFee / 1000000);
-                              _displayValue = newValue
-                                  .toStringAsFixed(_availableCoin.fractions);
-                            } else {
-                              _totalValue = _totalValue + _txFee;
-                            }
-                            if (_destroyedChange > 0) {
-                              double newValue =
-                                  (double.parse(_amountKey.currentState.value) -
-                                      (_txFee / 1000000));
-                              _displayValue = newValue.toString();
-                              _totalValue =
-                                  _totalValue - _txFee + _destroyedChange;
-                            }
-                            return SimpleDialog(
-                              title: Text(AppLocalizations.instance
-                                  .translate('send_confirm_transaction')),
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 14.0),
-                                  child: Column(
-                                    children: [
-                                      RichText(
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                          text: AppLocalizations.instance
-                                              .translate('send_transferring'),
-                                          style: DefaultTextStyle.of(context)
-                                              .style,
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                                text:
-                                                    "$_displayValue ${_wallet.letterCode}",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            TextSpan(
-                                                text: AppLocalizations.instance
-                                                    .translate('send_to')),
-                                            TextSpan(
-                                                text: _addressKey
-                                                    .currentState.value,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(AppLocalizations.instance.translate(
-                                          'send_fee', {
-                                        'amount': "${_txFee / 1000000}",
-                                        'letter_code': "${_wallet.letterCode}"
-                                      })),
-                                      if (_destroyedChange > 0)
-                                        Text(
-                                          AppLocalizations.instance
-                                              .translate('send_dust', {
-                                            'amount':
-                                                "${_destroyedChange / 1000000}",
-                                            'letter_code':
-                                                "${_wallet.letterCode}"
-                                          }),
-                                          style: TextStyle(
-                                              color:
-                                                  Theme.of(context).errorColor),
-                                        ),
-                                      Text(
-                                          AppLocalizations.instance.translate(
-                                              'send_total', {
-                                            'amount':
-                                                "${_totalValue / 1000000}",
-                                            'letter_code':
-                                                "${_wallet.letterCode}"
-                                          }),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      SizedBox(height: 20),
-                                      ElevatedButton.icon(
-                                        style: ElevatedButton.styleFrom(
-                                          primary:
-                                              Theme.of(context).primaryColor,
-                                        ),
-                                        label: Text(AppLocalizations.instance
-                                            .translate('send_confirm_send')),
-                                        icon: Icon(Icons.send),
-                                        onPressed: () async {
-                                          try {
-                                            Map _buildResult =
-                                                await buildTx(false, _txFee);
-                                            //write tx to history
-                                            await _activeWallets.putTx(
-                                                _wallet.name,
-                                                _addressKey.currentState.value,
-                                                {
-                                                  "txid": _buildResult["id"],
-                                                  "hex": _buildResult["hex"],
-                                                  "outValue":
-                                                      _totalValue - _txFee,
-                                                  "outFees":
-                                                      _txFee + _destroyedChange
-                                                });
-                                            //broadcast
-                                            Provider.of<ElectrumConnection>(
-                                                    context,
-                                                    listen: false)
-                                                .broadcastTransaction(
-                                                    _buildResult["hex"],
-                                                    _buildResult["id"]);
-                                            //pop message
-                                            Navigator.of(context).pop();
-                                            //navigate back to tx list
-                                            widget.changeIndex(1);
-                                          } catch (e) {
-                                            print("error $e");
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(AppLocalizations
-                                                    .instance
-                                                    .translate(
-                                                  'send_oops',
-                                                )),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          });
-                    });
+                    FocusScope.of(context).unfocus();
+                    //check for required auth
+                    AppSettings _appSettings =
+                        Provider.of<AppSettings>(context, listen: false);
+                    if (_appSettings.authenticationOptions["sendTransaction"]) {
+                      await Auth.requireAuth(
+                          context,
+                          _appSettings.biometricsAllowed,
+                          () => showTransactionConfirmation(context));
+                    } else {
+                      showTransactionConfirmation(context);
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(AppLocalizations.instance.translate(

@@ -263,7 +263,7 @@ class ActiveWallets with ChangeNotifier {
                 address: addr,
                 direction: direction,
                 broadCasted: true,
-                confirmations: tx["confirmations"],
+                confirmations: tx["confirmations"] ?? 0,
                 broadcastHex: "",
               ));
             }
