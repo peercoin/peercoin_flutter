@@ -14,8 +14,9 @@ class AppSettingsScreen extends StatefulWidget {
 
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
-  String _seedPhrase = "";
   bool _biometricsAllowed;
+  bool _biometricsRevealed = false;
+  String _seedPhrase = "";
   Map<String, bool> _authenticationOptions;
   AppSettings _settings;
 
@@ -45,6 +46,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
+  void revealAuthOptions(bool biometricsAllowed) async {
+    await Auth.requireAuth(
+      context,
+      biometricsAllowed,
+      () => setState(
+        () {
+          _biometricsRevealed = true;
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _settings = context.watch<AppSettings>();
@@ -66,52 +79,66 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              SwitchListTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_biometrics'),
-                  ),
-                  value: _biometricsAllowed,
-                  onChanged: (newState) {
-                    _settings.setBiometricsAllowed(newState);
-                  }),
-              SwitchListTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_walletList'),
-                  ),
-                  value: _authenticationOptions["walletList"],
-                  onChanged: (newState) {
-                    _settings.setAuthenticationOptions("walletList", newState);
-                  }),
-              SwitchListTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_walletHome'),
-                  ),
-                  value: _authenticationOptions["walletHome"],
-                  onChanged: (newState) {
-                    _settings.setAuthenticationOptions("walletHome", newState);
-                  }),
-              SwitchListTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_sendTransaction'),
-                  ),
-                  value: _authenticationOptions["sendTransaction"],
-                  onChanged: (newState) {
-                    _settings.setAuthenticationOptions(
-                        "sendTransaction", newState);
-                  }),
-              SwitchListTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_newWallet'),
-                  ),
-                  value: _authenticationOptions["newWallet"],
-                  onChanged: (newState) {
-                    _settings.setAuthenticationOptions("newWallet", newState);
-                  }),
+              _biometricsRevealed == false
+                  ? TextButton(
+                      onPressed: () =>
+                          revealAuthOptions(_settings.biometricsAllowed),
+                      child: Text(
+                          AppLocalizations.instance
+                              .translate('app_settings_revealAuthButton'),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor)))
+                  : Column(children: [
+                      SwitchListTile(
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_biometrics'),
+                          ),
+                          value: _biometricsAllowed,
+                          onChanged: (newState) {
+                            _settings.setBiometricsAllowed(newState);
+                          }),
+                      SwitchListTile(
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_walletList'),
+                          ),
+                          value: _authenticationOptions["walletList"],
+                          onChanged: (newState) {
+                            _settings.setAuthenticationOptions(
+                                "walletList", newState);
+                          }),
+                      SwitchListTile(
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_walletHome'),
+                          ),
+                          value: _authenticationOptions["walletHome"],
+                          onChanged: (newState) {
+                            _settings.setAuthenticationOptions(
+                                "walletHome", newState);
+                          }),
+                      SwitchListTile(
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_sendTransaction'),
+                          ),
+                          value: _authenticationOptions["sendTransaction"],
+                          onChanged: (newState) {
+                            _settings.setAuthenticationOptions(
+                                "sendTransaction", newState);
+                          }),
+                      SwitchListTile(
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_newWallet'),
+                          ),
+                          value: _authenticationOptions["newWallet"],
+                          onChanged: (newState) {
+                            _settings.setAuthenticationOptions(
+                                "newWallet", newState);
+                          }),
+                    ]),
               Divider(),
               SizedBox(height: 10),
               Text(
@@ -125,7 +152,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           revealSeedPhrase(_settings.biometricsAllowed),
                       child: Text(
                           AppLocalizations.instance
-                              .translate('app_settings_revealButton'),
+                              .translate('app_settings_revealSeedButton'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor)))
                   : Column(children: [
