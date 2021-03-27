@@ -290,7 +290,7 @@ class _SendTabState extends State<SendTab> {
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    FocusScope.of(context).unfocus();
+                    FocusScope.of(context).unfocus(); //hide keyboard
                     //check for required auth
                     AppSettings _appSettings =
                         Provider.of<AppSettings>(context, listen: false);
