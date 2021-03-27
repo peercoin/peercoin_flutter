@@ -8,6 +8,15 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class Auth {
+  static Future<void> executeCallback(
+      BuildContext context, Function callback) async {
+    if (callback != null) {
+      Navigator.pop(context);
+      await callback();
+      //TODO having a loading animation here would be nicer
+    }
+  }
+
   static Future<void> localAuth(BuildContext context,
       [Function callback]) async {
     final localAuth = LocalAuthentication();
@@ -25,8 +34,7 @@ class Auth {
               .translate('authenticate_biometric_reason'),
           stickyAuth: true);
       if (didAuthenticate) {
-        if (callback != null) callback();
-        Navigator.pop(context);
+        executeCallback(context, callback);
       }
     } catch (e) {
       localAuth.stopAuthentication();
@@ -57,6 +65,9 @@ class Auth {
         didOpened: () async {
           await localAuth(context, callback);
         },
+        didUnlocked: () {
+          executeCallback(context, callback);
+        },
       );
     } else {
       await screenLock(
@@ -72,8 +83,7 @@ class Auth {
             text: AppLocalizations.instance
                 .translate("authenticate_confirm_title")),
         didUnlocked: () {
-          if (callback != null) callback();
-          Navigator.pop(context);
+          executeCallback(context, callback);
         },
       );
     }
