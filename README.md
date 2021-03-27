@@ -13,11 +13,11 @@ This repository currently relies on a fork of bitcoin_flutter, which can be foun
 
 The original library is not compatible, due to transaction timestamp incompability. 
 
-**Update icons**
+**Update icons**  
 ` flutter pub run flutter_launcher_icons:main`
 
-**Update Hive adapters**
+**Update Hive adapters**  
 `flutter packages pub run build_runner build`
 
-**Update splash screen**
-` flutter pub run flutter_native_splash:create`
+**Update splash screen**  
+`flutter pub run flutter_native_splash:create`
