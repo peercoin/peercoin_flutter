@@ -73,7 +73,8 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                             listen: false)
                         .prefs;
                     await prefs.setBool("setupFinished", true);
-                    Navigator.popAndPushNamed(context, Routes.WalletList);
+                    await Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routes.WalletList, (_) => false);
                   },
                 );
               },
