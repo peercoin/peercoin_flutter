@@ -75,10 +75,6 @@ class ElectrumConnection with ChangeNotifier {
     notifyListeners();
   }
 
-  set scanMode(bool newScanMode) {
-    _scanMode = newScanMode;
-  }
-
   String get connectionState {
     return _connectionState;
   }
