@@ -37,6 +37,7 @@
   "wallet_connected": "connected",
   "wallets_list": "Your wallets",
   "wallets_none": "You have no active wallets",
+  "wallet_pop_menu_paperwallet": "Import Paper Wallet",
   "app_navigation": "Navigation",
   "app_wallets": "Wallets",
   "app_settings": "Settings",
