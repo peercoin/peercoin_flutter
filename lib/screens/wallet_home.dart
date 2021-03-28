@@ -143,15 +143,17 @@ class _WalletHomeState extends State<WalletHomeScreen>
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_left),
-            label: 'Receive', //TODO i18n
+            label: AppLocalizations.instance
+                .translate('wallet_bottom_nav_receive'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Transactions', //TODO i18n
+            label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_right),
-            label: 'Send', //TODO i18n
+            label:
+                AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           )
         ],
       ),

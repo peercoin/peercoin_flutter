@@ -87,5 +87,8 @@
   "authenticate_confirm_title_new" : "Re-enter your new PIN",
   "authenticate_change_pin_success" : "PIN succesfully changed",
   "wallet_scan_appBar_title": "Scanning your imported seed",
-  "wallet_scan_notice": "This might take a while. Don't close this screen!"
+  "wallet_scan_notice": "This might take a while. Don't close this screen!",
+  "wallet_bottom_nav_receive": "Receive",
+  "wallet_bottom_nav_tx": "Transactions",
+  "wallet_bottom_nav_send": "Send"
 }
