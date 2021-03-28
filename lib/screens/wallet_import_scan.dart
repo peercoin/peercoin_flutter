@@ -40,7 +40,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _timer = Timer.periodic(Duration(seconds: 5), (timer) {
         int dueTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5;
         if (_latestUpdate <= dueTime) {
-          _timer.cancel();
           Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         }
       });
@@ -67,6 +66,12 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     }
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
