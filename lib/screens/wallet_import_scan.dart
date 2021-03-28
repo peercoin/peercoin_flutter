@@ -75,6 +75,12 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   }
 
   @override
+  void deactivate() {
+    _connectionProvider.closeConnection();
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

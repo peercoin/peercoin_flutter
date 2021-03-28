@@ -52,7 +52,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _connectionProvider.init(_wallet.name);
+      _connectionProvider.init(_wallet.name, false);
     }
   }
 
@@ -66,7 +66,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
 
-      if (_connectionProvider.init(_wallet.name)) {
+      if (_connectionProvider.init(_wallet.name, false)) {
         _connectionProvider.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(_wallet.name));
         rebroadCastUnsendTx();
