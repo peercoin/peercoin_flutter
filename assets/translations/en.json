@@ -54,6 +54,7 @@
   "app_settings_changeCode": "Change PIN",
   "receive_requested_amount": "Requested amount",
   "receive_enter_amount": "Please enter an amount",
+  "receive_share": "Share",
   "send_address": "Address",
   "send_enter_address": "Please enter an address",
   "send_invalid_address": "Invalid address",
