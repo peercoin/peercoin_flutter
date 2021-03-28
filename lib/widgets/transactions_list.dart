@@ -24,8 +24,11 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
-    List<WalletTransaction> _reversedTx =
-        widget._walletTransactions.reversed.toList();
+    List<WalletTransaction> _reversedTx = widget._walletTransactions
+        .where((element) => element.timestamp != -1) //filter phatom tx
+        .toList()
+        .reversed
+        .toList();
     List<WalletTransaction> _filteredTx = _reversedTx;
     if (_filterChoice != "all") {
       _filteredTx = _reversedTx
@@ -35,7 +38,7 @@ class _TransactionListState extends State<TransactionList> {
 
     return Expanded(
         child: Column(children: [
-      if (widget._walletTransactions.length > 0)
+      if (_reversedTx.length > 0)
         Wrap(
           spacing: 8.0,
           children: <Widget>[
@@ -64,7 +67,7 @@ class _TransactionListState extends State<TransactionList> {
           ],
         ),
       Expanded(
-        child: widget._walletTransactions.length == 0
+        child: _reversedTx.length == 0
             ? Center(
                 child: Text(
                     AppLocalizations.instance.translate('transactions_none')),

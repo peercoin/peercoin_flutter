@@ -230,14 +230,12 @@ class ElectrumConnection with ChangeNotifier {
       "utxo_$address",
       [hashId],
     );
-    if (_scanMode == false) {
-      //fire get_history
-      sendMessage(
-        "blockchain.scripthash.get_history",
-        "history_$address",
-        [hashId],
-      );
-    }
+    //fire get_history
+    sendMessage(
+      "blockchain.scripthash.get_history",
+      "history_$address",
+      [hashId],
+    );
   }
 
   void handleUtxo(String id, List utxos) async {
@@ -280,7 +278,7 @@ class ElectrumConnection with ChangeNotifier {
     String txId = id.replaceFirst("tx_", "");
     String addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(_coinName, addr, tx);
+      await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     }
   }
 
