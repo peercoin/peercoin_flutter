@@ -52,7 +52,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _connectionProvider.init(_wallet.name);
+      _connectionProvider.init(_wallet.name, false);
     }
   }
 
@@ -66,7 +66,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
 
-      if (_connectionProvider.init(_wallet.name)) {
+      if (_connectionProvider.init(_wallet.name, false)) {
         _connectionProvider.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(_wallet.name));
         rebroadCastUnsendTx();
@@ -102,8 +102,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
           print("new block ${_connectionProvider.latestBlock}");
           _latestBlock = _connectionProvider.latestBlock;
 
-          var unconfirmedTx =
-              _walletTransactions.where((element) => element.confirmations < 6);
+          var unconfirmedTx = _walletTransactions.where((element) =>
+              element.confirmations < 6 && element.timestamp != -1);
           unconfirmedTx.forEach((element) {
             print("requesting update for ${element.txid}");
             _connectionProvider.requestTxUpdate(element.txid);
@@ -143,15 +143,17 @@ class _WalletHomeState extends State<WalletHomeScreen>
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_left),
-            label: 'Receive',
+            label: AppLocalizations.instance
+                .translate('wallet_bottom_nav_receive'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Transactions',
+            label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_right),
-            label: 'Send',
+            label:
+                AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           )
         ],
       ),
@@ -267,7 +269,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                           ),
                           Text(
                             AppLocalizations.instance
-                                .translate('wallet_connected', null),
+                                .translate('wallet_connected'),
                             style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontSize: 12),

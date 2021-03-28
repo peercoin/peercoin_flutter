@@ -29,12 +29,14 @@ class ElectrumConnection with ChangeNotifier {
   ElectrumConnection(this._activeWallets);
   int _latestBlock;
   bool _closedIntentionally = false;
+  bool _scanMode = false;
 
-  bool init(walletName) {
+  bool init(walletName, [bool scanMode = false]) {
     if (_connection == null) {
       _coinName = walletName;
       _connectionState = "waiting";
       _closedIntentionally = false;
+      _scanMode = scanMode;
       print("init server connection");
       connect();
       Stream stream = _connection.stream;
@@ -104,6 +106,7 @@ class ElectrumConnection with ChangeNotifier {
     _connection = null;
     _addresses = {};
     _latestBlock = null;
+    _scanMode = false;
     if (_closedIntentionally == false)
       Timer(Duration(seconds: 10),
           () => init(_coinName)); //retry if not intentional
@@ -210,23 +213,17 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleScriptHashSubscribeNotification(
       String hashId, String newStatus) async {
-    //got update notification for hash => get utxo and history list
+    //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
         orElse: () => null);
     print("update for $hashId");
     //update status so we flag that we proccessed this update already
     await _activeWallets.updateAddressStatus(_coinName, address, newStatus);
-    //fire listunspent
+    //fire listunspent to get utxo
     sendMessage(
       "blockchain.scripthash.listunspent",
       "utxo_$address",
-      [hashId],
-    );
-    //fire get_history
-    sendMessage(
-      "blockchain.scripthash.get_history",
-      "history_$address",
       [hashId],
     );
   }
@@ -237,6 +234,12 @@ class ElectrumConnection with ChangeNotifier {
       _coinName,
       txAddr,
       utxos,
+    );
+    //fire get_history
+    sendMessage(
+      "blockchain.scripthash.get_history",
+      "history_$txAddr",
+      [_addresses[txAddr]],
     );
   }
 
@@ -271,7 +274,7 @@ class ElectrumConnection with ChangeNotifier {
     String txId = id.replaceFirst("tx_", "");
     String addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(_coinName, addr, tx);
+      await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     }
   }
 

@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
@@ -58,6 +61,38 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
+  void changePIN(bool biometricsAllowed) async {
+    await Auth.requireAuth(
+      context,
+      biometricsAllowed,
+      () async => await screenLock(
+        title: HeadingTitle(
+            text:
+                AppLocalizations.instance.translate("authenticate_title_new")),
+        confirmTitle: HeadingTitle(
+            text: AppLocalizations.instance
+                .translate("authenticate_confirm_title_new")),
+        context: context,
+        correctString: '',
+        digits: 6,
+        confirmation: true,
+        didConfirmed: (matchedText) async {
+          await Provider.of<EncryptedBox>(context, listen: false)
+              .setPassCode(matchedText);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              AppLocalizations.instance
+                  .translate("authenticate_change_pin_success"),
+              textAlign: TextAlign.center,
+            ),
+            duration: Duration(seconds: 2),
+          ));
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _settings = context.watch<AppSettings>();
@@ -66,7 +101,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("App Settings"),
+        title: Text(
+          AppLocalizations.instance.translate('app_settings_appbar'),
+        ),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
@@ -75,7 +112,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           child: Column(
             children: [
               Text(
-                "Authentification",
+                AppLocalizations.instance.translate('app_settings_auth_header'),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
@@ -138,6 +175,15 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             _settings.setAuthenticationOptions(
                                 "newWallet", newState);
                           }),
+                      TextButton(
+                        onPressed: () => changePIN(_settings.biometricsAllowed),
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('app_settings_changeCode'),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      )
                     ]),
               Divider(),
               SizedBox(height: 10),

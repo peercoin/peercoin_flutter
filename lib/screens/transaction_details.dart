@@ -7,7 +7,6 @@ import 'package:peercoin/models/wallettransaction.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetails extends StatelessWidget {
-
   void _launchURL(_url) async {
     await canLaunch(_url)
         ? await launch(
@@ -111,8 +110,7 @@ class TransactionDetails extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 label: Text(
-                  AppLocalizations.instance
-                      .translate('tx_view_in_explorer', null),
+                  AppLocalizations.instance.translate('tx_view_in_explorer'),
                   style: TextStyle(color: Theme.of(context).primaryColor),
                 )),
           )

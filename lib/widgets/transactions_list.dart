@@ -24,8 +24,11 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
-    List<WalletTransaction> _reversedTx =
-        widget._walletTransactions.reversed.toList();
+    List<WalletTransaction> _reversedTx = widget._walletTransactions
+        .where((element) => element.timestamp != -1) //filter phatom tx
+        .toList()
+        .reversed
+        .toList();
     List<WalletTransaction> _filteredTx = _reversedTx;
     if (_filterChoice != "all") {
       _filteredTx = _reversedTx
@@ -35,39 +38,39 @@ class _TransactionListState extends State<TransactionList> {
 
     return Expanded(
         child: Column(children: [
-      if (widget._walletTransactions.length > 0)
+      if (_reversedTx.length > 0)
         Wrap(
           spacing: 8.0,
           children: <Widget>[
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label: Container(
-                  child: Text(AppLocalizations.instance
-                      .translate('transactions_in', null))),
+                  child: Text(
+                      AppLocalizations.instance.translate('transactions_in'))),
               selected: _filterChoice == "in",
               onSelected: (_) => _handleSelect("in"),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(AppLocalizations.instance
-                  .translate('transactions_all', null)),
+              label:
+                  Text(AppLocalizations.instance.translate('transactions_all')),
               selected: _filterChoice == "all",
               onSelected: (_) => _handleSelect("all"),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(AppLocalizations.instance
-                  .translate('transactions_out', null)),
+              label:
+                  Text(AppLocalizations.instance.translate('transactions_out')),
               selected: _filterChoice == "out",
               onSelected: (_) => _handleSelect("out"),
             ),
           ],
         ),
       Expanded(
-        child: widget._walletTransactions.length == 0
+        child: _reversedTx.length == 0
             ? Center(
-                child: Text(AppLocalizations.instance
-                    .translate('transactions_none', null)),
+                child: Text(
+                    AppLocalizations.instance.translate('transactions_none')),
               )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {
