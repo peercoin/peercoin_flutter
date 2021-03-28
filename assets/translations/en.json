@@ -49,6 +49,9 @@
   "app_settings_revealAuthButton": "Reveal authentication options",
   "app_settings_seed": "Seed phrase",
   "app_settings_shareSeed": "Share seed",
+  "app_settings_auth_header": "Authentication",
+  "app_settings_appbar": "App Settings",
+  "app_settings_changeCode": "Change PIN",
   "receive_requested_amount": "Requested amount",
   "receive_enter_amount": "Please enter an amount",
   "send_address": "Address",
@@ -78,7 +81,10 @@
   "authenticate_biometric_hint" : "Verify identity",
   "authenticate_biometric_title" : "Authentication required",
   "authenticate_title" : "Please enter your PIN",
+  "authenticate_title_new" : "Please enter your new PIN",
   "authenticate_confirm_title" : "Re-enter your PIN",
+  "authenticate_confirm_title_new" : "Re-enter your new PIN",
+  "authenticate_change_pin_success" : "PIN succesfully changed",
   "wallet_scan_appBar_title": "Scanning your imported seed",
   "wallet_scan_notice": "This might take a while. Don't close this screen!"
 }

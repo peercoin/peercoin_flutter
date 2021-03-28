@@ -31,12 +31,10 @@ class EncryptedBox with ChangeNotifier {
     return _passCode;
   }
 
-  Future<bool> setPassCode(passCode) async {
-    if (_passCode == null) {
-      await _secureStorage.write(key: "passCode", value: passCode);
-      return true;
-    }
-    return false;
+  Future<bool> setPassCode(String passCode) async {
+    await _secureStorage.write(key: "passCode", value: passCode);
+    _passCode = passCode;
+    return true;
   }
 
   Future<Box> getGenericBox(String name) async {
