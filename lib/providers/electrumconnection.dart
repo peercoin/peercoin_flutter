@@ -25,6 +25,7 @@ class ElectrumConnection with ChangeNotifier {
   String _connectionState;
   ActiveWallets _activeWallets;
   Map _addresses = {};
+  Map<String, List> _paperWalletUtxos = {};
   String _coinName;
   ElectrumConnection(this._activeWallets);
   int _latestBlock;
@@ -83,7 +84,7 @@ class ElectrumConnection with ChangeNotifier {
     return _latestBlock;
   }
 
-  set latestBlock(newLatest) {
+  set latestBlock(int newLatest) {
     _latestBlock = newLatest;
     notifyListeners();
   }
@@ -92,11 +93,19 @@ class ElectrumConnection with ChangeNotifier {
     return _addresses;
   }
 
+  Map<String, List> get paperWalletUtxos {
+    return _paperWalletUtxos;
+  }
+
   void closeConnection() {
     if (_connection != null && _connection.sink != null) {
       _closedIntentionally = true;
       _connection.sink.close();
     }
+  }
+
+  void cleanPaperWallet() {
+    _paperWalletUtxos = {};
   }
 
   void cleanUpOnDone() {
@@ -107,6 +116,7 @@ class ElectrumConnection with ChangeNotifier {
     _addresses = {};
     _latestBlock = null;
     _scanMode = false;
+    _paperWalletUtxos = {};
     if (_closedIntentionally == false)
       Timer(Duration(seconds: 10),
           () => init(_coinName)); //retry if not intentional
@@ -129,6 +139,8 @@ class ElectrumConnection with ChangeNotifier {
         handleTx(id, result);
       } else if (idString.startsWith("utxo_")) {
         handleUtxo(id, result);
+      } else if (idString.startsWith("paperwallet_")) {
+        handlePaperWallet(id, result);
       } else if (idString.startsWith("broadcast_")) {
         handleBroadcast(id, result);
       } else if (idString == "blocks") {
@@ -226,6 +238,20 @@ class ElectrumConnection with ChangeNotifier {
       "utxo_$address",
       [hashId],
     );
+  }
+
+  void requestPaperWalletUtxos(String hashId, String address) {
+    sendMessage(
+      "blockchain.scripthash.listunspent",
+      "paperwallet_$address",
+      [hashId],
+    );
+  }
+
+  void handlePaperWallet(String id, List utxos) {
+    final txAddr = id.replaceFirst("paperwallet_", "");
+    _paperWalletUtxos[txAddr] = utxos;
+    notifyListeners();
   }
 
   void handleUtxo(String id, List utxos) async {

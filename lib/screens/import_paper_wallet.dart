@@ -3,8 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
+import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/loading_indicator.dart';
+import 'package:provider/provider.dart';
 
 class ImportPaperWalletScreen extends StatefulWidget {
   @override
@@ -20,6 +24,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   Coin _activeCoin;
   String _walletName;
   bool _initial = true;
+  bool _balanceLoading = false;
+  ElectrumConnection _connectionProvider;
+  ActiveWallets _activeWallets;
+  Map<String, List> _paperWalletUtxos = {};
 
   @override
   void didChangeDependencies() {
@@ -27,10 +35,23 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       setState(() {
         _walletName = ModalRoute.of(context).settings.arguments;
         _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
+        _connectionProvider = Provider.of<ElectrumConnection>(context);
+        _activeWallets = Provider.of<ActiveWallets>(context);
         _initial = false;
       });
     }
+    if (_connectionProvider.paperWalletUtxos.length > 0 &&
+        _connectionProvider.paperWalletUtxos != _paperWalletUtxos) {
+      _paperWalletUtxos = _connectionProvider.paperWalletUtxos;
+      calculateBalance();
+    }
     super.didChangeDependencies();
+  }
+
+  @override
+  void deactivate() {
+    _connectionProvider.cleanPaperWallet();
+    super.deactivate();
   }
 
   void handlePress(int step) {
@@ -42,8 +63,17 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         case 2:
           createQrScanner("priv");
           break;
+        case 3:
+          requestUtxos();
+          break;
       }
     }
+  }
+
+  void moveStep(int newStep) {
+    setState(() {
+      _currentStep = newStep;
+    });
   }
 
   void createQrScanner(String keyType) async {
@@ -92,10 +122,25 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     });
   }
 
-  void moveStep(int newStep) {
+  void requestUtxos() async {
     setState(() {
-      _currentStep = newStep;
+      _balanceLoading = true;
     });
+    _connectionProvider.requestPaperWalletUtxos(
+        _activeWallets.getScriptHash(_walletName, _pubKey), _pubKey);
+  }
+
+  void calculateBalance() {
+    int _totalValue = 0;
+    _paperWalletUtxos[_pubKey].forEach((element) {
+      _totalValue += element["value"];
+    });
+    setState(() {
+      _balanceLoading = false;
+      _balance =
+          "${(_totalValue / 1000000).toString()} ${_activeCoin.letterCode}";
+    });
+    moveStep(4);
   }
 
   @override
@@ -140,7 +185,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    Container(height: 20, child: Text(_pubKey)),
+                    Container(height: 30, child: Text(_pubKey)),
                     Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +211,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    Container(height: 20, child: Text(_privKey)),
+                    Container(height: 60, child: Text(_privKey)),
                     Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +237,11 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    Container(height: 20, child: Text(_balance)),
+                    Container(
+                        height: 30,
+                        child: _balanceLoading == true
+                            ? LoadingIndicator()
+                            : Text(_balance)),
                     Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,7 +267,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Divider()
                   ],
                 ),
