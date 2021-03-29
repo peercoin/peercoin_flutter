@@ -151,81 +151,100 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   Future<void> emptyWallet() async {
-    await buildImportTx();
-    showDialog(
-      context: context,
-      builder: (_) {
-        final _displayValue = _balance;
-        return SimpleDialog(
-          title: Text(
-              AppLocalizations.instance.translate('send_confirm_transaction')),
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
-              child: Column(
+    if (_balanceInt == 0 || _balanceInt < _activeCoin.minimumTxValue) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate("paperwallet_error_1"),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+      ));
+    } else {
+      await buildImportTx();
+      showDialog(
+        context: context,
+        builder: (_) {
+          final _displayValue = (_balanceInt - _requiredFee) / 1000000;
+          return SimpleDialog(
+            title: Text(
+              AppLocalizations.instance.translate('send_confirm_transaction'),
+              textAlign: TextAlign.center,
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Column(
+                  children: [
+                    Text("Importing $_displayValue ${_activeCoin.letterCode}",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Importing $_displayValue",
+                  Text(AppLocalizations.instance.translate('send_fee', {
+                    'amount': "${_requiredFee / 1000000}",
+                    'letter_code': "${_activeCoin.letterCode}"
+                  })),
+                  Text(
+                      AppLocalizations.instance.translate('send_total', {
+                        'amount': "${_balanceInt / 1000000}",
+                        'letter_code': "${_activeCoin.letterCode}"
+                      }),
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
-            ),
-            SizedBox(height: 10),
-            Text(AppLocalizations.instance.translate('send_fee', {
-              'amount': "${_requiredFee / 1000000}",
-              'letter_code': "${_activeCoin.letterCode}"
-            })),
-            Text(
-                AppLocalizations.instance.translate('send_total', {
-                  'amount': "${_balanceInt / 1000000}",
-                  'letter_code': "${_activeCoin.letterCode}"
-                }),
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-              ),
-              label: Text(
-                  AppLocalizations.instance.translate('send_confirm_send')),
-              icon: Icon(Icons.send),
-              onPressed: () async {
-                try {
-                  Map _buildResult = await buildImportTx(_requiredFee, false);
-                  //write tx to history
-                  /*  await _activeWallets.putTx(
-                            _wallet.name, _addressKey.currentState.value, {
-                          "txid": _buildResult["id"],
-                          "hex": _buildResult["hex"],
-                          "outValue": _totalValue - _txFee,
-                          "outFees": _txFee + _destroyedChange
-                        }); */
-                  //broadcast
-                  /*  Provider.of<ElectrumConnection>(context, listen: false)
-                            .broadcastTransaction(
-                                _buildResult["hex"], _buildResult["id"]); */
-                  //pop message
-                  Navigator.of(context).pop();
-                  //navigate back to tx list
-
-                } catch (e) {
-                  print("error $e");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.instance.translate(
-                        'send_oops',
-                      )),
-                    ),
-                  );
-                }
-              },
-            )
-          ],
-        );
-      },
-    );
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                  ),
+                  label: Text(AppLocalizations.instance
+                      .translate('paperwallet_confirm_inport')),
+                  icon: Icon(Icons.send),
+                  onPressed: () async {
+                    try {
+                      await buildImportTx(_requiredFee, false);
+                      //broadcast
+                      Provider.of<ElectrumConnection>(context, listen: false)
+                          .broadcastTransaction(_transactionHex, "import");
+                      //pop message
+                      Navigator.of(context).pop();
+                      //pop again to close import screen
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          AppLocalizations.instance
+                              .translate("paperwallet_success"),
+                          textAlign: TextAlign.center,
+                        ),
+                        duration: Duration(seconds: 5),
+                      ));
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      print("error $e");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(AppLocalizations.instance.translate(
+                            'send_oops',
+                          )),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              )
+            ],
+          );
+        },
+      );
+    }
   }
 
-  Future<Map> buildImportTx([int fee = 0, bool dryRun = true]) async {
+  Future<void> buildImportTx([int fee = 0, bool dryRun = true]) async {
     final tx = TransactionBuilder(network: _activeCoin.networkType);
     tx.setVersion(1);
     //send everything minus fees to unusedaddr
@@ -261,7 +280,6 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_balanceInt);
     return Scaffold(
         appBar: AppBar(
           title: Text(

@@ -306,7 +306,9 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleBroadcast(String id, String result) {
     String txId = id.replaceFirst("broadcast_", "");
-    _activeWallets.updateBroadcasted(_coinName, txId, true);
+    if (txId != "import") {
+      _activeWallets.updateBroadcasted(_coinName, txId, true);
+    }
   }
 }
 
