@@ -410,11 +410,12 @@ class ActiveWallets with ChangeNotifier {
         }
 
         Map<int, Map> keyMap = {};
+        List _usedUtxos = [];
         inputTx.asMap().forEach((inputKey, inputUtxo) {
-          print("inputValue ${inputUtxo.value}");
           //find key to that utxo
           openWallet.addresses.asMap().forEach((key, walletAddr) {
-            if (walletAddr.address == inputUtxo.address) {
+            if (walletAddr.address == inputUtxo.address &&
+                !_usedUtxos.contains(inputUtxo.hash)) {
               int _addrIndex = key;
               var child = hdWallet.address == inputUtxo.address
                   ? hdWallet
@@ -422,6 +423,7 @@ class ActiveWallets with ChangeNotifier {
               keyMap[inputKey] =
                   ({"wif": child.wif, "addr": inputUtxo.address});
               tx.addInput(inputUtxo.hash, inputUtxo.txPos);
+              _usedUtxos.add(inputUtxo.hash);
             }
           });
         });
