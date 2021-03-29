@@ -167,7 +167,7 @@ class _SendTabState extends State<SendTab> {
                         try {
                           Map _buildResult = await buildTx(false, _txFee);
                           //write tx to history
-                          await _activeWallets.putTx(
+                          await _activeWallets.putOutgoingTx(
                               _wallet.name, _addressKey.currentState.value, {
                             "txid": _buildResult["id"],
                             "hex": _buildResult["hex"],

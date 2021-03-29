@@ -285,21 +285,7 @@ class ActiveWallets with ChangeNotifier {
               }
             });
           });
-        } else {
-          //outgoing tx
-          openWallet.putTransaction(WalletTransaction(
-            txid: tx["txid"],
-            timestamp: tx["blocktime"],
-            value: tx["outValue"],
-            fee: tx["outFees"],
-            address: address,
-            direction: direction,
-            broadCasted: false,
-            confirmations: 0,
-            broadcastHex: tx["hex"],
-          ));
         }
-
         // trigger notification
         FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
             FlutterLocalNotificationsPlugin();
@@ -314,6 +300,25 @@ class ActiveWallets with ChangeNotifier {
           );
       }
     }
+
+    notifyListeners();
+    await openWallet.save();
+  }
+
+  Future<void> putOutgoingTx(String identifier, String address, Map tx) async {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+
+    openWallet.putTransaction(WalletTransaction(
+      txid: tx["txid"],
+      timestamp: tx["blocktime"],
+      value: tx["outValue"],
+      fee: tx["outFees"],
+      address: address,
+      direction: "out",
+      broadCasted: false,
+      confirmations: 0,
+      broadcastHex: tx["hex"],
+    ));
 
     notifyListeners();
     await openWallet.save();
