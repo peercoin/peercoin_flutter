@@ -21,6 +21,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   String _pubKey = "";
   String _privKey = "";
   String _balance = "";
+  String _transactionHex = "";
+  int _balanceInt = 0;
+  int _requiredFee = 0;
   Coin _activeCoin;
   String _walletName;
   bool _initial = true;
@@ -65,6 +68,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
           break;
         case 3:
           requestUtxos();
+          break;
+        case 4:
+          emptyWallet();
           break;
       }
     }
@@ -137,14 +143,125 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     });
     setState(() {
       _balanceLoading = false;
+      _balanceInt = _totalValue;
       _balance =
           "${(_totalValue / 1000000).toString()} ${_activeCoin.letterCode}";
     });
     moveStep(4);
   }
 
+  Future<void> emptyWallet() async {
+    await buildImportTx();
+    showDialog(
+      context: context,
+      builder: (_) {
+        final _displayValue = _balance;
+        return SimpleDialog(
+          title: Text(
+              AppLocalizations.instance.translate('send_confirm_transaction')),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Column(
+                children: [
+                  Text("Importing $_displayValue",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(AppLocalizations.instance.translate('send_fee', {
+              'amount': "${_requiredFee / 1000000}",
+              'letter_code': "${_activeCoin.letterCode}"
+            })),
+            Text(
+                AppLocalizations.instance.translate('send_total', {
+                  'amount': "${_balanceInt / 1000000}",
+                  'letter_code': "${_activeCoin.letterCode}"
+                }),
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+              ),
+              label: Text(
+                  AppLocalizations.instance.translate('send_confirm_send')),
+              icon: Icon(Icons.send),
+              onPressed: () async {
+                try {
+                  Map _buildResult = await buildImportTx(_requiredFee, false);
+                  //write tx to history
+                  /*  await _activeWallets.putTx(
+                            _wallet.name, _addressKey.currentState.value, {
+                          "txid": _buildResult["id"],
+                          "hex": _buildResult["hex"],
+                          "outValue": _totalValue - _txFee,
+                          "outFees": _txFee + _destroyedChange
+                        }); */
+                  //broadcast
+                  /*  Provider.of<ElectrumConnection>(context, listen: false)
+                            .broadcastTransaction(
+                                _buildResult["hex"], _buildResult["id"]); */
+                  //pop message
+                  Navigator.of(context).pop();
+                  //navigate back to tx list
+
+                } catch (e) {
+                  print("error $e");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.instance.translate(
+                        'send_oops',
+                      )),
+                    ),
+                  );
+                }
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<Map> buildImportTx([int fee = 0, bool dryRun = true]) async {
+    final tx = TransactionBuilder(network: _activeCoin.networkType);
+    tx.setVersion(1);
+    //send everything minus fees to unusedaddr
+    tx.addOutput(_activeWallets.getUnusedAddress, _balanceInt - fee);
+    //add inputs
+    _paperWalletUtxos[_pubKey].forEach((utxo) {
+      tx.addInput(utxo["tx_hash"], utxo["tx_pos"]);
+    });
+    //sign
+    _paperWalletUtxos[_pubKey].asMap().forEach((index, utxo) {
+      tx.sign(
+        vin: index,
+        keyPair: ECPair.fromWIF(_privKey, network: _activeCoin.networkType),
+      );
+    });
+    final intermediate = tx.build();
+
+    var number = ((intermediate.txSize) / 1000 * _activeCoin.feePerKb)
+        .toStringAsFixed(_activeCoin.fractions);
+    var asDouble = double.parse(number) * 1000000;
+    int requiredFeeInSatoshis = asDouble.toInt();
+
+    if (dryRun == false) {
+      _transactionHex = intermediate.toHex();
+    }
+    //generate new wallet addr
+    await _activeWallets.generateUnusedAddress(_activeCoin.name);
+
+    setState(() {
+      _requiredFee = requiredFeeInSatoshis + 10; //TODO remove +10 when rdy
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(_balanceInt);
     return Scaffold(
         appBar: AppBar(
           title: Text(
