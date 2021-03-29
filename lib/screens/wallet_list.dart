@@ -49,8 +49,11 @@ class _WalletListScreenState extends State<WalletListScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(Routes.NewWallet),
+              onPressed: () {
+                if (_initial == false) {
+                  Navigator.of(context).pushNamed(Routes.NewWallet);
+                }
+              },
               icon: Icon(Icons.add),
             ),
           )

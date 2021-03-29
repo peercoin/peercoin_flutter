@@ -135,7 +135,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   void selectPopUpMenuItem(String value) {
     if (value == "import_wallet") {
-      Navigator.of(context).pushNamed(Routes.ImportPaperWallet);
+      Navigator.of(context)
+          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
     }
   }
 

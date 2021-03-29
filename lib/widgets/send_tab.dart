@@ -319,8 +319,10 @@ class _SendTabState extends State<SendTab> {
                     size: 40,
                   ),
                   onPressed: () async {
-                    final result =
-                        await Navigator.of(context).pushNamed(Routes.QRScan);
+                    final result = await Navigator.of(context).pushNamed(
+                        Routes.QRScan,
+                        arguments:
+                            AppLocalizations.instance.translate('scan_qr'));
                     if (result != null) parseQrResult(result);
                   }),
             ]),
