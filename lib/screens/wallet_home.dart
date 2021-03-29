@@ -6,6 +6,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
@@ -132,6 +133,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
     super.deactivate();
   }
 
+  void selectPopUpMenuItem(String value) {
+    if (value == "import_wallet") {
+      Navigator.of(context)
+          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,9 +176,22 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Text(_wallet.title)
         ]),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            // child: Icon(Icons.settings), //TODO add
+          PopupMenuButton(
+            onSelected: (value) => selectPopUpMenuItem(value),
+            itemBuilder: (_) {
+              return [
+                PopupMenuItem(
+                  value: "import_wallet",
+                  child: ListTile(
+                    leading: Icon(Icons.arrow_circle_down),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_paperwallet'),
+                    ),
+                  ),
+                )
+              ];
+            },
           )
         ],
       ),

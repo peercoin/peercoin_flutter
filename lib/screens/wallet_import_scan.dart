@@ -38,8 +38,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       }
 
       _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-        int dueTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 5;
-        if (_latestUpdate <= dueTime) {
+        int dueTime = _latestUpdate + 5;
+        if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
           Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         }
       });
