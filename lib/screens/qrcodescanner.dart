@@ -17,6 +17,7 @@ class _QRScannerState extends State<QRScanner> {
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode codeResult;
+  BuildContext thisCtx;
 
   @override
   void reassemble() {
@@ -29,6 +30,7 @@ class _QRScannerState extends State<QRScanner> {
 
   @override
   Widget build(BuildContext context) {
+    thisCtx = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(ModalRoute.of(context).settings.arguments),
@@ -82,7 +84,7 @@ class _QRScannerState extends State<QRScanner> {
     controller.scannedDataStream.listen((scanData) {
       if (scanData != null) {
         controller.pauseCamera();
-        Navigator.maybeOf(context).maybePop(scanData.code);
+        Navigator.maybeOf(thisCtx).maybePop(scanData.code);
       }
     });
   }
