@@ -70,11 +70,10 @@ void main() async {
     }
   });
 
-  //check if app is not locked
+  //check if app is locked
   FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   final failedAuths =
-      int.parse(await _secureStorage.read(key: "failedAuths")) ?? 0;
-  print(failedAuths);
+      int.parse(await _secureStorage.read(key: "failedAuths") ?? "0");
   if (setupFinished == false) {
     _homeWidget = SetupScreen();
   } else if (failedAuths > 0) {
