@@ -201,7 +201,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
+                    primary: Colors.white,
                   ),
                   label: Text(AppLocalizations.instance
                       .translate('paperwallet_confirm_inport')),
@@ -303,18 +303,18 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_1'),
                             style: Theme.of(context).textTheme.headline6),
-                        TextButton.icon(
+                        ElevatedButton.icon(
                           onPressed: () => handlePress(1),
                           icon: Icon(Icons.camera,
                               color: _currentStep == 1
-                                  ? Theme.of(context).primaryColor
+                                  ? Colors.white
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
                                 .translate('paperwallet_step_1_text'),
                             style: TextStyle(
                                 color: _currentStep == 1
-                                    ? Theme.of(context).primaryColor
+                                    ? Colors.white
                                     : Theme.of(context).accentColor),
                           ),
                         ),
@@ -329,18 +329,18 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_2'),
                             style: Theme.of(context).textTheme.headline6),
-                        TextButton.icon(
+                        ElevatedButton.icon(
                           onPressed: () => handlePress(2),
                           icon: Icon(Icons.camera,
                               color: _currentStep == 2
-                                  ? Theme.of(context).primaryColor
+                                  ? Colors.white
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
                                 .translate('paperwallet_step_2_text'),
                             style: TextStyle(
                                 color: _currentStep == 2
-                                    ? Theme.of(context).primaryColor
+                                    ? Colors.white
                                     : Theme.of(context).accentColor),
                           ),
                         ),
@@ -355,18 +355,18 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_3'),
                             style: Theme.of(context).textTheme.headline6),
-                        TextButton.icon(
+                        ElevatedButton.icon(
                           onPressed: () => handlePress(3),
                           icon: Icon(Icons.payments,
                               color: _currentStep == 3
-                                  ? Theme.of(context).primaryColor
+                                  ? Colors.white
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
                                 .translate('paperwallet_step_3_text'),
                             style: TextStyle(
                                 color: _currentStep == 3
-                                    ? Theme.of(context).primaryColor
+                                    ? Colors.white
                                     : Theme.of(context).accentColor),
                           ),
                         ),
@@ -385,18 +385,18 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_4'),
                             style: Theme.of(context).textTheme.headline6),
-                        TextButton.icon(
+                        ElevatedButton.icon(
                           onPressed: () => handlePress(4),
                           icon: Icon(Icons.arrow_circle_down,
                               color: _currentStep == 4
-                                  ? Theme.of(context).primaryColor
+                                  ? Colors.white
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
                                 .translate('paperwallet_step_4_text'),
                             style: TextStyle(
                                 color: _currentStep == 4
-                                    ? Theme.of(context).primaryColor
+                                    ? Colors.white
                                     : Theme.of(context).accentColor),
                           ),
                         ),

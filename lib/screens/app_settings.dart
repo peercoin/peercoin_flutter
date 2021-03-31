@@ -117,14 +117,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ),
               SizedBox(height: 10),
               _biometricsRevealed == false
-                  ? TextButton(
+                  ? ElevatedButton(
                       onPressed: () =>
                           revealAuthOptions(_settings.biometricsAllowed),
                       child: Text(
-                          AppLocalizations.instance
-                              .translate('app_settings_revealAuthButton'),
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor)))
+                        AppLocalizations.instance
+                            .translate('app_settings_revealAuthButton'),
+                      ))
                   : Column(children: [
                       SwitchListTile(
                           title: Text(
@@ -175,13 +174,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             _settings.setAuthenticationOptions(
                                 "newWallet", newState);
                           }),
-                      TextButton(
+                      ElevatedButton(
                         onPressed: () => changePIN(_settings.biometricsAllowed),
                         child: Text(
                           AppLocalizations.instance
                               .translate('app_settings_changeCode'),
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       )
                     ]),
@@ -193,26 +190,23 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ),
               SizedBox(height: 10),
               _seedPhrase == ""
-                  ? TextButton(
+                  ? ElevatedButton(
                       onPressed: () =>
                           revealSeedPhrase(_settings.biometricsAllowed),
                       child: Text(
-                          AppLocalizations.instance
-                              .translate('app_settings_revealSeedButton'),
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor)))
+                        AppLocalizations.instance
+                            .translate('app_settings_revealSeedButton'),
+                      ))
                   : Column(children: [
                       SelectableText(
                         _seedPhrase,
                         textAlign: TextAlign.center,
                       ),
-                      TextButton(
+                      ElevatedButton(
                         onPressed: () => Share.share(_seedPhrase),
                         child: Text(
                           AppLocalizations.instance
                               .translate('app_settings_shareSeed'),
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       )
                     ])

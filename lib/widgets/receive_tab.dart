@@ -149,7 +149,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   return null;
                 }),
             SizedBox(height: 20),
-            TextButton.icon(
+            ElevatedButton.icon(
                 onPressed: () async {
                   await Share.share(_qrString ?? widget._unusedAddress);
                 },

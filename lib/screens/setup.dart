@@ -52,7 +52,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextButton(
+                        ElevatedButton(
                           onPressed: () => {createWallet(context)},
                           child: Text(
                             AppLocalizations.instance.translate(
@@ -66,7 +66,7 @@ class _SetupScreenState extends State<SetupScreen> {
                               'create_wallet_or',
                             ),
                             style: TextStyle(color: Colors.white)),
-                        TextButton(
+                        ElevatedButton(
                           onPressed: () => Navigator.of(context)
                               .pushNamed(Routes.SetupImport),
                           child: Text(

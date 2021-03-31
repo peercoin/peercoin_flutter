@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-class MyTheme{
+
+class MyTheme {
   static MaterialColor peercoinGreen = MaterialColor(
     _peercoinGreenValue,
     <int, Color>{
@@ -17,17 +18,19 @@ class MyTheme{
   );
   static int _peercoinGreenValue = 0xff3cb054;
 
-
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(
       primaryColor: peercoinGreen,
       accentColor: Colors.grey,
       errorColor: Colors.red,
       primarySwatch: peercoinGreen,
-      textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(primary: Colors.white),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: peercoinGreen,
+          onPrimary: Colors.white,
+        ),
+      ),
     ),
-  ),
     ThemeMode.dark: ThemeData.dark().copyWith(
       primaryColor: Color(0xff46662B),
       scaffoldBackgroundColor: DarkThemeColors.background,
@@ -36,7 +39,7 @@ class MyTheme{
     )
   };
 
-  static ThemeData getTheme(ThemeMode mode){
+  static ThemeData getTheme(ThemeMode mode) {
     return appThemes[mode];
   }
 }

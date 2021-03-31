@@ -103,7 +103,7 @@ class TransactionDetails extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Center(
-            child: TextButton.icon(
+            child: ElevatedButton.icon(
                 onPressed: () => _launchURL(baseUrl + "${_tx.txid}"),
                 icon: Icon(
                   Icons.search,

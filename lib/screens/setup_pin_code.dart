@@ -48,7 +48,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                   });
                 }),
             SizedBox(height: 30),
-            TextButton(
+            ElevatedButton(
               onPressed: () async {
                 await screenLock(
                   title: HeadingTitle(
