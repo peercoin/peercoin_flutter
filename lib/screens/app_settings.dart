@@ -196,10 +196,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             .translate('app_settings_revealSeedButton'),
                       ))
                   : Column(children: [
+                      SizedBox(height: 20),
                       SelectableText(
                         _seedPhrase,
                         textAlign: TextAlign.center,
                       ),
+                      SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () => Share.share(_seedPhrase),
                         child: Text(
