@@ -56,7 +56,8 @@ class Auth {
     }
   }
 
-  static Future<void> spawnJail(BuildContext context) async {
+  static Future<void> spawnJail(
+      BuildContext context, bool jailedFromHome) async {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -77,7 +78,8 @@ class Auth {
             ],
           );
         });
-    Navigator.of(context).pushReplacementNamed(Routes.AuthJail);
+    Navigator.of(context)
+        .pushReplacementNamed(Routes.AuthJail, arguments: jailedFromHome);
   }
 
   static Future<void> localAuth(BuildContext context,
@@ -105,7 +107,9 @@ class Auth {
   }
 
   static Future<void> requireAuth(BuildContext context, bool biometricsAllowed,
-      [Function callback, bool canCancel = true]) async {
+      [Function callback,
+      bool canCancel = true,
+      bool jailedFromHome = false]) async {
     if (biometricsAllowed) {
       await screenLock(
         context: context,
@@ -133,7 +137,7 @@ class Auth {
         },
         didError: (retries) => errorHandler(context, retries),
         didMaxRetries: (_) async {
-          spawnJail(context);
+          spawnJail(context, jailedFromHome);
         },
       );
     } else {
@@ -154,7 +158,7 @@ class Auth {
         },
         didError: (retries) => errorHandler(context, retries),
         didMaxRetries: (_) async {
-          spawnJail(context);
+          spawnJail(context, jailedFromHome);
         },
       );
     }
