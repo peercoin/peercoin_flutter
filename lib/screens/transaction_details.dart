@@ -107,11 +107,9 @@ class TransactionDetails extends StatelessWidget {
                 onPressed: () => _launchURL(baseUrl + "${_tx.txid}"),
                 icon: Icon(
                   Icons.search,
-                  color: Theme.of(context).primaryColor,
                 ),
                 label: Text(
                   AppLocalizations.instance.translate('tx_view_in_explorer'),
-                  style: TextStyle(color: Theme.of(context).primaryColor),
                 )),
           )
         ],

@@ -112,9 +112,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           child: Column(
             children: [
               Text(
-                AppLocalizations.instance.translate('app_settings_auth_header'),
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+                  AppLocalizations.instance
+                      .translate('app_settings_auth_header'),
+                  style: Theme.of(context).textTheme.headline6),
               SizedBox(height: 10),
               _biometricsRevealed == false
                   ? ElevatedButton(
@@ -184,10 +184,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     ]),
               Divider(),
               SizedBox(height: 10),
-              Text(
-                AppLocalizations.instance.translate('app_settings_seed'),
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text(AppLocalizations.instance.translate('app_settings_seed'),
+                  style: Theme.of(context).textTheme.headline6),
               SizedBox(height: 10),
               _seedPhrase == ""
                   ? ElevatedButton(
