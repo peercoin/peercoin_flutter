@@ -47,7 +47,7 @@
   "paperwallet_step_4": "Step 4",
   "paperwallet_step_4_text": "Empty wallet & import",
   "paperwallet_error_1": "Wallet empty \nor amount below minimum output",
-  "paperwallet_confirm_inport": "Confirm & Import",
+  "paperwallet_confirm_import": "Confirm & Import",
   "paperwallet_success": "Paper Wallet imported successfully.\nTransaction will appear very soon",
   "app_navigation": "Navigation",
   "app_wallets": "Wallets",

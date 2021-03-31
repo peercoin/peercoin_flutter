@@ -200,11 +200,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                  ),
                   label: Text(AppLocalizations.instance
-                      .translate('paperwallet_confirm_inport')),
+                      .translate('paperwallet_confirm_import')),
                   icon: Icon(Icons.send),
                   onPressed: () async {
                     try {

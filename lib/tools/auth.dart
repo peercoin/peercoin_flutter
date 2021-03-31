@@ -21,7 +21,6 @@ class Auth {
       await callback();
       //TODO having a loading animation here would be nicer
     } else {
-      //
       Navigator.pop(context);
     }
   }
@@ -29,30 +28,31 @@ class Auth {
   static void errorHandler(BuildContext context, int retries) async {
     if (retries == maxRetries - 1) {
       await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                AppLocalizations.instance
-                    .translate('authenticate_retry_warning_title'),
-                textAlign: TextAlign.center,
-              ),
-              content: Text(
-                AppLocalizations.instance
-                    .translate('authenticate_retry_warning_text'),
-              ),
-              actions: [
-                TextButton(
-                  child: Text(
-                    AppLocalizations.instance.translate('jail_dialog_button'),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              AppLocalizations.instance
+                  .translate('authenticate_retry_warning_title'),
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              AppLocalizations.instance
+                  .translate('authenticate_retry_warning_text'),
+            ),
+            actions: [
+              TextButton(
+                child: Text(
+                  AppLocalizations.instance.translate('jail_dialog_button'),
                 ),
-              ],
-            );
-          });
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
