@@ -32,11 +32,15 @@ class MyTheme {
       ),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
-      primaryColor: Color(0xff46662B),
-      scaffoldBackgroundColor: DarkThemeColors.background,
-      accentColor: DarkThemeColors.primaryAccent,
-      errorColor: Color(0xffAB0C3D),
-    )
+        primaryColor: Color(0xff46662B),
+        scaffoldBackgroundColor: DarkThemeColors.background,
+        accentColor: DarkThemeColors.primaryAccent,
+        errorColor: Color(0xffAB0C3D),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+          primary: Color(0xff46662B),
+          onPrimary: Colors.white,
+        )))
   };
 
   static ThemeData getTheme(ThemeMode mode) {
