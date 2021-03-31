@@ -102,7 +102,7 @@ class _TransactionListState extends State<TransactionList> {
                           ModalRoute.of(context).settings.arguments
                         ]),
                         leading: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Icon(
                                 _filteredTx[i].direction == "in"
@@ -151,12 +151,10 @@ class _TransactionListState extends State<TransactionList> {
                             textScaleFactor: 0.9,
                           ),
                         ),
-                        subtitle: Center(
-                          child: Text(
-                            _filteredTx[i].address,
-                            overflow: TextOverflow.ellipsis,
-                            textScaleFactor: 1,
-                          ),
+                        subtitle: Text(
+                          _filteredTx[i].address,
+                          overflow: TextOverflow.ellipsis,
+                          textScaleFactor: 1,
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

@@ -103,15 +103,13 @@ class TransactionDetails extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Center(
-            child: TextButton.icon(
+            child: ElevatedButton.icon(
                 onPressed: () => _launchURL(baseUrl + "${_tx.txid}"),
                 icon: Icon(
                   Icons.search,
-                  color: Theme.of(context).primaryColor,
                 ),
                 label: Text(
                   AppLocalizations.instance.translate('tx_view_in_explorer'),
-                  style: TextStyle(color: Theme.of(context).primaryColor),
                 )),
           )
         ],

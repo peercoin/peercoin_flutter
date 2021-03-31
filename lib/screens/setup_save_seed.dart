@@ -77,7 +77,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             ),
             SizedBox(height: 30),
             sharedYet
-                ? TextButton(
+                ? ElevatedButton(
                     onPressed: () async {
                       var prefs = await Provider.of<UnencryptedOptions>(context,
                               listen: false)
@@ -90,7 +90,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       style: TextStyle(fontSize: 18),
                     ),
                   )
-                : TextButton(
+                : ElevatedButton(
                     onPressed: () async => await shareSeed(seed),
                     child: Text(
                       AppLocalizations.instance.translate('export_now'),

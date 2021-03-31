@@ -67,98 +67,98 @@ class _ReceiveTabState extends State<ReceiveTab> {
         padding: EdgeInsets.all(20),
         child: Form(
           key: _formKey,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: <
-                  Widget>[
-            InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SimpleDialog(children: [
-                      Center(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.33,
-                          width: MediaQuery.of(context).size.width * 1,
-                          child: Center(
-                            child: QrImage(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              data: _qrString ?? widget._unusedAddress,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(children: [
+                          Center(
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.33,
+                              width: MediaQuery.of(context).size.width * 1,
+                              child: Center(
+                                child: QrImage(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                  data: _qrString ?? widget._unusedAddress,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                    ]);
+                          )
+                        ]);
+                      },
+                    );
                   },
-                );
-              },
-              child: QrImage(
-                data: _qrString ?? widget._unusedAddress,
-                size: MediaQuery.of(context).size.width * 0.3,
-                padding: EdgeInsets.all(1),
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-              ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
-                  borderRadius: BorderRadius.all(Radius.circular(4))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FittedBox(
-                  child: SelectableText(
-                    widget._unusedAddress,
-                    style: TextStyle(color: Colors.white),
+                  child: QrImage(
+                    data: _qrString ?? widget._unusedAddress,
+                    size: MediaQuery.of(context).size.width * 0.3,
+                    padding: EdgeInsets.all(1),
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-                textInputAction: TextInputAction.done,
-                key: _amountKey,
-                controller: amountController,
-                onChanged: (String newString) {
-                  double parsed = newString != "" ? double.parse(newString) : 0;
-                  if (parsed > 0) {
-                    stringBuilder(parsed);
-                  } else {
-                    stringBuilder(0);
-                  }
-                },
-                autocorrect: false,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      getValidator(_availableCoin.fractions)),
-                ],
-                keyboardType: TextInputType.numberWithOptions(signed: true),
-                decoration: InputDecoration(
-                  icon: Icon(Icons.money),
-                  labelText: AppLocalizations.instance
-                      .translate('receive_requested_amount'),
-                  suffix: Text(_wallet.letterCode),
+                SizedBox(height: 20),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).accentColor,
+                      borderRadius: BorderRadius.all(Radius.circular(4))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: SelectableText(
+                        widget._unusedAddress,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return AppLocalizations.instance
-                        .translate('receive_enter_amount');
-                  }
-                  return null;
-                }),
-            SizedBox(height: 20),
-            TextButton.icon(
-                onPressed: () async {
-                  await Share.share(_qrString ?? widget._unusedAddress);
-                },
-                icon: Icon(Icons.share, color: Theme.of(context).primaryColor),
-                label: Text(
-                  AppLocalizations.instance.translate('receive_share'),
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ))
-          ]),
+                SizedBox(height: 20),
+                TextFormField(
+                    textInputAction: TextInputAction.done,
+                    key: _amountKey,
+                    controller: amountController,
+                    onChanged: (String newString) {
+                      double parsed =
+                          newString != "" ? double.parse(newString) : 0;
+                      if (parsed > 0) {
+                        stringBuilder(parsed);
+                      } else {
+                        stringBuilder(0);
+                      }
+                    },
+                    autocorrect: false,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          getValidator(_availableCoin.fractions)),
+                    ],
+                    keyboardType: TextInputType.numberWithOptions(signed: true),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.money),
+                      labelText: AppLocalizations.instance
+                          .translate('receive_requested_amount'),
+                      suffix: Text(_wallet.letterCode),
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return AppLocalizations.instance
+                            .translate('receive_enter_amount');
+                      }
+                      return null;
+                    }),
+                SizedBox(height: 20),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      await Share.share(_qrString ?? widget._unusedAddress);
+                    },
+                    icon: Icon(Icons.share),
+                    label: Text(
+                      AppLocalizations.instance.translate('receive_share'),
+                    ))
+              ]),
         ),
       ),
     );

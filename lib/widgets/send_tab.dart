@@ -223,6 +223,14 @@ class _SendTabState extends State<SendTab> {
               decoration: InputDecoration(
                 icon: Icon(Icons.shuffle),
                 labelText: AppLocalizations.instance.translate('tx_address'),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    ClipboardData data = await Clipboard.getData('text/plain');
+                    addressController.text = data.text;
+                  },
+                  icon:
+                      Icon(Icons.paste, color: Theme.of(context).primaryColor),
+                ),
               ),
               validator: (value) {
                 if (value.isEmpty) {

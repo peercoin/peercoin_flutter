@@ -97,7 +97,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
             SizedBox(height: 30),
             _loading
                 ? LoadingIndicator()
-                : TextButton.icon(
+                : ElevatedButton.icon(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();

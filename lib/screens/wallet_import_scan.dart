@@ -37,10 +37,11 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
             await _activeWallets.getWalletScriptHashes(_coinName));
       }
 
-      _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
         int dueTime = _latestUpdate + 5;
         if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
-          Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+          _timer.cancel();
+          await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         }
       });
       setState(() {
@@ -77,6 +78,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   @override
   void deactivate() {
     _connectionProvider.closeConnection();
+    _timer.cancel();
     super.deactivate();
   }
 

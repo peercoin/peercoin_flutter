@@ -79,17 +79,11 @@ class _QRScannerState extends State<QRScanner> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       if (scanData != null) {
-        controller.pauseCamera();
-        Navigator.maybeOf(context).maybePop(scanData.code);
+        controller.dispose();
+        await Navigator.maybeOf(context).maybePop(scanData.code);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
