@@ -6,6 +6,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
@@ -52,7 +53,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _connectionProvider.init(_wallet.name);
+      _connectionProvider.init(_wallet.name, false);
     }
   }
 
@@ -66,7 +67,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
 
-      if (_connectionProvider.init(_wallet.name)) {
+      if (_connectionProvider.init(_wallet.name, false)) {
         _connectionProvider.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(_wallet.name));
         rebroadCastUnsendTx();
@@ -102,8 +103,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
           print("new block ${_connectionProvider.latestBlock}");
           _latestBlock = _connectionProvider.latestBlock;
 
-          var unconfirmedTx =
-              _walletTransactions.where((element) => element.confirmations < 6);
+          var unconfirmedTx = _walletTransactions.where((element) =>
+              element.confirmations < 6 && element.timestamp != -1);
           unconfirmedTx.forEach((element) {
             print("requesting update for ${element.txid}");
             _connectionProvider.requestTxUpdate(element.txid);
@@ -132,6 +133,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
     super.deactivate();
   }
 
+  void selectPopUpMenuItem(String value) {
+    if (value == "import_wallet") {
+      Navigator.of(context)
+          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,15 +151,17 @@ class _WalletHomeState extends State<WalletHomeScreen>
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_left),
-            label: 'Receive',
+            label: AppLocalizations.instance
+                .translate('wallet_bottom_nav_receive'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Transactions',
+            label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_right),
-            label: 'Send',
+            label:
+                AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           )
         ],
       ),
@@ -166,9 +176,22 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Text(_wallet.title)
         ]),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            // child: Icon(Icons.settings), //TODO add
+          PopupMenuButton(
+            onSelected: (value) => selectPopUpMenuItem(value),
+            itemBuilder: (_) {
+              return [
+                PopupMenuItem(
+                  value: "import_wallet",
+                  child: ListTile(
+                    leading: Icon(Icons.arrow_circle_down),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_paperwallet'),
+                    ),
+                  ),
+                )
+              ];
+            },
           )
         ],
       ),
@@ -267,7 +290,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                           ),
                           Text(
                             AppLocalizations.instance
-                                .translate('wallet_connected', null),
+                                .translate('wallet_connected'),
                             style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontSize: 12),

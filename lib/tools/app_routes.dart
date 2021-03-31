@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/app_settings_screen.dart';
+import 'package:peercoin/screens/app_settings.dart';
+import 'package:peercoin/screens/auth_jail.dart';
+import 'package:peercoin/screens/import_paper_wallet.dart';
 import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/screens/qrcodescanner.dart';
 import 'package:peercoin/screens/setup_import_seed.dart';
@@ -7,6 +9,7 @@ import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:peercoin/screens/setup_save_seed.dart';
 import 'package:peercoin/screens/transaction_details.dart';
 import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/screens/wallet_import_scan.dart';
 import 'package:peercoin/screens/wallet_list.dart';
 
 class Routes {
@@ -20,6 +23,9 @@ class Routes {
   static const String SetupImport = "/setup-import-seed";
   static const String Transaction = "/tx-detail";
   static const String WalletHome = "/wallet-home";
+  static const String WalletImportScan = "/wallet-import-scan";
+  static const String ImportPaperWallet = "/import-paperwallet";
+  static const String AuthJail = "/auth-jail";
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -31,7 +37,10 @@ class Routes {
       Routes.QRScan: (context) => QRScanner(),
       Routes.Transaction: (context) => TransactionDetails(),
       Routes.AppSettings: (context) => AppSettingsScreen(),
-      Routes.SetupImport: (context) => SetupImportSeed()
+      Routes.SetupImport: (context) => SetupImportSeedScreen(),
+      Routes.WalletImportScan: (context) => WalletImportScanScreen(),
+      Routes.ImportPaperWallet: (context) => ImportPaperWalletScreen(),
+      Routes.AuthJail: (context) => AuthJailScreen()
     };
   }
 }

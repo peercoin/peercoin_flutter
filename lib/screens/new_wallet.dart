@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class NewWalletScreen extends StatefulWidget {
-
   @override
   _NewWalletScreenState createState() => _NewWalletScreenState();
 }
@@ -24,7 +25,16 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
     try {
       await Provider.of<ActiveWallets>(context, listen: false).addWallet(_coin,
           availableCoins[_coin].displayName, availableCoins[_coin].letterCode);
-      Navigator.of(context).pop();
+      var prefs =
+          await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
+
+      if (prefs.getBool("importedSeed") == true) {
+        await Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.WalletImportScan, (_) => false,
+            arguments: _coin);
+      } else {
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(

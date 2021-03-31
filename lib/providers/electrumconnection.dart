@@ -25,16 +25,19 @@ class ElectrumConnection with ChangeNotifier {
   String _connectionState;
   ActiveWallets _activeWallets;
   Map _addresses = {};
+  Map<String, List> _paperWalletUtxos = {};
   String _coinName;
   ElectrumConnection(this._activeWallets);
   int _latestBlock;
   bool _closedIntentionally = false;
+  bool _scanMode = false;
 
-  bool init(walletName) {
+  bool init(walletName, [bool scanMode = false]) {
     if (_connection == null) {
       _coinName = walletName;
       _connectionState = "waiting";
       _closedIntentionally = false;
+      _scanMode = scanMode;
       print("init server connection");
       connect();
       Stream stream = _connection.stream;
@@ -81,13 +84,17 @@ class ElectrumConnection with ChangeNotifier {
     return _latestBlock;
   }
 
-  set latestBlock(newLatest) {
+  set latestBlock(int newLatest) {
     _latestBlock = newLatest;
     notifyListeners();
   }
 
   Map get listenedAddresses {
     return _addresses;
+  }
+
+  Map<String, List> get paperWalletUtxos {
+    return _paperWalletUtxos;
   }
 
   void closeConnection() {
@@ -97,6 +104,10 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
+  void cleanPaperWallet() {
+    _paperWalletUtxos = {};
+  }
+
   void cleanUpOnDone() {
     _pingTimer.cancel();
     _pingTimer = null;
@@ -104,6 +115,8 @@ class ElectrumConnection with ChangeNotifier {
     _connection = null;
     _addresses = {};
     _latestBlock = null;
+    _scanMode = false;
+    _paperWalletUtxos = {};
     if (_closedIntentionally == false)
       Timer(Duration(seconds: 10),
           () => init(_coinName)); //retry if not intentional
@@ -126,6 +139,8 @@ class ElectrumConnection with ChangeNotifier {
         handleTx(id, result);
       } else if (idString.startsWith("utxo_")) {
         handleUtxo(id, result);
+      } else if (idString.startsWith("paperwallet_")) {
+        handlePaperWallet(id, result);
       } else if (idString.startsWith("broadcast_")) {
         handleBroadcast(id, result);
       } else if (idString == "blocks") {
@@ -210,25 +225,33 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleScriptHashSubscribeNotification(
       String hashId, String newStatus) async {
-    //got update notification for hash => get utxo and history list
+    //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
         orElse: () => null);
     print("update for $hashId");
     //update status so we flag that we proccessed this update already
     await _activeWallets.updateAddressStatus(_coinName, address, newStatus);
-    //fire listunspent
+    //fire listunspent to get utxo
     sendMessage(
       "blockchain.scripthash.listunspent",
       "utxo_$address",
       [hashId],
     );
-    //fire get_history
+  }
+
+  void requestPaperWalletUtxos(String hashId, String address) {
     sendMessage(
-      "blockchain.scripthash.get_history",
-      "history_$address",
+      "blockchain.scripthash.listunspent",
+      "paperwallet_$address",
       [hashId],
     );
+  }
+
+  void handlePaperWallet(String id, List utxos) {
+    final txAddr = id.replaceFirst("paperwallet_", "");
+    _paperWalletUtxos[txAddr] = utxos;
+    notifyListeners();
   }
 
   void handleUtxo(String id, List utxos) async {
@@ -237,6 +260,12 @@ class ElectrumConnection with ChangeNotifier {
       _coinName,
       txAddr,
       utxos,
+    );
+    //fire get_history
+    sendMessage(
+      "blockchain.scripthash.get_history",
+      "history_$txAddr",
+      [_addresses[txAddr]],
     );
   }
 
@@ -271,13 +300,15 @@ class ElectrumConnection with ChangeNotifier {
     String txId = id.replaceFirst("tx_", "");
     String addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(_coinName, addr, tx);
+      await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     }
   }
 
   void handleBroadcast(String id, String result) {
     String txId = id.replaceFirst("broadcast_", "");
-    _activeWallets.updateBroadcasted(_coinName, txId, true);
+    if (txId != "import") {
+      _activeWallets.updateBroadcasted(_coinName, txId, true);
+    }
   }
 }
 

@@ -104,7 +104,7 @@ class ActiveWallets with ChangeNotifier {
       //wallet is not brand new, lets find an unused address
       var unusedAddr;
       openWallet.addresses.forEach((walletAddr) {
-        if (walletAddr.used == false) {
+        if (walletAddr.used == false && walletAddr.status == null) {
           unusedAddr = walletAddr.address;
         }
       });
@@ -213,90 +213,113 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> putTx(String identifier, String address, Map tx) async {
+  Future<void> putTx(String identifier, String address, Map tx,
+      [bool scanMode = false]) async {
     CoinWallet openWallet = getSpecificCoinWallet(identifier);
     // log("$address puttx: $tx");
 
-    //check if that tx is already in the db
-    List<WalletTransaction> txInWallet = openWallet.transactions;
-    bool isInWallet = false;
-    txInWallet.forEach((walletTx) {
-      if (walletTx.txid == tx["txid"]) {
-        isInWallet = true;
-        if (isInWallet == true) {
-          if (walletTx.timestamp == null) {
-            //did the tx confirm?
-            walletTx.newTimestamp = tx["blocktime"];
-          }
-          if (tx["confirmations"] != null &&
-              walletTx.confirmations < tx["confirmations"]) {
-            //more confirmations?
-            walletTx.newConfirmations = tx["confirmations"];
+    if (scanMode == true) {
+      //write phantom tx that are not displayed in tx list but known to the wallet
+      //so they won't be parsed again and cause weird display behaviour
+      openWallet.putTransaction(WalletTransaction(
+        txid: tx["txid"],
+        timestamp: -1, //flags phantom tx
+        value: 0,
+        fee: 0,
+        address: address,
+        direction: "in",
+        broadCasted: true,
+        confirmations: 0,
+        broadcastHex: "",
+      ));
+    } else {
+      //check if that tx is already in the db
+      List<WalletTransaction> txInWallet = openWallet.transactions;
+      bool isInWallet = false;
+      txInWallet.forEach((walletTx) {
+        if (walletTx.txid == tx["txid"]) {
+          isInWallet = true;
+          if (isInWallet == true) {
+            if (walletTx.timestamp == null) {
+              //did the tx confirm?
+              walletTx.newTimestamp = tx["blocktime"];
+            }
+            if (tx["confirmations"] != null &&
+                walletTx.confirmations < tx["confirmations"]) {
+              //more confirmations?
+              walletTx.newConfirmations = tx["confirmations"];
+            }
           }
         }
-      }
-    });
-    //it's not in wallet yet
-    if (!isInWallet) {
-      //check if that tx addresses more than one of our addresses
-      var utxoInWallet = openWallet.utxos
-          .firstWhere((elem) => elem.hash == tx["txid"], orElse: () => null);
-      String direction = utxoInWallet == null ? "out" : "in";
+      });
+      //it's not in wallet yet
+      if (!isInWallet) {
+        //check if that tx addresses more than one of our addresses
+        var utxoInWallet = openWallet.utxos
+            .firstWhere((elem) => elem.hash == tx["txid"], orElse: () => null);
+        String direction = utxoInWallet == null ? "out" : "in";
 
-      if (direction == "in") {
-        List voutList = tx["vout"].toList();
-        voutList.forEach((vOut) {
-          final asMap = vOut as Map;
-          asMap["scriptPubKey"]["addresses"].forEach((addr) {
-            if (openWallet.addresses.firstWhere(
-                    (element) => element.address == addr,
-                    orElse: () => null) !=
-                null) {
-              //address is ours, add new tx
-              final txValue = (vOut["value"] * 1000000).toInt();
+        if (direction == "in") {
+          List voutList = tx["vout"].toList();
+          voutList.forEach((vOut) {
+            final asMap = vOut as Map;
+            asMap["scriptPubKey"]["addresses"].forEach((addr) {
+              if (openWallet.addresses.firstWhere(
+                      (element) => element.address == addr,
+                      orElse: () => null) !=
+                  null) {
+                //address is ours, add new tx
+                final txValue = (vOut["value"] * 1000000).toInt();
 
-              openWallet.putTransaction(WalletTransaction(
-                txid: tx["txid"],
-                timestamp: tx["blocktime"],
-                value: txValue,
-                fee: 0,
-                address: addr,
-                direction: direction,
-                broadCasted: true,
-                confirmations: tx["confirmations"] ?? 0,
-                broadcastHex: "",
-              ));
-            }
+                openWallet.putTransaction(WalletTransaction(
+                  txid: tx["txid"],
+                  timestamp: tx["blocktime"],
+                  value: txValue,
+                  fee: 0,
+                  address: addr,
+                  direction: direction,
+                  broadCasted: true,
+                  confirmations: tx["confirmations"] ?? 0,
+                  broadcastHex: "",
+                ));
+              }
+            });
           });
-        });
-      } else {
-        //outgoing tx
-        openWallet.putTransaction(WalletTransaction(
-          txid: tx["txid"],
-          timestamp: tx["blocktime"],
-          value: tx["outValue"],
-          fee: tx["outFees"],
-          address: address,
-          direction: direction,
-          broadCasted: false,
-          confirmations: 0,
-          broadcastHex: tx["hex"],
-        ));
+        }
+        // trigger notification
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+
+        if (direction == "in")
+          await flutterLocalNotificationsPlugin.show(
+            0,
+            'New transaction received',
+            tx["txid"],
+            LocalNotificationSettings.platformChannelSpecifics,
+            payload: identifier,
+          );
       }
-
-      // trigger notification
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-
-      if (direction == "in")
-        await flutterLocalNotificationsPlugin.show(
-          0,
-          'New transaction received',
-          tx["txid"],
-          LocalNotificationSettings.platformChannelSpecifics,
-          payload: identifier,
-        );
     }
+
+    notifyListeners();
+    await openWallet.save();
+  }
+
+  Future<void> putOutgoingTx(String identifier, String address, Map tx) async {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+
+    openWallet.putTransaction(WalletTransaction(
+      txid: tx["txid"],
+      timestamp: tx["blocktime"],
+      value: tx["outValue"],
+      fee: tx["outFees"],
+      address: address,
+      direction: "out",
+      broadCasted: false,
+      confirmations: 0,
+      broadcastHex: tx["hex"],
+    ));
+
     notifyListeners();
     await openWallet.save();
   }
@@ -387,11 +410,12 @@ class ActiveWallets with ChangeNotifier {
         }
 
         Map<int, Map> keyMap = {};
+        List _usedUtxos = [];
         inputTx.asMap().forEach((inputKey, inputUtxo) {
-          print("inputValue ${inputUtxo.value}");
           //find key to that utxo
           openWallet.addresses.asMap().forEach((key, walletAddr) {
-            if (walletAddr.address == inputUtxo.address) {
+            if (walletAddr.address == inputUtxo.address &&
+                !_usedUtxos.contains(inputUtxo.hash)) {
               int _addrIndex = key;
               var child = hdWallet.address == inputUtxo.address
                   ? hdWallet
@@ -399,6 +423,7 @@ class ActiveWallets with ChangeNotifier {
               keyMap[inputKey] =
                   ({"wif": child.wif, "addr": inputUtxo.address});
               tx.addInput(inputUtxo.hash, inputUtxo.txPos);
+              _usedUtxos.add(inputUtxo.hash);
             }
           });
         });

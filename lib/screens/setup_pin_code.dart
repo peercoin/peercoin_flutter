@@ -48,7 +48,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                   });
                 }),
             SizedBox(height: 30),
-            TextButton(
+            ElevatedButton(
               onPressed: () async {
                 await screenLock(
                   title: HeadingTitle(
@@ -62,12 +62,12 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                   digits: 6,
                   confirmation: true,
                   didConfirmed: (matchedText) async {
-                    Provider.of<EncryptedBox>(context, listen: false)
+                    await Provider.of<EncryptedBox>(context, listen: false)
                         .setPassCode(matchedText);
 
                     AppSettings settings =
                         Provider.of<AppSettings>(context, listen: false);
-                    settings.createInitialSettings(_biometricsAllowed);
+                    await settings.createInitialSettings(_biometricsAllowed);
 
                     var prefs = await Provider.of<UnencryptedOptions>(context,
                             listen: false)

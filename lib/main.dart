@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/auth_jail.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +25,7 @@ import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
 
 bool setupFinished;
+Widget _homeWidget;
 
 void main() async {
   //init sharedpreferences
@@ -67,12 +70,23 @@ void main() async {
     }
   });
 
+  //check if app is locked
+  FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final failedAuths =
+      int.parse(await _secureStorage.read(key: "failedAuths") ?? "0");
+  if (setupFinished == false) {
+    _homeWidget = SetupScreen();
+  } else if (failedAuths > 0) {
+    _homeWidget = AuthJailScreen(true);
+  } else {
+    _homeWidget = WalletListScreen();
+  }
+
   //run
-  runApp(MyApp());
+  runApp(PeercoinApp());
 }
 
-
-class MyApp extends StatelessWidget {
+class PeercoinApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -116,7 +130,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system, // Default
         theme: MyTheme.getTheme(ThemeMode.light),
         darkTheme: MyTheme.getTheme(ThemeMode.dark),
-        home: setupFinished ? WalletListScreen() : SetupScreen(),
+        home: _homeWidget,
         routes: Routes.getRoutes(),
       ),
     );

@@ -2,14 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({
     Key key,
   }) : super(key: key);
-
 
   @override
   State<StatefulWidget> createState() => _QRScannerState();
@@ -33,7 +31,7 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.instance.translate('scan_qr')),
+        title: Text(ModalRoute.of(context).settings.arguments),
       ),
       body: Column(
         children: <Widget>[
@@ -81,17 +79,11 @@ class _QRScannerState extends State<QRScanner> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       if (scanData != null) {
-        controller.pauseCamera();
-        Navigator.maybeOf(context).maybePop(scanData.code);
+        controller.dispose();
+        await Navigator.maybeOf(context).maybePop(scanData.code);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }

@@ -10,6 +10,7 @@ class EncryptedBox with ChangeNotifier {
   Map<String, Box> _cryptoBox = {};
   Uint8List _encryptionKey;
   String _passCode;
+  int _failedAuths = 0;
   FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<Uint8List> get key async {
@@ -31,12 +32,28 @@ class EncryptedBox with ChangeNotifier {
     return _passCode;
   }
 
-  Future<bool> setPassCode(passCode) async {
-    if (_passCode == null) {
-      await _secureStorage.write(key: "passCode", value: passCode);
-      return true;
+  Future<bool> setPassCode(String passCode) async {
+    await _secureStorage.write(key: "passCode", value: passCode);
+    _passCode = passCode;
+    return true;
+  }
+
+  Future<int> get failedAuths async {
+    if (_failedAuths == 0) {
+      final result = await _secureStorage.read(key: "failedAuths");
+      if (result == null) {
+        _failedAuths = 0;
+      } else {
+        _failedAuths = int.parse(result);
+      }
     }
-    return false;
+    return _failedAuths;
+  }
+
+  Future<void> setFailedAuths(int newInt) async {
+    await _secureStorage.write(key: "failedAuths", value: newInt.toString());
+    _failedAuths = newInt;
+    return true;
   }
 
   Future<Box> getGenericBox(String name) async {

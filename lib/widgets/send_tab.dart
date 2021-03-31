@@ -167,7 +167,7 @@ class _SendTabState extends State<SendTab> {
                         try {
                           Map _buildResult = await buildTx(false, _txFee);
                           //write tx to history
-                          await _activeWallets.putTx(
+                          await _activeWallets.putOutgoingTx(
                               _wallet.name, _addressKey.currentState.value, {
                             "txid": _buildResult["id"],
                             "hex": _buildResult["hex"],
@@ -223,6 +223,14 @@ class _SendTabState extends State<SendTab> {
               decoration: InputDecoration(
                 icon: Icon(Icons.shuffle),
                 labelText: AppLocalizations.instance.translate('tx_address'),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    ClipboardData data = await Clipboard.getData('text/plain');
+                    addressController.text = data.text;
+                  },
+                  icon:
+                      Icon(Icons.paste, color: Theme.of(context).primaryColor),
+                ),
               ),
               validator: (value) {
                 if (value.isEmpty) {
@@ -319,8 +327,10 @@ class _SendTabState extends State<SendTab> {
                     size: 40,
                   ),
                   onPressed: () async {
-                    final result =
-                        await Navigator.of(context).pushNamed(Routes.QRScan);
+                    final result = await Navigator.of(context).pushNamed(
+                        Routes.QRScan,
+                        arguments:
+                            AppLocalizations.instance.translate('scan_qr'));
                     if (result != null) parseQrResult(result);
                   }),
             ]),
