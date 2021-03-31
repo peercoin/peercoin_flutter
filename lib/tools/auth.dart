@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class Auth {
   static const int maxRetries = 3;
+  //TODO count retries left in secure storage
 
   static Future<void> executeCallback(
       BuildContext context, Function callback) async {
