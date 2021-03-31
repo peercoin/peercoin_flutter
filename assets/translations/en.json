@@ -98,9 +98,15 @@
   "authenticate_confirm_title" : "Re-enter your PIN",
   "authenticate_confirm_title_new" : "Re-enter your new PIN",
   "authenticate_change_pin_success" : "PIN succesfully changed",
+  "authenticate_retry_warning_title" : "Warning, you only have one retry left.",
+  "authenticate_retry_warning_text" : "App will go into locked state and can only be unlocked with successful authentification.",
   "wallet_scan_appBar_title": "Scanning your imported seed",
   "wallet_scan_notice": "This might take a while. Don't close this screen!",
   "wallet_bottom_nav_receive": "Receive",
   "wallet_bottom_nav_tx": "Transactions",
-  "wallet_bottom_nav_send": "Send"
+  "wallet_bottom_nav_send": "Send",
+  "jail_dialog_title": "You have reached the maximum number of retries.",
+  "jail_dialog_button": "Okay",
+  "jail_heading": "App locked for",
+  "jail_countdown": "seconds"
 }
