@@ -20,6 +20,7 @@ class _AuthJailState extends State<AuthJailScreen> {
   Timer _timer;
   int _lockCountdown = 0;
   bool _initial = true;
+  bool _jailedFromRoute = false;
 
   void _startTimer() {
     _timer = new Timer.periodic(
@@ -49,13 +50,14 @@ class _AuthJailState extends State<AuthJailScreen> {
         final encrytpedStorage =
             Provider.of<EncryptedBox>(context, listen: false);
         await encrytpedStorage.setFailedAuths(0);
-        if (widget._jailedFromHome == true) {
+        if (widget._jailedFromHome == true || _jailedFromRoute == true) {
           Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         } else {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
       false,
+      widget._jailedFromHome,
     );
   }
 
@@ -70,6 +72,13 @@ class _AuthJailState extends State<AuthJailScreen> {
 
       //increase number of failed auths
       await encrytpedStorage.setFailedAuths(failedAuths + 1);
+
+      //check if jailedFromHome came again through route
+      if (widget._jailedFromHome == false) {
+        final jailedFromRoute =
+            ModalRoute.of(context).settings.arguments as bool;
+        if (jailedFromRoute == true) _jailedFromRoute = true;
+      }
 
       setState(() {
         _initial = false;
