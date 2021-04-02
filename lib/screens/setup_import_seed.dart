@@ -24,7 +24,18 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     });
     ActiveWallets _activeWallets =
         Provider.of<ActiveWallets>(context, listen: false);
-    await _activeWallets.init();
+    try {
+      await _activeWallets.init();
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate("setup_securebox_fail"),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 10),
+      ));
+    }
     await _activeWallets.createPhrase(_controller.text);
     var prefs =
         await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
