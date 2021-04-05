@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class Auth {
   static const int maxRetries = 3;
+  static const int retriesLeft = 3;
   //TODO count retries left in secure storage
 
   static Future<void> executeCallback(
@@ -27,7 +28,7 @@ class Auth {
   }
 
   static void errorHandler(BuildContext context, int retries) async {
-    if (retries == maxRetries - 1) {
+    if (retries == retriesLeft - 1) {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -117,10 +118,26 @@ class Auth {
         correctString:
             await Provider.of<EncryptedBox>(context, listen: false).passCode,
         digits: 6,
-        maxRetries: maxRetries,
+        maxRetries: retriesLeft,
         canCancel: canCancel,
-        title: HeadingTitle(
-            text: AppLocalizations.instance.translate("authenticate_title")),
+        title: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: AppLocalizations.instance.translate("authenticate_title"),
+                style: TextStyle(
+                  fontSize: 24,
+                ),
+                children: [
+                  TextSpan(
+                    text: AppLocalizations.instance.translate(
+                      retriesLeft > 1
+                          ? "authenticate_subtitle_plural"
+                          : "authenticate_subtitle_singular",
+                      {"retriesLeft": retriesLeft.toString()},
+                    ),
+                    style: TextStyle(fontSize: 14),
+                  )
+                ])),
         confirmTitle: HeadingTitle(
             text: AppLocalizations.instance
                 .translate("authenticate_confirm_title")),
@@ -147,10 +164,15 @@ class Auth {
         correctString:
             await Provider.of<EncryptedBox>(context, listen: false).passCode,
         digits: 6,
-        maxRetries: maxRetries,
+        maxRetries: retriesLeft,
         canCancel: canCancel,
         title: HeadingTitle(
-            text: AppLocalizations.instance.translate("authenticate_title")),
+            text: AppLocalizations.instance.translate(
+          "authenticate_title",
+          {
+            "retriesLeft": retriesLeft.toString(),
+          },
+        )),
         confirmTitle: HeadingTitle(
             text: AppLocalizations.instance
                 .translate("authenticate_confirm_title")),
