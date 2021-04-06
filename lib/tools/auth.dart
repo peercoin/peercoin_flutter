@@ -10,13 +10,17 @@ import 'package:provider/provider.dart';
 
 class Auth {
   static const int maxRetries = 3;
-  static const int retriesLeft = 3;
-  //TODO count retries left in secure storage
+  static int retriesLeft = maxRetries;
+  static int failedAuthAttempts = 0;
 
   static Future<void> executeCallback(
       BuildContext context, Function callback) async {
-    //reset unsuccesful login counter
+    //reset unsuccesful login and attempt counter
     await Provider.of<EncryptedBox>(context, listen: false).setFailedAuths(0);
+    await Provider.of<EncryptedBox>(context, listen: false)
+        .setFailedAuthAttempts(0);
+    retriesLeft = maxRetries;
+    failedAuthAttempts = 0;
 
     if (callback != null) {
       Navigator.pop(context);
@@ -56,6 +60,10 @@ class Auth {
         },
       );
     }
+    failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
+    await context
+        .read<EncryptedBox>()
+        .setFailedAuthAttempts(failedAuthAttempts + 1);
   }
 
   static Future<void> spawnJail(
@@ -112,78 +120,56 @@ class Auth {
       [Function callback,
       bool canCancel = true,
       bool jailedFromHome = false]) async {
-    if (biometricsAllowed) {
-      await screenLock(
-        context: context,
-        correctString:
-            await Provider.of<EncryptedBox>(context, listen: false).passCode,
-        digits: 6,
-        maxRetries: retriesLeft,
-        canCancel: canCancel,
-        title: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-                text: AppLocalizations.instance.translate("authenticate_title"),
-                style: TextStyle(
-                  fontSize: 24,
-                ),
-                children: [
-                  TextSpan(
-                    text: AppLocalizations.instance.translate(
-                      retriesLeft > 1
-                          ? "authenticate_subtitle_plural"
-                          : "authenticate_subtitle_singular",
-                      {"retriesLeft": retriesLeft.toString()},
-                    ),
-                    style: TextStyle(fontSize: 14),
-                  )
-                ])),
-        confirmTitle: HeadingTitle(
-            text: AppLocalizations.instance
-                .translate("authenticate_confirm_title")),
-        customizedButtonChild: Icon(
-          Icons.fingerprint,
-        ),
-        customizedButtonTap: () async {
-          await localAuth(context, callback);
-        },
-        didOpened: () async {
-          await localAuth(context, callback);
-        },
-        didUnlocked: () {
-          executeCallback(context, callback);
-        },
-        didError: (retries) => errorHandler(context, retries),
-        didMaxRetries: (_) async {
-          spawnJail(context, jailedFromHome);
-        },
-      );
-    } else {
-      await screenLock(
-        context: context,
-        correctString:
-            await Provider.of<EncryptedBox>(context, listen: false).passCode,
-        digits: 6,
-        maxRetries: retriesLeft,
-        canCancel: canCancel,
-        title: HeadingTitle(
-            text: AppLocalizations.instance.translate(
-          "authenticate_title",
-          {
-            "retriesLeft": retriesLeft.toString(),
-          },
-        )),
-        confirmTitle: HeadingTitle(
-            text: AppLocalizations.instance
-                .translate("authenticate_confirm_title")),
-        didUnlocked: () {
-          executeCallback(context, callback);
-        },
-        didError: (retries) => errorHandler(context, retries),
-        didMaxRetries: (_) async {
-          spawnJail(context, jailedFromHome);
-        },
-      );
-    }
+    failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
+    retriesLeft = (maxRetries - failedAuthAttempts);
+    if (retriesLeft == 0) retriesLeft = 1;
+
+    await screenLock(
+      context: context,
+      correctString:
+          await Provider.of<EncryptedBox>(context, listen: false).passCode,
+      digits: 6,
+      maxRetries: retriesLeft,
+      canCancel: canCancel,
+      title: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: AppLocalizations.instance.translate("authenticate_title"),
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              children: [
+                TextSpan(
+                  text: AppLocalizations.instance.translate(
+                    retriesLeft == 1
+                        ? "authenticate_subtitle_singular"
+                        : "authenticate_subtitle_plural",
+                    {"retriesLeft": retriesLeft.toString()},
+                  ),
+                  style: TextStyle(fontSize: 14),
+                )
+              ])),
+      confirmTitle: HeadingTitle(
+          text: AppLocalizations.instance
+              .translate("authenticate_confirm_title")),
+      customizedButtonChild: biometricsAllowed
+          ? Icon(
+              Icons.fingerprint,
+            )
+          : Container(),
+      customizedButtonTap: () async {
+        if (biometricsAllowed) await localAuth(context, callback);
+      },
+      didOpened: () async {
+        if (biometricsAllowed) await localAuth(context, callback);
+      },
+      didUnlocked: () {
+        executeCallback(context, callback);
+      },
+      didError: (retries) => errorHandler(context, retries),
+      didMaxRetries: (_) async {
+        spawnJail(context, jailedFromHome);
+      },
+    );
   }
 }
