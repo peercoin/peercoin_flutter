@@ -5,6 +5,7 @@ import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -39,6 +40,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SetupProgressIndicator(2),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 30),
         color: Theme.of(context).primaryColor,

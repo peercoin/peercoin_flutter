@@ -6,6 +6,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupPinCodeScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SetupProgressIndicator(3),
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 30),

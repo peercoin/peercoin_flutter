@@ -6,6 +6,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
+import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
@@ -46,6 +47,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SetupProgressIndicator(2),
       body: SingleChildScrollView(
         child: Container(
           color: Theme.of(context).primaryColor,
