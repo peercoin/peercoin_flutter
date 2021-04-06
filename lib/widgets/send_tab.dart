@@ -62,7 +62,7 @@ class _SendTabState extends State<SendTab> {
       if (key == "amount") {
         amountController.text = value;
       } else if (key == "label") {
-        //TODO v0.2 implement
+        //TODO v0.3 implement
       }
     });
     addressController.text = parsed.path;
