@@ -160,6 +160,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         duration: Duration(seconds: 5),
       ));
     } else {
+      bool _firstPress = true;
       await buildImportTx();
       showDialog(
         context: context,
@@ -204,7 +205,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       .translate('paperwallet_confirm_import')),
                   icon: Icon(Icons.send),
                   onPressed: () async {
+                    if (_firstPress == false) return; //prevent double tap
                     try {
+                      _firstPress = false;
                       await buildImportTx(_requiredFee, false);
                       //broadcast
                       Provider.of<ElectrumConnection>(context, listen: false)
