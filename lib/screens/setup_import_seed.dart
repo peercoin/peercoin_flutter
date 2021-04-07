@@ -41,7 +41,8 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     var prefs =
         await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
     await prefs.setBool("importedSeed", true);
-    await Navigator.of(context).popAndPushNamed(Routes.SetUpPin);
+    await Navigator.of(context)
+        .pushNamedAndRemoveUntil(Routes.SetUpPin, (_) => false);
   }
 
   @override
