@@ -25,17 +25,19 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
         padding: EdgeInsets.symmetric(horizontal: 30),
         color: Theme.of(context).primaryColor,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               "assets/icon/ppc-icon-white-256.png",
               width: 50,
             ),
-            SizedBox(height: 60),
+            Text(
+              AppLocalizations.instance.translate('setup_pin_title'),
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
             Text(AppLocalizations.instance.translate('setup_pin'),
                 style: TextStyle(color: Colors.white)),
-            SizedBox(height: 30),
             SwitchListTile(
                 title: Text(
                     AppLocalizations.instance
@@ -49,7 +51,6 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     _biometricsAllowed = newState;
                   });
                 }),
-            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
                 await screenLock(
