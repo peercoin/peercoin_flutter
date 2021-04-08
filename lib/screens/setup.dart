@@ -32,26 +32,34 @@ class _SetupScreenState extends State<SetupScreen> {
         color: Theme.of(context).primaryColor,
         child: Container(
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/icon/ppc-icon-white-256.png",
-                width: 50,
-              ),
-              SizedBox(height: 60),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: Text(
-                  AppLocalizations.instance.translate('setup_files_for_wallet'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              SizedBox(height: 30),
-              _loading
-                  ? LoadingIndicator()
-                  : Column(
+          child: _loading
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LinearProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/icon/ppc-icon-white-256.png",
+                      width: 50,
+                    ),
+                    SizedBox(height: 60),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      child: Text(
+                        AppLocalizations.instance
+                            .translate('setup_files_for_wallet'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
@@ -79,8 +87,8 @@ class _SetupScreenState extends State<SetupScreen> {
                         )
                       ],
                     )
-            ],
-          ),
+                  ],
+                ),
         ),
       ),
     );
