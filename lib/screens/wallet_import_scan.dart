@@ -32,7 +32,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.generateUnusedAddress(_coinName);
 
-      if (_connectionProvider.init(_coinName, true)) {
+      if (await _connectionProvider.init(_coinName, true)) {
         _connectionProvider.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(_coinName));
       }

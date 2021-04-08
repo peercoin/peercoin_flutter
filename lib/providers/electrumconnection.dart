@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:developer' as developer;
+import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:web_socket_channel/io.dart';
@@ -10,8 +12,11 @@ import 'package:web_socket_channel/io.dart';
 //"online"
 
 class ElectrumConnection with ChangeNotifier {
-  static const Map<String, List> _availableServers = {
-    "peercoin": ["wss://electrum.peercoinexplorer.net:50004"],
+  static const Map<String, List> _seeds = {
+    "peercoin": [
+      "wss://electrum.peercoinexploresr.net:50004",
+      "wss://electrum.peercoinexplorer.net:50004"
+    ],
     "peercoinTestnet": ["wss://testnet-electrum.peercoinexplorer.net:50004"]
   };
 
@@ -31,26 +36,27 @@ class ElectrumConnection with ChangeNotifier {
   int _latestBlock;
   bool _closedIntentionally = false;
   bool _scanMode = false;
+  int _connectionAttempt = 0;
 
-  bool init(walletName, [bool scanMode = false]) {
+  Future<bool> init(walletName, [bool scanMode = false]) async {
     if (_connection == null) {
       _coinName = walletName;
       _connectionState = "waiting";
       _closedIntentionally = false;
       _scanMode = scanMode;
       print("init server connection");
-      connect();
+      await connect(_connectionAttempt);
       Stream stream = _connection.stream;
 
-      stream.listen(
-          (elem) {
-            replyHandler(elem);
-          },
-          onError: (error) => print("error: $error"),
-          onDone: () {
-            cleanUpOnDone();
-            print("connection done");
-          });
+      stream.listen((elem) {
+        replyHandler(elem);
+      }, onError: (error) {
+        print("stream error: $error");
+        _connectionAttempt++;
+      }, onDone: () {
+        cleanUpOnDone();
+        print("connection done");
+      });
       tryHandShake();
       startPingTimer();
       return true;
@@ -58,16 +64,23 @@ class ElectrumConnection with ChangeNotifier {
     return false;
   }
 
-  dynamic connect() {
-    String initialUrl = _availableServers[_coinName]
-        [_availableServers[_coinName].length - 1]; //TODO ? pick random sever ?
+  Future<void> connect(_attempt) async {
+    //TODO check if we have servers in list
+    //no ? try seed
+    print(_attempt);
 
+    if (_attempt > _seeds.length - 1) {
+      _connectionAttempt = 0;
+    }
+
+    String initialUrl = _seeds[_coinName][_connectionAttempt];
+    print(initialUrl);
     try {
       _connection = IOWebSocketChannel.connect(
         initialUrl,
       );
     } catch (e) {
-      print("error $e");
+      print("connection error: $e");
     }
   }
 
@@ -100,6 +113,7 @@ class ElectrumConnection with ChangeNotifier {
   void closeConnection() {
     if (_connection != null && _connection.sink != null) {
       _closedIntentionally = true;
+      _connectionAttempt = 0;
       _connection.sink.close();
     }
   }
@@ -117,13 +131,14 @@ class ElectrumConnection with ChangeNotifier {
     _latestBlock = null;
     _scanMode = false;
     _paperWalletUtxos = {};
+
     if (_closedIntentionally == false)
-      Timer(Duration(seconds: 10),
+      Timer(Duration(seconds: 5),
           () => init(_coinName)); //retry if not intentional
   }
 
   void replyHandler(reply) {
-    log("${DateTime.now().toIso8601String()} $reply");
+    developer.log("${DateTime.now().toIso8601String()} $reply");
     var decoded = json.decode(reply);
     var id = decoded["id"];
     String idString = id.toString();
