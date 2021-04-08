@@ -128,7 +128,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                           },
                         ),
                         Text(
-                          "Slide to change the number of words",
+                          AppLocalizations.instance
+                              .translate("setup_seed_slider_label"),
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ],

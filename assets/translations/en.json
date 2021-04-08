@@ -11,6 +11,8 @@
   "setup_pin": "Please set a PIN before you continue.",
   "setup_create_pin": "Create PIN",
   "setup_securebox_fail": "We are very sorry.\nYour device does not support a secure enough way of storing keys.",
+  "setup_seed_slider_label": "Slide to change the number of words",
+  "setup_welcome": "Welcome to Peercoin Wallet",
   "create_wallet_new_seed": "Create wallet with new seed",
   "create_wallet_or": "or",
   "create_wallet_existing_seed": "Import existing seed",

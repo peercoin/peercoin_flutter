@@ -42,13 +42,16 @@ class _SetupScreenState extends State<SetupScreen> {
                   ],
                 )
               : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Image.asset(
                       "assets/icon/ppc-icon-white-256.png",
                       width: 50,
                     ),
-                    SizedBox(height: 60),
+                    Text(
+                      AppLocalizations.instance.translate('setup_welcome'),
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 50),
                       child: Text(
@@ -58,7 +61,6 @@ class _SetupScreenState extends State<SetupScreen> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(height: 30),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
