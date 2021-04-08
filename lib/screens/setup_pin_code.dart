@@ -6,6 +6,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupPinCodeScreen extends StatefulWidget {
@@ -18,24 +19,27 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SetupProgressIndicator(3),
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 30),
         color: Theme.of(context).primaryColor,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               "assets/icon/ppc-icon-white-256.png",
               width: 50,
             ),
-            SizedBox(height: 60),
+            Text(
+              AppLocalizations.instance.translate('setup_pin_title'),
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
             Text(AppLocalizations.instance.translate('setup_pin'),
                 style: TextStyle(color: Colors.white)),
-            SizedBox(height: 30),
             SwitchListTile(
-                subtitle: Text(
+                title: Text(
                     AppLocalizations.instance
                         .translate('app_settings_biometrics'),
                     style: TextStyle(color: Colors.white)),
@@ -47,7 +51,6 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     _biometricsAllowed = newState;
                   });
                 }),
-            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
                 await screenLock(

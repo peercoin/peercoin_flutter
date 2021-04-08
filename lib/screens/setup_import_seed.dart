@@ -6,6 +6,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
+import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
@@ -24,17 +25,30 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     });
     ActiveWallets _activeWallets =
         Provider.of<ActiveWallets>(context, listen: false);
-    await _activeWallets.init();
+    try {
+      await _activeWallets.init();
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate("setup_securebox_fail"),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 10),
+      ));
+    }
     await _activeWallets.createPhrase(_controller.text);
     var prefs =
         await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
     await prefs.setBool("importedSeed", true);
-    await Navigator.of(context).popAndPushNamed(Routes.SetUpPin);
+    await Navigator.of(context)
+        .pushNamedAndRemoveUntil(Routes.SetUpPin, (_) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: SetupProgressIndicator(2),
       body: SingleChildScrollView(
         child: Container(
           color: Theme.of(context).primaryColor,

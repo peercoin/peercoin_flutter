@@ -62,7 +62,7 @@ class _SendTabState extends State<SendTab> {
       if (key == "amount") {
         amountController.text = value;
       } else if (key == "label") {
-        //TODO v0.2 implement
+        //TODO v0.3 implement
       }
     });
     addressController.text = parsed.path;
@@ -86,6 +86,7 @@ class _SendTabState extends State<SendTab> {
 
   void showTransactionConfirmation(context) async {
     Map _buildResult;
+    bool _firstPress = true;
     _buildResult = await buildTx(true);
 
     int _destroyedChange = _buildResult["destroyedChange"];
@@ -164,7 +165,9 @@ class _SendTabState extends State<SendTab> {
                           .translate('send_confirm_send')),
                       icon: Icon(Icons.send),
                       onPressed: () async {
+                        if (_firstPress == false) return; //prevent double tap
                         try {
+                          _firstPress = false;
                           Map _buildResult = await buildTx(false, _txFee);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(

@@ -11,6 +11,7 @@ class EncryptedBox with ChangeNotifier {
   Uint8List _encryptionKey;
   String _passCode;
   int _failedAuths = 0;
+  int _failedAuthAttempts = 0;
   FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<Uint8List> get key async {
@@ -53,6 +54,25 @@ class EncryptedBox with ChangeNotifier {
   Future<void> setFailedAuths(int newInt) async {
     await _secureStorage.write(key: "failedAuths", value: newInt.toString());
     _failedAuths = newInt;
+    return true;
+  }
+
+  Future<int> get failedAuthAttempts async {
+    if (_failedAuthAttempts == 0) {
+      final result = await _secureStorage.read(key: "failedAuthAttempts");
+      if (result == null) {
+        _failedAuthAttempts = 0;
+      } else {
+        _failedAuthAttempts = int.parse(result);
+      }
+    }
+    return _failedAuthAttempts;
+  }
+
+  Future<void> setFailedAuthAttempts(int newInt) async {
+    await _secureStorage.write(
+        key: "failedAuthAttempts", value: newInt.toString());
+    _failedAuthAttempts = newInt;
     return true;
   }
 

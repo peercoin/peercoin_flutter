@@ -122,8 +122,7 @@ class _AuthJailState extends State<AuthJailScreen> {
                   style: TextStyle(fontSize: 24, color: Colors.white)),
               SizedBox(height: 20),
               LinearProgressIndicator(
-                color: Colors.white,
-                backgroundColor: Theme.of(context).accentColor,
+                backgroundColor: Colors.white,
               )
             ]),
           ),
