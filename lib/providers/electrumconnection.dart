@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -15,9 +16,12 @@ class ElectrumConnection with ChangeNotifier {
   static const Map<String, List> _seeds = {
     "peercoin": [
       "wss://electrum.peercoinexploresr.net:50004",
-      "wss://electrum.peercoinexplorer.net:50004"
+      "wss://electrum.peercoinexplorer.net:50004",
+      "wss://allingas.peercoinexplorer.net:50004"
     ],
-    "peercoinTestnet": ["wss://testnet-electrum.peercoinexplorer.net:50004"]
+    "peercoinTestnet": [
+      "wss://testnet-electrum.peercoinexplorer.net:50004",
+    ]
   };
 
   static const Map<String, double> _requiredProtocol = {
@@ -160,6 +164,8 @@ class ElectrumConnection with ChangeNotifier {
         handleBroadcast(id, result);
       } else if (idString == "blocks") {
         handleBlock(result["height"]);
+      } else if (idString == "peers") {
+        handlePeers(result);
       } else if (_addresses[idString] != null) {
         handleAddressStatus(id, result);
       }
@@ -186,8 +192,13 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  void tryHandShake() {
-    sendMessage("server.version", "version");
+  void tryHandShake() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    sendMessage(
+      "server.version",
+      "version",
+      ["${packageInfo.appName}-flutter-${packageInfo.version}"],
+    );
   }
 
   void handleHandShake(List result) {
@@ -200,6 +211,8 @@ class ElectrumConnection with ChangeNotifier {
       connectionState = "connected";
       //subscribe to headers
       sendMessage("blockchain.headers.subscribe", "blocks");
+      //ask for peers
+      sendMessage("server.peers.subscribe", "peers");
     }
   }
 
@@ -324,6 +337,10 @@ class ElectrumConnection with ChangeNotifier {
     if (txId != "import") {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
+  }
+
+  void handlePeers(dynamic result) {
+    print("peers $result");
   }
 }
 
