@@ -461,10 +461,12 @@ class ActiveWallets with ChangeNotifier {
       } else {
         //no utxos available
         //TODO throw custom error
+        return {};
       }
     } else {
       //tx amount greater wallet balance
       //TODO throw custom error
+      return {};
     }
   }
 
