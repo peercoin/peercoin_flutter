@@ -33,11 +33,12 @@ class ElectrumConnection with ChangeNotifier {
   Map _addresses = {};
   Map<String, List> _paperWalletUtxos = {};
   String _coinName;
-  ElectrumConnection(this._activeWallets);
   int _latestBlock;
   bool _closedIntentionally = false;
   bool _scanMode = false;
   int _connectionAttempt = 0;
+
+  ElectrumConnection(this._activeWallets);
 
   Future<bool> init(walletName, [bool scanMode = false]) async {
     if (_connection == null) {
