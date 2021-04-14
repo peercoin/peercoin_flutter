@@ -133,7 +133,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                       FilteringTextInputFormatter.allow(
                           getValidator(_availableCoin.fractions)),
                     ],
-                    keyboardType: TextInputType.numberWithOptions(signed: true),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
                       icon: Icon(Icons.money),
                       labelText: AppLocalizations.instance
