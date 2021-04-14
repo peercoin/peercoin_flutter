@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
-import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -15,9 +13,8 @@ import 'package:web_socket_channel/io.dart';
 class ElectrumConnection with ChangeNotifier {
   static const Map<String, List> _seeds = {
     "peercoin": [
-      "wss://electrum.peercoinexploresr.net:50004",
       "wss://electrum.peercoinexplorer.net:50004",
-      "wss://allingas.peercoinexplorer.net:50004"
+      "wss://allingas.peercoinexplorer.net:50004",
     ],
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
@@ -73,7 +70,7 @@ class ElectrumConnection with ChangeNotifier {
     //no ? try seed
     print(_attempt);
 
-    if (_attempt > _seeds.length - 1) {
+    if (_attempt > _seeds.length) {
       _connectionAttempt = 0;
     }
 
@@ -114,9 +111,9 @@ class ElectrumConnection with ChangeNotifier {
     return _paperWalletUtxos;
   }
 
-  void closeConnection() {
+  void closeConnection([bool _closedIntentionally = true]) {
     if (_connection != null && _connection.sink != null) {
-      _closedIntentionally = true;
+      _closedIntentionally = _closedIntentionally;
       _connectionAttempt = 0;
       _connection.sink.close();
     }
@@ -164,8 +161,6 @@ class ElectrumConnection with ChangeNotifier {
         handleBroadcast(id, result);
       } else if (idString == "blocks") {
         handleBlock(result["height"]);
-      } else if (idString == "peers") {
-        handlePeers(result);
       } else if (_addresses[idString] != null) {
         handleAddressStatus(id, result);
       }
@@ -204,15 +199,13 @@ class ElectrumConnection with ChangeNotifier {
   void handleHandShake(List result) {
     double version = double.parse(result.elementAt(result.length - 1));
     if (version < _requiredProtocol[_coinName]) {
-      //protocol version too low!"
-      //TODO invoke try next server method
+      //protocol version too low!
+      closeConnection(false);
     } else {
       //we're connected and version handshake is successful
       connectionState = "connected";
-      //subscribe to headers
+      //subscribe to block headers
       sendMessage("blockchain.headers.subscribe", "blocks");
-      //ask for peers
-      sendMessage("server.peers.subscribe", "peers");
     }
   }
 
@@ -338,11 +331,4 @@ class ElectrumConnection with ChangeNotifier {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
   }
-
-  void handlePeers(dynamic result) {
-    print("peers $result");
-  }
 }
-
-//TODO: v0.3 try to connect to another server on failed version handshake
-//TODO: v0.3 get server peers and store in box ? sendMessage("server.peers.subscribe", 2);
