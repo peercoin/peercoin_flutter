@@ -1,10 +1,15 @@
 # peercoin-flutter
 Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.  
-**Early alpha**  
+**App in constant development**  
 Basic testing successfull on iOS 14.4 and Android 10.  
 **Use at own risk.**  
 
 ![screenshot](https://user-images.githubusercontent.com/11148913/113717529-feb9c300-96eb-11eb-92b7-d5199ec0460f.jpg)
+
+## Known Restrictions
+- can't send to Multisig addresses
+- can't send to Segwit addresses
+- adds 1 Satoshi extra fee due to sporadic internal rounding errors 
 
 ## Development
 This repository currently relies on a fork of bitcoin_flutter, which can be found here: 
