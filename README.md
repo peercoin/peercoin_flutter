@@ -6,7 +6,7 @@ Basic testing successfull on iOS 14.4 and Android 10.
 
 ![screenshot](https://user-images.githubusercontent.com/11148913/113717529-feb9c300-96eb-11eb-92b7-d5199ec0460f.jpg)
 
-## Known Restrictions
+## Known Limitations
 - can't send to Multisig addresses
 - can't send to Segwit addresses
 - adds 1 Satoshi extra fee due to sporadic internal rounding errors 
