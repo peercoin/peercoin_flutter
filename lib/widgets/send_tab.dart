@@ -259,7 +259,7 @@ class _SendTabState extends State<SendTab> {
                   FilteringTextInputFormatter.allow(
                       getValidator(_availableCoin.fractions)),
                 ],
-                keyboardType: TextInputType.numberWithOptions(signed: true),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
                   labelText: AppLocalizations.instance.translate('send_amount'),
