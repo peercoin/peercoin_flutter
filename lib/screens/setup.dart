@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
