@@ -17,12 +17,12 @@ import './models/walletutxo.dart';
 import './providers/activewallets.dart';
 import './providers/electrumconnection.dart';
 import './providers/encryptedbox.dart';
-import 'providers/unencryptedOptions.dart';
+import './providers/unencryptedOptions.dart';
 import './screens/setup.dart';
 import './screens/wallet_list.dart';
-import 'tools/app_localizations.dart';
-import 'tools/app_routes.dart';
-import 'tools/app_themes.dart';
+import './tools/app_localizations.dart';
+import './tools/app_routes.dart';
+import './tools/app_themes.dart';
 
 bool setupFinished;
 Widget _homeWidget;
