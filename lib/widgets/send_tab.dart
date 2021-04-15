@@ -258,9 +258,8 @@ class _SendTabState extends State<SendTab> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
                       getValidator(_availableCoin.fractions)),
-                  FilteringTextInputFormatter.deny((","))
                 ],
-                keyboardType: TextInputType.numberWithOptions(signed: true),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
                   labelText: AppLocalizations.instance.translate('send_amount'),
@@ -271,11 +270,14 @@ class _SendTabState extends State<SendTab> {
                     return AppLocalizations.instance
                         .translate('send_enter_amount');
                   }
+                  final convertedValue = value.replaceAll(",", ".");
+                  amountController.text = convertedValue;
                   int txValueInSatoshis =
-                      (double.parse(value) * 1000000).toInt();
+                      (double.parse(convertedValue) * 1000000).toInt();
                   print("req value $txValueInSatoshis - ${_wallet.balance}");
-                  if (value.contains(".") &&
-                      value.split(".")[1].length > _availableCoin.fractions) {
+                  if (convertedValue.contains(".") &&
+                      convertedValue.split(".")[1].length >
+                          _availableCoin.fractions) {
                     return AppLocalizations.instance
                         .translate('send_amount_small');
                   }

@@ -10,7 +10,7 @@ import 'package:bip39/bip39.dart' as bip39;
 import '../models/availablecoins.dart';
 import '../models/coin.dart';
 import '../models/coinwallet.dart';
-import '../models/notification.dart';
+import '../tools/notification.dart';
 import '../models/walletaddress.dart';
 import '../models/wallettransaction.dart';
 import '../models/walletutxo.dart';
@@ -461,10 +461,12 @@ class ActiveWallets with ChangeNotifier {
       } else {
         //no utxos available
         //TODO throw custom error
+        return {};
       }
     } else {
       //tx amount greater wallet balance
       //TODO throw custom error
+      return {};
     }
   }
 

@@ -29,6 +29,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
     if (_initial == true) {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
+      stringBuilder("");
       setState(() {
         _initial = false;
       });
@@ -36,11 +37,14 @@ class _ReceiveTabState extends State<ReceiveTab> {
     super.didChangeDependencies();
   }
 
-  void stringBuilder(double amount) {
+  void stringBuilder(String amount) {
+    final convertedValue =
+        amount == "" ? 0 : double.parse(amount.replaceAll(",", "."));
+
     setState(() {
-      _qrString = amount == 0
-          ? widget._unusedAddress
-          : "${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$amount";
+      _qrString = convertedValue == 0
+          ? "${_availableCoin.uriCode}:${widget._unusedAddress}"
+          : "${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue";
     });
   }
 
@@ -84,7 +88,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                                 child: QrImage(
                                   backgroundColor: Colors.white,
                                   foregroundColor: Colors.black,
-                                  data: _qrString ?? widget._unusedAddress,
+                                  data: _qrString,
                                 ),
                               ),
                             ),
@@ -94,7 +98,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     );
                   },
                   child: QrImage(
-                    data: _qrString ?? widget._unusedAddress,
+                    data: _qrString,
                     size: MediaQuery.of(context).size.width * 0.3,
                     padding: EdgeInsets.all(1),
                     backgroundColor: Colors.white,
@@ -122,20 +126,15 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     key: _amountKey,
                     controller: amountController,
                     onChanged: (String newString) {
-                      double parsed =
-                          newString != "" ? double.parse(newString) : 0;
-                      if (parsed > 0) {
-                        stringBuilder(parsed);
-                      } else {
-                        stringBuilder(0);
-                      }
+                      stringBuilder(newString);
                     },
                     autocorrect: false,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           getValidator(_availableCoin.fractions)),
                     ],
-                    keyboardType: TextInputType.numberWithOptions(signed: true),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
                       icon: Icon(Icons.money),
                       labelText: AppLocalizations.instance
