@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/servers.dart';
 import 'package:web_socket_channel/io.dart';
 
 //connectionState schema
@@ -11,16 +12,6 @@ import 'package:web_socket_channel/io.dart';
 //"online"
 
 class ElectrumConnection with ChangeNotifier {
-  static const Map<String, List> _seeds = {
-    "peercoin": [
-      "wss://electrum.peercoinexplorer.net:50004",
-      "wss://allingas.peercoinexplorer.net:50004",
-    ],
-    "peercoinTestnet": [
-      "wss://testnet-electrum.peercoinexplorer.net:50004",
-    ]
-  };
-
   static const Map<String, double> _requiredProtocol = {
     "peercoin": 1.4,
     "peercoinTestnet": 1.4
@@ -30,6 +21,7 @@ class ElectrumConnection with ChangeNotifier {
   IOWebSocketChannel _connection;
   String _connectionState;
   ActiveWallets _activeWallets;
+  Servers _servers;
   Map _addresses = {};
   Map<String, List> _paperWalletUtxos = {};
   String _coinName;
@@ -37,8 +29,9 @@ class ElectrumConnection with ChangeNotifier {
   bool _closedIntentionally = false;
   bool _scanMode = false;
   int _connectionAttempt = 0;
+  List _availableServers;
 
-  ElectrumConnection(this._activeWallets);
+  ElectrumConnection(this._activeWallets, this._servers);
 
   Future<bool> init(walletName, [bool scanMode = false]) async {
     if (_connection == null) {
@@ -47,6 +40,7 @@ class ElectrumConnection with ChangeNotifier {
       _closedIntentionally = false;
       _scanMode = scanMode;
       print("init server connection");
+      await _servers.init(walletName);
       await connect(_connectionAttempt);
       Stream stream = _connection.stream;
 
@@ -67,19 +61,19 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   Future<void> connect(_attempt) async {
-    //TODO check if we have servers in list
-    //no ? try seed
-    print(_attempt);
-
-    if (_attempt > _seeds.length) {
+    print("connection attempt $_attempt");
+    //get server list from server provider
+    _availableServers = await _servers.getServerList(_coinName);
+    //reset attempt if attempt pointer is outside list
+    if (_attempt > _availableServers.length) {
       _connectionAttempt = 0;
     }
 
-    String initialUrl = _seeds[_coinName][_connectionAttempt];
-    print(initialUrl);
+    String _serverUrl = _availableServers[_connectionAttempt];
+    print("connecting to $_serverUrl");
     try {
       _connection = IOWebSocketChannel.connect(
-        initialUrl,
+        _serverUrl,
       );
     } catch (e) {
       print("connection error: $e");

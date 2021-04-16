@@ -141,8 +141,9 @@ class ActiveWallets with ChangeNotifier {
   Future<String> getWalletAddressStatus(
       String identifier, String address) async {
     var addresses = await getWalletAddresses(identifier);
-    var targetWallet = addresses
-        .firstWhere((element) => element.address == address, orElse: null);
+    var targetWallet = addresses.firstWhere(
+        (element) => element.address == address,
+        orElse: () => null);
     return targetWallet.status;
   }
 
