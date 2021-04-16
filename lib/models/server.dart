@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-// part 'server.g.dart';
+part 'server.g.dart';
 
 @HiveType(typeId: 6)
 class Server extends HiveObject {

@@ -5,7 +5,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/app_options.dart';
+import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/screens/auth_jail.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +42,7 @@ void main() async {
   Hive.registerAdapter(WalletAddressAdapter());
   Hive.registerAdapter(WalletUtxoAdapter());
   Hive.registerAdapter(AppOptionsStoreAdapter());
+  Hive.registerAdapter(ServerAdapter());
 
   //init notifications
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -115,7 +118,14 @@ class PeercoinApp extends StatelessWidget {
               Provider.of<ActiveWallets>(context, listen: false),
             );
           },
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return Servers(
+              Provider.of<EncryptedBox>(context, listen: false),
+            );
+          },
+        ),
       ],
       child: MaterialApp(
         title: 'Peercoin',
