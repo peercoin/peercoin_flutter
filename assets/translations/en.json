@@ -42,6 +42,7 @@
   "wallets_list": "Your wallets",
   "wallets_none": "You have no active wallets",
   "wallet_pop_menu_paperwallet": "Import Paper Wallet",
+  "wallet_pop_menu_servers": "Adjust Servers",
   "paperwallet_step_1": "Step 1",
   "paperwallet_step_1_text": "Scan public key",
   "paperwallet_step_2": "Step 2",
