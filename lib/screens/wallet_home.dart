@@ -138,6 +138,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       Navigator.of(context)
           .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
     }
+    if (value == "server_settings") {
+      Navigator.of(context)
+          .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
+    }
   }
 
   @override
@@ -188,6 +192,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_paperwallet'),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "server_settings",
+                  child: ListTile(
+                    leading: Icon(Icons.sync),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_servers'),
                     ),
                   ),
                 )

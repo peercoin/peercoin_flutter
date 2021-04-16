@@ -7,17 +7,16 @@ import 'package:hive/hive.dart';
 @HiveType(typeId: 6)
 class Server extends HiveObject {
   @HiveField(0)
-  String name;
+  String label;
 
   @HiveField(1)
   InternetAddress address;
 
   @HiveField(2)
-  bool blocked = false;
+  bool connectable = true;
 
   @HiveField(3)
-  String source;
-  //TODO enum? - seed, servers peers, user
+  bool userGenerated;
 
   @HiveField(4)
   String donationAddress;
@@ -28,5 +27,7 @@ class Server extends HiveObject {
   @HiveField(6)
   DateTime lastConnection;
 
-  Server({@required this.name, @required this.address, @required this.source});
+  Server({
+    @required this.address,
+  });
 }
