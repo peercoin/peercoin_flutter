@@ -76,8 +76,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   }
 
   @override
-  void deactivate() {
-    _connectionProvider.closeConnection();
+  void deactivate() async {
+    await _connectionProvider.closeConnection();
     _timer.cancel();
     super.deactivate();
   }

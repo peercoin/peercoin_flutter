@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'server.g.dart';
@@ -7,27 +5,42 @@ part 'server.g.dart';
 @HiveType(typeId: 6)
 class Server extends HiveObject {
   @HiveField(0)
-  String label;
+  String _label;
 
   @HiveField(1)
-  InternetAddress address;
+  String address;
 
   @HiveField(2)
-  bool connectable = true;
+  bool _connectable = true;
 
   @HiveField(3)
-  bool userGenerated;
+  bool _userGenerated;
 
   @HiveField(4)
-  String donationAddress;
+  String _donationAddress;
 
   @HiveField(5)
-  String serverBanner;
+  String _serverBanner;
 
   @HiveField(6)
-  DateTime lastConnection;
+  DateTime _lastConnection;
+
+  @HiveField(7)
+  bool _hidden = false;
 
   Server({
     @required this.address,
   });
+
+  get getAddress {
+    return address;
+  }
+
+  get hidden {
+    return _hidden;
+  }
+
+  get connectable {
+    return _connectable;
+  }
 }
