@@ -114,15 +114,16 @@ class PeercoinApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return ElectrumConnection(
-              Provider.of<ActiveWallets>(context, listen: false),
+            return Servers(
+              Provider.of<EncryptedBox>(context, listen: false),
             );
           },
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return Servers(
-              Provider.of<EncryptedBox>(context, listen: false),
+            return ElectrumConnection(
+              Provider.of<ActiveWallets>(context, listen: false),
+              Provider.of<Servers>(context, listen: false),
             );
           },
         ),
