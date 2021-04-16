@@ -18,6 +18,7 @@ class ElectrumConnection with ChangeNotifier {
   };
 
   Timer _pingTimer;
+  Timer _reconnectTimer;
   IOWebSocketChannel _connection;
   String _connectionState;
   ActiveWallets _activeWallets;
@@ -33,16 +34,20 @@ class ElectrumConnection with ChangeNotifier {
 
   ElectrumConnection(this._activeWallets, this._servers);
 
-  Future<bool> init(walletName, [bool scanMode = false]) async {
+  Future<bool> init(walletName,
+      [bool scanMode = false, bool requestedFromWalletHome = false]) async {
     if (_connection == null) {
       _coinName = walletName;
       _connectionState = "waiting";
-      _closedIntentionally = false;
       _scanMode = scanMode;
       print("init server connection");
       await _servers.init(walletName);
       await connect(_connectionAttempt);
       Stream stream = _connection.stream;
+
+      if (requestedFromWalletHome == true) {
+        _closedIntentionally = false;
+      }
 
       stream.listen((elem) {
         replyHandler(elem);
@@ -55,6 +60,7 @@ class ElectrumConnection with ChangeNotifier {
       });
       tryHandShake();
       startPingTimer();
+
       return true;
     }
     return false;
@@ -65,7 +71,7 @@ class ElectrumConnection with ChangeNotifier {
     //get server list from server provider
     _availableServers = await _servers.getServerList(_coinName);
     //reset attempt if attempt pointer is outside list
-    if (_attempt > _availableServers.length) {
+    if (_attempt > _availableServers.length - 1) {
       _connectionAttempt = 0;
     }
 
@@ -106,11 +112,15 @@ class ElectrumConnection with ChangeNotifier {
     return _paperWalletUtxos;
   }
 
-  void closeConnection([bool _closedIntentionally = true]) {
+  Future<void> closeConnection([bool _intentional = true]) async {
     if (_connection != null && _connection.sink != null) {
-      _closedIntentionally = _closedIntentionally;
+      _closedIntentionally = _intentional;
       _connectionAttempt = 0;
-      _connection.sink.close();
+      await _connection.sink.close();
+    }
+    if (_intentional) {
+      _closedIntentionally = true;
+      if (_reconnectTimer != null) _reconnectTimer.cancel();
     }
   }
 
@@ -121,7 +131,7 @@ class ElectrumConnection with ChangeNotifier {
   void cleanUpOnDone() {
     _pingTimer.cancel();
     _pingTimer = null;
-    connectionState = "waiting";
+    connectionState = "waiting"; //setter!
     _connection = null;
     _addresses = {};
     _latestBlock = null;
@@ -129,7 +139,7 @@ class ElectrumConnection with ChangeNotifier {
     _paperWalletUtxos = {};
 
     if (_closedIntentionally == false)
-      Timer(Duration(seconds: 5),
+      _reconnectTimer = Timer(Duration(seconds: 5),
           () => init(_coinName)); //retry if not intentional
   }
 
