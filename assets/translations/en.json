@@ -116,5 +116,6 @@
   "jail_dialog_title": "You have reached the maximum number of retries.",
   "jail_dialog_button": "Okay",
   "jail_heading": "App locked for",
-  "jail_countdown": "seconds"
+  "jail_countdown": "seconds",
+  "server_settings_title": "Server Settings"
 }

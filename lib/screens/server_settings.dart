@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
   @override
@@ -8,6 +9,12 @@ class ServerSettingsScreen extends StatefulWidget {
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.instance.translate('server_settings_title'),
+        ),
+      ),
+    );
   }
 }

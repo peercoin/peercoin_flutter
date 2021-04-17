@@ -110,5 +110,6 @@
     "jail_dialog_title": "Du hast die maximale Anzahl Versuche erreicht. ",
     "jail_dialog_button": "Okay",
     "jail_heading": "App gesperrt für",
-    "jail_countdown": "Sekunden"
+    "jail_countdown": "Sekunden",
+    "server_settings_title": "Server Einstellungen"
 }
