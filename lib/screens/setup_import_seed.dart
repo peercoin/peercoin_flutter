@@ -82,6 +82,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       color: Colors.white,
                       padding: EdgeInsets.all(20),
                       child: TextFormField(
+                        textInputAction: TextInputAction.done,
                         controller: _controller,
                         validator: (value) {
                           if (value.split(' ').length < 12) {
