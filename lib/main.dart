@@ -122,6 +122,8 @@ class PeercoinApp extends StatelessWidget {
         supportedLocales: [
           const Locale('en'), // default
           const Locale('nl'),
+          const Locale('de'),
+          const Locale('ru'),
         ],
         localizationsDelegates: [
           AppLocalizations.delegate,
