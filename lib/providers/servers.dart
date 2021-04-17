@@ -29,9 +29,7 @@ class Servers with ChangeNotifier {
       _serverBox.put(coinIdentifier, []);
       _serverStorage = _serverBox.get(coinIdentifier);
     }
-  }
 
-  Future<List> getServerList(String coinIdentifier) async {
     //check first run
     if (_serverStorage.isEmpty) {
       print("server storage is empty, initializing");
@@ -54,7 +52,9 @@ class Servers with ChangeNotifier {
         _serverStorage.add(newServer);
       }
     });
+  }
 
+  Future<List> getServerList(String coinIdentifier) async {
     //form list
     List _availableServers = [];
     _serverStorage.forEach((element) {
