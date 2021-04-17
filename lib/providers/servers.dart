@@ -67,4 +67,16 @@ class Servers with ChangeNotifier {
 
     return _availableServers;
   }
+
+  Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
+    //form list
+    List<Server> _availableServersDetails = [];
+    _serverStorage.forEach((element) {
+      _availableServersDetails.add(element);
+    });
+
+    print("available servers $_availableServersDetails");
+
+    return _availableServersDetails;
+  }
 }
