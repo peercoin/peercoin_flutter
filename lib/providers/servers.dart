@@ -17,6 +17,7 @@ class Servers with ChangeNotifier {
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
       "wss://t2estnet-electrum.peercoinexplorer.net:50004",
+      "wss://surenot.net:50004",
     ]
   };
 
@@ -34,8 +35,9 @@ class Servers with ChangeNotifier {
     if (_serverStorage.isEmpty) {
       print("server storage is empty, initializing");
 
-      _seeds[coinIdentifier].forEach((hardcodedSeedAddress) {
-        Server newServer = Server(address: hardcodedSeedAddress);
+      _seeds[coinIdentifier].asMap().forEach((index, hardcodedSeedAddress) {
+        Server newServer =
+            Server(address: hardcodedSeedAddress, priority: index);
         _serverStorage.add(newServer);
       });
     }
@@ -48,7 +50,8 @@ class Servers with ChangeNotifier {
       if (res == null) {
         //hard coded server not yet in storage
         print("$hardcodedSeedAddress not yet in storage");
-        Server newServer = Server(address: hardcodedSeedAddress);
+        Server newServer = Server(
+            address: hardcodedSeedAddress, priority: _serverStorage.length);
         _serverStorage.add(newServer);
       }
     });
@@ -59,7 +62,7 @@ class Servers with ChangeNotifier {
     List _availableServers = [];
     _serverStorage.forEach((element) {
       if (element.hidden == false && element.connectable == true) {
-        _availableServers.add(element.address);
+        _availableServers.insert(element.priority, element.address);
       }
     });
 
@@ -72,7 +75,8 @@ class Servers with ChangeNotifier {
     //form list
     List<Server> _availableServersDetails = [];
     _serverStorage.forEach((element) {
-      _availableServersDetails.add(element);
+      print(element.priority);
+      _availableServersDetails.insert(element.priority, element);
     });
 
     print("available servers $_availableServersDetails");

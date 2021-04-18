@@ -28,9 +28,10 @@ class Server extends HiveObject {
   @HiveField(7)
   bool _hidden = false;
 
-  Server({
-    @required this.address,
-  });
+  @HiveField(8)
+  int priority;
+
+  Server({@required this.address, @required this.priority});
 
   get getAddress {
     return address;

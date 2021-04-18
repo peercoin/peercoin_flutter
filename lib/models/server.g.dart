@@ -18,6 +18,7 @@ class ServerAdapter extends TypeAdapter<Server> {
     };
     return Server(
       address: fields[1] as String,
+      priority: fields[8] as int,
     )
       .._label = fields[0] as String
       .._connectable = fields[2] as bool
@@ -31,7 +32,7 @@ class ServerAdapter extends TypeAdapter<Server> {
   @override
   void write(BinaryWriter writer, Server obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj._label)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class ServerAdapter extends TypeAdapter<Server> {
       ..writeByte(6)
       ..write(obj._lastConnection)
       ..writeByte(7)
-      ..write(obj._hidden);
+      ..write(obj._hidden)
+      ..writeByte(8)
+      ..write(obj.priority);
   }
 
   @override
