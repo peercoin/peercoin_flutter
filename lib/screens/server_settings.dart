@@ -30,6 +30,10 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
+    final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -42,25 +46,40 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
               onPressed: () {
-                print("new server dialog");
+                print("save dialog");
               },
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.save),
             ),
           )
         ],
       ),
       body: _servers.isEmpty
           ? Container()
-          : ListView.builder(
-              itemCount: _servers.length,
-              itemBuilder: (ctx, i) {
-                print(_servers[i]);
-                return Card(
-                  child: ListTile(
-                    title: Text(_servers[i].address),
-                  ),
-                );
-              }),
+          : ReorderableListView(
+              onReorder: (oldIndex, newIndex) {
+                setState(() {
+                  if (oldIndex < newIndex) {
+                    newIndex -= 1;
+                  }
+                  final item = _servers.removeAt(oldIndex);
+                  _servers.insert(newIndex, item);
+                });
+              },
+              children: <Widget>[
+                for (int index = 0; index < _servers.length; index++)
+                  Card(
+                      key: Key('$index'),
+                      child: ListTile(
+                        leading: Text("#${index + 1}"),
+                        trailing: IconButton(
+                          onPressed: () => print("hide"),
+                          icon: Icon(Icons.visibility_off),
+                        ),
+                        tileColor: index.isOdd ? oddItemColor : evenItemColor,
+                        title: Text(_servers[index].address),
+                      )),
+              ],
+            ),
     );
   }
 }
