@@ -51,9 +51,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      _connectionProvider.init(_wallet.name, false);
+      await _connectionProvider.init(_wallet.name, false, true);
     }
   }
 
