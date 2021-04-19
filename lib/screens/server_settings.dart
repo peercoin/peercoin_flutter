@@ -57,13 +57,17 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           ? Container()
           : ReorderableListView(
               onReorder: (oldIndex, newIndex) {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                print("newIndex: $newIndex");
+                print(_servers);
                 setState(() {
-                  if (oldIndex < newIndex) {
-                    newIndex -= 1;
-                  }
                   final item = _servers.removeAt(oldIndex);
-                  item.setPriority = newIndex;
-                  _servers.insert(newIndex, item); //TODO doesn't work
+                  _servers.insert(newIndex,
+                      item); //TODO doesn't work does not move item that was pushed away
+                  //TODO call save priorities to save ALL values, not just the one that was changed
+                  // item.setPriority = newIndex;
                 });
               },
               children: <Widget>[
