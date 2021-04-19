@@ -21,7 +21,7 @@ class ServerAdapter extends TypeAdapter<Server> {
       priority: fields[8] as int,
     )
       .._label = fields[0] as String
-      .._connectable = fields[2] as bool
+      ..connectable = fields[2] as bool
       .._userGenerated = fields[3] as bool
       .._donationAddress = fields[4] as String
       .._serverBanner = fields[5] as String
@@ -38,7 +38,7 @@ class ServerAdapter extends TypeAdapter<Server> {
       ..writeByte(1)
       ..write(obj.address)
       ..writeByte(2)
-      ..write(obj._connectable)
+      ..write(obj.connectable)
       ..writeByte(3)
       ..write(obj._userGenerated)
       ..writeByte(4)

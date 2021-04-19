@@ -76,6 +76,7 @@
   "send_to": "nach",
   "send_total": "Gesamt $amount $letter_code",
   "send_transferring": "Übertrage",
+  "server_settings_title": "Server Einstellungen",
   "setup_create_pin": "PIN erstellen",
   "setup_files_for_wallet": "Erstelle alle notwenigen Dateien um mit deiner Wallet loszulegen. Bitte wähle eine Option.",
   "setup_import_title": "Seed importieren",

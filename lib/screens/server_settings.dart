@@ -62,7 +62,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                     newIndex -= 1;
                   }
                   final item = _servers.removeAt(oldIndex);
-                  _servers.insert(newIndex, item);
+                  item.setPriority = newIndex;
+                  _servers.insert(newIndex, item); //TODO doesn't work
                 });
               },
               children: <Widget>[
@@ -70,10 +71,41 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                   Card(
                       key: Key('$index'),
                       child: ListTile(
-                        leading: Text("#${index + 1}"),
+                        leading: Icon(Icons.toc),
                         trailing: IconButton(
-                          onPressed: () => print("hide"),
-                          icon: Icon(Icons.visibility_off),
+                          onPressed: () {
+                            setState(() {
+                              //toggle connectable
+                              _servers[index].setConnectable =
+                                  !_servers[index].connectable;
+                              //connectable now false ? move to bottom of list
+                              if (!_servers[index].connectable) {
+                                final item = _servers.removeAt(index);
+                                _servers.insert(_servers.length, item);
+                                _servers[index].setPriority =
+                                    _servers.length - 1;
+                              } else {
+                                final item = _servers.removeAt(index);
+                                _servers.insert(0, item);
+                                _servers[index].setPriority = 0;
+                              }
+                            });
+                            //check if still one connectable server is left
+                            //show snack bar
+                            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            //   content: Text(
+                            //     AppLocalizations.instance.translate(
+                            //         "authenticate_change_pin_success"),
+                            //     textAlign: TextAlign.center,
+                            //   ),
+                            //   duration: Duration(seconds: 2),
+                            // ));
+
+                            //turn tile grey
+                          },
+                          icon: Icon(_servers[index].connectable
+                              ? Icons.offline_bolt
+                              : Icons.offline_bolt_outlined),
                         ),
                         tileColor: index.isOdd ? oddItemColor : evenItemColor,
                         title: Text(_servers[index].address),

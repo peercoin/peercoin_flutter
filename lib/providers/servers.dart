@@ -5,8 +5,7 @@ import 'package:peercoin/providers/encryptedbox.dart';
 
 class Servers with ChangeNotifier {
   EncryptedBox _encryptedBox;
-  List _serverStorage;
-  Box _serverBox;
+  Box<Server> _serverBox;
   Servers(this._encryptedBox);
 
   static const Map<String, List> _seeds = {
@@ -23,36 +22,33 @@ class Servers with ChangeNotifier {
 
   Future<void> init(String coinIdentifier) async {
     print("init server provider");
-    _serverBox = await _encryptedBox.getGenericBox("serverBox");
-    _serverStorage = _serverBox.get(coinIdentifier);
-
-    if (_serverStorage == null) {
-      _serverBox.put(coinIdentifier, []);
-      _serverStorage = _serverBox.get(coinIdentifier);
-    }
+    _serverBox = await Hive.openBox<Server>(
+      "serverBox-$coinIdentifier",
+      encryptionCipher: HiveAesCipher(await _encryptedBox.key),
+    );
 
     //check first run
-    if (_serverStorage.isEmpty) {
+    if (_serverBox.isEmpty) {
       print("server storage is empty, initializing");
 
       _seeds[coinIdentifier].asMap().forEach((index, hardcodedSeedAddress) {
         Server newServer =
             Server(address: hardcodedSeedAddress, priority: index);
-        _serverStorage.add(newServer);
+        _serverBox.add(newServer);
       });
     }
 
     // check if all hard coded seeds for this coin are already in db
     _seeds[coinIdentifier].forEach((hardcodedSeedAddress) {
-      Server res = _serverStorage.firstWhere(
+      Server res = _serverBox.values.firstWhere(
           (element) => element.getAddress == hardcodedSeedAddress,
           orElse: () => null);
       if (res == null) {
         //hard coded server not yet in storage
         print("$hardcodedSeedAddress not yet in storage");
-        Server newServer = Server(
-            address: hardcodedSeedAddress, priority: _serverStorage.length);
-        _serverStorage.add(newServer);
+        Server newServer =
+            Server(address: hardcodedSeedAddress, priority: _serverBox.length);
+        _serverBox.add(newServer);
       }
     });
   }
@@ -60,9 +56,9 @@ class Servers with ChangeNotifier {
   Future<List> getServerList(String coinIdentifier) async {
     //form list
     List _availableServers = [];
-    _serverStorage.forEach((element) {
-      if (element.hidden == false && element.connectable == true) {
-        _availableServers.insert(element.priority, element.address);
+    _serverBox.values.forEach((Server server) {
+      if (server.hidden == false && server.connectable == true) {
+        _availableServers.insert(server.priority, server.address);
       }
     });
 
@@ -73,13 +69,19 @@ class Servers with ChangeNotifier {
 
   Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
     //form list
-    List<Server> _availableServersDetails = [];
-    _serverStorage.forEach((element) {
-      print(element.priority);
-      _availableServersDetails.insert(element.priority, element);
+    print(_serverBox.values);
+    List<Server> _availableServersDetails = List.generate(
+      _serverBox.values.length,
+      (index) => null,
+    );
+    print(_availableServersDetails);
+    _serverBox.values.forEach((Server server) {
+      print(server.priority);
+      _availableServersDetails.removeAt(server.priority);
+      _availableServersDetails.insert(server.priority, server);
     });
 
-    print("available servers $_availableServersDetails");
+    print("detailed servers $_availableServersDetails");
 
     return _availableServersDetails;
   }

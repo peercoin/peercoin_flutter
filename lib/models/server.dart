@@ -11,7 +11,7 @@ class Server extends HiveObject {
   String address;
 
   @HiveField(2)
-  bool _connectable = true;
+  bool connectable = true;
 
   @HiveField(3)
   bool _userGenerated;
@@ -41,7 +41,14 @@ class Server extends HiveObject {
     return _hidden;
   }
 
-  get connectable {
-    return _connectable;
+  set setPriority(int newValue) {
+    priority = newValue;
+    print("setting $priority to $newValue");
+    this.save();
+  }
+
+  set setConnectable(bool newValue) {
+    connectable = newValue;
+    this.save();
   }
 }
