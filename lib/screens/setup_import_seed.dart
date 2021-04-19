@@ -68,7 +68,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     AppLocalizations.instance.translate(
-                      'import_seed',
+                      'setup_import_note',
                     ),
                     style: TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
