@@ -82,6 +82,7 @@
   "send_to": " to ",
   "send_total": "Total $amount $letter_code",
   "send_transferring": "Transferring ",
+  "server_add_title": "Add new server",
   "server_settings_title": "Server Settings",
   "server_settings_error_no_server_left": "At least one connectable server is required!",
   "setup_create_pin": "Create PIN",
