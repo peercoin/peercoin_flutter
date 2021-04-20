@@ -142,3 +142,5 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     );
   }
 }
+
+//TODO allow servers to be hidden

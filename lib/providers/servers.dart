@@ -15,8 +15,8 @@ class Servers with ChangeNotifier {
     ],
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
-      "wss://t2estnet-electrum.peercoinexplorer.net:50004",
-      "wss://surenot22.net:50004",
+      "wss://t2estnet-electrum.peercoinexplorer.net:50004", //TODO remove
+      "wss://surenot22.net:50004", //TODO remove
     ]
   };
 
