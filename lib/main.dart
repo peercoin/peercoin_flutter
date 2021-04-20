@@ -152,3 +152,8 @@ class PeercoinApp extends StatelessWidget {
 }
 
 //TODO: null safety when bitcoin_flutter is null_safe as well (crypto^3.0.0)
+/*
+https://stackoverflow.com/questions/29182581/global-variables-in-dart
+List availableLocales = ["en", "nl", "de", "ro", "ru"];
+supportedLocales: List.generate(availableLocales.length, (index) => Locale(availableLocales[index]));
+*/
