@@ -16,7 +16,7 @@ class Servers with ChangeNotifier {
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
       "wss://t2estnet-electrum.peercoinexplorer.net:50004",
-      "wss://surenot.net:50004",
+      "wss://surenot22.net:50004",
     ]
   };
 
@@ -46,11 +46,15 @@ class Servers with ChangeNotifier {
       if (res == null) {
         //hard coded server not yet in storage
         print("$hardcodedSeedAddress not yet in storage");
-        Server newServer =
-            Server(address: hardcodedSeedAddress, priority: _serverBox.length);
-        _serverBox.add(newServer);
+        addServer(hardcodedSeedAddress);
       }
     });
+  }
+
+  void addServer(String url) {
+    final priority = _serverBox.length;
+    Server newServer = Server(address: url, priority: priority);
+    _serverBox.add(newServer);
   }
 
   Future<List> getServerList(String coinIdentifier) async {
@@ -65,10 +69,10 @@ class Servers with ChangeNotifier {
       }
     });
 
-    print(
-        "available servers ${_availableServers.whereType<String>().toList()}");
+    final _prunedList = _availableServers.whereType<String>().toList();
+    print("available servers $_prunedList");
 
-    return _availableServers.whereType<String>().toList();
+    return _prunedList;
   }
 
   Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
@@ -81,6 +85,16 @@ class Servers with ChangeNotifier {
       _availableServersDetails.removeAt(server.priority);
       _availableServersDetails.insert(server.priority, server);
     });
+
+    //sort by connectable
+    _availableServersDetails.sort((a, b) {
+      if (b.connectable) {
+        return 1;
+      }
+      return -1;
+    });
+    //sort by priority
+    _availableServersDetails.sort((a, b) => a.priority.compareTo(b.priority));
 
     print("detailed servers $_availableServersDetails");
 
