@@ -43,7 +43,6 @@ class Server extends HiveObject {
 
   set setPriority(int newValue) {
     priority = newValue;
-    print("setting $priority to $newValue");
     this.save();
   }
 

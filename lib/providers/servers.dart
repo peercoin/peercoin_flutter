@@ -55,28 +55,29 @@ class Servers with ChangeNotifier {
 
   Future<List> getServerList(String coinIdentifier) async {
     //form list
-    List _availableServers = [];
+    List _availableServers = List.generate(
+      _serverBox.values.length,
+      (index) => null,
+    );
     _serverBox.values.forEach((Server server) {
       if (server.hidden == false && server.connectable == true) {
         _availableServers.insert(server.priority, server.address);
       }
     });
 
-    print("available servers $_availableServers");
+    print(
+        "available servers ${_availableServers.whereType<String>().toList()}");
 
-    return _availableServers;
+    return _availableServers.whereType<String>().toList();
   }
 
   Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
     //form list
-    print(_serverBox.values);
     List<Server> _availableServersDetails = List.generate(
       _serverBox.values.length,
       (index) => null,
     );
-    print(_availableServersDetails);
     _serverBox.values.forEach((Server server) {
-      print(server.priority);
       _availableServersDetails.removeAt(server.priority);
       _availableServersDetails.insert(server.priority, server);
     });
