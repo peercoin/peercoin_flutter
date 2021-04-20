@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -111,105 +112,113 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              Text(
-                  AppLocalizations.instance
-                      .translate('app_settings_auth_header'),
-                  style: Theme.of(context).textTheme.headline6),
-              SizedBox(height: 10),
-              _biometricsRevealed == false
-                  ? ElevatedButton(
-                      onPressed: () =>
-                          revealAuthOptions(_settings.biometricsAllowed),
-                      child: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_revealAuthButton'),
-                      ))
-                  : Column(children: [
-                      SwitchListTile(
-                          title: Text(
-                            AppLocalizations.instance
-                                .translate('app_settings_biometrics'),
-                          ),
-                          value: _biometricsAllowed,
-                          onChanged: (newState) {
-                            _settings.setBiometricsAllowed(newState);
-                          }),
-                      SwitchListTile(
-                          title: Text(
-                            AppLocalizations.instance
-                                .translate('app_settings_walletList'),
-                          ),
-                          value: _authenticationOptions["walletList"],
-                          onChanged: (newState) {
-                            _settings.setAuthenticationOptions(
-                                "walletList", newState);
-                          }),
-                      SwitchListTile(
-                          title: Text(
-                            AppLocalizations.instance
-                                .translate('app_settings_walletHome'),
-                          ),
-                          value: _authenticationOptions["walletHome"],
-                          onChanged: (newState) {
-                            _settings.setAuthenticationOptions(
-                                "walletHome", newState);
-                          }),
-                      SwitchListTile(
-                          title: Text(
-                            AppLocalizations.instance
-                                .translate('app_settings_sendTransaction'),
-                          ),
-                          value: _authenticationOptions["sendTransaction"],
-                          onChanged: (newState) {
-                            _settings.setAuthenticationOptions(
-                                "sendTransaction", newState);
-                          }),
-                      SwitchListTile(
-                          title: Text(
-                            AppLocalizations.instance
-                                .translate('app_settings_newWallet'),
-                          ),
-                          value: _authenticationOptions["newWallet"],
-                          onChanged: (newState) {
-                            _settings.setAuthenticationOptions(
-                                "newWallet", newState);
-                          }),
-                      ElevatedButton(
-                        onPressed: () => changePIN(_settings.biometricsAllowed),
-                        child: Text(
-                          AppLocalizations.instance
-                              .translate('app_settings_changeCode'),
-                        ),
-                      )
-                    ]),
-              Divider(),
-              SizedBox(height: 10),
-              Text(AppLocalizations.instance.translate('app_settings_seed'),
-                  style: Theme.of(context).textTheme.headline6),
-              SizedBox(height: 10),
-              _seedPhrase == ""
-                  ? ElevatedButton(
-                      onPressed: () =>
-                          revealSeedPhrase(_settings.biometricsAllowed),
-                      child: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_revealSeedButton'),
-                      ))
-                  : Column(children: [
-                      SizedBox(height: 20),
-                      SelectableText(
-                        _seedPhrase,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => Share.share(_seedPhrase),
-                        child: Text(
-                          AppLocalizations.instance
-                              .translate('app_settings_shareSeed'),
-                        ),
-                      )
-                    ])
+              ExpansionTile(
+                  title: Text("Language",
+                      style: Theme.of(context).textTheme.headline6)),
+              ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance
+                          .translate('app_settings_auth_header'),
+                      style: Theme.of(context).textTheme.headline6),
+                  children: [
+                    _biometricsRevealed == false
+                        ? ElevatedButton(
+                            onPressed: () =>
+                                revealAuthOptions(_settings.biometricsAllowed),
+                            child: Text(
+                              AppLocalizations.instance
+                                  .translate('app_settings_revealAuthButton'),
+                            ))
+                        : Column(children: [
+                            SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('app_settings_biometrics'),
+                                ),
+                                value: _biometricsAllowed,
+                                onChanged: (newState) {
+                                  _settings.setBiometricsAllowed(newState);
+                                }),
+                            SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('app_settings_walletList'),
+                                ),
+                                value: _authenticationOptions["walletList"],
+                                onChanged: (newState) {
+                                  _settings.setAuthenticationOptions(
+                                      "walletList", newState);
+                                }),
+                            SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('app_settings_walletHome'),
+                                ),
+                                value: _authenticationOptions["walletHome"],
+                                onChanged: (newState) {
+                                  _settings.setAuthenticationOptions(
+                                      "walletHome", newState);
+                                }),
+                            SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.instance.translate(
+                                      'app_settings_sendTransaction'),
+                                ),
+                                value:
+                                    _authenticationOptions["sendTransaction"],
+                                onChanged: (newState) {
+                                  _settings.setAuthenticationOptions(
+                                      "sendTransaction", newState);
+                                }),
+                            SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('app_settings_newWallet'),
+                                ),
+                                value: _authenticationOptions["newWallet"],
+                                onChanged: (newState) {
+                                  _settings.setAuthenticationOptions(
+                                      "newWallet", newState);
+                                }),
+                            ElevatedButton(
+                              onPressed: () =>
+                                  changePIN(_settings.biometricsAllowed),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('app_settings_changeCode'),
+                              ),
+                            )
+                          ]),
+                  ]),
+              ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance.translate('app_settings_seed'),
+                      style: Theme.of(context).textTheme.headline6),
+                  children: [
+                    _seedPhrase == ""
+                        ? ElevatedButton(
+                            onPressed: () =>
+                                revealSeedPhrase(_settings.biometricsAllowed),
+                            child: Text(
+                              AppLocalizations.instance
+                                  .translate('app_settings_revealSeedButton'),
+                            ))
+                        : Column(children: [
+                            SizedBox(height: 20),
+                            SelectableText(
+                              _seedPhrase,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () => Share.share(_seedPhrase),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('app_settings_shareSeed'),
+                              ),
+                            )
+                          ])
+                  ])
             ],
           ),
         ),
