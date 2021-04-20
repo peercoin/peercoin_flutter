@@ -119,20 +119,17 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                 ),
                 _loading
                     ? LoadingIndicator()
-                    : Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ElevatedButton.icon(
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                createWallet(context);
-                              }
-                            },
-                            icon: Icon(Icons.input),
-                            label: Text(AppLocalizations.instance.translate(
-                              'import_seed_button',
-                            ))),
-                      )
+                    : ElevatedButton.icon(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            createWallet(context);
+                          }
+                        },
+                        icon: Icon(Icons.input),
+                        label: Text(AppLocalizations.instance.translate(
+                          'import_seed_button',
+                        ))),
               ]),
         ),
       ),
