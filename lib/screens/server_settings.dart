@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:provider/provider.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
@@ -63,7 +64,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
               onPressed: () {
-                print("add diag");
+                Navigator.of(context)
+                    .pushNamed(Routes.ServerAdd, arguments: _walletName);
               },
               icon: Icon(Icons.add),
             ),
