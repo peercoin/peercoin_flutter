@@ -1,8 +1,6 @@
 library peercoin.globals;
 
-List<String> availableLocales = ["en", "nl", "de", "ro", "ru"];
-
-Map<String, String> availableLocalesLang = {
+Map<String, String> availableLocales = {
   "en": "English",
   "nl": "Dutch",
   "de": "German",

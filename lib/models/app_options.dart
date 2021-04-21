@@ -14,10 +14,7 @@ class AppOptionsStore extends HiveObject {
   @HiveField(1)
   bool _allowBiometrics = true;
 
-  @HiveField(2)
-  String _selectedLang = "en";
-
-  AppOptionsStore(this._allowBiometrics, this._selectedLang);
+  AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
     return _allowBiometrics;
@@ -34,15 +31,6 @@ class AppOptionsStore extends HiveObject {
 
   void changeAuthenticationOptions(String field, bool value) {
     _authenticationOptions[field] = value;
-    this.save();
-  }
-
-  String get selectedLang {
-    return _selectedLang;
-  }
-
-  set changeLang(String newLang) {
-    _selectedLang = newLang;
     this.save();
   }
 }

@@ -29,12 +29,14 @@ import './tools/app_themes.dart';
 
 bool setupFinished;
 Widget _homeWidget;
+Locale _locale;
 
 void main() async {
   //init sharedpreferences
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
   setupFinished = prefs.getBool("setupFinished") ?? false;
+  _locale = Locale(prefs.getString("language_code") ?? "und");
 
   //init hive
   await Hive.initFlutter();
@@ -131,13 +133,12 @@ class PeercoinApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Peercoin',
-        supportedLocales: List.generate(availableLocales.length,
-            (index) => Locale(availableLocales[index])),
+        supportedLocales: availableLocales.keys.map((lang) => Locale(lang)),
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
         ],
-        locale: Locale("de"),
+        locale: _locale == Locale("und") ? null : _locale,
         themeMode: ThemeMode.system, // Default
         theme: MyTheme.getTheme(ThemeMode.light),
         darkTheme: MyTheme.getTheme(ThemeMode.dark),

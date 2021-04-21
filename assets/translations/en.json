@@ -7,6 +7,8 @@
   "app_settings_auth_header": "Authentication",
   "app_settings_biometrics": "Allow biometric authentification",
   "app_settings_changeCode": "Change PIN",
+  "app_settings_language": "Language",
+  "app_settings_language_restart": "Restarting the app is required.",
   "app_settings_newWallet": "Require to add new wallet",
   "app_settings_revealAuthButton": "Reveal authentication options",
   "app_settings_revealSeedButton": "Reveal seed phrase",

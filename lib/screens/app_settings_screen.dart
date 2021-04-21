@@ -23,6 +23,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _biometricsRevealed = false;
   String _seedPhrase = "";
   String _lang = "";
+  bool _languageChangeInfoDisplayed = false;
   Map<String, bool> _authenticationOptions;
   AppSettings _settings;
 
@@ -96,16 +97,29 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
-  void saveLang(String lang) {
-    _settings.selectedLang = lang;
-    Locale(lang);
+  void saveLang(String lang) async {
+    await _settings.setSelectedLang(lang);
+    if (_languageChangeInfoDisplayed == false) {
+      //show notification
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate("app_settings_language_restart"),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 2),
+      ));
+      setState(() {
+        _languageChangeInfoDisplayed = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _biometricsAllowed = _settings.biometricsAllowed ?? false;
     _authenticationOptions = _settings.authenticationOptions ?? false;
-    _lang = _settings.selectedLang ?? AppLocalizations.instance.locale;
+    _lang =
+        _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -120,14 +134,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           child: Column(
             children: [
               ExpansionTile(
-                title: Text("Language",
+                title: Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_language'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
-                children: availableLocales.map((lang) {
+                children: availableLocales.keys.map((lang) {
                   return InkWell(
                     onTap: () => saveLang(lang),
                     child: ListTile(
-                      title: Text(availableLocalesLang[lang]),
+                      title: Text(availableLocales[lang]),
                       leading: Radio(
                         value: lang,
                         groupValue: _lang,
