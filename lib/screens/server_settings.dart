@@ -16,13 +16,14 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   String _walletName = "";
   List<Server> _servers = [];
   Map _indexCache = {};
+  Servers _serversProvider;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _walletName = ModalRoute.of(context).settings.arguments;
-      _servers =
-          await Provider.of<Servers>(context).getServerDetailsList(_walletName);
+      _serversProvider = Provider.of<Servers>(context);
+      _servers = await _serversProvider.getServerDetailsList(_walletName);
       setState(() {
         _initial = false;
       });
@@ -40,8 +41,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   Color calculateTileColor(int index, bool connectable) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
-    final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
+    final Color oddItemColor = colorScheme.primary.withOpacity(0.10);
+    final Color evenItemColor = colorScheme.primary.withOpacity(0.3);
 
     if (!connectable) {
       return Theme.of(context).accentColor;
@@ -70,9 +71,17 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
-              onPressed: () {
-                Navigator.of(context)
+              onPressed: () async {
+                var result = await Navigator.of(context)
                     .pushNamed(Routes.ServerAdd, arguments: _walletName);
+                if (result == true) {
+                  final result =
+                      await _serversProvider.getServerDetailsList(_walletName);
+
+                  setState(() {
+                    _servers = result;
+                  });
+                }
               },
               icon: Icon(Icons.add),
             ),

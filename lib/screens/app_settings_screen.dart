@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:peercoin/providers/activewallets.dart';

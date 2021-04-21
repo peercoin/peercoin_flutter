@@ -11,12 +11,10 @@ class Servers with ChangeNotifier {
   static const Map<String, List> _seeds = {
     "peercoin": [
       "wss://electrum.peercoinexplorer.net:50004",
-      // "wss://allingas.peercoinexplorer.net:50004",
+      "wss://allingas.peercoinexplorer.net:50004",
     ],
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
-      "wss://t2estnet-electrum.peercoinexplorer.net:50004", //TODO remove
-      "wss://surenot22.net:50004", //TODO remove
     ]
   };
 

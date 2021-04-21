@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/server.dart';
+import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
@@ -57,6 +58,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     } else {
       //continue: try to connect
       print("trying to connect");
+
+      //close original server connection
+      await Provider.of<ElectrumConnection>(context, listen: false)
+          .closeConnection();
+
+      //try new connection
       var _connection;
       try {
         _connection = IOWebSocketChannel.connect(
@@ -93,7 +100,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             //add server to db
             Provider.of<Servers>(context, listen: false).addServer(serverUrl);
             //pop screen
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(true);
           } else {
             //gensis hash doesn't match
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
