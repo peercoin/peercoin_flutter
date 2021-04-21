@@ -86,7 +86,7 @@
   "server_add_server_no_connection": "Verbindung zu Server fehlgeschlagen.",
   "server_add_server_wrong_genesis": "Genesis Hash stimmt nicht überein.\n Dieser Server unterstützt diesen Coin nicht.",
   "server_settings_title": "Server Einstellungen",
-  "server_settings_alert_generated_title": "Bist du sicher, dass die diesen Server entfernen willst?",
+  "server_settings_alert_generated_title": "Bist du sicher, dass du diesen Server entfernen willst?",
   "server_settings_alert_cancel": "Abbrechen",
   "server_settings_alert_hardcoded_title": "Vorinstallierter Server",
   "server_settings_alert_hardcoded_content": "Vorinstallierte Server können nicht gelöscht, sondern nur deaktiviert werden.",
