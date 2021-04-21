@@ -98,7 +98,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
               AvailableCoins().getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
-            Provider.of<Servers>(context, listen: false).addServer(serverUrl);
+            Provider.of<Servers>(context, listen: false)
+                .addServer(serverUrl, true);
             //pop screen
             Navigator.of(context).pop(true);
           } else {

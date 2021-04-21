@@ -19,10 +19,10 @@ class ServerAdapter extends TypeAdapter<Server> {
     return Server(
       address: fields[1] as String,
       priority: fields[8] as int,
+      userGenerated: fields[3] as bool,
     )
       .._label = fields[0] as String
       ..connectable = fields[2] as bool
-      .._userGenerated = fields[3] as bool
       .._donationAddress = fields[4] as String
       .._serverBanner = fields[5] as String
       .._lastConnection = fields[6] as DateTime
@@ -40,7 +40,7 @@ class ServerAdapter extends TypeAdapter<Server> {
       ..writeByte(2)
       ..write(obj.connectable)
       ..writeByte(3)
-      ..write(obj._userGenerated)
+      ..write(obj.userGenerated)
       ..writeByte(4)
       ..write(obj._donationAddress)
       ..writeByte(5)

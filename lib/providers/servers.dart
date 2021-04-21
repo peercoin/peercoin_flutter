@@ -11,7 +11,7 @@ class Servers with ChangeNotifier {
   static const Map<String, List> _seeds = {
     "peercoin": [
       "wss://electrum.peercoinexplorer.net:50004",
-      "wss://allingas.peercoinexplorer.net:50004",
+      // "wss://allingas.peercoinexplorer.net:50004", TODO unlock in next release 0.2.4
     ],
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
@@ -30,8 +30,11 @@ class Servers with ChangeNotifier {
       print("server storage is empty, initializing");
 
       _seeds[coinIdentifier].asMap().forEach((index, hardcodedSeedAddress) {
-        Server newServer =
-            Server(address: hardcodedSeedAddress, priority: index);
+        Server newServer = Server(
+          address: hardcodedSeedAddress,
+          priority: index,
+          userGenerated: false,
+        );
         _serverBox.add(newServer);
       });
     }
@@ -51,9 +54,21 @@ class Servers with ChangeNotifier {
 
   void addServer(String url, [bool userGenerated = false]) {
     final priority = _serverBox.length;
-    Server newServer = Server(address: url, priority: priority);
-    if (userGenerated) newServer.setUserGenerated = true;
+    Server newServer = Server(
+      address: url,
+      priority: priority,
+      userGenerated: userGenerated,
+    );
     _serverBox.add(newServer);
+  }
+
+  void removeServer(Server server) {
+    final serverMap = _serverBox.toMap();
+    serverMap.forEach((key, value) {
+      if (value.address == server.address) {
+        _serverBox.delete(key);
+      }
+    });
   }
 
   Future<List> getServerList(String coinIdentifier) async {

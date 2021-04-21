@@ -23,13 +23,20 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     if (_initial) {
       _walletName = ModalRoute.of(context).settings.arguments;
       _serversProvider = Provider.of<Servers>(context);
-      _servers = await _serversProvider.getServerDetailsList(_walletName);
+      await loadServers();
       setState(() {
         _initial = false;
       });
     }
 
     super.didChangeDependencies();
+  }
+
+  Future<void> loadServers() async {
+    final result = await _serversProvider.getServerDetailsList(_walletName);
+    setState(() {
+      _servers = result;
+    });
   }
 
   Future<void> savePriorities(String serverUrl, int newIndex) async {
@@ -75,12 +82,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                 var result = await Navigator.of(context)
                     .pushNamed(Routes.ServerAdd, arguments: _walletName);
                 if (result == true) {
-                  final result =
-                      await _serversProvider.getServerDetailsList(_walletName);
-
-                  setState(() {
-                    _servers = result;
-                  });
+                  await loadServers();
                 }
               },
               icon: Icon(Icons.add),
@@ -108,6 +110,64 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                   key: Key('$index'),
                   child: ListTile(
                     leading: Icon(Icons.toc),
+                    onLongPress: () {
+                      if (_servers[index].userGenerated == true) {
+                        showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.instance.translate(
+                                    'server_settings_alert_generated_title')),
+                                content: Text(_servers[index].address),
+                                actions: <Widget>[
+                                  TextButton.icon(
+                                      label: Text(AppLocalizations.instance
+                                          .translate(
+                                              'server_settings_alert_cancel')),
+                                      icon: Icon(Icons.cancel),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      }),
+                                  TextButton.icon(
+                                    label: Text(AppLocalizations.instance
+                                        .translate('jail_dialog_button')),
+                                    icon: Icon(Icons.check),
+                                    onPressed: () {
+                                      _serversProvider
+                                          .removeServer(_servers[index]);
+                                      //reload servers
+                                      loadServers();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.instance.translate(
+                                    'server_settings_alert_hardcoded_title')),
+                                content: Text(AppLocalizations.instance.translate(
+                                    'server_settings_alert_hardcoded_content')),
+                                actions: <Widget>[
+                                  TextButton.icon(
+                                    label: Text(
+                                      AppLocalizations.instance
+                                          .translate('jail_dialog_button'),
+                                    ),
+                                    icon: Icon(Icons.check),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      }
+                    },
                     trailing: IconButton(
                       onPressed: () {
                         final oldItem = _servers[index];

@@ -14,7 +14,7 @@ class Server extends HiveObject {
   bool connectable = true;
 
   @HiveField(3)
-  bool _userGenerated;
+  bool userGenerated;
 
   @HiveField(4)
   String _donationAddress;
@@ -31,7 +31,11 @@ class Server extends HiveObject {
   @HiveField(8)
   int priority;
 
-  Server({@required this.address, @required this.priority});
+  Server({
+    @required this.address,
+    @required this.priority,
+    @required this.userGenerated,
+  });
 
   get getAddress {
     return address;
@@ -48,11 +52,6 @@ class Server extends HiveObject {
 
   set setConnectable(bool newValue) {
     connectable = newValue;
-    this.save();
-  }
-
-  set setUserGenerated(bool newValue) {
-    _userGenerated = newValue;
     this.save();
   }
 }
