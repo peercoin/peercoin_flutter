@@ -50,4 +50,9 @@ class Server extends HiveObject {
     connectable = newValue;
     this.save();
   }
+
+  set setUserGenerated(bool newValue) {
+    _userGenerated = newValue;
+    this.save();
+  }
 }

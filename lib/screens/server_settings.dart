@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/server.dart';
+import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -48,6 +49,12 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
       return oddItemColor;
     }
     return evenItemColor;
+  }
+
+  @override
+  void deactivate() {
+    Provider.of<ElectrumConnection>(context).init(_walletName);
+    super.deactivate();
   }
 
   @override

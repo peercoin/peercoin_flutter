@@ -13,6 +13,7 @@ class Coin {
   final int minimumTxValue;
   final double feePerKb;
   final String explorerTxDetailUrl;
+  final String genesisHash;
 
   Coin({
     @required this.name,
@@ -26,5 +27,6 @@ class Coin {
     @required this.minimumTxValue,
     @required this.feePerKb,
     @required this.explorerTxDetailUrl,
+    @required this.genesisHash,
   });
 }

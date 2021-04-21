@@ -11,7 +11,7 @@ class Servers with ChangeNotifier {
   static const Map<String, List> _seeds = {
     "peercoin": [
       "wss://electrum.peercoinexplorer.net:50004",
-      "wss://allingas.peercoinexplorer.net:50004",
+      // "wss://allingas.peercoinexplorer.net:50004",
     ],
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
@@ -51,9 +51,10 @@ class Servers with ChangeNotifier {
     });
   }
 
-  void addServer(String url) {
+  void addServer(String url, [bool userGenerated = false]) {
     final priority = _serverBox.length;
     Server newServer = Server(address: url, priority: priority);
+    if (userGenerated) newServer.setUserGenerated = true;
     _serverBox.add(newServer);
   }
 
@@ -95,8 +96,6 @@ class Servers with ChangeNotifier {
     });
     //sort by priority
     _availableServersDetails.sort((a, b) => a.priority.compareTo(b.priority));
-
-    print("detailed servers $_availableServersDetails");
 
     return _availableServersDetails;
   }

@@ -34,8 +34,11 @@ class ElectrumConnection with ChangeNotifier {
 
   ElectrumConnection(this._activeWallets, this._servers);
 
-  Future<bool> init(walletName,
-      [bool scanMode = false, bool requestedFromWalletHome = false]) async {
+  Future<bool> init(
+    walletName, {
+    bool scanMode = false,
+    bool requestedFromWalletHome = false,
+  }) async {
     if (_connection == null) {
       _coinName = walletName;
       _connectionState = "waiting";
