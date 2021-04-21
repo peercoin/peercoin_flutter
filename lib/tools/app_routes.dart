@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/app_settings.dart';
+import 'package:peercoin/screens/app_settings_screen.dart';
 import 'package:peercoin/screens/auth_jail.dart';
 import 'package:peercoin/screens/import_paper_wallet.dart';
 import 'package:peercoin/screens/new_wallet.dart';

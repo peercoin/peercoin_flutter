@@ -5,6 +5,7 @@ import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
+import 'package:peercoin/tools/app_globals.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
@@ -21,16 +22,17 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _biometricsAllowed;
   bool _biometricsRevealed = false;
   String _seedPhrase = "";
+  String _lang = "";
   Map<String, bool> _authenticationOptions;
   AppSettings _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      // do things
       setState(() {
         _initial = false;
       });
+      _settings = context.watch<AppSettings>();
     }
 
     super.didChangeDependencies();
@@ -94,11 +96,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
+  void saveLang(String lang) {
+    _settings.selectedLang = lang;
+    Locale(lang);
+  }
+
   @override
   Widget build(BuildContext context) {
-    _settings = context.watch<AppSettings>();
     _biometricsAllowed = _settings.biometricsAllowed ?? false;
     _authenticationOptions = _settings.authenticationOptions ?? false;
+    _lang = _settings.selectedLang ?? AppLocalizations.instance.locale;
 
     return Scaffold(
       appBar: AppBar(
@@ -113,13 +120,29 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           child: Column(
             children: [
               ExpansionTile(
-                  title: Text("Language",
-                      style: Theme.of(context).textTheme.headline6)),
+                title: Text("Language",
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: availableLocales.map((lang) {
+                  return InkWell(
+                    onTap: () => saveLang(lang),
+                    child: ListTile(
+                      title: Text(availableLocalesLang[lang]),
+                      leading: Radio(
+                        value: lang,
+                        groupValue: _lang,
+                        onChanged: (_) => saveLang(lang),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
               ExpansionTile(
                   title: Text(
                       AppLocalizations.instance
                           .translate('app_settings_auth_header'),
                       style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
                   children: [
                     _biometricsRevealed == false
                         ? ElevatedButton(
@@ -194,6 +217,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   title: Text(
                       AppLocalizations.instance.translate('app_settings_seed'),
                       style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
                   children: [
                     _seedPhrase == ""
                         ? ElevatedButton(

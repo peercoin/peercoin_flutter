@@ -13,9 +13,9 @@ class AppSettings with ChangeNotifier {
     _appOptions = _optionsBox.get("appOptions");
   }
 
-  Future<void> createInitialSettings(bool allowBiometrics) async {
+  Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
     Box _optionsBox = await _encryptedBox.getGenericBox("optionsBox");
-    _optionsBox.put("appOptions", AppOptionsStore(allowBiometrics));
+    _optionsBox.put("appOptions", AppOptionsStore(allowBiometrics, lang));
   }
 
   bool get biometricsAllowed {
@@ -29,6 +29,15 @@ class AppSettings with ChangeNotifier {
 
   Map<String, bool> get authenticationOptions {
     return _appOptions.authenticationOptions;
+  }
+
+  String get selectedLang {
+    return _appOptions.selectedLang;
+  }
+
+  set selectedLang(String newLang) {
+    _appOptions.changeLang = newLang;
+    notifyListeners();
   }
 
   void setAuthenticationOptions(String field, bool newStatus) {
