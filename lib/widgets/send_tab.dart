@@ -238,7 +238,7 @@ class _SendTabState extends State<SendTab> {
               validator: (value) {
                 if (value.isEmpty) {
                   return AppLocalizations.instance
-                      .translate('receive_enter_amount');
+                      .translate('send_enter_address');
                 }
                 String sanitized = value.trim();
                 if (Address.validateAddress(

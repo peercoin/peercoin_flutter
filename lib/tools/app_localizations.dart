@@ -18,7 +18,16 @@ class AppLocalizations {
     this.locale = locale;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const Map<String, String> availableLocales = {
+    "en": "English",
+    "nl": "Nederlands",
+    "de": "Deutsch",
+    "ro": "Română",
+    "ru": "русский"
+  };
+
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   Locale locale;
   Map<String, String> _localizedStrings;
@@ -33,12 +42,14 @@ class AppLocalizations {
     }
   }
 
-  Future<Map<String, String>> _loadLocalizedStrings(Locale localeToBeLoaded) async {
+  Future<Map<String, String>> _loadLocalizedStrings(
+      Locale localeToBeLoaded) async {
     String jsonString;
     Map<String, String> localizedStrings = {};
 
     try {
-      jsonString = await rootBundle.loadString('assets/translations/${localeToBeLoaded.languageCode}.json');
+      jsonString = await rootBundle.loadString(
+          'assets/translations/${localeToBeLoaded.languageCode}.json');
     } catch (exception) {
       print(exception);
       return localizedStrings;
@@ -64,7 +75,8 @@ class AppLocalizations {
 
     arguments.forEach((argumentKey, value) {
       if (value == null) {
-        print('Value for "$argumentKey" is null in call of translate(\'$key\')');
+        print(
+            'Value for "$argumentKey" is null in call of translate(\'$key\')');
         value = '';
       }
       translation = translation.replaceAll("\$$argumentKey", value);
@@ -74,7 +86,8 @@ class AppLocalizations {
   }
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override

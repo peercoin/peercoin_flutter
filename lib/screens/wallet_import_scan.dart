@@ -27,12 +27,15 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
+      setState(() {
+        _initial = false;
+      });
       _coinName = ModalRoute.of(context).settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.generateUnusedAddress(_coinName);
 
-      if (await _connectionProvider.init(_coinName, true)) {
+      if (await _connectionProvider.init(_coinName, scanMode: true)) {
         _connectionProvider.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(_coinName));
       }
@@ -43,9 +46,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           _timer.cancel();
           await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         }
-      });
-      setState(() {
-        _initial = false;
       });
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider.connectionState;
@@ -76,8 +76,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   }
 
   @override
-  void deactivate() {
-    _connectionProvider.closeConnection();
+  void deactivate() async {
+    await _connectionProvider.closeConnection();
     _timer.cancel();
     super.deactivate();
   }

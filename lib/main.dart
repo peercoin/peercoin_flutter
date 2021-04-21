@@ -5,7 +5,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/app_options.dart';
+import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/screens/auth_jail.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,21 +19,23 @@ import './models/walletutxo.dart';
 import './providers/activewallets.dart';
 import './providers/electrumconnection.dart';
 import './providers/encryptedbox.dart';
-import 'providers/unencryptedOptions.dart';
+import './providers/unencryptedOptions.dart';
 import './screens/setup.dart';
 import './screens/wallet_list.dart';
-import 'tools/app_localizations.dart';
-import 'tools/app_routes.dart';
-import 'tools/app_themes.dart';
+import './tools/app_localizations.dart';
+import './tools/app_routes.dart';
+import './tools/app_themes.dart';
 
 bool setupFinished;
 Widget _homeWidget;
+Locale _locale;
 
 void main() async {
   //init sharedpreferences
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
   setupFinished = prefs.getBool("setupFinished") ?? false;
+  _locale = Locale(prefs.getString("language_code") ?? "und");
 
   //init hive
   await Hive.initFlutter();
@@ -40,6 +44,7 @@ void main() async {
   Hive.registerAdapter(WalletAddressAdapter());
   Hive.registerAdapter(WalletUtxoAdapter());
   Hive.registerAdapter(AppOptionsStoreAdapter());
+  Hive.registerAdapter(ServerAdapter());
 
   //init notifications
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -111,24 +116,29 @@ class PeercoinApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return ElectrumConnection(
-              Provider.of<ActiveWallets>(context, listen: false),
+            return Servers(
+              Provider.of<EncryptedBox>(context, listen: false),
             );
           },
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return ElectrumConnection(
+              Provider.of<ActiveWallets>(context, listen: false),
+              Provider.of<Servers>(context, listen: false),
+            );
+          },
+        ),
       ],
       child: MaterialApp(
         title: 'Peercoin',
-        supportedLocales: [
-          const Locale('en'), // default
-          const Locale('nl'),
-          const Locale('de'),
-          const Locale('ru'),
-        ],
+        supportedLocales:
+            AppLocalizations.availableLocales.keys.map((lang) => Locale(lang)),
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
         ],
+        locale: _locale == Locale("und") ? null : _locale,
         themeMode: ThemeMode.system, // Default
         theme: MyTheme.getTheme(ThemeMode.light),
         darkTheme: MyTheme.getTheme(ThemeMode.dark),

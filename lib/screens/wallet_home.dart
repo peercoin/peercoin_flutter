@@ -51,15 +51,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      _connectionProvider.init(_wallet.name, false);
+      await _connectionProvider.init(_wallet.name,
+          requestedFromWalletHome: true);
     }
   }
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
+      setState(() {
+        _initial = false;
+      });
+
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
@@ -67,14 +72,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
 
-      if (await _connectionProvider.init(_wallet.name, false)) {
+      if (await _connectionProvider.init(_wallet.name,
+          requestedFromWalletHome: true)) {
         _connectionProvider.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(_wallet.name));
         rebroadCastUnsendTx();
       }
-      setState(() {
-        _initial = false;
-      });
+
       AppSettings _appSettings =
           Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions["walletHome"])
@@ -128,8 +132,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   @override
-  void deactivate() {
-    _connectionProvider.closeConnection();
+  void deactivate() async {
+    await _connectionProvider.closeConnection();
     super.deactivate();
   }
 
@@ -137,6 +141,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
     if (value == "import_wallet") {
       Navigator.of(context)
           .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+    }
+    if (value == "server_settings") {
+      Navigator.of(context)
+          .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
     }
   }
 
@@ -188,6 +196,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_paperwallet'),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "server_settings",
+                  child: ListTile(
+                    leading: Icon(Icons.sync),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_servers'),
                     ),
                   ),
                 )
