@@ -4,7 +4,6 @@ import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
-import 'package:peercoin/tools/app_globals.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
@@ -138,11 +137,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         .translate('app_settings_language'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
-                children: availableLocales.keys.map((lang) {
+                children: AppLocalizations.availableLocales.keys.map((lang) {
                   return InkWell(
                     onTap: () => saveLang(lang),
                     child: ListTile(
-                      title: Text(availableLocales[lang]),
+                      title: Text(AppLocalizations.availableLocales[lang]),
                       leading: Radio(
                         value: lang,
                         groupValue: _lang,

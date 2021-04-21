@@ -9,7 +9,6 @@ import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/screens/auth_jail.dart';
-import 'package:peercoin/tools/app_globals.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -133,7 +132,8 @@ class PeercoinApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Peercoin',
-        supportedLocales: availableLocales.keys.map((lang) => Locale(lang)),
+        supportedLocales:
+            AppLocalizations.availableLocales.keys.map((lang) => Locale(lang)),
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
