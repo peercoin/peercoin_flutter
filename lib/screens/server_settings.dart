@@ -161,7 +161,9 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                   },
                   onDismissed: (_) {
                     _serversProvider.removeServer(_servers[index]);
-                    loadServers();
+                    setState(() {
+                      _servers.remove(_servers[index]);
+                    });
                   },
                   background: Container(
                     alignment: Alignment.centerRight,
@@ -170,7 +172,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                     color: Theme.of(context).errorColor,
                     child: Icon(Icons.delete, color: Colors.white, size: 40),
                   ),
-                  key: Key('$index'),
+                  key: Key('${_servers[index].address}'),
                   child: Card(
                     child: ListTile(
                       leading: Icon(Icons.toc),
