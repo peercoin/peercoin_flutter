@@ -105,7 +105,7 @@
   "transactions_all": "Alle",
   "transactions_fee": "-$amount \nGebühr",
   "transactions_in": "Ein",
-  "transactionsnone": "Bisher keine Transaktionen",
+  "transactions_none": "Bisher keine Transaktionen",
   "transactions_out": "Aus",
   "tx_address": "Adresse",
   "tx_confirmations": "Bestätigungen",
