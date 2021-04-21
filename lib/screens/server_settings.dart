@@ -106,117 +106,122 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
               itemCount: _servers.length,
               itemBuilder: (ctx, index) {
                 savePriorities(_servers[index].address, index);
-                return Card(
-                  key: Key('$index'),
-                  child: ListTile(
-                    leading: Icon(Icons.toc),
-                    onLongPress: () {
-                      if (_servers[index].userGenerated == true) {
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.instance.translate(
-                                    'server_settings_alert_generated_title')),
-                                content: Text(_servers[index].address),
-                                actions: <Widget>[
-                                  TextButton.icon(
-                                      label: Text(AppLocalizations.instance
-                                          .translate(
-                                              'server_settings_alert_cancel')),
-                                      icon: Icon(Icons.cancel),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      }),
-                                  TextButton.icon(
-                                    label: Text(AppLocalizations.instance
-                                        .translate('jail_dialog_button')),
-                                    icon: Icon(Icons.check),
-                                    onPressed: () {
-                                      _serversProvider
-                                          .removeServer(_servers[index]);
-                                      //reload servers
-                                      loadServers();
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      } else {
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.instance.translate(
-                                    'server_settings_alert_hardcoded_title')),
-                                content: Text(AppLocalizations.instance.translate(
-                                    'server_settings_alert_hardcoded_content')),
-                                actions: <Widget>[
-                                  TextButton.icon(
-                                    label: Text(
-                                      AppLocalizations.instance
-                                          .translate('jail_dialog_button'),
-                                    ),
-                                    icon: Icon(Icons.check),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      }
-                    },
-                    trailing: IconButton(
-                      onPressed: () {
-                        final oldItem = _servers[index];
-                        setState(() {
-                          //toggle connectable
-                          _servers[index].setConnectable =
-                              !_servers[index].connectable;
-                        });
-                        //check if still one connectable server is left
-                        if (_servers.firstWhere(
-                                (element) => element.connectable == true,
-                                orElse: () => null) ==
-                            null) {
-                          //show snack bar
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              AppLocalizations.instance.translate(
-                                  "server_settings_error_no_server_left"),
-                              textAlign: TextAlign.center,
+                return Dismissible(
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (_) async {
+                    if (_servers[index].userGenerated == true) {
+                      return await showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text(AppLocalizations.instance.translate(
+                              'server_settings_alert_generated_title')),
+                          content: Text(_servers[index].address),
+                          actions: <Widget>[
+                            TextButton.icon(
+                                label: Text(AppLocalizations.instance
+                                    .translate('server_settings_alert_cancel')),
+                                icon: Icon(Icons.cancel),
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                }),
+                            TextButton.icon(
+                              label: Text(AppLocalizations.instance
+                                  .translate('jail_dialog_button')),
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
                             ),
-                            duration: Duration(seconds: 2),
-                          ));
+                          ],
+                        ),
+                      );
+                    } else {
+                      return await showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text(AppLocalizations.instance.translate(
+                              'server_settings_alert_hardcoded_title')),
+                          content: Text(AppLocalizations.instance.translate(
+                              'server_settings_alert_hardcoded_content')),
+                          actions: <Widget>[
+                            TextButton.icon(
+                              label: Text(
+                                AppLocalizations.instance
+                                    .translate('jail_dialog_button'),
+                              ),
+                              icon: Icon(Icons.check),
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  onDismissed: (_) {
+                    _serversProvider.removeServer(_servers[index]);
+                    loadServers();
+                  },
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    color: Theme.of(context).errorColor,
+                    child: Icon(Icons.delete, color: Colors.white, size: 40),
+                  ),
+                  key: Key('$index'),
+                  child: Card(
+                    child: ListTile(
+                      leading: Icon(Icons.toc),
+                      trailing: IconButton(
+                        onPressed: () {
+                          final oldItem = _servers[index];
+                          setState(() {
+                            //toggle connectable
+                            _servers[index].setConnectable =
+                                !_servers[index].connectable;
+                          });
+                          //check if still one connectable server is left
+                          if (_servers.firstWhere(
+                                  (element) => element.connectable == true,
+                                  orElse: () => null) ==
+                              null) {
+                            //show snack bar
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                AppLocalizations.instance.translate(
+                                    "server_settings_error_no_server_left"),
+                                textAlign: TextAlign.center,
+                              ),
+                              duration: Duration(seconds: 2),
+                            ));
 
-                          //reset connectable
-                          oldItem.setConnectable = true;
-                        }
-                        //connectable now false ? move to bottom of list
-                        if (!_servers[index].connectable) {
-                          final item = _servers.removeAt(index);
-                          _servers.insert(_servers.length, item);
-                          _servers[index].setPriority = _servers.length - 1;
-                        } else {
-                          final item = _servers.removeAt(index);
-                          _servers.insert(0, item);
-                          _servers[index].setPriority = 0;
-                        }
-                      },
-                      icon: Icon(_servers[index].connectable
-                          ? Icons.offline_bolt
-                          : Icons.offline_bolt_outlined),
+                            //reset connectable
+                            oldItem.setConnectable = true;
+                          }
+                          //connectable now false ? move to bottom of list
+                          if (!_servers[index].connectable) {
+                            final item = _servers.removeAt(index);
+                            _servers.insert(_servers.length, item);
+                            _servers[index].setPriority = _servers.length - 1;
+                          } else {
+                            final item = _servers.removeAt(index);
+                            _servers.insert(0, item);
+                            _servers[index].setPriority = 0;
+                          }
+                        },
+                        icon: Icon(_servers[index].connectable
+                            ? Icons.offline_bolt
+                            : Icons.offline_bolt_outlined),
+                      ),
+                      tileColor: calculateTileColor(
+                          index, _servers[index].connectable),
+                      title: Text(_servers[index].address),
                     ),
-                    tileColor:
-                        calculateTileColor(index, _servers[index].connectable),
-                    title: Text(_servers[index].address),
                   ),
                 );
               }),
     );
   }
 }
-
-//TODO allow servers to be hidden
