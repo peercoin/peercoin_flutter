@@ -79,7 +79,7 @@
   "send_total": "Gesamt $amount $letter_code",
   "send_transferring": "Übertrage",
   "server_add_title": "Neuen Server hinzufügen",
-  "server_settings_titlee": "Server Einstellungen",
+  "server_settings_title": "Server Einstellungen",
   "server_settings_error_no_server_left": "Es muss mindestens ein Server verbleiben!",
   "setup_create_pin": "PIN erstellen",
   "setup_files_for_wallet": "Erstelle alle notwenigen Dateien um mit deiner Wallet loszulegen. Bitte wähle eine Option.",
