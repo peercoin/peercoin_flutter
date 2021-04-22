@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/about.dart';
 import 'package:peercoin/screens/app_settings_screen.dart';
 import 'package:peercoin/screens/auth_jail.dart';
 import 'package:peercoin/screens/import_paper_wallet.dart';
@@ -30,6 +31,7 @@ class Routes {
   static const String AuthJail = "/auth-jail";
   static const String ServerSettings = "/server-settings";
   static const String ServerAdd = "/server-add";
+  static const String About = "/about";
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -46,7 +48,8 @@ class Routes {
       Routes.ImportPaperWallet: (context) => ImportPaperWalletScreen(),
       Routes.AuthJail: (context) => AuthJailScreen(),
       Routes.ServerSettings: (context) => ServerSettingsScreen(),
-      Routes.ServerAdd: (context) => ServerAddScreen()
+      Routes.ServerAdd: (context) => ServerAddScreen(),
+      Routes.About: (context) => AboutScren()
     };
   }
 }
