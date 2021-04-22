@@ -12,8 +12,8 @@ class AppDrawer extends StatelessWidget {
           automaticallyImplyLeading: false,
         ),
         ListTile(
-          onTap: () => Navigator.of(context)
-              .pushReplacementNamed(Routes.WalletList),
+          onTap: () =>
+              Navigator.of(context).pushReplacementNamed(Routes.WalletList),
           leading: Icon(
             Icons.account_balance_wallet,
           ),
@@ -23,8 +23,14 @@ class AppDrawer extends StatelessWidget {
         ListTile(
             leading: Icon(Icons.app_settings_alt),
             title: Text(AppLocalizations.instance.translate('app_settings')),
-            onTap: () => Navigator.of(context)
-                .pushReplacementNamed(Routes.AppSettings))
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(Routes.AppSettings)),
+        Divider(),
+        ListTile(
+            leading: Icon(Icons.info),
+            title: Text(AppLocalizations.instance.translate('about')),
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(Routes.About))
       ])),
     );
   }
