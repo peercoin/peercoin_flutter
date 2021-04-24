@@ -14,6 +14,9 @@ class AppOptionsStore extends HiveObject {
   @HiveField(1)
   bool _allowBiometrics = true;
 
+  @HiveField(2)
+  String _defaultWallet = "";
+
   AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
@@ -31,6 +34,15 @@ class AppOptionsStore extends HiveObject {
 
   void changeAuthenticationOptions(String field, bool value) {
     _authenticationOptions[field] = value;
+    this.save();
+  }
+
+  get defaultWallet {
+    return _defaultWallet;
+  }
+
+  set defaultWallet(String newWallet) {
+    _defaultWallet = newWallet;
     this.save();
   }
 }
