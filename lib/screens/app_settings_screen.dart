@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
+import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
@@ -21,17 +22,22 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _biometricsRevealed = false;
   String _seedPhrase = "";
   String _lang = "";
+  String _defaultWallet = "";
   bool _languageChangeInfoDisplayed = false;
   Map<String, bool> _authenticationOptions;
   AppSettings _settings;
+  ActiveWallets _activeWallets;
+  List<CoinWallet> _availableWallets = [];
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
+      _settings = context.watch<AppSettings>();
+      _activeWallets = context.watch<ActiveWallets>();
+      _availableWallets = await _activeWallets.activeWalletsValues;
       setState(() {
         _initial = false;
       });
-      _settings = context.watch<AppSettings>();
     }
 
     super.didChangeDependencies();
@@ -112,12 +118,17 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     }
   }
 
+  void saveDefaultWallet(String wallet) async {
+    _settings.setDefaultWallet(wallet);
+  }
+
   @override
   Widget build(BuildContext context) {
     _biometricsAllowed = _settings.biometricsAllowed ?? false;
     _authenticationOptions = _settings.authenticationOptions ?? false;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
+    _defaultWallet = _settings.defaultWallet ?? "";
 
     return Scaffold(
       appBar: AppBar(
@@ -146,6 +157,26 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         value: lang,
                         groupValue: _lang,
                         onChanged: (_) => saveLang(lang),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              ExpansionTile(
+                title: Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_default_wallet'),
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: _availableWallets.map((wallet) {
+                  return InkWell(
+                    onTap: () => saveDefaultWallet(wallet.letterCode),
+                    child: ListTile(
+                      title: Text(wallet.title),
+                      leading: Radio(
+                        value: wallet.letterCode,
+                        groupValue: _defaultWallet,
+                        onChanged: (_) => saveDefaultWallet(wallet.letterCode),
                       ),
                     ),
                   );

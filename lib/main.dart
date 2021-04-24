@@ -84,7 +84,7 @@ void main() async {
   } else if (failedAuths > 0) {
     _homeWidget = AuthJailScreen(true);
   } else {
-    _homeWidget = WalletListScreen();
+    _homeWidget = WalletListScreen(fromColdStart: true);
   }
 
   //run

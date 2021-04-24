@@ -61,7 +61,7 @@ class ActiveWallets with ChangeNotifier {
     }
   }
 
-  Future<List> get activeWalletsValues async {
+  Future<List<CoinWallet>> get activeWalletsValues async {
     return _walletBox.values.toList();
   }
 

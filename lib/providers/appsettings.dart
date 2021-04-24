@@ -50,4 +50,13 @@ class AppSettings with ChangeNotifier {
     _appOptions.changeAuthenticationOptions(field, newStatus);
     notifyListeners();
   }
+
+  String get defaultWallet {
+    return _appOptions.defaultWallet ?? "";
+  }
+
+  void setDefaultWallet(String newWallet) {
+    _appOptions.defaultWallet = newWallet;
+    notifyListeners();
+  }
 }
