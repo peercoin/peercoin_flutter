@@ -45,11 +45,15 @@ class _WalletListScreenState extends State<WalletListScreen> {
           );
         } else if (values.length > 1) {
           //find default wallet
-          await Navigator.of(context).pushReplacementNamed(
-            Routes.WalletHome,
-            arguments: values.firstWhere(
-                (elem) => elem.letterCode == _appSettings.defaultWallet),
-          );
+          final defaultWallet = values.firstWhere(
+              (elem) => elem.letterCode == _appSettings.defaultWallet,
+              orElse: () => null);
+          if (defaultWallet != null) {
+            await Navigator.of(context).pushReplacementNamed(
+              Routes.WalletHome,
+              arguments: defaultWallet,
+            );
+          }
         }
       }
     }
