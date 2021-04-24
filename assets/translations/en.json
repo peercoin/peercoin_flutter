@@ -119,6 +119,7 @@
   "setup_securebox_fail": "We are very sorry.\nYour device does not support a secure enough way of storing keys.",
   "setup_seed_slider_label": "Slide to change the number of words",
   "setup_welcome": "Welcome to Peercoin Wallet",
+  "share_app": "Share App",
   "time": "Time",
   "transaction_details": "Transaction details",
   "transactions_all": "All",
