@@ -32,7 +32,7 @@
   "authenticate_biometric_reason": "Bitte authentifizieren.",
   "authenticate_biometric_title": "Authentifizierung nötig.",
   "authenticate_change_pin_success": "PIN erfolgreich geändert",
-  "authenticate_confirm_title": "PIN nochmals eingeben",
+  "authenticate_confirm_title": "PIN nochmals eingeben \n",
   "authenticate_confirm_title_new": "Neue PIN nochmals eingeben",
   "authenticate_retry_warning_text": "Die App wird sich sperren und kann nur mit einer erfolgreichen Authentifizierung entsperrt werden.",
   "authenticate_retry_warning_title": "Warnung, nur noch ein Versuch übrig.",

@@ -34,7 +34,7 @@
   "authenticate_biometric_reason": "Please authenticate.",
   "authenticate_biometric_title": "Authentication required",
   "authenticate_change_pin_success": "PIN succesfully changed",
-  "authenticate_confirm_title": "Re-enter your PIN",
+  "authenticate_confirm_title": "Re-enter your PIN \n",
   "authenticate_confirm_title_new": "Re-enter your new PIN",
   "authenticate_retry_warning_text": "App will go into locked state and can only be unlocked with successful authentification.",
   "authenticate_retry_warning_title": "Warning, you only have one retry left.",

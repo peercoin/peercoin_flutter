@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screen_lock/functions.dart';
-import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
@@ -74,12 +73,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       context,
       biometricsAllowed,
       () async => await screenLock(
-        title: HeadingTitle(
-            text:
-                AppLocalizations.instance.translate("authenticate_title_new")),
-        confirmTitle: HeadingTitle(
-            text: AppLocalizations.instance
-                .translate("authenticate_confirm_title_new")),
+        title: Text(
+          AppLocalizations.instance.translate("authenticate_title_new"),
+          style: TextStyle(
+            fontSize: 24,
+          ),
+        ),
+        confirmTitle: Text(
+          AppLocalizations.instance.translate("authenticate_confirm_title_new"),
+          style: TextStyle(
+            fontSize: 24,
+          ),
+        ),
         context: context,
         correctString: '',
         digits: 6,
