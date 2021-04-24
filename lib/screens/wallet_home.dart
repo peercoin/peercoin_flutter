@@ -22,6 +22,7 @@ class WalletHomeScreen extends StatefulWidget {
 class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
+  bool _rescanInProgress = false;
   String _unusedAddress = "";
   CoinWallet _wallet;
   int _pageIndex = 1;
@@ -133,7 +134,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void deactivate() async {
-    await _connectionProvider.closeConnection();
+    if (_rescanInProgress == false) await _connectionProvider.closeConnection();
     super.deactivate();
   }
 
@@ -141,10 +142,42 @@ class _WalletHomeState extends State<WalletHomeScreen>
     if (value == "import_wallet") {
       Navigator.of(context)
           .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
-    }
-    if (value == "server_settings") {
+    } else if (value == "server_settings") {
       Navigator.of(context)
           .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
+    } else if (value == "rescan") {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title:
+              Text(AppLocalizations.instance.translate('wallet_rescan_title')),
+          content: Text(
+              AppLocalizations.instance.translate('wallet_rescan_content')),
+          actions: <Widget>[
+            TextButton.icon(
+                label: Text(AppLocalizations.instance
+                    .translate('server_settings_alert_cancel')),
+                icon: Icon(Icons.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+            TextButton.icon(
+              label: Text(
+                  AppLocalizations.instance.translate('jail_dialog_button')),
+              icon: Icon(Icons.check),
+              onPressed: () async {
+                //close connection
+                await _connectionProvider.closeConnection();
+                _rescanInProgress = true;
+                //init rescan
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    Routes.WalletImportScan, (_) => false,
+                    arguments: _wallet.name);
+              },
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -185,6 +218,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Text(_wallet.title)
         ]),
         actions: [
+          IconButton(icon: Icon(Icons.menu_book), onPressed: () => print("hi")),
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
@@ -206,6 +240,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_servers'),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "rescan",
+                  child: ListTile(
+                    leading: Icon(Icons.sync_problem),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_rescan'),
                     ),
                   ),
                 )

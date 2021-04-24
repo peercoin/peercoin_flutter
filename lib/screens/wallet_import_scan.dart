@@ -33,6 +33,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _coinName = ModalRoute.of(context).settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      await _activeWallets.prepareForRescan(_coinName);
       await _activeWallets.generateUnusedAddress(_coinName);
 
       if (await _connectionProvider.init(_coinName, scanMode: true)) {
