@@ -11,7 +11,9 @@ import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 class WalletListScreen extends StatefulWidget {
+  final bool fromColdStart;
   _WalletListScreenState createState() => _WalletListScreenState();
+  WalletListScreen({this.fromColdStart = false});
 }
 
 class _WalletListScreenState extends State<WalletListScreen> {
@@ -21,18 +23,31 @@ class _WalletListScreenState extends State<WalletListScreen> {
 
   @override
   void didChangeDependencies() async {
+    _activeWallets = Provider.of<ActiveWallets>(context);
+    AppSettings _appSettings = Provider.of<AppSettings>(context, listen: false);
+    await _appSettings.init(); //only required in home widget
+    await _activeWallets.init();
     if (_initial) {
-      _activeWallets = Provider.of<ActiveWallets>(context);
-      AppSettings _appSettings =
-          Provider.of<AppSettings>(context, listen: false);
-      await _appSettings.init(); //only required in home widget
-      if (_appSettings.authenticationOptions["walletList"])
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
-
-      await _activeWallets.init();
       setState(() {
         _initial = false;
       });
+      if (widget.fromColdStart == false) {
+        if (_appSettings.authenticationOptions["walletList"])
+          await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+      } else {
+        //push to default wallet
+        final values = await _activeWallets.activeWalletsValues;
+        if (values.length == 1) {
+          //only one wallet available, pushing to that one
+          await Navigator.of(context).pushReplacementNamed(
+            Routes.WalletHome,
+            arguments: values[0],
+          );
+        } else if (values.length > 1) {
+          //find default wallet
+
+        }
+      }
     }
 
     super.didChangeDependencies();
