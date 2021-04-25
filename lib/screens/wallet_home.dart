@@ -218,7 +218,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Text(_wallet.title)
         ]),
         actions: [
-          IconButton(icon: Icon(Icons.menu_book), onPressed: () => print("hi")),
+          // IconButton(icon: Icon(Icons.menu_book), onPressed: () => print("hi")), //TODO next release
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {

@@ -11,7 +11,7 @@ class Servers with ChangeNotifier {
   static const Map<String, List> _seeds = {
     "peercoin": [
       "wss://electrum.peercoinexplorer.net:50004",
-      // "wss://allingas.peercoinexplorer.net:50004", TODO unlock in next release 0.2.4
+      "wss://allingas.peercoinexplorer.net:50004",
     ],
     "peercoinTestnet": [
       "wss://testnet-electrum.peercoinexplorer.net:50004",
