@@ -11,8 +11,9 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/wallet_content_switch.dart';
+import 'package:peercoin/widgets/wallet_home_connection.dart';
+import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class WalletHomeScreen extends StatefulWidget {
 class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
+  bool _rescanInProgress = false;
   String _unusedAddress = "";
   CoinWallet _wallet;
   int _pageIndex = 1;
@@ -71,13 +73,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
-
-      if (await _connectionProvider.init(_wallet.name,
-          requestedFromWalletHome: true)) {
-        _connectionProvider.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(_wallet.name));
-        rebroadCastUnsendTx();
-      }
+      await _connectionProvider.init(_wallet.name,
+          requestedFromWalletHome: true);
 
       AppSettings _appSettings =
           Provider.of<AppSettings>(context, listen: false);
@@ -133,7 +130,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void deactivate() async {
-    await _connectionProvider.closeConnection();
+    if (_rescanInProgress == false) await _connectionProvider.closeConnection();
     super.deactivate();
   }
 
@@ -141,10 +138,42 @@ class _WalletHomeState extends State<WalletHomeScreen>
     if (value == "import_wallet") {
       Navigator.of(context)
           .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
-    }
-    if (value == "server_settings") {
+    } else if (value == "server_settings") {
       Navigator.of(context)
           .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
+    } else if (value == "rescan") {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title:
+              Text(AppLocalizations.instance.translate('wallet_rescan_title')),
+          content: Text(
+              AppLocalizations.instance.translate('wallet_rescan_content')),
+          actions: <Widget>[
+            TextButton.icon(
+                label: Text(AppLocalizations.instance
+                    .translate('server_settings_alert_cancel')),
+                icon: Icon(Icons.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+            TextButton.icon(
+              label: Text(
+                  AppLocalizations.instance.translate('jail_dialog_button')),
+              icon: Icon(Icons.check),
+              onPressed: () async {
+                //close connection
+                await _connectionProvider.closeConnection();
+                _rescanInProgress = true;
+                //init rescan
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    Routes.WalletImportScan, (_) => false,
+                    arguments: _wallet.name);
+              },
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -185,6 +214,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Text(_wallet.title)
         ]),
         actions: [
+          // IconButton(icon: Icon(Icons.menu_book), onPressed: () => print("hi")), //TODO next release
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
@@ -206,6 +236,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_servers'),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "rescan",
+                  child: ListTile(
+                    leading: Icon(Icons.sync_problem),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_rescan'),
                     ),
                   ),
                 )
@@ -248,78 +288,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
                             : Container(),
                       ],
                     ),
-                    _unusedAddress == ""
-                        ? SizedBox(height: 60, width: 60)
-                        : InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return SimpleDialog(children: [
-                                      Center(
-                                          child: Column(children: [
-                                        SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.33,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              1,
-                                          child: Center(
-                                            child: QrImage(
-                                              data: _unusedAddress,
-                                              backgroundColor: Colors.white,
-                                              foregroundColor: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: FittedBox(
-                                            child: SelectableText(
-                                              _unusedAddress,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        )
-                                      ]))
-                                    ]);
-                                  });
-                            },
-                            child: QrImage(
-                              data: _unusedAddress,
-                              size: 60.0,
-                              padding: EdgeInsets.all(1),
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                            ),
-                          )
+                    WalletHomeQr(_unusedAddress)
                   ],
                 ),
-                _connectionState == "connected"
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.sync,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('wallet_connected'),
-                            style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontSize: 12),
-                          ),
-                        ],
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: LoadingIndicator(),
-                      ),
+                WalletHomeConnection(_connectionState),
                 Divider(),
                 WalletContentSwitch(
                     pageIndex: _pageIndex,

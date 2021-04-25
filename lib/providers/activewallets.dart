@@ -325,15 +325,26 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
+  Future<void> prepareForRescan(String identifier) async {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+
+    openWallet.addresses.forEach((element) {
+      //clear utxos
+      openWallet.clearUtxo(element.address);
+      //reset status
+      updateAddressStatus(identifier, element.address, null);
+    });
+  }
+
   Future<void> updateAddressStatus(
       String identifier, String address, String status) async {
     print("updating $address to $status");
     //set address to used
     //update status for address
-    var openWallet = getSpecificCoinWallet(identifier);
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
     openWallet.addresses.forEach((walletAddr) async {
       if (walletAddr.address == address) {
-        walletAddr.newUsed = true;
+        walletAddr.newUsed = status == null ? false : true;
         walletAddr.newStatus = status;
       }
       await openWallet.save();

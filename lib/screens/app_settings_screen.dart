@@ -124,7 +124,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveDefaultWallet(String wallet) async {
-    _settings.setDefaultWallet(wallet);
+    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? "" : wallet);
   }
 
   @override
