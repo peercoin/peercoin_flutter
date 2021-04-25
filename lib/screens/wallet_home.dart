@@ -73,13 +73,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
-
-      if (await _connectionProvider.init(_wallet.name,
-          requestedFromWalletHome: true)) {
-        _connectionProvider.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(_wallet.name));
-        rebroadCastUnsendTx();
-      }
+      await _connectionProvider.init(_wallet.name,
+          requestedFromWalletHome: true);
 
       AppSettings _appSettings =
           Provider.of<AppSettings>(context, listen: false);

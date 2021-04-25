@@ -220,10 +220,20 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                       tileColor: calculateTileColor(
                           index, _servers[index].connectable),
                       title: Text(_servers[index].address),
+                      subtitle: _servers[index].address ==
+                              context
+                                  .watch<ElectrumConnection>()
+                                  .connectedServerUrl
+                          ? Center(
+                              child: Text(AppLocalizations.instance
+                                  .translate('wallet_connected')),
+                            )
+                          : Container(),
                     ),
                   ),
                 );
-              }),
+              },
+            ),
     );
   }
 }

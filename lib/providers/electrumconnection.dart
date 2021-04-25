@@ -28,6 +28,7 @@ class ElectrumConnection with ChangeNotifier {
   Map<String, List> _paperWalletUtxos = {};
   String _coinName;
   int _latestBlock;
+  String _serverUrl;
   bool _closedIntentionally = false;
   bool _scanMode = false;
   int _connectionAttempt = 0;
@@ -79,7 +80,7 @@ class ElectrumConnection with ChangeNotifier {
       _connectionAttempt = 0;
     }
 
-    String _serverUrl = _availableServers[_connectionAttempt];
+    _serverUrl = _availableServers[_connectionAttempt];
     print("connecting to $_serverUrl");
 
     _connectionAttempt++;
@@ -215,20 +216,19 @@ class ElectrumConnection with ChangeNotifier {
     if (version < _requiredProtocol[_coinName]) {
       //protocol version too low!
       closeConnection(false);
-    } else {
-      //we're connected and version handshake is successful
-      connectionState = "connected";
     }
   }
 
   void handleFeatures(Map result) {
     if (result["genesis_hash"] ==
         AvailableCoins().getSpecificCoin(_coinName).genesisHash) {
-      //server has same genesis block -> subscribe to block headers
+      //we're connected and genesis handshake is successful
+      connectionState = "connected";
+      //subscribe to block headers
       sendMessage("blockchain.headers.subscribe", "blocks");
     } else {
       //wrong genesis!
-      print("wrong genesis!");
+      print("wrong genesis! disconnecting.");
       closeConnection(false);
     }
   }
@@ -354,5 +354,10 @@ class ElectrumConnection with ChangeNotifier {
     if (txId != "import") {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
+  }
+
+  String get connectedServerUrl {
+    if (_connectionState == "connected") return _serverUrl;
+    return "";
   }
 }
