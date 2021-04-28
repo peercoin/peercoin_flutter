@@ -23,7 +23,8 @@ class AppLocalizations {
     "nl": "Nederlands",
     "de": "Deutsch",
     "ro": "Română",
-    "ru": "русский"
+    "ru": "русский",
+    "zh": "中文 (Zhōngwén)"
   };
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
