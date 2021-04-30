@@ -83,6 +83,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 }
 
+//TODO walletaddress needs a field to distinguish incoming/outgoing tx
 //TODO TX List show label if set
 //TODO send tab add label input (optional)
 //TODO receive tab add label input (optional)
