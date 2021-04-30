@@ -216,8 +216,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
         actions: [
           IconButton(
             icon: Icon(Icons.menu_book),
-            onPressed: () => Navigator.of(context)
-                .pushNamed(Routes.AddressBook, arguments: _wallet.name),
+            onPressed: () => Navigator.of(context).pushNamed(Routes.AddressBook,
+                arguments: {"name": _wallet.name, "title": _wallet.title}),
           ),
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
