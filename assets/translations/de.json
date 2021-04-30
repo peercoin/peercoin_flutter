@@ -13,6 +13,7 @@
   "add_coin_failed": "Wallet hinzufügen fehlgeschlagen!",
   "add_new_wallet": "Neue Wallet hinzufügen",
   "addressbook_title": "$coin Adressbuch",
+  "addressbook_no_label": "Kein Label",
   "app_settings": "Einstellungen",
   "app_settings_appbar": "App Einstellungen",
   "app_settings_auth_header": "Authentifizierung",
