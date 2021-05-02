@@ -14,6 +14,8 @@
   "add_new_wallet": "Add new wallet",
   "addressbook_title": "$coin Addresses",
   "addressbook_no_label": "no label",
+  "addressbook_edit_dialog_title": "Edit label",
+  "addressbook_edit_dialog_input": "New label",
   "app_navigation": "Navigation",
   "app_settings": "Settings",
   "app_settings_appbar": "App Settings",

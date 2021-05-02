@@ -515,6 +515,17 @@ class ActiveWallets with ChangeNotifier {
     openWallet.save();
   }
 
+  void updateLabel(String identifier, String address, String label) {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+    WalletAddress addr = openWallet.addresses.firstWhere(
+      (element) => element.address == address,
+      orElse: () => null,
+    );
+    addr.newAddressBookName = label;
+    openWallet.save();
+    notifyListeners();
+  }
+
   String reverseString(String input) {
     List items = [];
     for (var i = 0; i < input.length; i++) {

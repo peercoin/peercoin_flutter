@@ -31,6 +31,51 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     super.didChangeDependencies();
   }
 
+  Future<void> _displayTextInputDialog(
+      BuildContext context, WalletAddress address) async {
+    TextEditingController _textFieldController = TextEditingController();
+    _textFieldController.text = address.addressBookName ?? "";
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance
+                    .translate('addressbook_edit_dialog_title') +
+                " ${address.address}",
+            textAlign: TextAlign.center,
+          ),
+          content: TextField(
+            controller: _textFieldController,
+            maxLength: 32,
+            decoration: InputDecoration(
+                hintText: AppLocalizations.instance
+                    .translate('addressbook_edit_dialog_input')),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.instance
+                  .translate('server_settings_alert_cancel')),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
+              onPressed: () {
+                context.read<ActiveWallets>().updateLabel(
+                    _walletName, address.address, _textFieldController.text);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_initial)
@@ -59,7 +104,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
               itemBuilder: (ctx, i) {
                 return Card(
                   child: InkWell(
-                    onTap: () => print("this is how I win"),
+                    onTap: () =>
+                        _displayTextInputDialog(context, _walletAddresses[i]),
                     child: ListTile(
                       title: Center(
                         child: Text(_walletAddresses[i].address),
