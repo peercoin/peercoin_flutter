@@ -12,12 +12,15 @@ class WalletAddress extends HiveObject {
   String status;
   @HiveField(3)
   bool used;
+  @HiveField(4)
+  bool isOurs = true;
 
   WalletAddress({
     @required this.address,
     @required this.addressBookName,
     @required this.used,
     @required this.status,
+    @required this.isOurs,
   });
 
   set newStatus(String newStatus) {

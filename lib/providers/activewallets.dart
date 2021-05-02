@@ -95,10 +95,12 @@ class ActiveWallets with ChangeNotifier {
     if (openWallet.addresses.isEmpty) {
       //generate new address
       openWallet.addNewAddress = WalletAddress(
-          address: hdWallet.address,
-          addressBookName: null,
-          used: false,
-          status: null);
+        address: hdWallet.address,
+        addressBookName: null,
+        used: false,
+        status: null,
+        isOurs: true,
+      );
       unusedAddress = hdWallet.address;
     } else {
       //wallet is not brand new, lets find an unused address
@@ -117,10 +119,12 @@ class ActiveWallets with ChangeNotifier {
             .derivePath("m/0'/${openWallet.addresses.length}/0")
             .address;
         openWallet.addNewAddress = WalletAddress(
-            address: newAddress,
-            addressBookName: null,
-            used: false,
-            status: null);
+          address: newAddress,
+          addressBookName: null,
+          used: false,
+          status: null,
+          isOurs: true,
+        );
         unusedAddress = newAddress;
       }
     }
@@ -483,13 +487,16 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<Map> getWalletScriptHashes(String identifier, [String address]) async {
-    var addresses;
+    List<WalletAddress> addresses;
     Map answerMap = {};
     if (address == null) {
       //get all
       addresses = await getWalletAddresses(identifier);
       addresses.forEach((addr) {
-        answerMap[addr.address] = getScriptHash(identifier, addr.address);
+        if (addr.isOurs == true || addr.isOurs == null) {
+          // == null for backwards compatability
+          answerMap[addr.address] = getScriptHash(identifier, addr.address);
+        }
       });
     } else {
       //get just one

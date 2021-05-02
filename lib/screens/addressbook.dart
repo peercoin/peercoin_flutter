@@ -15,12 +15,14 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   String _walletName;
   String _walletTitle;
   List<WalletAddress> _walletAddresses = [];
+  List<WalletAddress> _filteredTx = [];
   int _pageIndex = 0;
 
   void changeIndex(int i) {
     setState(() {
       _pageIndex = i;
     });
+    applyFilter();
   }
 
   @override
@@ -31,11 +33,28 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       _walletTitle = _args["title"];
       _walletAddresses =
           await context.watch<ActiveWallets>().getWalletAddresses(_walletName);
+      applyFilter();
       setState(() {
         _initial = false;
       });
     }
     super.didChangeDependencies();
+  }
+
+  void applyFilter([String searchedKey]) {
+    List<WalletAddress> _filteredList = [];
+    if (_pageIndex == 0) {
+      _walletAddresses.forEach((e) {
+        if (e.isOurs == true || e.isOurs == null) _filteredList.add(e);
+      });
+    } else if (_pageIndex == 1) {
+      _walletAddresses.forEach((e) {
+        if (e.isOurs == false) _filteredList.add(e);
+      });
+    }
+    setState(() {
+      _filteredTx = _filteredList;
+    });
   }
 
   Future<void> _displayTextInputDialog(
@@ -121,22 +140,25 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
           )
         ],
       ),
-      body: _walletAddresses.isEmpty
-          ? Center(child: LoadingIndicator())
+      body: _filteredTx.isEmpty
+          ? Center(
+              child: Text(AppLocalizations.instance
+                  .translate('addressbook_no_sending')),
+            )
           : ListView.builder(
-              itemCount: _walletAddresses.length,
+              itemCount: _filteredTx.length,
               itemBuilder: (ctx, i) {
                 return Card(
                   child: InkWell(
                     onTap: () =>
-                        _displayTextInputDialog(context, _walletAddresses[i]),
+                        _displayTextInputDialog(context, _filteredTx[i]),
                     child: ListTile(
                       title: Center(
-                        child: Text(_walletAddresses[i].address),
+                        child: Text(_filteredTx[i].address),
                       ),
                       subtitle: Center(
                         child: Text(
-                          _walletAddresses[i].addressBookName ??
+                          _filteredTx[i].addressBookName ??
                               AppLocalizations.instance
                                   .translate('addressbook_no_label'),
                           style: TextStyle(
@@ -153,7 +175,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 }
 
-//TODO walletaddress needs a field to distinguish incoming/outgoing tx
+//TODO make addr book list tile slideable (edit/share)
 //TODO TX List show label if set
 //TODO send tab add label input (optional)
 //TODO receive tab add label input (optional)
