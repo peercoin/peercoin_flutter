@@ -163,3 +163,5 @@ class _ReceiveTabState extends State<ReceiveTab> {
     );
   }
 }
+
+//TODO add note that all inputs are optional
