@@ -360,3 +360,5 @@ class _SendTabState extends State<SendTab> {
     );
   }
 }
+
+//TODO pass & store label when sending

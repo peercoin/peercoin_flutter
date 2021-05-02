@@ -218,5 +218,4 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 }
 
-//TODO send tab add label input (optional)
 //TODO receive tab add label input (optional)
