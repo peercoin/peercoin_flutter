@@ -1,13 +1,16 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:provider/provider.dart';
 
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
-  TransactionList(this._walletTransactions);
+  final String _identifier;
+  TransactionList(this._walletTransactions, this._identifier);
 
   @override
   _TransactionListState createState() => _TransactionListState();
@@ -20,6 +23,14 @@ class _TransactionListState extends State<TransactionList> {
     setState(() {
       _filterChoice = newChoice;
     });
+  }
+
+  String resolveAddressDisplayName(String address) {
+    final result = context
+        .read<ActiveWallets>()
+        .getLabelForAddress(widget._identifier, address);
+    if (result != null) return "$result (${address.substring(0, 5)}...)";
+    return address;
   }
 
   @override
@@ -152,7 +163,7 @@ class _TransactionListState extends State<TransactionList> {
                           ),
                         ),
                         subtitle: Text(
-                          _filteredTx[i].address,
+                          resolveAddressDisplayName(_filteredTx[i].address),
                           overflow: TextOverflow.ellipsis,
                           textScaleFactor: 1,
                         ),

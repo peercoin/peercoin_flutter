@@ -298,10 +298,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 WalletHomeConnection(_connectionState),
                 Divider(),
                 WalletContentSwitch(
-                    pageIndex: _pageIndex,
-                    walletTransactions: _walletTransactions,
-                    unusedAddress: _unusedAddress,
-                    changeIndex: changeIndex)
+                  pageIndex: _pageIndex,
+                  walletTransactions: _walletTransactions,
+                  unusedAddress: _unusedAddress,
+                  changeIndex: changeIndex,
+                  identifier: _wallet.name,
+                )
               ],
             ),
     );

@@ -80,7 +80,8 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('tx_address'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.address)
+              SelectableText(_tx.address),
+              Text("")
             ],
           ),
           Divider(),
