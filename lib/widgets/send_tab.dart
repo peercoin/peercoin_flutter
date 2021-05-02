@@ -26,6 +26,7 @@ class _SendTabState extends State<SendTab> {
   final _formKey = GlobalKey<FormState>();
   final _addressKey = GlobalKey<FormFieldState>();
   final _amountKey = GlobalKey<FormFieldState>();
+  final _labelKey = GlobalKey<FormFieldState>();
   bool _initial = true;
   CoinWallet _wallet;
   Coin _availableCoin;
@@ -62,7 +63,7 @@ class _SendTabState extends State<SendTab> {
       if (key == "amount") {
         amountController.text = value;
       } else if (key == "label") {
-        //TODO v0.3 implement
+        labelController.text = value;
       }
     });
     addressController.text = parsed.path;
@@ -190,9 +191,11 @@ class _SendTabState extends State<SendTab> {
                           print("error $e");
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.instance.translate(
-                                'send_oops',
-                              )),
+                              content: Text(
+                                AppLocalizations.instance.translate(
+                                  'send_oops',
+                                ),
+                              ),
                             ),
                           );
                         }
@@ -208,16 +211,17 @@ class _SendTabState extends State<SendTab> {
 
   var addressController = TextEditingController();
   var amountController = TextEditingController();
+  var labelController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
-          key: _formKey,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                  Widget>[
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
             TextFormField(
               key: _addressKey,
               controller: addressController,
@@ -249,6 +253,17 @@ class _SendTabState extends State<SendTab> {
                 }
                 return null;
               },
+            ),
+            TextFormField(
+              textInputAction: TextInputAction.done,
+              key: _labelKey,
+              controller: labelController,
+              autocorrect: false,
+              decoration: InputDecoration(
+                icon: Icon(Icons.bookmark),
+                labelText: AppLocalizations.instance.translate('send_label'),
+              ),
+              maxLength: 32,
             ),
             TextFormField(
                 textInputAction: TextInputAction.done,
@@ -339,7 +354,9 @@ class _SendTabState extends State<SendTab> {
                     if (result != null) parseQrResult(result);
                   }),
             ]),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 }
