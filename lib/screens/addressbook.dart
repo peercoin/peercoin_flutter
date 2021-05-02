@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class AddressBookScreen extends StatefulWidget {
   @override
@@ -16,7 +18,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   String _walletName;
   String _walletTitle;
   List<WalletAddress> _walletAddresses = [];
-  List<WalletAddress> _filteredTx = [];
+  List<WalletAddress> _filteredAddr = [];
   int _pageIndex = 0;
   SearchBar searchBar;
 
@@ -61,7 +63,6 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 
   void applyFilter([String searchedKey]) {
-    print(searchedKey);
     List<WalletAddress> _filteredList = [];
     if (_pageIndex == 0) {
       _walletAddresses.forEach((e) {
@@ -82,7 +83,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     }
 
     setState(() {
-      _filteredTx = _filteredList;
+      _filteredAddr = _filteredList;
     });
   }
 
@@ -148,19 +149,6 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         child: LoadingIndicator(),
       ));
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     AppLocalizations.instance
-      //         .translate('addressbook_title', {"coin": _walletTitle}),
-      //   ),
-      //   actions: [
-
-      //     IconButton(
-      //       icon: Icon(Icons.search),
-      //       onPressed: () => print("searchin"),
-      //     ), //TODO implement
-      //   ],
-      // ),
       appBar: searchBar.build(context),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -180,25 +168,40 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
           )
         ],
       ),
-      body: _filteredTx.isEmpty
+      body: _filteredAddr.isEmpty
           ? Center(
               child: Text(AppLocalizations.instance
                   .translate('addressbook_no_sending')),
             )
           : ListView.builder(
-              itemCount: _filteredTx.length,
+              itemCount: _filteredAddr.length,
               itemBuilder: (ctx, i) {
                 return Card(
-                  child: InkWell(
-                    onTap: () =>
-                        _displayTextInputDialog(context, _filteredTx[i]),
+                  child: Slidable(
+                    actionPane: SlidableScrollActionPane(),
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: 'Edit',
+                        color: Theme.of(context).primaryColor,
+                        icon: Icons.edit,
+                        onTap: () =>
+                            _displayTextInputDialog(context, _filteredAddr[i]),
+                      ),
+                      IconSlideAction(
+                        caption: 'Share',
+                        color: Theme.of(context).accentColor,
+                        iconWidget: Icon(Icons.share, color: Colors.white),
+                        onTap: () => Share.share(_filteredAddr[i].address),
+                      ),
+                    ],
+                    actionExtentRatio: 0.25,
                     child: ListTile(
                       title: Center(
-                        child: Text(_filteredTx[i].address),
+                        child: Text(_filteredAddr[i].address),
                       ),
                       subtitle: Center(
                         child: Text(
-                          _filteredTx[i].addressBookName ??
+                          _filteredAddr[i].addressBookName ??
                               AppLocalizations.instance
                                   .translate('addressbook_no_label'),
                           style: TextStyle(
@@ -206,15 +209,14 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                           ),
                         ),
                       ),
-                      //TODO add leading icon indicating direciton
                     ),
                   ),
                 );
-              }),
+              },
+            ),
     );
   }
 }
 
-//TODO make addr book list tile slideable (edit/share)
 //TODO send tab add label input (optional)
 //TODO receive tab add label input (optional)
