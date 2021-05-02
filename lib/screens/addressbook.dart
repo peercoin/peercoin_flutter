@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -17,6 +18,20 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   List<WalletAddress> _walletAddresses = [];
   List<WalletAddress> _filteredTx = [];
   int _pageIndex = 0;
+  SearchBar searchBar;
+
+  _AddressBookScreenState() {
+    searchBar = SearchBar(
+      inBar: false,
+      setState: setState,
+      onClosed: clearFilter,
+      onSubmitted: clearFilter,
+      onCleared: clearFilter,
+      buildDefaultAppBar: buildAppBar,
+      onChanged: applyFilter,
+      hintText: AppLocalizations.instance.translate("search"),
+    );
+  }
 
   void changeIndex(int i) {
     setState(() {
@@ -41,7 +56,12 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     super.didChangeDependencies();
   }
 
+  void clearFilter([String _]) {
+    applyFilter();
+  }
+
   void applyFilter([String searchedKey]) {
+    print(searchedKey);
     List<WalletAddress> _filteredList = [];
     if (_pageIndex == 0) {
       _walletAddresses.forEach((e) {
@@ -52,6 +72,15 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         if (e.isOurs == false) _filteredList.add(e);
       });
     }
+
+    if (searchedKey != null) {
+      _filteredList = _filteredList.where((element) {
+        return element.address.contains(searchedKey) ||
+            element.addressBookName != null &&
+                element.addressBookName.contains(searchedKey);
+      }).toList();
+    }
+
     setState(() {
       _filteredTx = _filteredList;
     });
@@ -102,6 +131,15 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     );
   }
 
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        title: Text(
+          AppLocalizations.instance
+              .translate('addressbook_title', {"coin": _walletTitle}),
+        ),
+        actions: [searchBar.getSearchAction(context)]);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_initial)
@@ -110,18 +148,20 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         child: LoadingIndicator(),
       ));
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.instance
-              .translate('addressbook_title', {"coin": _walletTitle}),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => print("searchin"),
-          ), //TODO implement
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     AppLocalizations.instance
+      //         .translate('addressbook_title', {"coin": _walletTitle}),
+      //   ),
+      //   actions: [
+
+      //     IconButton(
+      //       icon: Icon(Icons.search),
+      //       onPressed: () => print("searchin"),
+      //     ), //TODO implement
+      //   ],
+      // ),
+      appBar: searchBar.build(context),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         fixedColor: Colors.white,
@@ -176,6 +216,5 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
 }
 
 //TODO make addr book list tile slideable (edit/share)
-//TODO TX List show label if set
 //TODO send tab add label input (optional)
 //TODO receive tab add label input (optional)
