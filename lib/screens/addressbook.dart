@@ -15,6 +15,13 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   String _walletName;
   String _walletTitle;
   List<WalletAddress> _walletAddresses = [];
+  int _pageIndex = 0;
+
+  void changeIndex(int i) {
+    setState(() {
+      _pageIndex = i;
+    });
+  }
 
   @override
   void didChangeDependencies() async {
@@ -96,10 +103,27 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
           ), //TODO implement
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        fixedColor: Colors.white,
+        onTap: (index) => changeIndex(index),
+        currentIndex: _pageIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_left),
+            label: AppLocalizations.instance
+                .translate('addressbook_bottom_bar_your_addresses'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_right),
+            label: AppLocalizations.instance
+                .translate('addressbook_bottom_bar_sending_addresses'),
+          )
+        ],
+      ),
       body: _walletAddresses.isEmpty
           ? Center(child: LoadingIndicator())
           : ListView.builder(
-              //TODO add selection chips for incoming / outgoing
               itemCount: _walletAddresses.length,
               itemBuilder: (ctx, i) {
                 return Card(
