@@ -1,6 +1,9 @@
+import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:peercoin/models/availablecoins.dart';
+import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -21,6 +24,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   List<WalletAddress> _filteredAddr = [];
   int _pageIndex = 0;
   SearchBar searchBar;
+  Coin _availableCoin;
 
   _AddressBookScreenState() {
     searchBar = SearchBar(
@@ -32,6 +36,25 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       buildDefaultAppBar: buildAppBar,
       onChanged: applyFilter,
       hintText: AppLocalizations.instance.translate("search"),
+    );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      title: FittedBox(
+        child: Text(
+          AppLocalizations.instance
+              .translate('addressbook_title', {"coin": _walletTitle}),
+        ),
+      ),
+      actions: [
+        searchBar.getSearchAction(context),
+        if (_pageIndex == 1)
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => _addressAddDialog(context),
+          ),
+      ],
     );
   }
 
@@ -51,6 +74,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       _walletAddresses =
           await context.watch<ActiveWallets>().getWalletAddresses(_walletName);
       applyFilter();
+      _availableCoin = AvailableCoins().getSpecificCoin(_walletName);
+
       setState(() {
         _initial = false;
       });
@@ -87,7 +112,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     });
   }
 
-  Future<void> _displayTextInputDialog(
+  Future<void> _addressEditDialog(
       BuildContext context, WalletAddress address) async {
     TextEditingController _textFieldController = TextEditingController();
     _textFieldController.text = address.addressBookName ?? "";
@@ -132,15 +157,93 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-        title: FittedBox(
-          child: Text(
-            AppLocalizations.instance
-                .translate('addressbook_title', {"coin": _walletTitle}),
+  Future<void> _addressAddDialog(BuildContext context) async {
+    TextEditingController _labelController = TextEditingController();
+    TextEditingController _addressController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('addressbook_add_new'),
+            textAlign: TextAlign.center,
           ),
-        ),
-        actions: [searchBar.getSearchAction(context)]);
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(
+                    hintText:
+                        AppLocalizations.instance.translate('send_address'),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return AppLocalizations.instance
+                          .translate('send_enter_address');
+                    }
+                    String sanitized = value.trim();
+                    if (Address.validateAddress(
+                            sanitized, _availableCoin.networkType) ==
+                        false) {
+                      return AppLocalizations.instance
+                          .translate('send_invalid_address');
+                    }
+                    //TODO check if already exists
+                    if (_walletAddresses.firstWhere(
+                            (elem) => elem.address == value,
+                            orElse: () => null) !=
+                        null) {
+                      return "Adress already exists";
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _labelController,
+                  maxLength: 32,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.instance.translate('send_label'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.instance
+                  .translate('server_settings_alert_cancel')),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  context.read<ActiveWallets>().updateLabel(
+                        _walletName,
+                        _addressController.text,
+                        _labelController.text == ""
+                            ? null
+                            : _labelController.text,
+                      );
+                  applyFilter();
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -187,7 +290,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         color: Theme.of(context).primaryColor,
                         icon: Icons.edit,
                         onTap: () =>
-                            _displayTextInputDialog(context, _filteredAddr[i]),
+                            _addressEditDialog(context, _filteredAddr[i]),
                       ),
                       IconSlideAction(
                         caption: 'Share',
@@ -198,18 +301,19 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
-                      title: FittedBox(
+                      subtitle: FittedBox(
                         child: Center(
                           child: Text(_filteredAddr[i].address),
                         ),
                       ),
-                      subtitle: Center(
+                      title: Center(
                         child: Text(
                           _filteredAddr[i].addressBookName ??
                               AppLocalizations.instance
                                   .translate('addressbook_no_label'),
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -221,3 +325,5 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     );
   }
 }
+
+//TODO sending addresses: allow manual add of addresses

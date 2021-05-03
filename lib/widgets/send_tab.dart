@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -33,6 +35,7 @@ class _SendTabState extends State<SendTab> {
   ActiveWallets _activeWallets;
   int _txFee = 0;
   int _totalValue = 0;
+  List<WalletAddress> _availableAddresses = [];
 
   @override
   void didChangeDependencies() async {
@@ -40,6 +43,8 @@ class _SendTabState extends State<SendTab> {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _availableAddresses =
+          await _activeWallets.getWalletAddresses(_wallet.name);
       setState(() {
         _initial = false;
       });
@@ -217,6 +222,10 @@ class _SendTabState extends State<SendTab> {
         });
   }
 
+  Future<Iterable> getSuggestions(String pattern) async {
+    return _availableAddresses.where((element) => element.isOurs == false);
+  }
+
   var addressController = TextEditingController();
   var amountController = TextEditingController();
   var labelController = TextEditingController();
@@ -230,23 +239,39 @@ class _SendTabState extends State<SendTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextFormField(
-              key: _addressKey,
-              controller: addressController,
-              textInputAction: TextInputAction.next,
-              autocorrect: false,
-              decoration: InputDecoration(
-                icon: Icon(Icons.shuffle),
-                labelText: AppLocalizations.instance.translate('tx_address'),
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    ClipboardData data = await Clipboard.getData('text/plain');
-                    addressController.text = data.text;
-                  },
-                  icon:
-                      Icon(Icons.paste, color: Theme.of(context).primaryColor),
+            TypeAheadFormField(
+              hideOnEmpty: true,
+              textFieldConfiguration: TextFieldConfiguration(
+                controller: addressController,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.shuffle),
+                  labelText: AppLocalizations.instance.translate('tx_address'),
+                  suffixIcon: IconButton(
+                    onPressed: () async {
+                      ClipboardData data =
+                          await Clipboard.getData('text/plain');
+                      addressController.text = data.text;
+                    },
+                    icon: Icon(Icons.paste,
+                        color: Theme.of(context).primaryColor),
+                  ),
                 ),
               ),
+              suggestionsCallback: (pattern) {
+                return getSuggestions(pattern);
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(
+                  title: Text(suggestion),
+                );
+              },
+              transitionBuilder: (context, suggestionsBox, controller) {
+                return suggestionsBox;
+              },
+              onSuggestionSelected: (suggestion) {
+                addressController.text = suggestion;
+              },
               validator: (value) {
                 if (value.isEmpty) {
                   return AppLocalizations.instance
@@ -262,6 +287,38 @@ class _SendTabState extends State<SendTab> {
                 return null;
               },
             ),
+            // TextFormField(
+            //   key: _addressKey,
+            //   controller: addressController,
+            //   textInputAction: TextInputAction.next,
+            //   autocorrect: false,
+            //   decoration: InputDecoration(
+            //     icon: Icon(Icons.shuffle),
+            //     labelText: AppLocalizations.instance.translate('tx_address'),
+            //     suffixIcon: IconButton(
+            //       onPressed: () async {
+            //         ClipboardData data = await Clipboard.getData('text/plain');
+            //         addressController.text = data.text;
+            //       },
+            //       icon:
+            //           Icon(Icons.paste, color: Theme.of(context).primaryColor),
+            //     ),
+            //   ),
+            //   validator: (value) {
+            //     if (value.isEmpty) {
+            //       return AppLocalizations.instance
+            //           .translate('send_enter_address');
+            //     }
+            //     String sanitized = value.trim();
+            //     if (Address.validateAddress(
+            //             sanitized, _availableCoin.networkType) ==
+            //         false) {
+            //       return AppLocalizations.instance
+            //           .translate('send_invalid_address');
+            //     }
+            //     return null;
+            //   },
+            // ),
             TextFormField(
               textInputAction: TextInputAction.done,
               key: _labelKey,
