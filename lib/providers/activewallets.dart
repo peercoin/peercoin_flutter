@@ -24,6 +24,7 @@ class ActiveWallets with ChangeNotifier {
   Box _walletBox;
   Box _vaultBox;
   Map<String, CoinWallet> _specificWallet = {};
+  WalletAddress _transferedAddress;
 
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox("vaultBox");
@@ -330,13 +331,13 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> prepareForRescan(String identifier) async {
+    print("prepare rescan called");
     CoinWallet openWallet = getSpecificCoinWallet(identifier);
-
-    openWallet.addresses.forEach((element) {
+    await openWallet.clearAddresses();
+    final copyAddresses = openWallet.addresses;
+    copyAddresses.forEach((element) {
       //clear utxos
       openWallet.clearUtxo(element.address);
-      //reset status
-      updateAddressStatus(identifier, element.address, null);
     });
   }
 
@@ -557,6 +558,14 @@ class ActiveWallets with ChangeNotifier {
       orElse: () => null,
     );
     return addr?.addressBookName ?? "";
+  }
+
+  set transferedAddress(newAddress) {
+    _transferedAddress = newAddress;
+  }
+
+  WalletAddress get transferedAddress {
+    return _transferedAddress;
   }
 
   String reverseString(String input) {

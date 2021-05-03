@@ -18,8 +18,7 @@ import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
   final Function changeIndex;
-  final WalletAddress transferedAddress;
-  SendTab(this.changeIndex, this.transferedAddress);
+  SendTab(this.changeIndex);
 
   @override
   _SendTabState createState() => _SendTabState();
@@ -39,6 +38,7 @@ class _SendTabState extends State<SendTab> {
   ActiveWallets _activeWallets;
   int _txFee = 0;
   int _totalValue = 0;
+  WalletAddress _transferedAddress;
   List<WalletAddress> _availableAddresses = [];
 
   @override
@@ -49,18 +49,9 @@ class _SendTabState extends State<SendTab> {
       _activeWallets = Provider.of<ActiveWallets>(context);
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
-
       setState(() {
         _initial = false;
-        if (widget.transferedAddress != null) {
-          addressController.text = widget.transferedAddress.address;
-          labelController.text = widget.transferedAddress.addressBookName ?? "";
-        }
       });
-    }
-    if (widget.transferedAddress != null &&
-        widget.transferedAddress.address != addressController.text) {
-      print("overwrite needded");
     }
     super.didChangeDependencies();
   }
@@ -250,6 +241,14 @@ class _SendTabState extends State<SendTab> {
 
   @override
   Widget build(BuildContext context) {
+    _transferedAddress = _activeWallets.transferedAddress;
+    if (_transferedAddress != null &&
+        _transferedAddress.address != addressController.text) {
+      addressController.text = _transferedAddress.address;
+      labelController.text = _transferedAddress.addressBookName ?? "";
+      _activeWallets.transferedAddress = null; //reset transfer
+    }
+
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
