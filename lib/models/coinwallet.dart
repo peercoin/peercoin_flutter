@@ -76,9 +76,8 @@ class CoinWallet extends HiveObject {
 
   set addNewAddress(WalletAddress newAddress) {
     final res = _addresses.firstWhere(
-            (element) => element.address == newAddress.address,
-            orElse: () => null) ==
-        null;
+        (element) => element.address == newAddress.address,
+        orElse: () => null);
     if (res == null) {
       _addresses.add(newAddress);
       this.save();

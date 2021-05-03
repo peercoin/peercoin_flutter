@@ -119,6 +119,17 @@ class ActiveWallets with ChangeNotifier {
         String newAddress = hdWallet
             .derivePath("m/0'/${openWallet.addresses.length}/0")
             .address;
+
+        final res = openWallet.addresses.firstWhere(
+            (element) => element.address == newAddress,
+            orElse: () => null);
+
+        if (res != null) {
+          newAddress = hdWallet
+              .derivePath("m/0'/${openWallet.addresses.length + 1}/0")
+              .address;
+        }
+
         openWallet.addNewAddress = WalletAddress(
           address: newAddress,
           addressBookName: null,
@@ -126,6 +137,7 @@ class ActiveWallets with ChangeNotifier {
           status: null,
           isOurs: true,
         );
+
         unusedAddress = newAddress;
       }
     }
@@ -331,13 +343,13 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> prepareForRescan(String identifier) async {
-    print("prepare rescan called");
     CoinWallet openWallet = getSpecificCoinWallet(identifier);
-    await openWallet.clearAddresses();
-    final copyAddresses = openWallet.addresses;
-    copyAddresses.forEach((element) {
+
+    openWallet.addresses.forEach((element) {
       //clear utxos
       openWallet.clearUtxo(element.address);
+      //reset status
+      updateAddressStatus(identifier, element.address, null);
     });
   }
 
