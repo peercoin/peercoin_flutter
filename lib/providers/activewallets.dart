@@ -528,7 +528,18 @@ class ActiveWallets with ChangeNotifier {
       (element) => element.address == address,
       orElse: () => null,
     );
-    addr.newAddressBookName = label;
+    if (addr != null) {
+      addr.newAddressBookName = label;
+    } else {
+      openWallet.addNewAddress = WalletAddress(
+        address: address,
+        addressBookName: label,
+        used: true,
+        status: null,
+        isOurs: false,
+      );
+    }
+
     openWallet.save();
     notifyListeners();
   }
@@ -539,7 +550,7 @@ class ActiveWallets with ChangeNotifier {
       (element) => element.address == address,
       orElse: () => null,
     );
-    return addr.addressBookName;
+    return addr?.addressBookName ?? "";
   }
 
   String reverseString(String input) {

@@ -134,9 +134,11 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        title: Text(
-          AppLocalizations.instance
-              .translate('addressbook_title', {"coin": _walletTitle}),
+        title: FittedBox(
+          child: Text(
+            AppLocalizations.instance
+                .translate('addressbook_title', {"coin": _walletTitle}),
+          ),
         ),
         actions: [searchBar.getSearchAction(context)]);
   }
@@ -196,8 +198,10 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
-                      title: Center(
-                        child: Text(_filteredAddr[i].address),
+                      title: FittedBox(
+                        child: Center(
+                          child: Text(_filteredAddr[i].address),
+                        ),
                       ),
                       subtitle: Center(
                         child: Text(

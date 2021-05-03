@@ -29,7 +29,7 @@ class _TransactionListState extends State<TransactionList> {
     final result = context
         .read<ActiveWallets>()
         .getLabelForAddress(widget._identifier, address);
-    if (result != null) return "$result (${address.substring(0, 5)}...)";
+    if (result != "") return "$result (${address.substring(0, 5)}...)";
     return address;
   }
 

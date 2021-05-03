@@ -183,6 +183,14 @@ class _SendTabState extends State<SendTab> {
                                   listen: false)
                               .broadcastTransaction(
                                   _buildResult["hex"], _buildResult["id"]);
+                          //store label if exists
+                          if (_labelKey.currentState.value != "") {
+                            _activeWallets.updateLabel(
+                              _wallet.name,
+                              _addressKey.currentState.value,
+                              _labelKey.currentState.value,
+                            );
+                          }
                           //pop message
                           Navigator.of(context).pop();
                           //navigate back to tx list
