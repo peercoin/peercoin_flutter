@@ -81,7 +81,7 @@ class TransactionDetails extends StatelessWidget {
               Text(AppLocalizations.instance.translate('tx_address'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.address),
-              Text("")
+              // Text("") TODO might add address label here in the future
             ],
           ),
           Divider(),
