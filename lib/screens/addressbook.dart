@@ -193,7 +193,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       return AppLocalizations.instance
                           .translate('send_invalid_address');
                     }
-                    //TODO check if already exists
+                    //check if already exists
                     if (_walletAddresses.firstWhere(
                             (elem) => elem.address == value,
                             orElse: () => null) !=
@@ -286,18 +286,66 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                     actionPane: SlidableScrollActionPane(),
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: 'Edit',
+                        caption: 'Edit', //TODO Translate
                         color: Theme.of(context).primaryColor,
                         icon: Icons.edit,
                         onTap: () =>
                             _addressEditDialog(context, _filteredAddr[i]),
                       ),
                       IconSlideAction(
-                        caption: 'Share',
+                        caption: 'Share', //TODO Translate
                         color: Theme.of(context).accentColor,
                         iconWidget: Icon(Icons.share, color: Colors.white),
                         onTap: () => Share.share(_filteredAddr[i].address),
                       ),
+                      if (_pageIndex == 1)
+                        IconSlideAction(
+                            caption: 'Delete', //TODO Translate
+                            color: Colors.red,
+                            iconWidget: Icon(Icons.delete, color: Colors.white),
+                            onTap: () async {
+                              await showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text(AppLocalizations.instance
+                                      .translate(
+                                          'addressbook_dialog_remove_title')),
+                                  content: Text(_filteredAddr[i].address),
+                                  actions: <Widget>[
+                                    TextButton.icon(
+                                        label: Text(AppLocalizations.instance
+                                            .translate(
+                                                'server_settings_alert_cancel')),
+                                        icon: Icon(Icons.cancel),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        }),
+                                    TextButton.icon(
+                                      label: Text(AppLocalizations.instance
+                                          .translate('jail_dialog_button')),
+                                      icon: Icon(Icons.check),
+                                      onPressed: () {
+                                        context
+                                            .read<ActiveWallets>()
+                                            .removeAddress(
+                                                _walletName, _filteredAddr[i]);
+                                        applyFilter();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                            AppLocalizations.instance.translate(
+                                                "addressbook_dialog_remove_snack"),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          duration: Duration(seconds: 5),
+                                        ));
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            })
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(

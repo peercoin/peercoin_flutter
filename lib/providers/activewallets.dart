@@ -544,6 +544,12 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeAddress(String identifier, WalletAddress addr) {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+    openWallet.removeAddress(addr);
+    notifyListeners();
+  }
+
   String getLabelForAddress(String identifier, String address) {
     CoinWallet openWallet = getSpecificCoinWallet(identifier);
     WalletAddress addr = openWallet.addresses.firstWhere(

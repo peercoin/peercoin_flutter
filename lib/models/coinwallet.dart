@@ -93,4 +93,10 @@ class CoinWallet extends HiveObject {
     _utxos.removeWhere((element) => element.address == address);
     this.save();
   }
+
+  void removeAddress(WalletAddress walletAddress) {
+    _addresses
+        .removeWhere((element) => element.address == walletAddress.address);
+    this.save();
+  }
 }

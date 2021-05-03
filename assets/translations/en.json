@@ -15,6 +15,8 @@
   "addressbook_add_new": "Add new address",
   "addressbook_bottom_bar_your_addresses": "Your Addresses",
   "addressbook_bottom_bar_sending_addresses": "Sending Addresses",
+  "addressbook_dialog_remove_title": "Do you really want to remove this address?",
+  "addressbook_dialog_remove_snack": "Address successfully removed",
   "addressbook_title": "$coin Addresses",
   "addressbook_edit_dialog_title": "Edit label",
   "addressbook_edit_dialog_input": "New label",
