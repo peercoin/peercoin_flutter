@@ -286,21 +286,24 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                     actionPane: SlidableScrollActionPane(),
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: 'Edit', //TODO Translate
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_edit'),
                         color: Theme.of(context).primaryColor,
                         icon: Icons.edit,
                         onTap: () =>
                             _addressEditDialog(context, _filteredAddr[i]),
                       ),
                       IconSlideAction(
-                        caption: 'Share', //TODO Translate
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_share'),
                         color: Theme.of(context).accentColor,
                         iconWidget: Icon(Icons.share, color: Colors.white),
                         onTap: () => Share.share(_filteredAddr[i].address),
                       ),
                       if (_pageIndex == 1)
                         IconSlideAction(
-                          caption: 'Send to', //TODO Translate
+                          caption: AppLocalizations.instance
+                              .translate('addressbook_swipe_send'),
                           color: Colors.white,
                           iconWidget: Icon(Icons.send, color: Colors.grey),
                           onTap: () =>
@@ -308,7 +311,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         ),
                       if (_pageIndex == 1)
                         IconSlideAction(
-                            caption: 'Delete', //TODO Translate
+                            caption: AppLocalizations.instance
+                                .translate('addressbook_swipe_delete'),
                             color: Colors.red,
                             iconWidget: Icon(Icons.delete, color: Colors.white),
                             onTap: () async {
@@ -380,5 +384,3 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     );
   }
 }
-
-//TODO: Sending addresses - allow delete
