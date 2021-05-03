@@ -18,7 +18,8 @@ import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
   final Function changeIndex;
-  SendTab(this.changeIndex);
+  final WalletAddress transferedAddress;
+  SendTab(this.changeIndex, this.transferedAddress);
 
   @override
   _SendTabState createState() => _SendTabState();
@@ -29,6 +30,9 @@ class _SendTabState extends State<SendTab> {
   final _addressKey = GlobalKey<FormFieldState>();
   final _amountKey = GlobalKey<FormFieldState>();
   final _labelKey = GlobalKey<FormFieldState>();
+  final addressController = TextEditingController();
+  final amountController = TextEditingController();
+  final labelController = TextEditingController();
   bool _initial = true;
   CoinWallet _wallet;
   Coin _availableCoin;
@@ -45,9 +49,18 @@ class _SendTabState extends State<SendTab> {
       _activeWallets = Provider.of<ActiveWallets>(context);
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
+
       setState(() {
         _initial = false;
+        if (widget.transferedAddress != null) {
+          addressController.text = widget.transferedAddress.address;
+          labelController.text = widget.transferedAddress.addressBookName ?? "";
+        }
       });
+    }
+    if (widget.transferedAddress != null &&
+        widget.transferedAddress.address != addressController.text) {
+      print("overwrite needded");
     }
     super.didChangeDependencies();
   }
@@ -234,10 +247,6 @@ class _SendTabState extends State<SendTab> {
       return false;
     });
   }
-
-  var addressController = TextEditingController();
-  var amountController = TextEditingController();
-  var labelController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

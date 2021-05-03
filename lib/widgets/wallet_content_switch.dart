@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/widgets/receive_tab.dart';
 import 'package:peercoin/widgets/send_tab.dart';
@@ -10,6 +11,7 @@ class WalletContentSwitch extends StatelessWidget {
   final String unusedAddress;
   final String identifier;
   final Function changeIndex;
+  final WalletAddress transferedAddress;
 
   WalletContentSwitch({
     this.pageIndex,
@@ -17,6 +19,7 @@ class WalletContentSwitch extends StatelessWidget {
     this.unusedAddress,
     this.changeIndex,
     this.identifier,
+    this.transferedAddress,
   });
 
   @override
@@ -32,7 +35,13 @@ class WalletContentSwitch extends StatelessWidget {
         );
       case 2:
         return Expanded(
-            child: SingleChildScrollView(child: SendTab(changeIndex)));
+          child: SingleChildScrollView(
+            child: SendTab(
+              changeIndex,
+              transferedAddress,
+            ),
+          ),
+        );
       default:
         return Container();
     }

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -33,6 +34,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   Iterable _listenedAddresses;
   List<WalletTransaction> _walletTransactions;
   int _latestBlock = 0;
+  WalletAddress _transferedAddress;
 
   void changeIndex(int i) {
     setState(() {
@@ -216,8 +218,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
         actions: [
           IconButton(
             icon: Icon(Icons.menu_book),
-            onPressed: () => Navigator.of(context).pushNamed(Routes.AddressBook,
-                arguments: {"name": _wallet.name, "title": _wallet.title}),
+            onPressed: () async {
+              setState(() {
+                _transferedAddress = null;
+              });
+              final _result = await Navigator.of(context).pushNamed(
+                  Routes.AddressBook,
+                  arguments: {"name": _wallet.name, "title": _wallet.title});
+              if (_result != null) {
+                setState(() {
+                  _transferedAddress = _result;
+                });
+                changeIndex(2);
+              } //TODO doesn't clear properly when selecting another address book entry
+            },
           ),
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
@@ -298,12 +312,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 WalletHomeConnection(_connectionState),
                 Divider(),
                 WalletContentSwitch(
-                  pageIndex: _pageIndex,
-                  walletTransactions: _walletTransactions,
-                  unusedAddress: _unusedAddress,
-                  changeIndex: changeIndex,
-                  identifier: _wallet.name,
-                )
+                    pageIndex: _pageIndex,
+                    walletTransactions: _walletTransactions,
+                    unusedAddress: _unusedAddress,
+                    changeIndex: changeIndex,
+                    identifier: _wallet.name,
+                    transferedAddress: _transferedAddress)
               ],
             ),
     );

@@ -300,6 +300,14 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       ),
                       if (_pageIndex == 1)
                         IconSlideAction(
+                          caption: 'Send to', //TODO Translate
+                          color: Colors.white,
+                          iconWidget: Icon(Icons.send, color: Colors.grey),
+                          onTap: () =>
+                              Navigator.of(context).pop(_filteredAddr[i]),
+                        ),
+                      if (_pageIndex == 1)
+                        IconSlideAction(
                             caption: 'Delete', //TODO Translate
                             color: Colors.red,
                             iconWidget: Icon(Icons.delete, color: Colors.white),
