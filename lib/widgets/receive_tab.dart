@@ -180,7 +180,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     }
                     return null;
                   }),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () async {
                   if (labelController.text != "")

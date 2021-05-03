@@ -162,10 +162,12 @@ class _TransactionListState extends State<TransactionList> {
                             textScaleFactor: 0.9,
                           ),
                         ),
-                        subtitle: Text(
-                          resolveAddressDisplayName(_filteredTx[i].address),
-                          overflow: TextOverflow.ellipsis,
-                          textScaleFactor: 1,
+                        subtitle: Center(
+                          child: Text(
+                            resolveAddressDisplayName(_filteredTx[i].address),
+                            overflow: TextOverflow.ellipsis,
+                            textScaleFactor: 1,
+                          ),
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
