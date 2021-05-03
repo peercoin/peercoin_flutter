@@ -75,7 +75,7 @@
   "paperwallet_step_4_text": "Wallet leeren & importieren",
   "paperwallet_success": "Papier Wallet erfolgreich importiert.\nDie Transaktion wird gleich erscheinen.",
   "receive_enter_amount": "Bitte Betrag eingeben",
-  "receive_requested_amount": "Angeforderter Betrag",
+  "receive_requested_amount": "Angeforderter Betrag (optional)",
   "receive_share": "Teilen",
   "scan_qr": "QR-Code scannen",
   "search": "Suchen",
