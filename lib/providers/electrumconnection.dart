@@ -354,6 +354,7 @@ class ElectrumConnection with ChangeNotifier {
     if (txId != "import") {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
+    //TODO error handling if server rejects tx
   }
 
   String get connectedServerUrl {

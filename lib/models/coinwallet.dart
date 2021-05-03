@@ -75,8 +75,13 @@ class CoinWallet extends HiveObject {
   }
 
   set addNewAddress(WalletAddress newAddress) {
-    _addresses.add(newAddress);
-    this.save();
+    final res = _addresses.firstWhere(
+        (element) => element.address == newAddress.address,
+        orElse: () => null);
+    if (res == null) {
+      _addresses.add(newAddress);
+      this.save();
+    }
   }
 
   void putTransaction(WalletTransaction newTx) {
@@ -91,6 +96,12 @@ class CoinWallet extends HiveObject {
 
   void clearUtxo(String address) {
     _utxos.removeWhere((element) => element.address == address);
+    this.save();
+  }
+
+  void removeAddress(WalletAddress walletAddress) {
+    _addresses
+        .removeWhere((element) => element.address == walletAddress.address);
     this.save();
   }
 }

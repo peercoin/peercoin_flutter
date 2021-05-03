@@ -214,7 +214,21 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Text(_wallet.title)
         ]),
         actions: [
-          // IconButton(icon: Icon(Icons.menu_book), onPressed: () => print("hi")), //TODO next release
+          IconButton(
+            icon: Icon(Icons.menu_book),
+            onPressed: () async {
+              _activeWallets.transferedAddress = null;
+              final _result = await Navigator.of(context).pushNamed(
+                  Routes.AddressBook,
+                  arguments: {"name": _wallet.name, "title": _wallet.title});
+              if (_result != null) {
+                setState(() {
+                  _activeWallets.transferedAddress = _result;
+                });
+                changeIndex(2);
+              }
+            },
+          ),
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
@@ -294,10 +308,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 WalletHomeConnection(_connectionState),
                 Divider(),
                 WalletContentSwitch(
-                    pageIndex: _pageIndex,
-                    walletTransactions: _walletTransactions,
-                    unusedAddress: _unusedAddress,
-                    changeIndex: changeIndex)
+                  pageIndex: _pageIndex,
+                  walletTransactions: _walletTransactions,
+                  unusedAddress: _unusedAddress,
+                  changeIndex: changeIndex,
+                  identifier: _wallet.name,
+                )
               ],
             ),
     );

@@ -24,6 +24,7 @@ class ActiveWallets with ChangeNotifier {
   Box _walletBox;
   Box _vaultBox;
   Map<String, CoinWallet> _specificWallet = {};
+  WalletAddress _transferedAddress;
 
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox("vaultBox");
@@ -95,10 +96,12 @@ class ActiveWallets with ChangeNotifier {
     if (openWallet.addresses.isEmpty) {
       //generate new address
       openWallet.addNewAddress = WalletAddress(
-          address: hdWallet.address,
-          addressBookName: null,
-          used: false,
-          status: null);
+        address: hdWallet.address,
+        addressBookName: null,
+        used: false,
+        status: null,
+        isOurs: true,
+      );
       unusedAddress = hdWallet.address;
     } else {
       //wallet is not brand new, lets find an unused address
@@ -116,11 +119,25 @@ class ActiveWallets with ChangeNotifier {
         String newAddress = hdWallet
             .derivePath("m/0'/${openWallet.addresses.length}/0")
             .address;
+
+        final res = openWallet.addresses.firstWhere(
+            (element) => element.address == newAddress,
+            orElse: () => null);
+
+        if (res != null) {
+          newAddress = hdWallet
+              .derivePath("m/0'/${openWallet.addresses.length + 1}/0")
+              .address;
+        }
+
         openWallet.addNewAddress = WalletAddress(
-            address: newAddress,
-            addressBookName: null,
-            used: false,
-            status: null);
+          address: newAddress,
+          addressBookName: null,
+          used: false,
+          status: null,
+          isOurs: true,
+        );
+
         unusedAddress = newAddress;
       }
     }
@@ -483,13 +500,16 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<Map> getWalletScriptHashes(String identifier, [String address]) async {
-    var addresses;
+    List<WalletAddress> addresses;
     Map answerMap = {};
     if (address == null) {
       //get all
       addresses = await getWalletAddresses(identifier);
       addresses.forEach((addr) {
-        answerMap[addr.address] = getScriptHash(identifier, addr.address);
+        if (addr.isOurs == true || addr.isOurs == null) {
+          // == null for backwards compatability
+          answerMap[addr.address] = getScriptHash(identifier, addr.address);
+        }
       });
     } else {
       //get just one
@@ -513,6 +533,51 @@ class ActiveWallets with ChangeNotifier {
     tx.broadCasted = broadcasted;
     tx.resetBroadcastHex();
     openWallet.save();
+  }
+
+  void updateLabel(String identifier, String address, String label) {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+    WalletAddress addr = openWallet.addresses.firstWhere(
+      (element) => element.address == address,
+      orElse: () => null,
+    );
+    if (addr != null) {
+      addr.newAddressBookName = label;
+    } else {
+      openWallet.addNewAddress = WalletAddress(
+        address: address,
+        addressBookName: label,
+        used: true,
+        status: null,
+        isOurs: false,
+      );
+    }
+
+    openWallet.save();
+    notifyListeners();
+  }
+
+  void removeAddress(String identifier, WalletAddress addr) {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+    openWallet.removeAddress(addr);
+    notifyListeners();
+  }
+
+  String getLabelForAddress(String identifier, String address) {
+    CoinWallet openWallet = getSpecificCoinWallet(identifier);
+    WalletAddress addr = openWallet.addresses.firstWhere(
+      (element) => element.address == address,
+      orElse: () => null,
+    );
+    return addr?.addressBookName ?? "";
+  }
+
+  set transferedAddress(newAddress) {
+    _transferedAddress = newAddress;
+  }
+
+  WalletAddress get transferedAddress {
+    return _transferedAddress;
   }
 
   String reverseString(String input) {

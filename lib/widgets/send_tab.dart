@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -26,12 +28,18 @@ class _SendTabState extends State<SendTab> {
   final _formKey = GlobalKey<FormState>();
   final _addressKey = GlobalKey<FormFieldState>();
   final _amountKey = GlobalKey<FormFieldState>();
+  final _labelKey = GlobalKey<FormFieldState>();
+  final addressController = TextEditingController();
+  final amountController = TextEditingController();
+  final labelController = TextEditingController();
   bool _initial = true;
   CoinWallet _wallet;
   Coin _availableCoin;
   ActiveWallets _activeWallets;
   int _txFee = 0;
   int _totalValue = 0;
+  WalletAddress _transferedAddress;
+  List<WalletAddress> _availableAddresses = [];
 
   @override
   void didChangeDependencies() async {
@@ -39,6 +47,8 @@ class _SendTabState extends State<SendTab> {
       _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _availableAddresses =
+          await _activeWallets.getWalletAddresses(_wallet.name);
       setState(() {
         _initial = false;
       });
@@ -62,7 +72,7 @@ class _SendTabState extends State<SendTab> {
       if (key == "amount") {
         amountController.text = value;
       } else if (key == "label") {
-        //TODO v0.3 implement
+        labelController.text = value;
       }
     });
     addressController.text = parsed.path;
@@ -182,6 +192,14 @@ class _SendTabState extends State<SendTab> {
                                   listen: false)
                               .broadcastTransaction(
                                   _buildResult["hex"], _buildResult["id"]);
+                          //store label if exists
+                          if (_labelKey.currentState.value != "") {
+                            _activeWallets.updateLabel(
+                              _wallet.name,
+                              _addressKey.currentState.value,
+                              _labelKey.currentState.value,
+                            );
+                          }
                           //pop message
                           Navigator.of(context).pop();
                           //navigate back to tx list
@@ -190,9 +208,11 @@ class _SendTabState extends State<SendTab> {
                           print("error $e");
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.instance.translate(
-                                'send_oops',
-                              )),
+                              content: Text(
+                                AppLocalizations.instance.translate(
+                                  'send_oops',
+                                ),
+                              ),
                             ),
                           );
                         }
@@ -206,35 +226,72 @@ class _SendTabState extends State<SendTab> {
         });
   }
 
-  var addressController = TextEditingController();
-  var amountController = TextEditingController();
+  Future<Iterable> getSuggestions(String pattern) async {
+    return _availableAddresses.where((element) {
+      if (element.isOurs == false && element.address.contains(pattern)) {
+        return true;
+      } else if (element.isOurs == false &&
+          element.addressBookName != null &&
+          element.addressBookName.contains(pattern)) {
+        return true;
+      }
+      return false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _transferedAddress = _activeWallets.transferedAddress;
+    if (_transferedAddress != null &&
+        _transferedAddress.address != addressController.text) {
+      addressController.text = _transferedAddress.address;
+      labelController.text = _transferedAddress.addressBookName ?? "";
+      _activeWallets.transferedAddress = null; //reset transfer
+    }
+
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
-          key: _formKey,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                  Widget>[
-            TextFormField(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TypeAheadFormField(
+              hideOnEmpty: true,
               key: _addressKey,
-              controller: addressController,
-              textInputAction: TextInputAction.next,
-              autocorrect: false,
-              decoration: InputDecoration(
-                icon: Icon(Icons.shuffle),
-                labelText: AppLocalizations.instance.translate('tx_address'),
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    ClipboardData data = await Clipboard.getData('text/plain');
-                    addressController.text = data.text;
-                  },
-                  icon:
-                      Icon(Icons.paste, color: Theme.of(context).primaryColor),
+              textFieldConfiguration: TextFieldConfiguration(
+                controller: addressController,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.shuffle),
+                  labelText: AppLocalizations.instance.translate('tx_address'),
+                  suffixIcon: IconButton(
+                    onPressed: () async {
+                      ClipboardData data =
+                          await Clipboard.getData('text/plain');
+                      addressController.text = data.text;
+                    },
+                    icon: Icon(Icons.paste,
+                        color: Theme.of(context).primaryColor),
+                  ),
                 ),
               ),
+              suggestionsCallback: (pattern) {
+                return getSuggestions(pattern);
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(
+                  title: Text(suggestion.addressBookName ?? ""),
+                  subtitle: Text(suggestion.address),
+                );
+              },
+              transitionBuilder: (context, suggestionsBox, controller) {
+                return suggestionsBox;
+              },
+              onSuggestionSelected: (suggestion) {
+                addressController.text = suggestion.address;
+                labelController.text = suggestion.addressBookName;
+              },
               validator: (value) {
                 if (value.isEmpty) {
                   return AppLocalizations.instance
@@ -249,6 +306,17 @@ class _SendTabState extends State<SendTab> {
                 }
                 return null;
               },
+            ),
+            TextFormField(
+              textInputAction: TextInputAction.done,
+              key: _labelKey,
+              controller: labelController,
+              autocorrect: false,
+              decoration: InputDecoration(
+                icon: Icon(Icons.bookmark),
+                labelText: AppLocalizations.instance.translate('send_label'),
+              ),
+              maxLength: 32,
             ),
             TextFormField(
                 textInputAction: TextInputAction.done,
@@ -339,7 +407,9 @@ class _SendTabState extends State<SendTab> {
                     if (result != null) parseQrResult(result);
                   }),
             ]),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 }
