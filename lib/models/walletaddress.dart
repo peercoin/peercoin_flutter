@@ -27,8 +27,8 @@ class WalletAddress extends HiveObject {
     status = newStatus;
   }
 
-  set newAddressBookName(String newAdressBookName) {
-    addressBookName = newAdressBookName;
+  set newAddressBookName(String newAddressBookName) {
+    addressBookName = newAddressBookName;
   }
 
   set newUsed(bool newUsed) {

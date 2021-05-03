@@ -198,7 +198,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                             (elem) => elem.address == value,
                             orElse: () => null) !=
                         null) {
-                      return "Adress already exists";
+                      return "Address already exists";
                     }
                     return null;
                   },
