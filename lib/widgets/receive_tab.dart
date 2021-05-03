@@ -141,6 +141,20 @@ class _ReceiveTabState extends State<ReceiveTab> {
               ),
               SizedBox(height: 20),
               TextFormField(
+                textInputAction: TextInputAction.done,
+                key: _labelKey,
+                controller: labelController,
+                autocorrect: false,
+                onChanged: (String newString) {
+                  stringBuilder();
+                },
+                decoration: InputDecoration(
+                  icon: Icon(Icons.bookmark),
+                  labelText: AppLocalizations.instance.translate('send_label'),
+                ),
+                maxLength: 32,
+              ),
+              TextFormField(
                   textInputAction: TextInputAction.done,
                   key: _amountKey,
                   controller: amountController,
@@ -166,20 +180,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     }
                     return null;
                   }),
-              TextFormField(
-                textInputAction: TextInputAction.done,
-                key: _labelKey,
-                controller: labelController,
-                autocorrect: false,
-                onChanged: (String newString) {
-                  stringBuilder();
-                },
-                decoration: InputDecoration(
-                  icon: Icon(Icons.bookmark),
-                  labelText: AppLocalizations.instance.translate('send_label'),
-                ),
-                maxLength: 32,
-              ),
+              SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: () async {
                   if (labelController.text != "")

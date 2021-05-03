@@ -299,38 +299,6 @@ class _SendTabState extends State<SendTab> {
                 return null;
               },
             ),
-            // TextFormField(
-            //   key: _addressKey,
-            //   controller: addressController,
-            //   textInputAction: TextInputAction.next,
-            //   autocorrect: false,
-            //   decoration: InputDecoration(
-            //     icon: Icon(Icons.shuffle),
-            //     labelText: AppLocalizations.instance.translate('tx_address'),
-            //     suffixIcon: IconButton(
-            //       onPressed: () async {
-            //         ClipboardData data = await Clipboard.getData('text/plain');
-            //         addressController.text = data.text;
-            //       },
-            //       icon:
-            //           Icon(Icons.paste, color: Theme.of(context).primaryColor),
-            //     ),
-            //   ),
-            //   validator: (value) {
-            //     if (value.isEmpty) {
-            //       return AppLocalizations.instance
-            //           .translate('send_enter_address');
-            //     }
-            //     String sanitized = value.trim();
-            //     if (Address.validateAddress(
-            //             sanitized, _availableCoin.networkType) ==
-            //         false) {
-            //       return AppLocalizations.instance
-            //           .translate('send_invalid_address');
-            //     }
-            //     return null;
-            //   },
-            // ),
             TextFormField(
               textInputAction: TextInputAction.done,
               key: _labelKey,
@@ -437,5 +405,3 @@ class _SendTabState extends State<SendTab> {
     );
   }
 }
-
-//TODO pass & store label when sending
