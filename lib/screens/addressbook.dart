@@ -302,15 +302,14 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                     actionExtentRatio: 0.25,
                     child: ListTile(
                       subtitle: FittedBox(
+                        fit: BoxFit.scaleDown,
                         child: Center(
                           child: Text(_filteredAddr[i].address),
                         ),
                       ),
                       title: Center(
                         child: Text(
-                          _filteredAddr[i].addressBookName ??
-                              AppLocalizations.instance
-                                  .translate('addressbook_no_label'),
+                          _filteredAddr[i].addressBookName ?? "-",
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
@@ -326,4 +325,4 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 }
 
-//TODO sending addresses: allow manual add of addresses
+//TODO: Sending addresses - allow delete

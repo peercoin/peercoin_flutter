@@ -223,7 +223,16 @@ class _SendTabState extends State<SendTab> {
   }
 
   Future<Iterable> getSuggestions(String pattern) async {
-    return _availableAddresses.where((element) => element.isOurs == false);
+    return _availableAddresses.where((element) {
+      if (element.isOurs == false && element.address.contains(pattern)) {
+        return true;
+      } else if (element.isOurs == false &&
+          element.addressBookName != null &&
+          element.addressBookName.contains(pattern)) {
+        return true;
+      }
+      return false;
+    });
   }
 
   var addressController = TextEditingController();
@@ -241,6 +250,7 @@ class _SendTabState extends State<SendTab> {
           children: <Widget>[
             TypeAheadFormField(
               hideOnEmpty: true,
+              key: _addressKey,
               textFieldConfiguration: TextFieldConfiguration(
                 controller: addressController,
                 autocorrect: false,
@@ -263,14 +273,16 @@ class _SendTabState extends State<SendTab> {
               },
               itemBuilder: (context, suggestion) {
                 return ListTile(
-                  title: Text(suggestion),
+                  title: Text(suggestion.addressBookName ?? ""),
+                  subtitle: Text(suggestion.address),
                 );
               },
               transitionBuilder: (context, suggestionsBox, controller) {
                 return suggestionsBox;
               },
               onSuggestionSelected: (suggestion) {
-                addressController.text = suggestion;
+                addressController.text = suggestion.address;
+                labelController.text = suggestion.addressBookName;
               },
               validator: (value) {
                 if (value.isEmpty) {
