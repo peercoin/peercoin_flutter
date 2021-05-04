@@ -116,18 +116,20 @@ class ActiveWallets with ChangeNotifier {
         unusedAddress = unusedAddr;
       } else {
         //not empty, but all used -> create new one
-        String newAddress = hdWallet
-            .derivePath("m/0'/${openWallet.addresses.length}/0")
-            .address;
+        int numberOfOurAddr = openWallet.addresses
+            .where((element) => element.isOurs == true)
+            .length;
+        String derivePath = "m/0'/$numberOfOurAddr/0";
+        String newAddress = hdWallet.derivePath(derivePath).address;
 
         final res = openWallet.addresses.firstWhere(
             (element) => element.address == newAddress,
             orElse: () => null);
 
         if (res != null) {
-          newAddress = hdWallet
-              .derivePath("m/0'/${openWallet.addresses.length + 1}/0")
-              .address;
+          numberOfOurAddr++;
+          derivePath = "m/0'/$numberOfOurAddr/0";
+          newAddress = hdWallet.derivePath(derivePath).address;
         }
 
         openWallet.addNewAddress = WalletAddress(
