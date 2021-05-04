@@ -42,9 +42,11 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       title: FittedBox(
-        child: Text(
-          AppLocalizations.instance
-              .translate('addressbook_title', {"coin": _walletTitle}),
+        child: Center(
+          child: Text(
+            AppLocalizations.instance
+                .translate('addressbook_title', {"coin": _walletTitle}),
+          ),
         ),
       ),
       actions: [
