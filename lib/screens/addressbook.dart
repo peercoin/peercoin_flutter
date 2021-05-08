@@ -285,6 +285,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
               itemBuilder: (ctx, i) {
                 return Card(
                   child: Slidable(
+                    key: Key(_filteredAddr[i].address),
                     actionPane: SlidableScrollActionPane(),
                     secondaryActions: <Widget>[
                       IconSlideAction(
