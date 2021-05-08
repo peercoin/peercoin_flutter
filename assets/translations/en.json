@@ -159,6 +159,7 @@
   "wallet_pop_menu_rescan": "Rescan",
   "wallet_pop_menu_servers": "Adjust Servers",
   "wallet_receive": "Receive",
+  "wallet_receive_label_hint": "Hint: Pressing this button will save the address label",
   "wallet_rescan_title": "Rescan wallet",
   "wallet_rescan_content": "Scans the wallet again. If you're having trouble with transactions or amounts, this might be helpful.\nThis might take a moment.",
   "wallet_scan_appBar_title": "Scanning your imported seed",
