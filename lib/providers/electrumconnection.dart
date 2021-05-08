@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -8,9 +9,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:web_socket_channel/io.dart';
 
-//connectionState schema
-//"waiting"
-//"online"
+enum ElectrumConnectionState { waiting, connected, offline }
 
 class ElectrumConnection with ChangeNotifier {
   static const Map<String, double> _requiredProtocol = {
@@ -21,8 +20,8 @@ class ElectrumConnection with ChangeNotifier {
   Timer _pingTimer;
   Timer _reconnectTimer;
   IOWebSocketChannel _connection;
-  String _connectionState;
   ActiveWallets _activeWallets;
+  ElectrumConnectionState _connectionState;
   Servers _servers;
   Map _addresses = {};
   Map<String, List> _paperWalletUtxos = {};
@@ -33,6 +32,7 @@ class ElectrumConnection with ChangeNotifier {
   bool _scanMode = false;
   int _connectionAttempt = 0;
   List _availableServers;
+  StreamSubscription _offlineSubscription;
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -41,9 +41,32 @@ class ElectrumConnection with ChangeNotifier {
     bool scanMode = false,
     bool requestedFromWalletHome = false,
   }) async {
-    if (_connection == null) {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult == ConnectivityResult.none) {
+      connectionState = ElectrumConnectionState.offline;
+
+      _offlineSubscription = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        print(result);
+        if (result != ConnectivityResult.none) {
+          //connection re-established
+          _offlineSubscription.cancel();
+          init(
+            walletName,
+            scanMode: scanMode,
+            requestedFromWalletHome: requestedFromWalletHome,
+          );
+        } else if (result == ConnectivityResult.none) {
+          connectionState = ElectrumConnectionState.offline;
+        }
+      });
+
+      return false;
+    } else if (_connection == null) {
       _coinName = walletName;
-      _connectionState = "waiting";
+      _connectionState = ElectrumConnectionState.waiting;
       _scanMode = scanMode;
       print("init server connection");
       await _servers.init(walletName);
@@ -93,12 +116,12 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  set connectionState(String newState) {
+  set connectionState(ElectrumConnectionState newState) {
     _connectionState = newState;
     notifyListeners();
   }
 
-  String get connectionState {
+  ElectrumConnectionState get connectionState {
     return _connectionState;
   }
 
@@ -138,16 +161,23 @@ class ElectrumConnection with ChangeNotifier {
   void cleanUpOnDone() {
     _pingTimer.cancel();
     _pingTimer = null;
-    connectionState = "waiting"; //setter!
+    connectionState = ElectrumConnectionState.waiting; //setter!
     _connection = null;
     _addresses = {};
     _latestBlock = null;
     _scanMode = false;
     _paperWalletUtxos = {};
 
-    if (_closedIntentionally == false)
+    if (_closedIntentionally == false) {
       _reconnectTimer = Timer(Duration(seconds: 5),
           () => init(_coinName)); //retry if not intentional
+    }
+  }
+
+  @override
+  void dispose() {
+    _offlineSubscription.cancel();
+    super.dispose();
   }
 
   void replyHandler(reply) {
@@ -223,7 +253,7 @@ class ElectrumConnection with ChangeNotifier {
     if (result["genesis_hash"] ==
         AvailableCoins().getSpecificCoin(_coinName).genesisHash) {
       //we're connected and genesis handshake is successful
-      connectionState = "connected";
+      connectionState = ElectrumConnectionState.connected;
       //subscribe to block headers
       sendMessage("blockchain.headers.subscribe", "blocks");
     } else {

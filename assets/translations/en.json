@@ -154,6 +154,7 @@
   "wallet_bottom_nav_send": "Send",
   "wallet_bottom_nav_tx": "Transactions",
   "wallet_connected": "connected",
+  "wallet_offline": "offline",
   "wallet_pop_menu_paperwallet": "Import Paper Wallet",
   "wallet_pop_menu_rescan": "Rescan",
   "wallet_pop_menu_servers": "Adjust Servers",

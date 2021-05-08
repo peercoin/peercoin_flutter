@@ -20,7 +20,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   String _coinName = "";
   String _unusedAddress = "";
   Iterable _listenedAddresses;
-  String _connectionState = "";
+  ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
   Timer _timer;
 
@@ -53,7 +53,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _unusedAddress = _activeWallets.getUnusedAddress;
 
       _listenedAddresses = _connectionProvider.listenedAddresses.keys;
-      if (_connectionState == "connected") {
+      if (_connectionState == ElectrumConnectionState.connected) {
         if (_listenedAddresses.length == 0) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider.subscribeToScriptHashes(
