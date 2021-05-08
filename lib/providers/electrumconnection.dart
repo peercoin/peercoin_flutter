@@ -388,7 +388,8 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   String get connectedServerUrl {
-    if (_connectionState == "connected") return _serverUrl;
+    if (_connectionState == ElectrumConnectionState.connected)
+      return _serverUrl;
     return "";
   }
 }
