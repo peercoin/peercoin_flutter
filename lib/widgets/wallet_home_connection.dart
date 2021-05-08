@@ -31,7 +31,7 @@ class WalletHomeConnection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.offline_bolt,
+            Icons.offline_bolt_outlined,
             color: Theme.of(context).accentColor,
           ),
           SizedBox(
