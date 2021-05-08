@@ -184,6 +184,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         fixedColor: Colors.white,
+        unselectedLabelStyle: TextStyle(letterSpacing: 1.5),
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [

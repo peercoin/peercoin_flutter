@@ -41,8 +41,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: FittedBox(
-        child: Center(
+      title: Center(
+        child: FittedBox(
           child: Text(
             AppLocalizations.instance
                 .translate('addressbook_title', {"coin": _walletTitle}),
@@ -260,6 +260,9 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         fixedColor: Colors.white,
+        unselectedLabelStyle: TextStyle(
+          letterSpacing: 1.4,
+        ),
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [
