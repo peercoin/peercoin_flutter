@@ -27,7 +27,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   String _unusedAddress = "";
   CoinWallet _wallet;
   int _pageIndex = 1;
-  String _connectionState = "";
+  ElectrumConnectionState _connectionState;
   ElectrumConnection _connectionProvider;
   ActiveWallets _activeWallets;
   Iterable _listenedAddresses;
@@ -85,7 +85,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _unusedAddress = _activeWallets.getUnusedAddress;
 
       _listenedAddresses = _connectionProvider.listenedAddresses.keys;
-      if (_connectionState == "connected") {
+      if (_connectionState == ElectrumConnectionState.connected) {
         if (_listenedAddresses.length == 0) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider.subscribeToScriptHashes(
@@ -184,6 +184,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         fixedColor: Colors.white,
+        unselectedLabelStyle: TextStyle(letterSpacing: 1.5),
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [
@@ -283,13 +284,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     ),
                     Column(
                       children: [
-                        AnimatedContainer(
-                          duration: Duration(seconds: 1),
-                          child: Text(
-                            (_wallet.balance / 1000000).toString(),
-                            style: TextStyle(
-                                fontSize: 26, fontWeight: FontWeight.bold),
-                          ),
+                        Text(
+                          (_wallet.balance / 1000000).toString(),
+                          style: TextStyle(
+                              fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                         _wallet.unconfirmedBalance > 0
                             ? Text(

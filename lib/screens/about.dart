@@ -121,6 +121,20 @@ class _AboutScrenState extends State<AboutScren> {
                             SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
+                                  .translate('about_translate'),
+                            ),
+                            TextButton(
+                              onPressed: () async =>
+                                  _launchURL("https://weblate.ppc.lol"),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('about_go_weblate'),
+                              ),
+                            ),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
+                              AppLocalizations.instance
                                   .translate('about_help_or_feedback'),
                             ),
                             TextButton(
