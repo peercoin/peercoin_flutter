@@ -49,10 +49,10 @@ class ElectrumConnection with ChangeNotifier {
       _offlineSubscription = Connectivity()
           .onConnectivityChanged
           .listen((ConnectivityResult result) {
-        print(result);
         if (result != ConnectivityResult.none) {
           //connection re-established
           _offlineSubscription.cancel();
+          _connection = null;
           init(
             walletName,
             scanMode: scanMode,
@@ -66,7 +66,7 @@ class ElectrumConnection with ChangeNotifier {
       return false;
     } else if (_connection == null) {
       _coinName = walletName;
-      _connectionState = ElectrumConnectionState.waiting;
+      connectionState = ElectrumConnectionState.waiting;
       _scanMode = scanMode;
       print("init server connection");
       await _servers.init(walletName);
