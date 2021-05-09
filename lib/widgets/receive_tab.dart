@@ -193,6 +193,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   AppLocalizations.instance.translate('receive_share'),
                 ),
               ),
+              SizedBox(height: 10),
               Text(
                   AppLocalizations.instance
                       .translate('wallet_receive_label_hint'),
