@@ -26,6 +26,7 @@ class Server extends HiveObject {
   DateTime _lastConnection;
 
   @HiveField(7)
+  // ignore: prefer_final_fields
   bool _hidden = false;
 
   @HiveField(8)
@@ -37,21 +38,21 @@ class Server extends HiveObject {
     @required this.userGenerated,
   });
 
-  get getAddress {
+  String get getAddress {
     return address;
   }
 
-  get hidden {
+  bool get hidden {
     return _hidden;
   }
 
   set setPriority(int newValue) {
     priority = newValue;
-    this.save();
+    save();
   }
 
   set setConnectable(bool newValue) {
     connectable = newValue;
-    this.save();
+    save();
   }
 }

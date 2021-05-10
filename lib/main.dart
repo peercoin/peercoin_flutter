@@ -34,8 +34,8 @@ void main() async {
   //init sharedpreferences
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
-  setupFinished = prefs.getBool("setupFinished") ?? false;
-  _locale = Locale(prefs.getString("language_code") ?? "und");
+  setupFinished = prefs.getBool('setupFinished') ?? false;
+  _locale = Locale(prefs.getString('language_code') ?? 'und');
 
   //init hive
   await Hive.initFlutter();
@@ -47,8 +47,7 @@ void main() async {
   Hive.registerAdapter(ServerAdapter());
 
   //init notifications
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -59,11 +58,10 @@ void main() async {
         sound: true,
       );
 
-  const AndroidInitializationSettings initializationSettingsAndroid =
+  const initializationSettingsAndroid =
       AndroidInitializationSettings('@drawable/splash');
-  final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings();
-  final InitializationSettings initializationSettings = InitializationSettings(
+  final initializationSettingsIOS = IOSInitializationSettings();
+  final initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
@@ -76,9 +74,9 @@ void main() async {
   });
 
   //check if app is locked
-  FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final _secureStorage = const FlutterSecureStorage();
   final failedAuths =
-      int.parse(await _secureStorage.read(key: "failedAuths") ?? "0");
+      int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
   if (setupFinished == false) {
     _homeWidget = SetupScreen();
   } else if (failedAuths > 0) {
@@ -138,7 +136,7 @@ class PeercoinApp extends StatelessWidget {
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
         ],
-        locale: _locale == Locale("und") ? null : _locale,
+        locale: _locale == Locale('und') ? null : _locale,
         themeMode: ThemeMode.system, // Default
         theme: MyTheme.getTheme(ThemeMode.light),
         darkTheme: MyTheme.getTheme(ThemeMode.dark),

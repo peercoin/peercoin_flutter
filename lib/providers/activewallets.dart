@@ -17,24 +17,23 @@ import '../models/walletutxo.dart';
 import '../providers/encryptedbox.dart';
 
 class ActiveWallets with ChangeNotifier {
-  EncryptedBox _encryptedBox;
+  final EncryptedBox _encryptedBox;
   ActiveWallets(this._encryptedBox);
   String _seedPhrase;
-  String _unusedAddress = "";
+  String _unusedAddress = '';
   Box _walletBox;
   Box _vaultBox;
+  // ignore: prefer_final_fields
   Map<String, CoinWallet> _specificWallet = {};
   WalletAddress _transferedAddress;
 
   Future<void> init() async {
-    _vaultBox = await _encryptedBox.getGenericBox("vaultBox");
+    _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
     _walletBox = await _encryptedBox.getWalletBox();
   }
 
   Future<String> get seedPhrase async {
-    if (_seedPhrase == null) {
-      _seedPhrase = _vaultBox.get("mnemonicSeed");
-    }
+    _seedPhrase ??= _vaultBox.get('mnemonicSeed');
     return _seedPhrase;
   }
 
@@ -79,7 +78,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> addWallet(String name, String title, String letterCode) async {
-    var box = await Hive.openBox<CoinWallet>("wallets",
+    var box = await Hive.openBox<CoinWallet>('wallets',
         encryptionCipher: HiveAesCipher(await _encryptedBox.key));
     await box.put(name, CoinWallet(name, title, letterCode));
     notifyListeners();
@@ -87,9 +86,8 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    NetworkType network =
-        AvailableCoins().getSpecificCoin(identifier).networkType;
-    var hdWallet = new HDWallet.fromSeed(
+    final network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    var hdWallet = HDWallet.fromSeed(
       seedPhraseUint8List(await seedPhrase),
       network: network,
     );
@@ -116,11 +114,11 @@ class ActiveWallets with ChangeNotifier {
         unusedAddress = unusedAddr;
       } else {
         //not empty, but all used -> create new one
-        int numberOfOurAddr = openWallet.addresses
+        var numberOfOurAddr = openWallet.addresses
             .where((element) => element.isOurs == true)
             .length;
-        String derivePath = "m/0'/$numberOfOurAddr/0";
-        String newAddress = hdWallet.derivePath(derivePath).address;
+        var derivePath = "m/0'/$numberOfOurAddr/0";
+        var newAddress = hdWallet.derivePath(derivePath).address;
 
         final res = openWallet.addresses.firstWhere(
             (element) => element.address == newAddress,
@@ -168,7 +166,7 @@ class ActiveWallets with ChangeNotifier {
 
   Future<List> getUnkownTxFromList(String identifier, List newTxList) async {
     var storedTransactions = await getWalletTransactions(identifier);
-    List unkownTx = [];
+    var unkownTx = [];
     newTxList.forEach((newTx) {
       bool found = false;
       storedTransactions.forEach((storedTx) {

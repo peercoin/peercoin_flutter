@@ -1,21 +1,22 @@
 import 'package:hive/hive.dart';
-part "app_options.g.dart";
+part 'app_options.g.dart';
 
 @HiveType(typeId: 5)
 class AppOptionsStore extends HiveObject {
   @HiveField(0)
+  // ignore: prefer_final_fields
   Map<String, bool> _authenticationOptions = {
-    "walletList": false,
-    "walletHome": false,
-    "sendTransaction": true,
-    "newWallet": false,
+    'walletList': false,
+    'walletHome': false,
+    'sendTransaction': true,
+    'newWallet': false,
   };
 
   @HiveField(1)
   bool _allowBiometrics = true;
 
   @HiveField(2)
-  String _defaultWallet = "";
+  String _defaultWallet = '';
 
   AppOptionsStore(this._allowBiometrics);
 
@@ -25,7 +26,7 @@ class AppOptionsStore extends HiveObject {
 
   set allowBiometrics(bool newStatus) {
     _allowBiometrics = newStatus;
-    this.save();
+    save();
   }
 
   Map<String, bool> get authenticationOptions {
@@ -34,15 +35,15 @@ class AppOptionsStore extends HiveObject {
 
   void changeAuthenticationOptions(String field, bool value) {
     _authenticationOptions[field] = value;
-    this.save();
+    save();
   }
 
-  get defaultWallet {
+  String get defaultWallet {
     return _defaultWallet;
   }
 
   set defaultWallet(String newWallet) {
     _defaultWallet = newWallet;
-    this.save();
+    save();
   }
 }
