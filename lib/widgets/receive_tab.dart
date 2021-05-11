@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -42,24 +42,24 @@ class _ReceiveTabState extends State<ReceiveTab> {
   }
 
   void stringBuilder() {
-    final convertedValue = amountController.text == ""
+    final convertedValue = amountController.text == ''
         ? 0
-        : double.parse(amountController.text.replaceAll(",", "."));
+        : double.parse(amountController.text.replaceAll(',', '.'));
     final label = labelController.text;
-    String _builtString = "";
+    var _builtString = '';
 
     if (convertedValue == 0) {
-      _builtString = "${_availableCoin.uriCode}:${widget._unusedAddress}";
-      if (label != "") {
+      _builtString = '${_availableCoin.uriCode}:${widget._unusedAddress}';
+      if (label != '') {
         _builtString =
-            "${_availableCoin.uriCode}:${widget._unusedAddress}?label=$label";
+            '${_availableCoin.uriCode}:${widget._unusedAddress}?label=$label';
       }
     } else {
       _builtString =
-          "${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue";
-      if (label != "") {
+          '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue';
+      if (label != '') {
         _builtString =
-            "${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue&label=$label";
+            '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue&label=$label';
       }
     }
     setState(() {
@@ -68,7 +68,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
   }
 
   RegExp getValidator(int fractions) {
-    String expression = r'^([1-9]{1}[0-9]{0,' +
+    var expression = r'^([1-9]{1}[0-9]{0,' +
         fractions.toString() +
         r'}(,[0-9]{3})*(.[0-9]{0,' +
         fractions.toString() +
@@ -80,7 +80,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
         fractions.toString() +
         r'})?)$';
 
-    return new RegExp(expression);
+    return RegExp(expression);
   }
 
   @override
@@ -183,9 +183,10 @@ class _ReceiveTabState extends State<ReceiveTab> {
               SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () async {
-                  if (labelController.text != "")
+                  if (labelController.text != '') {
                     context.read<ActiveWallets>().updateLabel(_wallet.name,
                         widget._unusedAddress, labelController.text);
+                  }
                   await Share.share(_qrString ?? widget._unusedAddress);
                 },
                 icon: Icon(Icons.share),

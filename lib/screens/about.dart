@@ -34,7 +34,7 @@ class _AboutScrenState extends State<AboutScren> {
         : throw 'Could not launch $_url';
   }
 
-  launchMailto() async {
+  Future<void> launchMailto() async {
     final mailtoLink = Mailto(
       to: ['hello@app.peercoin.net'],
       subject: 'Peercoin Wallet',
@@ -62,17 +62,17 @@ class _AboutScrenState extends State<AboutScren> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text("${_packageInfo.appName}"),
+                            Text('${_packageInfo.appName}'),
                             Text(
-                              "Version ${_packageInfo.version} Build ${_packageInfo.buildNumber}",
+                              'Version ${_packageInfo.version} Build ${_packageInfo.buildNumber}',
                             ),
                             Text(AppLocalizations.instance.translate(
                               'about_developers',
-                              {"year": DateFormat.y().format(DateTime.now())},
+                              {'year': DateFormat.y().format(DateTime.now())},
                             )),
                             TextButton(
                                 onPressed: () => _launchURL(
-                                    "https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE"),
+                                    'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('about_license'),
@@ -84,7 +84,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                                 onPressed: () => _launchURL(
-                                    "https://github.com/peercoin/peercoin_flutter"),
+                                    'https://github.com/peercoin/peercoin_flutter'),
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('about_view_source'),
@@ -97,7 +97,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
-                                  "https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md"),
+                                  'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_data_declaration'),
@@ -111,7 +111,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
-                                  "https://www.peercoin.net/foundation"),
+                                  'https://www.peercoin.net/foundation'),
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_foundation_button'),
@@ -125,7 +125,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               onPressed: () async =>
-                                  _launchURL("https://weblate.ppc.lol"),
+                                  _launchURL('https://weblate.ppc.lol'),
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_go_weblate'),
@@ -138,7 +138,7 @@ class _AboutScrenState extends State<AboutScren> {
                                   .translate('about_help_or_feedback'),
                             ),
                             TextButton(
-                              onPressed: () async => await launchMailto(),
+                              onPressed: () async => launchMailto(),
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_send_mail'),

@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
+
+  @override
   _WalletListScreenState createState() => _WalletListScreenState();
   WalletListScreen({this.fromColdStart = false});
 }
@@ -24,7 +26,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
-    AppSettings _appSettings = Provider.of<AppSettings>(context, listen: false);
+    var _appSettings = Provider.of<AppSettings>(context, listen: false);
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
@@ -32,8 +34,9 @@ class _WalletListScreenState extends State<WalletListScreen> {
         _initial = false;
       });
       if (widget.fromColdStart == false) {
-        if (_appSettings.authenticationOptions["walletList"])
+        if (_appSettings.authenticationOptions['walletList']) {
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+        }
       } else {
         //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
@@ -94,10 +97,11 @@ class _WalletListScreenState extends State<WalletListScreen> {
                   FutureBuilder(
                     future: _activeWallets.activeWalletsValues,
                     builder: (_, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting)
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Expanded(
                           child: Center(child: LoadingIndicator()),
                         );
+                      }
                       if (snapshot.data == null || snapshot.data.isEmpty) {
                         return Column(children: [
                           SizedBox(height: 30),

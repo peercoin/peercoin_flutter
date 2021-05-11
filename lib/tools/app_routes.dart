@@ -18,22 +18,22 @@ import 'package:peercoin/screens/wallet_list.dart';
 
 class Routes {
   // Route name constants
-  static const String WalletList = "/wallet-list";
-  static const String AppSettings = "/app-settings";
-  static const String NewWallet = "/new-wallet";
-  static const String QRScan = "/qr-scan";
-  static const String SetUpPin = "/setup-pin";
-  static const String SetupScreen = "/setup-save-seed";
-  static const String SetupImport = "/setup-import-seed";
-  static const String Transaction = "/tx-detail";
-  static const String WalletHome = "/wallet-home";
-  static const String WalletImportScan = "/wallet-import-scan";
-  static const String ImportPaperWallet = "/import-paperwallet";
-  static const String AuthJail = "/auth-jail";
-  static const String ServerSettings = "/server-settings";
-  static const String ServerAdd = "/server-add";
-  static const String About = "/about";
-  static const String AddressBook = "/addressbook";
+  static const String WalletList = '/wallet-list';
+  static const String AppSettings = '/app-settings';
+  static const String NewWallet = '/new-wallet';
+  static const String QRScan = '/qr-scan';
+  static const String SetUpPin = '/setup-pin';
+  static const String SetupScreen = '/setup-save-seed';
+  static const String SetupImport = '/setup-import-seed';
+  static const String Transaction = '/tx-detail';
+  static const String WalletHome = '/wallet-home';
+  static const String WalletImportScan = '/wallet-import-scan';
+  static const String ImportPaperWallet = '/import-paperwallet';
+  static const String AuthJail = '/auth-jail';
+  static const String ServerSettings = '/server-settings';
+  static const String ServerAdd = '/server-add';
+  static const String About = '/about';
+  static const String AddressBook = '/addressbook';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {

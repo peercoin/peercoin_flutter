@@ -15,7 +15,7 @@ class SetupImportSeedScreen extends StatefulWidget {
 }
 
 class _SetupImportSeedState extends State<SetupImportSeedScreen> {
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
@@ -23,15 +23,14 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     setState(() {
       _loading = true;
     });
-    ActiveWallets _activeWallets =
-        Provider.of<ActiveWallets>(context, listen: false);
+    var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
     try {
       await _activeWallets.init();
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate("setup_securebox_fail"),
+          AppLocalizations.instance.translate('setup_securebox_fail'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 10),
@@ -40,7 +39,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     await _activeWallets.createPhrase(_controller.text);
     var prefs =
         await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
-    await prefs.setBool("importedSeed", true);
+    await prefs.setBool('importedSeed', true);
     await Navigator.of(context)
         .pushNamedAndRemoveUntil(Routes.SetUpPin, (_) => false);
   }
@@ -57,7 +56,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Image.asset(
-                  "assets/icon/ppc-icon-white-256.png",
+                  'assets/icon/ppc-icon-white-256.png',
                   width: 50,
                 ),
                 Text(
@@ -101,8 +100,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                             onPressed: () async {
-                              ClipboardData data =
-                                  await Clipboard.getData('text/plain');
+                              var data = await Clipboard.getData('text/plain');
                               _controller.text = data.text;
                               FocusScope.of(context).unfocus(); //hide keyboard
                             },

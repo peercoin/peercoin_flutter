@@ -6,7 +6,7 @@ class WalletHomeQr extends StatelessWidget {
   WalletHomeQr(this._unusedAddress);
   @override
   Widget build(BuildContext context) {
-    return _unusedAddress == ""
+    return _unusedAddress == ''
         ? SizedBox(height: 60, width: 60)
         : InkWell(
             onTap: () {

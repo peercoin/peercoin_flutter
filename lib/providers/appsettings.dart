@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings with ChangeNotifier {
   AppOptionsStore _appOptions;
-  EncryptedBox _encryptedBox;
+  final EncryptedBox _encryptedBox;
   SharedPreferences _sharedPrefs;
   String _selectedLang;
   AppSettings(this._encryptedBox);
 
   Future<void> init() async {
-    Box _optionsBox = await _encryptedBox.getGenericBox("optionsBox");
-    _appOptions = _optionsBox.get("appOptions");
+    var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
+    _appOptions = _optionsBox.get('appOptions');
     _sharedPrefs = await SharedPreferences.getInstance();
   }
 
   Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
-    Box _optionsBox = await _encryptedBox.getGenericBox("optionsBox");
-    await _optionsBox.put("appOptions", AppOptionsStore(allowBiometrics));
-    await _sharedPrefs.setString("language_code", lang);
+    var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
+    await _optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
+    await _sharedPrefs.setString('language_code', lang);
   }
 
   bool get biometricsAllowed {
@@ -42,7 +41,7 @@ class AppSettings with ChangeNotifier {
 
   Future<void> setSelectedLang(String newLang) async {
     _selectedLang = newLang;
-    await _sharedPrefs.setString("language_code", newLang);
+    await _sharedPrefs.setString('language_code', newLang);
     notifyListeners();
   }
 
@@ -52,7 +51,7 @@ class AppSettings with ChangeNotifier {
   }
 
   String get defaultWallet {
-    return _appOptions.defaultWallet ?? "";
+    return _appOptions.defaultWallet ?? '';
   }
 
   void setDefaultWallet(String newWallet) {

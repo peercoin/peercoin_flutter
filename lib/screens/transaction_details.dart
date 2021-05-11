@@ -20,7 +20,7 @@ class TransactionDetails extends StatelessWidget {
     final args = ModalRoute.of(context).settings.arguments as List;
     final WalletTransaction _tx = args[0];
     final CoinWallet _coinWallet = args[1];
-    final String baseUrl =
+    final baseUrl =
         AvailableCoins().getSpecificCoin(_coinWallet.name).explorerTxDetailUrl;
 
     return Scaffold(
@@ -60,7 +60,7 @@ class TransactionDetails extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SelectableText((_tx.value / 1000000).toString() +
-                  " " +
+                  ' ' +
                   _coinWallet.letterCode)
             ],
           ),
@@ -71,7 +71,7 @@ class TransactionDetails extends StatelessWidget {
               Text(AppLocalizations.instance.translate('tx_fee'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(
-                  (_tx.fee / 1000000).toString() + " " + _coinWallet.letterCode)
+                  (_tx.fee / 1000000).toString() + ' ' + _coinWallet.letterCode)
             ],
           ),
           Divider(),
@@ -105,7 +105,7 @@ class TransactionDetails extends StatelessWidget {
           SizedBox(height: 20),
           Center(
             child: ElevatedButton.icon(
-                onPressed: () => _launchURL(baseUrl + "${_tx.txid}"),
+                onPressed: () => _launchURL(baseUrl + '${_tx.txid}'),
                 icon: Icon(
                   Icons.search,
                 ),

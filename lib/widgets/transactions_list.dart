@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
@@ -17,7 +17,7 @@ class TransactionList extends StatefulWidget {
 }
 
 class _TransactionListState extends State<TransactionList> {
-  String _filterChoice = "all";
+  String _filterChoice = 'all';
 
   void _handleSelect(String newChoice) {
     setState(() {
@@ -29,19 +29,19 @@ class _TransactionListState extends State<TransactionList> {
     final result = context
         .read<ActiveWallets>()
         .getLabelForAddress(widget._identifier, address);
-    if (result != "") return "$result (${address.substring(0, 5)}...)";
+    if (result != '') return '$result (${address.substring(0, 5)}...)';
     return address;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<WalletTransaction> _reversedTx = widget._walletTransactions
+    var _reversedTx = widget._walletTransactions
         .where((element) => element.timestamp != -1) //filter phatom tx
         .toList()
         .reversed
         .toList();
-    List<WalletTransaction> _filteredTx = _reversedTx;
-    if (_filterChoice != "all") {
+    var _filteredTx = _reversedTx;
+    if (_filterChoice != 'all') {
       _filteredTx = _reversedTx
           .where((element) => element.direction == _filterChoice)
           .toList();
@@ -49,7 +49,7 @@ class _TransactionListState extends State<TransactionList> {
 
     return Expanded(
         child: Column(children: [
-      if (_reversedTx.length > 0)
+      if (_reversedTx.isNotEmpty)
         Wrap(
           spacing: 8.0,
           children: <Widget>[
@@ -58,27 +58,27 @@ class _TransactionListState extends State<TransactionList> {
               label: Container(
                   child: Text(
                       AppLocalizations.instance.translate('transactions_in'))),
-              selected: _filterChoice == "in",
-              onSelected: (_) => _handleSelect("in"),
+              selected: _filterChoice == 'in',
+              onSelected: (_) => _handleSelect('in'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label:
                   Text(AppLocalizations.instance.translate('transactions_all')),
-              selected: _filterChoice == "all",
-              onSelected: (_) => _handleSelect("all"),
+              selected: _filterChoice == 'all',
+              onSelected: (_) => _handleSelect('all'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label:
                   Text(AppLocalizations.instance.translate('transactions_out')),
-              selected: _filterChoice == "out",
-              onSelected: (_) => _handleSelect("out"),
+              selected: _filterChoice == 'out',
+              onSelected: (_) => _handleSelect('out'),
             ),
           ],
         ),
       Expanded(
-        child: _reversedTx.length == 0
+        child: _reversedTx.isEmpty
             ? Center(
                 child: Text(
                     AppLocalizations.instance.translate('transactions_none')),
@@ -87,24 +87,24 @@ class _TransactionListState extends State<TransactionList> {
                 onHorizontalDragEnd: (dragEndDetails) {
                   if (dragEndDetails.primaryVelocity < 0) {
                     //left swipe
-                    if (_filterChoice == "in") {
-                      _handleSelect("all");
-                    } else if (_filterChoice == "all") {
-                      _handleSelect("out");
+                    if (_filterChoice == 'in') {
+                      _handleSelect('all');
+                    } else if (_filterChoice == 'all') {
+                      _handleSelect('out');
                     }
                   } else if (dragEndDetails.primaryVelocity > 0) {
                     //right swipe
-                    if (_filterChoice == "out") {
-                      _handleSelect("all");
-                    } else if (_filterChoice == "all") {
-                      _handleSelect("in");
+                    if (_filterChoice == 'out') {
+                      _handleSelect('all');
+                    } else if (_filterChoice == 'all') {
+                      _handleSelect('in');
                     }
                   }
                 },
                 child: ListView.builder(
                   itemCount: _filteredTx.length,
                   itemBuilder: (_, i) {
-                    int currentConfirmations = _filteredTx[i].confirmations;
+                    var currentConfirmations = _filteredTx[i].confirmations;
                     return Card(
                       child: ListTile(
                         onTap: () => Navigator.of(context)
@@ -116,7 +116,7 @@ class _TransactionListState extends State<TransactionList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Icon(
-                                _filteredTx[i].direction == "in"
+                                _filteredTx[i].direction == 'in'
                                     ? Icons.west
                                     : Icons.east,
                                 size: 18,
@@ -124,7 +124,7 @@ class _TransactionListState extends State<TransactionList> {
                               AnimatedContainer(
                                   duration: Duration(milliseconds: 500),
                                   child: _filteredTx[i].broadCasted == false
-                                      ? Text("?",
+                                      ? Text('?',
                                           textScaleFactor: 0.9,
                                           style: TextStyle(
                                               color: Theme.of(context)
@@ -142,7 +142,7 @@ class _TransactionListState extends State<TransactionList> {
                                           roundedCap: (_, __) => true,
                                         )),
                               Text(
-                                DateFormat("d. MMM").format(
+                                DateFormat('d. MMM').format(
                                     _filteredTx[i].timestamp != null
                                         ? DateTime.fromMillisecondsSinceEpoch(
                                             _filteredTx[i].timestamp * 1000)
@@ -173,21 +173,21 @@ class _TransactionListState extends State<TransactionList> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              (_filteredTx[i].direction == "in" ? "+" : "-") +
+                              (_filteredTx[i].direction == 'in' ? '+' : '-') +
                                   (_filteredTx[i].value / 1000000).toString(),
                               style: TextStyle(
                                   fontWeight: _filteredTx[i].timestamp != null
                                       ? FontWeight.bold
                                       : FontWeight.w300,
-                                  color: _filteredTx[i].direction == "out"
+                                  color: _filteredTx[i].direction == 'out'
                                       ? Colors.redAccent.shade200
                                       : Colors.black),
                             ),
-                            if (_filteredTx[i].direction == "out")
+                            if (_filteredTx[i].direction == 'out')
                               Text(
                                 AppLocalizations.instance.translate(
                                     'transactions_fee', {
-                                  'amount': "${_filteredTx[i].fee / 1000000}"
+                                  'amount': '${_filteredTx[i].fee / 1000000}'
                                 }),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(

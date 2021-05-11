@@ -13,9 +13,9 @@ class ServerSettingsScreen extends StatefulWidget {
 
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   bool _initial = true;
-  String _walletName = "";
+  String _walletName = '';
   List<Server> _servers = [];
-  Map _indexCache = {};
+  final Map _indexCache = {};
   Servers _serversProvider;
 
   @override
@@ -47,9 +47,9 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   }
 
   Color calculateTileColor(int index, bool connectable) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color oddItemColor = colorScheme.primary.withOpacity(0.10);
-    final Color evenItemColor = colorScheme.primary.withOpacity(0.3);
+    final colorScheme = Theme.of(context).colorScheme;
+    final oddItemColor = colorScheme.primary.withOpacity(0.10);
+    final evenItemColor = colorScheme.primary.withOpacity(0.3);
 
     if (!connectable) {
       return Theme.of(context).accentColor;
@@ -193,7 +193,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                 AppLocalizations.instance.translate(
-                                    "server_settings_error_no_server_left"),
+                                    'server_settings_error_no_server_left'),
                                 textAlign: TextAlign.center,
                               ),
                               duration: Duration(seconds: 2),

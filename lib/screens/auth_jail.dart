@@ -23,7 +23,7 @@ class _AuthJailState extends State<AuthJailScreen> {
   bool _jailedFromRoute = false;
 
   void _startTimer() {
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       const Duration(seconds: 1),
       (Timer timer) {
         if (_lockCountdown == 0) {
@@ -43,7 +43,7 @@ class _AuthJailState extends State<AuthJailScreen> {
   void onTimerEnd() async {
     final appSettings = Provider.of<AppSettings>(context, listen: false);
     await appSettings.init();
-    Auth.requireAuth(
+    await Auth.requireAuth(
       context,
       appSettings.biometricsAllowed,
       () async {
@@ -51,7 +51,7 @@ class _AuthJailState extends State<AuthJailScreen> {
             Provider.of<EncryptedBox>(context, listen: false);
         await encrytpedStorage.setFailedAuths(0);
         if (widget._jailedFromHome == true || _jailedFromRoute == true) {
-          Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+          await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         } else {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }

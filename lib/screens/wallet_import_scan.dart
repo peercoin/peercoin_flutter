@@ -17,8 +17,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _initial = true;
   ElectrumConnection _connectionProvider;
   ActiveWallets _activeWallets;
-  String _coinName = "";
-  String _unusedAddress = "";
+  String _coinName = '';
+  String _unusedAddress = '';
   Iterable _listenedAddresses;
   ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
@@ -42,7 +42,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       }
 
       _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-        int dueTime = _latestUpdate + 5;
+        var dueTime = _latestUpdate + 5;
         if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
           _timer.cancel();
           await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
@@ -54,7 +54,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
 
       _listenedAddresses = _connectionProvider.listenedAddresses.keys;
       if (_connectionState == ElectrumConnectionState.connected) {
-        if (_listenedAddresses.length == 0) {
+        if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider.subscribeToScriptHashes(
               await _activeWallets.getWalletScriptHashes(_coinName));

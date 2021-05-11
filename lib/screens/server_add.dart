@@ -19,7 +19,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   final _formKey = GlobalKey<FormState>();
   final _serverKey = GlobalKey<FormFieldState>();
   final _serverController = TextEditingController();
-  String _walletName = "";
+  String _walletName = '';
   List<Server> _currentServerList = [];
   bool _initial = true;
   bool _loading = false;
@@ -50,14 +50,14 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate("server_add_server_exists"),
+          AppLocalizations.instance.translate('server_add_server_exists'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
       ));
     } else {
       //continue: try to connect
-      print("trying to connect");
+      print('trying to connect');
 
       //close original server connection
       await Provider.of<ElectrumConnection>(context, listen: false)
@@ -70,7 +70,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           serverUrl,
         );
       } catch (e) {
-        print("connection error: $e");
+        print('connection error: $e');
       }
 
       void sendMessage(String method, String id, [List params]) {
@@ -78,9 +78,9 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           _connection.sink.add(
             json.encode(
               {
-                "id": id,
-                "method": method,
-                if (params != null) "params": params
+                'id': id,
+                'method': method,
+                if (params != null) 'params': params
               },
             ),
           );
@@ -89,12 +89,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
       void replyHandler(reply) {
         var decoded = json.decode(reply);
-        var id = decoded["id"];
-        String idString = id.toString();
-        var result = decoded["result"];
+        var id = decoded['id'];
+        var idString = id.toString();
+        var result = decoded['result'];
 
-        if (idString == "features") {
-          if (result["genesis_hash"] ==
+        if (idString == 'features') {
+          if (result['genesis_hash'] ==
               AvailableCoins().getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
@@ -107,7 +107,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 AppLocalizations.instance
-                    .translate("server_add_server_wrong_genesis"),
+                    .translate('server_add_server_wrong_genesis'),
                 textAlign: TextAlign.center,
               ),
               duration: Duration(seconds: 2),
@@ -122,21 +122,21 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       _connection.stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        print("stream error: $error");
+        print('stream error: $error');
         setState(() {
           _loading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             AppLocalizations.instance
-                .translate("server_add_server_no_connection"),
+                .translate('server_add_server_no_connection'),
             textAlign: TextAlign.center,
           ),
           duration: Duration(seconds: 2),
         ));
       });
 
-      sendMessage("server.features", "features");
+      sendMessage('server.features', 'features');
     }
   }
 
@@ -183,12 +183,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                     onFieldSubmitted: (_) => _formKey.currentState.validate(),
                     inputFormatters: [],
                     validator: (value) {
-                      RegExp portRegex = new RegExp(":[0-9]");
+                      var portRegex = RegExp(':[0-9]');
 
                       if (value.isEmpty) {
                         return AppLocalizations.instance
                             .translate('server_add_input_empty');
-                      } else if (!value.contains("wss://")) {
+                      } else if (!value.contains('wss://')) {
                         return AppLocalizations.instance
                             .translate('server_add_no_wss');
                       } else if (!portRegex.hasMatch(value)) {

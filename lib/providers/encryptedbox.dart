@@ -7,12 +7,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:peercoin/models/coinwallet.dart';
 
 class EncryptedBox with ChangeNotifier {
-  Map<String, Box> _cryptoBox = {};
+  final Map<String, Box> _cryptoBox = {};
   Uint8List _encryptionKey;
   String _passCode;
   int _failedAuths = 0;
   int _failedAuthAttempts = 0;
-  FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<Uint8List> get key async {
     if (_encryptionKey == null) {
@@ -27,21 +27,19 @@ class EncryptedBox with ChangeNotifier {
   }
 
   Future<String> get passCode async {
-    if (_passCode == null) {
-      _passCode = await _secureStorage.read(key: "passCode");
-    }
+    _passCode ??= await _secureStorage.read(key: 'passCode');
     return _passCode;
   }
 
   Future<bool> setPassCode(String passCode) async {
-    await _secureStorage.write(key: "passCode", value: passCode);
+    await _secureStorage.write(key: 'passCode', value: passCode);
     _passCode = passCode;
     return true;
   }
 
   Future<int> get failedAuths async {
     if (_failedAuths == 0) {
-      final result = await _secureStorage.read(key: "failedAuths");
+      final result = await _secureStorage.read(key: 'failedAuths');
       if (result == null) {
         _failedAuths = 0;
       } else {
@@ -52,14 +50,14 @@ class EncryptedBox with ChangeNotifier {
   }
 
   Future<void> setFailedAuths(int newInt) async {
-    await _secureStorage.write(key: "failedAuths", value: newInt.toString());
+    await _secureStorage.write(key: 'failedAuths', value: newInt.toString());
     _failedAuths = newInt;
     return true;
   }
 
   Future<int> get failedAuthAttempts async {
     if (_failedAuthAttempts == 0) {
-      final result = await _secureStorage.read(key: "failedAuthAttempts");
+      final result = await _secureStorage.read(key: 'failedAuthAttempts');
       if (result == null) {
         _failedAuthAttempts = 0;
       } else {
@@ -71,7 +69,7 @@ class EncryptedBox with ChangeNotifier {
 
   Future<void> setFailedAuthAttempts(int newInt) async {
     await _secureStorage.write(
-        key: "failedAuthAttempts", value: newInt.toString());
+        key: 'failedAuthAttempts', value: newInt.toString());
     _failedAuthAttempts = newInt;
     return true;
   }
@@ -86,7 +84,7 @@ class EncryptedBox with ChangeNotifier {
 
   Future<Box> getWalletBox() async {
     return await Hive.openBox<CoinWallet>(
-      "wallets",
+      'wallets',
       encryptionCipher: HiveAesCipher(await key),
     );
   }

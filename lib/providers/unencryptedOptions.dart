@@ -7,6 +7,6 @@ class UnencryptedOptions {
 
   Future<bool> get setupFinished async {
     var instance = await prefs;
-    return instance.getBool("setupFinished");
+    return instance.getBool('setupFinished');
   }
 }

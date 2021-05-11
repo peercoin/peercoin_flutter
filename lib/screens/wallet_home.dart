@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -24,7 +24,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   bool _rescanInProgress = false;
-  String _unusedAddress = "";
+  String _unusedAddress = '';
   CoinWallet _wallet;
   int _pageIndex = 1;
   ElectrumConnectionState _connectionState;
@@ -76,17 +76,17 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await _connectionProvider.init(_wallet.name,
           requestedFromWalletHome: true);
 
-      AppSettings _appSettings =
-          Provider.of<AppSettings>(context, listen: false);
-      if (_appSettings.authenticationOptions["walletHome"])
+      var _appSettings = Provider.of<AppSettings>(context, listen: false);
+      if (_appSettings.authenticationOptions['walletHome']) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
 
       _listenedAddresses = _connectionProvider.listenedAddresses.keys;
       if (_connectionState == ElectrumConnectionState.connected) {
-        if (_listenedAddresses.length == 0) {
+        if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider.subscribeToScriptHashes(
               await _activeWallets.getWalletScriptHashes(_wallet.name));
@@ -101,13 +101,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_connectionProvider.latestBlock != null) {
         if (_connectionProvider.latestBlock > _latestBlock) {
           //new block
-          print("new block ${_connectionProvider.latestBlock}");
+          print('new block ${_connectionProvider.latestBlock}');
           _latestBlock = _connectionProvider.latestBlock;
 
           var unconfirmedTx = _walletTransactions.where((element) =>
               element.confirmations < 6 && element.timestamp != -1);
           unconfirmedTx.forEach((element) {
-            print("requesting update for ${element.txid}");
+            print('requesting update for ${element.txid}');
             _connectionProvider.requestTxUpdate(element.txid);
           });
         }
@@ -135,13 +135,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   void selectPopUpMenuItem(String value) {
-    if (value == "import_wallet") {
+    if (value == 'import_wallet') {
       Navigator.of(context)
           .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
-    } else if (value == "server_settings") {
+    } else if (value == 'server_settings') {
       Navigator.of(context)
           .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
-    } else if (value == "rescan") {
+    } else if (value == 'rescan') {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -166,7 +166,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 await _connectionProvider.closeConnection();
                 _rescanInProgress = true;
                 //init rescan
-                Navigator.of(context).pushNamedAndRemoveUntil(
+                await Navigator.of(context).pushNamedAndRemoveUntil(
                     Routes.WalletImportScan, (_) => false,
                     arguments: _wallet.name);
               },
@@ -221,7 +221,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               _activeWallets.transferedAddress = null;
               final _result = await Navigator.of(context).pushNamed(
                   Routes.AddressBook,
-                  arguments: {"name": _wallet.name, "title": _wallet.title});
+                  arguments: {'name': _wallet.name, 'title': _wallet.title});
               if (_result != null) {
                 setState(() {
                   _activeWallets.transferedAddress = _result;
@@ -235,7 +235,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             itemBuilder: (_) {
               return [
                 PopupMenuItem(
-                  value: "import_wallet",
+                  value: 'import_wallet',
                   child: ListTile(
                     leading: Icon(Icons.arrow_circle_down),
                     title: Text(
@@ -245,7 +245,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   ),
                 ),
                 PopupMenuItem(
-                  value: "server_settings",
+                  value: 'server_settings',
                   child: ListTile(
                     leading: Icon(Icons.sync),
                     title: Text(
@@ -255,7 +255,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   ),
                 ),
                 PopupMenuItem(
-                  value: "rescan",
+                  value: 'rescan',
                   child: ListTile(
                     leading: Icon(Icons.sync_problem),
                     title: Text(
