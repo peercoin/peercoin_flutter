@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/widgets/receive_tab.dart';
 import 'package:peercoin/widgets/send_tab.dart';
@@ -27,7 +27,7 @@ class WalletContentSwitch extends StatelessWidget {
             child: SingleChildScrollView(child: ReceiveTab(unusedAddress)));
       case 1:
         return TransactionList(
-          walletTransactions != null ? walletTransactions : [],
+          walletTransactions ?? [],
           identifier,
         );
       case 2:

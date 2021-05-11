@@ -17,7 +17,7 @@ class SetupSaveScreen extends StatefulWidget {
 class _SetupSaveScreenState extends State<SetupSaveScreen> {
   bool _sharedYet = false;
   bool _initial = true;
-  String _seed = "";
+  String _seed = '';
   double _currentSliderValue = 12;
   ActiveWallets _activeWallets;
 
@@ -46,8 +46,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
   }
 
   void recreatePhrase(double sliderValue) async {
-    int _entropy = 128;
-    int _intValue = sliderValue.toInt();
+    var _entropy = 128;
+    var _intValue = sliderValue.toInt();
 
     switch (_intValue) {
       case 16:
@@ -87,7 +87,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Image.asset(
-                      "assets/icon/ppc-icon-white-256.png",
+                      'assets/icon/ppc-icon-white-256.png',
                       width: 50,
                     ),
                     Container(
@@ -129,7 +129,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         ),
                         Text(
                           AppLocalizations.instance
-                              .translate("setup_seed_slider_label"),
+                              .translate('setup_seed_slider_label'),
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ],
@@ -137,7 +137,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                     Text(
                       AppLocalizations.instance.translate(
                           'label_keep_seed_safe', {
-                        "numberOfWords": _currentSliderValue.round().toString()
+                        'numberOfWords': _currentSliderValue.round().toString()
                       }),
                       style: TextStyle(color: Colors.white),
                       textAlign: TextAlign.center,
@@ -152,8 +152,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                                             context,
                                             listen: false)
                                         .prefs;
-                                await prefs.setBool("importedSeed", false);
-                                Navigator.popAndPushNamed(
+                                await prefs.setBool('importedSeed', false);
+                                await Navigator.popAndPushNamed(
                                     context, Routes.SetUpPin);
                               },
                               child: Text(

@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -16,8 +16,7 @@ class _SetupScreenState extends State<SetupScreen> {
     setState(() {
       _loading = true;
     });
-    ActiveWallets _activeWallets =
-        Provider.of<ActiveWallets>(context, listen: false);
+    var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
     await _activeWallets.init();
     await _activeWallets.createPhrase();
     await Navigator.of(context).popAndPushNamed(Routes.SetupScreen);
@@ -44,7 +43,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Image.asset(
-                      "assets/icon/ppc-icon-white-256.png",
+                      'assets/icon/ppc-icon-white-256.png',
                       width: 50,
                     ),
                     Text(

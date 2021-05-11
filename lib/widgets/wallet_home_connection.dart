@@ -8,7 +8,7 @@ class WalletHomeConnection extends StatelessWidget {
   WalletHomeConnection(this._connectionState);
   @override
   Widget build(BuildContext context) {
-    if (_connectionState == ElectrumConnectionState.connected)
+    if (_connectionState == ElectrumConnectionState.connected) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -26,7 +26,7 @@ class WalletHomeConnection extends StatelessWidget {
           ),
         ],
       );
-    else if (_connectionState == ElectrumConnectionState.offline)
+    } else if (_connectionState == ElectrumConnectionState.offline) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -44,10 +44,11 @@ class WalletHomeConnection extends StatelessWidget {
           ),
         ],
       );
-    else
+    } else {
       return Padding(
         padding: const EdgeInsets.all(10.0),
         child: LoadingIndicator(),
       );
+    }
   }
 }

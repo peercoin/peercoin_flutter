@@ -29,7 +29,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/icon/ppc-icon-white-256.png",
+              'assets/icon/ppc-icon-white-256.png',
               width: 50,
             ),
             Text(
@@ -56,10 +56,10 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                 await screenLock(
                   title: HeadingTitle(
                       text: AppLocalizations.instance
-                          .translate("authenticate_title")),
+                          .translate('authenticate_title')),
                   confirmTitle: HeadingTitle(
                       text: AppLocalizations.instance
-                          .translate("authenticate_confirm_title")),
+                          .translate('authenticate_confirm_title')),
                   context: context,
                   correctString: '',
                   digits: 6,
@@ -68,7 +68,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     await Provider.of<EncryptedBox>(context, listen: false)
                         .setPassCode(matchedText);
 
-                    AppSettings settings =
+                    var settings =
                         Provider.of<AppSettings>(context, listen: false);
                     await settings.init();
                     await settings.createInitialSettings(_biometricsAllowed,
@@ -77,7 +77,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     var prefs = await Provider.of<UnencryptedOptions>(context,
                             listen: false)
                         .prefs;
-                    await prefs.setBool("setupFinished", true);
+                    await prefs.setBool('setupFinished', true);
                     await Navigator.of(context).pushNamedAndRemoveUntil(
                         Routes.WalletList, (_) => false);
                   },

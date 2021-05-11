@@ -19,12 +19,12 @@ class AppLocalizations {
   }
 
   static const Map<String, String> availableLocales = {
-    "en": "English",
-    "nl": "Nederlands",
-    "de": "Deutsch",
-    "ro": "Română",
-    "ru": "русский",
-    "zh": "中文 (Zhōngwén)"
+    'en': 'English',
+    'nl': 'Nederlands',
+    'de': 'Deutsch',
+    'ro': 'Română',
+    'ru': 'русский',
+    'zh': '中文 (Zhōngwén)'
   };
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
@@ -46,7 +46,7 @@ class AppLocalizations {
   Future<Map<String, String>> _loadLocalizedStrings(
       Locale localeToBeLoaded) async {
     String jsonString;
-    Map<String, String> localizedStrings = {};
+    var localizedStrings = <String, String>{};
 
     try {
       jsonString = await rootBundle.loadString(
@@ -66,11 +66,11 @@ class AppLocalizations {
   }
 
   String translate(String key, [Map<String, String> arguments]) {
-    String translation = _localizedStrings[key];
+    var translation = _localizedStrings[key];
     translation = translation ?? _fallbackLocalizedStrings[key];
-    translation = translation ?? "";
+    translation = translation ?? '';
 
-    if (arguments == null || arguments.length == 0) {
+    if (arguments == null || arguments.isEmpty) {
       return translation;
     }
 
@@ -80,7 +80,7 @@ class AppLocalizations {
             'Value for "$argumentKey" is null in call of translate(\'$key\')');
         value = '';
       }
-      translation = translation.replaceAll("\$$argumentKey", value);
+      translation = translation.replaceAll('\$$argumentKey', value);
     });
 
     return translation;
@@ -98,7 +98,7 @@ class _AppLocalizationsDelegate
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    AppLocalizations localizations = AppLocalizations._init(locale);
+    var localizations = AppLocalizations._init(locale);
     await localizations.load();
     return localizations;
   }

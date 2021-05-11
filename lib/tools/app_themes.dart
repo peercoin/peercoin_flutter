@@ -16,7 +16,7 @@ class MyTheme {
       900: Color(0xff3cb054),
     },
   );
-  static int _peercoinGreenValue = 0xff3cb054;
+  static final int _peercoinGreenValue = 0xff3cb054;
 
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(

@@ -36,20 +36,24 @@ class _QRScannerState extends State<QRScanner> {
       body: Column(
         children: <Widget>[
           Expanded(
-              child: Stack(children: [
-            _buildQrView(context),
-            Positioned(
-              bottom: 25,
-              right: 25,
-              child: FloatingActionButton(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: Icon(
-                    Icons.lightbulb,
-                    color: Colors.white,
+            child: Stack(
+              children: [
+                _buildQrView(context),
+                Positioned(
+                  bottom: 25,
+                  right: 25,
+                  child: FloatingActionButton(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    onPressed: () async => await controller.toggleFlash(),
+                    child: Icon(
+                      Icons.lightbulb,
+                      color: Colors.white,
+                    ),
                   ),
-                  onPressed: () async => await controller.toggleFlash()),
-            )
-          ]))
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

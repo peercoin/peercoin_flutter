@@ -12,7 +12,7 @@ class LocalNotificationSettings {
     importance: Importance.max,
     priority: Priority.high,
     showWhen: true,
-    sound: RawResourceAndroidNotificationSound("money"),
+    sound: RawResourceAndroidNotificationSound('money'),
   );
 
   static NotificationDetails get platformChannelSpecifics {

@@ -35,7 +35,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       onCleared: clearFilter,
       buildDefaultAppBar: buildAppBar,
       onChanged: applyFilter,
-      hintText: AppLocalizations.instance.translate("search"),
+      hintText: AppLocalizations.instance.translate('search'),
     );
   }
 
@@ -45,7 +45,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         child: FittedBox(
           child: Text(
             AppLocalizations.instance
-                .translate('addressbook_title', {"coin": _walletTitle}),
+                .translate('addressbook_title', {'coin': _walletTitle}),
           ),
         ),
       ),
@@ -71,8 +71,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   void didChangeDependencies() async {
     if (_initial) {
       final _args = ModalRoute.of(context).settings.arguments as Map;
-      _walletName = _args["name"];
-      _walletTitle = _args["title"];
+      _walletName = _args['name'];
+      _walletTitle = _args['title'];
       _walletAddresses =
           await context.watch<ActiveWallets>().getWalletAddresses(_walletName);
       applyFilter();
@@ -90,7 +90,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 
   void applyFilter([String searchedKey]) {
-    List<WalletAddress> _filteredList = [];
+    var _filteredList = <WalletAddress>[];
     if (_pageIndex == 0) {
       _walletAddresses.forEach((e) {
         if (e.isOurs == true || e.isOurs == null) _filteredList.add(e);
@@ -116,8 +116,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
 
   Future<void> _addressEditDialog(
       BuildContext context, WalletAddress address) async {
-    TextEditingController _textFieldController = TextEditingController();
-    _textFieldController.text = address.addressBookName ?? "";
+    var _textFieldController = TextEditingController();
+    _textFieldController.text = address.addressBookName ?? '';
     return showDialog(
       context: context,
       builder: (context) {
@@ -125,7 +125,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
           title: Text(
             AppLocalizations.instance
                     .translate('addressbook_edit_dialog_title') +
-                " ${address.address}",
+                ' ${address.address}',
             textAlign: TextAlign.center,
           ),
           content: TextField(
@@ -137,21 +137,21 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')),
               onPressed: () {
                 Navigator.pop(context);
               },
+              child: Text(AppLocalizations.instance
+                  .translate('server_settings_alert_cancel')),
             ),
             TextButton(
-              child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button'),
-              ),
               onPressed: () {
                 context.read<ActiveWallets>().updateLabel(
                     _walletName, address.address, _textFieldController.text);
                 Navigator.pop(context);
               },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
             ),
           ],
         );
@@ -160,8 +160,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 
   Future<void> _addressAddDialog(BuildContext context) async {
-    TextEditingController _labelController = TextEditingController();
-    TextEditingController _addressController = TextEditingController();
+    var _labelController = TextEditingController();
+    var _addressController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
     return showDialog(
@@ -188,7 +188,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       return AppLocalizations.instance
                           .translate('send_enter_address');
                     }
-                    String sanitized = value.trim();
+                    var sanitized = value.trim();
                     if (Address.validateAddress(
                             sanitized, _availableCoin.networkType) ==
                         false) {
@@ -200,7 +200,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                             (elem) => elem.address == value,
                             orElse: () => null) !=
                         null) {
-                      return "Address already exists";
+                      return 'Address already exists';
                     }
                     return null;
                   },
@@ -217,23 +217,20 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')),
               onPressed: () {
                 Navigator.pop(context);
               },
+              child: Text(AppLocalizations.instance
+                  .translate('server_settings_alert_cancel')),
             ),
             TextButton(
-              child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button'),
-              ),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
                   context.read<ActiveWallets>().updateLabel(
                         _walletName,
                         _addressController.text,
-                        _labelController.text == ""
+                        _labelController.text == ''
                             ? null
                             : _labelController.text,
                       );
@@ -241,6 +238,9 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                   Navigator.pop(context);
                 }
               },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
             ),
           ],
         );
@@ -250,11 +250,12 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_initial)
+    if (_initial) {
       return Scaffold(
           body: Center(
         child: LoadingIndicator(),
       ));
+    }
     return Scaffold(
       appBar: searchBar.build(context),
       bottomNavigationBar: BottomNavigationBar(
@@ -352,7 +353,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                                             .showSnackBar(SnackBar(
                                           content: Text(
                                             AppLocalizations.instance.translate(
-                                                "addressbook_dialog_remove_snack"),
+                                                'addressbook_dialog_remove_snack'),
                                             textAlign: TextAlign.center,
                                           ),
                                           duration: Duration(seconds: 5),
@@ -375,7 +376,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       ),
                       title: Center(
                         child: Text(
-                          _filteredAddr[i].addressBookName ?? "-",
+                          _filteredAddr[i].addressBookName ?? '-',
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,

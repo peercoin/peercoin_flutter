@@ -35,10 +35,11 @@ class AppDrawer extends StatelessWidget {
                   Navigator.of(context).pushReplacementNamed(Routes.About)),
           Divider(),
           ListTile(
-              leading: Icon(Icons.share),
-              title: Text(AppLocalizations.instance.translate('share_app')),
-              onTap: () => Share.share(
-                  "https://play.google.com/store/apps/details?id=com.coinerella.peercoin")) //TODO point to peercoin.net when it's on there
+            leading: Icon(Icons.share),
+            title: Text(AppLocalizations.instance.translate('share_app')),
+            onTap: () => Share.share(
+                'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
+          ) //TODO point to peercoin.net when it's on there
         ],
       )),
     );

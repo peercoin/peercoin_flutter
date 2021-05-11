@@ -13,16 +13,16 @@ enum ElectrumConnectionState { waiting, connected, offline }
 
 class ElectrumConnection with ChangeNotifier {
   static const Map<String, double> _requiredProtocol = {
-    "peercoin": 1.4,
-    "peercoinTestnet": 1.4
+    'peercoin': 1.4,
+    'peercoinTestnet': 1.4
   };
 
   Timer _pingTimer;
   Timer _reconnectTimer;
   IOWebSocketChannel _connection;
-  ActiveWallets _activeWallets;
+  final ActiveWallets _activeWallets;
   ElectrumConnectionState _connectionState;
-  Servers _servers;
+  final Servers _servers;
   Map _addresses = {};
   Map<String, List> _paperWalletUtxos = {};
   String _coinName;
@@ -68,10 +68,10 @@ class ElectrumConnection with ChangeNotifier {
       _coinName = walletName;
       connectionState = ElectrumConnectionState.waiting;
       _scanMode = scanMode;
-      print("init server connection");
+      print('init server connection');
       await _servers.init(walletName);
       await connect();
-      Stream stream = _connection.stream;
+      var stream = _connection.stream;
 
       if (requestedFromWalletHome == true) {
         _closedIntentionally = false;
@@ -80,11 +80,11 @@ class ElectrumConnection with ChangeNotifier {
       stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        print("stream error: $error");
+        print('stream error: $error');
         _connectionAttempt++;
       }, onDone: () {
         cleanUpOnDone();
-        print("connection done");
+        print('connection done');
       });
       tryHandShake();
       startPingTimer();
@@ -95,16 +95,16 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   Future<void> connect() async {
-    print("connection attempt $_connectionAttempt");
     //get server list from server provider
     _availableServers = await _servers.getServerList(_coinName);
     //reset attempt if attempt pointer is outside list
     if (_connectionAttempt > _availableServers.length - 1) {
       _connectionAttempt = 0;
     }
+    print('connection attempt $_connectionAttempt');
 
     _serverUrl = _availableServers[_connectionAttempt];
-    print("connecting to $_serverUrl");
+    print('connecting to $_serverUrl');
 
     _connectionAttempt++;
     try {
@@ -112,7 +112,7 @@ class ElectrumConnection with ChangeNotifier {
         _serverUrl,
       );
     } catch (e) {
-      print("connection error: $e");
+      print('connection error: $e');
     }
   }
 
@@ -181,41 +181,41 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void replyHandler(reply) {
-    developer.log("${DateTime.now().toIso8601String()} $reply");
+    developer.log('${DateTime.now().toIso8601String()} $reply');
     var decoded = json.decode(reply);
-    var id = decoded["id"];
-    String idString = id.toString();
-    var result = decoded["result"];
+    var id = decoded['id'];
+    var idString = id.toString();
+    var result = decoded['result'];
 
-    if (decoded["id"] != null) {
-      print("replyhandler $idString");
-      if (idString == "version") {
+    if (decoded['id'] != null) {
+      print('replyhandler $idString');
+      if (idString == 'version') {
         handleVersion(result);
-      } else if (idString.startsWith("history_")) {
+      } else if (idString.startsWith('history_')) {
         handleHistory(result);
-      } else if (idString.startsWith("tx_")) {
+      } else if (idString.startsWith('tx_')) {
         handleTx(id, result);
-      } else if (idString.startsWith("utxo_")) {
+      } else if (idString.startsWith('utxo_')) {
         handleUtxo(id, result);
-      } else if (idString.startsWith("paperwallet_")) {
+      } else if (idString.startsWith('paperwallet_')) {
         handlePaperWallet(id, result);
-      } else if (idString.startsWith("broadcast_")) {
+      } else if (idString.startsWith('broadcast_')) {
         handleBroadcast(id, result);
-      } else if (idString == "blocks") {
-        handleBlock(result["height"]);
+      } else if (idString == 'blocks') {
+        handleBlock(result['height']);
       } else if (_addresses[idString] != null) {
         handleAddressStatus(id, result);
-      } else if (idString == "features") {
+      } else if (idString == 'features') {
         handleFeatures(result);
       }
-    } else if (decoded["params"] != null) {
-      switch (decoded["method"]) {
-        case "blockchain.scripthash.subscribe":
+    } else if (decoded['params'] != null) {
+      switch (decoded['method']) {
+        case 'blockchain.scripthash.subscribe':
           handleScriptHashSubscribeNotification(
-              decoded["params"][0], decoded["params"][1]);
+              decoded['params'][0], decoded['params'][1]);
           break;
-        case "blockchain.headers.subscribe":
-          handleBlock(decoded["params"][0]["height"]);
+        case 'blockchain.headers.subscribe':
+          handleBlock(decoded['params'][0]['height']);
           break;
       }
     }
@@ -225,24 +225,24 @@ class ElectrumConnection with ChangeNotifier {
     if (_connection != null) {
       _connection.sink.add(
         json.encode(
-          {"id": id, "method": method, if (params != null) "params": params},
+          {'id': id, 'method': method, if (params != null) 'params': params},
         ),
       );
     }
   }
 
   void tryHandShake() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    var packageInfo = await PackageInfo.fromPlatform();
     sendMessage(
-      "server.version",
-      "version",
-      ["${packageInfo.appName}-flutter-${packageInfo.version}"],
+      'server.version',
+      'version',
+      ['${packageInfo.appName}-flutter-${packageInfo.version}'],
     );
-    sendMessage("server.features", "features");
+    sendMessage('server.features', 'features');
   }
 
   void handleVersion(List result) {
-    double version = double.parse(result.elementAt(result.length - 1));
+    var version = double.parse(result.elementAt(result.length - 1));
     if (version < _requiredProtocol[_coinName]) {
       //protocol version too low!
       closeConnection(false);
@@ -250,15 +250,15 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void handleFeatures(Map result) {
-    if (result["genesis_hash"] ==
+    if (result['genesis_hash'] ==
         AvailableCoins().getSpecificCoin(_coinName).genesisHash) {
       //we're connected and genesis handshake is successful
       connectionState = ElectrumConnectionState.connected;
       //subscribe to block headers
-      sendMessage("blockchain.headers.subscribe", "blocks");
+      sendMessage('blockchain.headers.subscribe', 'blocks');
     } else {
       //wrong genesis!
-      print("wrong genesis! disconnecting.");
+      print('wrong genesis! disconnecting.');
       closeConnection(false);
     }
   }
@@ -274,27 +274,25 @@ class ElectrumConnection with ChangeNotifier {
       //emulate scripthash subscribe push
       var hash = _addresses.entries
           .firstWhere((element) => element.key == address, orElse: () => null);
-      print("status changed! $oldStatus, $newStatus");
+      print('status changed! $oldStatus, $newStatus');
       //handle the status update
       handleScriptHashSubscribeNotification(hash.value, newStatus);
     }
   }
 
   void startPingTimer() {
-    if (_pingTimer == null) {
-      _pingTimer = Timer.periodic(
-        Duration(minutes: 8),
-        (_) {
-          sendMessage("server.ping", "ping");
-        },
-      );
-    }
+    _pingTimer ??= Timer.periodic(
+      Duration(minutes: 8),
+      (_) {
+        sendMessage('server.ping', 'ping');
+      },
+    );
   }
 
   void subscribeToScriptHashes(Map addresses) {
     addresses.entries.forEach((hash) {
       _addresses[hash.key] = hash.value;
-      sendMessage("blockchain.scripthash.subscribe", hash.key, [hash.value]);
+      sendMessage('blockchain.scripthash.subscribe', hash.key, [hash.value]);
     });
   }
 
@@ -304,33 +302,33 @@ class ElectrumConnection with ChangeNotifier {
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
         orElse: () => null);
-    print("update for $hashId");
+    print('update for $hashId');
     //update status so we flag that we proccessed this update already
     await _activeWallets.updateAddressStatus(_coinName, address, newStatus);
     //fire listunspent to get utxo
     sendMessage(
-      "blockchain.scripthash.listunspent",
-      "utxo_$address",
+      'blockchain.scripthash.listunspent',
+      'utxo_$address',
       [hashId],
     );
   }
 
   void requestPaperWalletUtxos(String hashId, String address) {
     sendMessage(
-      "blockchain.scripthash.listunspent",
-      "paperwallet_$address",
+      'blockchain.scripthash.listunspent',
+      'paperwallet_$address',
       [hashId],
     );
   }
 
   void handlePaperWallet(String id, List utxos) {
-    final txAddr = id.replaceFirst("paperwallet_", "");
+    final txAddr = id.replaceFirst('paperwallet_', '');
     _paperWalletUtxos[txAddr] = utxos;
     notifyListeners();
   }
 
   void handleUtxo(String id, List utxos) async {
-    final txAddr = id.replaceFirst("utxo_", "");
+    final txAddr = id.replaceFirst('utxo_', '');
     await _activeWallets.putUtxos(
       _coinName,
       txAddr,
@@ -338,18 +336,18 @@ class ElectrumConnection with ChangeNotifier {
     );
     //fire get_history
     sendMessage(
-      "blockchain.scripthash.get_history",
-      "history_$txAddr",
+      'blockchain.scripthash.get_history',
+      'history_$txAddr',
       [_addresses[txAddr]],
     );
   }
 
   void handleHistory(List result) async {
     result.forEach((historyTx) {
-      var txId = historyTx["tx_hash"];
+      var txId = historyTx['tx_hash'];
       sendMessage(
-        "blockchain.transaction.get",
-        "tx_$txId",
+        'blockchain.transaction.get',
+        'tx_$txId',
         [txId, true],
       );
     });
@@ -357,39 +355,40 @@ class ElectrumConnection with ChangeNotifier {
 
   void requestTxUpdate(String txId) {
     sendMessage(
-      "blockchain.transaction.get",
-      "tx_$txId",
+      'blockchain.transaction.get',
+      'tx_$txId',
       [txId, true],
     );
   }
 
   void broadcastTransaction(String txHash, String txId) {
     sendMessage(
-      "blockchain.transaction.broadcast",
-      "broadcast_$txId",
+      'blockchain.transaction.broadcast',
+      'broadcast_$txId',
       [txHash],
     );
   }
 
   void handleTx(String id, Map tx) async {
-    String txId = id.replaceFirst("tx_", "");
-    String addr = await _activeWallets.getAddressForTx(_coinName, txId);
+    var txId = id.replaceFirst('tx_', '');
+    var addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
       await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     }
   }
 
   void handleBroadcast(String id, String result) {
-    String txId = id.replaceFirst("broadcast_", "");
-    if (txId != "import") {
+    var txId = id.replaceFirst('broadcast_', '');
+    if (txId != 'import') {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
     //TODO error handling if server rejects tx
   }
 
   String get connectedServerUrl {
-    if (_connectionState == ElectrumConnectionState.connected)
+    if (_connectionState == ElectrumConnectionState.connected) {
       return _serverUrl;
-    return "";
+    }
+    return '';
   }
 }

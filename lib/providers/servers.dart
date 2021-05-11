@@ -4,33 +4,33 @@ import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 
 class Servers with ChangeNotifier {
-  EncryptedBox _encryptedBox;
+  final EncryptedBox _encryptedBox;
   Box<Server> _serverBox;
   Servers(this._encryptedBox);
 
   static const Map<String, List> _seeds = {
-    "peercoin": [
-      "wss://electrum.peercoinexplorer.net:50004",
-      "wss://allingas.peercoinexplorer.net:50004",
+    'peercoin': [
+      'wss://electrum.peercoinexplorer.net:50004',
+      'wss://allingas.peercoinexplorer.net:50004',
     ],
-    "peercoinTestnet": [
-      "wss://testnet-electrum.peercoinexplorer.net:50004",
+    'peercoinTestnet': [
+      'wss://testnet-electrum.peercoinexplorer.net:50009',
     ]
   };
 
   Future<void> init(String coinIdentifier) async {
-    print("init server provider");
+    print('init server provider');
     _serverBox = await Hive.openBox<Server>(
-      "serverBox-$coinIdentifier",
+      'serverBox-$coinIdentifier',
       encryptionCipher: HiveAesCipher(await _encryptedBox.key),
     );
 
     //check first run
     if (_serverBox.isEmpty) {
-      print("server storage is empty, initializing");
+      print('server storage is empty, initializing');
 
       _seeds[coinIdentifier].asMap().forEach((index, hardcodedSeedAddress) {
-        Server newServer = Server(
+        var newServer = Server(
           address: hardcodedSeedAddress,
           priority: index,
           userGenerated: false,
@@ -41,20 +41,30 @@ class Servers with ChangeNotifier {
 
     // check if all hard coded seeds for this coin are already in db
     _seeds[coinIdentifier].forEach((hardcodedSeedAddress) {
-      Server res = _serverBox.values.firstWhere(
+      var res = _serverBox.values.firstWhere(
           (element) => element.getAddress == hardcodedSeedAddress,
           orElse: () => null);
       if (res == null) {
         //hard coded server not yet in storage
-        print("$hardcodedSeedAddress not yet in storage");
+        print('$hardcodedSeedAddress not yet in storage');
         addServer(hardcodedSeedAddress);
+      }
+    });
+    //check if hard coded seeds have been removed
+    _serverBox.values.forEach((boxElement) {
+      var res = _seeds[coinIdentifier].firstWhere(
+          (element) => element == boxElement.address,
+          orElse: () => null);
+      if (res == null) {
+        print('${boxElement.address} not existant anymore');
+        removeServer(boxElement);
       }
     });
   }
 
   void addServer(String url, [bool userGenerated = false]) {
     final priority = _serverBox.length;
-    Server newServer = Server(
+    var newServer = Server(
       address: url,
       priority: priority,
       userGenerated: userGenerated,
@@ -73,9 +83,9 @@ class Servers with ChangeNotifier {
 
   Future<List> getServerList(String coinIdentifier) async {
     //form list
-    List _availableServers = List.generate(
+    var _availableServers = List.generate(
       _serverBox.values.length,
-      (index) => null,
+      (index) => '',
     );
     _serverBox.values.forEach((Server server) {
       if (server.hidden == false && server.connectable == true) {
@@ -83,21 +93,19 @@ class Servers with ChangeNotifier {
       }
     });
 
-    final _prunedList = _availableServers.whereType<String>().toList();
-    print("available servers $_prunedList");
+    final _prunedList =
+        _availableServers.where((element) => element.isNotEmpty).toList();
+    print('available servers $_prunedList');
 
     return _prunedList;
   }
 
   Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
     //form list
-    List<Server> _availableServersDetails = List.generate(
-      _serverBox.values.length,
-      (index) => null,
-    );
+    var _availableServersDetails = <Server>[];
+
     _serverBox.values.forEach((Server server) {
-      _availableServersDetails.removeAt(server.priority);
-      _availableServersDetails.insert(server.priority, server);
+      _availableServersDetails.add(server);
     });
 
     //sort by connectable

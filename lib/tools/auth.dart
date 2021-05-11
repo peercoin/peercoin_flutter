@@ -48,12 +48,12 @@ class Auth {
             ),
             actions: [
               TextButton(
-                child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
-                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                child: Text(
+                  AppLocalizations.instance.translate('jail_dialog_button'),
+                ),
               ),
             ],
           );
@@ -78,17 +78,17 @@ class Auth {
             ),
             actions: [
               TextButton(
-                child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
-                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                child: Text(
+                  AppLocalizations.instance.translate('jail_dialog_button'),
+                ),
               ),
             ],
           );
         });
-    Navigator.of(context)
+    await Navigator.of(context)
         .pushReplacementNamed(Routes.AuthJail, arguments: jailedFromHome);
   }
 
@@ -109,10 +109,10 @@ class Auth {
               .translate('authenticate_biometric_reason'),
           stickyAuth: true);
       if (didAuthenticate) {
-        executeCallback(context, callback);
+        await executeCallback(context, callback);
       }
     } catch (e) {
-      localAuth.stopAuthentication();
+      await localAuth.stopAuthentication();
     }
   }
 
@@ -134,7 +134,7 @@ class Auth {
       title: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-              text: AppLocalizations.instance.translate("authenticate_title"),
+              text: AppLocalizations.instance.translate('authenticate_title'),
               style: TextStyle(
                 fontSize: 24,
               ),
@@ -142,16 +142,16 @@ class Auth {
                 TextSpan(
                   text: AppLocalizations.instance.translate(
                     retriesLeft == 1
-                        ? "authenticate_subtitle_singular"
-                        : "authenticate_subtitle_plural",
-                    {"retriesLeft": retriesLeft.toString()},
+                        ? 'authenticate_subtitle_singular'
+                        : 'authenticate_subtitle_plural',
+                    {'retriesLeft': retriesLeft.toString()},
                   ),
                   style: TextStyle(fontSize: 14),
                 )
               ])),
       confirmTitle: HeadingTitle(
           text: AppLocalizations.instance
-              .translate("authenticate_confirm_title")),
+              .translate('authenticate_confirm_title')),
       customizedButtonChild: biometricsAllowed
           ? Icon(
               Icons.fingerprint,
@@ -168,7 +168,7 @@ class Auth {
       },
       didError: (retries) => errorHandler(context, retries),
       didMaxRetries: (_) async {
-        spawnJail(context, jailedFromHome);
+        await spawnJail(context, jailedFromHome);
       },
     );
   }

@@ -21,7 +21,7 @@ class WalletTransaction extends HiveObject {
   @HiveField(7)
   bool broadCasted = true;
   @HiveField(8)
-  String broadcastHex = "";
+  String broadcastHex = '';
 
   WalletTransaction({
     @required this.txid,
@@ -48,6 +48,6 @@ class WalletTransaction extends HiveObject {
   }
 
   void resetBroadcastHex() {
-    broadcastHex = "";
+    broadcastHex = '';
   }
 }

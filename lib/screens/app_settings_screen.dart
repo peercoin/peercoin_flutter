@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -19,9 +19,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   bool _biometricsAllowed;
   bool _biometricsRevealed = false;
-  String _seedPhrase = "";
-  String _lang = "";
-  String _defaultWallet = "";
+  String _seedPhrase = '';
+  String _lang = '';
+  String _defaultWallet = '';
   bool _languageChangeInfoDisplayed = false;
   Map<String, bool> _authenticationOptions;
   AppSettings _settings;
@@ -74,13 +74,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       biometricsAllowed,
       () async => await screenLock(
         title: Text(
-          AppLocalizations.instance.translate("authenticate_title_new"),
+          AppLocalizations.instance.translate('authenticate_title_new'),
           style: TextStyle(
             fontSize: 24,
           ),
         ),
         confirmTitle: Text(
-          AppLocalizations.instance.translate("authenticate_confirm_title_new"),
+          AppLocalizations.instance.translate('authenticate_confirm_title_new'),
           style: TextStyle(
             fontSize: 24,
           ),
@@ -95,7 +95,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               AppLocalizations.instance
-                  .translate("authenticate_change_pin_success"),
+                  .translate('authenticate_change_pin_success'),
               textAlign: TextAlign.center,
             ),
             duration: Duration(seconds: 2),
@@ -112,7 +112,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate("app_settings_language_restart"),
+          AppLocalizations.instance.translate('app_settings_language_restart'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -124,7 +124,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveDefaultWallet(String wallet) async {
-    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? "" : wallet);
+    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
   }
 
   @override
@@ -133,7 +133,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     _authenticationOptions = _settings.authenticationOptions ?? false;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
-    _defaultWallet = _settings.defaultWallet ?? "";
+    _defaultWallet = _settings.defaultWallet ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -217,20 +217,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                   AppLocalizations.instance
                                       .translate('app_settings_walletList'),
                                 ),
-                                value: _authenticationOptions["walletList"],
+                                value: _authenticationOptions['walletList'],
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
-                                      "walletList", newState);
+                                      'walletList', newState);
                                 }),
                             SwitchListTile(
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('app_settings_walletHome'),
                                 ),
-                                value: _authenticationOptions["walletHome"],
+                                value: _authenticationOptions['walletHome'],
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
-                                      "walletHome", newState);
+                                      'walletHome', newState);
                                 }),
                             SwitchListTile(
                                 title: Text(
@@ -238,20 +238,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                       'app_settings_sendTransaction'),
                                 ),
                                 value:
-                                    _authenticationOptions["sendTransaction"],
+                                    _authenticationOptions['sendTransaction'],
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
-                                      "sendTransaction", newState);
+                                      'sendTransaction', newState);
                                 }),
                             SwitchListTile(
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('app_settings_newWallet'),
                                 ),
-                                value: _authenticationOptions["newWallet"],
+                                value: _authenticationOptions['newWallet'],
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
-                                      "newWallet", newState);
+                                      'newWallet', newState);
                                 }),
                             ElevatedButton(
                               onPressed: () =>
@@ -269,7 +269,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       style: Theme.of(context).textTheme.headline6),
                   childrenPadding: EdgeInsets.all(10),
                   children: [
-                    _seedPhrase == ""
+                    _seedPhrase == ''
                         ? ElevatedButton(
                             onPressed: () =>
                                 revealSeedPhrase(_settings.biometricsAllowed),

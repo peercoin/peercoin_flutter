@@ -18,10 +18,10 @@ class ImportPaperWalletScreen extends StatefulWidget {
 
 class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   int _currentStep = 1;
-  String _pubKey = "";
-  String _privKey = "";
-  String _balance = "";
-  String _transactionHex = "";
+  String _pubKey = '';
+  String _privKey = '';
+  String _balance = '';
+  String _transactionHex = '';
   int _balanceInt = 0;
   int _requiredFee = 0;
   Coin _activeCoin;
@@ -43,7 +43,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         _initial = false;
       });
     }
-    if (_connectionProvider.paperWalletUtxos.length > 0 &&
+    if (_connectionProvider.paperWalletUtxos.isNotEmpty &&
         _connectionProvider.paperWalletUtxos != _paperWalletUtxos) {
       _paperWalletUtxos = _connectionProvider.paperWalletUtxos;
       calculateBalance();
@@ -61,10 +61,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     if (step == _currentStep) {
       switch (step) {
         case 1:
-          createQrScanner("pub");
+          createQrScanner('pub');
           break;
         case 2:
-          createQrScanner("priv");
+          createQrScanner('priv');
           break;
         case 3:
           requestUtxos();
@@ -85,12 +85,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   void createQrScanner(String keyType) async {
     final result = await Navigator.of(context).pushNamed(
       Routes.QRScan,
-      arguments: AppLocalizations.instance.translate(keyType == "pub"
+      arguments: AppLocalizations.instance.translate(keyType == 'pub'
           ? 'paperwallet_step_1_text'
           : 'paperwallet_step_2_text'),
     );
     if (result != null) {
-      keyType == "pub" ? validatePubKey(result) : validatePrivKey(result);
+      keyType == 'pub' ? validatePubKey(result) : validatePrivKey(result);
     }
   }
 
@@ -100,7 +100,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _newKey = pubKey;
       moveStep(2);
     } else {
-      _newKey = "Invalid address";
+      _newKey = 'Invalid address';
     }
     setState(() {
       _pubKey = _newKey;
@@ -110,7 +110,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   void validatePrivKey(String privKey) {
     String _newKey;
     Wallet _wallet;
-    bool _error = false;
+    var _error = false;
     try {
       _wallet = Wallet.fromWIF(privKey, _activeCoin.networkType);
     } catch (e) {
@@ -121,7 +121,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _newKey = privKey;
       moveStep(3);
     } else {
-      _newKey = "Invalid private key";
+      _newKey = 'Invalid private key';
     }
     setState(() {
       _privKey = _newKey;
@@ -137,15 +137,15 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   void calculateBalance() {
-    int _totalValue = 0;
+    var _totalValue = 0;
     _paperWalletUtxos[_pubKey].forEach((element) {
-      _totalValue += element["value"];
+      _totalValue += element['value'];
     });
     setState(() {
       _balanceLoading = false;
       _balanceInt = _totalValue;
       _balance =
-          "${(_totalValue / 1000000).toString()} ${_activeCoin.letterCode}";
+          '${(_totalValue / 1000000).toString()} ${_activeCoin.letterCode}';
     });
     moveStep(4);
   }
@@ -154,15 +154,15 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     if (_balanceInt == 0 || _balanceInt < _activeCoin.minimumTxValue) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate("paperwallet_error_1"),
+          AppLocalizations.instance.translate('paperwallet_error_1'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 5),
       ));
     } else {
-      bool _firstPress = true;
+      var _firstPress = true;
       await buildImportTx();
-      showDialog(
+      await showDialog(
         context: context,
         builder: (_) {
           final _displayValue = (_balanceInt - _requiredFee) / 1000000;
@@ -176,7 +176,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Column(
                   children: [
-                    Text("Importing $_displayValue ${_activeCoin.letterCode}",
+                    Text('Importing $_displayValue ${_activeCoin.letterCode}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -186,13 +186,13 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(AppLocalizations.instance.translate('send_fee', {
-                    'amount': "${_requiredFee / 1000000}",
-                    'letter_code': "${_activeCoin.letterCode}"
+                    'amount': '${_requiredFee / 1000000}',
+                    'letter_code': '${_activeCoin.letterCode}'
                   })),
                   Text(
                       AppLocalizations.instance.translate('send_total', {
-                        'amount': "${_balanceInt / 1000000}",
-                        'letter_code': "${_activeCoin.letterCode}"
+                        'amount': '${_balanceInt / 1000000}',
+                        'letter_code': '${_activeCoin.letterCode}'
                       }),
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
@@ -211,21 +211,21 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       await buildImportTx(_requiredFee, false);
                       //broadcast
                       Provider.of<ElectrumConnection>(context, listen: false)
-                          .broadcastTransaction(_transactionHex, "import");
+                          .broadcastTransaction(_transactionHex, 'import');
                       //pop message
                       Navigator.of(context).pop();
                       //pop again to close import screen
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           AppLocalizations.instance
-                              .translate("paperwallet_success"),
+                              .translate('paperwallet_success'),
                           textAlign: TextAlign.center,
                         ),
                         duration: Duration(seconds: 5),
                       ));
                       Navigator.of(context).pop();
                     } catch (e) {
-                      print("error $e");
+                      print('error $e');
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppLocalizations.instance.translate(
@@ -251,7 +251,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     tx.addOutput(_activeWallets.getUnusedAddress, _balanceInt - fee);
     //add inputs
     _paperWalletUtxos[_pubKey].forEach((utxo) {
-      tx.addInput(utxo["tx_hash"], utxo["tx_pos"]);
+      tx.addInput(utxo['tx_hash'], utxo['tx_pos']);
     });
     //sign
     _paperWalletUtxos[_pubKey].asMap().forEach((index, utxo) {
@@ -265,7 +265,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     var number = ((intermediate.txSize) / 1000 * _activeCoin.feePerKb)
         .toStringAsFixed(_activeCoin.fractions);
     var asDouble = double.parse(number) * 1000000;
-    int requiredFeeInSatoshis = asDouble.toInt();
+    var requiredFeeInSatoshis = asDouble.toInt();
 
     if (dryRun == false) {
       _transactionHex = intermediate.toHex();
@@ -283,7 +283,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            AppLocalizations.instance.translate("wallet_pop_menu_paperwallet"),
+            AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
           ),
         ),
         body: Column(

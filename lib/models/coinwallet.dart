@@ -7,25 +7,28 @@ part 'coinwallet.g.dart';
 @HiveType(typeId: 1)
 class CoinWallet extends HiveObject {
   @HiveField(0)
-  String _name;
+  final String _name;
 
   @HiveField(1)
-  String _letterCode;
+  final String _letterCode;
 
   @HiveField(2)
+  // ignore: prefer_final_fields
   List<WalletAddress> _addresses = [];
 
   @HiveField(3)
+  // ignore: prefer_final_fields
   List<WalletTransaction> _transactions = [];
 
   @HiveField(4)
+  // ignore: prefer_final_fields
   List<WalletUtxo> _utxos = [];
 
   @HiveField(5)
   int _balance = 0;
 
   @HiveField(6)
-  String _title;
+  final String _title;
 
   @HiveField(7)
   int _unconfirmedBalance = 0;
@@ -66,12 +69,12 @@ class CoinWallet extends HiveObject {
 
   set balance(int newBalance) {
     _balance = newBalance;
-    this.save();
+    save();
   }
 
   set unconfirmedBalance(int newBalance) {
     _unconfirmedBalance = newBalance;
-    this.save();
+    save();
   }
 
   set addNewAddress(WalletAddress newAddress) {
@@ -80,28 +83,28 @@ class CoinWallet extends HiveObject {
         orElse: () => null);
     if (res == null) {
       _addresses.add(newAddress);
-      this.save();
+      save();
     }
   }
 
   void putTransaction(WalletTransaction newTx) {
     _transactions.add(newTx);
-    this.save();
+    save();
   }
 
   void putUtxo(WalletUtxo newUtxo) {
     _utxos.add(newUtxo);
-    this.save();
+    save();
   }
 
   void clearUtxo(String address) {
     _utxos.removeWhere((element) => element.address == address);
-    this.save();
+    save();
   }
 
   void removeAddress(WalletAddress walletAddress) {
     _addresses
         .removeWhere((element) => element.address == walletAddress.address);
-    this.save();
+    save();
   }
 }
