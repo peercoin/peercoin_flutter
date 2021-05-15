@@ -268,12 +268,12 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         currentIndex: _pageIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_left),
+            icon: Icon(Icons.download_sharp),
             label: AppLocalizations.instance
                 .translate('addressbook_bottom_bar_your_addresses'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_right),
+            icon: Icon(Icons.upload_sharp),
             label: AppLocalizations.instance
                 .translate('addressbook_bottom_bar_sending_addresses'),
           )
