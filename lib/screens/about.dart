@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_themes.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mailto/mailto.dart';
@@ -71,6 +72,9 @@ class _AboutScrenState extends State<AboutScren> {
                               {'year': DateFormat.y().format(DateTime.now())},
                             )),
                             TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: MyTheme.peercoinGreen,
+                                ),
                                 onPressed: () => _launchURL(
                                     'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
                                 child: Text(
@@ -83,6 +87,9 @@ class _AboutScrenState extends State<AboutScren> {
                               AppLocalizations.instance.translate('about_free'),
                             ),
                             TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: MyTheme.peercoinGreen,
+                                ),
                                 onPressed: () => _launchURL(
                                     'https://github.com/peercoin/peercoin_flutter'),
                                 child: Text(
@@ -96,6 +103,9 @@ class _AboutScrenState extends State<AboutScren> {
                                   .translate('about_data_protection'),
                             ),
                             TextButton(
+                              style: TextButton.styleFrom(
+                                primary: MyTheme.peercoinGreen,
+                              ),
                               onPressed: () => _launchURL(
                                   'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
                               child: Text(
@@ -110,6 +120,9 @@ class _AboutScrenState extends State<AboutScren> {
                                   .translate('about_foundation'),
                             ),
                             TextButton(
+                              style: TextButton.styleFrom(
+                                primary: MyTheme.peercoinGreen,
+                              ),
                               onPressed: () => _launchURL(
                                   'https://www.peercoin.net/foundation'),
                               child: Text(
@@ -124,6 +137,9 @@ class _AboutScrenState extends State<AboutScren> {
                                   .translate('about_translate'),
                             ),
                             TextButton(
+                              style: TextButton.styleFrom(
+                                primary: MyTheme.peercoinGreen,
+                              ),
                               onPressed: () async =>
                                   _launchURL('https://weblate.ppc.lol'),
                               child: Text(
@@ -138,6 +154,9 @@ class _AboutScrenState extends State<AboutScren> {
                                   .translate('about_help_or_feedback'),
                             ),
                             TextButton(
+                              style: TextButton.styleFrom(
+                                primary: MyTheme.peercoinGreen,
+                              ),
                               onPressed: () async => launchMailto(),
                               child: Text(
                                 AppLocalizations.instance
