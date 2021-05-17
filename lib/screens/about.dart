@@ -73,7 +73,7 @@ class _AboutScrenState extends State<AboutScren> {
                             )),
                             TextButton(
                                 style: TextButton.styleFrom(
-                                  primary: MyTheme.peercoinGreen,
+                                  primary: Theme.of(context).primaryColor,
                                 ),
                                 onPressed: () => _launchURL(
                                     'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
@@ -88,7 +88,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                                 style: TextButton.styleFrom(
-                                  primary: MyTheme.peercoinGreen,
+                                  primary: Theme.of(context).primaryColor,
                                 ),
                                 onPressed: () => _launchURL(
                                     'https://github.com/peercoin/peercoin_flutter'),
@@ -104,7 +104,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                primary: MyTheme.peercoinGreen,
+                                primary: Theme.of(context).primaryColor,
                               ),
                               onPressed: () => _launchURL(
                                   'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
@@ -121,7 +121,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                primary: MyTheme.peercoinGreen,
+                                primary: Theme.of(context).primaryColor,
                               ),
                               onPressed: () => _launchURL(
                                   'https://www.peercoin.net/foundation'),
@@ -138,7 +138,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                primary: MyTheme.peercoinGreen,
+                                primary: Theme.of(context).primaryColor,
                               ),
                               onPressed: () async =>
                                   _launchURL('https://weblate.ppc.lol'),
@@ -155,7 +155,7 @@ class _AboutScrenState extends State<AboutScren> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                primary: MyTheme.peercoinGreen,
+                                primary: Theme.of(context).primaryColor,
                               ),
                               onPressed: () async => launchMailto(),
                               child: Text(
