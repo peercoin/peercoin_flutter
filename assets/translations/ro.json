@@ -101,7 +101,7 @@
     "authenticate_subtitle_singular": "$retriesLeft încercare v-a rămas",
     "authenticate_subtitle_plural": "$retriesLeft încercări v-au rămas",
     "authenticate_title_new": "Introduceți codul PIN nou",
-    "authenticate_confirm_title": "Reintroduceți codul PIN \n",
+    "authenticate_confirm_title": "Reintroduceți codul PIN",
     "authenticate_confirm_title_new": "Reintroduceți codul PIN nou",
     "authenticate_change_pin_success": "PIN-ul a fost schimbat",
     "authenticate_retry_warning_title": "Atenţie! V-a mai rămas o singură încercare.",
