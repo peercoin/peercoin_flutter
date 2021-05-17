@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
@@ -16,6 +17,24 @@ class SetupPinCodeScreen extends StatefulWidget {
 
 class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
   bool _biometricsAllowed = true;
+  bool _initial = true;
+  bool _biometricsAvailable = false;
+
+  @override
+  void didChangeDependencies() async {
+    if (_initial) {
+      var localAuth = LocalAuthentication();
+      _biometricsAvailable = await localAuth.canCheckBiometrics;
+      if (_biometricsAvailable == false) {
+        _biometricsAllowed = false;
+      }
+    }
+    setState(() {
+      _initial = false;
+    });
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +66,20 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                 activeColor: Colors.white,
                 inactiveThumbColor: Colors.grey,
                 onChanged: (newState) {
-                  setState(() {
-                    _biometricsAllowed = newState;
-                  });
+                  if (_biometricsAvailable == false) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        AppLocalizations.instance
+                            .translate('setup_pin_no_biometrics'),
+                        textAlign: TextAlign.center,
+                      ),
+                      duration: Duration(seconds: 5),
+                    ));
+                  } else {
+                    setState(() {
+                      _biometricsAllowed = newState;
+                    });
+                  }
                 }),
             ElevatedButton(
               onPressed: () async {

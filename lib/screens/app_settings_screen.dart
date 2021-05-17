@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
@@ -19,6 +20,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   bool _biometricsAllowed;
   bool _biometricsRevealed = false;
+  bool _biometricsAvailable = false;
   String _seedPhrase = '';
   String _lang = '';
   String _defaultWallet = '';
@@ -34,6 +36,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       _settings = context.watch<AppSettings>();
       _activeWallets = context.watch<ActiveWallets>();
       _availableWallets = await _activeWallets.activeWalletsValues;
+      var localAuth = LocalAuthentication();
+      _biometricsAvailable = await localAuth.canCheckBiometrics;
+      if (_biometricsAvailable == false) {
+        _settings.setBiometricsAllowed(false);
+      }
       setState(() {
         _initial = false;
       });
@@ -125,6 +132,17 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   void saveDefaultWallet(String wallet) async {
     _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
+    saveSnack(context);
+  }
+
+  void saveSnack(context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('app_settings_saved_snack'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 2),
+    ));
   }
 
   @override
@@ -210,7 +228,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 ),
                                 value: _biometricsAllowed,
                                 onChanged: (newState) {
-                                  _settings.setBiometricsAllowed(newState);
+                                  if (_biometricsAvailable == false) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                        AppLocalizations.instance.translate(
+                                            'setup_pin_no_biometrics'),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 5),
+                                    ));
+                                  } else {
+                                    _settings.setBiometricsAllowed(newState);
+                                    saveSnack(context);
+                                  }
                                 }),
                             SwitchListTile(
                                 title: Text(
@@ -221,6 +252,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
                                       'walletList', newState);
+                                  saveSnack(context);
                                 }),
                             SwitchListTile(
                                 title: Text(
@@ -231,6 +263,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
                                       'walletHome', newState);
+                                  saveSnack(context);
                                 }),
                             SwitchListTile(
                                 title: Text(
@@ -242,6 +275,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
                                       'sendTransaction', newState);
+                                  saveSnack(context);
                                 }),
                             SwitchListTile(
                                 title: Text(
@@ -252,6 +286,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 onChanged: (newState) {
                                   _settings.setAuthenticationOptions(
                                       'newWallet', newState);
+                                  saveSnack(context);
                                 }),
                             ElevatedButton(
                               onPressed: () =>
