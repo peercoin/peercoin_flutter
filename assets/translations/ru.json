@@ -101,7 +101,7 @@
     "authenticate_subtitle_singular": "$retriesLeft попытка осталось",
     "authenticate_subtitle_plural": "$retriesLeft попыток осталось",
     "authenticate_title_new": "Пожалуйста, введите ваш новый PIN",
-    "authenticate_confirm_title": "Повторно введите ваш PIN \n",
+    "authenticate_confirm_title": "Повторно введите ваш PIN",
     "authenticate_confirm_title_new": "Повторно введите ваш новый PIN",
     "authenticate_change_pin_success": "PIN успешно изменен",
     "authenticate_retry_warning_title": "Внимание! У вас осталась только одна попытка.",
