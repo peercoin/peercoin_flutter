@@ -67,6 +67,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _connectedServer =
+        context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -175,9 +177,16 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                   key: Key('${_servers[index].address}'),
                   child: Card(
                     child: ListTile(
-                      leading: Icon(Icons.toc),
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.toc),
+                          if (!_servers[index].userGenerated)
+                            Icon(Icons.delete_forever),
+                        ],
+                      ),
                       trailing: IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           final oldItem = _servers[index];
                           setState(() {
                             //toggle connectable
@@ -204,6 +213,12 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           }
                           //connectable now false ? move to bottom of list
                           if (!_servers[index].connectable) {
+                            if (_servers[index].address == _connectedServer) {
+                              //were we connected to this server? close connection
+                              await context
+                                  .read<ElectrumConnection>()
+                                  .closeConnection(false);
+                            }
                             final item = _servers.removeAt(index);
                             _servers.insert(_servers.length, item);
                             _servers[index].setPriority = _servers.length - 1;
@@ -220,10 +235,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                       tileColor: calculateTileColor(
                           index, _servers[index].connectable),
                       title: Text(_servers[index].address),
-                      subtitle: _servers[index].address ==
-                              context
-                                  .watch<ElectrumConnection>()
-                                  .connectedServerUrl
+                      subtitle: _servers[index].address == _connectedServer
                           ? Center(
                               child: Text(AppLocalizations.instance
                                   .translate('wallet_connected')),
