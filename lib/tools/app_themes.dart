@@ -32,7 +32,7 @@ class MyTheme {
       ),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
-      primaryColor: peercoinGreen,
+      primaryColor: Color(0xff46662B),
       scaffoldBackgroundColor: DarkThemeColors.background,
       accentColor: DarkThemeColors.primaryAccent,
       errorColor: Color(0xffAB0C3D),
@@ -43,7 +43,7 @@ class MyTheme {
       )),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-        primary: peercoinGreen,
+        primary: Color(0xff46662B),
       )),
     )
   };
