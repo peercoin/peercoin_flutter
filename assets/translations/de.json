@@ -169,5 +169,7 @@
     "peercoinC": "Peercoin",
     "send_label": "Label (optional)",
     "about_translate": "Du kannst im Peercoin Weblate helfen diese App zu übersetzen.",
-    "about_go_weblate": "Weblate öffnen"
+    "about_go_weblate": "Weblate öffnen",
+    "setup_pin_no_biometrics": "Dein Gerät unterstützt keine biometrische Authentifizierung.",
+    "app_settings_saved_snack": "Deine Änderungen wurden gespeichert"
 }
