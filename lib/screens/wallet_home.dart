@@ -189,7 +189,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         currentIndex: _pageIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_left),
+            icon: Icon(Icons.download_sharp),
             label: AppLocalizations.instance
                 .translate('wallet_bottom_nav_receive'),
           ),
@@ -198,7 +198,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_right),
+            icon: Icon(Icons.upload_sharp),
             label:
                 AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           )
