@@ -68,7 +68,7 @@ class AppDrawer extends StatelessWidget {
                         .translate('jail_dialog_button')),
                     icon: Icon(Icons.check),
                     onPressed: () {
-                      _launchURL('https://buy.peercoin.net');
+                      _launchURL('https://ppc.lol/buy');
                       Navigator.of(context).pop();
                     },
                   ),
