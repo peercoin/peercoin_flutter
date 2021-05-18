@@ -29,6 +29,7 @@ import './tools/app_themes.dart';
 bool setupFinished;
 Widget _homeWidget;
 Locale _locale;
+ThemeMode _themeMode;
 
 void main() async {
   //init sharedpreferences
@@ -36,6 +37,16 @@ void main() async {
   var prefs = await SharedPreferences.getInstance();
   setupFinished = prefs.getBool('setupFinished') ?? false;
   _locale = Locale(prefs.getString('language_code') ?? 'und');
+
+  //compute theme setting
+  var _themeString = prefs.getString('theme_mode') ?? 'system';
+  if (_themeString == 'system') {
+    _themeMode = ThemeMode.system;
+  } else if (_themeString == 'dark') {
+    _themeMode = ThemeMode.dark;
+  } else {
+    _themeMode = ThemeMode.light;
+  }
 
   //init hive
   await Hive.initFlutter();
@@ -137,7 +148,7 @@ class PeercoinApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
         ],
         locale: _locale == Locale('und') ? null : _locale,
-        themeMode: ThemeMode.system, // Default
+        themeMode: _themeMode,
         theme: MyTheme.getTheme(ThemeMode.light),
         darkTheme: MyTheme.getTheme(ThemeMode.dark),
         home: _homeWidget,

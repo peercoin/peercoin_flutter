@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/functions.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
+import 'package:peercoin/widgets/settings_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -24,11 +23,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   String _seedPhrase = '';
   String _lang = '';
   String _defaultWallet = '';
+  String _selectedTheme = '';
   bool _languageChangeInfoDisplayed = false;
-  Map<String, bool> _authenticationOptions;
   AppSettings _settings;
   ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
+  final List _availableThemes = [
+    'system',
+    'light',
+    'dark',
+  ];
 
   @override
   void didChangeDependencies() async {
@@ -75,44 +79,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
-  void changePIN(bool biometricsAllowed) async {
-    await Auth.requireAuth(
-      context,
-      biometricsAllowed,
-      () async => await screenLock(
-        title: Text(
-          AppLocalizations.instance.translate('authenticate_title_new'),
-          style: TextStyle(
-            fontSize: 24,
-          ),
-        ),
-        confirmTitle: Text(
-          AppLocalizations.instance.translate('authenticate_confirm_title_new'),
-          style: TextStyle(
-            fontSize: 24,
-          ),
-        ),
-        context: context,
-        correctString: '',
-        digits: 6,
-        confirmation: true,
-        didConfirmed: (matchedText) async {
-          await Provider.of<EncryptedBox>(context, listen: false)
-              .setPassCode(matchedText);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-              AppLocalizations.instance
-                  .translate('authenticate_change_pin_success'),
-              textAlign: TextAlign.center,
-            ),
-            duration: Duration(seconds: 2),
-          ));
-          Navigator.of(context).pop();
-        },
-      ),
-    );
-  }
-
   void saveLang(String lang) async {
     await _settings.setSelectedLang(lang);
     if (_languageChangeInfoDisplayed == false) {
@@ -130,9 +96,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     }
   }
 
-  void saveDefaultWallet(String wallet) async {
-    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
-    saveSnack(context);
+  void saveTheme(String theme) async {
+    await _settings.setSelectedTheme(theme);
+    //show notification
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('app_settings_language_restart'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 2),
+    ));
   }
 
   void saveSnack(context) {
@@ -145,13 +118,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     ));
   }
 
+  void saveDefaultWallet(String wallet) async {
+    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
+    saveSnack(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     _biometricsAllowed = _settings.biometricsAllowed ?? false;
-    _authenticationOptions = _settings.authenticationOptions ?? false;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
     _defaultWallet = _settings.defaultWallet ?? '';
+    _selectedTheme = _settings.selectedTheme ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -220,83 +198,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               AppLocalizations.instance
                                   .translate('app_settings_revealAuthButton'),
                             ))
-                        : Column(children: [
-                            SwitchListTile(
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('app_settings_biometrics'),
-                                ),
-                                value: _biometricsAllowed,
-                                onChanged: (newState) {
-                                  if (_biometricsAvailable == false) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(
-                                        AppLocalizations.instance.translate(
-                                            'setup_pin_no_biometrics'),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      duration: Duration(seconds: 5),
-                                    ));
-                                  } else {
-                                    _settings.setBiometricsAllowed(newState);
-                                    saveSnack(context);
-                                  }
-                                }),
-                            SwitchListTile(
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('app_settings_walletList'),
-                                ),
-                                value: _authenticationOptions['walletList'],
-                                onChanged: (newState) {
-                                  _settings.setAuthenticationOptions(
-                                      'walletList', newState);
-                                  saveSnack(context);
-                                }),
-                            SwitchListTile(
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('app_settings_walletHome'),
-                                ),
-                                value: _authenticationOptions['walletHome'],
-                                onChanged: (newState) {
-                                  _settings.setAuthenticationOptions(
-                                      'walletHome', newState);
-                                  saveSnack(context);
-                                }),
-                            SwitchListTile(
-                                title: Text(
-                                  AppLocalizations.instance.translate(
-                                      'app_settings_sendTransaction'),
-                                ),
-                                value:
-                                    _authenticationOptions['sendTransaction'],
-                                onChanged: (newState) {
-                                  _settings.setAuthenticationOptions(
-                                      'sendTransaction', newState);
-                                  saveSnack(context);
-                                }),
-                            SwitchListTile(
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('app_settings_newWallet'),
-                                ),
-                                value: _authenticationOptions['newWallet'],
-                                onChanged: (newState) {
-                                  _settings.setAuthenticationOptions(
-                                      'newWallet', newState);
-                                  saveSnack(context);
-                                }),
-                            ElevatedButton(
-                              onPressed: () =>
-                                  changePIN(_settings.biometricsAllowed),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('app_settings_changeCode'),
-                              ),
-                            )
-                          ]),
+                        : SettingsAuth(
+                            _biometricsAllowed,
+                            _biometricsAvailable,
+                            _settings,
+                            saveSnack,
+                            _settings.authenticationOptions,
+                          )
                   ]),
               ExpansionTile(
                   title: Text(
@@ -327,7 +235,29 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               ),
                             )
                           ])
-                  ])
+                  ]),
+              ExpansionTile(
+                title: Text(
+                    AppLocalizations.instance.translate('app_settings_theme'),
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: _availableThemes.map((theme) {
+                  return InkWell(
+                    onTap: () => saveTheme(theme),
+                    child: ListTile(
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_theme_$theme'),
+                      ),
+                      leading: Radio(
+                        value: theme,
+                        groupValue: _selectedTheme,
+                        onChanged: (_) => saveTheme(theme),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              )
             ],
           ),
         ),
