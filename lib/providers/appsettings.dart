@@ -8,12 +8,14 @@ class AppSettings with ChangeNotifier {
   final EncryptedBox _encryptedBox;
   SharedPreferences _sharedPrefs;
   String _selectedLang;
+  String _selectedTheme;
   AppSettings(this._encryptedBox);
 
   Future<void> init() async {
     var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
     _appOptions = _optionsBox.get('appOptions');
     _sharedPrefs = await SharedPreferences.getInstance();
+    _selectedTheme = _sharedPrefs.getString('theme_mode') ?? 'system';
   }
 
   Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
@@ -39,9 +41,19 @@ class AppSettings with ChangeNotifier {
     return _selectedLang;
   }
 
+  String get selectedTheme {
+    return _selectedTheme;
+  }
+
   Future<void> setSelectedLang(String newLang) async {
     _selectedLang = newLang;
     await _sharedPrefs.setString('language_code', newLang);
+    notifyListeners();
+  }
+
+  Future<void> setSelectedTheme(String newTheme) async {
+    _selectedTheme = newTheme;
+    await _sharedPrefs.setString('theme_mode', newTheme);
     notifyListeners();
   }
 

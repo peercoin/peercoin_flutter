@@ -23,10 +23,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   String _seedPhrase = '';
   String _lang = '';
   String _defaultWallet = '';
+  String _selectedTheme = '';
   bool _languageChangeInfoDisplayed = false;
   AppSettings _settings;
   ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
+  final List _availableThemes = [
+    'system',
+    'light',
+    'dark',
+  ];
 
   @override
   void didChangeDependencies() async {
@@ -90,6 +96,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     }
   }
 
+  void saveTheme(String theme) async {
+    await _settings.setSelectedTheme(theme);
+    //show notification
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('app_settings_language_restart'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 2),
+    ));
+  }
+
   void saveSnack(context) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
@@ -111,6 +129,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
     _defaultWallet = _settings.defaultWallet ?? '';
+    _selectedTheme = _settings.selectedTheme ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -216,7 +235,29 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               ),
                             )
                           ])
-                  ])
+                  ]),
+              ExpansionTile(
+                title: Text(
+                    AppLocalizations.instance.translate('app_settings_theme'),
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: _availableThemes.map((theme) {
+                  return InkWell(
+                    onTap: () => saveTheme(theme),
+                    child: ListTile(
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_theme_$theme'),
+                      ),
+                      leading: Radio(
+                        value: theme,
+                        groupValue: _selectedTheme,
+                        onChanged: (_) => saveTheme(theme),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              )
             ],
           ),
         ),
