@@ -33,6 +33,12 @@ class ElectrumConnection with ChangeNotifier {
   int _connectionAttempt = 0;
   List _availableServers;
   StreamSubscription _offlineSubscription;
+  int _numberOfBlanks = 0;
+  int _maxNumberOfBlanks =
+      5; //number of consecutive null addresses before next depth
+  int _accountDepth = 0;
+  int _chainDepth = 0;
+  int _addressDepth = 0;
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -278,6 +284,20 @@ class ElectrumConnection with ChangeNotifier {
       //handle the status update
       handleScriptHashSubscribeNotification(hash.value, newStatus);
     }
+    if (_scanMode == true && newStatus == null) {
+      _numberOfBlanks++;
+      subscribeNextDerivatedAddress();
+    }
+  }
+
+  void subscribeNextDerivatedAddress() async {
+    var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
+        _coinName, _accountDepth, _chainDepth, _addressDepth);
+    //TODO implement count up
+
+    subscribeToScriptHashes(
+      await _activeWallets.getWalletScriptHashes(_coinName, _nextAddr),
+    );
   }
 
   void startPingTimer() {

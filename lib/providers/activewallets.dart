@@ -83,6 +83,25 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> getAddressFromDerivationPath(
+      String identifier, int account, int chain, int address,
+      [master = false]) async {
+    final network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    var hdWallet = HDWallet.fromSeed(
+      seedPhraseUint8List(await seedPhrase),
+      network: network,
+    );
+
+    if (master == true) {
+      return hdWallet.address;
+    } else {
+      var derivePath = "m/$account'/$chain/$address";
+      print(derivePath);
+
+      return hdWallet.derivePath(derivePath).address;
+    }
+  }
+
   Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
     final network = AvailableCoins().getSpecificCoin(identifier).networkType;
@@ -116,7 +135,7 @@ class ActiveWallets with ChangeNotifier {
         var numberOfOurAddr = openWallet.addresses
             .where((element) => element.isOurs == true)
             .length;
-        var derivePath = "m/0'/$numberOfOurAddr/0";
+        var derivePath = "m/0'/0/$numberOfOurAddr";
         var newAddress = hdWallet.derivePath(derivePath).address;
 
         final res = openWallet.addresses.firstWhere(
@@ -124,8 +143,9 @@ class ActiveWallets with ChangeNotifier {
             orElse: () => null);
 
         if (res != null) {
+          //next addr in derivePath is already used for some reason
           numberOfOurAddr++;
-          derivePath = "m/0'/$numberOfOurAddr/0";
+          derivePath = "m/0'/0/$numberOfOurAddr";
           newAddress = hdWallet.derivePath(derivePath).address;
         }
 
