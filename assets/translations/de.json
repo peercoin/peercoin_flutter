@@ -171,5 +171,9 @@
     "about_translate": "Du kannst im Peercoin Weblate helfen diese App zu übersetzen.",
     "about_go_weblate": "Weblate öffnen",
     "setup_pin_no_biometrics": "Dein Gerät unterstützt keine biometrische Authentifizierung.",
-    "app_settings_saved_snack": "Deine Änderungen wurden gespeichert"
+    "app_settings_saved_snack": "Deine Änderungen wurden gespeichert",
+    "app_settings_theme": "App Darstellung",
+    "app_settings_theme_light": "Hell",
+    "app_settings_theme_dark": "Dunkel",
+    "app_settings_theme_system": "System Voreinstellung"
 }
