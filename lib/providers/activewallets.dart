@@ -180,7 +180,7 @@ class ActiveWallets with ChangeNotifier {
     var targetWallet = addresses.firstWhere(
         (element) => element.address == address,
         orElse: () => null);
-    return targetWallet.status;
+    return targetWallet?.status;
   }
 
   Future<List> getUnkownTxFromList(String identifier, List newTxList) async {

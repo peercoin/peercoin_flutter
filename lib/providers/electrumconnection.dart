@@ -33,12 +33,10 @@ class ElectrumConnection with ChangeNotifier {
   int _connectionAttempt = 0;
   List _availableServers;
   StreamSubscription _offlineSubscription;
-  int _numberOfBlanks = 0;
-  int _maxNumberOfBlanks =
+  int _depthPointer = 0;
+  final int _maxDepth =
       5; //number of consecutive null addresses before next depth
-  int _accountDepth = 0;
-  int _chainDepth = 0;
-  int _addressDepth = 0;
+  Map<String, int> _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -173,6 +171,7 @@ class ElectrumConnection with ChangeNotifier {
     _latestBlock = null;
     _scanMode = false;
     _paperWalletUtxos = {};
+    _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
 
     if (_closedIntentionally == false) {
       _reconnectTimer = Timer(Duration(seconds: 5),
@@ -285,19 +284,36 @@ class ElectrumConnection with ChangeNotifier {
       handleScriptHashSubscribeNotification(hash.value, newStatus);
     }
     if (_scanMode == true && newStatus == null) {
-      _numberOfBlanks++;
       subscribeNextDerivatedAddress();
     }
   }
 
   void subscribeNextDerivatedAddress() async {
-    var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
-        _coinName, _accountDepth, _chainDepth, _addressDepth);
-    //TODO implement count up
+    var currentPointer = _queryDepth.keys.toList()[_depthPointer];
+    if (_queryDepth[currentPointer] < _maxDepth) {
+      print(_queryDepth);
 
-    subscribeToScriptHashes(
-      await _activeWallets.getWalletScriptHashes(_coinName, _nextAddr),
-    );
+      var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
+        _coinName,
+        _queryDepth['account'],
+        _queryDepth['chain'],
+        _queryDepth['address'],
+      );
+
+      print(_nextAddr);
+
+      subscribeToScriptHashes(
+        await _activeWallets.getWalletScriptHashes(_coinName, _nextAddr),
+      );
+      _queryDepth[currentPointer]++;
+    } else if (_depthPointer < _queryDepth.keys.length - 1) {
+      print("move pointer");
+      _depthPointer++;
+      subscribeNextDerivatedAddress();
+    }
+
+    //TODO save != null to List
+    //TODO reset scan path
   }
 
   void startPingTimer() {
