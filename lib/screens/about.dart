@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_themes.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mailto/mailto.dart';
