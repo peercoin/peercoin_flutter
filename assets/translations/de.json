@@ -175,5 +175,8 @@
     "app_settings_theme": "App Darstellung",
     "app_settings_theme_light": "Hell",
     "app_settings_theme_dark": "Dunkel",
-    "app_settings_theme_system": "System Voreinstellung"
+    "app_settings_theme_system": "System Voreinstellung",
+    "buy_peercoin_dialog_title": "Du wirst jetzt auf die Website eines Drittanbieters weitergeleitet.",
+    "buy_peercoin_dialog_content": "Die Autoren dieser App sind nicht für ihren Inhalt verantwortlich.",
+    "buy_peercoin": "Peercoin Kaufen"
 }
