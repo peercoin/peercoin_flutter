@@ -135,7 +135,7 @@ class ActiveWallets with ChangeNotifier {
         var numberOfOurAddr = openWallet.addresses
             .where((element) => element.isOurs == true)
             .length;
-        var derivePath = "m/0'/0/$numberOfOurAddr";
+        var derivePath = "m/0'/$numberOfOurAddr/0";
         var newAddress = hdWallet.derivePath(derivePath).address;
 
         final res = openWallet.addresses.firstWhere(
@@ -145,7 +145,7 @@ class ActiveWallets with ChangeNotifier {
         if (res != null) {
           //next addr in derivePath is already used for some reason
           numberOfOurAddr++;
-          derivePath = "m/0'/0/$numberOfOurAddr";
+          derivePath = "m/0'/$numberOfOurAddr/0";
           newAddress = hdWallet.derivePath(derivePath).address;
         }
 
@@ -452,27 +452,19 @@ class ActiveWallets with ChangeNotifier {
 
         var keyMap = <int, Map>{};
         var _usedUtxos = [];
-        var _wifsOldFormat = {};
-        var _wifsNewFormat = {};
-
-        for (var i = 0; i <= openWallet.addresses.length; i++) {
-          final oldChild = hdWallet.derivePath("m/0'/$i/0");
-          final newChild = hdWallet.derivePath("m/0'/0/$i");
-          _wifsOldFormat[oldChild.address] = oldChild.wif;
-          _wifsNewFormat[newChild.address] = newChild.wif;
-        }
-        _wifsOldFormat[hdWallet.address] = hdWallet.wif;
 
         inputTx.asMap().forEach((inputKey, inputUtxo) {
           //find key to that utxo
           openWallet.addresses.asMap().forEach((key, walletAddr) {
             if (walletAddr.address == inputUtxo.address &&
                 !_usedUtxos.contains(inputUtxo.hash)) {
-              keyMap[inputKey] = ({
-                'wif': _wifsOldFormat[inputUtxo.address] ??
-                    _wifsNewFormat[inputUtxo.address],
-                'addr': inputUtxo.address
-              });
+              var _addrIndex = key;
+              var child = hdWallet.address == inputUtxo.address
+                  ? hdWallet
+                  : hdWallet.derivePath("m/0'/$_addrIndex/0");
+              keyMap[inputKey] =
+                  ({'wif': child.wif, 'addr': inputUtxo.address});
+
               tx.addInput(inputUtxo.hash, inputUtxo.txPos);
               _usedUtxos.add(inputUtxo.hash);
             }
