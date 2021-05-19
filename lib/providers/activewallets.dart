@@ -180,7 +180,7 @@ class ActiveWallets with ChangeNotifier {
     var targetWallet = addresses.firstWhere(
         (element) => element.address == address,
         orElse: () => null);
-    return targetWallet.status;
+    return targetWallet?.status;
   }
 
   Future<List> getUnkownTxFromList(String identifier, List newTxList) async {
@@ -571,6 +571,25 @@ class ActiveWallets with ChangeNotifier {
 
     openWallet.save();
     notifyListeners();
+  }
+
+  void addAddressFromScan(String identifier, String address) {
+    var openWallet = getSpecificCoinWallet(identifier);
+    var addr = openWallet.addresses.firstWhere(
+      (element) => element.address == address,
+      orElse: () => null,
+    );
+    if (addr == null) {
+      openWallet.addNewAddress = WalletAddress(
+        address: address,
+        addressBookName: null,
+        used: true,
+        status: null,
+        isOurs: true,
+      );
+    }
+
+    openWallet.save();
   }
 
   void removeAddress(String identifier, WalletAddress addr) {
