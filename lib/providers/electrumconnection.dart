@@ -286,6 +286,7 @@ class ElectrumConnection with ChangeNotifier {
     if (_scanMode == true && newStatus == null) {
       subscribeNextDerivatedAddress();
     }
+    //TODO save != null to Wallet
   }
 
   void subscribeNextDerivatedAddress() async {
@@ -310,10 +311,8 @@ class ElectrumConnection with ChangeNotifier {
       print("move pointer");
       _depthPointer++;
       subscribeNextDerivatedAddress();
+      //TODO reset scan path to jump deeper
     }
-
-    //TODO save != null to List
-    //TODO reset scan path
   }
 
   void startPingTimer() {
