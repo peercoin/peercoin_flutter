@@ -362,14 +362,6 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> prepareForRescan(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
-
-    // openWallet.addresses.forEach((element) {
-    //   //clear utxos
-    //   openWallet.clearUtxo(element.address);
-    //   //reset status
-    //   updateAddressStatus(identifier, element.address, null);
-    // });
-    // openWallet.utxos.forEach((element) {});
     openWallet.utxos.removeRange(0, openWallet.utxos.length);
     await openWallet.save();
   }
