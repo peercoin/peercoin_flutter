@@ -33,6 +33,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.prepareForRescan(_coinName);
+      await _connectionProvider.init(_coinName, scanMode: true);
 
       _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
         var dueTime = _latestUpdate + 5;

@@ -573,6 +573,25 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
+  void addAddressFromScan(String identifier, String address) {
+    var openWallet = getSpecificCoinWallet(identifier);
+    var addr = openWallet.addresses.firstWhere(
+      (element) => element.address == address,
+      orElse: () => null,
+    );
+    if (addr == null) {
+      openWallet.addNewAddress = WalletAddress(
+        address: address,
+        addressBookName: null,
+        used: true,
+        status: null,
+        isOurs: true,
+      );
+    }
+
+    openWallet.save();
+  }
+
   void removeAddress(String identifier, WalletAddress addr) {
     var openWallet = getSpecificCoinWallet(identifier);
     openWallet.removeAddress(addr);
