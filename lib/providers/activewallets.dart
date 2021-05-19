@@ -452,19 +452,23 @@ class ActiveWallets with ChangeNotifier {
 
         var keyMap = <int, Map>{};
         var _usedUtxos = [];
+        var _wifs = {};
+
+        for (var i = 0; i <= openWallet.addresses.length; i++) {
+          final child = hdWallet.derivePath("m/0'/$i/0");
+          _wifs[child.address] = child.wif;
+        }
+        _wifs[hdWallet.address] = hdWallet.wif;
 
         inputTx.asMap().forEach((inputKey, inputUtxo) {
           //find key to that utxo
           openWallet.addresses.asMap().forEach((key, walletAddr) {
             if (walletAddr.address == inputUtxo.address &&
                 !_usedUtxos.contains(inputUtxo.hash)) {
-              var _addrIndex = key;
-              var child = hdWallet.address == inputUtxo.address
-                  ? hdWallet
-                  : hdWallet.derivePath("m/0'/$_addrIndex/0");
-              keyMap[inputKey] =
-                  ({'wif': child.wif, 'addr': inputUtxo.address});
-
+              keyMap[inputKey] = ({
+                'wif': _wifs[inputUtxo.address],
+                'addr': inputUtxo.address
+              });
               tx.addInput(inputUtxo.hash, inputUtxo.txPos);
               _usedUtxos.add(inputUtxo.hash);
             }
