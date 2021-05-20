@@ -392,6 +392,32 @@ class ActiveWallets with ChangeNotifier {
     return '';
   }
 
+  Future<String> getWif(
+    String identifier,
+    WalletAddress address,
+    NetworkType network,
+  ) async {
+    if (address.wif == '') {
+      var openWallet = getSpecificCoinWallet(identifier);
+      var _wifs = {};
+      var hdWallet = HDWallet.fromSeed(
+        seedPhraseUint8List(await seedPhrase),
+        network: network,
+      );
+
+      for (var i = 0; i <= openWallet.addresses.length; i++) {
+        final child = hdWallet.derivePath("m/0'/$i/0");
+        _wifs[child.address] = child.wif;
+      }
+      _wifs[hdWallet.address] = hdWallet.wif;
+
+      address.wif = _wifs[address.address]; //save
+      await openWallet.save();
+      return _wifs[address.address];
+    }
+    return address.wif;
+  }
+
   Future<Map> buildTransaction(
     String identifier,
     String address,
@@ -425,12 +451,7 @@ class ActiveWallets with ChangeNotifier {
             inputTx.add(utxo);
           }
         });
-
         var network = AvailableCoins().getSpecificCoin(identifier).networkType;
-        var hdWallet = HDWallet.fromSeed(
-          seedPhraseUint8List(await seedPhrase),
-          network: network,
-        );
 
         //start building tx
         final tx = TransactionBuilder(network: network);
@@ -452,23 +473,15 @@ class ActiveWallets with ChangeNotifier {
 
         var keyMap = <int, Map>{};
         var _usedUtxos = [];
-        var _wifs = {};
-
-        for (var i = 0; i <= openWallet.addresses.length; i++) {
-          final child = hdWallet.derivePath("m/0'/$i/0");
-          _wifs[child.address] = child.wif;
-        }
-        _wifs[hdWallet.address] = hdWallet.wif;
 
         inputTx.asMap().forEach((inputKey, inputUtxo) {
           //find key to that utxo
-          openWallet.addresses.asMap().forEach((key, walletAddr) {
+          openWallet.addresses.asMap().forEach((key, walletAddr) async {
             if (walletAddr.address == inputUtxo.address &&
                 !_usedUtxos.contains(inputUtxo.hash)) {
-              keyMap[inputKey] = ({
-                'wif': _wifs[inputUtxo.address],
-                'addr': inputUtxo.address
-              });
+              var wif = await getWif(identifier, walletAddr, network);
+
+              keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
               tx.addInput(inputUtxo.hash, inputUtxo.txPos);
               _usedUtxos.add(inputUtxo.hash);
             }

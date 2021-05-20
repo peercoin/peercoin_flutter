@@ -14,6 +14,8 @@ class WalletAddress extends HiveObject {
   bool used;
   @HiveField(4)
   bool isOurs = true;
+  @HiveField(5)
+  String wif = '';
 
   WalletAddress({
     @required this.address,
