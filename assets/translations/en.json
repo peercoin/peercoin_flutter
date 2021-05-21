@@ -62,7 +62,7 @@
     "authenticate_subtitle_plural": "$retriesLeft attempts in total",
     "authenticate_subtitle_singular": "$retriesLeft attempt in total",
     "authenticate_title": "Please enter your PIN\n",
-    "authenticate_title_new": "Please enter your new PIN",
+    "authenticate_title_new": "Please enter your new PIN\n",
     "buy_peercoin": "Purchase Peercoin",
     "buy_peercoin_dialog_title": "You will now be forwarded to a third party website.",
     "buy_peercoin_dialog_content": "The mainters of this app are not responsible for its content.",

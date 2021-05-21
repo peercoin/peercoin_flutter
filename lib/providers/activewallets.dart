@@ -404,7 +404,7 @@ class ActiveWallets with ChangeNotifier {
         (element) => element.address == address,
         orElse: () => null);
 
-    if (walletAddress.wif == '') {
+    if (walletAddress != null && walletAddress.wif == '') {
       var _wifs = {};
       var hdWallet = HDWallet.fromSeed(
         seedPhraseUint8List(await seedPhrase),
@@ -420,8 +420,10 @@ class ActiveWallets with ChangeNotifier {
       walletAddress.wif = _wifs[walletAddress.address]; //save
       await openWallet.save();
       return _wifs[walletAddress.address];
+    } else if (walletAddress == null) {
+      return '';
     }
-    return walletAddress.wif ?? '';
+    return walletAddress.wif;
   }
 
   Future<Map> buildTransaction(
@@ -477,23 +479,27 @@ class ActiveWallets with ChangeNotifier {
           tx.addOutput(address, _txAmount - fee);
         }
 
-        var keyMap = <int, Map>{};
-        var _usedUtxos = [];
+        //generate keyMap
+        Future<Map<int, Map>> generateKeyMap() async {
+          var keyMap = <int, Map>{};
+          var _usedUtxos = [];
 
-        inputTx.asMap().forEach((inputKey, inputUtxo) {
-          //find key to that utxo
-          openWallet.addresses.asMap().forEach((key, walletAddr) async {
-            if (walletAddr.address == inputUtxo.address &&
-                !_usedUtxos.contains(inputUtxo.hash)) {
-              var wif = await getWif(identifier, walletAddr.address);
-
-              keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
-              tx.addInput(inputUtxo.hash, inputUtxo.txPos);
-              _usedUtxos.add(inputUtxo.hash);
-            }
+          inputTx.asMap().forEach((inputKey, inputUtxo) async {
+            //find key to that utxo
+            openWallet.addresses.asMap().forEach((key, walletAddr) async {
+              if (walletAddr.address == inputUtxo.address &&
+                  !_usedUtxos.contains(inputUtxo.hash)) {
+                var wif = await getWif(identifier, walletAddr.address);
+                keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
+                tx.addInput(inputUtxo.hash, inputUtxo.txPos);
+                _usedUtxos.add(inputUtxo.hash);
+              }
+            });
           });
-        });
+          return keyMap;
+        }
 
+        var keyMap = await generateKeyMap();
         //sign
         keyMap.forEach((key, value) {
           print("signing - ${value["addr"]} - ${value["wif"]}");
