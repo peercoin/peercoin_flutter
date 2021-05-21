@@ -22,7 +22,8 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       used: fields[3] as bool,
       status: fields[2] as String,
       isOurs: fields[4] as bool,
-    )..wif = fields[5] as String;
+      wif: fields[5] as String,
+    );
   }
 
   @override
