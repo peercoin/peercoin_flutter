@@ -352,13 +352,19 @@ class _SendTabState extends State<SendTab> {
                     return AppLocalizations.instance
                         .translate('send_amount_exceeds');
                   }
-                  if (txValueInSatoshis == _availableCoin.minimumTxValue &&
-                      txValueInSatoshis == _wallet.balance) {
+                  if (txValueInSatoshis < _availableCoin.minimumTxValue) {
                     return AppLocalizations.instance.translate(
                         'send_amount_below_minimum', {
-                      'amount': '${_availableCoin.minimumTxValue * 1000000}'
+                      'amount': '${_availableCoin.minimumTxValue / 1000000}'
                     });
                   }
+                  if (txValueInSatoshis == _wallet.balance &&
+                      _wallet.balance == _availableCoin.minimumTxValue) {
+                    return AppLocalizations.instance.translate(
+                      'send_amount_below_minimum_unable',
+                    );
+                  }
+
                   return null;
                 }),
             SizedBox(height: 30),
