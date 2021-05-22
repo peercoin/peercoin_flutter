@@ -17,7 +17,6 @@ Basic testing successfull on iOS 14.4 and Android 10.
 
 ## Known Limitations
 - can't send to Multisig addresses
-- can't send to Segwit addresses
 - adds 1 Satoshi extra fee due to sporadic internal rounding errors 
 
 ## Development
