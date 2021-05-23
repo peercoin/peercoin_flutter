@@ -404,22 +404,24 @@ class ActiveWallets with ChangeNotifier {
         (element) => element.address == address,
         orElse: () => null);
 
-    if (walletAddress != null && walletAddress.wif == '') {
-      var _wifs = {};
-      var hdWallet = HDWallet.fromSeed(
-        seedPhraseUint8List(await seedPhrase),
-        network: network,
-      );
+    if (walletAddress != null) {
+      if (walletAddress.wif == null || walletAddress.wif == '') {
+        var _wifs = {};
+        var hdWallet = HDWallet.fromSeed(
+          seedPhraseUint8List(await seedPhrase),
+          network: network,
+        );
 
-      for (var i = 0; i <= openWallet.addresses.length; i++) {
-        final child = hdWallet.derivePath("m/0'/$i/0");
-        _wifs[child.address] = child.wif;
+        for (var i = 0; i <= openWallet.addresses.length; i++) {
+          final child = hdWallet.derivePath("m/0'/$i/0");
+          _wifs[child.address] = child.wif;
+        }
+        _wifs[hdWallet.address] = hdWallet.wif;
+
+        walletAddress.newWif = _wifs[walletAddress.address]; //save
+        await openWallet.save();
+        return _wifs[walletAddress.address];
       }
-      _wifs[hdWallet.address] = hdWallet.wif;
-
-      walletAddress.wif = _wifs[walletAddress.address]; //save
-      await openWallet.save();
-      return _wifs[walletAddress.address];
     } else if (walletAddress == null) {
       return '';
     }

@@ -37,4 +37,8 @@ class WalletAddress extends HiveObject {
   set newUsed(bool newUsed) {
     used = newUsed;
   }
+
+  set newWif(String newWif) {
+    wif = newWif;
+  }
 }
