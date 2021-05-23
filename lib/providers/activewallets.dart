@@ -117,6 +117,7 @@ class ActiveWallets with ChangeNotifier {
         used: false,
         status: null,
         isOurs: true,
+        wif: hdWallet.wif,
       );
       unusedAddress = hdWallet.address;
     } else {
@@ -136,28 +137,29 @@ class ActiveWallets with ChangeNotifier {
             .where((element) => element.isOurs == true)
             .length;
         var derivePath = "m/0'/$numberOfOurAddr/0";
-        var newAddress = hdWallet.derivePath(derivePath).address;
+        var newHdWallet = hdWallet.derivePath(derivePath);
 
         final res = openWallet.addresses.firstWhere(
-            (element) => element.address == newAddress,
+            (element) => element.address == newHdWallet.address,
             orElse: () => null);
 
         if (res != null) {
           //next addr in derivePath is already used for some reason
           numberOfOurAddr++;
           derivePath = "m/0'/$numberOfOurAddr/0";
-          newAddress = hdWallet.derivePath(derivePath).address;
+          newHdWallet = hdWallet.derivePath(derivePath);
         }
 
         openWallet.addNewAddress = WalletAddress(
-          address: newAddress,
+          address: newHdWallet.address,
           addressBookName: null,
           used: false,
           status: null,
           isOurs: true,
+          wif: newHdWallet.wif,
         );
 
-        unusedAddress = newAddress;
+        unusedAddress = newHdWallet.address;
       }
     }
     await openWallet.save();
@@ -392,6 +394,38 @@ class ActiveWallets with ChangeNotifier {
     return '';
   }
 
+  Future<String> getWif(
+    String identifier,
+    String address,
+  ) async {
+    var network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    var openWallet = getSpecificCoinWallet(identifier);
+    var walletAddress = openWallet.addresses.firstWhere(
+        (element) => element.address == address,
+        orElse: () => null);
+
+    if (walletAddress != null && walletAddress.wif == '') {
+      var _wifs = {};
+      var hdWallet = HDWallet.fromSeed(
+        seedPhraseUint8List(await seedPhrase),
+        network: network,
+      );
+
+      for (var i = 0; i <= openWallet.addresses.length; i++) {
+        final child = hdWallet.derivePath("m/0'/$i/0");
+        _wifs[child.address] = child.wif;
+      }
+      _wifs[hdWallet.address] = hdWallet.wif;
+
+      walletAddress.wif = _wifs[walletAddress.address]; //save
+      await openWallet.save();
+      return _wifs[walletAddress.address];
+    } else if (walletAddress == null) {
+      return '';
+    }
+    return walletAddress.wif;
+  }
+
   Future<Map> buildTransaction(
     String identifier,
     String address,
@@ -425,12 +459,7 @@ class ActiveWallets with ChangeNotifier {
             inputTx.add(utxo);
           }
         });
-
         var network = AvailableCoins().getSpecificCoin(identifier).networkType;
-        var hdWallet = HDWallet.fromSeed(
-          seedPhraseUint8List(await seedPhrase),
-          network: network,
-        );
 
         //start building tx
         final tx = TransactionBuilder(network: network);
@@ -450,27 +479,27 @@ class ActiveWallets with ChangeNotifier {
           tx.addOutput(address, _txAmount - fee);
         }
 
-        var keyMap = <int, Map>{};
-        var _usedUtxos = [];
+        //generate keyMap
+        Future<Map<int, Map>> generateKeyMap() async {
+          var keyMap = <int, Map>{};
+          var _usedUtxos = [];
 
-        inputTx.asMap().forEach((inputKey, inputUtxo) {
-          //find key to that utxo
-          openWallet.addresses.asMap().forEach((key, walletAddr) {
-            if (walletAddr.address == inputUtxo.address &&
-                !_usedUtxos.contains(inputUtxo.hash)) {
-              var _addrIndex = key;
-              var child = hdWallet.address == inputUtxo.address
-                  ? hdWallet
-                  : hdWallet.derivePath("m/0'/$_addrIndex/0");
-              keyMap[inputKey] =
-                  ({'wif': child.wif, 'addr': inputUtxo.address});
-
-              tx.addInput(inputUtxo.hash, inputUtxo.txPos);
-              _usedUtxos.add(inputUtxo.hash);
-            }
+          inputTx.asMap().forEach((inputKey, inputUtxo) async {
+            //find key to that utxo
+            openWallet.addresses.asMap().forEach((key, walletAddr) async {
+              if (walletAddr.address == inputUtxo.address &&
+                  !_usedUtxos.contains(inputUtxo.hash)) {
+                var wif = await getWif(identifier, walletAddr.address);
+                keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
+                tx.addInput(inputUtxo.hash, inputUtxo.txPos);
+                _usedUtxos.add(inputUtxo.hash);
+              }
+            });
           });
-        });
+          return keyMap;
+        }
 
+        var keyMap = await generateKeyMap();
         //sign
         keyMap.forEach((key, value) {
           print("signing - ${value["addr"]} - ${value["wif"]}");
@@ -563,6 +592,7 @@ class ActiveWallets with ChangeNotifier {
         used: true,
         status: null,
         isOurs: false,
+        wif: '',
       );
     }
 
@@ -570,7 +600,7 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAddressFromScan(String identifier, String address) {
+  void addAddressFromScan(String identifier, String address) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhere(
       (element) => element.address == address,
@@ -578,17 +608,17 @@ class ActiveWallets with ChangeNotifier {
     );
     if (addr == null) {
       openWallet.addNewAddress = WalletAddress(
-        address: address,
-        addressBookName: null,
-        used: true,
-        status: null,
-        isOurs: true,
-      );
+          address: address,
+          addressBookName: null,
+          used: true,
+          status: null,
+          isOurs: true,
+          wif: await getWif(identifier, address));
     } else {
-      updateAddressStatus(identifier, address, null);
+      await updateAddressStatus(identifier, address, null);
     }
 
-    openWallet.save();
+    await openWallet.save();
   }
 
   void removeAddress(String identifier, WalletAddress addr) {

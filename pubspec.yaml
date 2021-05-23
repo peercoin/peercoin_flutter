@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.3.9+24
+version: 0.3.9+27
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -29,7 +29,8 @@ dependencies:
   crypto: ^2.0.3
   bip39: ^1.0.3
   bitcoin_flutter:
-    path: ../bitcoin_flutter
+    git:
+      url: https://github.com/peercoin/bitcoin_flutter.git
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
   hive_generator: ^0.8.2

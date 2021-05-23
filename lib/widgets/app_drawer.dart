@@ -38,12 +38,6 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(Routes.AppSettings)),
           Divider(),
           ListTile(
-              leading: Icon(Icons.info),
-              title: Text(AppLocalizations.instance.translate('about')),
-              onTap: () =>
-                  Navigator.of(context).pushReplacementNamed(Routes.About)),
-          Divider(),
-          ListTile(
             leading: Icon(Icons.shopping_basket),
             title: Text(AppLocalizations.instance.translate('buy_peercoin')),
             onTap: () => showDialog(
@@ -76,6 +70,13 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
           ),
+          Divider(),
+
+          ListTile(
+              leading: Icon(Icons.info),
+              title: Text(AppLocalizations.instance.translate('about')),
+              onTap: () =>
+                  Navigator.of(context).pushReplacementNamed(Routes.About)),
           Divider(),
           ListTile(
             leading: Icon(Icons.share),

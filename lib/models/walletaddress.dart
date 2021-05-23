@@ -14,6 +14,8 @@ class WalletAddress extends HiveObject {
   bool used;
   @HiveField(4)
   bool isOurs = true;
+  @HiveField(5)
+  String wif = '';
 
   WalletAddress({
     @required this.address,
@@ -21,6 +23,7 @@ class WalletAddress extends HiveObject {
     @required this.used,
     @required this.status,
     @required this.isOurs,
+    @required this.wif,
   });
 
   set newStatus(String newStatus) {
