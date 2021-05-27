@@ -102,7 +102,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
                           child: Center(child: LoadingIndicator()),
                         );
                       }
-                      if (snapshot.data == null || !snapshot.hasData) {
+                      var listData = snapshot.data! as List;
+                      if (listData.isEmpty) {
                         return Column(children: [
                           SizedBox(height: 30),
                           Text(AppLocalizations.instance
@@ -110,7 +111,6 @@ class _WalletListScreenState extends State<WalletListScreen> {
                           SizedBox(height: 30)
                         ]);
                       }
-                      var listData = snapshot.data as List;
                       return Expanded(
                         child: ListView.builder(
                           itemCount: listData.length,
