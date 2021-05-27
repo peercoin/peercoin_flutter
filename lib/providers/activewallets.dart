@@ -407,7 +407,7 @@ class ActiveWallets with ChangeNotifier {
       if (walletAddress.wif == null || walletAddress.wif == '') {
         var _wifs = {};
         var hdWallet = HDWallet.fromSeed(
-          seedPhraseUint8List(await (seedPhrase as FutureOr<String>)),
+          seedPhraseUint8List(await seedPhrase as String),
           network: network,
         );
 

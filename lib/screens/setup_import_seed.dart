@@ -101,7 +101,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           suffixIcon: IconButton(
                             onPressed: () async {
                               var data = await Clipboard.getData('text/plain');
-                              if (data!.text != null) {
+                              if (data != null) {
                                 _controller.text = data.text!;
                               }
                               FocusScope.of(context).unfocus(); //hide keyboard

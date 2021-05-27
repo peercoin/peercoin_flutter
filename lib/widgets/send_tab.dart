@@ -268,7 +268,7 @@ class _SendTabState extends State<SendTab> {
                   suffixIcon: IconButton(
                     onPressed: () async {
                       var data = await Clipboard.getData('text/plain');
-                      if (data!.text != null) {
+                      if (data != null) {
                         addressController.text = data.text!;
                       }
                     },
