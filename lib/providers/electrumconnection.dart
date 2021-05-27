@@ -148,7 +148,7 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   Future<void> closeConnection([bool _intentional = true]) async {
-    if (_connection != null && _connection!.sink != null) {
+    if (_connection != null) {
       _closedIntentionally = _intentional;
       await _connection!.sink.close();
     }

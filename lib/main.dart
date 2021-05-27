@@ -157,5 +157,3 @@ class PeercoinApp extends StatelessWidget {
     );
   }
 }
-
-//TODO: null safety when bitcoin_flutter is null_safe as well (crypto^3.0.0)

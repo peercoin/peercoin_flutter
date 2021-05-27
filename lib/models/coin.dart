@@ -1,5 +1,4 @@
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
-import 'package:flutter/material.dart';
 
 class Coin {
   final String name;

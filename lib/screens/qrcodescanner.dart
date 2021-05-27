@@ -84,10 +84,8 @@ class _QRScannerState extends State<QRScanner> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) async {
-      if (scanData != null) {
-        controller.dispose();
-        await Navigator.maybeOf(context)!.maybePop(scanData.code);
-      }
+      controller.dispose();
+      await Navigator.maybeOf(context)!.maybePop(scanData.code);
     });
   }
 }
