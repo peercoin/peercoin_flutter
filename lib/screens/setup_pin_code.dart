@@ -23,8 +23,13 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      var localAuth = LocalAuthentication();
-      _biometricsAvailable = await localAuth.canCheckBiometrics;
+      try {
+        var localAuth = LocalAuthentication();
+        _biometricsAvailable = await localAuth.canCheckBiometrics;
+      } catch (e) {
+        _biometricsAvailable = false;
+      }
+
       if (_biometricsAvailable == false) {
         _biometricsAllowed = false;
       }
