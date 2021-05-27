@@ -17,9 +17,9 @@ class SetupSaveScreen extends StatefulWidget {
 class _SetupSaveScreenState extends State<SetupSaveScreen> {
   bool _sharedYet = false;
   bool _initial = true;
-  String _seed = '';
+  String? _seed = '';
   double _currentSliderValue = 12;
-  ActiveWallets _activeWallets;
+  late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
     await Share.share(seed);
@@ -95,12 +95,12 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       width: double.infinity,
                       child: Text(
                         AppLocalizations.instance
-                            .translate('label_wallet_seed'),
+                            .translate('label_wallet_seed')!,
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                     ),
                     SelectableText(
-                      _seed,
+                      _seed!,
                       minLines: 4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -129,7 +129,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         ),
                         Text(
                           AppLocalizations.instance
-                              .translate('setup_seed_slider_label'),
+                              .translate('setup_seed_slider_label')!,
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ],
@@ -138,7 +138,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       AppLocalizations.instance.translate(
                           'label_keep_seed_safe', {
                         'numberOfWords': _currentSliderValue.round().toString()
-                      }),
+                      })!,
                       style: TextStyle(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
@@ -157,7 +157,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                                     context, Routes.SetUpPin);
                               },
                               child: Text(
-                                AppLocalizations.instance.translate('continue'),
+                                AppLocalizations.instance.translate('continue')!,
                                 style: TextStyle(fontSize: 18),
                               ),
                             )
@@ -165,7 +165,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                               onPressed: () async => await shareSeed(_seed),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('export_now'),
+                                    .translate('export_now')!,
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),

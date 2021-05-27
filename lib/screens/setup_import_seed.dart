@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -30,7 +32,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('setup_securebox_fail'),
+          AppLocalizations.instance.translate('setup_securebox_fail')!,
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 10),
@@ -60,7 +62,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   width: 50,
                 ),
                 Text(
-                  AppLocalizations.instance.translate('setup_import_title'),
+                  AppLocalizations.instance.translate('setup_import_title')!,
                   style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
                 Padding(
@@ -68,7 +70,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   child: Text(
                     AppLocalizations.instance.translate(
                       'setup_import_note',
-                    ),
+                    )!,
                     style: TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
@@ -84,7 +86,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         textInputAction: TextInputAction.done,
                         controller: _controller,
                         validator: (value) {
-                          if (value.split(' ').length < 12) {
+                          if (value!.split(' ').length < 12) {
                             return AppLocalizations.instance.translate(
                               'import_seed_error_1',
                             );
@@ -101,7 +103,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           suffixIcon: IconButton(
                             onPressed: () async {
                               var data = await Clipboard.getData('text/plain');
-                              _controller.text = data.text;
+                              if (data!.text != null) {
+                                _controller.text = data.text!;
+                              }
                               FocusScope.of(context).unfocus(); //hide keyboard
                             },
                             icon: Icon(Icons.paste,
@@ -119,15 +123,15 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                     ? LoadingIndicator()
                     : ElevatedButton.icon(
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
                             createWallet(context);
                           }
                         },
                         icon: Icon(Icons.input),
                         label: Text(AppLocalizations.instance.translate(
                           'import_seed_button',
-                        ))),
+                        )!)),
               ]),
         ),
       ),

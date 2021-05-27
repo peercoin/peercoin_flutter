@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/server.dart';
@@ -19,7 +20,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   final _formKey = GlobalKey<FormState>();
   final _serverKey = GlobalKey<FormFieldState>();
   final _serverController = TextEditingController();
-  String _walletName = '';
+  String? _walletName = '';
   List<Server> _currentServerList = [];
   bool _initial = true;
   bool _loading = false;
@@ -27,7 +28,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   @override
   void didChangeDependencies() {
     if (_initial) {
-      _walletName = ModalRoute.of(context).settings.arguments;
+      _walletName = ModalRoute.of(context)!.settings.arguments as String?;
       setState(() {
         _initial = false;
       });
@@ -35,7 +36,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     super.didChangeDependencies();
   }
 
-  void tryConnect(String serverUrl) async {
+  void tryConnect(String? serverUrl) async {
     _currentServerList = await Provider.of<Servers>(context, listen: false)
         .getServerDetailsList(_walletName);
 
@@ -44,13 +45,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     });
 
     //check if server already exists
-    if (_currentServerList.firstWhere((element) => element.address == serverUrl,
-            orElse: () => null) !=
+    if (_currentServerList.firstWhereOrNull((element) => element.address == serverUrl) !=
         null) {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('server_add_server_exists'),
+          AppLocalizations.instance.translate('server_add_server_exists')!,
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -67,13 +67,13 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       var _connection;
       try {
         _connection = IOWebSocketChannel.connect(
-          serverUrl,
+          serverUrl!,
         );
       } catch (e) {
         print('connection error: $e');
       }
 
-      void sendMessage(String method, String id, [List params]) {
+      void sendMessage(String method, String id, [List? params]) {
         if (_connection != null) {
           _connection.sink.add(
             json.encode(
@@ -95,7 +95,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
         if (idString == 'features') {
           if (result['genesis_hash'] ==
-              AvailableCoins().getSpecificCoin(_walletName).genesisHash) {
+              AvailableCoins().getSpecificCoin(_walletName)!.genesisHash) {
             //gensis hash matches
             //add server to db
             Provider.of<Servers>(context, listen: false)
@@ -107,7 +107,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 AppLocalizations.instance
-                    .translate('server_add_server_wrong_genesis'),
+                    .translate('server_add_server_wrong_genesis')!,
                 textAlign: TextAlign.center,
               ),
               duration: Duration(seconds: 2),
@@ -129,7 +129,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             AppLocalizations.instance
-                .translate('server_add_server_no_connection'),
+                .translate('server_add_server_no_connection')!,
             textAlign: TextAlign.center,
           ),
           duration: Duration(seconds: 2),
@@ -146,7 +146,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            AppLocalizations.instance.translate('server_add_title'),
+            AppLocalizations.instance.translate('server_add_title')!,
           ),
         ),
         actions: [
@@ -154,8 +154,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
               onPressed: () {
-                _formKey.currentState.save();
-                _formKey.currentState.validate();
+                _formKey.currentState!.save();
+                _formKey.currentState!.validate();
               },
               icon: Icon(Icons.save),
             ),
@@ -180,12 +180,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                           .translate('server_add_input_label'),
                     ),
                     maxLines: null,
-                    onFieldSubmitted: (_) => _formKey.currentState.validate(),
+                    onFieldSubmitted: (_) => _formKey.currentState!.validate(),
                     inputFormatters: [],
                     validator: (value) {
                       var portRegex = RegExp(':[0-9]');
 
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return AppLocalizations.instance
                             .translate('server_add_input_empty');
                       } else if (!value.contains('wss://')) {

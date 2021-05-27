@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
@@ -13,15 +14,15 @@ class ServerSettingsScreen extends StatefulWidget {
 
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   bool _initial = true;
-  String _walletName = '';
+  String? _walletName = '';
   List<Server> _servers = [];
   final Map _indexCache = {};
-  Servers _serversProvider;
+  late Servers _serversProvider;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _walletName = ModalRoute.of(context).settings.arguments;
+      _walletName = ModalRoute.of(context)!.settings.arguments as String?;
       _serversProvider = Provider.of<Servers>(context);
       await loadServers();
       setState(() {
@@ -39,7 +40,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     });
   }
 
-  Future<void> savePriorities(String serverUrl, int newIndex) async {
+  Future<void> savePriorities(String? serverUrl, int newIndex) async {
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
       _servers[newIndex].setPriority = newIndex;
@@ -73,7 +74,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            AppLocalizations.instance.translate('server_settings_title'),
+            AppLocalizations.instance.translate('server_settings_title')!,
           ),
         ),
         actions: [
@@ -116,19 +117,19 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         context: context,
                         builder: (_) => AlertDialog(
                           title: Text(AppLocalizations.instance.translate(
-                              'server_settings_alert_generated_title')),
-                          content: Text(_servers[index].address),
+                              'server_settings_alert_generated_title')!),
+                          content: Text(_servers[index].address!),
                           actions: <Widget>[
                             TextButton.icon(
                                 label: Text(AppLocalizations.instance
-                                    .translate('server_settings_alert_cancel')),
+                                    .translate('server_settings_alert_cancel')!),
                                 icon: Icon(Icons.cancel),
                                 onPressed: () {
                                   Navigator.of(context).pop(false);
                                 }),
                             TextButton.icon(
                               label: Text(AppLocalizations.instance
-                                  .translate('jail_dialog_button')),
+                                  .translate('jail_dialog_button')!),
                               icon: Icon(Icons.check),
                               onPressed: () {
                                 Navigator.of(context).pop(true);
@@ -142,14 +143,14 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         context: context,
                         builder: (_) => AlertDialog(
                           title: Text(AppLocalizations.instance.translate(
-                              'server_settings_alert_hardcoded_title')),
+                              'server_settings_alert_hardcoded_title')!),
                           content: Text(AppLocalizations.instance.translate(
-                              'server_settings_alert_hardcoded_content')),
+                              'server_settings_alert_hardcoded_content')!),
                           actions: <Widget>[
                             TextButton.icon(
                               label: Text(
                                 AppLocalizations.instance
-                                    .translate('jail_dialog_button'),
+                                    .translate('jail_dialog_button')!,
                               ),
                               icon: Icon(Icons.check),
                               onPressed: () {
@@ -181,7 +182,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.toc),
-                          if (!_servers[index].userGenerated)
+                          if (!_servers[index].userGenerated!)
                             Icon(Icons.delete_forever),
                         ],
                       ),
@@ -191,18 +192,17 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           setState(() {
                             //toggle connectable
                             _servers[index].setConnectable =
-                                !_servers[index].connectable;
+                                !_servers[index].connectable!;
                           });
                           //check if still one connectable server is left
-                          if (_servers.firstWhere(
-                                  (element) => element.connectable == true,
-                                  orElse: () => null) ==
+                          if (_servers.firstWhereOrNull(
+                                  (element) => element.connectable == true) ==
                               null) {
                             //show snack bar
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                 AppLocalizations.instance.translate(
-                                    'server_settings_error_no_server_left'),
+                                    'server_settings_error_no_server_left')!,
                                 textAlign: TextAlign.center,
                               ),
                               duration: Duration(seconds: 2),
@@ -212,7 +212,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             oldItem.setConnectable = true;
                           }
                           //connectable now false ? move to bottom of list
-                          if (!_servers[index].connectable) {
+                          if (!_servers[index].connectable!) {
                             if (_servers[index].address == _connectedServer) {
                               //were we connected to this server? close connection
                               await context
@@ -228,17 +228,17 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             _servers[index].setPriority = 0;
                           }
                         },
-                        icon: Icon(_servers[index].connectable
+                        icon: Icon(_servers[index].connectable!
                             ? Icons.offline_bolt
                             : Icons.offline_bolt_outlined),
                       ),
                       tileColor: calculateTileColor(
-                          index, _servers[index].connectable),
-                      title: Text(_servers[index].address),
+                          index, _servers[index].connectable!),
+                      title: Text(_servers[index].address!),
                       subtitle: _servers[index].address == _connectedServer
                           ? Center(
                               child: Text(AppLocalizations.instance
-                                  .translate('wallet_connected')),
+                                  .translate('wallet_connected')!),
                             )
                           : Container(),
                     ),

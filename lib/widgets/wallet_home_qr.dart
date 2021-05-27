@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class WalletHomeQr extends StatelessWidget {
-  final String _unusedAddress;
+  final String? _unusedAddress;
   WalletHomeQr(this._unusedAddress);
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class WalletHomeQr extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 1,
                           child: Center(
                             child: QrImage(
-                              data: _unusedAddress,
+                              data: _unusedAddress!,
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
                             ),
@@ -31,7 +31,7 @@ class WalletHomeQr extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: FittedBox(
                             child: SelectableText(
-                              _unusedAddress,
+                              _unusedAddress!,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -41,7 +41,7 @@ class WalletHomeQr extends StatelessWidget {
                   });
             },
             child: QrImage(
-              data: _unusedAddress,
+              data: _unusedAddress!,
               size: 60.0,
               padding: EdgeInsets.all(1),
               backgroundColor: Colors.white,

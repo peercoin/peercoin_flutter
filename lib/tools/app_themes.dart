@@ -48,7 +48,7 @@ class MyTheme {
     )
   };
 
-  static ThemeData getTheme(ThemeMode mode) {
+  static ThemeData? getTheme(ThemeMode mode) {
     return appThemes[mode];
   }
 }

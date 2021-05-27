@@ -24,15 +24,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   bool _rescanInProgress = false;
-  String _unusedAddress = '';
-  CoinWallet _wallet;
+  String? _unusedAddress = '';
+  CoinWallet? _wallet;
   int _pageIndex = 1;
-  ElectrumConnectionState _connectionState;
-  ElectrumConnection _connectionProvider;
-  ActiveWallets _activeWallets;
-  Iterable _listenedAddresses;
-  List<WalletTransaction> _walletTransactions;
-  int _latestBlock = 0;
+  ElectrumConnectionState? _connectionState;
+  ElectrumConnection? _connectionProvider;
+  late ActiveWallets _activeWallets;
+  late Iterable _listenedAddresses;
+  List<WalletTransaction>? _walletTransactions;
+  int? _latestBlock = 0;
 
   void changeIndex(int i) {
     setState(() {
@@ -42,20 +42,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      await _connectionProvider.init(_wallet.name,
+      await _connectionProvider!.init(_wallet!.name,
           requestedFromWalletHome: true);
     }
   }
@@ -67,48 +67,48 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet?;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      await _activeWallets.generateUnusedAddress(_wallet.name);
+      await _activeWallets.generateUnusedAddress(_wallet!.name);
       _walletTransactions =
-          await _activeWallets.getWalletTransactions(_wallet.name);
-      await _connectionProvider.init(_wallet.name,
+          await _activeWallets.getWalletTransactions(_wallet!.name);
+      await _connectionProvider!.init(_wallet!.name,
           requestedFromWalletHome: true);
 
       var _appSettings = Provider.of<AppSettings>(context, listen: false);
-      if (_appSettings.authenticationOptions['walletHome']) {
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+      if (_appSettings.authenticationOptions!['walletHome']!) {
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed!);
       }
     } else if (_connectionProvider != null) {
-      _connectionState = _connectionProvider.connectionState;
+      _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
 
-      _listenedAddresses = _connectionProvider.listenedAddresses.keys;
+      _listenedAddresses = _connectionProvider!.listenedAddresses.keys;
       if (_connectionState == ElectrumConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
-          _connectionProvider.subscribeToScriptHashes(
-              await _activeWallets.getWalletScriptHashes(_wallet.name));
+          _connectionProvider!.subscribeToScriptHashes(
+              await _activeWallets.getWalletScriptHashes(_wallet!.name));
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
-          _connectionProvider.subscribeToScriptHashes(await _activeWallets
-              .getWalletScriptHashes(_wallet.name, _unusedAddress));
+          _connectionProvider!.subscribeToScriptHashes(await _activeWallets
+              .getWalletScriptHashes(_wallet!.name, _unusedAddress));
         }
       }
-      if (_connectionProvider.latestBlock != null) {
-        if (_connectionProvider.latestBlock > _latestBlock) {
+      if (_connectionProvider!.latestBlock != null) {
+        if (_connectionProvider!.latestBlock! > _latestBlock!) {
           //new block
-          print('new block ${_connectionProvider.latestBlock}');
-          _latestBlock = _connectionProvider.latestBlock;
+          print('new block ${_connectionProvider!.latestBlock}');
+          _latestBlock = _connectionProvider!.latestBlock;
 
-          var unconfirmedTx = _walletTransactions.where((element) =>
-              element.confirmations < 6 && element.timestamp != -1);
+          var unconfirmedTx = _walletTransactions!.where((element) =>
+              element.confirmations! < 6 && element.timestamp != -1);
           unconfirmedTx.forEach((element) {
             print('requesting update for ${element.txid}');
-            _connectionProvider.requestTxUpdate(element.txid);
+            _connectionProvider!.requestTxUpdate(element.txid);
           });
         }
       }
@@ -119,9 +119,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   void rebroadCastUnsendTx() {
     var nonBroadcastedTx =
-        _walletTransactions.where((element) => element.broadCasted == false);
+        _walletTransactions!.where((element) => element.broadCasted == false);
     nonBroadcastedTx.forEach((element) {
-      _connectionProvider.broadcastTransaction(
+      _connectionProvider!.broadcastTransaction(
         element.broadcastHex,
         element.txid,
       );
@@ -130,45 +130,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void deactivate() async {
-    if (_rescanInProgress == false) await _connectionProvider.closeConnection();
+    if (_rescanInProgress == false) await _connectionProvider!.closeConnection();
     super.deactivate();
   }
 
   void selectPopUpMenuItem(String value) {
     if (value == 'import_wallet') {
       Navigator.of(context)
-          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet!.name);
     } else if (value == 'server_settings') {
       Navigator.of(context)
-          .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
+          .pushNamed(Routes.ServerSettings, arguments: _wallet!.name);
     } else if (value == 'rescan') {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
           title:
-              Text(AppLocalizations.instance.translate('wallet_rescan_title')),
+              Text(AppLocalizations.instance.translate('wallet_rescan_title')!),
           content: Text(
-              AppLocalizations.instance.translate('wallet_rescan_content')),
+              AppLocalizations.instance.translate('wallet_rescan_content')!),
           actions: <Widget>[
             TextButton.icon(
                 label: Text(AppLocalizations.instance
-                    .translate('server_settings_alert_cancel')),
+                    .translate('server_settings_alert_cancel')!),
                 icon: Icon(Icons.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
             TextButton.icon(
               label: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button')),
+                  AppLocalizations.instance.translate('jail_dialog_button')!),
               icon: Icon(Icons.check),
               onPressed: () async {
                 //close connection
-                await _connectionProvider.closeConnection();
+                await _connectionProvider!.closeConnection();
                 _rescanInProgress = true;
                 //init rescan
                 await Navigator.of(context).pushNamedAndRemoveUntil(
                     Routes.WalletImportScan, (_) => false,
-                    arguments: _wallet.name);
+                    arguments: _wallet!.name);
               },
             ),
           ],
@@ -208,11 +208,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
         title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(
               AvailableCoins()
-                  .getSpecificCoin(_wallet.name)
+                  .getSpecificCoin(_wallet!.name)!
                   .iconPathTransparent,
               width: 20),
           SizedBox(width: 10),
-          Text(_wallet.title)
+          Text(_wallet!.title!)
         ]),
         actions: [
           IconButton(
@@ -221,7 +221,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               _activeWallets.transferedAddress = null;
               final _result = await Navigator.of(context).pushNamed(
                   Routes.AddressBook,
-                  arguments: {'name': _wallet.name, 'title': _wallet.title});
+                  arguments: {'name': _wallet!.name, 'title': _wallet!.title});
               if (_result != null) {
                 setState(() {
                   _activeWallets.transferedAddress = _result;
@@ -231,7 +231,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             },
           ),
           PopupMenuButton(
-            onSelected: (value) => selectPopUpMenuItem(value),
+            onSelected: (dynamic value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
               return [
                 PopupMenuItem(
@@ -240,7 +240,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     leading: Icon(Icons.arrow_circle_down),
                     title: Text(
                       AppLocalizations.instance
-                          .translate('wallet_pop_menu_paperwallet'),
+                          .translate('wallet_pop_menu_paperwallet')!,
                     ),
                   ),
                 ),
@@ -250,7 +250,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     leading: Icon(Icons.sync),
                     title: Text(
                       AppLocalizations.instance
-                          .translate('wallet_pop_menu_servers'),
+                          .translate('wallet_pop_menu_servers')!,
                     ),
                   ),
                 ),
@@ -260,7 +260,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     leading: Icon(Icons.sync_problem),
                     title: Text(
                       AppLocalizations.instance
-                          .translate('wallet_pop_menu_rescan'),
+                          .translate('wallet_pop_menu_rescan')!,
                     ),
                   ),
                 )
@@ -278,20 +278,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      _wallet.letterCode,
+                      _wallet!.letterCode!,
                       style: TextStyle(
                           fontSize: 26, color: Theme.of(context).accentColor),
                     ),
                     Column(
                       children: [
                         Text(
-                          (_wallet.balance / 1000000).toString(),
+                          (_wallet!.balance! / 1000000).toString(),
                           style: TextStyle(
                               fontSize: 26, fontWeight: FontWeight.bold),
                         ),
-                        _wallet.unconfirmedBalance > 0
+                        _wallet!.unconfirmedBalance! > 0
                             ? Text(
-                                (_wallet.unconfirmedBalance / 1000000)
+                                (_wallet!.unconfirmedBalance! / 1000000)
                                     .toString(),
                                 style: TextStyle(
                                     fontSize: 14,
@@ -310,7 +310,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   walletTransactions: _walletTransactions,
                   unusedAddress: _unusedAddress,
                   changeIndex: changeIndex,
-                  identifier: _wallet.name,
+                  identifier: _wallet!.name,
                 )
               ],
             ),

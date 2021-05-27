@@ -5,7 +5,7 @@ class UnencryptedOptions {
     return await SharedPreferences.getInstance();
   }
 
-  Future<bool> get setupFinished async {
+  Future<bool?> get setupFinished async {
     var instance = await prefs;
     return instance.getBool('setupFinished');
   }

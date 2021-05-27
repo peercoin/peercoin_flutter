@@ -26,10 +26,10 @@ import './tools/app_localizations.dart';
 import './tools/app_routes.dart';
 import './tools/app_themes.dart';
 
-bool setupFinished;
-Widget _homeWidget;
-Locale _locale;
-ThemeMode _themeMode;
+bool? setupFinished;
+Widget? _homeWidget;
+Locale? _locale;
+ThemeMode? _themeMode;
 
 void main() async {
   //init sharedpreferences
@@ -78,7 +78,7 @@ void main() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
+      onSelectNotification: (String? payload) async {
     if (payload != null) {
       debugPrint('notification payload: $payload');
     }

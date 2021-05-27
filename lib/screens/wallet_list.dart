@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -21,7 +22,7 @@ class WalletListScreen extends StatefulWidget {
 class _WalletListScreenState extends State<WalletListScreen> {
   bool _isLoading = false;
   bool _initial = true;
-  ActiveWallets _activeWallets;
+  late ActiveWallets _activeWallets;
 
   @override
   void didChangeDependencies() async {
@@ -34,8 +35,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
         _initial = false;
       });
       if (widget.fromColdStart == false) {
-        if (_appSettings.authenticationOptions['walletList']) {
-          await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+        if (_appSettings.authenticationOptions!['walletList']!) {
+          await Auth.requireAuth(context, _appSettings.biometricsAllowed!);
         }
       } else {
         //push to default wallet
@@ -48,9 +49,8 @@ class _WalletListScreenState extends State<WalletListScreen> {
           );
         } else if (values.length > 1) {
           //find default wallet
-          final defaultWallet = values.firstWhere(
-              (elem) => elem.letterCode == _appSettings.defaultWallet,
-              orElse: () => null);
+          final defaultWallet = values.firstWhereOrNull(
+              (elem) => elem.letterCode == _appSettings.defaultWallet);
           if (defaultWallet != null) {
             await Navigator.of(context).pushReplacementNamed(
               Routes.WalletHome,
@@ -70,7 +70,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
       drawer: AppDrawer(),
       appBar: AppBar(
         title: Center(
-            child: Text(AppLocalizations.instance.translate('wallets_list'))),
+            child: Text(AppLocalizations.instance.translate('wallets_list')!)),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -102,44 +102,46 @@ class _WalletListScreenState extends State<WalletListScreen> {
                           child: Center(child: LoadingIndicator()),
                         );
                       }
-                      if (snapshot.data == null || snapshot.data.isEmpty) {
+                      if (snapshot.data == null || !snapshot.hasData) {
                         return Column(children: [
                           SizedBox(height: 30),
                           Text(AppLocalizations.instance
-                              .translate('wallets_none')),
+                              .translate('wallets_none')!),
                           SizedBox(height: 30)
                         ]);
                       }
+                      var listData = snapshot.data as List;
                       return Expanded(
                         child: ListView.builder(
-                          itemCount: snapshot.data.length,
+                          itemCount: listData.length,
                           itemBuilder: (ctx, i) {
-                            CoinWallet _wallet = snapshot.data[i];
+                            CoinWallet _wallet = listData[i];
                             return Card(
                               child: Column(
                                 children: [
                                   InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        await Navigator.of(context)
-                                            .pushReplacementNamed(
-                                          Routes.WalletHome,
-                                          arguments: _wallet,
-                                        );
-                                      },
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Image.asset(
-                                              AvailableCoins()
-                                                  .getSpecificCoin(_wallet.name)
-                                                  .iconPath,
-                                              width: 20),
-                                        ),
-                                        title: Text(_wallet.title),
-                                      ))
+                                    onTap: () async {
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
+                                      await Navigator.of(context)
+                                          .pushReplacementNamed(
+                                        Routes.WalletHome,
+                                        arguments: _wallet,
+                                      );
+                                    },
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: Image.asset(
+                                            AvailableCoins()
+                                                .getSpecificCoin(_wallet.name)!
+                                                .iconPath,
+                                            width: 20),
+                                      ),
+                                      title: Text(_wallet.title!),
+                                    ),
+                                  )
                                 ],
                               ),
                             );

@@ -1,47 +1,51 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings with ChangeNotifier {
-  AppOptionsStore _appOptions;
+  AppOptionsStore? _appOptions;
   final EncryptedBox _encryptedBox;
-  SharedPreferences _sharedPrefs;
-  String _selectedLang;
-  String _selectedTheme;
+  late SharedPreferences _sharedPrefs;
+  String? _selectedLang;
+  String? _selectedTheme;
   AppSettings(this._encryptedBox);
 
   Future<void> init() async {
-    var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
-    _appOptions = _optionsBox.get('appOptions');
+    var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
+    _appOptions = _optionsBox!.get('appOptions');
     _sharedPrefs = await SharedPreferences.getInstance();
     _selectedTheme = _sharedPrefs.getString('theme_mode') ?? 'system';
   }
 
   Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
-    var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
+    var _optionsBox =
+        await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
     await _optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
     await _sharedPrefs.setString('language_code', lang);
   }
 
-  bool get biometricsAllowed {
-    return _appOptions.allowBiometrics;
+  bool? get biometricsAllowed {
+    return _appOptions!.allowBiometrics;
   }
 
   void setBiometricsAllowed(bool newStatus) {
-    _appOptions.allowBiometrics = newStatus;
+    _appOptions!.allowBiometrics = newStatus;
     notifyListeners();
   }
 
-  Map<String, bool> get authenticationOptions {
-    return _appOptions.authenticationOptions;
+  Map<String, bool>? get authenticationOptions {
+    return _appOptions!.authenticationOptions;
   }
 
-  String get selectedLang {
+  String? get selectedLang {
     return _selectedLang;
   }
 
-  String get selectedTheme {
+  String? get selectedTheme {
     return _selectedTheme;
   }
 
@@ -58,16 +62,16 @@ class AppSettings with ChangeNotifier {
   }
 
   void setAuthenticationOptions(String field, bool newStatus) {
-    _appOptions.changeAuthenticationOptions(field, newStatus);
+    _appOptions!.changeAuthenticationOptions(field, newStatus);
     notifyListeners();
   }
 
   String get defaultWallet {
-    return _appOptions.defaultWallet ?? '';
+    return _appOptions!.defaultWallet ?? '';
   }
 
-  void setDefaultWallet(String newWallet) {
-    _appOptions.defaultWallet = newWallet;
+  void setDefaultWallet(String? newWallet) {
+    _appOptions!.defaultWallet = newWallet;
     notifyListeners();
   }
 }

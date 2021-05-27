@@ -17,15 +17,15 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return WalletTransaction(
-      txid: fields[0] as String,
-      timestamp: fields[1] as int,
-      value: fields[2] as int,
-      fee: fields[3] as int,
-      address: fields[4] as String,
-      direction: fields[5] as String,
-      broadCasted: fields[7] as bool,
-      broadcastHex: fields[8] as String,
-      confirmations: fields[6] as int,
+      txid: fields[0] as String?,
+      timestamp: fields[1] as int?,
+      value: fields[2] as int?,
+      fee: fields[3] as int?,
+      address: fields[4] as String?,
+      direction: fields[5] as String?,
+      broadCasted: fields[7] as bool?,
+      broadcastHex: fields[8] as String?,
+      confirmations: fields[6] as int?,
     );
   }
 

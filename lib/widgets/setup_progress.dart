@@ -8,7 +8,7 @@ class SetupProgressIndicator extends StatelessWidget with PreferredSizeWidget {
 
   SetupProgressIndicator(
     this.step, {
-    Key key,
+    Key? key,
   })  : preferredSize = Size.fromHeight(50.0),
         super(key: key);
   @override

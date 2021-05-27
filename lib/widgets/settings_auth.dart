@@ -7,11 +7,11 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class SettingsAuth extends StatelessWidget {
-  final bool _biometricsAllowed;
+  final bool? _biometricsAllowed;
   final bool _biometricsAvailable;
-  final AppSettings _settings;
+  final AppSettings? _settings;
   final Function _saveSnack;
-  final Map<String, bool> _authenticationOptions;
+  final Map<String, bool>? _authenticationOptions;
 
   SettingsAuth(
     this._biometricsAllowed,
@@ -27,13 +27,13 @@ class SettingsAuth extends StatelessWidget {
       biometricsAllowed,
       () async => await screenLock(
         title: Text(
-          AppLocalizations.instance.translate('authenticate_title_new'),
+          AppLocalizations.instance.translate('authenticate_title_new')!,
           style: TextStyle(
             fontSize: 24,
           ),
         ),
         confirmTitle: Text(
-          AppLocalizations.instance.translate('authenticate_confirm_title_new'),
+          AppLocalizations.instance.translate('authenticate_confirm_title_new')!,
           style: TextStyle(
             fontSize: 24,
           ),
@@ -48,7 +48,7 @@ class SettingsAuth extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               AppLocalizations.instance
-                  .translate('authenticate_change_pin_success'),
+                  .translate('authenticate_change_pin_success')!,
               textAlign: TextAlign.center,
             ),
             duration: Duration(seconds: 2),
@@ -65,65 +65,65 @@ class SettingsAuth extends StatelessWidget {
       children: [
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_biometrics'),
+              AppLocalizations.instance.translate('app_settings_biometrics')!,
             ),
-            value: _biometricsAllowed,
+            value: _biometricsAllowed!,
             onChanged: (newState) {
               if (_biometricsAvailable == false) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
                     AppLocalizations.instance
-                        .translate('setup_pin_no_biometrics'),
+                        .translate('setup_pin_no_biometrics')!,
                     textAlign: TextAlign.center,
                   ),
                   duration: Duration(seconds: 5),
                 ));
               } else {
-                _settings.setBiometricsAllowed(newState);
+                _settings!.setBiometricsAllowed(newState);
                 _saveSnack(context);
               }
             }),
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_walletList'),
+              AppLocalizations.instance.translate('app_settings_walletList')!,
             ),
-            value: _authenticationOptions['walletList'],
+            value: _authenticationOptions!['walletList']!,
             onChanged: (newState) {
-              _settings.setAuthenticationOptions('walletList', newState);
+              _settings!.setAuthenticationOptions('walletList', newState);
               _saveSnack(context);
             }),
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_walletHome'),
+              AppLocalizations.instance.translate('app_settings_walletHome')!,
             ),
-            value: _authenticationOptions['walletHome'],
+            value: _authenticationOptions!['walletHome']!,
             onChanged: (newState) {
-              _settings.setAuthenticationOptions('walletHome', newState);
+              _settings!.setAuthenticationOptions('walletHome', newState);
               _saveSnack(context);
             }),
         SwitchListTile(
             title: Text(
               AppLocalizations.instance
-                  .translate('app_settings_sendTransaction'),
+                  .translate('app_settings_sendTransaction')!,
             ),
-            value: _authenticationOptions['sendTransaction'],
+            value: _authenticationOptions!['sendTransaction']!,
             onChanged: (newState) {
-              _settings.setAuthenticationOptions('sendTransaction', newState);
+              _settings!.setAuthenticationOptions('sendTransaction', newState);
               _saveSnack(context);
             }),
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_newWallet'),
+              AppLocalizations.instance.translate('app_settings_newWallet')!,
             ),
-            value: _authenticationOptions['newWallet'],
+            value: _authenticationOptions!['newWallet']!,
             onChanged: (newState) {
-              _settings.setAuthenticationOptions('newWallet', newState);
+              _settings!.setAuthenticationOptions('newWallet', newState);
               _saveSnack(context);
             }),
         ElevatedButton(
-          onPressed: () => changePIN(context, _settings.biometricsAllowed),
+          onPressed: () => changePIN(context, _settings!.biometricsAllowed!),
           child: Text(
-            AppLocalizations.instance.translate('app_settings_changeCode'),
+            AppLocalizations.instance.translate('app_settings_changeCode')!,
           ),
         )
       ],

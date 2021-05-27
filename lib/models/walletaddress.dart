@@ -5,32 +5,32 @@ part 'walletaddress.g.dart';
 @HiveType(typeId: 2)
 class WalletAddress extends HiveObject {
   @HiveField(0)
-  final String address;
+  final String? address;
   @HiveField(1)
-  String addressBookName;
+  String? addressBookName;
   @HiveField(2)
-  String status;
+  String? status;
   @HiveField(3)
-  bool used;
+  bool? used;
   @HiveField(4)
-  bool isOurs = true;
+  bool? isOurs = true;
   @HiveField(5)
-  String wif = '';
+  String? wif = '';
 
   WalletAddress({
-    @required this.address,
-    @required this.addressBookName,
-    @required this.used,
-    @required this.status,
-    @required this.isOurs,
-    @required this.wif,
+    required this.address,
+    required this.addressBookName,
+    required this.used,
+    required this.status,
+    required this.isOurs,
+    required this.wif,
   });
 
-  set newStatus(String newStatus) {
+  set newStatus(String? newStatus) {
     status = newStatus;
   }
 
-  set newAddressBookName(String newAddressBookName) {
+  set newAddressBookName(String? newAddressBookName) {
     addressBookName = newAddressBookName;
   }
 
@@ -38,7 +38,7 @@ class WalletAddress extends HiveObject {
     used = newUsed;
   }
 
-  set newWif(String newWif) {
+  set newWif(String? newWif) {
     wif = newWif;
   }
 }

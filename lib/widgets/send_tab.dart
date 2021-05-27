@@ -17,7 +17,7 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
-  final Function changeIndex;
+  final Function? changeIndex;
   SendTab(this.changeIndex);
 
   @override
@@ -33,22 +33,22 @@ class _SendTabState extends State<SendTab> {
   final amountController = TextEditingController();
   final labelController = TextEditingController();
   bool _initial = true;
-  CoinWallet _wallet;
-  Coin _availableCoin;
-  ActiveWallets _activeWallets;
-  int _txFee = 0;
+  CoinWallet? _wallet;
+  Coin? _availableCoin;
+  late ActiveWallets _activeWallets;
+  int? _txFee = 0;
   int _totalValue = 0;
-  WalletAddress _transferedAddress;
-  List<WalletAddress> _availableAddresses = [];
+  WalletAddress? _transferedAddress;
+  List<WalletAddress>? _availableAddresses = [];
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
-      _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet?;
+      _availableCoin = AvailableCoins().getSpecificCoin(_wallet!.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _availableAddresses =
-          await _activeWallets.getWalletAddresses(_wallet.name);
+          await _activeWallets.getWalletAddresses(_wallet!.name);
       setState(() {
         _initial = false;
       });
@@ -56,11 +56,11 @@ class _SendTabState extends State<SendTab> {
     super.didChangeDependencies();
   }
 
-  Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
+  Future<Map> buildTx(bool dryrun, [int? fee = 0]) async {
     return await _activeWallets.buildTransaction(
-      _wallet.name,
-      _addressKey.currentState.value.trim(),
-      _amountKey.currentState.value,
+      _wallet!.name,
+      _addressKey.currentState!.value.trim(),
+      _amountKey.currentState!.value,
       fee,
       dryrun,
     );
@@ -99,30 +99,30 @@ class _SendTabState extends State<SendTab> {
     var _firstPress = true;
     _buildResult = await buildTx(true);
 
-    int _destroyedChange = _buildResult['destroyedChange'];
+    int? _destroyedChange = _buildResult['destroyedChange'];
     _txFee = _buildResult['fee'];
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          String _displayValue = _amountKey.currentState.value;
+          String? _displayValue = _amountKey.currentState!.value;
           _totalValue =
-              (double.parse(_amountKey.currentState.value) * 1000000).toInt();
-          if (_totalValue == _wallet.balance) {
-            var newValue = double.parse(_amountKey.currentState.value) -
-                (_txFee / 1000000);
-            _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
+              (double.parse(_amountKey.currentState!.value) * 1000000).toInt();
+          if (_totalValue == _wallet!.balance) {
+            var newValue = double.parse(_amountKey.currentState!.value) -
+                (_txFee! / 1000000);
+            _displayValue = newValue.toStringAsFixed(_availableCoin!.fractions);
           } else {
-            _totalValue = _totalValue + _txFee;
+            _totalValue = _totalValue + _txFee!;
           }
-          if (_destroyedChange > 0) {
-            var newValue = (double.parse(_amountKey.currentState.value) -
-                (_txFee / 1000000));
+          if (_destroyedChange! > 0) {
+            var newValue = (double.parse(_amountKey.currentState!.value) -
+                (_txFee! / 1000000));
             _displayValue = newValue.toString();
-            _totalValue = _totalValue - _txFee + _destroyedChange;
+            _totalValue = _totalValue - _txFee! + _destroyedChange;
           }
           return SimpleDialog(
             title: Text(AppLocalizations.instance
-                .translate('send_confirm_transaction')),
+                .translate('send_confirm_transaction')!),
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -136,35 +136,35 @@ class _SendTabState extends State<SendTab> {
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
                           TextSpan(
-                              text: '$_displayValue ${_wallet.letterCode}',
+                              text: '$_displayValue ${_wallet!.letterCode}',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                               text: AppLocalizations.instance
                                   .translate('send_to')),
                           TextSpan(
-                              text: _addressKey.currentState.value,
+                              text: _addressKey.currentState!.value,
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
                     SizedBox(height: 10),
                     Text(AppLocalizations.instance.translate('send_fee', {
-                      'amount': '${_txFee / 1000000}',
-                      'letter_code': '${_wallet.letterCode}'
-                    })),
+                      'amount': '${_txFee! / 1000000}',
+                      'letter_code': '${_wallet!.letterCode}'
+                    })!),
                     if (_destroyedChange > 0)
                       Text(
                         AppLocalizations.instance.translate('send_dust', {
                           'amount': '${_destroyedChange / 1000000}',
-                          'letter_code': '${_wallet.letterCode}'
-                        }),
+                          'letter_code': '${_wallet!.letterCode}'
+                        })!,
                         style: TextStyle(color: Theme.of(context).errorColor),
                       ),
                     Text(
                         AppLocalizations.instance.translate('send_total', {
                           'amount': '${_totalValue / 1000000}',
-                          'letter_code': '${_wallet.letterCode}'
-                        }),
+                          'letter_code': '${_wallet!.letterCode}'
+                        })!,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 20),
                     ElevatedButton.icon(
@@ -172,7 +172,7 @@ class _SendTabState extends State<SendTab> {
                         primary: Theme.of(context).primaryColor,
                       ),
                       label: Text(AppLocalizations.instance
-                          .translate('send_confirm_send')),
+                          .translate('send_confirm_send')!),
                       icon: Icon(Icons.send),
                       onPressed: () async {
                         if (_firstPress == false) return; //prevent double tap
@@ -181,11 +181,11 @@ class _SendTabState extends State<SendTab> {
                           var _buildResult = await buildTx(false, _txFee);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
-                              _wallet.name, _addressKey.currentState.value, {
+                              _wallet!.name, _addressKey.currentState!.value, {
                             'txid': _buildResult['id'],
                             'hex': _buildResult['hex'],
-                            'outValue': _totalValue - _txFee,
-                            'outFees': _txFee + _destroyedChange
+                            'outValue': _totalValue - _txFee!,
+                            'outFees': _txFee! + _destroyedChange
                           });
                           //broadcast
                           Provider.of<ElectrumConnection>(context,
@@ -193,17 +193,17 @@ class _SendTabState extends State<SendTab> {
                               .broadcastTransaction(
                                   _buildResult['hex'], _buildResult['id']);
                           //store label if exists
-                          if (_labelKey.currentState.value != '') {
+                          if (_labelKey.currentState!.value != '') {
                             _activeWallets.updateLabel(
-                              _wallet.name,
-                              _addressKey.currentState.value,
-                              _labelKey.currentState.value,
+                              _wallet!.name,
+                              _addressKey.currentState!.value,
+                              _labelKey.currentState!.value,
                             );
                           }
                           //pop message
                           Navigator.of(context).pop();
                           //navigate back to tx list
-                          widget.changeIndex(1);
+                          widget.changeIndex!(1);
                         } catch (e) {
                           print('error $e');
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -211,7 +211,7 @@ class _SendTabState extends State<SendTab> {
                               content: Text(
                                 AppLocalizations.instance.translate(
                                   'send_oops',
-                                ),
+                                )!,
                               ),
                             ),
                           );
@@ -227,12 +227,12 @@ class _SendTabState extends State<SendTab> {
   }
 
   Future<Iterable> getSuggestions(String pattern) async {
-    return _availableAddresses.where((element) {
-      if (element.isOurs == false && element.address.contains(pattern)) {
+    return _availableAddresses!.where((element) {
+      if (element.isOurs == false && element.address!.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
           element.addressBookName != null &&
-          element.addressBookName.contains(pattern)) {
+          element.addressBookName!.contains(pattern)) {
         return true;
       }
       return false;
@@ -243,9 +243,9 @@ class _SendTabState extends State<SendTab> {
   Widget build(BuildContext context) {
     _transferedAddress = _activeWallets.transferedAddress;
     if (_transferedAddress != null &&
-        _transferedAddress.address != addressController.text) {
-      addressController.text = _transferedAddress.address;
-      labelController.text = _transferedAddress.addressBookName ?? '';
+        _transferedAddress!.address != addressController.text) {
+      addressController.text = _transferedAddress!.address!;
+      labelController.text = _transferedAddress!.addressBookName ?? '';
       _activeWallets.transferedAddress = null; //reset transfer
     }
 
@@ -268,7 +268,9 @@ class _SendTabState extends State<SendTab> {
                   suffixIcon: IconButton(
                     onPressed: () async {
                       var data = await Clipboard.getData('text/plain');
-                      addressController.text = data.text;
+                      if (data!.text != null) {
+                        addressController.text = data.text!;
+                      }
                     },
                     icon: Icon(Icons.paste,
                         color: Theme.of(context).primaryColor),
@@ -278,7 +280,7 @@ class _SendTabState extends State<SendTab> {
               suggestionsCallback: (pattern) {
                 return getSuggestions(pattern);
               },
-              itemBuilder: (context, suggestion) {
+              itemBuilder: (context, dynamic suggestion) {
                 return ListTile(
                   title: Text(suggestion.addressBookName ?? ''),
                   subtitle: Text(suggestion.address),
@@ -287,18 +289,18 @@ class _SendTabState extends State<SendTab> {
               transitionBuilder: (context, suggestionsBox, controller) {
                 return suggestionsBox;
               },
-              onSuggestionSelected: (suggestion) {
+              onSuggestionSelected: (dynamic suggestion) {
                 addressController.text = suggestion.address;
                 labelController.text = suggestion.addressBookName;
               },
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return AppLocalizations.instance
                       .translate('send_enter_address');
                 }
                 var sanitized = value.trim();
                 if (Address.validateAddress(
-                        sanitized, _availableCoin.networkType) ==
+                        sanitized, _availableCoin!.networkType) ==
                     false) {
                   return AppLocalizations.instance
                       .translate('send_invalid_address');
@@ -324,16 +326,16 @@ class _SendTabState extends State<SendTab> {
                 autocorrect: false,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
-                      getValidator(_availableCoin.fractions)),
+                      getValidator(_availableCoin!.fractions)),
                 ],
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
                   labelText: AppLocalizations.instance.translate('send_amount'),
-                  suffix: Text(_wallet.letterCode),
+                  suffix: Text(_wallet!.letterCode!),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return AppLocalizations.instance
                         .translate('send_enter_amount');
                   }
@@ -341,25 +343,25 @@ class _SendTabState extends State<SendTab> {
                   amountController.text = convertedValue;
                   var txValueInSatoshis =
                       (double.parse(convertedValue) * 1000000).toInt();
-                  print('req value $txValueInSatoshis - ${_wallet.balance}');
+                  print('req value $txValueInSatoshis - ${_wallet!.balance}');
                   if (convertedValue.contains('.') &&
                       convertedValue.split('.')[1].length >
-                          _availableCoin.fractions) {
+                          _availableCoin!.fractions) {
                     return AppLocalizations.instance
                         .translate('send_amount_small');
                   }
-                  if (txValueInSatoshis > _wallet.balance) {
+                  if (txValueInSatoshis > _wallet!.balance!) {
                     return AppLocalizations.instance
                         .translate('send_amount_exceeds');
                   }
-                  if (txValueInSatoshis < _availableCoin.minimumTxValue) {
+                  if (txValueInSatoshis < _availableCoin!.minimumTxValue) {
                     return AppLocalizations.instance.translate(
                         'send_amount_below_minimum', {
-                      'amount': '${_availableCoin.minimumTxValue / 1000000}'
+                      'amount': '${_availableCoin!.minimumTxValue / 1000000}'
                     });
                   }
-                  if (txValueInSatoshis == _wallet.balance &&
-                      _wallet.balance == _availableCoin.minimumTxValue) {
+                  if (txValueInSatoshis == _wallet!.balance &&
+                      _wallet!.balance == _availableCoin!.minimumTxValue) {
                     return AppLocalizations.instance.translate(
                       'send_amount_below_minimum_unable',
                     );
@@ -374,16 +376,17 @@ class _SendTabState extends State<SendTab> {
                   primary: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
                     FocusScope.of(context).unfocus(); //hide keyboard
                     //check for required auth
                     var _appSettings =
                         Provider.of<AppSettings>(context, listen: false);
-                    if (_appSettings.authenticationOptions['sendTransaction']) {
+                    if (_appSettings
+                        .authenticationOptions!['sendTransaction']!) {
                       await Auth.requireAuth(
                           context,
-                          _appSettings.biometricsAllowed,
+                          _appSettings.biometricsAllowed!,
                           () => showTransactionConfirmation(context));
                     } else {
                       showTransactionConfirmation(context);
@@ -392,11 +395,11 @@ class _SendTabState extends State<SendTab> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(AppLocalizations.instance.translate(
                       'send_errors_solve',
-                    ))));
+                    )!)));
                   }
                 },
                 icon: Icon(Icons.send),
-                label: Text(AppLocalizations.instance.translate('send')),
+                label: Text(AppLocalizations.instance.translate('send')!),
               ),
               IconButton(
                   icon: Icon(
@@ -409,7 +412,7 @@ class _SendTabState extends State<SendTab> {
                         Routes.QRScan,
                         arguments:
                             AppLocalizations.instance.translate('scan_qr'));
-                    if (result != null) parseQrResult(result);
+                    if (result != null) parseQrResult(result as String);
                   }),
             ]),
           ],

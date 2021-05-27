@@ -4,7 +4,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 
 class WalletHomeConnection extends StatelessWidget {
-  final ElectrumConnectionState _connectionState;
+  final ElectrumConnectionState? _connectionState;
   WalletHomeConnection(this._connectionState);
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class WalletHomeConnection extends StatelessWidget {
             width: 3,
           ),
           Text(
-            AppLocalizations.instance.translate('wallet_connected'),
+            AppLocalizations.instance.translate('wallet_connected')!,
             style:
                 TextStyle(color: Theme.of(context).accentColor, fontSize: 12),
           ),
@@ -38,7 +38,7 @@ class WalletHomeConnection extends StatelessWidget {
             width: 3,
           ),
           Text(
-            AppLocalizations.instance.translate('wallet_offline'),
+            AppLocalizations.instance.translate('wallet_offline')!,
             style:
                 TextStyle(color: Theme.of(context).accentColor, fontSize: 12),
           ),

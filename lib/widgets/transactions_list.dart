@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
-  final String _identifier;
+  final String? _identifier;
   TransactionList(this._walletTransactions, this._identifier);
 
   @override
@@ -25,11 +25,11 @@ class _TransactionListState extends State<TransactionList> {
     });
   }
 
-  String resolveAddressDisplayName(String address) {
+  String? resolveAddressDisplayName(String? address) {
     final result = context
         .read<ActiveWallets>()
         .getLabelForAddress(widget._identifier, address);
-    if (result != '') return '$result (${address.substring(0, 5)}...)';
+    if (result != '') return '$result (${address!.substring(0, 5)}...)';
     return address;
   }
 
@@ -57,21 +57,21 @@ class _TransactionListState extends State<TransactionList> {
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label: Container(
                   child: Text(
-                      AppLocalizations.instance.translate('transactions_in'))),
+                      AppLocalizations.instance.translate('transactions_in')!)),
               selected: _filterChoice == 'in',
               onSelected: (_) => _handleSelect('in'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label:
-                  Text(AppLocalizations.instance.translate('transactions_all')),
+                  Text(AppLocalizations.instance.translate('transactions_all')!),
               selected: _filterChoice == 'all',
               onSelected: (_) => _handleSelect('all'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label:
-                  Text(AppLocalizations.instance.translate('transactions_out')),
+                  Text(AppLocalizations.instance.translate('transactions_out')!),
               selected: _filterChoice == 'out',
               onSelected: (_) => _handleSelect('out'),
             ),
@@ -81,18 +81,18 @@ class _TransactionListState extends State<TransactionList> {
         child: _reversedTx.isEmpty
             ? Center(
                 child: Text(
-                    AppLocalizations.instance.translate('transactions_none')),
+                    AppLocalizations.instance.translate('transactions_none')!),
               )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {
-                  if (dragEndDetails.primaryVelocity < 0) {
+                  if (dragEndDetails.primaryVelocity! < 0) {
                     //left swipe
                     if (_filterChoice == 'in') {
                       _handleSelect('all');
                     } else if (_filterChoice == 'all') {
                       _handleSelect('out');
                     }
-                  } else if (dragEndDetails.primaryVelocity > 0) {
+                  } else if (dragEndDetails.primaryVelocity! > 0) {
                     //right swipe
                     if (_filterChoice == 'out') {
                       _handleSelect('all');
@@ -110,7 +110,7 @@ class _TransactionListState extends State<TransactionList> {
                         onTap: () => Navigator.of(context)
                             .pushNamed(Routes.Transaction, arguments: [
                           _filteredTx[i],
-                          ModalRoute.of(context).settings.arguments
+                          ModalRoute.of(context)!.settings.arguments
                         ]),
                         leading: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,7 +131,7 @@ class _TransactionListState extends State<TransactionList> {
                                                   .accentColor))
                                       : CircularStepProgressIndicator(
                                           totalSteps: 6,
-                                          currentStep: currentConfirmations,
+                                          currentStep: currentConfirmations!,
                                           width: 20,
                                           height: 20,
                                           selectedColor:
@@ -145,7 +145,7 @@ class _TransactionListState extends State<TransactionList> {
                                 DateFormat('d. MMM').format(
                                     _filteredTx[i].timestamp != null
                                         ? DateTime.fromMillisecondsSinceEpoch(
-                                            _filteredTx[i].timestamp * 1000)
+                                            _filteredTx[i].timestamp! * 1000)
                                         : DateTime.now()),
                                 style: TextStyle(
                                   fontWeight: _filteredTx[i].timestamp != null
@@ -157,14 +157,14 @@ class _TransactionListState extends State<TransactionList> {
                             ]),
                         title: Center(
                           child: Text(
-                            _filteredTx[i].txid,
+                            _filteredTx[i].txid!,
                             overflow: TextOverflow.ellipsis,
                             textScaleFactor: 0.9,
                           ),
                         ),
                         subtitle: Center(
                           child: Text(
-                            resolveAddressDisplayName(_filteredTx[i].address),
+                            resolveAddressDisplayName(_filteredTx[i].address)!,
                             overflow: TextOverflow.ellipsis,
                             textScaleFactor: 1,
                           ),
@@ -174,7 +174,7 @@ class _TransactionListState extends State<TransactionList> {
                           children: [
                             Text(
                               (_filteredTx[i].direction == 'in' ? '+' : '-') +
-                                  (_filteredTx[i].value / 1000000).toString(),
+                                  (_filteredTx[i].value! / 1000000).toString(),
                               style: TextStyle(
                                   fontWeight: _filteredTx[i].timestamp != null
                                       ? FontWeight.bold
@@ -187,8 +187,8 @@ class _TransactionListState extends State<TransactionList> {
                               Text(
                                 AppLocalizations.instance.translate(
                                     'transactions_fee', {
-                                  'amount': '${_filteredTx[i].fee / 1000000}'
-                                }),
+                                  'amount': '${_filteredTx[i].fee! / 1000000}'
+                                })!,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 12,

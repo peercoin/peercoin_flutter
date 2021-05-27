@@ -13,7 +13,7 @@ class AboutScren extends StatefulWidget {
 
 class _AboutScrenState extends State<AboutScren> {
   bool _initial = true;
-  PackageInfo _packageInfo;
+  PackageInfo? _packageInfo;
 
   @override
   void didChangeDependencies() async {
@@ -47,7 +47,7 @@ class _AboutScrenState extends State<AboutScren> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            AppLocalizations.instance.translate('about'),
+            AppLocalizations.instance.translate('about')!,
           ),
         ),
         drawer: AppDrawer(),
@@ -62,86 +62,86 @@ class _AboutScrenState extends State<AboutScren> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('${_packageInfo.appName}'),
+                            Text('${_packageInfo!.appName}'),
                             Text(
-                              'Version ${_packageInfo.version} Build ${_packageInfo.buildNumber}',
+                              'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
                             ),
                             Text(AppLocalizations.instance.translate(
                               'about_developers',
                               {'year': DateFormat.y().format(DateTime.now())},
-                            )),
+                            )!),
                             TextButton(
                                 onPressed: () => _launchURL(
                                     'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
                                 child: Text(
                                   AppLocalizations.instance
-                                      .translate('about_license'),
+                                      .translate('about_license')!,
                                 )),
                             Divider(),
                             SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance.translate('about_free'),
+                              AppLocalizations.instance.translate('about_free')!,
                             ),
                             TextButton(
                                 onPressed: () => _launchURL(
                                     'https://github.com/peercoin/peercoin_flutter'),
                                 child: Text(
                                   AppLocalizations.instance
-                                      .translate('about_view_source'),
+                                      .translate('about_view_source')!,
                                 )),
                             Divider(),
                             SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
-                                  .translate('about_data_protection'),
+                                  .translate('about_data_protection')!,
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
                                   'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('about_data_declaration'),
+                                    .translate('about_data_declaration')!,
                               ),
                             ),
                             Divider(),
                             SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
-                                  .translate('about_foundation'),
+                                  .translate('about_foundation')!,
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
                                   'https://www.peercoin.net/foundation'),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('about_foundation_button'),
+                                    .translate('about_foundation_button')!,
                               ),
                             ),
                             Divider(),
                             SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
-                                  .translate('about_translate'),
+                                  .translate('about_translate')!,
                             ),
                             TextButton(
                               onPressed: () async =>
                                   _launchURL('https://weblate.ppc.lol'),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('about_go_weblate'),
+                                    .translate('about_go_weblate')!,
                               ),
                             ),
                             Divider(),
                             SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
-                                  .translate('about_help_or_feedback'),
+                                  .translate('about_help_or_feedback')!,
                             ),
                             TextButton(
                               onPressed: () async => launchMailto(),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('about_send_mail'),
+                                    .translate('about_send_mail')!,
                               ),
                             ),
                           ]),

@@ -17,7 +17,7 @@ class AuthJailScreen extends StatefulWidget {
 }
 
 class _AuthJailState extends State<AuthJailScreen> {
-  Timer _timer;
+  late Timer _timer;
   int _lockCountdown = 0;
   bool _initial = true;
   bool _jailedFromRoute = false;
@@ -45,7 +45,7 @@ class _AuthJailState extends State<AuthJailScreen> {
     await appSettings.init();
     await Auth.requireAuth(
       context,
-      appSettings.biometricsAllowed,
+      appSettings.biometricsAllowed!,
       () async {
         final encrytpedStorage =
             Provider.of<EncryptedBox>(context, listen: false);
@@ -76,7 +76,7 @@ class _AuthJailState extends State<AuthJailScreen> {
       //check if jailedFromHome came again through route
       if (widget._jailedFromHome == false) {
         final jailedFromRoute =
-            ModalRoute.of(context).settings.arguments as bool;
+            ModalRoute.of(context)!.settings.arguments as bool?;
         if (jailedFromRoute == true) _jailedFromRoute = true;
       }
 
@@ -110,14 +110,14 @@ class _AuthJailState extends State<AuthJailScreen> {
                 size: 48,
               ),
               SizedBox(height: 20),
-              Text(AppLocalizations.instance.translate('jail_heading'),
+              Text(AppLocalizations.instance.translate('jail_heading')!,
                   style: TextStyle(fontSize: 24, color: Colors.white)),
               SizedBox(height: 20),
               Text(_lockCountdown.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24, color: Colors.white)),
               SizedBox(height: 20),
-              Text(AppLocalizations.instance.translate('jail_countdown'),
+              Text(AppLocalizations.instance.translate('jail_countdown')!,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24, color: Colors.white)),
               SizedBox(height: 20),

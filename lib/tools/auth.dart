@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
@@ -14,7 +16,7 @@ class Auth {
   static int failedAuthAttempts = 0;
 
   static Future<void> executeCallback(
-      BuildContext context, Function callback) async {
+      BuildContext context, Function? callback) async {
     //reset unsuccesful login and attempt counter
     await Provider.of<EncryptedBox>(context, listen: false).setFailedAuths(0);
     await Provider.of<EncryptedBox>(context, listen: false)
@@ -39,12 +41,12 @@ class Auth {
           return AlertDialog(
             title: Text(
               AppLocalizations.instance
-                  .translate('authenticate_retry_warning_title'),
+                  .translate('authenticate_retry_warning_title')!,
               textAlign: TextAlign.center,
             ),
             content: Text(
               AppLocalizations.instance
-                  .translate('authenticate_retry_warning_text'),
+                  .translate('authenticate_retry_warning_text')!,
             ),
             actions: [
               TextButton(
@@ -52,7 +54,7 @@ class Auth {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
+                  AppLocalizations.instance.translate('jail_dialog_button')!,
                 ),
               ),
             ],
@@ -73,7 +75,7 @@ class Auth {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              AppLocalizations.instance.translate('jail_dialog_title'),
+              AppLocalizations.instance.translate('jail_dialog_title')!,
               textAlign: TextAlign.center,
             ),
             actions: [
@@ -82,7 +84,7 @@ class Auth {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
+                  AppLocalizations.instance.translate('jail_dialog_button')!,
                 ),
               ),
             ],
@@ -93,7 +95,7 @@ class Auth {
   }
 
   static Future<void> localAuth(BuildContext context,
-      [Function callback]) async {
+      [Function? callback]) async {
     final localAuth = LocalAuthentication();
     final authStrings = AndroidAuthMessages(
       signInTitle:
@@ -106,7 +108,7 @@ class Auth {
           androidAuthStrings: authStrings,
           biometricOnly: true,
           localizedReason: AppLocalizations.instance
-              .translate('authenticate_biometric_reason'),
+              .translate('authenticate_biometric_reason')!,
           stickyAuth: true);
       if (didAuthenticate) {
         await executeCallback(context, callback);
@@ -117,7 +119,7 @@ class Auth {
   }
 
   static Future<void> requireAuth(BuildContext context, bool biometricsAllowed,
-      [Function callback,
+      [Function? callback,
       bool canCancel = true,
       bool jailedFromHome = false]) async {
     failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
@@ -126,8 +128,8 @@ class Auth {
 
     await screenLock(
       context: context,
-      correctString:
-          await Provider.of<EncryptedBox>(context, listen: false).passCode,
+      correctString: await Provider.of<EncryptedBox>(context, listen: false)
+          .passCode as String,
       digits: 6,
       maxRetries: retriesLeft,
       canCancel: canCancel,
@@ -151,7 +153,7 @@ class Auth {
               ])),
       confirmTitle: HeadingTitle(
           text: AppLocalizations.instance
-              .translate('authenticate_confirm_title')),
+              .translate('authenticate_confirm_title')!),
       customizedButtonChild: biometricsAllowed
           ? Icon(
               Icons.fingerprint,

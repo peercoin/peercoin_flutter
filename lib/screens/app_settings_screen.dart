@@ -17,16 +17,16 @@ class AppSettingsScreen extends StatefulWidget {
 
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
-  bool _biometricsAllowed;
+  bool? _biometricsAllowed;
   bool _biometricsRevealed = false;
   bool _biometricsAvailable = false;
-  String _seedPhrase = '';
+  String? _seedPhrase = '';
   String _lang = '';
   String _defaultWallet = '';
   String _selectedTheme = '';
   bool _languageChangeInfoDisplayed = false;
-  AppSettings _settings;
-  ActiveWallets _activeWallets;
+  AppSettings? _settings;
+  late ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
   final List _availableThemes = [
     'system',
@@ -43,7 +43,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       var localAuth = LocalAuthentication();
       _biometricsAvailable = await localAuth.canCheckBiometrics;
       if (_biometricsAvailable == false) {
-        _settings.setBiometricsAllowed(false);
+        _settings!.setBiometricsAllowed(false);
       }
       setState(() {
         _initial = false;
@@ -80,12 +80,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveLang(String lang) async {
-    await _settings.setSelectedLang(lang);
+    await _settings!.setSelectedLang(lang);
     if (_languageChangeInfoDisplayed == false) {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('app_settings_language_restart'),
+          AppLocalizations.instance.translate('app_settings_language_restart')!,
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -97,11 +97,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveTheme(String theme) async {
-    await _settings.setSelectedTheme(theme);
+    await _settings!.setSelectedTheme(theme);
     //show notification
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        AppLocalizations.instance.translate('app_settings_language_restart'),
+        AppLocalizations.instance.translate('app_settings_language_restart')!,
         textAlign: TextAlign.center,
       ),
       duration: Duration(seconds: 2),
@@ -111,30 +111,31 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   void saveSnack(context) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack'),
+        AppLocalizations.instance.translate('app_settings_saved_snack')!,
         textAlign: TextAlign.center,
       ),
       duration: Duration(seconds: 2),
     ));
   }
 
-  void saveDefaultWallet(String wallet) async {
-    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
+  void saveDefaultWallet(String? wallet) async {
+    _settings!
+        .setDefaultWallet(wallet == _settings!.defaultWallet ? '' : wallet);
     saveSnack(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    _biometricsAllowed = _settings.biometricsAllowed ?? false;
+    _biometricsAllowed = _settings!.biometricsAllowed ?? false;
     _lang =
-        _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
-    _defaultWallet = _settings.defaultWallet ?? '';
-    _selectedTheme = _settings.selectedTheme ?? '';
+        _settings!.selectedLang ?? AppLocalizations.instance.locale.toString();
+    _defaultWallet = _settings!.defaultWallet;
+    _selectedTheme = _settings!.selectedTheme ?? '';
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.instance.translate('app_settings_appbar'),
+          AppLocalizations.instance.translate('app_settings_appbar')!,
         ),
       ),
       drawer: AppDrawer(),
@@ -146,18 +147,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ExpansionTile(
                 title: Text(
                     AppLocalizations.instance
-                        .translate('app_settings_language'),
+                        .translate('app_settings_language')!,
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: AppLocalizations.availableLocales.keys.map((lang) {
                   return InkWell(
                     onTap: () => saveLang(lang),
                     child: ListTile(
-                      title: Text(AppLocalizations.availableLocales[lang]),
+                      title: Text(AppLocalizations.availableLocales[lang]!),
                       leading: Radio(
                         value: lang,
                         groupValue: _lang,
-                        onChanged: (_) => saveLang(lang),
+                        onChanged: (dynamic _) => saveLang(lang),
                       ),
                     ),
                   );
@@ -166,18 +167,19 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ExpansionTile(
                 title: Text(
                     AppLocalizations.instance
-                        .translate('app_settings_default_wallet'),
+                        .translate('app_settings_default_wallet')!,
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: _availableWallets.map((wallet) {
                   return InkWell(
                     onTap: () => saveDefaultWallet(wallet.letterCode),
                     child: ListTile(
-                      title: Text(wallet.title),
+                      title: Text(wallet.title!),
                       leading: Radio(
                         value: wallet.letterCode,
                         groupValue: _defaultWallet,
-                        onChanged: (_) => saveDefaultWallet(wallet.letterCode),
+                        onChanged: (dynamic _) =>
+                            saveDefaultWallet(wallet.letterCode),
                       ),
                     ),
                   );
@@ -186,59 +188,59 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ExpansionTile(
                   title: Text(
                       AppLocalizations.instance
-                          .translate('app_settings_auth_header'),
+                          .translate('app_settings_auth_header')!,
                       style: Theme.of(context).textTheme.headline6),
                   childrenPadding: EdgeInsets.all(10),
                   children: [
                     _biometricsRevealed == false
                         ? ElevatedButton(
-                            onPressed: () =>
-                                revealAuthOptions(_settings.biometricsAllowed),
+                            onPressed: () => revealAuthOptions(
+                                _settings!.biometricsAllowed!),
                             child: Text(
                               AppLocalizations.instance
-                                  .translate('app_settings_revealAuthButton'),
+                                  .translate('app_settings_revealAuthButton')!,
                             ))
                         : SettingsAuth(
                             _biometricsAllowed,
                             _biometricsAvailable,
                             _settings,
                             saveSnack,
-                            _settings.authenticationOptions,
+                            _settings!.authenticationOptions,
                           )
                   ]),
               ExpansionTile(
                   title: Text(
-                      AppLocalizations.instance.translate('app_settings_seed'),
+                      AppLocalizations.instance.translate('app_settings_seed')!,
                       style: Theme.of(context).textTheme.headline6),
                   childrenPadding: EdgeInsets.all(10),
                   children: [
                     _seedPhrase == ''
                         ? ElevatedButton(
                             onPressed: () =>
-                                revealSeedPhrase(_settings.biometricsAllowed),
+                                revealSeedPhrase(_settings!.biometricsAllowed!),
                             child: Text(
                               AppLocalizations.instance
-                                  .translate('app_settings_revealSeedButton'),
+                                  .translate('app_settings_revealSeedButton')!,
                             ))
                         : Column(children: [
                             SizedBox(height: 20),
                             SelectableText(
-                              _seedPhrase,
+                              _seedPhrase!,
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () => Share.share(_seedPhrase),
+                              onPressed: () => Share.share(_seedPhrase!),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('app_settings_shareSeed'),
+                                    .translate('app_settings_shareSeed')!,
                               ),
                             )
                           ])
                   ]),
               ExpansionTile(
                 title: Text(
-                    AppLocalizations.instance.translate('app_settings_theme'),
+                    AppLocalizations.instance.translate('app_settings_theme')!,
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: _availableThemes.map((theme) {
@@ -247,12 +249,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     child: ListTile(
                       title: Text(
                         AppLocalizations.instance
-                            .translate('app_settings_theme_$theme'),
+                            .translate('app_settings_theme_$theme')!,
                       ),
                       leading: Radio(
                         value: theme,
                         groupValue: _selectedTheme,
-                        onChanged: (_) => saveTheme(theme),
+                        onChanged: (dynamic _) => saveTheme(theme),
                       ),
                     ),
                   );

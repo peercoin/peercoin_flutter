@@ -6,7 +6,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -14,9 +14,9 @@ class QRScanner extends StatefulWidget {
 }
 
 class _QRScannerState extends State<QRScanner> {
-  QRViewController controller;
+  late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode codeResult;
+  Barcode? codeResult;
 
   @override
   void reassemble() {
@@ -31,7 +31,7 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ModalRoute.of(context).settings.arguments),
+        title: Text(ModalRoute.of(context)!.settings.arguments as String),
       ),
       body: Column(
         children: <Widget>[
@@ -86,7 +86,7 @@ class _QRScannerState extends State<QRScanner> {
     controller.scannedDataStream.listen((scanData) async {
       if (scanData != null) {
         controller.dispose();
-        await Navigator.maybeOf(context).maybePop(scanData.code);
+        await Navigator.maybeOf(context)!.maybePop(scanData.code);
       }
     });
   }

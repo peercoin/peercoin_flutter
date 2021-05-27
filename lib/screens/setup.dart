@@ -47,14 +47,14 @@ class _SetupScreenState extends State<SetupScreen> {
                       width: 50,
                     ),
                     Text(
-                      AppLocalizations.instance.translate('setup_welcome'),
+                      AppLocalizations.instance.translate('setup_welcome')!,
                       style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 50),
                       child: Text(
                         AppLocalizations.instance
-                            .translate('setup_files_for_wallet'),
+                            .translate('setup_files_for_wallet')!,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
                       ),
@@ -67,21 +67,21 @@ class _SetupScreenState extends State<SetupScreen> {
                           child: Text(
                             AppLocalizations.instance.translate(
                               'create_wallet_new_seed',
-                            ),
+                            )!,
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
                         Text(
                             AppLocalizations.instance.translate(
                               'create_wallet_or',
-                            ),
+                            )!,
                             style: TextStyle(color: Colors.white)),
                         ElevatedButton(
                           onPressed: () => Navigator.of(context)
                               .pushNamed(Routes.SetupImport),
                           child: Text(
                             AppLocalizations.instance
-                                .translate('create_wallet_existing_seed'),
+                                .translate('create_wallet_existing_seed')!,
                             style: TextStyle(fontSize: 18),
                           ),
                         )
