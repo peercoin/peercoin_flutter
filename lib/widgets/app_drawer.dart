@@ -71,7 +71,6 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           Divider(),
-
           ListTile(
               leading: Icon(Icons.info),
               title: Text(AppLocalizations.instance.translate('about')!),
@@ -83,7 +82,7 @@ class AppDrawer extends StatelessWidget {
             title: Text(AppLocalizations.instance.translate('share_app')!),
             onTap: () => Share.share(
                 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
-          ) //TODO point to peercoin.net when it's on there
+          )
         ],
       )),
     );
