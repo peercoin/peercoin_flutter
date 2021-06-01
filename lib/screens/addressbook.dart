@@ -9,8 +9,8 @@ import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
+import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 
 class AddressBookScreen extends StatefulWidget {
   @override
@@ -305,7 +305,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                             .translate('addressbook_swipe_share'),
                         color: Theme.of(context).accentColor,
                         iconWidget: Icon(Icons.share, color: Colors.white),
-                        onTap: () => Share.share(_filteredAddr[i].address!),
+                        onTap: () => WalletHomeQr.showQrDialog(
+                            context, _filteredAddr[i].address!),
                       ),
                       if (_pageIndex == 1)
                         IconSlideAction(
