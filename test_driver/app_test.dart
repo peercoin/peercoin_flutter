@@ -1,33 +1,39 @@
-// Imports the Flutter Driver API.
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Setup', () {
-    // First, define the Finders and use them to locate widgets from the
-    // test suite. Note: the Strings provided to the `byValueKey` method must
-    // be the same as the Strings we used for the Keys in step 1.
-    final newSeedButtonFinder = find.byValueKey('newseed');
-    final importButtonFinder = find.byValueKey('import');
-    final continueFinder = find.byType('ElevatedButton');
-
+    final elevatedButtonFinder = find.byType('ElevatedButton');
     late FlutterDriver driver;
 
-    // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
       useMemoryFileSystemForTesting();
       driver = await FlutterDriver.connect();
     });
 
-    // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
       restoreFileSystem();
       await driver.close();
     });
 
     test('create new walet', () async {
-      await driver.tap(newSeedButtonFinder);
-      await driver.tap(continueFinder);
+      await driver.tap(find.byValueKey('newseed'));
+      await driver.tap(elevatedButtonFinder);
+
+      await driver.runUnsynchronized(() async {
+        await Process.run(
+          'adb',
+          <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
+          runInShell: true,
+        ); //TODO does not work on iphone
+        await driver.tap(find.byValueKey('continue'));
+      });
+      await driver.tap(elevatedButtonFinder); //pin pad
+      for (var i = 1; i <= 12; i++) {
+        await driver.tap(find.text('0'));
+      }
     });
 
     // test('starts at 0', () async {
