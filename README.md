@@ -33,3 +33,6 @@ The original library is not compatible, due to transaction timestamp incompabili
 
 **Update splash screen**  
 `flutter pub run flutter_native_splash:create`
+
+## Basic e2e testing
+`flutter drive --target=test_driver/app.dart`

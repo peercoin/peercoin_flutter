@@ -18,7 +18,8 @@ void main() {
       await driver.close();
     });
 
-    test('create new walet', () async {
+    test('create new wallet from scratch', () async {
+      //creates a brand new peercoin testnet wallet from scratch and check if it connects
       await driver.tap(find.byValueKey('newseed'));
       await driver.tap(elevatedButtonFinder);
 
@@ -27,36 +28,18 @@ void main() {
           'adb',
           <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
           runInShell: true,
-        ); //TODO does not work on iphone
+        ); //TODO removes "share" overlay - does not work on iphone
         await driver.tap(find.byValueKey('continue'));
       });
       await driver.tap(elevatedButtonFinder); //pin pad
       for (var i = 1; i <= 12; i++) {
         await driver.tap(find.text('0'));
       }
+      await driver.tap(find.byValueKey('add_wallet'));
+      await driver.tap(find.text('Peercoin Testnet'));
+      await driver.tap(find.byValueKey('confirm_add_wallet'));
+      await driver.tap(find.text('Peercoin Testnet')); //tap into wallet
+      expect(await driver.getText(find.text('connected')), 'connected');
     });
-
-    // test('starts at 0', () async {
-    //   // Use the `driver.getText` method to verify the counter starts at 0.
-    //   expect(await driver.getText(counterTextFinder), "0");
-    // });
-
-    // test('increments the counter', () async {
-    //   // First, tap the button.
-    //   await driver.tap(buttonFinder);
-
-    //   // Then, verify the counter text is incremented by 1.
-    //   expect(await driver.getText(counterTextFinder), "1");
-    // });
-
-    // test('increments the counter during animation', () async {
-    //   await driver.runUnsynchronized(() async {
-    //     // First, tap the button.
-    //     await driver.tap(buttonFinder);
-
-    //     // Then, verify the counter text is incremented by 1.
-    //     expect(await driver.getText(counterTextFinder), "1");
-    //   });
-    // });
   });
 }
