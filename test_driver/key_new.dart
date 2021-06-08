@@ -22,15 +22,12 @@ void main() {
       //creates a brand new peercoin testnet wallet from scratch and check if it connects
       await driver.tap(find.byValueKey('newseed'));
       await driver.tap(elevatedButtonFinder);
-
-      await driver.runUnsynchronized(() async {
-        await Process.run(
-          'adb',
-          <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
-          runInShell: true,
-        ); //TODO removes "share" overlay - does not work on iphone
-        await driver.tap(find.byValueKey('continue'));
-      });
+      await Process.run(
+        'adb',
+        <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
+        runInShell: true,
+      ); //TODO removes "share" overlay - does not work on iphone
+      await driver.tap(find.byValueKey('continue'));
       await driver.tap(elevatedButtonFinder); //pin pad
       for (var i = 1; i <= 12; i++) {
         await driver.tap(find.text('0'));
