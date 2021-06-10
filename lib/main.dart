@@ -141,6 +141,7 @@ class PeercoinApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Peercoin',
+        debugShowCheckedModeBanner: false,
         supportedLocales:
             AppLocalizations.availableLocales.keys.map((lang) => Locale(lang)),
         localizationsDelegates: [
