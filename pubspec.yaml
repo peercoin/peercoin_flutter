@@ -70,6 +70,7 @@ flutter_icons:
   ios: true
   image_path: "assets/icon/ppc-icon.png"
   image_path_ios: "assets/icon/ppc-icon-white-bg.png"
+  remove_alpha_ios: true
 
   flutter_launcher_name:
   name: "Peercoin"
