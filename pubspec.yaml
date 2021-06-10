@@ -30,7 +30,7 @@ dependencies:
   bip39: ^1.0.6
   bitcoin_flutter:
     git:
-      url: https://github.com/peercoin/bitcoin_flutter.git
+      url: https://github.com/Vesta-wallet/bitcoin_flutter.git
       ref: null_safety
   hive: ^2.0.4
   hive_flutter: ^1.0.0
