@@ -22,13 +22,13 @@ class ElectrumConnection with ChangeNotifier {
   Timer? _reconnectTimer;
   IOWebSocketChannel? _connection;
   final ActiveWallets _activeWallets;
-  ElectrumConnectionState? _connectionState;
+  ElectrumConnectionState _connectionState = ElectrumConnectionState.waiting;
   final Servers _servers;
   Map _addresses = {};
   Map<String, List?> _paperWalletUtxos = {};
-  String? _coinName;
+  late String _coinName;
   int? _latestBlock;
-  String? _serverUrl;
+  late String _serverUrl;
   bool _closedIntentionally = false;
   bool _scanMode = false;
   int _connectionAttempt = 0;
@@ -114,24 +114,24 @@ class ElectrumConnection with ChangeNotifier {
     _connectionAttempt++;
     try {
       _connection = IOWebSocketChannel.connect(
-        _serverUrl!,
+        _serverUrl,
       );
     } catch (e) {
       print('connection error: $e');
     }
   }
 
-  set connectionState(ElectrumConnectionState? newState) {
+  set connectionState(ElectrumConnectionState newState) {
     _connectionState = newState;
     notifyListeners();
   }
 
-  ElectrumConnectionState? get connectionState {
+  ElectrumConnectionState get connectionState {
     return _connectionState;
   }
 
-  int? get latestBlock {
-    return _latestBlock;
+  int get latestBlock {
+    return _latestBlock ?? 0;
   }
 
   set latestBlock(int? newLatest) {
@@ -252,7 +252,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleVersion(List result) {
     var version = double.parse(result.elementAt(result.length - 1));
-    if (version < _requiredProtocol[_coinName!]!) {
+    if (version < _requiredProtocol[_coinName]!) {
       //protocol version too low!
       closeConnection(false);
     }
@@ -260,7 +260,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleFeatures(Map result) {
     if (result['genesis_hash'] ==
-        AvailableCoins().getSpecificCoin(_coinName)!.genesisHash) {
+        AvailableCoins().getSpecificCoin(_coinName).genesisHash) {
       //we're connected and genesis handshake is successful
       connectionState = ElectrumConnectionState.connected;
       //subscribe to block headers
@@ -276,7 +276,7 @@ class ElectrumConnection with ChangeNotifier {
     latestBlock = height;
   }
 
-  void handleAddressStatus(String? address, String? newStatus) async {
+  void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
         await _activeWallets.getWalletAddressStatus(_coinName, address);
     if (newStatus != oldStatus) {

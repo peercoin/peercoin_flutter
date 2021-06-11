@@ -20,7 +20,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   final _formKey = GlobalKey<FormState>();
   final _serverKey = GlobalKey<FormFieldState>();
   final _serverController = TextEditingController();
-  String? _walletName = '';
+  String _walletName = '';
   List<Server> _currentServerList = [];
   bool _initial = true;
   bool _loading = false;
@@ -28,7 +28,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   @override
   void didChangeDependencies() {
     if (_initial) {
-      _walletName = ModalRoute.of(context)!.settings.arguments as String?;
+      _walletName = ModalRoute.of(context)!.settings.arguments as String;
       setState(() {
         _initial = false;
       });
@@ -45,7 +45,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     });
 
     //check if server already exists
-    if (_currentServerList.firstWhereOrNull((element) => element.address == serverUrl) !=
+    if (_currentServerList
+            .firstWhereOrNull((element) => element.address == serverUrl) !=
         null) {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -95,7 +96,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
         if (idString == 'features') {
           if (result['genesis_hash'] ==
-              AvailableCoins().getSpecificCoin(_walletName)!.genesisHash) {
+              AvailableCoins().getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
             Provider.of<Servers>(context, listen: false)

@@ -21,7 +21,7 @@ class TransactionDetails extends StatelessWidget {
     final WalletTransaction _tx = args[0];
     final CoinWallet _coinWallet = args[1];
     final baseUrl =
-        AvailableCoins().getSpecificCoin(_coinWallet.name)!.explorerTxDetailUrl;
+        AvailableCoins().getSpecificCoin(_coinWallet.name).explorerTxDetailUrl;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,8 +46,8 @@ class TransactionDetails extends StatelessWidget {
               Text(AppLocalizations.instance.translate('time')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.timestamp != null
-                  ? DateFormat().format(
-                      DateTime.fromMillisecondsSinceEpoch(_tx.timestamp! * 1000))
+                  ? DateFormat().format(DateTime.fromMillisecondsSinceEpoch(
+                      _tx.timestamp! * 1000))
                   : AppLocalizations.instance.translate('unconfirmed')!)
             ],
           ),
@@ -70,8 +70,9 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('tx_fee')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(
-                  (_tx.fee! / 1000000).toString() + ' ' + _coinWallet.letterCode!)
+              SelectableText((_tx.fee! / 1000000).toString() +
+                  ' ' +
+                  _coinWallet.letterCode!)
             ],
           ),
           Divider(),

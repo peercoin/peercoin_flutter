@@ -4,7 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 
 class WalletHomeQr extends StatelessWidget {
-  final String? _unusedAddress;
+  final String _unusedAddress;
   WalletHomeQr(this._unusedAddress);
 
   static void showQrDialog(BuildContext context, String address) {
@@ -49,9 +49,9 @@ class WalletHomeQr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var inkWell = InkWell(
-      onTap: () => showQrDialog(context, _unusedAddress!),
+      onTap: () => showQrDialog(context, _unusedAddress),
       child: QrImage(
-        data: _unusedAddress!,
+        data: _unusedAddress,
         size: 60.0,
         padding: EdgeInsets.all(1),
         backgroundColor: Colors.white,

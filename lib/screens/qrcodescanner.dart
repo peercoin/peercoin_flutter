@@ -16,7 +16,6 @@ class QRScanner extends StatefulWidget {
 class _QRScannerState extends State<QRScanner> {
   late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? codeResult;
 
   @override
   void reassemble() {

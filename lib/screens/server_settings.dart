@@ -14,7 +14,7 @@ class ServerSettingsScreen extends StatefulWidget {
 
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   bool _initial = true;
-  String? _walletName = '';
+  String _walletName = '';
   List<Server> _servers = [];
   final Map _indexCache = {};
   late Servers _serversProvider;
@@ -22,7 +22,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _walletName = ModalRoute.of(context)!.settings.arguments as String?;
+      _walletName = ModalRoute.of(context)!.settings.arguments as String;
       _serversProvider = Provider.of<Servers>(context);
       await loadServers();
       setState(() {
@@ -121,8 +121,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           content: Text(_servers[index].address!),
                           actions: <Widget>[
                             TextButton.icon(
-                                label: Text(AppLocalizations.instance
-                                    .translate('server_settings_alert_cancel')!),
+                                label: Text(AppLocalizations.instance.translate(
+                                    'server_settings_alert_cancel')!),
                                 icon: Icon(Icons.cancel),
                                 onPressed: () {
                                   Navigator.of(context).pop(false);

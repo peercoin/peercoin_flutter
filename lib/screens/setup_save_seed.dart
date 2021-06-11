@@ -17,7 +17,7 @@ class SetupSaveScreen extends StatefulWidget {
 class _SetupSaveScreenState extends State<SetupSaveScreen> {
   bool _sharedYet = false;
   bool _initial = true;
-  String? _seed = '';
+  String _seed = '';
   double _currentSliderValue = 12;
   late ActiveWallets _activeWallets;
 
@@ -100,7 +100,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       ),
                     ),
                     SelectableText(
-                      _seed!,
+                      _seed,
                       minLines: 4,
                       textAlign: TextAlign.center,
                       style: TextStyle(

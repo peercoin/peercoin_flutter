@@ -24,8 +24,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   String _transactionHex = '';
   int _balanceInt = 0;
   int _requiredFee = 0;
-  Coin? _activeCoin;
-  String? _walletName;
+  late Coin _activeCoin;
+  late String _walletName;
   bool _initial = true;
   bool _balanceLoading = false;
   late ElectrumConnection _connectionProvider;
@@ -36,7 +36,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   void didChangeDependencies() {
     if (_initial == true) {
       setState(() {
-        _walletName = ModalRoute.of(context)!.settings.arguments as String?;
+        _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
         _connectionProvider = Provider.of<ElectrumConnection>(context);
         _activeWallets = Provider.of<ActiveWallets>(context);
@@ -98,7 +98,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePubKey(String pubKey) {
     String _newKey;
-    if (Address.validateAddress(pubKey, _activeCoin!.networkType)) {
+    if (Address.validateAddress(pubKey, _activeCoin.networkType)) {
       _newKey = pubKey;
       moveStep(2);
     } else {
@@ -114,7 +114,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     late Wallet _wallet;
     var _error = false;
     try {
-      _wallet = Wallet.fromWIF(privKey, _activeCoin!.networkType);
+      _wallet = Wallet.fromWIF(privKey, _activeCoin.networkType);
     } catch (e) {
       _error = true;
     }
@@ -147,13 +147,13 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _balanceLoading = false;
       _balanceInt = _totalValue;
       _balance =
-          '${(_totalValue / 1000000).toString()} ${_activeCoin!.letterCode}';
+          '${(_totalValue / 1000000).toString()} ${_activeCoin.letterCode}';
     });
     moveStep(4);
   }
 
   Future<void> emptyWallet() async {
-    if (_balanceInt == 0 || _balanceInt < _activeCoin!.minimumTxValue) {
+    if (_balanceInt == 0 || _balanceInt < _activeCoin.minimumTxValue) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('paperwallet_error_1')!,
@@ -178,7 +178,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Column(
                   children: [
-                    Text('Importing $_displayValue ${_activeCoin!.letterCode}',
+                    Text('Importing $_displayValue ${_activeCoin.letterCode}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -189,12 +189,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 children: [
                   Text(AppLocalizations.instance.translate('send_fee', {
                     'amount': '${_requiredFee / 1000000}',
-                    'letter_code': '${_activeCoin!.letterCode}'
+                    'letter_code': '${_activeCoin.letterCode}'
                   })!),
                   Text(
                       AppLocalizations.instance.translate('send_total', {
                         'amount': '${_balanceInt / 1000000}',
-                        'letter_code': '${_activeCoin!.letterCode}'
+                        'letter_code': '${_activeCoin.letterCode}'
                       })!,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
@@ -247,7 +247,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   Future<void> buildImportTx([int fee = 0, bool dryRun = true]) async {
-    final tx = TransactionBuilder(network: _activeCoin!.networkType);
+    final tx = TransactionBuilder(network: _activeCoin.networkType);
     tx.setVersion(1);
     //send everything minus fees to unusedaddr
     tx.addOutput(_activeWallets.getUnusedAddress, _balanceInt - fee);
@@ -259,13 +259,13 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     _paperWalletUtxos[_pubKey]!.asMap().forEach((index, utxo) {
       tx.sign(
         vin: index,
-        keyPair: ECPair.fromWIF(_privKey, network: _activeCoin!.networkType),
+        keyPair: ECPair.fromWIF(_privKey, network: _activeCoin.networkType),
       );
     });
     final intermediate = tx.build();
 
-    var number = ((intermediate.txSize) / 1000 * _activeCoin!.feePerKb)
-        .toStringAsFixed(_activeCoin!.fractions);
+    var number = ((intermediate.txSize) / 1000 * _activeCoin.feePerKb)
+        .toStringAsFixed(_activeCoin.fractions);
     var asDouble = double.parse(number) * 1000000;
     var requiredFeeInSatoshis = asDouble.toInt();
 
@@ -273,7 +273,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _transactionHex = intermediate.toHex();
     }
     //generate new wallet addr
-    await _activeWallets.generateUnusedAddress(_activeCoin!.name);
+    await _activeWallets.generateUnusedAddress(_activeCoin.name);
 
     setState(() {
       _requiredFee = requiredFeeInSatoshis + 10; //TODO remove +10 when rdy

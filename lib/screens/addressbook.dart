@@ -19,8 +19,8 @@ class AddressBookScreen extends StatefulWidget {
 
 class _AddressBookScreenState extends State<AddressBookScreen> {
   bool _initial = true;
-  String? _walletName;
-  String? _walletTitle;
+  late String _walletName;
+  late String _walletTitle;
   List<WalletAddress>? _walletAddresses = [];
   List<WalletAddress> _filteredAddr = [];
   int _pageIndex = 0;
@@ -147,7 +147,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
             TextButton(
               onPressed: () {
                 context.read<ActiveWallets>().updateLabel(
-                    _walletName, address.address, _textFieldController.text);
+                    _walletName, address.address!, _textFieldController.text);
                 Navigator.pop(context);
               },
               child: Text(

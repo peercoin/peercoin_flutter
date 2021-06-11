@@ -12,6 +12,7 @@ class SetupScreen extends StatefulWidget {
 
 class _SetupScreenState extends State<SetupScreen> {
   bool _loading = false;
+
   void createWallet(context) async {
     setState(() {
       _loading = true;

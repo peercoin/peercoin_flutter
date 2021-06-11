@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
-  final String? _identifier;
+  final String _identifier;
   TransactionList(this._walletTransactions, this._identifier);
 
   @override
@@ -25,11 +25,11 @@ class _TransactionListState extends State<TransactionList> {
     });
   }
 
-  String? resolveAddressDisplayName(String? address) {
+  String resolveAddressDisplayName(String address) {
     final result = context
         .read<ActiveWallets>()
         .getLabelForAddress(widget._identifier, address);
-    if (result != '') return '$result (${address!.substring(0, 5)}...)';
+    if (result != '') return '$result (${address.substring(0, 5)}...)';
     return address;
   }
 
@@ -63,15 +63,15 @@ class _TransactionListState extends State<TransactionList> {
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label:
-                  Text(AppLocalizations.instance.translate('transactions_all')!),
+              label: Text(
+                  AppLocalizations.instance.translate('transactions_all')!),
               selected: _filterChoice == 'all',
               onSelected: (_) => _handleSelect('all'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label:
-                  Text(AppLocalizations.instance.translate('transactions_out')!),
+              label: Text(
+                  AppLocalizations.instance.translate('transactions_out')!),
               selected: _filterChoice == 'out',
               onSelected: (_) => _handleSelect('out'),
             ),
@@ -164,7 +164,7 @@ class _TransactionListState extends State<TransactionList> {
                         ),
                         subtitle: Center(
                           child: Text(
-                            resolveAddressDisplayName(_filteredTx[i].address)!,
+                            resolveAddressDisplayName(_filteredTx[i].address!),
                             overflow: TextOverflow.ellipsis,
                             textScaleFactor: 1,
                           ),

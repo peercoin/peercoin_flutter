@@ -18,8 +18,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _scanStarted = false;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
-  String? _coinName = '';
-  ElectrumConnectionState? _connectionState;
+  late String _coinName = '';
+  late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
   late Timer _timer;
 
@@ -29,7 +29,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       setState(() {
         _initial = false;
       });
-      _coinName = ModalRoute.of(context)!.settings.arguments as String?;
+      _coinName = ModalRoute.of(context)!.settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.prepareForRescan(_coinName);

@@ -19,15 +19,15 @@ Map<String, Coin> availableCoins = AvailableCoins().availableCoins;
 List activeCoins = [];
 
 class _NewWalletScreenState extends State<NewWalletScreen> {
-  String? _coin = '';
+  String _coin = '';
   bool _initial = true;
 
   Future<void> addWallet(ctx) async {
     try {
       await Provider.of<ActiveWallets>(context, listen: false).addWallet(
           _coin,
-          availableCoins[_coin!]!.displayName,
-          availableCoins[_coin!]!.letterCode);
+          availableCoins[_coin]!.displayName,
+          availableCoins[_coin]!.letterCode);
       var prefs =
           await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
 
@@ -123,7 +123,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
                                   AvailableCoins()
                                       .getSpecificCoin(availableCoins[
                                               actualAvailableWallets[item]]!
-                                          .name)!
+                                          .name)
                                       .iconPath,
                                   width: 20),
                             ),

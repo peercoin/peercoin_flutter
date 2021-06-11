@@ -17,15 +17,15 @@ class AppSettingsScreen extends StatefulWidget {
 
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
-  bool? _biometricsAllowed;
+  late bool _biometricsAllowed;
   bool _biometricsRevealed = false;
   bool _biometricsAvailable = false;
-  String? _seedPhrase = '';
+  String _seedPhrase = '';
   String _lang = '';
   String _defaultWallet = '';
   String _selectedTheme = '';
   bool _languageChangeInfoDisplayed = false;
-  AppSettings? _settings;
+  late AppSettings _settings;
   late ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
   final List _availableThemes = [
@@ -43,7 +43,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       var localAuth = LocalAuthentication();
       _biometricsAvailable = await localAuth.canCheckBiometrics;
       if (_biometricsAvailable == false) {
-        _settings!.setBiometricsAllowed(false);
+        _settings.setBiometricsAllowed(false);
       }
       setState(() {
         _initial = false;
@@ -80,7 +80,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveLang(String lang) async {
-    await _settings!.setSelectedLang(lang);
+    await _settings.setSelectedLang(lang);
     if (_languageChangeInfoDisplayed == false) {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -97,7 +97,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveTheme(String theme) async {
-    await _settings!.setSelectedTheme(theme);
+    await _settings.setSelectedTheme(theme);
     //show notification
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
@@ -119,18 +119,17 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveDefaultWallet(String? wallet) async {
-    _settings!
-        .setDefaultWallet(wallet == _settings!.defaultWallet ? '' : wallet);
+    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
     saveSnack(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    _biometricsAllowed = _settings!.biometricsAllowed ?? false;
+    _biometricsAllowed = _settings.biometricsAllowed ?? false;
     _lang =
-        _settings!.selectedLang ?? AppLocalizations.instance.locale.toString();
-    _defaultWallet = _settings!.defaultWallet;
-    _selectedTheme = _settings!.selectedTheme ?? '';
+        _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
+    _defaultWallet = _settings.defaultWallet;
+    _selectedTheme = _settings.selectedTheme ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -194,8 +193,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   children: [
                     _biometricsRevealed == false
                         ? ElevatedButton(
-                            onPressed: () => revealAuthOptions(
-                                _settings!.biometricsAllowed!),
+                            onPressed: () =>
+                                revealAuthOptions(_settings.biometricsAllowed!),
                             child: Text(
                               AppLocalizations.instance
                                   .translate('app_settings_revealAuthButton')!,
@@ -205,7 +204,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             _biometricsAvailable,
                             _settings,
                             saveSnack,
-                            _settings!.authenticationOptions,
+                            _settings.authenticationOptions!,
                           )
                   ]),
               ExpansionTile(
@@ -217,7 +216,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     _seedPhrase == ''
                         ? ElevatedButton(
                             onPressed: () =>
-                                revealSeedPhrase(_settings!.biometricsAllowed!),
+                                revealSeedPhrase(_settings.biometricsAllowed!),
                             child: Text(
                               AppLocalizations.instance
                                   .translate('app_settings_revealSeedButton')!,
@@ -225,12 +224,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         : Column(children: [
                             SizedBox(height: 20),
                             SelectableText(
-                              _seedPhrase!,
+                              _seedPhrase,
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () => Share.share(_seedPhrase!),
+                              onPressed: () => Share.share(_seedPhrase),
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('app_settings_shareSeed')!,
