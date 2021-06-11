@@ -63,6 +63,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
+                          key: const Key('newseed'),
                           onPressed: () => {createWallet(context)},
                           child: Text(
                             AppLocalizations.instance.translate(
@@ -77,6 +78,7 @@ class _SetupScreenState extends State<SetupScreen> {
                             )!,
                             style: TextStyle(color: Colors.white)),
                         ElevatedButton(
+                          key: const Key('import'),
                           onPressed: () => Navigator.of(context)
                               .pushNamed(Routes.SetupImport),
                           child: Text(

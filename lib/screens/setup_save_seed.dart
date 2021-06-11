@@ -146,6 +146,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       padding: EdgeInsets.all(10),
                       child: _sharedYet
                           ? ElevatedButton(
+                              key: Key('continue'),
                               onPressed: () async {
                                 var prefs =
                                     await Provider.of<UnencryptedOptions>(
@@ -157,7 +158,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                                     context, Routes.SetUpPin);
                               },
                               child: Text(
-                                AppLocalizations.instance.translate('continue')!,
+                                AppLocalizations.instance
+                                    .translate('continue')!,
                                 style: TextStyle(fontSize: 18),
                               ),
                             )

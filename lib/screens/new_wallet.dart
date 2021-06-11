@@ -24,8 +24,10 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
 
   Future<void> addWallet(ctx) async {
     try {
-      await Provider.of<ActiveWallets>(context, listen: false).addWallet(_coin,
-          availableCoins[_coin!]!.displayName, availableCoins[_coin!]!.letterCode);
+      await Provider.of<ActiveWallets>(context, listen: false).addWallet(
+          _coin,
+          availableCoins[_coin!]!.displayName,
+          availableCoins[_coin!]!.letterCode);
       var prefs =
           await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
 
@@ -88,6 +90,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: IconButton(
+                  key: Key('confirm_add_wallet'),
                   onPressed: () => addWallet(context),
                   icon: Icon(Icons.add),
                 ))
