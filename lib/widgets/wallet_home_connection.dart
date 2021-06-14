@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 
@@ -14,7 +15,8 @@ class WalletHomeConnection extends StatelessWidget {
         children: [
           Icon(
             Icons.offline_bolt,
-            color: Theme.of(context).primaryColor,
+            color: PeerColors.darkGreen,
+            size: 20,
           ),
           SizedBox(
             width: 3,
@@ -22,7 +24,7 @@ class WalletHomeConnection extends StatelessWidget {
           Text(
             AppLocalizations.instance.translate('wallet_connected'),
             style:
-                TextStyle(color: Theme.of(context).accentColor, fontSize: 12),
+                TextStyle(color: PeerColors.darkGreen, fontSize: 14,letterSpacing: 1.3),
           ),
         ],
       );

@@ -249,8 +249,13 @@ class _SendTabState extends State<SendTab> {
       _activeWallets.transferedAddress = null; //reset transfer
     }
 
-    return Padding(
-      padding: EdgeInsets.all(20),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
       child: Form(
         key: _formKey,
         child: Column(

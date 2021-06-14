@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
@@ -50,18 +51,21 @@ class _TransactionListState extends State<TransactionList> {
     return Expanded(
         child: Column(children: [
       if (_reversedTx.isNotEmpty)
-        Wrap(
+        /*Wrap(
           spacing: 8.0,
           children: <Widget>[
             ChoiceChip(
+              selectedColor: PeerColors.darkGreen,
+              backgroundColor: Theme.of(context).primaryColor,
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Container(
-                  child: Text(
-                      AppLocalizations.instance.translate('transactions_in'))),
+              label: Text(
+                  AppLocalizations.instance.translate('transactions_in')),
               selected: _filterChoice == 'in',
               onSelected: (_) => _handleSelect('in'),
             ),
             ChoiceChip(
+              selectedColor: PeerColors.darkGreen,
+              backgroundColor: Theme.of(context).primaryColor,
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label:
                   Text(AppLocalizations.instance.translate('transactions_all')),
@@ -69,6 +73,8 @@ class _TransactionListState extends State<TransactionList> {
               onSelected: (_) => _handleSelect('all'),
             ),
             ChoiceChip(
+              selectedColor: PeerColors.darkGreen,
+              backgroundColor: Theme.of(context).primaryColor,
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label:
                   Text(AppLocalizations.instance.translate('transactions_out')),
@@ -76,7 +82,7 @@ class _TransactionListState extends State<TransactionList> {
               onSelected: (_) => _handleSelect('out'),
             ),
           ],
-        ),
+        ),*/
       Expanded(
         child: _reversedTx.isEmpty
             ? Center(
@@ -113,14 +119,8 @@ class _TransactionListState extends State<TransactionList> {
                           ModalRoute.of(context).settings.arguments
                         ]),
                         leading: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Icon(
-                                _filteredTx[i].direction == 'in'
-                                    ? Icons.west
-                                    : Icons.east,
-                                size: 18,
-                              ),
                               AnimatedContainer(
                                   duration: Duration(milliseconds: 500),
                                   child: _filteredTx[i].broadCasted == false
@@ -180,7 +180,7 @@ class _TransactionListState extends State<TransactionList> {
                                       ? FontWeight.bold
                                       : FontWeight.w300,
                                   color: _filteredTx[i].direction == 'out'
-                                      ? Colors.redAccent.shade200
+                                      ? PeerColors.red
                                       : Colors.black),
                             ),
                             if (_filteredTx[i].direction == 'out')
