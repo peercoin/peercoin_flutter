@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 class SettingsAuth extends StatelessWidget {
   final bool? _biometricsAllowed;
   final bool _biometricsAvailable;
-  final AppSettings? _settings;
+  final AppSettings _settings;
   final Function _saveSnack;
-  final Map<String, bool>? _authenticationOptions;
+  final Map<String, bool> _authenticationOptions;
 
   SettingsAuth(
     this._biometricsAllowed,
@@ -33,7 +33,8 @@ class SettingsAuth extends StatelessWidget {
           ),
         ),
         confirmTitle: Text(
-          AppLocalizations.instance.translate('authenticate_confirm_title_new')!,
+          AppLocalizations.instance
+              .translate('authenticate_confirm_title_new')!,
           style: TextStyle(
             fontSize: 24,
           ),
@@ -79,7 +80,7 @@ class SettingsAuth extends StatelessWidget {
                   duration: Duration(seconds: 5),
                 ));
               } else {
-                _settings!.setBiometricsAllowed(newState);
+                _settings.setBiometricsAllowed(newState);
                 _saveSnack(context);
               }
             }),
@@ -87,18 +88,18 @@ class SettingsAuth extends StatelessWidget {
             title: Text(
               AppLocalizations.instance.translate('app_settings_walletList')!,
             ),
-            value: _authenticationOptions!['walletList']!,
+            value: _authenticationOptions['walletList']!,
             onChanged: (newState) {
-              _settings!.setAuthenticationOptions('walletList', newState);
+              _settings.setAuthenticationOptions('walletList', newState);
               _saveSnack(context);
             }),
         SwitchListTile(
             title: Text(
               AppLocalizations.instance.translate('app_settings_walletHome')!,
             ),
-            value: _authenticationOptions!['walletHome']!,
+            value: _authenticationOptions['walletHome']!,
             onChanged: (newState) {
-              _settings!.setAuthenticationOptions('walletHome', newState);
+              _settings.setAuthenticationOptions('walletHome', newState);
               _saveSnack(context);
             }),
         SwitchListTile(
@@ -106,22 +107,22 @@ class SettingsAuth extends StatelessWidget {
               AppLocalizations.instance
                   .translate('app_settings_sendTransaction')!,
             ),
-            value: _authenticationOptions!['sendTransaction']!,
+            value: _authenticationOptions['sendTransaction']!,
             onChanged: (newState) {
-              _settings!.setAuthenticationOptions('sendTransaction', newState);
+              _settings.setAuthenticationOptions('sendTransaction', newState);
               _saveSnack(context);
             }),
         SwitchListTile(
             title: Text(
               AppLocalizations.instance.translate('app_settings_newWallet')!,
             ),
-            value: _authenticationOptions!['newWallet']!,
+            value: _authenticationOptions['newWallet']!,
             onChanged: (newState) {
-              _settings!.setAuthenticationOptions('newWallet', newState);
+              _settings.setAuthenticationOptions('newWallet', newState);
               _saveSnack(context);
             }),
         ElevatedButton(
-          onPressed: () => changePIN(context, _settings!.biometricsAllowed!),
+          onPressed: () => changePIN(context, _settings.biometricsAllowed!),
           child: Text(
             AppLocalizations.instance.translate('app_settings_changeCode')!,
           ),

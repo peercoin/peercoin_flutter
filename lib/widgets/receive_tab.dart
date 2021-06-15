@@ -24,15 +24,15 @@ class _ReceiveTabState extends State<ReceiveTab> {
   final _formKey = GlobalKey<FormState>();
   final _amountKey = GlobalKey<FormFieldState>();
   final _labelKey = GlobalKey<FormFieldState>();
-  CoinWallet? _wallet;
-  Coin? _availableCoin;
+  late CoinWallet _wallet;
+  late Coin _availableCoin;
   String? _qrString;
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
-      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet?;
-      _availableCoin = AvailableCoins().getSpecificCoin(_wallet!.name);
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
+      _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       stringBuilder();
       setState(() {
         _initial = false;
@@ -49,17 +49,17 @@ class _ReceiveTabState extends State<ReceiveTab> {
     var _builtString = '';
 
     if (convertedValue == 0) {
-      _builtString = '${_availableCoin!.uriCode}:${widget._unusedAddress}';
+      _builtString = '${_availableCoin.uriCode}:${widget._unusedAddress}';
       if (label != '') {
         _builtString =
-            '${_availableCoin!.uriCode}:${widget._unusedAddress}?label=$label';
+            '${_availableCoin.uriCode}:${widget._unusedAddress}?label=$label';
       }
     } else {
       _builtString =
-          '${_availableCoin!.uriCode}:${widget._unusedAddress}?amount=$convertedValue';
+          '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue';
       if (label != '') {
         _builtString =
-            '${_availableCoin!.uriCode}:${widget._unusedAddress}?amount=$convertedValue&label=$label';
+            '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue&label=$label';
       }
     }
     setState(() {
@@ -164,14 +164,14 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   autocorrect: false,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        getValidator(_availableCoin!.fractions)),
+                        getValidator(_availableCoin.fractions)),
                   ],
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
                     icon: Icon(Icons.money),
                     labelText: AppLocalizations.instance
                         .translate('receive_requested_amount'),
-                    suffix: Text(_wallet!.letterCode!),
+                    suffix: Text(_wallet.letterCode!),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -184,7 +184,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
               ElevatedButton.icon(
                 onPressed: () async {
                   if (labelController.text != '') {
-                    context.read<ActiveWallets>().updateLabel(_wallet!.name,
+                    context.read<ActiveWallets>().updateLabel(_wallet.name!,
                         widget._unusedAddress, labelController.text);
                   }
                   await Share.share(_qrString ?? widget._unusedAddress);

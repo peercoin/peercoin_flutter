@@ -24,15 +24,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   bool _rescanInProgress = false;
-  String? _unusedAddress = '';
-  CoinWallet? _wallet;
+  String _unusedAddress = '';
+  late CoinWallet _wallet;
   int _pageIndex = 1;
-  ElectrumConnectionState? _connectionState;
+  late ElectrumConnectionState _connectionState =
+      ElectrumConnectionState.waiting;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
   late Iterable _listenedAddresses;
-  List<WalletTransaction>? _walletTransactions;
-  int? _latestBlock = 0;
+  late List<WalletTransaction> _walletTransactions = [];
+  int _latestBlock = 0;
 
   void changeIndex(int i) {
     setState(() {
@@ -55,8 +56,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      await _connectionProvider!.init(_wallet!.name,
-          requestedFromWalletHome: true);
+      await _connectionProvider!
+          .init(_wallet.name, requestedFromWalletHome: true);
     }
   }
 
@@ -67,14 +68,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet?;
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      await _activeWallets.generateUnusedAddress(_wallet!.name);
+      await _activeWallets.generateUnusedAddress(_wallet.name!);
       _walletTransactions =
-          await _activeWallets.getWalletTransactions(_wallet!.name);
-      await _connectionProvider!.init(_wallet!.name,
-          requestedFromWalletHome: true);
+          await _activeWallets.getWalletTransactions(_wallet.name!);
+      await _connectionProvider!
+          .init(_wallet.name, requestedFromWalletHome: true);
 
       var _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
@@ -89,28 +90,26 @@ class _WalletHomeState extends State<WalletHomeScreen>
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider!.subscribeToScriptHashes(
-              await _activeWallets.getWalletScriptHashes(_wallet!.name));
+              await _activeWallets.getWalletScriptHashes(_wallet.name!));
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
           _connectionProvider!.subscribeToScriptHashes(await _activeWallets
-              .getWalletScriptHashes(_wallet!.name, _unusedAddress));
+              .getWalletScriptHashes(_wallet.name!, _unusedAddress));
         }
       }
-      if (_connectionProvider!.latestBlock != null) {
-        if (_connectionProvider!.latestBlock! > _latestBlock!) {
-          //new block
-          print('new block ${_connectionProvider!.latestBlock}');
-          _latestBlock = _connectionProvider!.latestBlock;
+      if (_connectionProvider!.latestBlock > _latestBlock) {
+        //new block
+        print('new block ${_connectionProvider!.latestBlock}');
+        _latestBlock = _connectionProvider!.latestBlock;
 
-          var unconfirmedTx = _walletTransactions!.where((element) =>
-              element.confirmations! < 6 && element.timestamp != -1);
-          unconfirmedTx.forEach((element) {
-            print('requesting update for ${element.txid}');
-            _connectionProvider!.requestTxUpdate(element.txid);
-          });
-        }
+        var unconfirmedTx = _walletTransactions.where(
+            (element) => element.confirmations! < 6 && element.timestamp != -1);
+        unconfirmedTx.forEach((element) {
+          print('requesting update for ${element.txid}');
+          _connectionProvider!.requestTxUpdate(element.txid);
+        });
       }
     }
 
@@ -119,7 +118,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   void rebroadCastUnsendTx() {
     var nonBroadcastedTx =
-        _walletTransactions!.where((element) => element.broadCasted == false);
+        _walletTransactions.where((element) => element.broadCasted == false);
     nonBroadcastedTx.forEach((element) {
       _connectionProvider!.broadcastTransaction(
         element.broadcastHex,
@@ -130,17 +129,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void deactivate() async {
-    if (_rescanInProgress == false) await _connectionProvider!.closeConnection();
+    if (_rescanInProgress == false) {
+      await _connectionProvider!.closeConnection();
+    }
     super.deactivate();
   }
 
   void selectPopUpMenuItem(String value) {
     if (value == 'import_wallet') {
       Navigator.of(context)
-          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet!.name);
+          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
     } else if (value == 'server_settings') {
       Navigator.of(context)
-          .pushNamed(Routes.ServerSettings, arguments: _wallet!.name);
+          .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
     } else if (value == 'rescan') {
       showDialog(
         context: context,
@@ -168,7 +169,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 //init rescan
                 await Navigator.of(context).pushNamedAndRemoveUntil(
                     Routes.WalletImportScan, (_) => false,
-                    arguments: _wallet!.name);
+                    arguments: _wallet.name);
               },
             ),
           ],
@@ -208,11 +209,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
         title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.asset(
               AvailableCoins()
-                  .getSpecificCoin(_wallet!.name)!
+                  .getSpecificCoin(_wallet.name)
                   .iconPathTransparent,
               width: 20),
           SizedBox(width: 10),
-          Text(_wallet!.title!)
+          Text(_wallet.title!)
         ]),
         actions: [
           IconButton(
@@ -221,7 +222,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               _activeWallets.transferedAddress = null;
               final _result = await Navigator.of(context).pushNamed(
                   Routes.AddressBook,
-                  arguments: {'name': _wallet!.name, 'title': _wallet!.title});
+                  arguments: {'name': _wallet.name, 'title': _wallet.title});
               if (_result != null) {
                 setState(() {
                   _activeWallets.transferedAddress = _result;
@@ -278,20 +279,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      _wallet!.letterCode!,
+                      _wallet.letterCode!,
                       style: TextStyle(
                           fontSize: 26, color: Theme.of(context).accentColor),
                     ),
                     Column(
                       children: [
                         Text(
-                          (_wallet!.balance! / 1000000).toString(),
+                          (_wallet.balance! / 1000000).toString(),
                           style: TextStyle(
                               fontSize: 26, fontWeight: FontWeight.bold),
                         ),
-                        _wallet!.unconfirmedBalance! > 0
+                        _wallet.unconfirmedBalance! > 0
                             ? Text(
-                                (_wallet!.unconfirmedBalance! / 1000000)
+                                (_wallet.unconfirmedBalance! / 1000000)
                                     .toString(),
                                 style: TextStyle(
                                     fontSize: 14,
@@ -310,7 +311,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   walletTransactions: _walletTransactions,
                   unusedAddress: _unusedAddress,
                   changeIndex: changeIndex,
-                  identifier: _wallet!.name,
+                  identifier: _wallet.name!,
                 )
               ],
             ),

@@ -11,7 +11,7 @@ class AppSettings with ChangeNotifier {
   final EncryptedBox _encryptedBox;
   late SharedPreferences _sharedPrefs;
   String? _selectedLang;
-  String? _selectedTheme;
+  late String _selectedTheme;
   AppSettings(this._encryptedBox);
 
   Future<void> init() async {

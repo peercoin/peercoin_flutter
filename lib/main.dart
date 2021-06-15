@@ -26,10 +26,10 @@ import './tools/app_localizations.dart';
 import './tools/app_routes.dart';
 import './tools/app_themes.dart';
 
-bool? setupFinished;
-Widget? _homeWidget;
-Locale? _locale;
-ThemeMode? _themeMode;
+late bool setupFinished;
+late Widget _homeWidget;
+late Locale _locale;
+late ThemeMode _themeMode;
 
 void main() async {
   //init sharedpreferences

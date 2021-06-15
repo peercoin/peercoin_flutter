@@ -20,8 +20,8 @@ import '../providers/encryptedbox.dart';
 class ActiveWallets with ChangeNotifier {
   final EncryptedBox _encryptedBox;
   ActiveWallets(this._encryptedBox);
-  String? _seedPhrase;
-  String? _unusedAddress = '';
+  late String _seedPhrase;
+  String _unusedAddress = '';
   late Box _walletBox;
   Box? _vaultBox;
   // ignore: prefer_final_fields
@@ -33,16 +33,16 @@ class ActiveWallets with ChangeNotifier {
     _walletBox = await _encryptedBox.getWalletBox();
   }
 
-  Future<String?> get seedPhrase async {
-    _seedPhrase ??= _vaultBox!.get('mnemonicSeed');
+  Future<String> get seedPhrase async {
+    _seedPhrase = _vaultBox!.get('mnemonicSeed') ?? '';
     return _seedPhrase;
   }
 
-  String? get getUnusedAddress {
+  String get getUnusedAddress {
     return _unusedAddress;
   }
 
-  set unusedAddress(String? newAddr) {
+  set unusedAddress(String newAddr) {
     _unusedAddress = newAddr;
     notifyListeners();
   }
@@ -71,12 +71,12 @@ class ActiveWallets with ChangeNotifier {
     return _walletBox.keys.toList();
   }
 
-  CoinWallet? getSpecificCoinWallet(String? identifier) {
+  CoinWallet getSpecificCoinWallet(String identifier) {
     if (_specificWallet[identifier] == null) {
       //cache wallet
       _specificWallet[identifier] = _walletBox.get(identifier);
     }
-    return _specificWallet[identifier];
+    return _specificWallet[identifier]!;
   }
 
   Future<void> addWallet(String? name, String title, String letterCode) async {
@@ -89,9 +89,9 @@ class ActiveWallets with ChangeNotifier {
   Future<String?> getAddressFromDerivationPath(
       String? identifier, int? account, int? chain, int? address,
       [master = false]) async {
-    final network = AvailableCoins().getSpecificCoin(identifier)!.networkType;
+    final network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var hdWallet = HDWallet.fromSeed(
-      seedPhraseUint8List(await seedPhrase as String),
+      seedPhraseUint8List(await seedPhrase),
       network: network,
     );
 
@@ -105,11 +105,11 @@ class ActiveWallets with ChangeNotifier {
     }
   }
 
-  Future<void> generateUnusedAddress(String? identifier) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
-    final network = AvailableCoins().getSpecificCoin(identifier)!.networkType;
+  Future<void> generateUnusedAddress(String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    final network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var hdWallet = HDWallet.fromSeed(
-      seedPhraseUint8List(await seedPhrase as String),
+      seedPhraseUint8List(await seedPhrase),
       network: network,
     );
     if (openWallet.addresses!.isEmpty) {
@@ -122,7 +122,7 @@ class ActiveWallets with ChangeNotifier {
         isOurs: true,
         wif: hdWallet.wif,
       );
-      unusedAddress = hdWallet.address;
+      unusedAddress = hdWallet.address!;
     } else {
       //wallet is not brand new, lets find an unused address
       var unusedAddr;
@@ -161,26 +161,26 @@ class ActiveWallets with ChangeNotifier {
           wif: newHdWallet.wif,
         );
 
-        unusedAddress = newHdWallet.address;
+        unusedAddress = newHdWallet.address!;
       }
     }
     await openWallet.save();
   }
 
-  Future<List<WalletAddress>?> getWalletAddresses(String? identifier) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
-    return openWallet.addresses;
+  Future<List<WalletAddress>> getWalletAddresses(String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    return openWallet.addresses!;
   }
 
-  Future<List<WalletTransaction>?> getWalletTransactions(
-      String? identifier) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
-    return openWallet.transactions;
+  Future<List<WalletTransaction>> getWalletTransactions(
+      String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    return openWallet.transactions!;
   }
 
   Future<String?> getWalletAddressStatus(
-      String? identifier, String? address) async {
-    var addresses = await getWalletAddresses(identifier) as List<WalletAddress>;
+      String identifier, String address) async {
+    var addresses = await getWalletAddresses(identifier);
     var targetWallet =
         addresses.firstWhereOrNull((element) => element.address == address);
     return targetWallet?.status;
@@ -191,7 +191,7 @@ class ActiveWallets with ChangeNotifier {
     var unkownTx = [];
     newTxList.forEach((newTx) {
       var found = false;
-      storedTransactions!.forEach((storedTx) {
+      storedTransactions.forEach((storedTx) {
         if (storedTx.txid == newTx['tx_hash']) {
           found = true;
         }
@@ -203,8 +203,8 @@ class ActiveWallets with ChangeNotifier {
     return unkownTx;
   }
 
-  Future<void> updateWalletBalance(String? identifier) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  Future<void> updateWalletBalance(String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
 
     var balanceConfirmed = 0;
     var unconfirmedBalance = 0;
@@ -228,8 +228,8 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> putUtxos(String? identifier, String address, List utxos) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  Future<void> putUtxos(String identifier, String address, List utxos) async {
+    var openWallet = getSpecificCoinWallet(identifier);
 
     //clear utxos for address
     openWallet.clearUtxo(address);
@@ -251,9 +251,9 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> putTx(String? identifier, String? address, Map tx,
+  Future<void> putTx(String identifier, String address, Map tx,
       [bool scanMode = false]) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+    var openWallet = getSpecificCoinWallet(identifier);
     // log("$address puttx: $tx");
 
     if (scanMode == true) {
@@ -342,9 +342,8 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<void> putOutgoingTx(
-      String? identifier, String? address, Map tx) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  Future<void> putOutgoingTx(String identifier, String address, Map tx) async {
+    var openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.putTransaction(WalletTransaction(
       txid: tx['txid'],
@@ -362,18 +361,18 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<void> prepareForRescan(String? identifier) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  Future<void> prepareForRescan(String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
     openWallet.utxos!.removeRange(0, openWallet.utxos!.length);
     await openWallet.save();
   }
 
   Future<void> updateAddressStatus(
-      String? identifier, String? address, String? status) async {
+      String identifier, String? address, String? status) async {
     print('updating $address to $status');
     //set address to used
     //update status for address
-    var openWallet = getSpecificCoinWallet(identifier)!;
+    var openWallet = getSpecificCoinWallet(identifier);
     openWallet.addresses!.forEach((walletAddr) async {
       if (walletAddr.address == address) {
         walletAddr.newUsed = status == null ? false : true;
@@ -384,22 +383,22 @@ class ActiveWallets with ChangeNotifier {
     await generateUnusedAddress(identifier);
   }
 
-  Future<String?> getAddressForTx(String? identifier, String txid) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  Future<String> getAddressForTx(String identifier, String txid) async {
+    var openWallet = getSpecificCoinWallet(identifier);
     var tx =
         openWallet.utxos!.firstWhereOrNull((element) => element.hash == txid);
     if (tx != null) {
-      return tx.address;
+      return tx.address!;
     }
     return '';
   }
 
   Future<String?> getWif(
-    String? identifier,
-    String? address,
+    String identifier,
+    String address,
   ) async {
-    var network = AvailableCoins().getSpecificCoin(identifier)!.networkType;
-    var openWallet = getSpecificCoinWallet(identifier)!;
+    var network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses!
         .firstWhereOrNull((element) => element.address == address);
 
@@ -407,7 +406,7 @@ class ActiveWallets with ChangeNotifier {
       if (walletAddress.wif == null || walletAddress.wif == '') {
         var _wifs = {};
         var hdWallet = HDWallet.fromSeed(
-          seedPhraseUint8List(await seedPhrase as String),
+          seedPhraseUint8List(await seedPhrase),
           network: network,
         );
 
@@ -428,7 +427,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<Map> buildTransaction(
-    String? identifier,
+    String identifier,
     String? address,
     String amount,
     int? fee, [
@@ -436,7 +435,7 @@ class ActiveWallets with ChangeNotifier {
   ]) async {
     //convert amount
     var _txAmount = (double.parse(amount) * 1000000).toInt();
-    var openWallet = getSpecificCoinWallet(identifier)!;
+    var openWallet = getSpecificCoinWallet(identifier);
     var _hex = '';
     var _destroyedChange = 0;
 
@@ -452,7 +451,7 @@ class ActiveWallets with ChangeNotifier {
         //find eligible input utxos
         var _totalInputValue = 0;
         var inputTx = <WalletUtxo>[];
-        var coin = AvailableCoins().getSpecificCoin(identifier)!;
+        var coin = AvailableCoins().getSpecificCoin(identifier);
 
         openWallet.utxos!.forEach((utxo) {
           if (_totalInputValue <= (_txAmount + fee!)) {
@@ -460,7 +459,7 @@ class ActiveWallets with ChangeNotifier {
             inputTx.add(utxo);
           }
         });
-        var network = AvailableCoins().getSpecificCoin(identifier)!.networkType;
+        var network = AvailableCoins().getSpecificCoin(identifier).networkType;
 
         //start building tx
         final tx = TransactionBuilder(network: network);
@@ -490,7 +489,7 @@ class ActiveWallets with ChangeNotifier {
             openWallet.addresses!.asMap().forEach((key, walletAddr) async {
               if (walletAddr.address == inputUtxo.address &&
                   !_usedUtxos.contains(inputUtxo.hash)) {
-                var wif = await getWif(identifier, walletAddr.address);
+                var wif = await getWif(identifier, walletAddr.address!);
                 keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
                 tx.addInput(inputUtxo.hash, inputUtxo.txPos!);
                 _usedUtxos.add(inputUtxo.hash);
@@ -543,14 +542,14 @@ class ActiveWallets with ChangeNotifier {
     }
   }
 
-  Future<Map> getWalletScriptHashes(String? identifier,
+  Future<Map> getWalletScriptHashes(String identifier,
       [String? address]) async {
     List<WalletAddress>? addresses;
     var answerMap = {};
     if (address == null) {
       //get all
       addresses = await getWalletAddresses(identifier);
-      addresses!.forEach((addr) {
+      addresses.forEach((addr) {
         if (addr.isOurs == true || addr.isOurs == null) {
           // == null for backwards compatability
           answerMap[addr.address] = getScriptHash(identifier, addr.address!);
@@ -564,14 +563,14 @@ class ActiveWallets with ChangeNotifier {
   }
 
   String getScriptHash(String? identifier, String address) {
-    var network = AvailableCoins().getSpecificCoin(identifier)!.networkType;
+    var network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var script = Address.addressToOutputScript(address, network)!;
     var hash = sha256.convert(script).toString();
     return (reverseString(hash));
   }
 
-  void updateBroadcasted(String? identifier, String txId, bool broadcasted) {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  void updateBroadcasted(String identifier, String txId, bool broadcasted) {
+    var openWallet = getSpecificCoinWallet(identifier);
     var tx =
         openWallet.transactions!.firstWhere((element) => element.txid == txId);
     tx.broadCasted = broadcasted;
@@ -579,8 +578,8 @@ class ActiveWallets with ChangeNotifier {
     openWallet.save();
   }
 
-  void updateLabel(String? identifier, String? address, String? label) {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  void updateLabel(String identifier, String address, String? label) {
+    var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses!.firstWhereOrNull(
       (element) => element.address == address,
     );
@@ -601,8 +600,8 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAddressFromScan(String? identifier, String? address) async {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  void addAddressFromScan(String identifier, String address) async {
+    var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses!.firstWhereOrNull(
       (element) => element.address == address,
     );
@@ -621,14 +620,14 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  void removeAddress(String? identifier, WalletAddress addr) {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  void removeAddress(String identifier, WalletAddress addr) {
+    var openWallet = getSpecificCoinWallet(identifier);
     openWallet.removeAddress(addr);
     notifyListeners();
   }
 
-  String getLabelForAddress(String? identifier, String? address) {
-    var openWallet = getSpecificCoinWallet(identifier)!;
+  String getLabelForAddress(String identifier, String address) {
+    var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses!.firstWhereOrNull(
       (element) => element.address == address,
     );

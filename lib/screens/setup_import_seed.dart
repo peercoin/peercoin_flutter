@@ -82,6 +82,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       padding: EdgeInsets.all(20),
                       child: TextFormField(
                         textInputAction: TextInputAction.done,
+                        key: Key('importTextField'),
                         controller: _controller,
                         validator: (value) {
                           if (value!.split(' ').length < 12) {
@@ -126,6 +127,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             createWallet(context);
                           }
                         },
+                        key: Key('importKey'),
                         icon: Icon(Icons.input),
                         label: Text(AppLocalizations.instance.translate(
                           'import_seed_button',

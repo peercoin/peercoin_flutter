@@ -75,6 +75,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
+              key: Key('add_wallet'),
               onPressed: () {
                 if (_initial == false) {
                   Navigator.of(context).pushNamed(Routes.NewWallet);
@@ -135,7 +136,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                                         backgroundColor: Colors.white,
                                         child: Image.asset(
                                             AvailableCoins()
-                                                .getSpecificCoin(_wallet.name)!
+                                                .getSpecificCoin(_wallet.name)
                                                 .iconPath,
                                             width: 20),
                                       ),
