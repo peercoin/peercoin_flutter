@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -67,10 +68,21 @@ class _WalletListScreenState extends State<WalletListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       drawer: AppDrawer(),
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 0,
         title: Center(
-            child: Text(AppLocalizations.instance.translate('wallets_list'))),
+            child: Text(
+              AppLocalizations.instance.translate('wallets_list'),
+              style: TextStyle(
+                //fontSize: 26,
+                //fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            )),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -115,32 +127,73 @@ class _WalletListScreenState extends State<WalletListScreen> {
                           itemCount: snapshot.data.length,
                           itemBuilder: (ctx, i) {
                             CoinWallet _wallet = snapshot.data[i];
-                            return Card(
-                              child: Column(
-                                children: [
-                                  InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        await Navigator.of(context)
-                                            .pushReplacementNamed(
-                                          Routes.WalletHome,
-                                          arguments: _wallet,
-                                        );
-                                      },
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Image.asset(
-                                              AvailableCoins()
-                                                  .getSpecificCoin(_wallet.name)
-                                                  .iconPath,
-                                              width: 20),
-                                        ),
-                                        title: Text(_wallet.title),
-                                      ))
-                                ],
+                            return Padding(
+                              padding: const EdgeInsets.only(top:5),
+                              child: Card(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          await Navigator.of(context)
+                                              .pushReplacementNamed(
+                                            Routes.WalletHome,
+                                            arguments: _wallet,
+                                          );
+                                        },
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            child: Image.asset(
+                                                AvailableCoins()
+                                                    .getSpecificCoin(_wallet.name)
+                                                    .iconPath,
+                                                width: 20),
+                                          ),
+                                          title: Text(
+                                            _wallet.title,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              //color: PeerColors.darkGreen,
+                                            ),
+                                          ),
+                                          subtitle: Row(
+                                            children: [
+                                              Text(
+                                                (_wallet.balance / 1000000).toString(),
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  //fontWeight: FontWeight.bold,
+                                                  //color: PeerColors.darkGreen,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                _wallet.letterCode,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  //color: PeerColors.darkGreen,
+                                                  //fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: PeerColors.darkGreen,
+                                          ),
+                                        )
+                                    ),
+
+                                  ],
+                                ),
                               ),
                             );
                           },
@@ -148,6 +201,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                       );
                     },
                   ),
+
                 ],
               ),
             ),
