@@ -26,9 +26,11 @@ class WalletContentSwitch extends StatelessWidget {
         return Expanded(
             child: SingleChildScrollView(child: ReceiveTab(unusedAddress)));
       case 1:
-        return TransactionList(
-          walletTransactions ?? [],
-          identifier,
+        return Expanded(
+          child: TransactionList(
+            walletTransactions ?? [],
+            identifier,
+          ),
         );
       case 2:
         return Expanded(

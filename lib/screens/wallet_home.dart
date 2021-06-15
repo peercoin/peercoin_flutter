@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -10,12 +9,9 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/receive_tab.dart';
 import 'package:peercoin/widgets/wallet_content_switch.dart';
 import 'package:peercoin/widgets/wallet_home_connection.dart';
-import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
@@ -184,33 +180,33 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return Scaffold(
       drawer: AppDrawer(),
       /*bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: PeerColors.darkGreen,
-        selectedItemColor: Colors.white,
-        onTap: (index) => changeIndex(index),
-        currentIndex: _pageIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.download_rounded),
-            label: AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
-            backgroundColor: Theme.of(context).primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_rounded),
-            label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-            backgroundColor: Theme.of(context).primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_rounded),
-            label: 'Addresses',
-            backgroundColor: Theme.of(context).primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.upload_rounded),
-            label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-            backgroundColor: Theme.of(context).primaryColor,
-          )
-        ],
-      ),*/
+    unselectedItemColor: PeerColors.darkGreen,
+    selectedItemColor: Colors.white,
+    onTap: (index) => changeIndex(index),
+    currentIndex: _pageIndex,
+    items: [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.download_rounded),
+        label: AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.list_rounded),
+        label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.menu_book_rounded),
+        label: 'Addresses',
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.upload_rounded),
+        label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
+        backgroundColor: Theme.of(context).primaryColor,
+      )
+    ],
+  ),*/
       appBar: AppBar(
         elevation: 0,
         title: Center(child: Text(_wallet.title)),
@@ -255,19 +251,17 @@ class _WalletHomeState extends State<WalletHomeScreen>
         ],
       ),
       body: _initial
-          ? Center(child: SizedBox(
-          child: LoadingIndicator(),
-        width: MediaQuery.of(context).size.width/3,
-      ))
+          ? Center(child: LoadingIndicator())
           : Container(
-        color: Theme.of(context).primaryColor,
-            child: Column(
+              color: Theme.of(context).primaryColor,
+              child: Column(
                 children: [
-
                   Column(
                     children: [
                       WalletHomeConnection(_connectionState),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -276,46 +270,50 @@ class _WalletHomeState extends State<WalletHomeScreen>
                               Text(
                                 (_wallet.balance / 1000000).toString(),
                                 style: TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
                                   color: PeerColors.darkGreen,
                                 ),
                               ),
                               _wallet.unconfirmedBalance > 0
                                   ? Text(
-                                (_wallet.unconfirmedBalance / 1000000)
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).accentColor),
-                              )
+                                      (_wallet.unconfirmedBalance / 1000000)
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(context).accentColor),
+                                    )
                                   : Container(),
                             ],
                           ),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Text(
                             _wallet.letterCode,
                             style: TextStyle(
-                                fontSize: 26,
-                                color: PeerColors.darkGreen,
-                                fontWeight: FontWeight.bold,
+                              fontSize: 26,
+                              color: PeerColors.darkGreen,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 25,),
+                  SizedBox(
+                    height: 25,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       PeerIconButton(
                         icon: Icons.download_rounded,
-                        action: (){
-                            setState(() {
-                              _pageIndex = 0;
-                            });
-                            },
+                        action: () {
+                          setState(() {
+                            _pageIndex = 0;
+                          });
+                        },
                       ),
                       PeerIconButton(
                         icon: Icons.menu_book,
@@ -352,7 +350,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                       ),
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   WalletContentSwitch(
                     pageIndex: _pageIndex,
                     walletTransactions: _walletTransactions,
@@ -362,14 +362,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   )
                 ],
               ),
-          ),
+            ),
     );
   }
 }
 
 class PeerColors{
   PeerColors._();
-  static const Color darkGreen = Color(0xFF004346);
+  static const Color darkGreen = Color(0xFF2C4251);
   static const Color red = Color(0xFFF8333C);
 }
 
@@ -394,4 +394,28 @@ class PeerIconButton extends StatelessWidget {
     );
   }
 }
+
+class PeerServiceTitle extends StatelessWidget {
+  final String title;
+  PeerServiceTitle({this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 

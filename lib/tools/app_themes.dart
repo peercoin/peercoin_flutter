@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 
 class MyTheme {
   static MaterialColor peercoinGreen = MaterialColor(
@@ -26,7 +27,7 @@ class MyTheme {
       primarySwatch: peercoinGreen,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: peercoinGreen,
+          primary: PeerColors.darkGreen,
           onPrimary: Colors.white,
         ),
       ),

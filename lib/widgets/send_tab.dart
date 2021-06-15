@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
@@ -169,7 +171,7 @@ class _SendTabState extends State<SendTab> {
                     SizedBox(height: 20),
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
+                        primary: PeerColors.darkGreen,
                       ),
                       label: Text(AppLocalizations.instance
                           .translate('send_confirm_send')),
@@ -251,7 +253,7 @@ class _SendTabState extends State<SendTab> {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(vertical:20,horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -260,7 +262,8 @@ class _SendTabState extends State<SendTab> {
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
+            PeerServiceTitle(title: 'Send'),
             TypeAheadFormField(
               hideOnEmpty: true,
               key: _addressKey,
@@ -275,8 +278,8 @@ class _SendTabState extends State<SendTab> {
                       var data = await Clipboard.getData('text/plain');
                       addressController.text = data.text;
                     },
-                    icon: Icon(Icons.paste,
-                        color: Theme.of(context).primaryColor),
+                    icon: Icon(Icons.paste_rounded,
+                        color: PeerColors.darkGreen,),
                   ),
                 ),
               ),
@@ -376,7 +379,22 @@ class _SendTabState extends State<SendTab> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
+                  primary: Theme.of(context).buttonColor,
+                  onPrimary: Colors.black,
+                ),
+                label: Text('QR-Code'),
+                icon: Icon(Icons.qr_code_rounded,),
+                onPressed: () async {
+                  final result = await Navigator.of(context).pushNamed(
+                      Routes.QRScan,
+                      arguments:
+                      AppLocalizations.instance.translate('scan_qr'));
+                  if (result != null) parseQrResult(result);
+                },
+              ),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: PeerColors.darkGreen,
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
@@ -403,19 +421,8 @@ class _SendTabState extends State<SendTab> {
                 icon: Icon(Icons.send),
                 label: Text(AppLocalizations.instance.translate('send')),
               ),
-              IconButton(
-                  icon: Icon(
-                    Icons.camera,
-                    color: Theme.of(context).primaryColor,
-                    size: 40,
-                  ),
-                  onPressed: () async {
-                    final result = await Navigator.of(context).pushNamed(
-                        Routes.QRScan,
-                        arguments:
-                            AppLocalizations.instance.translate('scan_qr'));
-                    if (result != null) parseQrResult(result);
-                  }),
+
+
             ]),
           ],
         ),

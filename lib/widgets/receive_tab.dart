@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
@@ -87,7 +88,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(vertical:20,horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -97,6 +98,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            PeerServiceTitle(title: 'Receive'),
             InkWell(
               onTap: () {
                 showDialog(
@@ -122,7 +124,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
               },
               child: QrImage(
                 data: _qrString,
-                size: MediaQuery.of(context).size.width * 0.3,
+                size: MediaQuery.of(context).size.width * 0.2,
                 padding: EdgeInsets.all(1),
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,
@@ -138,7 +140,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 child: FittedBox(
                   child: SelectableText(
                     widget._unusedAddress,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -196,6 +198,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
               icon: Icon(Icons.share),
               label: Text(
                 AppLocalizations.instance.translate('receive_share'),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: PeerColors.darkGreen,
               ),
             ),
             SizedBox(height: 10),
