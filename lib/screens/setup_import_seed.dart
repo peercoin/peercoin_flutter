@@ -105,7 +105,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                               FocusScope.of(context).unfocus(); //hide keyboard
                             },
                             icon: Icon(Icons.paste,
-                                color: Theme.of(context).primaryColor),
+                                color: Theme.of(context).accentColor),
                           ),
                         ),
                         keyboardType: TextInputType.multiline,

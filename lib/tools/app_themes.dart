@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/screens/wallet_home.dart';
 
 class MyTheme {
-  static MaterialColor peercoinGreen = MaterialColor(
-    _peercoinGreenValue,
-    <int, Color>{
-      50: Color(0xff3cb054),
-      100: Color(0xff3cb054),
-      200: Color(0xff3cb054),
-      300: Color(0xff3cb054),
-      400: Color(0xff3cb054),
-      500: Color(0xff3cb054),
-      600: Color(0xff3cb054),
-      700: Color(0xff3cb054),
-      800: Color(0xff3cb054),
-      900: Color(0xff3cb054),
-    },
-  );
-  static final int _peercoinGreenValue = 0xff3cb054;
 
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(
-      primaryColor: peercoinGreen,
-      accentColor: Colors.grey,
-      errorColor: Colors.red,
-      primarySwatch: peercoinGreen,
+
+      accentColor: LightColors.darkBlue,
+      backgroundColor: LightColors.white,
+      buttonColor: LightColors.darkBlue,
+      cardColor: LightColors.white,
+      dialogBackgroundColor: LightColors.white,
+      disabledColor: LightColors.gray,
+      errorColor: LightColors.red,
+      focusColor: LightColors.green,
+      primaryColor: LightColors.green,
+      primarySwatch: materialColor(LightColors.darkBlue),
+      shadowColor: LightColors.lightBlue,
+
+
+      cardTheme: CardTheme(
+        elevation: 2,
+        color: LightColors.white,
+        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: PeerColors.darkGreen,
-          onPrimary: Colors.white,
+          primary: LightColors.darkBlue,
+          onPrimary: LightColors.white,
         ),
       ),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
       primaryColor: Color(0xff46662B),
-      scaffoldBackgroundColor: DarkThemeColors.background,
-      accentColor: DarkThemeColors.primaryAccent,
+      scaffoldBackgroundColor: DarkColors.background,
+      accentColor: DarkColors.primaryAccent,
       errorColor: Color(0xffAB0C3D),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -52,15 +50,38 @@ class MyTheme {
   static ThemeData getTheme(ThemeMode mode) {
     return appThemes[mode];
   }
+
+  static MaterialColor materialColor(Color color){
+    return MaterialColor(
+      color.value,
+      <int, Color>{
+        50: color,
+        100: color,
+        200: color,
+        300: color,
+        400: color,
+        500: color,
+        600: color,
+        700: color,
+        800: color,
+        900: color,
+      },
+    );
+  }
 }
 
-abstract class LightThemeColors {
-  static Color get background => const Color(0xFFFFFFFF);
-  static Color get primaryContent => const Color(0xFF000000);
-  static Color get primaryAccent => Colors.grey;
+abstract class LightColors {
+  static Color get green => const Color(0xff3cb054);
+  static Color get darkBlue => const Color(0xFF2C4251);
+  static Color get lightBlue => const Color(0xFFA6CFD5);
+  static Color get white => const Color(0xFFFFFFFC);
+  static Color get gray => const Color(0xFF97A7B3);
+  static Color get black => const Color(0xFF000000);
+  static Color get red => const Color(0xFFF8333C);
+  static Color get yellow => const Color(0xFFFFBF46);
 }
 
-abstract class DarkThemeColors {
+abstract class DarkColors {
   static Color get background => const Color(0xFF10041A);
   static Color get primaryContent => const Color(0xFFE1E1E1);
   static Color get primaryAccent => const Color(0xFFC7482A);

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -187,7 +186,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                                           ),
                                           trailing: Icon(
                                             Icons.arrow_forward_ios_rounded,
-                                            color: PeerColors.darkGreen,
+                                            color: Theme.of(context).accentColor,
                                           ),
                                         )
                                     ),

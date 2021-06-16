@@ -171,7 +171,7 @@ class _SendTabState extends State<SendTab> {
                     SizedBox(height: 20),
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        primary: PeerColors.darkGreen,
+                        primary: Theme.of(context).accentColor,
                       ),
                       label: Text(AppLocalizations.instance
                           .translate('send_confirm_send')),
@@ -251,19 +251,13 @@ class _SendTabState extends State<SendTab> {
       _activeWallets.transferedAddress = null; //reset transfer
     }
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
-      padding: const EdgeInsets.symmetric(vertical:20,horizontal: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
+    return PeerContainer(
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PeerServiceTitle(title: 'Send'),
+            PeerServiceTitle(title: AppLocalizations.instance.translate('wallet_bottom_nav_send')),
             TypeAheadFormField(
               hideOnEmpty: true,
               key: _addressKey,
@@ -279,7 +273,7 @@ class _SendTabState extends State<SendTab> {
                       addressController.text = data.text;
                     },
                     icon: Icon(Icons.paste_rounded,
-                        color: PeerColors.darkGreen,),
+                        color: Theme.of(context).accentColor,),
                   ),
                 ),
               ),
@@ -379,11 +373,11 @@ class _SendTabState extends State<SendTab> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).buttonColor,
+                  primary: Theme.of(context).disabledColor,
                   onPrimary: Colors.black,
                 ),
                 label: Text('QR-Code'),
-                icon: Icon(Icons.qr_code_rounded,),
+                icon: Icon(Icons.qr_code_scanner_rounded,),
                 onPressed: () async {
                   final result = await Navigator.of(context).pushNamed(
                       Routes.QRScan,
@@ -394,7 +388,7 @@ class _SendTabState extends State<SendTab> {
               ),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  primary: PeerColors.darkGreen,
+                  primary: Theme.of(context).accentColor,
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {

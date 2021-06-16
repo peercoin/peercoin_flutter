@@ -272,7 +272,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                                 style: TextStyle(
                                   fontSize: 26,
                                   fontWeight: FontWeight.bold,
-                                  color: PeerColors.darkGreen,
+                                  color: Theme.of(context).accentColor,
                                 ),
                               ),
                               _wallet.unconfirmedBalance > 0
@@ -293,7 +293,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                             _wallet.letterCode,
                             style: TextStyle(
                               fontSize: 26,
-                              color: PeerColors.darkGreen,
+                              color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -351,7 +351,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   WalletContentSwitch(
                     pageIndex: _pageIndex,
@@ -367,12 +367,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 }
 
-class PeerColors{
-  PeerColors._();
-  static const Color darkGreen = Color(0xFF2C4251);
-  static const Color red = Color(0xFFF8333C);
-}
-
 class PeerIconButton extends StatelessWidget {
   final Function action;
   final IconData icon;
@@ -382,7 +376,7 @@ class PeerIconButton extends StatelessWidget {
     return RawMaterialButton(
       onPressed: action,
       elevation: 0,
-      fillColor: PeerColors.darkGreen,
+      fillColor: Theme.of(context).accentColor,
       padding: const EdgeInsets.all(10),
       shape: CircleBorder(),
       constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
@@ -416,6 +410,25 @@ class PeerServiceTitle extends StatelessWidget {
     );
   }
 }
+
+class PeerContainer extends StatelessWidget {
+  final Widget child;
+  PeerContainer({this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).backgroundColor,
+      ),
+      child: child,
+    );
+  }
+}
+
 
 
 

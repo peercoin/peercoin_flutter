@@ -86,19 +86,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
-      padding: const EdgeInsets.symmetric(vertical:20,horizontal: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
+    return PeerContainer(
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            PeerServiceTitle(title: 'Receive'),
+            PeerServiceTitle(title: AppLocalizations.instance.translate('wallet_bottom_nav_receive')),
             InkWell(
               onTap: () {
                 showDialog(
@@ -133,7 +127,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
             SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).shadowColor,
                   borderRadius: BorderRadius.all(Radius.circular(4))),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -200,7 +194,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 AppLocalizations.instance.translate('receive_share'),
               ),
               style: ElevatedButton.styleFrom(
-                primary: PeerColors.darkGreen,
+                primary: Theme.of(context).accentColor,
               ),
             ),
             SizedBox(height: 10),
