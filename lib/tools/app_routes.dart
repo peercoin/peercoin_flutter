@@ -51,7 +51,7 @@ class Routes {
       Routes.AuthJail: (context) => AuthJailScreen(),
       Routes.ServerSettings: (context) => ServerSettingsScreen(),
       Routes.ServerAdd: (context) => ServerAddScreen(),
-      Routes.About: (context) => AboutScren(),
+      Routes.About: (context) => AboutScreen(),
       Routes.AddressBook: (context) => AddressBookScreen()
     };
   }

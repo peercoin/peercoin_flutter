@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mailto/mailto.dart';
 
-class AboutScren extends StatefulWidget {
+class AboutScreen extends StatefulWidget {
   @override
-  _AboutScrenState createState() => _AboutScrenState();
+  _AboutScreenState createState() => _AboutScreenState();
 }
 
-class _AboutScrenState extends State<AboutScren> {
+class _AboutScreenState extends State<AboutScreen> {
   bool _initial = true;
   PackageInfo _packageInfo;
 
@@ -49,8 +48,14 @@ class _AboutScrenState extends State<AboutScren> {
           title: Text(
             AppLocalizations.instance.translate('about'),
           ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-        drawer: AppDrawer(),
+        //drawer: AppDrawer(),
         body: Column(children: [
           Expanded(
             child: SingleChildScrollView(

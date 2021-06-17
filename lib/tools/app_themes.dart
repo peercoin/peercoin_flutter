@@ -16,7 +16,7 @@ class MyTheme {
       primaryColor: LightColors.green,
       primarySwatch: materialColor(LightColors.darkBlue),
       shadowColor: LightColors.lightBlue,
-
+      unselectedWidgetColor: LightColors.lightGreen,
 
       cardTheme: CardTheme(
         elevation: 2,
@@ -72,6 +72,7 @@ class MyTheme {
 
 abstract class LightColors {
   static Color get green => const Color(0xff3cb054);
+static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get darkBlue => const Color(0xFF2C4251);
   static Color get lightBlue => const Color(0xFFA6CFD5);
   static Color get white => const Color(0xFFFFFFFC);

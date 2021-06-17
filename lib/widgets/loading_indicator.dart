@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
 class LoadingIndicator extends StatelessWidget {
-  final Color background;
+  final Color backgroundColor;
   final Color color;
 
   LoadingIndicator(
-      {this.color = const Color(0xFF2C4251),
-      this.background = const Color(0xff3cb054)});
+      {this.color = const Color(0xff3cb054),
+      this.backgroundColor = const Color(0xFFFFFFFC)});
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: LinearProgressIndicator(
+        backgroundColor: backgroundColor,
         color: color,
-        backgroundColor: background,
+        //valueColor: AlwaysStoppedAnimation<Color>(color),
       ),
     );
   }

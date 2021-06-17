@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/app_settings_screen.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -68,11 +68,21 @@ class _WalletListScreenState extends State<WalletListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      drawer: AppDrawer(),
+      //drawer: AppDrawer(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.settings_rounded),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AppSettingsScreen()),
+            );
+          },
+        ),
         title: Center(
             child: Text(
               AppLocalizations.instance.translate('wallets_list'),

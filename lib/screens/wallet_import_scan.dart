@@ -93,7 +93,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LoadingIndicator(background:Theme.of(context).backgroundColor),
+          LoadingIndicator(color:Theme.of(context).backgroundColor),
           SizedBox(height: 20),
           Text(
             AppLocalizations.instance.translate('wallet_scan_notice'),

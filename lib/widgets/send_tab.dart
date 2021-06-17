@@ -255,7 +255,7 @@ class _SendTabState extends State<SendTab> {
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PeerServiceTitle(title: AppLocalizations.instance.translate('wallet_bottom_nav_send')),
             TypeAheadFormField(
@@ -374,7 +374,7 @@ class _SendTabState extends State<SendTab> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).disabledColor,
-                  onPrimary: Colors.black,
+                  onPrimary: Colors.white,
                 ),
                 label: Text('QR-Code'),
                 icon: Icon(Icons.qr_code_scanner_rounded,),
@@ -415,9 +415,13 @@ class _SendTabState extends State<SendTab> {
                 icon: Icon(Icons.send),
                 label: Text(AppLocalizations.instance.translate('send')),
               ),
-
-
             ]),
+            SizedBox(height: 10),
+            Text('Hint: Scanning the QR-Code will save you some time',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).accentColor,
+                )),
           ],
         ),
       ),

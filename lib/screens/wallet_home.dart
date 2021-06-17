@@ -7,7 +7,6 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/wallet_content_switch.dart';
 import 'package:peercoin/widgets/wallet_home_connection.dart';
@@ -177,39 +176,47 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    var back = Theme.of(context).primaryColor;
     return Scaffold(
-      drawer: AppDrawer(),
-      /*bottomNavigationBar: BottomNavigationBar(
-    unselectedItemColor: PeerColors.darkGreen,
-    selectedItemColor: Colors.white,
-    onTap: (index) => changeIndex(index),
-    currentIndex: _pageIndex,
-    items: [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.download_rounded),
-        label: AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
-        backgroundColor: Theme.of(context).primaryColor,
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Theme.of(context).unselectedWidgetColor,
+        selectedItemColor: Colors.white,
+        onTap: (index) => changeIndex(index),
+        currentIndex: _pageIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.download_rounded),
+            label: AppLocalizations.instance
+                .translate('wallet_bottom_nav_receive'),
+            backgroundColor: back,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_rounded),
+            label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
+            backgroundColor: back,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book_rounded),
+            label: 'Addresses',
+            backgroundColor: back,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.upload_rounded),
+            label:
+                AppLocalizations.instance.translate('wallet_bottom_nav_send'),
+            backgroundColor: back,
+          )
+        ],
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.list_rounded),
-        label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.menu_book_rounded),
-        label: 'Addresses',
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.upload_rounded),
-        label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-        backgroundColor: Theme.of(context).primaryColor,
-      )
-    ],
-  ),*/
       appBar: AppBar(
         elevation: 0,
         title: Center(child: Text(_wallet.title)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+          },
+        ),
         actions: [
           PopupMenuButton(
             onSelected: (value) => selectPopUpMenuItem(value),
@@ -258,10 +265,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 children: [
                   Column(
                     children: [
+                      SizedBox(height: 10,),
                       WalletHomeConnection(_connectionState),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -270,7 +276,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                               Text(
                                 (_wallet.balance / 1000000).toString(),
                                 style: TextStyle(
-                                  fontSize: 26,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).accentColor,
                                 ),
@@ -292,7 +298,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                           Text(
                             _wallet.letterCode,
                             style: TextStyle(
-                              fontSize: 26,
+                              fontSize: 24,
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.bold,
                             ),
@@ -301,64 +307,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      PeerIconButton(
-                        icon: Icons.download_rounded,
-                        action: () {
-                          setState(() {
-                            _pageIndex = 0;
-                          });
-                        },
-                      ),
-                      PeerIconButton(
-                        icon: Icons.menu_book,
-                        action: () async {
-                          _activeWallets.transferedAddress = null;
-                          final _result = await Navigator.of(context)
-                              .pushNamed(Routes.AddressBook, arguments: {
-                            'name': _wallet.name,
-                            'title': _wallet.title
-                          });
-                          if (_result != null) {
-                            setState(() {
-                              _activeWallets.transferedAddress = _result;
-                            });
-                            changeIndex(2);
-                          }
-                        },
-                      ),
-                      PeerIconButton(
-                        icon: Icons.list,
-                        action: () {
-                          setState(() {
-                            _pageIndex = 1;
-                          });
-                        },
-                      ),
-                      PeerIconButton(
-                        icon: Icons.upload_rounded,
-                        action: () {
-                          setState(() {
-                            _pageIndex = 2;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 25,),
                   WalletContentSwitch(
                     pageIndex: _pageIndex,
                     walletTransactions: _walletTransactions,
+                    walletAddresses: _wallet.addresses,
                     unusedAddress: _unusedAddress,
                     changeIndex: changeIndex,
                     identifier: _wallet.name,
+                    title: _wallet.title,
                   )
                 ],
               ),
@@ -418,7 +375,7 @@ class PeerContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
