@@ -10,15 +10,15 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
-class NewWalletScreen extends StatefulWidget {
+class NewWalletDialog extends StatefulWidget {
   @override
-  _NewWalletScreenState createState() => _NewWalletScreenState();
+  _NewWalletDialogState createState() => _NewWalletDialogState();
 }
 
 Map<String, Coin> availableCoins = AvailableCoins().availableCoins;
 List activeCoins = [];
 
-class _NewWalletScreenState extends State<NewWalletScreen> {
+class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
   bool _initial = true;
 
@@ -80,72 +80,69 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
         .where((element) => !activeCoins.contains(element))
         .toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.instance.translate('add_new_wallet')),
-        actions: [
-          if (actualAvailableWallets.isNotEmpty)
+    return Dialog(
+      child: Container(
+        color: Theme.of(context).backgroundColor,
+        padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+        height: 300,
+          child: actualAvailableWallets.isEmpty
+              ? Center(
+                  child:
+                      Text(AppLocalizations.instance.translate('no_new_wallet')),
+                )
+              : Column(children: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: IconButton(
-                  onPressed: () => addWallet(context),
-                  icon: Icon(Icons.add),
-                ))
-        ],
-      ),
-      body: Container(
-        child: actualAvailableWallets.isEmpty
-            ? Center(
-                child:
-                    Text(AppLocalizations.instance.translate('no_new_wallet')),
-              )
-            : Column(children: [
+              padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, actualAvailableWallets.isNotEmpty ? 20.0 : 0.0),
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.headline6,
+                child: Text('Select a wallet'),
+              ),
+            ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: actualAvailableWallets.length,
-                    itemBuilder: (ctx, item) {
-                      return ListTile(
-                        title: InkWell(
-                          onTap: () {
-                            setState(
-                              () {
-                                _coin = actualAvailableWallets[item];
-                              },
-                            );
-                          },
+                    child: ListView.builder(
+                      itemCount: actualAvailableWallets.length,
+                      itemBuilder: (ctx, item) {
+                        return Card(
                           child: ListTile(
-                            trailing: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Image.asset(
-                                  AvailableCoins()
-                                      .getSpecificCoin(availableCoins[
-                                              actualAvailableWallets[item]]
-                                          .name)
-                                      .iconPath,
-                                  width: 20),
-                            ),
-                            title: Text(
-                                availableCoins[actualAvailableWallets[item]]
-                                    .displayName),
-                            leading: Radio(
-                              value: actualAvailableWallets[item],
-                              groupValue: _coin,
-                              onChanged: (value) {
-                                setState(
-                                  () {
-                                    _coin = value;
-                                  },
-                                );
+                            title: InkWell(
+                              onTap: () {
+                                _coin = actualAvailableWallets[item];
+                                addWallet(context);
                               },
+                              child: ListTile(
+                                trailing: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Image.asset(
+                                      AvailableCoins()
+                                          .getSpecificCoin(availableCoins[
+                                                  actualAvailableWallets[item]]
+                                              .name)
+                                          .iconPath,
+                                      width: 20),
+                                ),
+                                title: Text(
+                                    availableCoins[actualAvailableWallets[item]]
+                                        .displayName),
+                                /*leading: Radio(
+                                  value: actualAvailableWallets[item],
+                                  groupValue: _coin,
+                                  onChanged: (value) {
+                                    setState(
+                                      () {
+                                        _coin = value;
+                                      },
+                                    );
+                                  },
+                                ),*/
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ]),
-      ),
+                ]),
+        ),
     );
   }
 }

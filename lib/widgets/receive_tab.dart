@@ -220,7 +220,33 @@ class _ReceiveTabState extends State<ReceiveTab> {
             ),
           ),
         ),
-        PeerContainer(
+        _wallet.title.contains('Testnet') ? PeerContainer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              PeerServiceTitle(title: 'Obtain Peercoin'),
+              SizedBox(height: 20),
+              Text(
+                AppLocalizations.instance
+                    .translate('buy_peercoin_dialog_title'),
+                textAlign: TextAlign.center,
+              ),
+              Text(AppLocalizations.instance
+                  .translate('buy_peercoin_dialog_content'),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () { _launchURL('https://peercoinexplorer.net/faucet/'); },
+                icon: Icon(Icons.open_in_new_rounded),
+                label: Text('Open faucet'),
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).accentColor,
+                ),
+              ),
+            ],
+          ),
+        ) : PeerContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[

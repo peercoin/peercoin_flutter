@@ -40,12 +40,13 @@ class WalletContentSwitch extends StatelessWidget {
         );
       case 2:
         return Expanded(
-            child: AddressTab(identifier, title, walletAddresses ?? []));
+            child: AddressTab(identifier, title, walletAddresses ?? [],(){}));
       case 3:
         return Expanded(
           child: SingleChildScrollView(
             child: SendTab(
               changeIndex,
+              'string',
             ),
           ),
         );

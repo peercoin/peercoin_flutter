@@ -7,8 +7,11 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/widgets/addresses_tab.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/wallet_content_switch.dart';
+import 'package:peercoin/widgets/receive_tab.dart';
+import 'package:peercoin/widgets/send_tab.dart';
+import 'package:peercoin/widgets/transactions_list.dart';
 import 'package:peercoin/widgets/wallet_home_connection.dart';
 import 'package:provider/provider.dart';
 
@@ -23,15 +26,23 @@ class _WalletHomeState extends State<WalletHomeScreen>
   bool _rescanInProgress = false;
   String _unusedAddress = '';
   CoinWallet _wallet;
-  int _pageIndex = 1;
+  int _pageIndex = Tabs.transactions;
   ElectrumConnectionState _connectionState;
   ElectrumConnection _connectionProvider;
   ActiveWallets _activeWallets;
   Iterable _listenedAddresses;
   List<WalletTransaction> _walletTransactions;
   int _latestBlock = 0;
+  String _passedAddress;
 
-  void changeIndex(int i) {
+  void changeIndex(int i,[String address]) {
+    if (i==Tabs.send) {
+      if(address!=null){
+        _passedAddress = address;
+      }else{
+        _passedAddress = '';
+      }
+    }
     setState(() {
       _pageIndex = i;
     });
@@ -177,6 +188,40 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   Widget build(BuildContext context) {
     var back = Theme.of(context).primaryColor;
+    var body;
+    switch (_pageIndex) {
+      case 0:
+        body = Expanded(
+            child: ReceiveTab(_unusedAddress));
+        break;
+      case 1:
+        body = Expanded(
+          child: TransactionList(
+            _walletTransactions ?? [],
+            _wallet.name,
+          ),
+        );
+        break;
+      case 2:
+        body = Expanded(
+            child: AddressTab(_wallet.name, _wallet.title,
+                _wallet.addresses ?? [], changeIndex));
+        break;
+      case 3:
+        body = Expanded(
+          child: SingleChildScrollView(
+            child: SendTab(
+              changeIndex,
+              _passedAddress,
+            ),
+          ),
+        );
+        break;
+      default:
+        body = Container();
+        break;
+    };
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Theme.of(context).unselectedWidgetColor,
@@ -308,15 +353,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     ],
                   ),
                   SizedBox(height: 25,),
-                  WalletContentSwitch(
-                    pageIndex: _pageIndex,
-                    walletTransactions: _walletTransactions,
-                    walletAddresses: _wallet.addresses,
-                    unusedAddress: _unusedAddress,
-                    changeIndex: changeIndex,
-                    identifier: _wallet.name,
-                    title: _wallet.title,
-                  )
+                  body,
                 ],
               ),
             ),
@@ -384,6 +421,14 @@ class PeerContainer extends StatelessWidget {
       child: child,
     );
   }
+}
+
+class Tabs{
+  Tabs._();
+  static final int receive = 0;
+  static final int transactions = 1;
+  static final int addresses = 2;
+  static final int send = 3;
 }
 
 

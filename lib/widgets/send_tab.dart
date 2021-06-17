@@ -20,7 +20,8 @@ import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
   final Function changeIndex;
-  SendTab(this.changeIndex);
+  final String passedAddress;
+  SendTab(this.changeIndex,this.passedAddress);
 
   @override
   _SendTabState createState() => _SendTabState();
@@ -52,6 +53,9 @@ class _SendTabState extends State<SendTab> {
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
       setState(() {
+        if(widget.passedAddress!=null){
+          addressController.text = widget.passedAddress;
+        }
         _initial = false;
       });
     }
@@ -205,7 +209,7 @@ class _SendTabState extends State<SendTab> {
                           //pop message
                           Navigator.of(context).pop();
                           //navigate back to tx list
-                          widget.changeIndex(1);
+                          widget.changeIndex(Tabs.transactions);
                         } catch (e) {
                           print('error $e');
                           ScaffoldMessenger.of(context).showSnackBar(

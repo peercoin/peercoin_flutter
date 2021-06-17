@@ -69,7 +69,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     style: TextStyle(color: Colors.white)),
                 value: _biometricsAllowed,
                 activeColor: Colors.white,
-                inactiveThumbColor: Theme.of(context).disabledColor,
+                inactiveThumbColor: Theme.of(context).primaryColor,
                 onChanged: (newState) {
                   if (_biometricsAvailable == false) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

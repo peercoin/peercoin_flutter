@@ -6,6 +6,7 @@ import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -14,7 +15,8 @@ class AddressTab extends StatefulWidget {
   final String name;
   final String title;
   final List<WalletAddress> _walletAddresses;
-  AddressTab(this.name,this.title,this._walletAddresses);
+  final Function changeIndex;
+  AddressTab(this.name,this.title,this._walletAddresses,this.changeIndex);
   @override
   _AddressTabState createState() => _AddressTabState();
 }
@@ -23,7 +25,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _initial = true;
   List<WalletAddress> _filteredAddr = [];
   Coin _availableCoin;
-  bool _ourAddresses = false;
+  bool _ourAddresses = true;
   final _formKey = GlobalKey<FormState>();
   final _searchKey = GlobalKey<FormFieldState>();
   final searchController = TextEditingController();
@@ -273,16 +275,16 @@ class _AddressTabState extends State<AddressTab> {
                         iconWidget: Icon(Icons.share, color: Colors.white),
                         onTap: () => Share.share(_filteredAddr[i].address),
                       ),
-                      if (_ourAddresses)
+                      if (!_ourAddresses)
                         IconSlideAction(
                           caption: AppLocalizations.instance
                               .translate('addressbook_swipe_send'),
                           color: Colors.white,
                           iconWidget: Icon(Icons.send, color: Colors.grey),
                           onTap: () =>
-                              Navigator.of(context).pop(_filteredAddr[i]),
+                              widget.changeIndex(Tabs.send,_filteredAddr[i].address),
                         ),
-                      if (_ourAddresses)
+                      if (!_ourAddresses)
                         IconSlideAction(
                             caption: AppLocalizations.instance
                                 .translate('addressbook_swipe_delete'),

@@ -41,7 +41,7 @@ class Routes {
       Routes.SetUpPin: (context) => SetupPinCodeScreen(),
       Routes.WalletList: (context) => WalletListScreen(),
       Routes.WalletHome: (context) => WalletHomeScreen(),
-      Routes.NewWallet: (context) => NewWalletScreen(),
+      Routes.NewWallet: (context) => NewWalletDialog(),
       Routes.QRScan: (context) => QRScanner(),
       Routes.Transaction: (context) => TransactionDetails(),
       Routes.AppSettings: (context) => AppSettingsScreen(),

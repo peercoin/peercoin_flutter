@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/screens/app_settings_screen.dart';
+import 'package:peercoin/screens/new_wallet.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -68,7 +69,6 @@ class _WalletListScreenState extends State<WalletListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      //drawer: AppDrawer(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: IconThemeData(color: Colors.white),
@@ -98,10 +98,15 @@ class _WalletListScreenState extends State<WalletListScreen> {
             child: IconButton(
               onPressed: () {
                 if (_initial == false) {
-                  Navigator.of(context).pushNamed(Routes.NewWallet);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return NewWalletDialog();
+                        }
+                    );
                 }
               },
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.add_rounded),
             ),
           )
         ],
