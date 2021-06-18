@@ -5,27 +5,29 @@ class MyTheme {
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(
 
-      accentColor: LightColors.darkBlue,
+      accentColor: LightColors.grey,
       backgroundColor: LightColors.white,
-      buttonColor: LightColors.darkBlue,
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
-      disabledColor: LightColors.gray,
+      disabledColor: LightColors.lightGreen,
       errorColor: LightColors.red,
       focusColor: LightColors.green,
       primaryColor: LightColors.green,
-      primarySwatch: materialColor(LightColors.darkBlue),
-      shadowColor: LightColors.lightBlue,
-      unselectedWidgetColor: LightColors.lightGreen,
+      primarySwatch: materialColor(LightColors.grey),
+      shadowColor: LightColors.lightGreen,
+      unselectedWidgetColor: LightColors.grey,
 
       cardTheme: CardTheme(
         elevation: 2,
         color: LightColors.white,
-        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        shape: RoundedRectangleBorder( //to set border radius to button
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: LightColors.darkBlue,
+          primary: LightColors.green,
           onPrimary: LightColors.white,
         ),
       ),
@@ -72,11 +74,9 @@ class MyTheme {
 
 abstract class LightColors {
   static Color get green => const Color(0xff3cb054);
-static Color get lightGreen => const Color(0xffB3E5BD);
-  static Color get darkBlue => const Color(0xFF2C4251);
-  static Color get lightBlue => const Color(0xFFA6CFD5);
-  static Color get white => const Color(0xFFFFFFFC);
-  static Color get gray => const Color(0xFF97A7B3);
+  static Color get lightGreen => const Color(0xffB3E5BD);
+  static Color get grey => const Color(0xFF717C89);
+  static Color get white => const Color(0xFFFDFFFC);
   static Color get black => const Color(0xFF000000);
   static Color get red => const Color(0xFFF8333C);
   static Color get yellow => const Color(0xFFFFBF46);

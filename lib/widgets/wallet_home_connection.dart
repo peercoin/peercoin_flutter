@@ -9,44 +9,56 @@ class WalletHomeConnection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_connectionState == ElectrumConnectionState.connected) {
-      return Row(
+      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.offline_bolt,
-            color: Theme.of(context).accentColor,
-            size: 20,
+          Image.asset(
+            'assets/icon/ppc-icon-white-256.png',
+            width: 40,
           ),
-          SizedBox(
-            width: 3,
-          ),
+          SizedBox(height: 10,),
           Text(
             AppLocalizations.instance.translate('wallet_connected'),
-            style:
-                TextStyle(color: Theme.of(context).accentColor, fontSize: 14,letterSpacing: 1.3),
+            style: TextStyle(
+              color: Theme.of(context).backgroundColor,
+              fontSize: 16,
+              letterSpacing: 1.4,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       );
     } else if (_connectionState == ElectrumConnectionState.offline) {
-      return Row(
+      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.offline_bolt_outlined,
-            color: Theme.of(context).accentColor,
+          Image.asset(
+            'assets/icon/ppc-icon-white-256.png',
+            width: 40,
           ),
-          SizedBox(
-            width: 3,
-          ),
+          SizedBox(height: 10,),
           Text(
             AppLocalizations.instance.translate('wallet_offline'),
-            style:
-                TextStyle(color: Theme.of(context).accentColor, fontSize: 12),
+            style: TextStyle(
+              color: Theme.of(context).backgroundColor,
+              fontSize: 16,
+              letterSpacing: 1.4,
+            ),
           ),
         ],
       );
     } else {
-      return LoadingIndicator();
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/icon/ppc-icon-white-256.png',
+            width: 40,
+          ),
+          SizedBox(height: 10,),
+          LoadingIndicator(),
+        ],
+      );
     }
   }
 }

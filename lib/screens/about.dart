@@ -81,6 +81,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('about_license'),
+                                  style: TextStyle(color: Theme.of(context).primaryColor),
                                 )),
                             Divider(),
                             SizedBox(height: 10),
@@ -93,6 +94,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('about_view_source'),
+                                  style: TextStyle(color: Theme.of(context).primaryColor),
                                 )),
                             Divider(),
                             SizedBox(height: 10),
@@ -106,6 +108,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_data_declaration'),
+                                style: TextStyle(color: Theme.of(context).primaryColor),
                               ),
                             ),
                             Divider(),
@@ -120,6 +123,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_foundation_button'),
+                                style: TextStyle(color: Theme.of(context).primaryColor),
                               ),
                             ),
                             Divider(),
@@ -134,6 +138,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_go_weblate'),
+                                style: TextStyle(color: Theme.of(context).primaryColor),
                               ),
                             ),
                             Divider(),
@@ -147,6 +152,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_send_mail'),
+                                style: TextStyle(color: Theme.of(context).primaryColor),
                               ),
                             ),
                           ]),

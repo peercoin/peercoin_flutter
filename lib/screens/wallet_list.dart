@@ -173,29 +173,22 @@ class _WalletListScreenState extends State<WalletListScreen> {
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
-                                              //color: PeerColors.darkGreen,
+                                              letterSpacing: 1.2,
+                                              color: Colors.black,
                                             ),
                                           ),
                                           subtitle: Row(
                                             children: [
                                               Text(
                                                 (_wallet.balance / 1000000).toString(),
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  //fontWeight: FontWeight.bold,
-                                                  //color: PeerColors.darkGreen,
-                                                ),
+                                                style: TextStyle(fontSize: 14,),
                                               ),
                                               SizedBox(
                                                 width: 5,
                                               ),
                                               Text(
                                                 _wallet.letterCode,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  //color: PeerColors.darkGreen,
-                                                  //fontWeight: FontWeight.bold,
-                                                ),
+                                                style: TextStyle(fontSize: 14,),
                                               ),
                                             ],
                                           ),
