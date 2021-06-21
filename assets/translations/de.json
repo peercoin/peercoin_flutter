@@ -53,7 +53,7 @@
     "authenticate_subtitle_plural": "$retriesLeft Versuche insgesamt",
     "authenticate_subtitle_singular": "$retriesLeft Versuch insgesamt",
     "authenticate_title": "Bitte PIN eingeben\n",
-    "authenticate_title_new": "Bitte neue PIN eingeben\n",
+    "authenticate_title_new": "Bitte neue PIN eingeben",
     "continue": "Fortsetzen",
     "create_wallet_existing_seed": "Importiere bestehenden Seed",
     "create_wallet_new_seed": "Erstelle Wallet mit neuem Seed",
