@@ -280,7 +280,7 @@ class ActiveWallets with ChangeNotifier {
           if (isInWallet == true) {
             if (walletTx.timestamp == 0) {
               //did the tx confirm?
-              walletTx.newTimestamp = tx['blocktime'];
+              walletTx.newTimestamp = tx['blocktime'] ?? 0;
             }
             if (tx['confirmations'] != null &&
                 walletTx.confirmations < tx['confirmations']) {
@@ -347,7 +347,7 @@ class ActiveWallets with ChangeNotifier {
 
     openWallet.putTransaction(WalletTransaction(
       txid: tx['txid'],
-      timestamp: tx['blocktime'],
+      timestamp: tx['blocktime'] ?? 0,
       value: tx['outValue'],
       fee: tx['outFees'],
       address: address,
