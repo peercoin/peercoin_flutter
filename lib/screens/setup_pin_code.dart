@@ -105,7 +105,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
 
                     var settings =
                         Provider.of<AppSettings>(context, listen: false);
-                    await settings.init();
+                    await settings.init(true);
                     await settings.createInitialSettings(_biometricsAllowed,
                         AppLocalizations.instance.locale.toString());
 

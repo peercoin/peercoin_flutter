@@ -14,9 +14,11 @@ class AppSettings with ChangeNotifier {
   late String _selectedTheme;
   AppSettings(this._encryptedBox);
 
-  Future<void> init() async {
-    var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
-    _appOptions = _optionsBox!.get('appOptions');
+  Future<void> init([bool fromSetup = false]) async {
+    if (fromSetup == true) {
+      var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
+      _appOptions = _optionsBox!.get('appOptions');
+    }
     _sharedPrefs = await SharedPreferences.getInstance();
     _selectedTheme = _sharedPrefs.getString('theme_mode') ?? 'system';
   }
