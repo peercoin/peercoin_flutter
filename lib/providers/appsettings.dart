@@ -15,7 +15,7 @@ class AppSettings with ChangeNotifier {
   AppSettings(this._encryptedBox);
 
   Future<void> init([bool fromSetup = false]) async {
-    if (fromSetup == true) {
+    if (fromSetup == false) {
       var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
       _appOptions = _optionsBox!.get('appOptions');
     }
