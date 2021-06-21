@@ -7,7 +7,7 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class SettingsAuth extends StatelessWidget {
-  final bool? _biometricsAllowed;
+  final bool _biometricsAllowed;
   final bool _biometricsAvailable;
   final AppSettings _settings;
   final Function _saveSnack;
@@ -67,7 +67,7 @@ class SettingsAuth extends StatelessWidget {
             title: Text(
               AppLocalizations.instance.translate('app_settings_biometrics'),
             ),
-            value: _biometricsAllowed!,
+            value: _biometricsAllowed,
             onChanged: (newState) {
               if (_biometricsAvailable == false) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
