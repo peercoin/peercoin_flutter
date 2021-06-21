@@ -6,7 +6,7 @@ class WalletAddress extends HiveObject {
   @HiveField(0)
   final String address;
   @HiveField(1)
-  String? addressBookName;
+  String? addressBookName; //nullable for backward compatability
   @HiveField(2)
   String? status;
   @HiveField(3)

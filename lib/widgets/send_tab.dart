@@ -56,7 +56,7 @@ class _SendTabState extends State<SendTab> {
     super.didChangeDependencies();
   }
 
-  Future<Map> buildTx(bool dryrun, [int? fee = 0]) async {
+  Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
     return await _activeWallets.buildTransaction(
       _wallet.name,
       _addressKey.currentState!.value.trim(),
@@ -178,7 +178,7 @@ class _SendTabState extends State<SendTab> {
                         if (_firstPress == false) return; //prevent double tap
                         try {
                           _firstPress = false;
-                          var _buildResult = await buildTx(false, _txFee);
+                          var _buildResult = await buildTx(false, _txFee!);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
                               _wallet.name, _addressKey.currentState!.value, {

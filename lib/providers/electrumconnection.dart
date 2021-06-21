@@ -317,9 +317,9 @@ class ElectrumConnection with ChangeNotifier {
 
       var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
         _coinName,
-        _queryDepth['account'],
-        _queryDepth['chain'],
-        _queryDepth['address'],
+        _queryDepth['account']!,
+        _queryDepth['chain']!,
+        _queryDepth['address']!,
       );
 
       print(_nextAddr);

@@ -87,7 +87,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<String?> getAddressFromDerivationPath(
-      String? identifier, int? account, int? chain, int? address,
+      String identifier, int account, int chain, int address,
       [master = false]) async {
     final network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var hdWallet = HDWallet.fromSeed(
@@ -428,9 +428,9 @@ class ActiveWallets with ChangeNotifier {
 
   Future<Map> buildTransaction(
     String identifier,
-    String? address,
+    String address,
     String amount,
-    int? fee, [
+    int fee, [
     bool dryRun = false,
   ]) async {
     //convert amount
@@ -454,7 +454,7 @@ class ActiveWallets with ChangeNotifier {
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
         openWallet.utxos.forEach((utxo) {
-          if (_totalInputValue <= (_txAmount + fee!)) {
+          if (_totalInputValue <= (_txAmount + fee)) {
             _totalInputValue += utxo.value;
             inputTx.add(utxo);
           }
@@ -465,7 +465,7 @@ class ActiveWallets with ChangeNotifier {
         final tx = TransactionBuilder(network: network);
         tx.setVersion(1);
         if (_needsChange == true) {
-          var changeAmount = _totalInputValue - _txAmount - fee!;
+          var changeAmount = _totalInputValue - _txAmount - fee;
           print('change amount $changeAmount');
           if (changeAmount < coin.minimumTxValue) {
             //change is too small! no change output
@@ -476,7 +476,7 @@ class ActiveWallets with ChangeNotifier {
             tx.addOutput(_unusedAddress, changeAmount);
           }
         } else {
-          tx.addOutput(address, _txAmount - fee!);
+          tx.addOutput(address, _txAmount - fee);
         }
 
         //generate keyMap
@@ -562,7 +562,7 @@ class ActiveWallets with ChangeNotifier {
     return answerMap;
   }
 
-  String getScriptHash(String? identifier, String address) {
+  String getScriptHash(String identifier, String address) {
     var network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var script = Address.addressToOutputScript(address, network)!;
     var hash = sha256.convert(script).toString();
