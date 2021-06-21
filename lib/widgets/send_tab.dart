@@ -17,7 +17,7 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
-  final Function? changeIndex;
+  final Function changeIndex;
   SendTab(this.changeIndex);
 
   @override
@@ -36,7 +36,7 @@ class _SendTabState extends State<SendTab> {
   late CoinWallet _wallet;
   late Coin _availableCoin;
   late ActiveWallets _activeWallets;
-  int? _txFee = 0;
+  int _txFee = 0;
   int _totalValue = 0;
   WalletAddress? _transferedAddress;
   late List<WalletAddress> _availableAddresses = [];
@@ -109,16 +109,16 @@ class _SendTabState extends State<SendTab> {
               (double.parse(_amountKey.currentState!.value) * 1000000).toInt();
           if (_totalValue == _wallet.balance) {
             var newValue = double.parse(_amountKey.currentState!.value) -
-                (_txFee! / 1000000);
+                (_txFee / 1000000);
             _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
           } else {
-            _totalValue = _totalValue + _txFee!;
+            _totalValue = _totalValue + _txFee;
           }
           if (_destroyedChange! > 0) {
             var newValue = (double.parse(_amountKey.currentState!.value) -
-                (_txFee! / 1000000));
+                (_txFee / 1000000));
             _displayValue = newValue.toString();
-            _totalValue = _totalValue - _txFee! + _destroyedChange;
+            _totalValue = _totalValue - _txFee + _destroyedChange;
           }
           return SimpleDialog(
             title: Text(AppLocalizations.instance
@@ -149,7 +149,7 @@ class _SendTabState extends State<SendTab> {
                     ),
                     SizedBox(height: 10),
                     Text(AppLocalizations.instance.translate('send_fee', {
-                      'amount': '${_txFee! / 1000000}',
+                      'amount': '${_txFee / 1000000}',
                       'letter_code': '${_wallet.letterCode}'
                     })),
                     if (_destroyedChange > 0)
@@ -178,14 +178,14 @@ class _SendTabState extends State<SendTab> {
                         if (_firstPress == false) return; //prevent double tap
                         try {
                           _firstPress = false;
-                          var _buildResult = await buildTx(false, _txFee!);
+                          var _buildResult = await buildTx(false, _txFee);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
                               _wallet.name, _addressKey.currentState!.value, {
                             'txid': _buildResult['id'],
                             'hex': _buildResult['hex'],
-                            'outValue': _totalValue - _txFee!,
-                            'outFees': _txFee! + _destroyedChange
+                            'outValue': _totalValue - _txFee,
+                            'outFees': _txFee + _destroyedChange
                           });
                           //broadcast
                           Provider.of<ElectrumConnection>(context,
@@ -203,7 +203,7 @@ class _SendTabState extends State<SendTab> {
                           //pop message
                           Navigator.of(context).pop();
                           //navigate back to tx list
-                          widget.changeIndex!(1);
+                          widget.changeIndex(1);
                         } catch (e) {
                           print('error $e');
                           ScaffoldMessenger.of(context).showSnackBar(
