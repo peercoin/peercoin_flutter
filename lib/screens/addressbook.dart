@@ -231,7 +231,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         _walletName,
                         _addressController.text,
                         _labelController.text == ''
-                            ? '-'
+                            ? ''
                             : _labelController.text,
                       );
                   applyFilter();
@@ -377,7 +377,9 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       ),
                       title: Center(
                         child: Text(
-                          _filteredAddr[i].addressBookName ?? '-',
+                          _filteredAddr[i].addressBookName == ''
+                              ? '-'
+                              : _filteredAddr[i].addressBookName!,
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
