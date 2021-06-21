@@ -131,7 +131,7 @@ class _TransactionListState extends State<TransactionList> {
                                                   .accentColor))
                                       : CircularStepProgressIndicator(
                                           totalSteps: 6,
-                                          currentStep: currentConfirmations!,
+                                          currentStep: currentConfirmations,
                                           width: 20,
                                           height: 20,
                                           selectedColor:
@@ -143,12 +143,12 @@ class _TransactionListState extends State<TransactionList> {
                                         )),
                               Text(
                                 DateFormat('d. MMM').format(
-                                    _filteredTx[i].timestamp != null
+                                    _filteredTx[i].timestamp != 0
                                         ? DateTime.fromMillisecondsSinceEpoch(
-                                            _filteredTx[i].timestamp! * 1000)
+                                            _filteredTx[i].timestamp * 1000)
                                         : DateTime.now()),
                                 style: TextStyle(
-                                  fontWeight: _filteredTx[i].timestamp != null
+                                  fontWeight: _filteredTx[i].timestamp != 0
                                       ? FontWeight.w500
                                       : FontWeight.w300,
                                 ),
@@ -157,14 +157,14 @@ class _TransactionListState extends State<TransactionList> {
                             ]),
                         title: Center(
                           child: Text(
-                            _filteredTx[i].txid!,
+                            _filteredTx[i].txid,
                             overflow: TextOverflow.ellipsis,
                             textScaleFactor: 0.9,
                           ),
                         ),
                         subtitle: Center(
                           child: Text(
-                            resolveAddressDisplayName(_filteredTx[i].address!),
+                            resolveAddressDisplayName(_filteredTx[i].address),
                             overflow: TextOverflow.ellipsis,
                             textScaleFactor: 1,
                           ),
@@ -174,9 +174,9 @@ class _TransactionListState extends State<TransactionList> {
                           children: [
                             Text(
                               (_filteredTx[i].direction == 'in' ? '+' : '-') +
-                                  (_filteredTx[i].value! / 1000000).toString(),
+                                  (_filteredTx[i].value / 1000000).toString(),
                               style: TextStyle(
-                                  fontWeight: _filteredTx[i].timestamp != null
+                                  fontWeight: _filteredTx[i].timestamp != 0
                                       ? FontWeight.bold
                                       : FontWeight.w300,
                                   color: _filteredTx[i].direction == 'out'
@@ -187,7 +187,7 @@ class _TransactionListState extends State<TransactionList> {
                               Text(
                                 AppLocalizations.instance.translate(
                                     'transactions_fee', {
-                                  'amount': '${_filteredTx[i].fee! / 1000000}'
+                                  'amount': '${_filteredTx[i].fee / 1000000}'
                                 })!,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(

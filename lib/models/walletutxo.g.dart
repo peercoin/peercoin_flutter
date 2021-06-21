@@ -17,11 +17,11 @@ class WalletUtxoAdapter extends TypeAdapter<WalletUtxo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return WalletUtxo(
-      hash: fields[0] as String?,
-      txPos: fields[1] as int?,
-      height: fields[2] as int?,
-      value: fields[3] as int?,
-      address: fields[4] as String?,
+      hash: fields[0] as String,
+      txPos: fields[1] as int,
+      height: fields[2] as int,
+      value: fields[3] as int,
+      address: fields[4] as String,
     );
   }
 

@@ -36,7 +36,7 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('id')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.txid!)
+              SelectableText(_tx.txid)
             ],
           ),
           Divider(),
@@ -45,9 +45,9 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('time')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.timestamp != null
-                  ? DateFormat().format(DateTime.fromMillisecondsSinceEpoch(
-                      _tx.timestamp! * 1000))
+              SelectableText(_tx.timestamp != 0
+                  ? DateFormat().format(
+                      DateTime.fromMillisecondsSinceEpoch(_tx.timestamp * 1000))
                   : AppLocalizations.instance.translate('unconfirmed')!)
             ],
           ),
@@ -59,7 +59,7 @@ class TransactionDetails extends StatelessWidget {
                 AppLocalizations.instance.translate('tx_value')!,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              SelectableText((_tx.value! / 1000000).toString() +
+              SelectableText((_tx.value / 1000000).toString() +
                   ' ' +
                   _coinWallet.letterCode)
             ],
@@ -70,9 +70,8 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('tx_fee')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText((_tx.fee! / 1000000).toString() +
-                  ' ' +
-                  _coinWallet.letterCode)
+              SelectableText(
+                  (_tx.fee / 1000000).toString() + ' ' + _coinWallet.letterCode)
             ],
           ),
           Divider(),
@@ -81,7 +80,7 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('tx_address')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.address!),
+              SelectableText(_tx.address),
               // Text("") TODO might add address label here in the future
             ],
           ),
@@ -91,7 +90,7 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('tx_direction')!,
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.direction!)
+              SelectableText(_tx.direction)
             ],
           ),
           Divider(),

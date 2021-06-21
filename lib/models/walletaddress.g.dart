@@ -17,9 +17,9 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return WalletAddress(
-      address: fields[0] as String?,
+      address: fields[0] as String,
       addressBookName: fields[1] as String?,
-      used: fields[3] as bool?,
+      used: fields[3] as bool,
       status: fields[2] as String?,
       isOurs: fields[4] as bool?,
       wif: fields[5] as String?,

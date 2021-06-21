@@ -115,7 +115,7 @@ class ActiveWallets with ChangeNotifier {
     if (openWallet.addresses.isEmpty) {
       //generate new address
       openWallet.addNewAddress = WalletAddress(
-        address: hdWallet.address,
+        address: hdWallet.address!,
         addressBookName: null,
         used: false,
         status: null,
@@ -153,7 +153,7 @@ class ActiveWallets with ChangeNotifier {
         }
 
         openWallet.addNewAddress = WalletAddress(
-          address: newHdWallet.address,
+          address: newHdWallet.address!,
           addressBookName: null,
           used: false,
           status: null,
@@ -210,14 +210,14 @@ class ActiveWallets with ChangeNotifier {
     var unconfirmedBalance = 0;
 
     openWallet.utxos.forEach((walletUtxo) {
-      if (walletUtxo.height! > 0 ||
+      if (walletUtxo.height > 0 ||
           openWallet.transactions.firstWhereOrNull(
                 (tx) => tx.txid == walletUtxo.hash && tx.direction == 'out',
               ) !=
               null) {
-        balanceConfirmed += walletUtxo.value!;
+        balanceConfirmed += walletUtxo.value;
       } else {
-        unconfirmedBalance += walletUtxo.value!;
+        unconfirmedBalance += walletUtxo.value;
       }
     });
 
@@ -278,12 +278,12 @@ class ActiveWallets with ChangeNotifier {
         if (walletTx.txid == tx['txid']) {
           isInWallet = true;
           if (isInWallet == true) {
-            if (walletTx.timestamp == null) {
+            if (walletTx.timestamp == 0) {
               //did the tx confirm?
               walletTx.newTimestamp = tx['blocktime'];
             }
             if (tx['confirmations'] != null &&
-                walletTx.confirmations! < tx['confirmations']) {
+                walletTx.confirmations < tx['confirmations']) {
               //more confirmations?
               walletTx.newConfirmations = tx['confirmations'];
             }
@@ -310,7 +310,7 @@ class ActiveWallets with ChangeNotifier {
 
                 openWallet.putTransaction(WalletTransaction(
                   txid: tx['txid'],
-                  timestamp: tx['blocktime'],
+                  timestamp: tx['blocktime'] ?? 0,
                   value: txValue,
                   fee: 0,
                   address: addr,
@@ -368,7 +368,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> updateAddressStatus(
-      String identifier, String? address, String? status) async {
+      String identifier, String address, String? status) async {
     print('updating $address to $status');
     //set address to used
     //update status for address
@@ -388,7 +388,7 @@ class ActiveWallets with ChangeNotifier {
     var tx =
         openWallet.utxos.firstWhereOrNull((element) => element.hash == txid);
     if (tx != null) {
-      return tx.address!;
+      return tx.address;
     }
     return '';
   }
@@ -455,7 +455,7 @@ class ActiveWallets with ChangeNotifier {
 
         openWallet.utxos.forEach((utxo) {
           if (_totalInputValue <= (_txAmount + fee!)) {
-            _totalInputValue += utxo.value!;
+            _totalInputValue += utxo.value;
             inputTx.add(utxo);
           }
         });
@@ -489,9 +489,9 @@ class ActiveWallets with ChangeNotifier {
             openWallet.addresses.asMap().forEach((key, walletAddr) async {
               if (walletAddr.address == inputUtxo.address &&
                   !_usedUtxos.contains(inputUtxo.hash)) {
-                var wif = await getWif(identifier, walletAddr.address!);
+                var wif = await getWif(identifier, walletAddr.address);
                 keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
-                tx.addInput(inputUtxo.hash, inputUtxo.txPos!);
+                tx.addInput(inputUtxo.hash, inputUtxo.txPos);
                 _usedUtxos.add(inputUtxo.hash);
               }
             });
@@ -552,7 +552,7 @@ class ActiveWallets with ChangeNotifier {
       addresses.forEach((addr) {
         if (addr.isOurs == true || addr.isOurs == null) {
           // == null for backwards compatability
-          answerMap[addr.address] = getScriptHash(identifier, addr.address!);
+          answerMap[addr.address] = getScriptHash(identifier, addr.address);
         }
       });
     } else {
@@ -578,7 +578,7 @@ class ActiveWallets with ChangeNotifier {
     openWallet.save();
   }
 
-  void updateLabel(String identifier, String address, String? label) {
+  void updateLabel(String identifier, String address, String label) {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,

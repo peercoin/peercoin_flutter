@@ -104,7 +104,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
 
     if (searchedKey != null) {
       _filteredList = _filteredList.where((element) {
-        return element.address!.contains(searchedKey) ||
+        return element.address.contains(searchedKey) ||
             element.addressBookName != null &&
                 element.addressBookName!.contains(searchedKey);
       }).toList();
@@ -147,7 +147,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
             TextButton(
               onPressed: () {
                 context.read<ActiveWallets>().updateLabel(
-                    _walletName, address.address!, _textFieldController.text);
+                    _walletName, address.address, _textFieldController.text);
                 Navigator.pop(context);
               },
               child: Text(
@@ -231,7 +231,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         _walletName,
                         _addressController.text,
                         _labelController.text == ''
-                            ? null
+                            ? '-'
                             : _labelController.text,
                       );
                   applyFilter();
@@ -289,7 +289,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
               itemBuilder: (ctx, i) {
                 return Card(
                   child: Slidable(
-                    key: Key(_filteredAddr[i].address!),
+                    key: Key(_filteredAddr[i].address),
                     actionPane: SlidableScrollActionPane(),
                     secondaryActions: <Widget>[
                       IconSlideAction(
@@ -306,7 +306,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         color: Theme.of(context).accentColor,
                         iconWidget: Icon(Icons.share, color: Colors.white),
                         onTap: () => WalletHomeQr.showQrDialog(
-                            context, _filteredAddr[i].address!),
+                            context, _filteredAddr[i].address),
                       ),
                       if (_pageIndex == 1)
                         IconSlideAction(
@@ -330,7 +330,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                                   title: Text(AppLocalizations.instance
                                       .translate(
                                           'addressbook_dialog_remove_title')!),
-                                  content: Text(_filteredAddr[i].address!),
+                                  content: Text(_filteredAddr[i].address),
                                   actions: <Widget>[
                                     TextButton.icon(
                                         label: Text(AppLocalizations.instance
@@ -372,7 +372,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       subtitle: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Center(
-                          child: Text(_filteredAddr[i].address!),
+                          child: Text(_filteredAddr[i].address),
                         ),
                       ),
                       title: Center(

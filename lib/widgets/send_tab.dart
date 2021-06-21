@@ -228,7 +228,7 @@ class _SendTabState extends State<SendTab> {
 
   Future<Iterable> getSuggestions(String pattern) async {
     return _availableAddresses.where((element) {
-      if (element.isOurs == false && element.address!.contains(pattern)) {
+      if (element.isOurs == false && element.address.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
           element.addressBookName != null &&
@@ -244,7 +244,7 @@ class _SendTabState extends State<SendTab> {
     _transferedAddress = _activeWallets.transferedAddress;
     if (_transferedAddress != null &&
         _transferedAddress!.address != addressController.text) {
-      addressController.text = _transferedAddress!.address!;
+      addressController.text = _transferedAddress!.address;
       labelController.text = _transferedAddress!.addressBookName ?? '';
       _activeWallets.transferedAddress = null; //reset transfer
     }

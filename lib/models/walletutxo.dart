@@ -4,15 +4,15 @@ part 'walletutxo.g.dart';
 @HiveType(typeId: 4)
 class WalletUtxo extends HiveObject {
   @HiveField(0)
-  final String? hash;
+  final String hash;
   @HiveField(1)
-  final int? txPos;
+  final int txPos;
   @HiveField(2)
-  int? height;
+  int height;
   @HiveField(3)
-  int? value;
+  int value;
   @HiveField(4)
-  final String? address;
+  final String address;
 
   WalletUtxo({
     required this.hash,
