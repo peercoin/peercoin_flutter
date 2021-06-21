@@ -386,7 +386,7 @@ class _SendTabState extends State<SendTab> {
                         .authenticationOptions!['sendTransaction']!) {
                       await Auth.requireAuth(
                           context,
-                          _appSettings.biometricsAllowed!,
+                          _appSettings.biometricsAllowed,
                           () => showTransactionConfirmation(context));
                     } else {
                       showTransactionConfirmation(context);

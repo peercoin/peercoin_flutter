@@ -56,7 +56,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
     if (_initial) {
       var _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['newWallet']!) {
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed!);
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       }
       setState(() {
         _initial = false;

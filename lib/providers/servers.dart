@@ -84,7 +84,7 @@ class Servers with ChangeNotifier {
     });
   }
 
-  Future<List> getServerList(String? coinIdentifier) async {
+  Future<List> getServerList(String coinIdentifier) async {
     //form list
     var _availableServers = List.generate(
       _serverBox.values.length,
@@ -103,7 +103,7 @@ class Servers with ChangeNotifier {
     return _prunedList;
   }
 
-  Future<List<Server>> getServerDetailsList(String? coinIdentifier) async {
+  Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
     //form list
     var _availableServersDetails = <Server>[];
 

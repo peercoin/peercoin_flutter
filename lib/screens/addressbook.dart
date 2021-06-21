@@ -25,7 +25,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   List<WalletAddress> _filteredAddr = [];
   int _pageIndex = 0;
   late SearchBar searchBar;
-  Coin? _availableCoin;
+  late Coin _availableCoin;
 
   _AddressBookScreenState() {
     searchBar = SearchBar(
@@ -191,7 +191,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                     }
                     var sanitized = value.trim();
                     if (Address.validateAddress(
-                            sanitized, _availableCoin!.networkType) ==
+                            sanitized, _availableCoin.networkType) ==
                         false) {
                       return AppLocalizations.instance
                           .translate('send_invalid_address');

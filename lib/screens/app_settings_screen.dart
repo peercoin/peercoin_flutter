@@ -125,7 +125,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _biometricsAllowed = _settings.biometricsAllowed ?? false;
+    _biometricsAllowed = _settings.biometricsAllowed;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
     _defaultWallet = _settings.defaultWallet;
@@ -194,7 +194,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     _biometricsRevealed == false
                         ? ElevatedButton(
                             onPressed: () =>
-                                revealAuthOptions(_settings.biometricsAllowed!),
+                                revealAuthOptions(_settings.biometricsAllowed),
                             child: Text(
                               AppLocalizations.instance
                                   .translate('app_settings_revealAuthButton')!,
@@ -216,7 +216,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     _seedPhrase == ''
                         ? ElevatedButton(
                             onPressed: () =>
-                                revealSeedPhrase(_settings.biometricsAllowed!),
+                                revealSeedPhrase(_settings.biometricsAllowed),
                             child: Text(
                               AppLocalizations.instance
                                   .translate('app_settings_revealSeedButton')!,

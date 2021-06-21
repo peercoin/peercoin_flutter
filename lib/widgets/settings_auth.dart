@@ -122,7 +122,7 @@ class SettingsAuth extends StatelessWidget {
               _saveSnack(context);
             }),
         ElevatedButton(
-          onPressed: () => changePIN(context, _settings.biometricsAllowed!),
+          onPressed: () => changePIN(context, _settings.biometricsAllowed),
           child: Text(
             AppLocalizations.instance.translate('app_settings_changeCode')!,
           ),

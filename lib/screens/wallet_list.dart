@@ -36,7 +36,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
       });
       if (widget.fromColdStart == false) {
         if (_appSettings.authenticationOptions!['walletList']!) {
-          await Auth.requireAuth(context, _appSettings.biometricsAllowed!);
+          await Auth.requireAuth(context, _appSettings.biometricsAllowed);
         }
       } else {
         //push to default wallet

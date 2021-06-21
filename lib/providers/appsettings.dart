@@ -7,7 +7,7 @@ import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings with ChangeNotifier {
-  AppOptionsStore? _appOptions;
+  late AppOptionsStore _appOptions;
   final EncryptedBox _encryptedBox;
   late SharedPreferences _sharedPrefs;
   String? _selectedLang;
@@ -28,17 +28,17 @@ class AppSettings with ChangeNotifier {
     await _sharedPrefs.setString('language_code', lang);
   }
 
-  bool? get biometricsAllowed {
-    return _appOptions!.allowBiometrics;
+  bool get biometricsAllowed {
+    return _appOptions.allowBiometrics;
   }
 
   void setBiometricsAllowed(bool newStatus) {
-    _appOptions!.allowBiometrics = newStatus;
+    _appOptions.allowBiometrics = newStatus;
     notifyListeners();
   }
 
   Map<String, bool>? get authenticationOptions {
-    return _appOptions!.authenticationOptions;
+    return _appOptions.authenticationOptions;
   }
 
   String? get selectedLang {
@@ -62,16 +62,16 @@ class AppSettings with ChangeNotifier {
   }
 
   void setAuthenticationOptions(String field, bool newStatus) {
-    _appOptions!.changeAuthenticationOptions(field, newStatus);
+    _appOptions.changeAuthenticationOptions(field, newStatus);
     notifyListeners();
   }
 
   String get defaultWallet {
-    return _appOptions!.defaultWallet;
+    return _appOptions.defaultWallet;
   }
 
   void setDefaultWallet(String newWallet) {
-    _appOptions!.defaultWallet = newWallet;
+    _appOptions.defaultWallet = newWallet;
     notifyListeners();
   }
 }

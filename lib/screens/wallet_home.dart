@@ -79,7 +79,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
       var _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed!);
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;

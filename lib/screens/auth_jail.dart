@@ -45,7 +45,7 @@ class _AuthJailState extends State<AuthJailScreen> {
     await appSettings.init();
     await Auth.requireAuth(
       context,
-      appSettings.biometricsAllowed!,
+      appSettings.biometricsAllowed,
       () async {
         final encrytpedStorage =
             Provider.of<EncryptedBox>(context, listen: false);

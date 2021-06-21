@@ -20,8 +20,8 @@ class AppOptionsStore extends HiveObject {
 
   AppOptionsStore(this._allowBiometrics);
 
-  bool? get allowBiometrics {
-    return _allowBiometrics;
+  bool get allowBiometrics {
+    return _allowBiometrics ?? false;
   }
 
   set allowBiometrics(bool? newStatus) {

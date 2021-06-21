@@ -134,7 +134,7 @@ class ElectrumConnection with ChangeNotifier {
     return _latestBlock ?? 0;
   }
 
-  set latestBlock(int? newLatest) {
+  set latestBlock(int newLatest) {
     _latestBlock = newLatest;
     notifyListeners();
   }
@@ -272,7 +272,7 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  void handleBlock(int? height) {
+  void handleBlock(int height) {
     latestBlock = height;
   }
 
@@ -411,7 +411,7 @@ class ElectrumConnection with ChangeNotifier {
     });
   }
 
-  void requestTxUpdate(String? txId) {
+  void requestTxUpdate(String txId) {
     sendMessage(
       'blockchain.transaction.get',
       'tx_$txId',
@@ -419,7 +419,7 @@ class ElectrumConnection with ChangeNotifier {
     );
   }
 
-  void broadcastTransaction(String? txHash, String? txId) {
+  void broadcastTransaction(String txHash, String txId) {
     sendMessage(
       'blockchain.transaction.broadcast',
       'broadcast_$txId',
@@ -435,7 +435,7 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  void handleBroadcast(String id, String? result) {
+  void handleBroadcast(String id, String result) {
     var txId = id.replaceFirst('broadcast_', '');
     if (txId != 'import') {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
@@ -443,7 +443,7 @@ class ElectrumConnection with ChangeNotifier {
     //TODO error handling if server rejects tx
   }
 
-  String? get connectedServerUrl {
+  String get connectedServerUrl {
     if (_connectionState == ElectrumConnectionState.connected) {
       return _serverUrl;
     }
