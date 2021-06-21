@@ -116,7 +116,7 @@ class ActiveWallets with ChangeNotifier {
       //generate new address
       openWallet.addNewAddress = WalletAddress(
         address: hdWallet.address!,
-        addressBookName: null,
+        addressBookName: '',
         used: false,
         status: null,
         isOurs: true,
@@ -154,7 +154,7 @@ class ActiveWallets with ChangeNotifier {
 
         openWallet.addNewAddress = WalletAddress(
           address: newHdWallet.address!,
-          addressBookName: null,
+          addressBookName: '',
           used: false,
           status: null,
           isOurs: true,
@@ -608,7 +608,7 @@ class ActiveWallets with ChangeNotifier {
     if (addr == null) {
       openWallet.addNewAddress = WalletAddress(
           address: address,
-          addressBookName: null,
+          addressBookName: '',
           used: true,
           status: null,
           isOurs: true,
@@ -631,7 +631,8 @@ class ActiveWallets with ChangeNotifier {
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,
     );
-    return addr?.addressBookName ?? '';
+    if (addr == null) return '';
+    return addr.addressBookName;
   }
 
   set transferedAddress(newAddress) {

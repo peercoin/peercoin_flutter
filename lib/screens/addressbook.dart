@@ -105,8 +105,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     if (searchedKey != null) {
       _filteredList = _filteredList.where((element) {
         return element.address.contains(searchedKey) ||
-            element.addressBookName != null &&
-                element.addressBookName!.contains(searchedKey);
+            element.addressBookName != '' &&
+                element.addressBookName.contains(searchedKey);
       }).toList();
     }
 
@@ -118,7 +118,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   Future<void> _addressEditDialog(
       BuildContext context, WalletAddress address) async {
     var _textFieldController = TextEditingController();
-    _textFieldController.text = address.addressBookName ?? '';
+    _textFieldController.text = address.addressBookName;
     return showDialog(
       context: context,
       builder: (context) {
@@ -379,7 +379,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         child: Text(
                           _filteredAddr[i].addressBookName == ''
                               ? '-'
-                              : _filteredAddr[i].addressBookName!,
+                              : _filteredAddr[i].addressBookName,
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,

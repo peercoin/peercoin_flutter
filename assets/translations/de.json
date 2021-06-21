@@ -52,7 +52,7 @@
     "authenticate_retry_warning_title": "Warnung, nur noch ein Versuch übrig.",
     "authenticate_subtitle_plural": "$retriesLeft Versuche insgesamt",
     "authenticate_subtitle_singular": "$retriesLeft Versuch insgesamt",
-    "authenticate_title": "Bitte PIN eingeben\n",
+    "authenticate_title": "Bitte PIN eingeben",
     "authenticate_title_new": "Bitte neue PIN eingeben",
     "continue": "Fortsetzen",
     "create_wallet_existing_seed": "Importiere bestehenden Seed",
