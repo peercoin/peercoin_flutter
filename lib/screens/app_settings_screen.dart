@@ -118,7 +118,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     ));
   }
 
-  void saveDefaultWallet(String? wallet) async {
+  void saveDefaultWallet(String wallet) async {
     _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
     saveSnack(context);
   }
@@ -171,14 +171,14 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 childrenPadding: EdgeInsets.all(10),
                 children: _availableWallets.map((wallet) {
                   return InkWell(
-                    onTap: () => saveDefaultWallet(wallet.letterCode),
+                    onTap: () => saveDefaultWallet(wallet.letterCode!),
                     child: ListTile(
                       title: Text(wallet.title!),
                       leading: Radio(
                         value: wallet.letterCode,
                         groupValue: _defaultWallet,
                         onChanged: (dynamic _) =>
-                            saveDefaultWallet(wallet.letterCode),
+                            saveDefaultWallet(wallet.letterCode!),
                       ),
                     ),
                   );

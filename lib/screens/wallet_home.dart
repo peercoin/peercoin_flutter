@@ -286,13 +286,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     Column(
                       children: [
                         Text(
-                          (_wallet.balance! / 1000000).toString(),
+                          (_wallet.balance / 1000000).toString(),
                           style: TextStyle(
                               fontSize: 26, fontWeight: FontWeight.bold),
                         ),
-                        _wallet.unconfirmedBalance! > 0
+                        _wallet.unconfirmedBalance > 0
                             ? Text(
-                                (_wallet.unconfirmedBalance! / 1000000)
+                                (_wallet.unconfirmedBalance / 1000000)
                                     .toString(),
                                 style: TextStyle(
                                     fontSize: 14,

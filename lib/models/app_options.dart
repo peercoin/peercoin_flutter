@@ -38,11 +38,11 @@ class AppOptionsStore extends HiveObject {
     save();
   }
 
-  String? get defaultWallet {
-    return _defaultWallet;
+  String get defaultWallet {
+    return _defaultWallet ?? '';
   }
 
-  set defaultWallet(String? newWallet) {
+  set defaultWallet(String newWallet) {
     _defaultWallet = newWallet;
     save();
   }

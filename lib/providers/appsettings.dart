@@ -67,10 +67,10 @@ class AppSettings with ChangeNotifier {
   }
 
   String get defaultWallet {
-    return _appOptions!.defaultWallet ?? '';
+    return _appOptions!.defaultWallet;
   }
 
-  void setDefaultWallet(String? newWallet) {
+  void setDefaultWallet(String newWallet) {
     _appOptions!.defaultWallet = newWallet;
     notifyListeners();
   }

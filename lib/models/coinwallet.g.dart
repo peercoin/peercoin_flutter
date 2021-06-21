@@ -17,15 +17,15 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CoinWallet(
-      fields[0] as String?,
-      fields[6] as String?,
-      fields[1] as String?,
+      fields[0] as String,
+      fields[6] as String,
+      fields[1] as String,
     )
-      .._addresses = (fields[2] as List?)?.cast<WalletAddress>()
-      .._transactions = (fields[3] as List?)?.cast<WalletTransaction>()
-      .._utxos = (fields[4] as List?)?.cast<WalletUtxo>()
-      .._balance = fields[5] as int?
-      .._unconfirmedBalance = fields[7] as int?;
+      .._addresses = (fields[2] as List).cast<WalletAddress>()
+      .._transactions = (fields[3] as List).cast<WalletTransaction>()
+      .._utxos = (fields[4] as List).cast<WalletUtxo>()
+      .._balance = fields[5] as int
+      .._unconfirmedBalance = fields[7] as int;
   }
 
   @override

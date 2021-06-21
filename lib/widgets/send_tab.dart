@@ -350,7 +350,7 @@ class _SendTabState extends State<SendTab> {
                     return AppLocalizations.instance
                         .translate('send_amount_small');
                   }
-                  if (txValueInSatoshis > _wallet.balance!) {
+                  if (txValueInSatoshis > _wallet.balance) {
                     return AppLocalizations.instance
                         .translate('send_amount_exceeds');
                   }
