@@ -118,7 +118,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         builder: (_) => AlertDialog(
                           title: Text(AppLocalizations.instance.translate(
                               'server_settings_alert_generated_title')!),
-                          content: Text(_servers[index].address!),
+                          content: Text(_servers[index].address),
                           actions: <Widget>[
                             TextButton.icon(
                                 label: Text(AppLocalizations.instance.translate(
@@ -182,7 +182,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.toc),
-                          if (!_servers[index].userGenerated!)
+                          if (!_servers[index].userGenerated)
                             Icon(Icons.delete_forever),
                         ],
                       ),
@@ -192,7 +192,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           setState(() {
                             //toggle connectable
                             _servers[index].setConnectable =
-                                !_servers[index].connectable!;
+                                !_servers[index].connectable;
                           });
                           //check if still one connectable server is left
                           if (_servers.firstWhereOrNull(
@@ -212,7 +212,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             oldItem.setConnectable = true;
                           }
                           //connectable now false ? move to bottom of list
-                          if (!_servers[index].connectable!) {
+                          if (!_servers[index].connectable) {
                             if (_servers[index].address == _connectedServer) {
                               //were we connected to this server? close connection
                               await context
@@ -228,13 +228,13 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             _servers[index].setPriority = 0;
                           }
                         },
-                        icon: Icon(_servers[index].connectable!
+                        icon: Icon(_servers[index].connectable
                             ? Icons.offline_bolt
                             : Icons.offline_bolt_outlined),
                       ),
                       tileColor: calculateTileColor(
-                          index, _servers[index].connectable!),
-                      title: Text(_servers[index].address!),
+                          index, _servers[index].connectable),
+                      title: Text(_servers[index].address),
                       subtitle: _servers[index].address == _connectedServer
                           ? Center(
                               child: Text(AppLocalizations.instance

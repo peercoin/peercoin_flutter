@@ -48,7 +48,7 @@ class _SendTabState extends State<SendTab> {
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _availableAddresses =
-          await _activeWallets.getWalletAddresses(_wallet.name!);
+          await _activeWallets.getWalletAddresses(_wallet.name);
       setState(() {
         _initial = false;
       });
@@ -58,7 +58,7 @@ class _SendTabState extends State<SendTab> {
 
   Future<Map> buildTx(bool dryrun, [int? fee = 0]) async {
     return await _activeWallets.buildTransaction(
-      _wallet.name!,
+      _wallet.name,
       _addressKey.currentState!.value.trim(),
       _amountKey.currentState!.value,
       fee,
@@ -181,7 +181,7 @@ class _SendTabState extends State<SendTab> {
                           var _buildResult = await buildTx(false, _txFee);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
-                              _wallet.name!, _addressKey.currentState!.value, {
+                              _wallet.name, _addressKey.currentState!.value, {
                             'txid': _buildResult['id'],
                             'hex': _buildResult['hex'],
                             'outValue': _totalValue - _txFee!,
@@ -195,7 +195,7 @@ class _SendTabState extends State<SendTab> {
                           //store label if exists
                           if (_labelKey.currentState!.value != '') {
                             _activeWallets.updateLabel(
-                              _wallet.name!,
+                              _wallet.name,
                               _addressKey.currentState!.value,
                               _labelKey.currentState!.value,
                             );
@@ -332,7 +332,7 @@ class _SendTabState extends State<SendTab> {
                 decoration: InputDecoration(
                   icon: Icon(Icons.money),
                   labelText: AppLocalizations.instance.translate('send_amount'),
-                  suffix: Text(_wallet.letterCode!),
+                  suffix: Text(_wallet.letterCode),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {

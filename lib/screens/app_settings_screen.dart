@@ -171,14 +171,14 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 childrenPadding: EdgeInsets.all(10),
                 children: _availableWallets.map((wallet) {
                   return InkWell(
-                    onTap: () => saveDefaultWallet(wallet.letterCode!),
+                    onTap: () => saveDefaultWallet(wallet.letterCode),
                     child: ListTile(
-                      title: Text(wallet.title!),
+                      title: Text(wallet.title),
                       leading: Radio(
                         value: wallet.letterCode,
                         groupValue: _defaultWallet,
                         onChanged: (dynamic _) =>
-                            saveDefaultWallet(wallet.letterCode!),
+                            saveDefaultWallet(wallet.letterCode),
                       ),
                     ),
                   );

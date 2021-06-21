@@ -71,9 +71,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      await _activeWallets.generateUnusedAddress(_wallet.name!);
+      await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
-          await _activeWallets.getWalletTransactions(_wallet.name!);
+          await _activeWallets.getWalletTransactions(_wallet.name);
       await _connectionProvider!
           .init(_wallet.name, requestedFromWalletHome: true);
 
@@ -90,13 +90,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider!.subscribeToScriptHashes(
-              await _activeWallets.getWalletScriptHashes(_wallet.name!));
+              await _activeWallets.getWalletScriptHashes(_wallet.name));
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
           _connectionProvider!.subscribeToScriptHashes(await _activeWallets
-              .getWalletScriptHashes(_wallet.name!, _unusedAddress));
+              .getWalletScriptHashes(_wallet.name, _unusedAddress));
         }
       }
       if (_connectionProvider!.latestBlock > _latestBlock) {
@@ -213,7 +213,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   .iconPathTransparent,
               width: 20),
           SizedBox(width: 10),
-          Text(_wallet.title!)
+          Text(_wallet.title)
         ]),
         actions: [
           IconButton(
@@ -279,7 +279,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      _wallet.letterCode!,
+                      _wallet.letterCode,
                       style: TextStyle(
                           fontSize: 26, color: Theme.of(context).accentColor),
                     ),
@@ -311,7 +311,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   walletTransactions: _walletTransactions,
                   unusedAddress: _unusedAddress,
                   changeIndex: changeIndex,
-                  identifier: _wallet.name!,
+                  identifier: _wallet.name,
                 )
               ],
             ),

@@ -171,7 +171,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     icon: Icon(Icons.money),
                     labelText: AppLocalizations.instance
                         .translate('receive_requested_amount'),
-                    suffix: Text(_wallet.letterCode!),
+                    suffix: Text(_wallet.letterCode),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -184,7 +184,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
               ElevatedButton.icon(
                 onPressed: () async {
                   if (labelController.text != '') {
-                    context.read<ActiveWallets>().updateLabel(_wallet.name!,
+                    context.read<ActiveWallets>().updateLabel(_wallet.name,
                         widget._unusedAddress, labelController.text);
                   }
                   await Share.share(_qrString ?? widget._unusedAddress);

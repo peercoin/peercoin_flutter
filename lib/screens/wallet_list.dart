@@ -140,7 +140,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                                                 .iconPath,
                                             width: 20),
                                       ),
-                                      title: Text(_wallet.title!),
+                                      title: Text(_wallet.title),
                                     ),
                                   )
                                 ],

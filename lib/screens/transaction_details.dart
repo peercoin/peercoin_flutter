@@ -61,7 +61,7 @@ class TransactionDetails extends StatelessWidget {
               ),
               SelectableText((_tx.value! / 1000000).toString() +
                   ' ' +
-                  _coinWallet.letterCode!)
+                  _coinWallet.letterCode)
             ],
           ),
           Divider(),
@@ -72,7 +72,7 @@ class TransactionDetails extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText((_tx.fee! / 1000000).toString() +
                   ' ' +
-                  _coinWallet.letterCode!)
+                  _coinWallet.letterCode)
             ],
           ),
           Divider(),

@@ -65,7 +65,7 @@ class Servers with ChangeNotifier {
     });
   }
 
-  void addServer(String? url, [bool userGenerated = false]) {
+  void addServer(String url, [bool userGenerated = false]) {
     final priority = _serverBox.length;
     var newServer = Server(
       address: url,
@@ -92,7 +92,7 @@ class Servers with ChangeNotifier {
     );
     _serverBox.values.forEach((Server server) {
       if (server.hidden == false && server.connectable == true) {
-        _availableServers.insert(server.priority!, server.address!);
+        _availableServers.insert(server.priority, server.address);
       }
     });
 
@@ -113,13 +113,13 @@ class Servers with ChangeNotifier {
 
     //sort by connectable
     _availableServersDetails.sort((a, b) {
-      if (b.connectable!) {
+      if (b.connectable) {
         return 1;
       }
       return -1;
     });
     //sort by priority
-    _availableServersDetails.sort((a, b) => a.priority!.compareTo(b.priority!));
+    _availableServersDetails.sort((a, b) => a.priority.compareTo(b.priority));
 
     return _availableServersDetails;
   }

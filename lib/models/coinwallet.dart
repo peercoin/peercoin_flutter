@@ -36,11 +36,11 @@ class CoinWallet extends HiveObject {
 
   CoinWallet(this._name, this._title, this._letterCode);
 
-  String? get name {
+  String get name {
     return _name;
   }
 
-  String? get letterCode {
+  String get letterCode {
     return _letterCode;
   }
 
@@ -64,7 +64,7 @@ class CoinWallet extends HiveObject {
     return _unconfirmedBalance;
   }
 
-  String? get title {
+  String get title {
     return _title;
   }
 

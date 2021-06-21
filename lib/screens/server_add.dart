@@ -36,7 +36,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     super.didChangeDependencies();
   }
 
-  void tryConnect(String? serverUrl) async {
+  void tryConnect(String serverUrl) async {
     _currentServerList = await Provider.of<Servers>(context, listen: false)
         .getServerDetailsList(_walletName);
 
@@ -68,7 +68,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       var _connection;
       try {
         _connection = IOWebSocketChannel.connect(
-          serverUrl!,
+          serverUrl,
         );
       } catch (e) {
         print('connection error: $e');

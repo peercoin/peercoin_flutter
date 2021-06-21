@@ -7,13 +7,13 @@ class Server extends HiveObject {
   String? _label;
 
   @HiveField(1)
-  String? address;
+  String address;
 
   @HiveField(2)
-  bool? connectable = true;
+  bool connectable = true;
 
   @HiveField(3)
-  bool? userGenerated;
+  bool userGenerated;
 
   @HiveField(4)
   String? _donationAddress;
@@ -26,10 +26,10 @@ class Server extends HiveObject {
 
   @HiveField(7)
   // ignore: prefer_final_fields
-  bool? _hidden = false;
+  bool _hidden = false;
 
   @HiveField(8)
-  int? priority;
+  int priority;
 
   Server({
     required this.address,
@@ -37,11 +37,11 @@ class Server extends HiveObject {
     required this.userGenerated,
   });
 
-  String? get getAddress {
+  String get getAddress {
     return address;
   }
 
-  bool? get hidden {
+  bool get hidden {
     return _hidden;
   }
 
