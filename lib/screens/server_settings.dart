@@ -74,7 +74,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            AppLocalizations.instance.translate('server_settings_title')!,
+            AppLocalizations.instance.translate('server_settings_title'),
           ),
         ),
         actions: [
@@ -117,19 +117,19 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         context: context,
                         builder: (_) => AlertDialog(
                           title: Text(AppLocalizations.instance.translate(
-                              'server_settings_alert_generated_title')!),
+                              'server_settings_alert_generated_title')),
                           content: Text(_servers[index].address),
                           actions: <Widget>[
                             TextButton.icon(
-                                label: Text(AppLocalizations.instance.translate(
-                                    'server_settings_alert_cancel')!),
+                                label: Text(AppLocalizations.instance
+                                    .translate('server_settings_alert_cancel')),
                                 icon: Icon(Icons.cancel),
                                 onPressed: () {
                                   Navigator.of(context).pop(false);
                                 }),
                             TextButton.icon(
                               label: Text(AppLocalizations.instance
-                                  .translate('jail_dialog_button')!),
+                                  .translate('jail_dialog_button')),
                               icon: Icon(Icons.check),
                               onPressed: () {
                                 Navigator.of(context).pop(true);
@@ -143,14 +143,14 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         context: context,
                         builder: (_) => AlertDialog(
                           title: Text(AppLocalizations.instance.translate(
-                              'server_settings_alert_hardcoded_title')!),
+                              'server_settings_alert_hardcoded_title')),
                           content: Text(AppLocalizations.instance.translate(
-                              'server_settings_alert_hardcoded_content')!),
+                              'server_settings_alert_hardcoded_content')),
                           actions: <Widget>[
                             TextButton.icon(
                               label: Text(
                                 AppLocalizations.instance
-                                    .translate('jail_dialog_button')!,
+                                    .translate('jail_dialog_button'),
                               ),
                               icon: Icon(Icons.check),
                               onPressed: () {
@@ -202,7 +202,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                 AppLocalizations.instance.translate(
-                                    'server_settings_error_no_server_left')!,
+                                    'server_settings_error_no_server_left'),
                                 textAlign: TextAlign.center,
                               ),
                               duration: Duration(seconds: 2),
@@ -238,7 +238,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                       subtitle: _servers[index].address == _connectedServer
                           ? Center(
                               child: Text(AppLocalizations.instance
-                                  .translate('wallet_connected')!),
+                                  .translate('wallet_connected')),
                             )
                           : Container(),
                     ),

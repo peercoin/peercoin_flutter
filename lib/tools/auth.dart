@@ -41,12 +41,12 @@ class Auth {
           return AlertDialog(
             title: Text(
               AppLocalizations.instance
-                  .translate('authenticate_retry_warning_title')!,
+                  .translate('authenticate_retry_warning_title'),
               textAlign: TextAlign.center,
             ),
             content: Text(
               AppLocalizations.instance
-                  .translate('authenticate_retry_warning_text')!,
+                  .translate('authenticate_retry_warning_text'),
             ),
             actions: [
               TextButton(
@@ -54,7 +54,7 @@ class Auth {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button')!,
+                  AppLocalizations.instance.translate('jail_dialog_button'),
                 ),
               ),
             ],
@@ -75,7 +75,7 @@ class Auth {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              AppLocalizations.instance.translate('jail_dialog_title')!,
+              AppLocalizations.instance.translate('jail_dialog_title'),
               textAlign: TextAlign.center,
             ),
             actions: [
@@ -84,7 +84,7 @@ class Auth {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button')!,
+                  AppLocalizations.instance.translate('jail_dialog_button'),
                 ),
               ),
             ],
@@ -108,7 +108,7 @@ class Auth {
           androidAuthStrings: authStrings,
           biometricOnly: true,
           localizedReason: AppLocalizations.instance
-              .translate('authenticate_biometric_reason')!,
+              .translate('authenticate_biometric_reason'),
           stickyAuth: true);
       if (didAuthenticate) {
         await executeCallback(context, callback);
@@ -148,13 +148,13 @@ class Auth {
                             ? 'authenticate_subtitle_singular'
                             : 'authenticate_subtitle_plural',
                         {'retriesLeft': retriesLeft.toString()},
-                      )!,
+                      ),
                   style: TextStyle(fontSize: 14),
                 )
               ])),
       confirmTitle: HeadingTitle(
           text: AppLocalizations.instance
-              .translate('authenticate_confirm_title')!),
+              .translate('authenticate_confirm_title')),
       customizedButtonChild: biometricsAllowed
           ? Icon(
               Icons.fingerprint,

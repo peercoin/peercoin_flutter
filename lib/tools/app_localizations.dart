@@ -65,7 +65,7 @@ class AppLocalizations {
     return localizedStrings;
   }
 
-  String? translate(String key, [Map<String, String?>? arguments]) {
+  String translate(String key, [Map<String, String?>? arguments]) {
     var translation = _localizedStrings[key];
     translation = translation ?? _fallbackLocalizedStrings[key];
     translation = translation ?? '';
@@ -83,7 +83,7 @@ class AppLocalizations {
       translation = translation!.replaceAll('\$$argumentKey', value);
     });
 
-    return translation;
+    return translation ?? '';
   }
 }
 

@@ -87,7 +87,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          AppLocalizations.instance.translate('wallet_scan_appBar_title')!,
+          AppLocalizations.instance.translate('wallet_scan_appBar_title'),
         )),
       ),
       body: Column(
@@ -96,7 +96,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           LoadingIndicator(),
           SizedBox(height: 20),
           Text(
-            AppLocalizations.instance.translate('wallet_scan_notice')!,
+            AppLocalizations.instance.translate('wallet_scan_notice'),
           )
         ],
       ),

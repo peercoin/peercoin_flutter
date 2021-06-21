@@ -122,7 +122,7 @@ class _SendTabState extends State<SendTab> {
           }
           return SimpleDialog(
             title: Text(AppLocalizations.instance
-                .translate('send_confirm_transaction')!),
+                .translate('send_confirm_transaction')),
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -151,20 +151,20 @@ class _SendTabState extends State<SendTab> {
                     Text(AppLocalizations.instance.translate('send_fee', {
                       'amount': '${_txFee! / 1000000}',
                       'letter_code': '${_wallet.letterCode}'
-                    })!),
+                    })),
                     if (_destroyedChange > 0)
                       Text(
                         AppLocalizations.instance.translate('send_dust', {
                           'amount': '${_destroyedChange / 1000000}',
                           'letter_code': '${_wallet.letterCode}'
-                        })!,
+                        }),
                         style: TextStyle(color: Theme.of(context).errorColor),
                       ),
                     Text(
                         AppLocalizations.instance.translate('send_total', {
                           'amount': '${_totalValue / 1000000}',
                           'letter_code': '${_wallet.letterCode}'
-                        })!,
+                        }),
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 20),
                     ElevatedButton.icon(
@@ -172,7 +172,7 @@ class _SendTabState extends State<SendTab> {
                         primary: Theme.of(context).primaryColor,
                       ),
                       label: Text(AppLocalizations.instance
-                          .translate('send_confirm_send')!),
+                          .translate('send_confirm_send')),
                       icon: Icon(Icons.send),
                       onPressed: () async {
                         if (_firstPress == false) return; //prevent double tap
@@ -211,7 +211,7 @@ class _SendTabState extends State<SendTab> {
                               content: Text(
                                 AppLocalizations.instance.translate(
                                   'send_oops',
-                                )!,
+                                ),
                               ),
                             ),
                           );
@@ -392,14 +392,19 @@ class _SendTabState extends State<SendTab> {
                       showTransactionConfirmation(context);
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(AppLocalizations.instance.translate(
-                      'send_errors_solve',
-                    )!)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.instance.translate(
+                            'send_errors_solve',
+                          ),
+                        ),
+                      ),
+                    );
                   }
                 },
                 icon: Icon(Icons.send),
-                label: Text(AppLocalizations.instance.translate('send')!),
+                label: Text(AppLocalizations.instance.translate('send')),
               ),
               IconButton(
                   icon: Icon(

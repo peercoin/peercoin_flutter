@@ -85,7 +85,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('app_settings_language_restart')!,
+          AppLocalizations.instance.translate('app_settings_language_restart'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -101,7 +101,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     //show notification
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        AppLocalizations.instance.translate('app_settings_language_restart')!,
+        AppLocalizations.instance.translate('app_settings_language_restart'),
         textAlign: TextAlign.center,
       ),
       duration: Duration(seconds: 2),
@@ -111,7 +111,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   void saveSnack(context) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack')!,
+        AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,
       ),
       duration: Duration(seconds: 2),
@@ -134,7 +134,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.instance.translate('app_settings_appbar')!,
+          AppLocalizations.instance.translate('app_settings_appbar'),
         ),
       ),
       drawer: AppDrawer(),
@@ -146,7 +146,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ExpansionTile(
                 title: Text(
                     AppLocalizations.instance
-                        .translate('app_settings_language')!,
+                        .translate('app_settings_language'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: AppLocalizations.availableLocales.keys.map((lang) {
@@ -166,7 +166,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ExpansionTile(
                 title: Text(
                     AppLocalizations.instance
-                        .translate('app_settings_default_wallet')!,
+                        .translate('app_settings_default_wallet'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: _availableWallets.map((wallet) {
@@ -187,7 +187,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ExpansionTile(
                   title: Text(
                       AppLocalizations.instance
-                          .translate('app_settings_auth_header')!,
+                          .translate('app_settings_auth_header'),
                       style: Theme.of(context).textTheme.headline6),
                   childrenPadding: EdgeInsets.all(10),
                   children: [
@@ -197,7 +197,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 revealAuthOptions(_settings.biometricsAllowed),
                             child: Text(
                               AppLocalizations.instance
-                                  .translate('app_settings_revealAuthButton')!,
+                                  .translate('app_settings_revealAuthButton'),
                             ))
                         : SettingsAuth(
                             _biometricsAllowed,
@@ -209,7 +209,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   ]),
               ExpansionTile(
                   title: Text(
-                      AppLocalizations.instance.translate('app_settings_seed')!,
+                      AppLocalizations.instance.translate('app_settings_seed'),
                       style: Theme.of(context).textTheme.headline6),
                   childrenPadding: EdgeInsets.all(10),
                   children: [
@@ -219,7 +219,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                 revealSeedPhrase(_settings.biometricsAllowed),
                             child: Text(
                               AppLocalizations.instance
-                                  .translate('app_settings_revealSeedButton')!,
+                                  .translate('app_settings_revealSeedButton'),
                             ))
                         : Column(children: [
                             SizedBox(height: 20),
@@ -232,14 +232,14 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               onPressed: () => Share.share(_seedPhrase),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('app_settings_shareSeed')!,
+                                    .translate('app_settings_shareSeed'),
                               ),
                             )
                           ])
                   ]),
               ExpansionTile(
                 title: Text(
-                    AppLocalizations.instance.translate('app_settings_theme')!,
+                    AppLocalizations.instance.translate('app_settings_theme'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: _availableThemes.map((theme) {
@@ -248,7 +248,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     child: ListTile(
                       title: Text(
                         AppLocalizations.instance
-                            .translate('app_settings_theme_$theme')!,
+                            .translate('app_settings_theme_$theme'),
                       ),
                       leading: Radio(
                         value: theme,

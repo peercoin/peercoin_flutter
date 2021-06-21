@@ -26,7 +26,7 @@ class TransactionDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        AppLocalizations.instance.translate('transaction_details')!,
+        AppLocalizations.instance.translate('transaction_details'),
       )),
       body: ListView(
         padding: EdgeInsets.all(20),
@@ -34,7 +34,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('id')!,
+              Text(AppLocalizations.instance.translate('id'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.txid)
             ],
@@ -43,12 +43,12 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('time')!,
+              Text(AppLocalizations.instance.translate('time'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.timestamp != 0
                   ? DateFormat().format(
                       DateTime.fromMillisecondsSinceEpoch(_tx.timestamp * 1000))
-                  : AppLocalizations.instance.translate('unconfirmed')!)
+                  : AppLocalizations.instance.translate('unconfirmed'))
             ],
           ),
           Divider(),
@@ -56,7 +56,7 @@ class TransactionDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.instance.translate('tx_value')!,
+                AppLocalizations.instance.translate('tx_value'),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SelectableText((_tx.value / 1000000).toString() +
@@ -68,7 +68,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_fee')!,
+              Text(AppLocalizations.instance.translate('tx_fee'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(
                   (_tx.fee / 1000000).toString() + ' ' + _coinWallet.letterCode)
@@ -78,7 +78,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_address')!,
+              Text(AppLocalizations.instance.translate('tx_address'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.address),
               // Text("") TODO might add address label here in the future
@@ -88,7 +88,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_direction')!,
+              Text(AppLocalizations.instance.translate('tx_direction'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.direction)
             ],
@@ -97,7 +97,7 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_confirmations')!,
+              Text(AppLocalizations.instance.translate('tx_confirmations'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
               SelectableText(_tx.confirmations.toString())
             ],
@@ -110,7 +110,7 @@ class TransactionDetails extends StatelessWidget {
                   Icons.search,
                 ),
                 label: Text(
-                  AppLocalizations.instance.translate('tx_view_in_explorer')!,
+                  AppLocalizations.instance.translate('tx_view_in_explorer'),
                 )),
           )
         ],

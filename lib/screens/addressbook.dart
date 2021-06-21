@@ -36,7 +36,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       onCleared: clearFilter,
       buildDefaultAppBar: buildAppBar,
       onChanged: applyFilter,
-      hintText: AppLocalizations.instance.translate('search')!,
+      hintText: AppLocalizations.instance.translate('search'),
     );
   }
 
@@ -46,7 +46,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         child: FittedBox(
           child: Text(
             AppLocalizations.instance
-                .translate('addressbook_title', {'coin': _walletTitle})!,
+                .translate('addressbook_title', {'coin': _walletTitle}),
           ),
         ),
       ),
@@ -125,7 +125,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
         return AlertDialog(
           title: Text(
             AppLocalizations.instance
-                    .translate('addressbook_edit_dialog_title')! +
+                    .translate('addressbook_edit_dialog_title') +
                 ' ${address.address}',
             textAlign: TextAlign.center,
           ),
@@ -142,7 +142,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                 Navigator.pop(context);
               },
               child: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')!),
+                  .translate('server_settings_alert_cancel')),
             ),
             TextButton(
               onPressed: () {
@@ -151,7 +151,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                 Navigator.pop(context);
               },
               child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button')!,
+                AppLocalizations.instance.translate('jail_dialog_button'),
               ),
             ),
           ],
@@ -170,7 +170,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            AppLocalizations.instance.translate('addressbook_add_new')!,
+            AppLocalizations.instance.translate('addressbook_add_new'),
             textAlign: TextAlign.center,
           ),
           content: Form(
@@ -221,7 +221,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                 Navigator.pop(context);
               },
               child: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')!),
+                  .translate('server_settings_alert_cancel')),
             ),
             TextButton(
               onPressed: () {
@@ -239,7 +239,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                 }
               },
               child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button')!,
+                AppLocalizations.instance.translate('jail_dialog_button'),
               ),
             ),
           ],
@@ -282,7 +282,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       body: _filteredAddr.isEmpty
           ? Center(
               child: Text(AppLocalizations.instance
-                  .translate('addressbook_no_sending')!),
+                  .translate('addressbook_no_sending')),
             )
           : ListView.builder(
               itemCount: _filteredAddr.length,
@@ -329,20 +329,20 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                                 builder: (_) => AlertDialog(
                                   title: Text(AppLocalizations.instance
                                       .translate(
-                                          'addressbook_dialog_remove_title')!),
+                                          'addressbook_dialog_remove_title')),
                                   content: Text(_filteredAddr[i].address),
                                   actions: <Widget>[
                                     TextButton.icon(
                                         label: Text(AppLocalizations.instance
                                             .translate(
-                                                'server_settings_alert_cancel')!),
+                                                'server_settings_alert_cancel')),
                                         icon: Icon(Icons.cancel),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         }),
                                     TextButton.icon(
                                       label: Text(AppLocalizations.instance
-                                          .translate('jail_dialog_button')!),
+                                          .translate('jail_dialog_button')),
                                       icon: Icon(Icons.check),
                                       onPressed: () {
                                         context
@@ -354,7 +354,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                                             .showSnackBar(SnackBar(
                                           content: Text(
                                             AppLocalizations.instance.translate(
-                                                'addressbook_dialog_remove_snack')!,
+                                                'addressbook_dialog_remove_snack'),
                                             textAlign: TextAlign.center,
                                           ),
                                           duration: Duration(seconds: 5),

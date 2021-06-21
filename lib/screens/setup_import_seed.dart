@@ -30,7 +30,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('setup_securebox_fail')!,
+          AppLocalizations.instance.translate('setup_securebox_fail'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 10),
@@ -60,7 +60,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   width: 50,
                 ),
                 Text(
-                  AppLocalizations.instance.translate('setup_import_title')!,
+                  AppLocalizations.instance.translate('setup_import_title'),
                   style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
                 Padding(
@@ -68,7 +68,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   child: Text(
                     AppLocalizations.instance.translate(
                       'setup_import_note',
-                    )!,
+                    ),
                     style: TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
@@ -131,7 +131,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         icon: Icon(Icons.input),
                         label: Text(AppLocalizations.instance.translate(
                           'import_seed_button',
-                        )!)),
+                        ))),
               ]),
         ),
       ),

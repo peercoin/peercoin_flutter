@@ -27,14 +27,13 @@ class SettingsAuth extends StatelessWidget {
       biometricsAllowed,
       () async => await screenLock(
         title: Text(
-          AppLocalizations.instance.translate('authenticate_title_new')!,
+          AppLocalizations.instance.translate('authenticate_title_new'),
           style: TextStyle(
             fontSize: 24,
           ),
         ),
         confirmTitle: Text(
-          AppLocalizations.instance
-              .translate('authenticate_confirm_title_new')!,
+          AppLocalizations.instance.translate('authenticate_confirm_title_new'),
           style: TextStyle(
             fontSize: 24,
           ),
@@ -49,7 +48,7 @@ class SettingsAuth extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               AppLocalizations.instance
-                  .translate('authenticate_change_pin_success')!,
+                  .translate('authenticate_change_pin_success'),
               textAlign: TextAlign.center,
             ),
             duration: Duration(seconds: 2),
@@ -66,7 +65,7 @@ class SettingsAuth extends StatelessWidget {
       children: [
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_biometrics')!,
+              AppLocalizations.instance.translate('app_settings_biometrics'),
             ),
             value: _biometricsAllowed!,
             onChanged: (newState) {
@@ -74,7 +73,7 @@ class SettingsAuth extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
                     AppLocalizations.instance
-                        .translate('setup_pin_no_biometrics')!,
+                        .translate('setup_pin_no_biometrics'),
                     textAlign: TextAlign.center,
                   ),
                   duration: Duration(seconds: 5),
@@ -86,7 +85,7 @@ class SettingsAuth extends StatelessWidget {
             }),
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_walletList')!,
+              AppLocalizations.instance.translate('app_settings_walletList'),
             ),
             value: _authenticationOptions['walletList']!,
             onChanged: (newState) {
@@ -95,7 +94,7 @@ class SettingsAuth extends StatelessWidget {
             }),
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_walletHome')!,
+              AppLocalizations.instance.translate('app_settings_walletHome'),
             ),
             value: _authenticationOptions['walletHome']!,
             onChanged: (newState) {
@@ -105,7 +104,7 @@ class SettingsAuth extends StatelessWidget {
         SwitchListTile(
             title: Text(
               AppLocalizations.instance
-                  .translate('app_settings_sendTransaction')!,
+                  .translate('app_settings_sendTransaction'),
             ),
             value: _authenticationOptions['sendTransaction']!,
             onChanged: (newState) {
@@ -114,7 +113,7 @@ class SettingsAuth extends StatelessWidget {
             }),
         SwitchListTile(
             title: Text(
-              AppLocalizations.instance.translate('app_settings_newWallet')!,
+              AppLocalizations.instance.translate('app_settings_newWallet'),
             ),
             value: _authenticationOptions['newWallet']!,
             onChanged: (newState) {
@@ -124,7 +123,7 @@ class SettingsAuth extends StatelessWidget {
         ElevatedButton(
           onPressed: () => changePIN(context, _settings.biometricsAllowed),
           child: Text(
-            AppLocalizations.instance.translate('app_settings_changeCode')!,
+            AppLocalizations.instance.translate('app_settings_changeCode'),
           ),
         )
       ],

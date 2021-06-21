@@ -51,7 +51,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('server_add_server_exists')!,
+          AppLocalizations.instance.translate('server_add_server_exists'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -108,7 +108,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 AppLocalizations.instance
-                    .translate('server_add_server_wrong_genesis')!,
+                    .translate('server_add_server_wrong_genesis'),
                 textAlign: TextAlign.center,
               ),
               duration: Duration(seconds: 2),
@@ -130,7 +130,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             AppLocalizations.instance
-                .translate('server_add_server_no_connection')!,
+                .translate('server_add_server_no_connection'),
             textAlign: TextAlign.center,
           ),
           duration: Duration(seconds: 2),
@@ -147,7 +147,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            AppLocalizations.instance.translate('server_add_title')!,
+            AppLocalizations.instance.translate('server_add_title'),
           ),
         ),
         actions: [

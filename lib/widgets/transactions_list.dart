@@ -57,21 +57,21 @@ class _TransactionListState extends State<TransactionList> {
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
               label: Container(
                   child: Text(
-                      AppLocalizations.instance.translate('transactions_in')!)),
+                      AppLocalizations.instance.translate('transactions_in'))),
               selected: _filterChoice == 'in',
               onSelected: (_) => _handleSelect('in'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(
-                  AppLocalizations.instance.translate('transactions_all')!),
+              label:
+                  Text(AppLocalizations.instance.translate('transactions_all')),
               selected: _filterChoice == 'all',
               onSelected: (_) => _handleSelect('all'),
             ),
             ChoiceChip(
               visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-              label: Text(
-                  AppLocalizations.instance.translate('transactions_out')!),
+              label:
+                  Text(AppLocalizations.instance.translate('transactions_out')),
               selected: _filterChoice == 'out',
               onSelected: (_) => _handleSelect('out'),
             ),
@@ -81,7 +81,7 @@ class _TransactionListState extends State<TransactionList> {
         child: _reversedTx.isEmpty
             ? Center(
                 child: Text(
-                    AppLocalizations.instance.translate('transactions_none')!),
+                    AppLocalizations.instance.translate('transactions_none')),
               )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {
@@ -188,7 +188,7 @@ class _TransactionListState extends State<TransactionList> {
                                 AppLocalizations.instance.translate(
                                     'transactions_fee', {
                                   'amount': '${_filteredTx[i].fee / 1000000}'
-                                })!,
+                                }),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 12,

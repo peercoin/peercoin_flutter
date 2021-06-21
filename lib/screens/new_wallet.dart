@@ -42,8 +42,8 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           _coin == ''
-              ? AppLocalizations.instance.translate('select_coin')!
-              : AppLocalizations.instance.translate('add_coin_failed')!,
+              ? AppLocalizations.instance.translate('select_coin')
+              : AppLocalizations.instance.translate('add_coin_failed'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 2),
@@ -84,7 +84,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.instance.translate('add_new_wallet')!),
+        title: Text(AppLocalizations.instance.translate('add_new_wallet')),
         actions: [
           if (actualAvailableWallets.isNotEmpty)
             Padding(
@@ -100,7 +100,7 @@ class _NewWalletScreenState extends State<NewWalletScreen> {
         child: actualAvailableWallets.isEmpty
             ? Center(
                 child:
-                    Text(AppLocalizations.instance.translate('no_new_wallet')!),
+                    Text(AppLocalizations.instance.translate('no_new_wallet')),
               )
             : Column(children: [
                 Expanded(

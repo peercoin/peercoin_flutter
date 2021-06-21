@@ -38,7 +38,7 @@ class WalletHomeQr extends StatelessWidget {
                 icon: Icon(Icons.share),
                 onPressed: () => Share.share(address),
                 label: Text(
-                  AppLocalizations.instance.translate('receive_share')!,
+                  AppLocalizations.instance.translate('receive_share'),
                 ))
           ]))
         ]);

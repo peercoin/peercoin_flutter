@@ -30,7 +30,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   bool _balanceLoading = false;
   late ElectrumConnection _connectionProvider;
   late ActiveWallets _activeWallets;
-  Map<String, List?> _paperWalletUtxos = {};
+  late Map<String, List?> _paperWalletUtxos = {};
 
   @override
   void didChangeDependencies() {
@@ -156,7 +156,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     if (_balanceInt == 0 || _balanceInt < _activeCoin.minimumTxValue) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('paperwallet_error_1')!,
+          AppLocalizations.instance.translate('paperwallet_error_1'),
           textAlign: TextAlign.center,
         ),
         duration: Duration(seconds: 5),
@@ -170,7 +170,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
           final _displayValue = (_balanceInt - _requiredFee) / 1000000;
           return SimpleDialog(
             title: Text(
-              AppLocalizations.instance.translate('send_confirm_transaction')!,
+              AppLocalizations.instance.translate('send_confirm_transaction'),
               textAlign: TextAlign.center,
             ),
             children: <Widget>[
@@ -190,12 +190,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                   Text(AppLocalizations.instance.translate('send_fee', {
                     'amount': '${_requiredFee / 1000000}',
                     'letter_code': '${_activeCoin.letterCode}'
-                  })!),
+                  })),
                   Text(
                       AppLocalizations.instance.translate('send_total', {
                         'amount': '${_balanceInt / 1000000}',
                         'letter_code': '${_activeCoin.letterCode}'
-                      })!,
+                      }),
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
@@ -204,7 +204,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: ElevatedButton.icon(
                   label: Text(AppLocalizations.instance
-                      .translate('paperwallet_confirm_import')!),
+                      .translate('paperwallet_confirm_import')),
                   icon: Icon(Icons.send),
                   onPressed: () async {
                     if (_firstPress == false) return; //prevent double tap
@@ -220,7 +220,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           AppLocalizations.instance
-                              .translate('paperwallet_success')!,
+                              .translate('paperwallet_success'),
                           textAlign: TextAlign.center,
                         ),
                         duration: Duration(seconds: 5),
@@ -232,7 +232,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         SnackBar(
                           content: Text(AppLocalizations.instance.translate(
                             'send_oops',
-                          )!),
+                          )),
                         ),
                       );
                     }
@@ -285,7 +285,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            AppLocalizations.instance.translate('wallet_pop_menu_paperwallet')!,
+            AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
           ),
         ),
         body: Column(
@@ -303,7 +303,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       children: [
                         Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_1')!,
+                                .translate('paperwallet_step_1'),
                             style: Theme.of(context).textTheme.headline6),
                         ElevatedButton.icon(
                           onPressed: () => handlePress(1),
@@ -313,7 +313,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_1_text')!,
+                                .translate('paperwallet_step_1_text'),
                             style: TextStyle(
                                 color: _currentStep == 1
                                     ? Colors.white
@@ -329,7 +329,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       children: [
                         Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_2')!,
+                                .translate('paperwallet_step_2'),
                             style: Theme.of(context).textTheme.headline6),
                         ElevatedButton.icon(
                           onPressed: () => handlePress(2),
@@ -339,7 +339,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_2_text')!,
+                                .translate('paperwallet_step_2_text'),
                             style: TextStyle(
                                 color: _currentStep == 2
                                     ? Colors.white
@@ -355,7 +355,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       children: [
                         Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_3')!,
+                                .translate('paperwallet_step_3'),
                             style: Theme.of(context).textTheme.headline6),
                         ElevatedButton.icon(
                           onPressed: () => handlePress(3),
@@ -365,7 +365,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_3_text')!,
+                                .translate('paperwallet_step_3_text'),
                             style: TextStyle(
                                 color: _currentStep == 3
                                     ? Colors.white
@@ -385,7 +385,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       children: [
                         Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_4')!,
+                                .translate('paperwallet_step_4'),
                             style: Theme.of(context).textTheme.headline6),
                         ElevatedButton.icon(
                           onPressed: () => handlePress(4),
@@ -395,7 +395,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                                   : Theme.of(context).accentColor),
                           label: Text(
                             AppLocalizations.instance
-                                .translate('paperwallet_step_4_text')!,
+                                .translate('paperwallet_step_4_text'),
                             style: TextStyle(
                                 color: _currentStep == 4
                                     ? Colors.white

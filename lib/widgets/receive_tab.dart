@@ -191,13 +191,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 },
                 icon: Icon(Icons.share),
                 label: Text(
-                  AppLocalizations.instance.translate('receive_share')!,
+                  AppLocalizations.instance.translate('receive_share'),
                 ),
               ),
               SizedBox(height: 10),
               Text(
                   AppLocalizations.instance
-                      .translate('wallet_receive_label_hint')!,
+                      .translate('wallet_receive_label_hint'),
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).accentColor,

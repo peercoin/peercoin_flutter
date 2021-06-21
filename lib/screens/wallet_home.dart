@@ -147,20 +147,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
         context: context,
         builder: (_) => AlertDialog(
           title:
-              Text(AppLocalizations.instance.translate('wallet_rescan_title')!),
+              Text(AppLocalizations.instance.translate('wallet_rescan_title')),
           content: Text(
-              AppLocalizations.instance.translate('wallet_rescan_content')!),
+              AppLocalizations.instance.translate('wallet_rescan_content')),
           actions: <Widget>[
             TextButton.icon(
                 label: Text(AppLocalizations.instance
-                    .translate('server_settings_alert_cancel')!),
+                    .translate('server_settings_alert_cancel')),
                 icon: Icon(Icons.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
             TextButton.icon(
               label: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button')!),
+                  AppLocalizations.instance.translate('jail_dialog_button')),
               icon: Icon(Icons.check),
               onPressed: () async {
                 //close connection
@@ -241,7 +241,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     leading: Icon(Icons.arrow_circle_down),
                     title: Text(
                       AppLocalizations.instance
-                          .translate('wallet_pop_menu_paperwallet')!,
+                          .translate('wallet_pop_menu_paperwallet'),
                     ),
                   ),
                 ),
@@ -251,7 +251,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     leading: Icon(Icons.sync),
                     title: Text(
                       AppLocalizations.instance
-                          .translate('wallet_pop_menu_servers')!,
+                          .translate('wallet_pop_menu_servers'),
                     ),
                   ),
                 ),
@@ -261,7 +261,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     leading: Icon(Icons.sync_problem),
                     title: Text(
                       AppLocalizations.instance
-                          .translate('wallet_pop_menu_rescan')!,
+                          .translate('wallet_pop_menu_rescan'),
                     ),
                   ),
                 )

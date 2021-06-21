@@ -70,7 +70,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
       drawer: AppDrawer(),
       appBar: AppBar(
         title: Center(
-            child: Text(AppLocalizations.instance.translate('wallets_list')!)),
+            child: Text(AppLocalizations.instance.translate('wallets_list'))),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -108,7 +108,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                         return Column(children: [
                           SizedBox(height: 30),
                           Text(AppLocalizations.instance
-                              .translate('wallets_none')!),
+                              .translate('wallets_none')),
                           SizedBox(height: 30)
                         ]);
                       }

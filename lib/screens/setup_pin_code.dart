@@ -57,15 +57,15 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
               width: 50,
             ),
             Text(
-              AppLocalizations.instance.translate('setup_pin_title')!,
+              AppLocalizations.instance.translate('setup_pin_title'),
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
-            Text(AppLocalizations.instance.translate('setup_pin')!,
+            Text(AppLocalizations.instance.translate('setup_pin'),
                 style: TextStyle(color: Colors.white)),
             SwitchListTile(
                 title: Text(
                     AppLocalizations.instance
-                        .translate('app_settings_biometrics')!,
+                        .translate('app_settings_biometrics'),
                     style: TextStyle(color: Colors.white)),
                 value: _biometricsAllowed,
                 activeColor: Colors.white,
@@ -75,7 +75,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                         AppLocalizations.instance
-                            .translate('setup_pin_no_biometrics')!,
+                            .translate('setup_pin_no_biometrics'),
                         textAlign: TextAlign.center,
                       ),
                       duration: Duration(seconds: 5),
@@ -91,10 +91,10 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                 await screenLock(
                   title: HeadingTitle(
                       text: AppLocalizations.instance
-                          .translate('authenticate_title')!),
+                          .translate('authenticate_title')),
                   confirmTitle: HeadingTitle(
                       text: AppLocalizations.instance
-                          .translate('authenticate_confirm_title')!),
+                          .translate('authenticate_confirm_title')),
                   context: context,
                   correctString: '',
                   digits: 6,
@@ -119,7 +119,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                 );
               },
               child: Text(
-                AppLocalizations.instance.translate('setup_create_pin')!,
+                AppLocalizations.instance.translate('setup_create_pin'),
                 style: TextStyle(fontSize: 18),
               ),
             )
