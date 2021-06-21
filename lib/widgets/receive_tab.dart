@@ -294,7 +294,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  PeerServiceTitle(title: 'Obtain Peercoin'),
+                  PeerServiceTitle(title: 'Obtain tPPC'),
                   SizedBox(height: 20),
                   Text(
                     AppLocalizations.instance

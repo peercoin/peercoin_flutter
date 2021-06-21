@@ -129,12 +129,13 @@ class _WalletListScreenState extends State<WalletListScreen> {
                         );
                       }
                       if (snapshot.data == null || snapshot.data.isEmpty) {
-                        return Column(children: [
-                          SizedBox(height: 30),
-                          Text(AppLocalizations.instance
-                              .translate('wallets_none')),
-                          SizedBox(height: 30)
-                        ]);
+                        return Expanded(
+                          child: Center(
+                            child: Text(AppLocalizations.instance
+                                .translate('wallets_none'),
+                            style: TextStyle(fontSize: 16,fontStyle: FontStyle.italic,color: Theme.of(context).backgroundColor),),
+                          ),
+                        );
                       }
                       return Expanded(
                         child: ListView.builder(

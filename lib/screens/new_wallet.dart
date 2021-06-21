@@ -76,73 +76,41 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var list = <Widget>[];
     final actualAvailableWallets = availableCoins.keys
         .where((element) => !activeCoins.contains(element))
         .toList();
 
-    return Dialog(
-      child: Container(
-        color: Theme.of(context).backgroundColor,
-        padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-        height: 300,
-          child: actualAvailableWallets.isEmpty
-              ? Center(
-                  child:
-                      Text(AppLocalizations.instance.translate('no_new_wallet')),
-                )
-              : Column(children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, actualAvailableWallets.isNotEmpty ? 20.0 : 0.0),
-              child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.headline6,
-                child: Text('Select a wallet'),
+    if (list.isNotEmpty) {
+      for(var wallet in actualAvailableWallets){
+        list.add(
+          SimpleDialogOption(
+            onPressed: () { _coin = wallet; addWallet(context); },
+            child: ListTile(
+                trailing: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Image.asset(
+                      AvailableCoins().getSpecificCoin(availableCoins[wallet]
+                          .name)
+                          .iconPath,
+                      width: 20),
+                ),
+                title: Text(
+                    availableCoins[wallet].displayName),
               ),
-            ),
-                Expanded(
-                    child: ListView.builder(
-                      itemCount: actualAvailableWallets.length,
-                      itemBuilder: (ctx, item) {
-                        return Card(
-                          child: ListTile(
-                            title: InkWell(
-                              onTap: () {
-                                _coin = actualAvailableWallets[item];
-                                addWallet(context);
-                              },
-                              child: ListTile(
-                                trailing: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Image.asset(
-                                      AvailableCoins()
-                                          .getSpecificCoin(availableCoins[
-                                                  actualAvailableWallets[item]]
-                                              .name)
-                                          .iconPath,
-                                      width: 20),
-                                ),
-                                title: Text(
-                                    availableCoins[actualAvailableWallets[item]]
-                                        .displayName),
-                                /*leading: Radio(
-                                  value: actualAvailableWallets[item],
-                                  groupValue: _coin,
-                                  onChanged: (value) {
-                                    setState(
-                                      () {
-                                        _coin = value;
-                                      },
-                                    );
-                                  },
-                                ),*/
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ]),
-        ),
+          )
+        );
+      }
+    }else{
+      list.add(Center(
+        child:
+        Text(AppLocalizations.instance.translate('no_new_wallet')),
+      ));
+    }
+
+    return SimpleDialog(
+      title: Text(AppLocalizations.instance.translate('add_new_wallet')),
+      children: list,
     );
   }
 }

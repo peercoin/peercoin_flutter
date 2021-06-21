@@ -97,6 +97,11 @@ class _TransactionListState extends State<TransactionList> {
             ),
           ],
         ),
+        _filteredTx==null || _filteredTx.isEmpty? Center(
+            child: Text('Empty list',
+              style: TextStyle(fontSize: 16,fontStyle: FontStyle.italic,color: Theme.of(context).backgroundColor),
+          )
+        ):
         GestureDetector(
           onHorizontalDragEnd: (dragEndDetails) {
             if (dragEndDetails.primaryVelocity < 0) {
