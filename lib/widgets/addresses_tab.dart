@@ -23,19 +23,19 @@ class AddressTab extends StatefulWidget {
 
 class _AddressTabState extends State<AddressTab> {
   bool _initial = true;
-  List<WalletAddress> _filteredAddr = [];
+  List<WalletAddress> _filteredSend = [];
+  List<WalletAddress> _filteredReceive = [];
   Coin _availableCoin;
-  bool _ourAddresses = true;
   final _formKey = GlobalKey<FormState>();
   final _searchKey = GlobalKey<FormFieldState>();
   final searchController = TextEditingController();
+  bool _search = false;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      applyFilter(ours: _ourAddresses);
+      applyFilter();
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
-
       setState(() {
         _initial = false;
       });
@@ -43,36 +43,35 @@ class _AddressTabState extends State<AddressTab> {
     super.didChangeDependencies();
   }
 
-  void clearFilter([String _]) {
-    applyFilter(ours: _ourAddresses);
-  }
+  void applyFilter([String searchedKey]) {
+    var _filteredListR = <WalletAddress>[];
+    var _filteredListS = <WalletAddress>[];
 
-  void applyFilter({bool ours, String searchedKey}) {
-    var _filteredList = <WalletAddress>[];
-
-    if (ours!=null) {
-      if (ours) {
-        widget._walletAddresses.forEach((e) {
-          if (e.isOurs == true || e.isOurs == null) _filteredList.add(e);
-        });
-        _ourAddresses = ours;
+    widget._walletAddresses.forEach((e) {
+      if (e.isOurs == true || e.isOurs == null) {
+        _filteredListR.add(e);
       } else {
-        widget._walletAddresses.forEach((e) {
-          if (e.isOurs == false) _filteredList.add(e);
-        });
-        _ourAddresses = ours;
+        _filteredListS.add(e);
       }
-    }
+    });
 
     if (searchedKey!=null) {
-      _filteredList = _filteredList.where((element) {
+      _filteredListR = _filteredListR.where((element) {
+        return element.address.contains(searchedKey) ||
+            element.addressBookName != null &&
+                element.addressBookName.contains(searchedKey);
+      }).toList();
+      _filteredListS = _filteredListS.where((element) {
         return element.address.contains(searchedKey) ||
             element.addressBookName != null &&
                 element.addressBookName.contains(searchedKey);
       }).toList();
     }
 
-    setState(() { _filteredAddr = _filteredList; });
+    setState(() {
+      _filteredReceive = _filteredListR;
+      _filteredSend = _filteredListS;
+    });
   }
 
   Future<void> _addressEditDialog(
@@ -212,150 +211,266 @@ class _AddressTabState extends State<AddressTab> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Column(
-      children: [
-        if (widget._walletAddresses.isNotEmpty)
-        Wrap(
-              spacing: 8.0,
-              children: <Widget>[
-                ChoiceChip(
-                  backgroundColor: Theme.of(context).unselectedWidgetColor,
-                  selectedColor: Theme.of(context).backgroundColor,
-                  visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-                  label: Container(
-                      child: Text('Send',
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                    ),
-                  )),
-                  selected: !_ourAddresses,
-                  onSelected: (_) => applyFilter(ours: false),
-                ),
-                ChoiceChip(
-                  backgroundColor: Theme.of(context).unselectedWidgetColor,
-                  selectedColor: Theme.of(context).backgroundColor,
-                  visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-                  label:
-                      Text('Your',
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                          )),
-                  selected: _ourAddresses,
-                  onSelected: (_) => applyFilter(ours: true),
-                ),
-              ],
-            ),
-        SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: _filteredAddr.length,
-            itemBuilder: (ctx, i) {
-              return Card(
-                child: ClipRect(
-                  child: Slidable(
-                    key: Key(_filteredAddr[i].address),
-                    actionPane: SlidableScrollActionPane(),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_edit'),
-                        color: Theme.of(context).primaryColor,
-                        icon: Icons.edit,
-                        onTap: () =>
-                            _addressEditDialog(context, _filteredAddr[i]),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_share'),
-                        color: Theme.of(context).accentColor,
-                        iconWidget: Icon(Icons.share, color: Colors.white),
-                        onTap: () => Share.share(_filteredAddr[i].address),
-                      ),
-                      if (!_ourAddresses)
-                        IconSlideAction(
-                          caption: AppLocalizations.instance
-                              .translate('addressbook_swipe_send'),
-                          color: Colors.white,
-                          iconWidget: Icon(Icons.send, color: Colors.grey),
-                          onTap: () =>
-                              widget.changeIndex(Tabs.send,_filteredAddr[i].address),
-                        ),
-                      if (!_ourAddresses)
-                        IconSlideAction(
-                            caption: AppLocalizations.instance
-                                .translate('addressbook_swipe_delete'),
-                            color: Colors.red,
-                            iconWidget: Icon(Icons.delete, color: Colors.white),
-                            onTap: () async {
-                              await showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text(AppLocalizations.instance.translate(
-                                      'addressbook_dialog_remove_title')),
-                                  content: Text(_filteredAddr[i].address),
-                                  actions: <Widget>[
-                                    TextButton.icon(
-                                        label: Text(AppLocalizations.instance
-                                            .translate(
-                                                'server_settings_alert_cancel')),
-                                        icon: Icon(Icons.cancel),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }),
-                                    TextButton.icon(
-                                      label: Text(AppLocalizations.instance
-                                          .translate('jail_dialog_button')),
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        context
-                                            .read<ActiveWallets>()
-                                            .removeAddress(
-                                                widget.name, _filteredAddr[i]);
-                                        //applyFilter();
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            AppLocalizations.instance.translate(
-                                                'addressbook_dialog_remove_snack'),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          duration: Duration(seconds: 5),
-                                        ));
-                                        Navigator.of(context).pop();
-                                      },
+    var listReceive = <Widget>[];
+    var listSend = <Widget>[];
+    for(var addr in _filteredSend){
+      listSend.add(
+          Card(
+            color: _search ? Theme.of(context).backgroundColor:Theme.of(context).shadowColor,
+            child: ClipRect(
+              child: Slidable(
+                key: Key(addr.address),
+                actionPane: SlidableScrollActionPane(),
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_edit'),
+                    color: Theme.of(context).primaryColor,
+                    icon: Icons.edit,
+                    onTap: () =>
+                        _addressEditDialog(context, addr),
+                  ),
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_share'),
+                    color: Theme.of(context).accentColor,
+                    iconWidget: Icon(Icons.share, color: Colors.white),
+                    onTap: () => Share.share(addr.address),
+                  ),
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_send'),
+                    color: Colors.white,
+                    iconWidget: Icon(Icons.send, color: Colors.grey),
+                    onTap: () =>
+                        widget.changeIndex(Tabs.send,addr.address),
+                  ),
+                  IconSlideAction(
+                      caption: AppLocalizations.instance
+                          .translate('addressbook_swipe_delete'),
+                      color: Colors.red,
+                      iconWidget: Icon(Icons.delete, color: Colors.white),
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: Text(AppLocalizations.instance.translate(
+                                'addressbook_dialog_remove_title')),
+                            content: Text(addr.address),
+                            actions: <Widget>[
+                              TextButton.icon(
+                                  label: Text(AppLocalizations.instance
+                                      .translate(
+                                      'server_settings_alert_cancel')),
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              TextButton.icon(
+                                label: Text(AppLocalizations.instance
+                                    .translate('jail_dialog_button')),
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  context
+                                      .read<ActiveWallets>()
+                                      .removeAddress(
+                                      widget.name, addr);
+                                  //applyFilter();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      AppLocalizations.instance.translate(
+                                          'addressbook_dialog_remove_snack'),
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ],
-                                ),
-                              );
-                            })
-                    ],
-                    actionExtentRatio: 0.25,
-                    child: ListTile(
-                      subtitle: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Center(
-                          child: Text(_filteredAddr[i].address),
-                        ),
-                      ),
-                      title: Center(
-                        child: Text(
-                          _filteredAddr[i].addressBookName ?? '-',
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w600,
+                                    duration: Duration(seconds: 5),
+                                  ));
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           ),
-                        ),
+                        );
+                      })
+                ],
+                actionExtentRatio: 0.25,
+                child: ListTile(
+                  subtitle: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Center(
+                      child: Text(addr.address),
+                    ),
+                  ),
+                  title: Center(
+                    child: Text(addr.addressBookName ?? '-',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
-              );
-            },
+              ),
+            ),
           ),
+      );
+    }
+    for(var addr in _filteredReceive){
+      listReceive.add(
+        Card(
+          color: _search ? Theme.of(context).backgroundColor:Theme.of(context).shadowColor,
+          child: ClipRect(
+            child: Slidable(
+              key: Key(addr.address),
+              actionPane: SlidableScrollActionPane(),
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  caption: AppLocalizations.instance
+                      .translate('addressbook_swipe_edit'),
+                  color: Theme.of(context).primaryColor,
+                  icon: Icons.edit,
+                  onTap: () =>
+                      _addressEditDialog(context, addr),
+                ),
+                IconSlideAction(
+                  caption: AppLocalizations.instance
+                      .translate('addressbook_swipe_share'),
+                  color: Theme.of(context).accentColor,
+                  iconWidget: Icon(Icons.share, color: Colors.white),
+                  onTap: () => Share.share(addr.address),
+                ),
+              ],
+              actionExtentRatio: 0.25,
+              child: ListTile(
+                subtitle: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Center(
+                    child: Text(addr.address),
+                  ),
+                ),
+                title: Center(
+                  child: Text(addr.addressBookName ?? '-',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: CustomScrollView(slivers: [
+            SliverAppBar(
+              floating: true,
+              //backgroundColor: Colors.amber,
+              title: Container(
+                margin: const EdgeInsets.only(top:8),
+                child: _search ? Form(
+                  key: _formKey,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextFormField(
+                      style: TextStyle(color: Theme.of(context).backgroundColor),
+                      cursorColor: Theme.of(context).backgroundColor,
+                      autofocus: true,
+                      key: _searchKey,
+                      textInputAction: TextInputAction.done,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        hintText: 'insert addresses or labels',
+                        hintStyle: TextStyle(color: Theme.of(context).shadowColor),
+                        suffixIcon: IconButton(
+                          icon: Center(child: Icon(Icons.clear)),
+                          iconSize: 24,
+                          color: Theme.of(context).shadowColor,
+                          onPressed: (){setState(() {
+                            _search = false;
+                            applyFilter();
+                          });},
+                        ),
+                      ),
+                      onChanged: applyFilter,
+                    ),
+                  ),
+                ) :Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).backgroundColor,
+                        onPrimary: Theme.of(context).backgroundColor,
+                        fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
+                        shape: RoundedRectangleBorder(
+                          //to set border radius to button
+                          borderRadius: BorderRadius.circular(30),
+                          side: BorderSide(
+                              width: 2, color: Theme.of(context).primaryColor),
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                              if (widget._walletAddresses.isNotEmpty) {
+                                setState(() {
+                                  _search = true;
+                                });
+                              }
+                            },
+                            child: Text(
+                        'Search',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.4,
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).backgroundColor,
+                        onPrimary: Theme.of(context).backgroundColor,
+                        fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
+                        shape: RoundedRectangleBorder(
+                          //to set border radius to button
+                          borderRadius: BorderRadius.circular(30),
+                          side: BorderSide(
+                              width: 2, color: Theme.of(context).primaryColor),
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: (){_addressAddDialog(context);},
+                      child: Text(
+                        'New address',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.4,
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverAppBar(
+              //backgroundColor: Colors.green,
+              title: Text(AppLocalizations.instance
+                  .translate('addressbook_bottom_bar_sending_addresses')),
+            ),
+            SliverList(delegate: SliverChildListDelegate(listSend),),
+            SliverAppBar(
+              //backgroundColor: Colors.green,
+              title: Text(AppLocalizations.instance
+                  .translate('addressbook_bottom_bar_your_addresses')),
+            ),
+            SliverList(delegate: SliverChildListDelegate(listReceive),),
+          ],)
         ),
       ],
     );

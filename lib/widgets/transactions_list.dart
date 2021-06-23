@@ -98,7 +98,8 @@ class _TransactionListState extends State<TransactionList> {
           ],
         ),
         _filteredTx==null || _filteredTx.isEmpty? Center(
-            child: Text('Empty list',
+            child: Text(AppLocalizations.instance
+                .translate('transactions_list'),
               style: TextStyle(fontSize: 16,fontStyle: FontStyle.italic,color: Theme.of(context).backgroundColor),
           )
         ):

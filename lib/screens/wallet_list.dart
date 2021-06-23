@@ -83,7 +83,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
             );
           },
         ),
-        title: Center(
+        /*title: Center(
             child: Text(
               AppLocalizations.instance.translate('wallets_list'),
               style: TextStyle(
@@ -91,7 +91,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                 //fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-            )),
+            )),*/
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -120,6 +120,21 @@ class _WalletListScreenState extends State<WalletListScreen> {
               padding: EdgeInsets.all(10),
               child: Column(
                 children: [
+                  Image.asset(
+                    'assets/icon/ppc-icon-white-256.png',
+                    height: MediaQuery.of(context).size.height/12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:16),
+                    child: Text(
+                      'Peercoin Wallet',
+                      style: TextStyle(
+                          letterSpacing: 1.4,
+                          fontSize: 24,
+                          color: Theme.of(context).backgroundColor),
+                    ),
+                  ),
+                  SizedBox(height: 32,),
                   FutureBuilder(
                     future: _activeWallets.activeWalletsValues,
                     builder: (_, snapshot) {

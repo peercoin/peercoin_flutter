@@ -294,7 +294,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  PeerServiceTitle(title: 'Obtain tPPC'),
+                  PeerServiceTitle(title: AppLocalizations.instance
+                      .translate('receive_obtain')),
                   SizedBox(height: 20),
                   Text(
                     AppLocalizations.instance
@@ -307,7 +308,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   ),
                   SizedBox(height: 20),
                   PeerButton(
-                    text: 'Open faucet',
+                    text: AppLocalizations.instance
+                        .translate('receive_faucet'),
                     action: () { _launchURL('https://peercoinexplorer.net/faucet/'); },
                   ),
                 ],
@@ -329,7 +331,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   ),
                   SizedBox(height: 20),
                   PeerButton(
-                    text: 'Open website',
+                    text: AppLocalizations.instance
+                        .translate('receive_website'),
                     action: () { _launchURL('https://ppc.lol/buy'); },
                   ),
                 ],

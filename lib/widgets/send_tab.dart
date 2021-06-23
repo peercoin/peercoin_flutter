@@ -428,7 +428,8 @@ class _SendTabState extends State<SendTab> {
                           return null;
                         }),
                     SizedBox(height: 30),
-                    PeerButtonBorder(text: 'QR-Code',
+                    PeerButtonBorder(text: AppLocalizations.instance.translate(
+                      'send_qr',),
                       action: () async {
                         final result = await Navigator.of(context).pushNamed(
                             Routes.QRScan,
@@ -463,7 +464,9 @@ class _SendTabState extends State<SendTab> {
                       },
                     ),
                     SizedBox(height: 10),
-                    Text('Hint: Scanning the QR-Code will save you some time',
+                    Text(AppLocalizations.instance.translate(
+                      'wallet_receive_send_hint',
+                    ),
                         style: TextStyle(
                           fontSize: 12,
                           color: Theme.of(context).accentColor,
