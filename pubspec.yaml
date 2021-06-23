@@ -92,6 +92,7 @@ flutter:
     - assets/icon/ppc-icon-48.png
     - assets/icon/ppc-icon-white-256.png
     - assets/icon/ppc-icon-white-48.png
+    - assets/icon/ppc-logo.png
     - assets/translations/en.json
     - assets/translations/nl.json
     - assets/translations/de.json

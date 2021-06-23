@@ -216,7 +216,7 @@ class _AddressTabState extends State<AddressTab> {
     for(var addr in _filteredSend){
       listSend.add(
           Card(
-            color: _search ? Theme.of(context).backgroundColor:Theme.of(context).shadowColor,
+            color: _search ? Theme.of(context).backgroundColor:const Color(0xFFD1EFD7),
             child: ClipRect(
               child: Slidable(
                 key: Key(addr.address),
@@ -318,7 +318,7 @@ class _AddressTabState extends State<AddressTab> {
     for(var addr in _filteredReceive){
       listReceive.add(
         Card(
-          color: _search ? Theme.of(context).backgroundColor:Theme.of(context).shadowColor,
+          color: _search ? Theme.of(context).backgroundColor:const Color(0xFFD1EFD7),
           child: ClipRect(
             child: Slidable(
               key: Key(addr.address),
@@ -385,11 +385,11 @@ class _AddressTabState extends State<AddressTab> {
                       autocorrect: false,
                       decoration: InputDecoration(
                         hintText: 'insert addresses or labels',
-                        hintStyle: TextStyle(color: Theme.of(context).shadowColor),
+                        hintStyle: TextStyle(color: const Color(0xFFD1EFD7)),
                         suffixIcon: IconButton(
                           icon: Center(child: Icon(Icons.clear)),
                           iconSize: 24,
-                          color: Theme.of(context).shadowColor,
+                          color: const Color(0xFFD1EFD7),
                           onPressed: (){setState(() {
                             _search = false;
                             applyFilter();

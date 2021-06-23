@@ -10,6 +10,7 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
@@ -83,15 +84,6 @@ class _WalletListScreenState extends State<WalletListScreen> {
             );
           },
         ),
-        /*title: Center(
-            child: Text(
-              AppLocalizations.instance.translate('wallets_list'),
-              style: TextStyle(
-                //fontSize: 26,
-                //fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            )),*/
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -120,10 +112,24 @@ class _WalletListScreenState extends State<WalletListScreen> {
               padding: EdgeInsets.all(10),
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/icon/ppc-icon-white-256.png',
-                    height: MediaQuery.of(context).size.height/12,
+                  Container(
+                      height: 80.0,
+                      width: 80.0,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).shadowColor,
+                        borderRadius: BorderRadius.all(const Radius.circular(50.0)),
+                        border: Border.all(color: Theme.of(context).backgroundColor,width: 2),
+                      ),
+                    child: GestureDetector(
+                      onTap: () => Share.share(
+                          'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
+                      child: Image.asset(
+                        'assets/icon/ppc-logo.png',
+                        height: MediaQuery.of(context).size.height / 12,
+                      ),
+                    ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(top:16),
                     child: Text(
@@ -231,3 +237,21 @@ class _WalletListScreenState extends State<WalletListScreen> {
     );
   }
 }
+
+
+/*
+*
+              ExpansionTile(
+                title: Text(AppLocalizations.instance.translate('share_app'),
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: [
+                  ElevatedButton(
+                    onPressed: () => Share.share(
+                        'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
+                    child: Text(
+                      AppLocalizations.instance.translate('receive_share'),
+                    ),
+                  )
+                ],
+              ),*/
