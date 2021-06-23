@@ -155,37 +155,6 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     PeerServiceTitle(title: AppLocalizations.instance.translate('wallet_bottom_nav_receive')),
-                    /*InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SimpleDialog(children: [
-                              Center(
-                                child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.33,
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  child: Center(
-                                    child: QrImage(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.black,
-                                      data: _qrString,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ]);
-                          },
-                        );
-                      },
-                      child: QrImage(
-                        data: _qrString,
-                        size: MediaQuery.of(context).size.width * 0.2,
-                        padding: EdgeInsets.all(1),
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                      ),
-                    ),*/
                     SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(

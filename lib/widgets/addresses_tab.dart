@@ -369,37 +369,35 @@ class _AddressTabState extends State<AddressTab> {
           child: CustomScrollView(slivers: [
             SliverAppBar(
               floating: true,
-              //backgroundColor: Colors.amber,
+              backgroundColor: _search ? Theme.of(context).backgroundColor:Theme.of(context).primaryColor,
               title: Container(
                 margin: const EdgeInsets.only(top:8),
                 child: _search ? Form(
                   key: _formKey,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.only(left:16),
                     child: TextFormField(
-                      style: TextStyle(color: Theme.of(context).backgroundColor),
-                      cursorColor: Theme.of(context).backgroundColor,
                       autofocus: true,
                       key: _searchKey,
                       textInputAction: TextInputAction.done,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        hintText: 'insert addresses or labels',
-                        hintStyle: TextStyle(color: const Color(0xFFD1EFD7)),
+                        border: InputBorder.none,
+                        hintText: AppLocalizations.instance
+                            .translate('addressbook_search'),
                         suffixIcon: IconButton(
                           icon: Center(child: Icon(Icons.clear)),
                           iconSize: 24,
-                          color: const Color(0xFFD1EFD7),
-                          onPressed: (){setState(() {
+                          onPressed: (){
                             _search = false;
-                            applyFilter();
-                          });},
+                            applyFilter();},
                         ),
                       ),
                       onChanged: applyFilter,
                     ),
                   ),
-                ) :Row(
+                ) :
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
@@ -476,45 +474,3 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
 }
-
-/*
-final InputBorder formBorders = OutlineInputBorder(
-      //borderRadius: const BorderRadius.all(Radius.circular(36)),
-      borderSide: const BorderSide(
-        width: 2,
-        color: Colors.transparent,
-      ),
-    );
-
-* Container(
-          margin: const EdgeInsets.all(8),
-          child: Form(
-            key: _formKey,
-            child: TextFormField(
-              key: _searchKey,
-              onChanged: (String text){applyFilter(searchedKey: text);},
-              controller: searchController,
-              style: TextStyle(color: Colors.white,),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                hintStyle: TextStyle(color: Colors.white,),
-                hintText: 'Address',
-                //floatingLabelBehavior: FloatingLabelBehavior.never,
-                suffixIcon: IconButton(
-                  icon: Center(child: Icon(CupertinoIcons.xmark_circle_fill)),
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: (){setState(() { searchController.clear(); });},
-                ),
-                filled: true,
-                border: formBorders,
-                disabledBorder: formBorders,
-                errorBorder: formBorders,
-                enabledBorder: formBorders,
-                focusedBorder: formBorders,
-                focusedErrorBorder: formBorders,
-              ),
-            ),
-
-          ),
-        ),*/

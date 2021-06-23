@@ -237,21 +237,3 @@ class _WalletListScreenState extends State<WalletListScreen> {
     );
   }
 }
-
-
-/*
-*
-              ExpansionTile(
-                title: Text(AppLocalizations.instance.translate('share_app'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: [
-                  ElevatedButton(
-                    onPressed: () => Share.share(
-                        'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
-                    child: Text(
-                      AppLocalizations.instance.translate('receive_share'),
-                    ),
-                  )
-                ],
-              ),*/

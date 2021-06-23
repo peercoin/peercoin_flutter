@@ -370,35 +370,6 @@ class PeerButtonBorder extends StatelessWidget {
   }
 }
 
-class PeerButtonNoBorder extends StatelessWidget {
-  final Function action;
-  final String text;
-  PeerButtonNoBorder({this.text, this.action});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).backgroundColor,
-        onPrimary: Theme.of(context).backgroundColor,
-        fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
-        /*shape: RoundedRectangleBorder( //to set border radius to button
-          borderRadius: BorderRadius.circular(30),
-          side: BorderSide(width:0, color:Theme.of(context).primaryColor),
-        ),*/
-        elevation: 0,
-      ),
-      onPressed: action,
-      child: Text(
-        text,
-        style: TextStyle(
-            letterSpacing: 1.4,
-            fontSize: 16,
-            color: Theme.of(context).primaryColor),
-      ),
-    );
-  }
-}
 
 class PeerServiceTitle extends StatelessWidget {
   final String title;
