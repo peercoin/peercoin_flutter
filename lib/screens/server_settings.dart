@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
@@ -16,12 +17,12 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   String _walletName = '';
   List<Server> _servers = [];
   final Map _indexCache = {};
-  Servers _serversProvider;
+  late Servers _serversProvider;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _walletName = ModalRoute.of(context).settings.arguments;
+      _walletName = ModalRoute.of(context)!.settings.arguments as String;
       _serversProvider = Provider.of<Servers>(context);
       await loadServers();
       setState(() {
@@ -39,7 +40,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     });
   }
 
-  Future<void> savePriorities(String serverUrl, int newIndex) async {
+  Future<void> savePriorities(String? serverUrl, int newIndex) async {
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
       _servers[newIndex].setPriority = newIndex;
@@ -194,9 +195,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                 !_servers[index].connectable;
                           });
                           //check if still one connectable server is left
-                          if (_servers.firstWhere(
-                                  (element) => element.connectable == true,
-                                  orElse: () => null) ==
+                          if (_servers.firstWhereOrNull(
+                                  (element) => element.connectable == true) ==
                               null) {
                             //show snack bar
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

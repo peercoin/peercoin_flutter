@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
@@ -17,22 +18,22 @@ class ElectrumConnection with ChangeNotifier {
     'peercoinTestnet': 1.4
   };
 
-  Timer _pingTimer;
-  Timer _reconnectTimer;
-  IOWebSocketChannel _connection;
+  Timer? _pingTimer;
+  Timer? _reconnectTimer;
+  IOWebSocketChannel? _connection;
   final ActiveWallets _activeWallets;
-  ElectrumConnectionState _connectionState;
+  ElectrumConnectionState _connectionState = ElectrumConnectionState.waiting;
   final Servers _servers;
   Map _addresses = {};
-  Map<String, List> _paperWalletUtxos = {};
-  String _coinName;
-  int _latestBlock;
-  String _serverUrl;
+  Map<String, List?> _paperWalletUtxos = {};
+  late String _coinName;
+  int? _latestBlock;
+  late String _serverUrl;
   bool _closedIntentionally = false;
   bool _scanMode = false;
   int _connectionAttempt = 0;
-  List _availableServers;
-  StreamSubscription _offlineSubscription;
+  late List _availableServers;
+  late StreamSubscription _offlineSubscription;
   int _depthPointer = 1;
   int _maxChainDepth = 5;
   int _maxAddressDepth = 0; //no address depth scan for now
@@ -75,7 +76,7 @@ class ElectrumConnection with ChangeNotifier {
       print('init server connection');
       await _servers.init(walletName);
       await connect();
-      var stream = _connection.stream;
+      var stream = _connection!.stream;
 
       if (requestedFromWalletHome == true) {
         _closedIntentionally = false;
@@ -130,7 +131,7 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   int get latestBlock {
-    return _latestBlock;
+    return _latestBlock ?? 0;
   }
 
   set latestBlock(int newLatest) {
@@ -142,19 +143,19 @@ class ElectrumConnection with ChangeNotifier {
     return _addresses;
   }
 
-  Map<String, List> get paperWalletUtxos {
+  Map<String, List?> get paperWalletUtxos {
     return _paperWalletUtxos;
   }
 
   Future<void> closeConnection([bool _intentional = true]) async {
-    if (_connection != null && _connection.sink != null) {
+    if (_connection != null) {
       _closedIntentionally = _intentional;
-      await _connection.sink.close();
+      await _connection!.sink.close();
     }
     if (_intentional) {
       _closedIntentionally = true;
       _connectionAttempt = 0;
-      if (_reconnectTimer != null) _reconnectTimer.cancel();
+      if (_reconnectTimer != null) _reconnectTimer!.cancel();
     }
   }
 
@@ -163,7 +164,7 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void cleanUpOnDone() {
-    _pingTimer.cancel();
+    _pingTimer!.cancel();
     _pingTimer = null;
     connectionState = ElectrumConnectionState.waiting; //setter!
     _connection = null;
@@ -229,9 +230,9 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  void sendMessage(String method, String id, [List params]) {
+  void sendMessage(String method, String? id, [List? params]) {
     if (_connection != null) {
-      _connection.sink.add(
+      _connection!.sink.add(
         json.encode(
           {'id': id, 'method': method, if (params != null) 'params': params},
         ),
@@ -251,7 +252,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleVersion(List result) {
     var version = double.parse(result.elementAt(result.length - 1));
-    if (version < _requiredProtocol[_coinName]) {
+    if (version < _requiredProtocol[_coinName]!) {
       //protocol version too low!
       closeConnection(false);
     }
@@ -275,20 +276,20 @@ class ElectrumConnection with ChangeNotifier {
     latestBlock = height;
   }
 
-  void handleAddressStatus(String address, String newStatus) async {
+  void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
         await _activeWallets.getWalletAddressStatus(_coinName, address);
     if (newStatus != oldStatus) {
       //emulate scripthash subscribe push
       var hash = _addresses.entries
-          .firstWhere((element) => element.key == address, orElse: () => null);
+          .firstWhereOrNull((element) => element.key == address)!;
       print('status changed! $oldStatus, $newStatus');
       //handle the status update
       handleScriptHashSubscribeNotification(hash.value, newStatus);
     }
     if (_scanMode == true) {
       if (newStatus == null) {
-        subscribeNextDerivatedAddress();
+        subscribeNextDerivedAddress();
       } else {
         //increase depth because we found one != null
         if (_depthPointer == 1) {
@@ -302,23 +303,23 @@ class ElectrumConnection with ChangeNotifier {
         //saving to wallet
         _activeWallets.addAddressFromScan(_coinName, address);
         //try next
-        subscribeNextDerivatedAddress();
+        subscribeNextDerivedAddress();
       }
     }
   }
 
-  void subscribeNextDerivatedAddress() async {
+  void subscribeNextDerivedAddress() async {
     var currentPointer = _queryDepth.keys.toList()[_depthPointer];
 
-    if (_depthPointer == 1 && _queryDepth[currentPointer] < _maxChainDepth ||
-        _depthPointer == 2 && _queryDepth[currentPointer] < _maxAddressDepth) {
+    if (_depthPointer == 1 && _queryDepth[currentPointer]! < _maxChainDepth ||
+        _depthPointer == 2 && _queryDepth[currentPointer]! < _maxAddressDepth) {
       print(_queryDepth);
 
       var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
         _coinName,
-        _queryDepth['account'],
-        _queryDepth['chain'],
-        _queryDepth['address'],
+        _queryDepth['account']!,
+        _queryDepth['chain']!,
+        _queryDepth['address']!,
       );
 
       print(_nextAddr);
@@ -326,12 +327,14 @@ class ElectrumConnection with ChangeNotifier {
       subscribeToScriptHashes(
         await _activeWallets.getWalletScriptHashes(_coinName, _nextAddr),
       );
-      _queryDepth[currentPointer]++;
+
+      var _number = _queryDepth[currentPointer] as int;
+      _queryDepth[currentPointer] = _number + 1;
     } else if (_depthPointer < _queryDepth.keys.length - 1) {
       print('move pointer');
       _queryDepth[currentPointer] = 0;
       _depthPointer++;
-      subscribeNextDerivatedAddress();
+      subscribeNextDerivedAddress();
     }
   }
 
@@ -352,7 +355,7 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void handleScriptHashSubscribeNotification(
-      String hashId, String newStatus) async {
+      String? hashId, String? newStatus) async {
     //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
@@ -376,7 +379,7 @@ class ElectrumConnection with ChangeNotifier {
     );
   }
 
-  void handlePaperWallet(String id, List utxos) {
+  void handlePaperWallet(String id, List? utxos) {
     final txAddr = id.replaceFirst('paperwallet_', '');
     _paperWalletUtxos[txAddr] = utxos;
     notifyListeners();
@@ -424,7 +427,7 @@ class ElectrumConnection with ChangeNotifier {
     );
   }
 
-  void handleTx(String id, Map tx) async {
+  void handleTx(String id, Map? tx) async {
     var txId = id.replaceFirst('tx_', '');
     var addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {

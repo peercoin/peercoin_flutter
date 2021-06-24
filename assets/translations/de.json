@@ -52,7 +52,7 @@
     "authenticate_retry_warning_title": "Warnung, nur noch ein Versuch übrig.",
     "authenticate_subtitle_plural": "$retriesLeft Versuche insgesamt",
     "authenticate_subtitle_singular": "$retriesLeft Versuch insgesamt",
-    "authenticate_title": "Bitte PIN eingeben\n",
+    "authenticate_title": "Bitte PIN eingeben",
     "authenticate_title_new": "Bitte neue PIN eingeben",
     "continue": "Fortsetzen",
     "create_wallet_existing_seed": "Importiere bestehenden Seed",
@@ -90,7 +90,7 @@
     "send": "Senden",
     "send_address": "Adresse",
     "send_amount": "Betrag",
-    "send_amount_below_minimum": "$amount ist der Mindestbetrag.\nDu hast nicht genug Guthaben um die Gebühren zu bezahlen.",
+    "send_amount_below_minimum": "Der Mindestbetrag beträgt $amount.\nBitte wähle einen Betrag, welcher größer oder gleich ist.",
     "send_amount_exceeds": "Betrag übersteigt Guthaben",
     "send_amount_small": "Betrag zu gering",
     "send_confirm_send": "Bestätigen & Senden",
@@ -178,5 +178,6 @@
     "app_settings_theme_system": "System Voreinstellung",
     "buy_peercoin_dialog_title": "Du wirst jetzt auf die Website eines Drittanbieters weitergeleitet.",
     "buy_peercoin_dialog_content": "Die Autoren dieser App sind nicht für ihren Inhalt verantwortlich.",
-    "buy_peercoin": "Peercoin Kaufen"
+    "buy_peercoin": "Peercoin Kaufen",
+    "send_amount_below_minimum_unable": "Der Mindestbetrag beträgt $amount.\nDu hast nicht genug Guthaben um die Gebühren zu bezahlen."
 }

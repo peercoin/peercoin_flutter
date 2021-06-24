@@ -19,7 +19,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
   bool _initial = true;
   String _seed = '';
   double _currentSliderValue = 12;
-  ActiveWallets _activeWallets;
+  late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
     await Share.share(seed);
@@ -146,6 +146,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       padding: EdgeInsets.all(10),
                       child: _sharedYet
                           ? ElevatedButton(
+                              key: Key('continue'),
                               onPressed: () async {
                                 var prefs =
                                     await Provider.of<UnencryptedOptions>(

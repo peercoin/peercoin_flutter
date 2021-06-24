@@ -25,13 +25,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
   bool _initial = true;
   bool _rescanInProgress = false;
   String _unusedAddress = '';
-  CoinWallet _wallet;
+  late CoinWallet _wallet;
   int _pageIndex = 1;
-  ElectrumConnectionState _connectionState;
-  ElectrumConnection _connectionProvider;
-  ActiveWallets _activeWallets;
-  Iterable _listenedAddresses;
-  List<WalletTransaction> _walletTransactions;
+  late ElectrumConnectionState _connectionState =
+      ElectrumConnectionState.waiting;
+  ElectrumConnection? _connectionProvider;
+  late ActiveWallets _activeWallets;
+  late Iterable _listenedAddresses;
+  late List<WalletTransaction> _walletTransactions = [];
   int _latestBlock = 0;
 
   void changeIndex(int i) {
@@ -42,21 +43,21 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      await _connectionProvider.init(_wallet.name,
-          requestedFromWalletHome: true);
+      await _connectionProvider!
+          .init(_wallet.name, requestedFromWalletHome: true);
     }
   }
 
@@ -67,50 +68,48 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
-      await _connectionProvider.init(_wallet.name,
-          requestedFromWalletHome: true);
+      await _connectionProvider!
+          .init(_wallet.name, requestedFromWalletHome: true);
 
       var _appSettings = Provider.of<AppSettings>(context, listen: false);
-      if (_appSettings.authenticationOptions['walletHome']) {
+      if (_appSettings.authenticationOptions!['walletHome']!) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       }
     } else if (_connectionProvider != null) {
-      _connectionState = _connectionProvider.connectionState;
+      _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
 
-      _listenedAddresses = _connectionProvider.listenedAddresses.keys;
+      _listenedAddresses = _connectionProvider!.listenedAddresses.keys;
       if (_connectionState == ElectrumConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
-          _connectionProvider.subscribeToScriptHashes(
+          _connectionProvider!.subscribeToScriptHashes(
               await _activeWallets.getWalletScriptHashes(_wallet.name));
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
-          _connectionProvider.subscribeToScriptHashes(await _activeWallets
+          _connectionProvider!.subscribeToScriptHashes(await _activeWallets
               .getWalletScriptHashes(_wallet.name, _unusedAddress));
         }
       }
-      if (_connectionProvider.latestBlock != null) {
-        if (_connectionProvider.latestBlock > _latestBlock) {
-          //new block
-          print('new block ${_connectionProvider.latestBlock}');
-          _latestBlock = _connectionProvider.latestBlock;
+      if (_connectionProvider!.latestBlock > _latestBlock) {
+        //new block
+        print('new block ${_connectionProvider!.latestBlock}');
+        _latestBlock = _connectionProvider!.latestBlock;
 
-          var unconfirmedTx = _walletTransactions.where((element) =>
-              element.confirmations < 6 && element.timestamp != -1);
-          unconfirmedTx.forEach((element) {
-            print('requesting update for ${element.txid}');
-            _connectionProvider.requestTxUpdate(element.txid);
-          });
-        }
+        var unconfirmedTx = _walletTransactions.where(
+            (element) => element.confirmations < 6 && element.timestamp != -1);
+        unconfirmedTx.forEach((element) {
+          print('requesting update for ${element.txid}');
+          _connectionProvider!.requestTxUpdate(element.txid);
+        });
       }
     }
 
@@ -121,7 +120,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     var nonBroadcastedTx =
         _walletTransactions.where((element) => element.broadCasted == false);
     nonBroadcastedTx.forEach((element) {
-      _connectionProvider.broadcastTransaction(
+      _connectionProvider!.broadcastTransaction(
         element.broadcastHex,
         element.txid,
       );
@@ -130,7 +129,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void deactivate() async {
-    if (_rescanInProgress == false) await _connectionProvider.closeConnection();
+    if (_rescanInProgress == false) {
+      await _connectionProvider!.closeConnection();
+    }
     super.deactivate();
   }
 
@@ -163,7 +164,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               icon: Icon(Icons.check),
               onPressed: () async {
                 //close connection
-                await _connectionProvider.closeConnection();
+                await _connectionProvider!.closeConnection();
                 _rescanInProgress = true;
                 //init rescan
                 await Navigator.of(context).pushNamedAndRemoveUntil(
@@ -231,7 +232,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             },
           ),
           PopupMenuButton(
-            onSelected: (value) => selectPopUpMenuItem(value),
+            onSelected: (dynamic value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
               return [
                 PopupMenuItem(

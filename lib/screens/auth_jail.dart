@@ -17,7 +17,7 @@ class AuthJailScreen extends StatefulWidget {
 }
 
 class _AuthJailState extends State<AuthJailScreen> {
-  Timer _timer;
+  late Timer _timer;
   int _lockCountdown = 0;
   bool _initial = true;
   bool _jailedFromRoute = false;
@@ -76,7 +76,7 @@ class _AuthJailState extends State<AuthJailScreen> {
       //check if jailedFromHome came again through route
       if (widget._jailedFromHome == false) {
         final jailedFromRoute =
-            ModalRoute.of(context).settings.arguments as bool;
+            ModalRoute.of(context)!.settings.arguments as bool?;
         if (jailedFromRoute == true) _jailedFromRoute = true;
       }
 

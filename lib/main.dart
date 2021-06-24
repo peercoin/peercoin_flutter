@@ -26,10 +26,10 @@ import './tools/app_localizations.dart';
 import './tools/app_routes.dart';
 import './tools/app_themes.dart';
 
-bool setupFinished;
-Widget _homeWidget;
-Locale _locale;
-ThemeMode _themeMode;
+late bool setupFinished;
+late Widget _homeWidget;
+late Locale _locale;
+late ThemeMode _themeMode;
 
 void main() async {
   //init sharedpreferences
@@ -78,7 +78,7 @@ void main() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
+      onSelectNotification: (String? payload) async {
     if (payload != null) {
       debugPrint('notification payload: $payload');
     }
@@ -141,6 +141,7 @@ class PeercoinApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Peercoin',
+        debugShowCheckedModeBanner: false,
         supportedLocales:
             AppLocalizations.availableLocales.keys.map((lang) => Locale(lang)),
         localizationsDelegates: [
@@ -157,5 +158,3 @@ class PeercoinApp extends StatelessWidget {
     );
   }
 }
-
-//TODO: null safety when bitcoin_flutter is null_safe as well (crypto^3.0.0)

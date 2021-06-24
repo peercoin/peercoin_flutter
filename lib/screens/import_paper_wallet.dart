@@ -24,19 +24,19 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   String _transactionHex = '';
   int _balanceInt = 0;
   int _requiredFee = 0;
-  Coin _activeCoin;
-  String _walletName;
+  late Coin _activeCoin;
+  late String _walletName;
   bool _initial = true;
   bool _balanceLoading = false;
-  ElectrumConnection _connectionProvider;
-  ActiveWallets _activeWallets;
-  Map<String, List> _paperWalletUtxos = {};
+  late ElectrumConnection _connectionProvider;
+  late ActiveWallets _activeWallets;
+  late Map<String, List?> _paperWalletUtxos = {};
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
       setState(() {
-        _walletName = ModalRoute.of(context).settings.arguments;
+        _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
         _connectionProvider = Provider.of<ElectrumConnection>(context);
         _activeWallets = Provider.of<ActiveWallets>(context);
@@ -90,7 +90,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
           : 'paperwallet_step_2_text'),
     );
     if (result != null) {
-      keyType == 'pub' ? validatePubKey(result) : validatePrivKey(result);
+      keyType == 'pub'
+          ? validatePubKey(result as String)
+          : validatePrivKey(result as String);
     }
   }
 
@@ -109,7 +111,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePrivKey(String privKey) {
     String _newKey;
-    Wallet _wallet;
+    late Wallet _wallet;
     var _error = false;
     try {
       _wallet = Wallet.fromWIF(privKey, _activeCoin.networkType);
@@ -138,8 +140,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void calculateBalance() {
     var _totalValue = 0;
-    _paperWalletUtxos[_pubKey].forEach((element) {
-      _totalValue += element['value'];
+    _paperWalletUtxos[_pubKey]!.forEach((element) {
+      _totalValue += element['value'] as int;
     });
     setState(() {
       _balanceLoading = false;
@@ -250,11 +252,11 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     //send everything minus fees to unusedaddr
     tx.addOutput(_activeWallets.getUnusedAddress, _balanceInt - fee);
     //add inputs
-    _paperWalletUtxos[_pubKey].forEach((utxo) {
+    _paperWalletUtxos[_pubKey]!.forEach((utxo) {
       tx.addInput(utxo['tx_hash'], utxo['tx_pos']);
     });
     //sign
-    _paperWalletUtxos[_pubKey].asMap().forEach((index, utxo) {
+    _paperWalletUtxos[_pubKey]!.asMap().forEach((index, utxo) {
       tx.sign(
         vin: index,
         keyPair: ECPair.fromWIF(_privKey, network: _activeCoin.networkType),

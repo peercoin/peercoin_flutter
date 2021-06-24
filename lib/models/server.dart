@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'server.g.dart';
 
 @HiveType(typeId: 6)
 class Server extends HiveObject {
   @HiveField(0)
-  String _label;
+  String? _label;
 
   @HiveField(1)
   String address;
@@ -17,13 +16,13 @@ class Server extends HiveObject {
   bool userGenerated;
 
   @HiveField(4)
-  String _donationAddress;
+  String? _donationAddress;
 
   @HiveField(5)
-  String _serverBanner;
+  String? _serverBanner;
 
   @HiveField(6)
-  DateTime _lastConnection;
+  DateTime? _lastConnection;
 
   @HiveField(7)
   // ignore: prefer_final_fields
@@ -33,9 +32,9 @@ class Server extends HiveObject {
   int priority;
 
   Server({
-    @required this.address,
-    @required this.priority,
-    @required this.userGenerated,
+    required this.address,
+    required this.priority,
+    required this.userGenerated,
   });
 
   String get getAddress {

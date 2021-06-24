@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/models/wallettransaction.dart';
@@ -78,9 +79,8 @@ class CoinWallet extends HiveObject {
   }
 
   set addNewAddress(WalletAddress newAddress) {
-    final res = _addresses.firstWhere(
-        (element) => element.address == newAddress.address,
-        orElse: () => null);
+    final res = _addresses
+        .firstWhereOrNull((element) => element.address == newAddress.address);
     if (res == null) {
       _addresses.add(newAddress);
       save();

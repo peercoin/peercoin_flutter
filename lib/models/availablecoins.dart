@@ -54,6 +54,6 @@ class AvailableCoins {
   }
 
   Coin getSpecificCoin(identifier) {
-    return _availableCoinList[identifier];
+    return _availableCoinList[identifier]!;
   }
 }

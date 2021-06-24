@@ -24,14 +24,14 @@ class _ReceiveTabState extends State<ReceiveTab> {
   final _formKey = GlobalKey<FormState>();
   final _amountKey = GlobalKey<FormFieldState>();
   final _labelKey = GlobalKey<FormFieldState>();
-  CoinWallet _wallet;
-  Coin _availableCoin;
-  String _qrString;
+  late CoinWallet _wallet;
+  late Coin _availableCoin;
+  String? _qrString;
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
-      _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       stringBuilder();
       setState(() {
@@ -107,7 +107,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                               child: QrImage(
                                 backgroundColor: Colors.white,
                                 foregroundColor: Colors.black,
-                                data: _qrString,
+                                data: _qrString!,
                               ),
                             ),
                           ),
@@ -117,7 +117,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   );
                 },
                 child: QrImage(
-                  data: _qrString,
+                  data: _qrString!,
                   size: MediaQuery.of(context).size.width * 0.3,
                   padding: EdgeInsets.all(1),
                   backgroundColor: Colors.white,
@@ -174,7 +174,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     suffix: Text(_wallet.letterCode),
                   ),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return AppLocalizations.instance
                           .translate('receive_enter_amount');
                     }

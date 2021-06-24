@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -8,25 +9,26 @@ import 'package:peercoin/models/coinwallet.dart';
 
 class EncryptedBox with ChangeNotifier {
   final Map<String, Box> _cryptoBox = {};
-  Uint8List _encryptionKey;
-  String _passCode;
+  Uint8List? _encryptionKey;
+  String? _passCode;
   int _failedAuths = 0;
   int _failedAuthAttempts = 0;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
-  Future<Uint8List> get key async {
+  Future<Uint8List?> get key async {
     if (_encryptionKey == null) {
       var containsEncryptionKey = await _secureStorage.containsKey(key: 'key');
       if (!containsEncryptionKey) {
         var key = Hive.generateSecureKey();
         await _secureStorage.write(key: 'key', value: base64UrlEncode(key));
       }
-      _encryptionKey = base64Url.decode(await _secureStorage.read(key: 'key'));
+      _encryptionKey =
+          base64Url.decode((await _secureStorage.read(key: 'key') as String));
     }
     return _encryptionKey;
   }
 
-  Future<String> get passCode async {
+  Future<String?> get passCode async {
     _passCode ??= await _secureStorage.read(key: 'passCode');
     return _passCode;
   }
@@ -52,7 +54,6 @@ class EncryptedBox with ChangeNotifier {
   Future<void> setFailedAuths(int newInt) async {
     await _secureStorage.write(key: 'failedAuths', value: newInt.toString());
     _failedAuths = newInt;
-    return true;
   }
 
   Future<int> get failedAuthAttempts async {
@@ -71,13 +72,12 @@ class EncryptedBox with ChangeNotifier {
     await _secureStorage.write(
         key: 'failedAuthAttempts', value: newInt.toString());
     _failedAuthAttempts = newInt;
-    return true;
   }
 
-  Future<Box> getGenericBox(String name) async {
+  Future<Box?> getGenericBox(String name) async {
     _cryptoBox[name] = await Hive.openBox(
       name,
-      encryptionCipher: HiveAesCipher(await key),
+      encryptionCipher: HiveAesCipher(await key as Uint8List),
     );
     return _cryptoBox[name];
   }
@@ -85,7 +85,7 @@ class EncryptedBox with ChangeNotifier {
   Future<Box> getWalletBox() async {
     return await Hive.openBox<CoinWallet>(
       'wallets',
-      encryptionCipher: HiveAesCipher(await key),
+      encryptionCipher: HiveAesCipher(await key as Uint8List),
     );
   }
 }

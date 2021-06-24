@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'walletutxo.g.dart';
 
@@ -16,11 +15,11 @@ class WalletUtxo extends HiveObject {
   final String address;
 
   WalletUtxo({
-    @required this.hash,
-    @required this.txPos,
-    @required this.height,
-    @required this.value,
-    @required this.address,
+    required this.hash,
+    required this.txPos,
+    required this.height,
+    required this.value,
+    required this.address,
   });
 
   set newValue(int newValue) {

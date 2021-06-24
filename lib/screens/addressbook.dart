@@ -1,4 +1,5 @@
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -8,8 +9,8 @@ import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
+import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 
 class AddressBookScreen extends StatefulWidget {
   @override
@@ -18,13 +19,13 @@ class AddressBookScreen extends StatefulWidget {
 
 class _AddressBookScreenState extends State<AddressBookScreen> {
   bool _initial = true;
-  String _walletName;
-  String _walletTitle;
-  List<WalletAddress> _walletAddresses = [];
+  late String _walletName;
+  late String _walletTitle;
+  List<WalletAddress>? _walletAddresses = [];
   List<WalletAddress> _filteredAddr = [];
   int _pageIndex = 0;
-  SearchBar searchBar;
-  Coin _availableCoin;
+  late SearchBar searchBar;
+  late Coin _availableCoin;
 
   _AddressBookScreenState() {
     searchBar = SearchBar(
@@ -70,7 +71,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      final _args = ModalRoute.of(context).settings.arguments as Map;
+      final _args = ModalRoute.of(context)!.settings.arguments as Map;
       _walletName = _args['name'];
       _walletTitle = _args['title'];
       _walletAddresses =
@@ -85,18 +86,18 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     super.didChangeDependencies();
   }
 
-  void clearFilter([String _]) {
+  void clearFilter([String? _]) {
     applyFilter();
   }
 
-  void applyFilter([String searchedKey]) {
+  void applyFilter([String? searchedKey]) {
     var _filteredList = <WalletAddress>[];
     if (_pageIndex == 0) {
-      _walletAddresses.forEach((e) {
+      _walletAddresses!.forEach((e) {
         if (e.isOurs == true || e.isOurs == null) _filteredList.add(e);
       });
     } else if (_pageIndex == 1) {
-      _walletAddresses.forEach((e) {
+      _walletAddresses!.forEach((e) {
         if (e.isOurs == false) _filteredList.add(e);
       });
     }
@@ -104,7 +105,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
     if (searchedKey != null) {
       _filteredList = _filteredList.where((element) {
         return element.address.contains(searchedKey) ||
-            element.addressBookName != null &&
+            element.addressBookName != '' &&
                 element.addressBookName.contains(searchedKey);
       }).toList();
     }
@@ -117,7 +118,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   Future<void> _addressEditDialog(
       BuildContext context, WalletAddress address) async {
     var _textFieldController = TextEditingController();
-    _textFieldController.text = address.addressBookName ?? '';
+    _textFieldController.text = address.addressBookName;
     return showDialog(
       context: context,
       builder: (context) {
@@ -184,7 +185,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         AppLocalizations.instance.translate('send_address'),
                   ),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return AppLocalizations.instance
                           .translate('send_enter_address');
                     }
@@ -196,9 +197,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                           .translate('send_invalid_address');
                     }
                     //check if already exists
-                    if (_walletAddresses.firstWhere(
-                            (elem) => elem.address == value,
-                            orElse: () => null) !=
+                    if (_walletAddresses!.firstWhereOrNull(
+                            (elem) => elem.address == value) !=
                         null) {
                       return 'Address already exists';
                     }
@@ -225,13 +225,13 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
             ),
             TextButton(
               onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
                   context.read<ActiveWallets>().updateLabel(
                         _walletName,
                         _addressController.text,
                         _labelController.text == ''
-                            ? null
+                            ? ''
                             : _labelController.text,
                       );
                   applyFilter();
@@ -305,7 +305,8 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                             .translate('addressbook_swipe_share'),
                         color: Theme.of(context).accentColor,
                         iconWidget: Icon(Icons.share, color: Colors.white),
-                        onTap: () => Share.share(_filteredAddr[i].address),
+                        onTap: () => WalletHomeQr.showQrDialog(
+                            context, _filteredAddr[i].address),
                       ),
                       if (_pageIndex == 1)
                         IconSlideAction(
@@ -376,7 +377,9 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                       ),
                       title: Center(
                         child: Text(
-                          _filteredAddr[i].addressBookName ?? '-',
+                          _filteredAddr[i].addressBookName == ''
+                              ? '-'
+                              : _filteredAddr[i].addressBookName,
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,

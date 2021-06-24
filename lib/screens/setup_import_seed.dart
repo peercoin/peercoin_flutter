@@ -82,9 +82,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       padding: EdgeInsets.all(20),
                       child: TextFormField(
                         textInputAction: TextInputAction.done,
+                        key: Key('importTextField'),
                         controller: _controller,
                         validator: (value) {
-                          if (value.split(' ').length < 12) {
+                          if (value!.split(' ').length < 12) {
                             return AppLocalizations.instance.translate(
                               'import_seed_error_1',
                             );
@@ -101,7 +102,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           suffixIcon: IconButton(
                             onPressed: () async {
                               var data = await Clipboard.getData('text/plain');
-                              _controller.text = data.text;
+                              if (data != null) {
+                                _controller.text = data.text!;
+                              }
                               FocusScope.of(context).unfocus(); //hide keyboard
                             },
                             icon: Icon(Icons.paste,
@@ -119,11 +122,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                     ? LoadingIndicator()
                     : ElevatedButton.icon(
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
                             createWallet(context);
                           }
                         },
+                        key: Key('importKey'),
                         icon: Icon(Icons.input),
                         label: Text(AppLocalizations.instance.translate(
                           'import_seed_button',

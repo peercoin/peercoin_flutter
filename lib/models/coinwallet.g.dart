@@ -21,9 +21,9 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       fields[6] as String,
       fields[1] as String,
     )
-      .._addresses = (fields[2] as List)?.cast<WalletAddress>()
-      .._transactions = (fields[3] as List)?.cast<WalletTransaction>()
-      .._utxos = (fields[4] as List)?.cast<WalletUtxo>()
+      .._addresses = (fields[2] as List).cast<WalletAddress>()
+      .._transactions = (fields[3] as List).cast<WalletTransaction>()
+      .._utxos = (fields[4] as List).cast<WalletUtxo>()
       .._balance = fields[5] as int
       .._unconfirmedBalance = fields[7] as int;
   }

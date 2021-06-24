@@ -1,25 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings with ChangeNotifier {
-  AppOptionsStore _appOptions;
+  late AppOptionsStore _appOptions;
   final EncryptedBox _encryptedBox;
-  SharedPreferences _sharedPrefs;
-  String _selectedLang;
-  String _selectedTheme;
+  late SharedPreferences _sharedPrefs;
+  String? _selectedLang;
+  late String _selectedTheme;
   AppSettings(this._encryptedBox);
 
-  Future<void> init() async {
-    var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
-    _appOptions = _optionsBox.get('appOptions');
+  Future<void> init([bool fromSetup = false]) async {
+    if (fromSetup == false) {
+      var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
+      _appOptions = _optionsBox!.get('appOptions');
+    }
     _sharedPrefs = await SharedPreferences.getInstance();
     _selectedTheme = _sharedPrefs.getString('theme_mode') ?? 'system';
   }
 
   Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
-    var _optionsBox = await _encryptedBox.getGenericBox('optionsBox');
+    var _optionsBox =
+        await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
     await _optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
     await _sharedPrefs.setString('language_code', lang);
   }
@@ -33,15 +39,15 @@ class AppSettings with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, bool> get authenticationOptions {
+  Map<String, bool>? get authenticationOptions {
     return _appOptions.authenticationOptions;
   }
 
-  String get selectedLang {
+  String? get selectedLang {
     return _selectedLang;
   }
 
-  String get selectedTheme {
+  String? get selectedTheme {
     return _selectedTheme;
   }
 
@@ -63,7 +69,7 @@ class AppSettings with ChangeNotifier {
   }
 
   String get defaultWallet {
-    return _appOptions.defaultWallet ?? '';
+    return _appOptions.defaultWallet;
   }
 
   void setDefaultWallet(String newWallet) {

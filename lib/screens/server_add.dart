@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/server.dart';
@@ -27,7 +28,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   @override
   void didChangeDependencies() {
     if (_initial) {
-      _walletName = ModalRoute.of(context).settings.arguments;
+      _walletName = ModalRoute.of(context)!.settings.arguments as String;
       setState(() {
         _initial = false;
       });
@@ -44,8 +45,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     });
 
     //check if server already exists
-    if (_currentServerList.firstWhere((element) => element.address == serverUrl,
-            orElse: () => null) !=
+    if (_currentServerList
+            .firstWhereOrNull((element) => element.address == serverUrl) !=
         null) {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -73,7 +74,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         print('connection error: $e');
       }
 
-      void sendMessage(String method, String id, [List params]) {
+      void sendMessage(String method, String id, [List? params]) {
         if (_connection != null) {
           _connection.sink.add(
             json.encode(
@@ -154,8 +155,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
               onPressed: () {
-                _formKey.currentState.save();
-                _formKey.currentState.validate();
+                _formKey.currentState!.save();
+                _formKey.currentState!.validate();
               },
               icon: Icon(Icons.save),
             ),
@@ -180,12 +181,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                           .translate('server_add_input_label'),
                     ),
                     maxLines: null,
-                    onFieldSubmitted: (_) => _formKey.currentState.validate(),
+                    onFieldSubmitted: (_) => _formKey.currentState!.validate(),
                     inputFormatters: [],
                     validator: (value) {
                       var portRegex = RegExp(':[0-9]');
 
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return AppLocalizations.instance
                             .translate('server_add_input_empty');
                       } else if (!value.contains('wss://')) {

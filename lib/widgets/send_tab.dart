@@ -33,18 +33,18 @@ class _SendTabState extends State<SendTab> {
   final amountController = TextEditingController();
   final labelController = TextEditingController();
   bool _initial = true;
-  CoinWallet _wallet;
-  Coin _availableCoin;
-  ActiveWallets _activeWallets;
+  late CoinWallet _wallet;
+  late Coin _availableCoin;
+  late ActiveWallets _activeWallets;
   int _txFee = 0;
   int _totalValue = 0;
-  WalletAddress _transferedAddress;
-  List<WalletAddress> _availableAddresses = [];
+  WalletAddress? _transferedAddress;
+  late List<WalletAddress> _availableAddresses = [];
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _wallet = ModalRoute.of(context).settings.arguments as CoinWallet;
+      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _availableAddresses =
@@ -59,8 +59,8 @@ class _SendTabState extends State<SendTab> {
   Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
     return await _activeWallets.buildTransaction(
       _wallet.name,
-      _addressKey.currentState.value.trim(),
-      _amountKey.currentState.value,
+      _addressKey.currentState!.value.trim(),
+      _amountKey.currentState!.value,
       fee,
       dryrun,
     );
@@ -99,23 +99,23 @@ class _SendTabState extends State<SendTab> {
     var _firstPress = true;
     _buildResult = await buildTx(true);
 
-    int _destroyedChange = _buildResult['destroyedChange'];
+    int? _destroyedChange = _buildResult['destroyedChange'];
     _txFee = _buildResult['fee'];
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          String _displayValue = _amountKey.currentState.value;
+          String? _displayValue = _amountKey.currentState!.value;
           _totalValue =
-              (double.parse(_amountKey.currentState.value) * 1000000).toInt();
+              (double.parse(_amountKey.currentState!.value) * 1000000).toInt();
           if (_totalValue == _wallet.balance) {
-            var newValue = double.parse(_amountKey.currentState.value) -
+            var newValue = double.parse(_amountKey.currentState!.value) -
                 (_txFee / 1000000);
             _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
           } else {
             _totalValue = _totalValue + _txFee;
           }
-          if (_destroyedChange > 0) {
-            var newValue = (double.parse(_amountKey.currentState.value) -
+          if (_destroyedChange! > 0) {
+            var newValue = (double.parse(_amountKey.currentState!.value) -
                 (_txFee / 1000000));
             _displayValue = newValue.toString();
             _totalValue = _totalValue - _txFee + _destroyedChange;
@@ -142,7 +142,7 @@ class _SendTabState extends State<SendTab> {
                               text: AppLocalizations.instance
                                   .translate('send_to')),
                           TextSpan(
-                              text: _addressKey.currentState.value,
+                              text: _addressKey.currentState!.value,
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -181,7 +181,7 @@ class _SendTabState extends State<SendTab> {
                           var _buildResult = await buildTx(false, _txFee);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
-                              _wallet.name, _addressKey.currentState.value, {
+                              _wallet.name, _addressKey.currentState!.value, {
                             'txid': _buildResult['id'],
                             'hex': _buildResult['hex'],
                             'outValue': _totalValue - _txFee,
@@ -193,11 +193,11 @@ class _SendTabState extends State<SendTab> {
                               .broadcastTransaction(
                                   _buildResult['hex'], _buildResult['id']);
                           //store label if exists
-                          if (_labelKey.currentState.value != '') {
+                          if (_labelKey.currentState!.value != '') {
                             _activeWallets.updateLabel(
                               _wallet.name,
-                              _addressKey.currentState.value,
-                              _labelKey.currentState.value,
+                              _addressKey.currentState!.value,
+                              _labelKey.currentState!.value,
                             );
                           }
                           //pop message
@@ -231,7 +231,6 @@ class _SendTabState extends State<SendTab> {
       if (element.isOurs == false && element.address.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
-          element.addressBookName != null &&
           element.addressBookName.contains(pattern)) {
         return true;
       }
@@ -243,9 +242,9 @@ class _SendTabState extends State<SendTab> {
   Widget build(BuildContext context) {
     _transferedAddress = _activeWallets.transferedAddress;
     if (_transferedAddress != null &&
-        _transferedAddress.address != addressController.text) {
-      addressController.text = _transferedAddress.address;
-      labelController.text = _transferedAddress.addressBookName ?? '';
+        _transferedAddress!.address != addressController.text) {
+      addressController.text = _transferedAddress!.address;
+      labelController.text = _transferedAddress!.addressBookName;
       _activeWallets.transferedAddress = null; //reset transfer
     }
 
@@ -268,7 +267,9 @@ class _SendTabState extends State<SendTab> {
                   suffixIcon: IconButton(
                     onPressed: () async {
                       var data = await Clipboard.getData('text/plain');
-                      addressController.text = data.text;
+                      if (data != null) {
+                        addressController.text = data.text!;
+                      }
                     },
                     icon: Icon(Icons.paste,
                         color: Theme.of(context).primaryColor),
@@ -278,7 +279,7 @@ class _SendTabState extends State<SendTab> {
               suggestionsCallback: (pattern) {
                 return getSuggestions(pattern);
               },
-              itemBuilder: (context, suggestion) {
+              itemBuilder: (context, dynamic suggestion) {
                 return ListTile(
                   title: Text(suggestion.addressBookName ?? ''),
                   subtitle: Text(suggestion.address),
@@ -287,12 +288,12 @@ class _SendTabState extends State<SendTab> {
               transitionBuilder: (context, suggestionsBox, controller) {
                 return suggestionsBox;
               },
-              onSuggestionSelected: (suggestion) {
+              onSuggestionSelected: (dynamic suggestion) {
                 addressController.text = suggestion.address;
                 labelController.text = suggestion.addressBookName;
               },
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return AppLocalizations.instance
                       .translate('send_enter_address');
                 }
@@ -333,7 +334,7 @@ class _SendTabState extends State<SendTab> {
                   suffix: Text(_wallet.letterCode),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return AppLocalizations.instance
                         .translate('send_enter_amount');
                   }
@@ -374,13 +375,14 @@ class _SendTabState extends State<SendTab> {
                   primary: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
                     FocusScope.of(context).unfocus(); //hide keyboard
                     //check for required auth
                     var _appSettings =
                         Provider.of<AppSettings>(context, listen: false);
-                    if (_appSettings.authenticationOptions['sendTransaction']) {
+                    if (_appSettings
+                        .authenticationOptions!['sendTransaction']!) {
                       await Auth.requireAuth(
                           context,
                           _appSettings.biometricsAllowed,
@@ -389,10 +391,15 @@ class _SendTabState extends State<SendTab> {
                       showTransactionConfirmation(context);
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(AppLocalizations.instance.translate(
-                      'send_errors_solve',
-                    ))));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.instance.translate(
+                            'send_errors_solve',
+                          ),
+                        ),
+                      ),
+                    );
                   }
                 },
                 icon: Icon(Icons.send),
@@ -409,7 +416,7 @@ class _SendTabState extends State<SendTab> {
                         Routes.QRScan,
                         arguments:
                             AppLocalizations.instance.translate('scan_qr'));
-                    if (result != null) parseQrResult(result);
+                    if (result != null) parseQrResult(result as String);
                   }),
             ]),
           ],

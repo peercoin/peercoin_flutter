@@ -21,11 +21,11 @@ class ServerAdapter extends TypeAdapter<Server> {
       priority: fields[8] as int,
       userGenerated: fields[3] as bool,
     )
-      .._label = fields[0] as String
+      .._label = fields[0] as String?
       ..connectable = fields[2] as bool
-      .._donationAddress = fields[4] as String
-      .._serverBanner = fields[5] as String
-      .._lastConnection = fields[6] as DateTime
+      .._donationAddress = fields[4] as String?
+      .._serverBanner = fields[5] as String?
+      .._lastConnection = fields[6] as DateTime?
       .._hidden = fields[7] as bool;
   }
 

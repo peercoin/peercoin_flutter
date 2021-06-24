@@ -1,5 +1,4 @@
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
-import 'package:flutter/material.dart';
 
 class Coin {
   final String name;
@@ -16,17 +15,17 @@ class Coin {
   final String genesisHash;
 
   Coin({
-    @required this.name,
-    @required this.displayName,
-    @required this.letterCode,
-    @required this.iconPath,
-    @required this.iconPathTransparent,
-    @required this.uriCode,
-    @required this.networkType,
-    @required this.fractions,
-    @required this.minimumTxValue,
-    @required this.feePerKb,
-    @required this.explorerTxDetailUrl,
-    @required this.genesisHash,
+    required this.name,
+    required this.displayName,
+    required this.letterCode,
+    required this.iconPath,
+    required this.iconPathTransparent,
+    required this.uriCode,
+    required this.networkType,
+    required this.fractions,
+    required this.minimumTxValue,
+    required this.feePerKb,
+    required this.explorerTxDetailUrl,
+    required this.genesisHash,
   });
 }

@@ -5,18 +5,18 @@ import 'package:peercoin/widgets/send_tab.dart';
 import 'package:peercoin/widgets/transactions_list.dart';
 
 class WalletContentSwitch extends StatelessWidget {
-  final int pageIndex;
-  final List<WalletTransaction> walletTransactions;
-  final String unusedAddress;
-  final String identifier;
-  final Function changeIndex;
+  late final int pageIndex;
+  final List<WalletTransaction>? walletTransactions;
+  late final String unusedAddress;
+  late final String identifier;
+  late final Function changeIndex;
 
   WalletContentSwitch({
-    this.pageIndex,
-    this.walletTransactions,
-    this.unusedAddress,
-    this.changeIndex,
-    this.identifier,
+    required this.pageIndex,
+    required this.walletTransactions,
+    required this.unusedAddress,
+    required this.changeIndex,
+    required this.identifier,
   });
 
   @override

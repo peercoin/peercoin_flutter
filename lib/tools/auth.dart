@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
@@ -14,7 +16,7 @@ class Auth {
   static int failedAuthAttempts = 0;
 
   static Future<void> executeCallback(
-      BuildContext context, Function callback) async {
+      BuildContext context, Function? callback) async {
     //reset unsuccesful login and attempt counter
     await Provider.of<EncryptedBox>(context, listen: false).setFailedAuths(0);
     await Provider.of<EncryptedBox>(context, listen: false)
@@ -93,7 +95,7 @@ class Auth {
   }
 
   static Future<void> localAuth(BuildContext context,
-      [Function callback]) async {
+      [Function? callback]) async {
     final localAuth = LocalAuthentication();
     final authStrings = AndroidAuthMessages(
       signInTitle:
@@ -117,7 +119,7 @@ class Auth {
   }
 
   static Future<void> requireAuth(BuildContext context, bool biometricsAllowed,
-      [Function callback,
+      [Function? callback,
       bool canCancel = true,
       bool jailedFromHome = false]) async {
     failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
@@ -126,8 +128,8 @@ class Auth {
 
     await screenLock(
       context: context,
-      correctString:
-          await Provider.of<EncryptedBox>(context, listen: false).passCode,
+      correctString: await Provider.of<EncryptedBox>(context, listen: false)
+          .passCode as String,
       digits: 6,
       maxRetries: retriesLeft,
       canCancel: canCancel,
@@ -140,12 +142,13 @@ class Auth {
               ),
               children: [
                 TextSpan(
-                  text: AppLocalizations.instance.translate(
-                    retriesLeft == 1
-                        ? 'authenticate_subtitle_singular'
-                        : 'authenticate_subtitle_plural',
-                    {'retriesLeft': retriesLeft.toString()},
-                  ),
+                  text: '\n' +
+                      AppLocalizations.instance.translate(
+                        retriesLeft == 1
+                            ? 'authenticate_subtitle_singular'
+                            : 'authenticate_subtitle_plural',
+                        {'retriesLeft': retriesLeft.toString()},
+                      ),
                   style: TextStyle(fontSize: 14),
                 )
               ])),

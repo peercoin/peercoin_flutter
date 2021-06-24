@@ -17,7 +17,7 @@ class TransactionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as List;
+    final args = ModalRoute.of(context)!.settings.arguments as List;
     final WalletTransaction _tx = args[0];
     final CoinWallet _coinWallet = args[1];
     final baseUrl =
@@ -45,7 +45,7 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('time'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.timestamp != null
+              SelectableText(_tx.timestamp != 0
                   ? DateFormat().format(
                       DateTime.fromMillisecondsSinceEpoch(_tx.timestamp * 1000))
                   : AppLocalizations.instance.translate('unconfirmed'))

@@ -49,7 +49,7 @@ class MyTheme {
   };
 
   static ThemeData getTheme(ThemeMode mode) {
-    return appThemes[mode];
+    return appThemes[mode] ?? appThemes[ThemeMode.light]!;
   }
 }
 

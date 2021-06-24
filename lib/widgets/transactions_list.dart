@@ -85,14 +85,14 @@ class _TransactionListState extends State<TransactionList> {
               )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {
-                  if (dragEndDetails.primaryVelocity < 0) {
+                  if (dragEndDetails.primaryVelocity! < 0) {
                     //left swipe
                     if (_filterChoice == 'in') {
                       _handleSelect('all');
                     } else if (_filterChoice == 'all') {
                       _handleSelect('out');
                     }
-                  } else if (dragEndDetails.primaryVelocity > 0) {
+                  } else if (dragEndDetails.primaryVelocity! > 0) {
                     //right swipe
                     if (_filterChoice == 'out') {
                       _handleSelect('all');
@@ -110,7 +110,7 @@ class _TransactionListState extends State<TransactionList> {
                         onTap: () => Navigator.of(context)
                             .pushNamed(Routes.Transaction, arguments: [
                           _filteredTx[i],
-                          ModalRoute.of(context).settings.arguments
+                          ModalRoute.of(context)!.settings.arguments
                         ]),
                         leading: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,12 +143,12 @@ class _TransactionListState extends State<TransactionList> {
                                         )),
                               Text(
                                 DateFormat('d. MMM').format(
-                                    _filteredTx[i].timestamp != null
+                                    _filteredTx[i].timestamp != 0
                                         ? DateTime.fromMillisecondsSinceEpoch(
                                             _filteredTx[i].timestamp * 1000)
                                         : DateTime.now()),
                                 style: TextStyle(
-                                  fontWeight: _filteredTx[i].timestamp != null
+                                  fontWeight: _filteredTx[i].timestamp != 0
                                       ? FontWeight.w500
                                       : FontWeight.w300,
                                 ),
@@ -176,7 +176,7 @@ class _TransactionListState extends State<TransactionList> {
                               (_filteredTx[i].direction == 'in' ? '+' : '-') +
                                   (_filteredTx[i].value / 1000000).toString(),
                               style: TextStyle(
-                                  fontWeight: _filteredTx[i].timestamp != null
+                                  fontWeight: _filteredTx[i].timestamp != 0
                                       ? FontWeight.bold
                                       : FontWeight.w300,
                                   color: _filteredTx[i].direction == 'out'

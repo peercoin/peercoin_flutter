@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'wallettransaction.g.dart';
 
@@ -24,15 +23,15 @@ class WalletTransaction extends HiveObject {
   String broadcastHex = '';
 
   WalletTransaction({
-    @required this.txid,
-    @required this.timestamp,
-    @required this.value,
-    @required this.fee,
-    @required this.address,
-    @required this.direction,
-    @required this.broadCasted,
-    @required this.broadcastHex,
-    @required this.confirmations,
+    required this.txid,
+    required this.timestamp,
+    required this.value,
+    required this.fee,
+    required this.address,
+    required this.direction,
+    required this.broadCasted,
+    required this.broadcastHex,
+    required this.confirmations,
   });
 
   set newTimestamp(int newTime) {

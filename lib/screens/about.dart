@@ -13,7 +13,7 @@ class AboutScren extends StatefulWidget {
 
 class _AboutScrenState extends State<AboutScren> {
   bool _initial = true;
-  PackageInfo _packageInfo;
+  PackageInfo? _packageInfo;
 
   @override
   void didChangeDependencies() async {
@@ -62,9 +62,9 @@ class _AboutScrenState extends State<AboutScren> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('${_packageInfo.appName}'),
+                            Text('${_packageInfo!.appName}'),
                             Text(
-                              'Version ${_packageInfo.version} Build ${_packageInfo.buildNumber}',
+                              'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
                             ),
                             Text(AppLocalizations.instance.translate(
                               'about_developers',

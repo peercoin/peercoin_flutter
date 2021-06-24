@@ -17,10 +17,10 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AppOptionsStore(
-      fields[1] as bool,
+      fields[1] as bool?,
     )
-      .._authenticationOptions = (fields[0] as Map)?.cast<String, bool>()
-      .._defaultWallet = fields[2] as String;
+      .._authenticationOptions = (fields[0] as Map?)?.cast<String, bool>()
+      .._defaultWallet = fields[2] as String?;
   }
 
   @override

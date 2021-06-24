@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/server.dart';
@@ -5,7 +8,7 @@ import 'package:peercoin/providers/encryptedbox.dart';
 
 class Servers with ChangeNotifier {
   final EncryptedBox _encryptedBox;
-  Box<Server> _serverBox;
+  late Box<Server> _serverBox;
   Servers(this._encryptedBox);
 
   static const Map<String, List> _seeds = {
@@ -19,18 +22,18 @@ class Servers with ChangeNotifier {
     ]
   };
 
-  Future<void> init(String coinIdentifier) async {
+  Future<void> init(String? coinIdentifier) async {
     print('init server provider');
     _serverBox = await Hive.openBox<Server>(
       'serverBox-$coinIdentifier',
-      encryptionCipher: HiveAesCipher(await _encryptedBox.key),
+      encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>),
     );
 
     //check first run
     if (_serverBox.isEmpty) {
       print('server storage is empty, initializing');
 
-      _seeds[coinIdentifier].asMap().forEach((index, hardcodedSeedAddress) {
+      _seeds[coinIdentifier!]!.asMap().forEach((index, hardcodedSeedAddress) {
         var newServer = Server(
           address: hardcodedSeedAddress,
           priority: index,
@@ -41,10 +44,9 @@ class Servers with ChangeNotifier {
     }
 
     // check if all hard coded seeds for this coin are already in db
-    _seeds[coinIdentifier].forEach((hardcodedSeedAddress) {
-      var res = _serverBox.values.firstWhere(
-          (element) => element.getAddress == hardcodedSeedAddress,
-          orElse: () => null);
+    _seeds[coinIdentifier!]!.forEach((hardcodedSeedAddress) {
+      var res = _serverBox.values.firstWhereOrNull(
+          (element) => element.getAddress == hardcodedSeedAddress);
       if (res == null) {
         //hard coded server not yet in storage
         print('$hardcodedSeedAddress not yet in storage');
@@ -53,7 +55,7 @@ class Servers with ChangeNotifier {
     });
     //check if hard coded seeds have been removed
     _serverBox.values.forEach((boxElement) {
-      var res = _seeds[coinIdentifier].firstWhere(
+      var res = _seeds[coinIdentifier]!.firstWhere(
           (element) => element == boxElement.address,
           orElse: () => null);
       if (res == null) {

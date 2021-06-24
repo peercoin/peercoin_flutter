@@ -17,7 +17,7 @@ class AppSettingsScreen extends StatefulWidget {
 
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
-  bool _biometricsAllowed;
+  late bool _biometricsAllowed;
   bool _biometricsRevealed = false;
   bool _biometricsAvailable = false;
   String _seedPhrase = '';
@@ -25,8 +25,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   String _defaultWallet = '';
   String _selectedTheme = '';
   bool _languageChangeInfoDisplayed = false;
-  AppSettings _settings;
-  ActiveWallets _activeWallets;
+  late AppSettings _settings;
+  late ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
   final List _availableThemes = [
     'system',
@@ -125,10 +125,10 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _biometricsAllowed = _settings.biometricsAllowed ?? false;
+    _biometricsAllowed = _settings.biometricsAllowed;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
-    _defaultWallet = _settings.defaultWallet ?? '';
+    _defaultWallet = _settings.defaultWallet;
     _selectedTheme = _settings.selectedTheme ?? '';
 
     return Scaffold(
@@ -153,11 +153,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   return InkWell(
                     onTap: () => saveLang(lang),
                     child: ListTile(
-                      title: Text(AppLocalizations.availableLocales[lang]),
+                      title: Text(AppLocalizations.availableLocales[lang]!),
                       leading: Radio(
                         value: lang,
                         groupValue: _lang,
-                        onChanged: (_) => saveLang(lang),
+                        onChanged: (dynamic _) => saveLang(lang),
                       ),
                     ),
                   );
@@ -177,7 +177,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       leading: Radio(
                         value: wallet.letterCode,
                         groupValue: _defaultWallet,
-                        onChanged: (_) => saveDefaultWallet(wallet.letterCode),
+                        onChanged: (dynamic _) =>
+                            saveDefaultWallet(wallet.letterCode),
                       ),
                     ),
                   );
@@ -203,7 +204,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             _biometricsAvailable,
                             _settings,
                             saveSnack,
-                            _settings.authenticationOptions,
+                            _settings.authenticationOptions!,
                           )
                   ]),
               ExpansionTile(
@@ -252,7 +253,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       leading: Radio(
                         value: theme,
                         groupValue: _selectedTheme,
-                        onChanged: (_) => saveTheme(theme),
+                        onChanged: (dynamic _) => saveTheme(theme),
                       ),
                     ),
                   );

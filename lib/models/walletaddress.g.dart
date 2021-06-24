@@ -20,9 +20,9 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       address: fields[0] as String,
       addressBookName: fields[1] as String,
       used: fields[3] as bool,
-      status: fields[2] as String,
-      isOurs: fields[4] as bool,
-      wif: fields[5] as String,
+      status: fields[2] as String?,
+      isOurs: fields[4] as bool?,
+      wif: fields[5] as String?,
     );
   }
 
