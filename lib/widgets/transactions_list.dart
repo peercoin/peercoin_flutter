@@ -145,7 +145,7 @@ class _TransactionListState extends State<TransactionList> {
                                 DateFormat('d. MMM').format(
                                     _filteredTx[i].timestamp != 0
                                         ? DateTime.fromMillisecondsSinceEpoch(
-                                            _filteredTx[i].timestamp * 1000)
+                                            _filteredTx[i].timestamp! * 1000)
                                         : DateTime.now()),
                                 style: TextStyle(
                                   fontWeight: _filteredTx[i].timestamp != 0

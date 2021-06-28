@@ -18,7 +18,7 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
     };
     return WalletTransaction(
       txid: fields[0] as String,
-      timestamp: fields[1] as int,
+      timestamp: fields[1] as int?,
       value: fields[2] as int,
       fee: fields[3] as int,
       address: fields[4] as String,

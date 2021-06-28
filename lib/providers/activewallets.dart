@@ -632,7 +632,7 @@ class ActiveWallets with ChangeNotifier {
       (element) => element.address == address,
     );
     if (addr == null) return '';
-    return addr.addressBookName;
+    return addr.addressBookName ?? '';
   }
 
   set transferedAddress(newAddress) {

@@ -231,7 +231,8 @@ class _SendTabState extends State<SendTab> {
       if (element.isOurs == false && element.address.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
-          element.addressBookName.contains(pattern)) {
+          element.addressBookName != null &&
+          element.addressBookName!.contains(pattern)) {
         return true;
       }
       return false;
@@ -244,7 +245,7 @@ class _SendTabState extends State<SendTab> {
     if (_transferedAddress != null &&
         _transferedAddress!.address != addressController.text) {
       addressController.text = _transferedAddress!.address;
-      labelController.text = _transferedAddress!.addressBookName;
+      labelController.text = _transferedAddress!.addressBookName ?? '';
       _activeWallets.transferedAddress = null; //reset transfer
     }
 

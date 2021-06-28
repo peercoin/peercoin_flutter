@@ -45,9 +45,9 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('time'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.timestamp != 0
-                  ? DateFormat().format(
-                      DateTime.fromMillisecondsSinceEpoch(_tx.timestamp * 1000))
+              SelectableText(_tx.timestamp! != 0
+                  ? DateFormat().format(DateTime.fromMillisecondsSinceEpoch(
+                      _tx.timestamp! * 1000))
                   : AppLocalizations.instance.translate('unconfirmed'))
             ],
           ),
