@@ -6,7 +6,7 @@ class WalletTransaction extends HiveObject {
   @HiveField(0)
   final String txid;
   @HiveField(1)
-  int timestamp;
+  int? timestamp; //nullable for backward compatability
   @HiveField(2)
   final int value;
   @HiveField(3)
