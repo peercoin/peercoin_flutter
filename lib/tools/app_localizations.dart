@@ -24,7 +24,8 @@ class AppLocalizations {
     'de': 'Deutsch',
     'ro': 'Română',
     'ru': 'русский',
-    'zh': '中文 (Zhōngwén)'
+    'zh': '中文 (Zhōngwén)',
+    'it': 'Italiano'
   };
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
