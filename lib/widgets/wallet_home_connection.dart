@@ -8,47 +8,40 @@ class WalletHomeConnection extends StatelessWidget {
   WalletHomeConnection(this._connectionState);
   @override
   Widget build(BuildContext context) {
+    Widget widget;
     if (_connectionState == ElectrumConnectionState.connected) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.offline_bolt,
-            color: Theme.of(context).primaryColor,
-          ),
-          SizedBox(
-            width: 3,
-          ),
-          Text(
-            AppLocalizations.instance.translate('wallet_connected'),
-            style:
-                TextStyle(color: Theme.of(context).accentColor, fontSize: 12),
-          ),
-        ],
+      widget = Text(
+        AppLocalizations.instance.translate('wallet_connected'),
+        style: TextStyle(
+          color: Theme.of(context).backgroundColor,
+          letterSpacing: 1.4,
+        ),
       );
     } else if (_connectionState == ElectrumConnectionState.offline) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.offline_bolt_outlined,
-            color: Theme.of(context).accentColor,
-          ),
-          SizedBox(
-            width: 3,
-          ),
-          Text(
-            AppLocalizations.instance.translate('wallet_offline'),
-            style:
-                TextStyle(color: Theme.of(context).accentColor, fontSize: 12),
-          ),
-        ],
+      widget = Text(
+        AppLocalizations.instance.translate('wallet_offline'),
+        style: TextStyle(
+          color: Theme.of(context).backgroundColor,
+          fontSize: 16,
+          letterSpacing: 1.4,
+        ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: LoadingIndicator(),
-      );
+      widget = LoadingIndicator();
     }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/icon/ppc-icon-white-256.png',
+          width: 40,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        widget,
+      ],
+    );
   }
 }

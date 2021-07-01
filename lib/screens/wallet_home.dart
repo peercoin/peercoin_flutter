@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/app_drawer.dart';
+import 'package:peercoin/widgets/addresses_tab.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/wallet_content_switch.dart';
-import 'package:peercoin/widgets/wallet_home_connection.dart';
-import 'package:peercoin/widgets/wallet_home_qr.dart';
+import 'package:peercoin/widgets/transactions_list.dart';
 import 'package:provider/provider.dart';
 
 class WalletHomeScreen extends StatefulWidget {
@@ -34,8 +31,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
   int _latestBlock = 0;
+  String _passedAddress = '';
 
-  void changeIndex(int i) {
+  void changeIndex(int i,[String? address]) {
+    if (i==Tabs.send) {
+      if(address!=null){
+        _passedAddress = address;
+      }else{
+        _passedAddress = '';
+      }
+    }
     setState(() {
       _pageIndex = i;
     });
@@ -180,57 +185,83 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    var back = Theme.of(context).primaryColor;
+    var body;
+    switch (_pageIndex) {
+      case Tabs.receive:
+        body = Container();//Expanded(child: ReceiveTab(_unusedAddress, _connectionState));
+        break;
+      case Tabs.transactions:
+        body = Expanded(
+          child: TransactionList(
+            _walletTransactions,
+            _wallet,
+            _connectionState,
+          ),
+        );
+        break;
+      case Tabs.addresses:
+        body = Expanded(
+            child: AddressTab(
+          _wallet.name,
+          _wallet.title,
+          _wallet.addresses,
+          changeIndex,
+        ));
+        break;
+      case Tabs.send:
+        body = Expanded(
+          child: Container()//SendTab(changeIndex, _passedAddress, _connectionState),
+        );
+        break;
+
+      default:
+        body = Container();
+        break;
+    }
+    ;
+
     return Scaffold(
-      drawer: AppDrawer(),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        fixedColor: Colors.white,
-        unselectedLabelStyle: TextStyle(letterSpacing: 1.5),
+        unselectedItemColor: Theme.of(context).disabledColor,
+        selectedItemColor: Colors.white,
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.download_sharp),
+            icon: Icon(Icons.download_rounded),
             label: AppLocalizations.instance
                 .translate('wallet_bottom_nav_receive'),
+            backgroundColor: back,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
+            icon: Icon(Icons.list_rounded),
             label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
+            backgroundColor: back,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.upload_sharp),
+            icon: Icon(Icons.menu_book_rounded),
+            label: 'Addresses',
+            backgroundColor: back,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.upload_rounded),
             label:
                 AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-          )
+            backgroundColor: back,
+          ),
         ],
       ),
       appBar: AppBar(
-        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset(
-              AvailableCoins()
-                  .getSpecificCoin(_wallet.name)
-                  .iconPathTransparent,
-              width: 20),
-          SizedBox(width: 10),
-          Text(_wallet.title)
-        ]),
+        elevation: 1,
+        title: Center(child: Text(_wallet.title)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+          },
+        ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu_book),
-            onPressed: () async {
-              _activeWallets.transferedAddress = null;
-              final _result = await Navigator.of(context).pushNamed(
-                  Routes.AddressBook,
-                  arguments: {'name': _wallet.name, 'title': _wallet.title});
-              if (_result != null) {
-                setState(() {
-                  _activeWallets.transferedAddress = _result;
-                });
-                changeIndex(2);
-              }
-            },
-          ),
           PopupMenuButton(
             onSelected: (dynamic value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
@@ -272,49 +303,135 @@ class _WalletHomeState extends State<WalletHomeScreen>
       ),
       body: _initial
           ? Center(child: LoadingIndicator())
-          : Column(
-              children: [
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      _wallet.letterCode,
-                      style: TextStyle(
-                          fontSize: 26, color: Theme.of(context).accentColor),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          (_wallet.balance / 1000000).toString(),
-                          style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
-                        ),
-                        _wallet.unconfirmedBalance > 0
-                            ? Text(
-                                (_wallet.unconfirmedBalance / 1000000)
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).accentColor),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                    WalletHomeQr(_unusedAddress)
-                  ],
-                ),
-                WalletHomeConnection(_connectionState),
-                Divider(),
-                WalletContentSwitch(
-                  pageIndex: _pageIndex,
-                  walletTransactions: _walletTransactions,
-                  unusedAddress: _unusedAddress,
-                  changeIndex: changeIndex,
-                  identifier: _wallet.name,
-                )
-              ],
+          : Container(
+              color: Theme.of(context).primaryColor,
+              child: Column(
+                children: [
+                  body,
+                ],
+              ),
             ),
     );
   }
+}
+
+
+/// Widgets that should be moved from here... **/
+
+class PeerButton extends StatelessWidget {
+  final Function() action;
+  final String text;
+  PeerButton({required this.text, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).primaryColor,
+        onPrimary: Theme.of(context).backgroundColor,
+        fixedSize: Size(MediaQuery.of(context).size.width/1.5, 40),
+        shape: RoundedRectangleBorder( //to set border radius to button
+            borderRadius: BorderRadius.circular(30)
+        ),
+        elevation: 0,
+      ),
+      onPressed: action,
+      child: Text(text,style: TextStyle(letterSpacing: 1.4,fontSize: 16),),
+    );
+  }
+}
+
+class PeerButtonBorder extends StatelessWidget {
+  final Function() action;
+  final String text;
+  PeerButtonBorder({required this.text, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).backgroundColor,
+        onPrimary: Theme.of(context).backgroundColor,
+        fixedSize: Size(MediaQuery.of(context).size.width/1.5, 40),
+        shape: RoundedRectangleBorder( //to set border radius to button
+          borderRadius: BorderRadius.circular(30),
+          side: BorderSide(width:2, color:Theme.of(context).primaryColor),
+        ),
+        elevation: 0,
+      ),
+      onPressed: action,
+      child: Text(
+        text,
+        style: TextStyle(
+            letterSpacing: 1.4,
+            fontSize: 16,
+            color: Theme.of(context).primaryColor),
+      ),
+    );
+  }
+}
+
+
+class PeerServiceTitle extends StatelessWidget {
+  final String title;
+  PeerServiceTitle({required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+      child: Column(
+        children: [
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                letterSpacing: 1.4,
+              ),
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width/10,
+              child: Divider(
+                color: Theme.of(context).primaryColor,
+                thickness: 3,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class PeerContainer extends StatelessWidget {
+  final Widget child;
+  PeerContainer({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Theme.of(context).backgroundColor,
+      ),
+      child: child,
+    );
+  }
+}
+
+class Tabs{
+  Tabs._();
+  static const int receive = 0;
+  static const int transactions = 1;
+  static const int addresses = 2;
+  static const int send = 3;
+
 }
