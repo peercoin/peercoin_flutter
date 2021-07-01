@@ -3,9 +3,9 @@ import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/about.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/app_drawer.dart';
 import 'package:peercoin/widgets/settings_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -136,8 +136,28 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         title: Text(
           AppLocalizations.instance.translate('app_settings_appbar'),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: IconButton(
+              icon: Icon(Icons.info_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AboutScreen()),
+                );
+              },
+            ),
+          ),
+        ],
       ),
-      drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

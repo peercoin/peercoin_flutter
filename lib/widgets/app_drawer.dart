@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
-import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -70,19 +69,6 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
           ),
-          Divider(),
-          ListTile(
-              leading: Icon(Icons.info),
-              title: Text(AppLocalizations.instance.translate('about')),
-              onTap: () =>
-                  Navigator.of(context).pushReplacementNamed(Routes.About)),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.share),
-            title: Text(AppLocalizations.instance.translate('share_app')),
-            onTap: () => Share.share(
-                'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
-          )
         ],
       )),
     );
