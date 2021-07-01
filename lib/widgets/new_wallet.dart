@@ -89,14 +89,14 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             SimpleDialogOption(
               onPressed: () { _coin = wallet; addWallet(context); },
               child: ListTile(
-                trailing: CircleAvatar(
+                leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Image.asset(
                       AvailableCoins()
                           .getSpecificCoin(availableCoins[wallet]!
                           .name)
                           .iconPath,
-                      width: 20),
+                      width: 16),
                 ),
                 title: Text(availableCoins[wallet]!.displayName),
               ),
