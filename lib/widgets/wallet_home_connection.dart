@@ -15,6 +15,7 @@ class WalletHomeConnection extends StatelessWidget {
         style: TextStyle(
           color: Theme.of(context).backgroundColor,
           letterSpacing: 1.4,
+          fontSize: 16,
         ),
       );
     } else if (_connectionState == ElectrumConnectionState.offline) {
@@ -30,17 +31,20 @@ class WalletHomeConnection extends StatelessWidget {
       widget = LoadingIndicator();
     }
 
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
           'assets/icon/ppc-icon-white-256.png',
-          width: 40,
+          width: 20,
         ),
         SizedBox(
-          height: 10,
+          width: 10,
         ),
-        widget,
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 4,
+          child: Center(child: widget,),
+        ),
       ],
     );
   }

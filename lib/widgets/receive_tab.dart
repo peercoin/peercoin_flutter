@@ -97,9 +97,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
         Column(
           children: [
 
-            SizedBox(height: 20,),
+            SizedBox(height: 32,),
             WalletHomeConnection(widget._connectionState),
-            SizedBox(height: 10,),
+            SizedBox(height: 16,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -111,6 +111,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         fontSize: 24,
                         color: Colors.grey[100],
                         letterSpacing: 1.2,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     _wallet.unconfirmedBalance > 0
@@ -133,7 +134,6 @@ class _ReceiveTabState extends State<ReceiveTab> {
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.grey[100],
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
@@ -142,7 +142,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
         ),
         ListView(
           children: [
-            SizedBox(height: 150,),
+            SizedBox(height: 130,),
             PeerContainer(
               child: Form(
                 key: _formKey,

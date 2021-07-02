@@ -8,7 +8,6 @@ import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/send_tab.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -242,7 +241,7 @@ class _AddressTabState extends State<AddressTab> {
                   color: Colors.white,
                   iconWidget: Icon(Icons.send, color: Colors.grey),
                   onTap: () =>
-                      widget.changeIndex(Tabs.send,PassedData(address: addr.address,label: addr.addressBookName)),
+                      widget.changeIndex(Tabs.send, addr.address, addr.addressBookName),
                 ),
                 IconSlideAction(
                     caption: AppLocalizations.instance
@@ -404,7 +403,7 @@ class _AddressTabState extends State<AddressTab> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).backgroundColor,
                           onPrimary: Theme.of(context).backgroundColor,
-                          fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
+                          fixedSize: Size(MediaQuery.of(context).size.width/3, 40),
                           shape: RoundedRectangleBorder(
                             //to set border radius to button
                             borderRadius: BorderRadius.circular(10),
@@ -433,7 +432,7 @@ class _AddressTabState extends State<AddressTab> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).backgroundColor,
                           onPrimary: Theme.of(context).backgroundColor,
-                          fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
+                          fixedSize: Size(MediaQuery.of(context).size.width/3, 40),
                           shape: RoundedRectangleBorder(
                             //to set border radius to button
                             borderRadius: BorderRadius.circular(10),
@@ -444,7 +443,7 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                         onPressed: (){_addressAddDialog(context);},
                         child: Text(
-                          'New address',
+                          'New',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.4,

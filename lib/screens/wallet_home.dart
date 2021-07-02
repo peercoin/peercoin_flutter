@@ -33,12 +33,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
   int _latestBlock = 0;
-  PassedData? _passed;
+  String? _address;
+  String? _label;
 
-  void changeIndex(int i,[PassedData? data]) {
+  void changeIndex(int i,[String? addr,String? lab]) {
     if (i==Tabs.send) {
       //Passes address from addresses_tab to send_tab (send to)
-      _passed = data;
+      _address = addr;
+      _label = lab;
     }
     setState(() {
       _pageIndex = i;
@@ -210,7 +212,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case Tabs.send:
         body = Expanded(
-          child: SendTab(changeIndex, _passed, _connectionState),
+          child: SendTab(changeIndex, _address, _label, _connectionState),
         );
         break;
 

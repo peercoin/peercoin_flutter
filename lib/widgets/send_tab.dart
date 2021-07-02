@@ -20,9 +20,10 @@ import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
   final Function _changeIndex;
-  final PassedData? _passed;
+  final String? _address;
+  final String? _label;
   final _connectionState;
-  SendTab(this._changeIndex,this._passed,this._connectionState);
+  SendTab(this._changeIndex,this._address,this._label,this._connectionState);
 
   @override
   _SendTabState createState() => _SendTabState();
@@ -54,8 +55,8 @@ class _SendTabState extends State<SendTab> {
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
       setState(() {
-        addressController.text = widget._passed!.address;
-        labelController.text = widget._passed!.label!;
+        addressController.text = widget._address ?? '';
+        labelController.text = widget._label ?? '';
         _initial = false;
       });
     }
@@ -259,12 +260,9 @@ class _SendTabState extends State<SendTab> {
       children: [
         Column(
           children: [
-            /*TODO:Maybe the top part with wallet connection + wallet balance,
-               since it is present also in the other tabs
-               could became a widget on its own */
-            SizedBox(height: 20,),
+            SizedBox(height: 32,),
             WalletHomeConnection(widget._connectionState),
-            SizedBox(height: 10,),
+            SizedBox(height: 16,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -276,6 +274,7 @@ class _SendTabState extends State<SendTab> {
                         fontSize: 24,
                         color: Colors.grey[100],
                         letterSpacing: 1.2,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     _wallet.unconfirmedBalance > 0
@@ -298,7 +297,6 @@ class _SendTabState extends State<SendTab> {
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.grey[100],
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
@@ -308,7 +306,7 @@ class _SendTabState extends State<SendTab> {
         ListView(
           children: [
 
-            SizedBox(height: 150,),
+            SizedBox(height: 130,),
             PeerContainer(
               child: Form(
                 key: _formKey,
@@ -480,10 +478,4 @@ class _SendTabState extends State<SendTab> {
       ],
     );
   }
-}
-
-class PassedData{
-  final String address;
-  final String? label;
-  PassedData({required this.address,this.label});
 }
