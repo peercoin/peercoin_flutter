@@ -98,6 +98,8 @@
     "peercoin": "Peercoin",
     "peercoinC": "Peercoin",
     "receive_enter_amount": "Please enter an amount",
+    "receive_faucet": "Open faucet",
+    "receive_obtain": "Obtain tPPC",
     "receive_requested_amount": "Requested amount (optional)",
     "receive_share": "Share",
     "scan_qr": "Scan QR-Code",
