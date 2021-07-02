@@ -10,6 +10,7 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/addresses_tab.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/receive_tab.dart';
+import 'package:peercoin/widgets/send_tab.dart';
 import 'package:peercoin/widgets/transactions_list.dart';
 import 'package:provider/provider.dart';
 
@@ -32,12 +33,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
   int _latestBlock = 0;
-  String _passedAddress = '';
+  PassedData? _passed;
 
-  void changeIndex(int i,[String? address]) {
+  void changeIndex(int i,[PassedData? data]) {
     if (i==Tabs.send) {
       //Passes address from addresses_tab to send_tab (send to)
-      _passedAddress = address ?? '';
+      _passed = data;
     }
     setState(() {
       _pageIndex = i;
@@ -209,7 +210,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case Tabs.send:
         body = Expanded(
-          child: Container()//SendTab(changeIndex, _passedAddress, _connectionState),
+          child: SendTab(changeIndex, _passed, _connectionState),
         );
         break;
 

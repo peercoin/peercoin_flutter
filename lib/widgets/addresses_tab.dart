@@ -8,6 +8,7 @@ import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/widgets/send_tab.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -214,7 +215,7 @@ class _AddressTabState extends State<AddressTab> {
     for(var addr in _filteredSend){
       listSend.add(
         Card(
-          color: _search ? Theme.of(context).backgroundColor:const Color(0xFFD1EFD7),
+          color: Theme.of(context).backgroundColor,
           child: ClipRect(
             child: Slidable(
               key: Key(addr.address),
@@ -241,7 +242,7 @@ class _AddressTabState extends State<AddressTab> {
                   color: Colors.white,
                   iconWidget: Icon(Icons.send, color: Colors.grey),
                   onTap: () =>
-                      widget.changeIndex(Tabs.send,addr.address),
+                      widget.changeIndex(Tabs.send,PassedData(address: addr.address,label: addr.addressBookName)),
                 ),
                 IconSlideAction(
                     caption: AppLocalizations.instance
@@ -316,7 +317,7 @@ class _AddressTabState extends State<AddressTab> {
     for(var addr in _filteredReceive){
       listReceive.add(
         Card(
-          color: _search ? Theme.of(context).backgroundColor:const Color(0xFFD1EFD7),
+          color: Theme.of(context).backgroundColor,
           child: ClipRect(
             child: Slidable(
               key: Key(addr.address),
@@ -406,7 +407,7 @@ class _AddressTabState extends State<AddressTab> {
                           fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
                           shape: RoundedRectangleBorder(
                             //to set border radius to button
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                             side: BorderSide(
                                 width: 2, color: Theme.of(context).primaryColor),
                           ),
@@ -435,7 +436,7 @@ class _AddressTabState extends State<AddressTab> {
                           fixedSize: Size(MediaQuery.of(context).size.width/2.5, 40),
                           shape: RoundedRectangleBorder(
                             //to set border radius to button
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                             side: BorderSide(
                                 width: 2, color: Theme.of(context).primaryColor),
                           ),

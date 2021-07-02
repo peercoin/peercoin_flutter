@@ -20,7 +20,7 @@ class MyTheme {
       cardTheme: CardTheme(
         elevation: 2,
         color: LightColors.white,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
         shape: RoundedRectangleBorder( //to set border radius to button
           borderRadius: BorderRadius.circular(10),
         ),
