@@ -278,7 +278,7 @@ class ActiveWallets with ChangeNotifier {
         if (walletTx.txid == tx['txid']) {
           isInWallet = true;
           if (isInWallet == true) {
-            if (walletTx.timestamp == 0) {
+            if (walletTx.timestamp == 0 || walletTx.timestamp == null) {
               //did the tx confirm?
               walletTx.newTimestamp = tx['blocktime'] ?? 0;
             }
