@@ -86,21 +86,18 @@ class _WalletListScreenState extends State<WalletListScreen> {
           },
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: IconButton(
-              onPressed: () {
-                if (_initial == false) {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context){
-                        return NewWalletDialog();
-                      }
-                  );
-                }
-              },
-              icon: Icon(Icons.add_rounded),
-            ),
+          IconButton(
+            onPressed: () {
+              if (_initial == false) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return NewWalletDialog();
+                    }
+                );
+              }
+            },
+            icon: Icon(Icons.add_rounded),
           )
         ],
       ),

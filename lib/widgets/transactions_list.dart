@@ -31,8 +31,8 @@ class _TransactionListState extends State<TransactionList> {
     final result = context
         .read<ActiveWallets>()
         .getLabelForAddress(widget._wallet.name, address);
-    if (result != '') return '$result (${address.substring(0, 5)}...)';
-    return address;
+    if (result != '') return '$result';
+    return address.substring(0, 10)+'...';
   }
 
   @override
@@ -139,8 +139,8 @@ class _TransactionListState extends State<TransactionList> {
                               ModalRoute.of(context)!.settings.arguments
                             ]),
                             leading: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   AnimatedContainer(
                                       duration: Duration(milliseconds: 500),
@@ -158,8 +158,7 @@ class _TransactionListState extends State<TransactionList> {
                                               currentStep: currentConfirmations,
                                               width: 20,
                                               height: 20,
-                                              selectedColor: Theme.of(context)
-                                                  .primaryColor,
+                                              selectedColor: Theme.of(context).primaryColor,
                                               unselectedColor:
                                                   Theme.of(context).unselectedWidgetColor.withOpacity(0.5),
                                               stepSize: 4,
@@ -190,13 +189,11 @@ class _TransactionListState extends State<TransactionList> {
                                 textScaleFactor: 0.9,
                               ),
                             ),
-                            subtitle: Center(
-                              child: Text(
-                                resolveAddressDisplayName(
-                                    _filteredTx[i - 1].address),
-                                overflow: TextOverflow.ellipsis,
-                                textScaleFactor: 1,
-                              ),
+                            subtitle: Text(
+                              resolveAddressDisplayName(
+                                  _filteredTx[i - 1].address),
+                              overflow: TextOverflow.ellipsis,
+                              textScaleFactor: 1,
                             ),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -215,7 +212,8 @@ class _TransactionListState extends State<TransactionList> {
                                       color:
                                           _filteredTx[i - 1].direction == 'out'
                                               ? Theme.of(context).errorColor
-                                              : Colors.black),
+                                              : Color(0xFF2A7A3A),
+                                  ),
                                 ),
                               ],
                             ),

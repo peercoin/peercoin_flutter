@@ -17,6 +17,11 @@ class MyTheme {
       shadowColor: LightColors.lightGreen,
       unselectedWidgetColor: LightColors.grey,
 
+      dialogTheme: DialogTheme(
+        shape: RoundedRectangleBorder( //to set border radius to button
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
       cardTheme: CardTheme(
         elevation: 2,
         color: LightColors.white,
