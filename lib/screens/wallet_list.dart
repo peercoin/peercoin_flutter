@@ -167,7 +167,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                     itemBuilder: (ctx, i) {
                       CoinWallet _wallet = listData[i];
                       return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+                        margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
                         color: Colors.white,
                         child: Column(
                           children: [

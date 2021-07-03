@@ -99,7 +99,7 @@ class _TransactionListState extends State<TransactionList> {
         widget._walletTransactions.isEmpty
             ? Center(
                 child: Text(
-                AppLocalizations.instance.translate('transactions_list'),
+                AppLocalizations.instance.translate('transactions_empty'),
                 style: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
