@@ -165,7 +165,7 @@ class _WalletListScreenState extends State<WalletListScreen> {
                       CoinWallet _wallet = listData[i];
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
-                        color: Colors.white,
+                        color: Theme.of(context).backgroundColor,
                         child: Column(
                           children: [
                             InkWell(
@@ -194,7 +194,6 @@ class _WalletListScreenState extends State<WalletListScreen> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       letterSpacing: 1.2,
-                                      color: Colors.black,
                                     ),
                                   ),
                                   subtitle: Row(

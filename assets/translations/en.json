@@ -156,7 +156,6 @@
     "time": "Time",
     "transaction_details": "Transaction details",
     "transactions_all": "All",
-    "transactions_empty": "Empty list",
     "transactions_fee": "-$amount \nFee",
     "transactions_in": "In",
     "transactions_none": "No transactions yet",

@@ -99,7 +99,7 @@ class _TransactionListState extends State<TransactionList> {
         widget._walletTransactions.isEmpty
             ? Center(
                 child: Text(
-                AppLocalizations.instance.translate('transactions_empty'),
+                AppLocalizations.instance.translate('transactions_none'),
                 style: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
@@ -140,7 +140,7 @@ class _TransactionListState extends State<TransactionList> {
                             ]),
                             leading: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   AnimatedContainer(
                                       duration: Duration(milliseconds: 500),
@@ -184,16 +184,18 @@ class _TransactionListState extends State<TransactionList> {
                                 ]),
                             title: Center(
                               child: Text(
-                                _filteredTx[i - 1].txid,
+                                _filteredTx[i - 1].txid.substring(0,20)+'...',
                                 overflow: TextOverflow.ellipsis,
                                 textScaleFactor: 0.9,
                               ),
                             ),
-                            subtitle: Text(
-                              resolveAddressDisplayName(
-                                  _filteredTx[i - 1].address),
-                              overflow: TextOverflow.ellipsis,
-                              textScaleFactor: 1,
+                            subtitle: Center(
+                              child: Text(
+                                resolveAddressDisplayName(
+                                    _filteredTx[i - 1].address),
+                                overflow: TextOverflow.ellipsis,
+                                textScaleFactor: 1,
+                              ),
                             ),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +205,7 @@ class _TransactionListState extends State<TransactionList> {
                                           ? '+'
                                           : '-') +
                                       (_filteredTx[i - 1].value / 1000000)
-                                          .toString(),
+                                          .toStringAsFixed(2),
                                   style: TextStyle(
                                       fontWeight:
                                           _filteredTx[i - 1].timestamp != null
@@ -212,7 +214,7 @@ class _TransactionListState extends State<TransactionList> {
                                       color:
                                           _filteredTx[i - 1].direction == 'out'
                                               ? Theme.of(context).errorColor
-                                              : Color(0xFF2A7A3A),
+                                              : Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
                               ],

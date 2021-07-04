@@ -7,15 +7,25 @@ class MyTheme {
 
       accentColor: LightColors.grey,
       backgroundColor: LightColors.white,
+      bottomAppBarColor: const Color(0xFF2A7A3A), //Incoming transaction: amount color
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
       errorColor: LightColors.red,
       focusColor: LightColors.green,
+      hintColor: LightColors.grey,
       primaryColor: LightColors.green,
       primarySwatch: materialColor(LightColors.grey),
       shadowColor: LightColors.lightGreen,
       unselectedWidgetColor: LightColors.grey,
+
+      textTheme: TextTheme(
+        button: TextStyle(
+            letterSpacing: 1.4,
+            fontSize: 16,
+            color: DarkColors.white
+        ),
+      ),
 
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder( //to set border radius to button
@@ -33,24 +43,75 @@ class MyTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: LightColors.green,
-          onPrimary: LightColors.white,
+          onPrimary: LightColors.green,
+          textStyle: TextStyle(color: LightColors.white,)
         ),
       ),
-    ),
-    ThemeMode.dark: ThemeData.dark().copyWith(
-      primaryColor: Color(0xff46662B),
-      scaffoldBackgroundColor: DarkColors.background,
-      accentColor: DarkColors.primaryAccent,
-      errorColor: Color(0xffAB0C3D),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xff46662B),
-            onPrimary: Colors.white,
-          )),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            primary: Color(0xff46662B),
-          )),
+            primary: LightColors.green,
+          )
+      ),
+    ),
+
+    ThemeMode.dark: ThemeData.dark().copyWith(
+
+      accentColor: DarkColors.white,
+      backgroundColor: DarkColors.green,
+      bottomAppBarColor: DarkColors.darkBlue, //Incoming transaction: amount color
+      cardColor: DarkColors.green,
+      dialogBackgroundColor: DarkColors.green,
+      disabledColor: DarkColors.darkBlue,
+      errorColor: DarkColors.red,
+      focusColor: DarkColors.black,
+      hintColor: DarkColors.white,
+      primaryColor: DarkColors.black,
+      scaffoldBackgroundColor: DarkColors.green,
+      shadowColor: DarkColors.darkBlue,
+      unselectedWidgetColor: DarkColors.grey,
+
+      textTheme: TextTheme(
+        headline6: TextStyle(color: DarkColors.white),
+        headline5: TextStyle(color: DarkColors.white),
+        headline4: TextStyle(color: DarkColors.white),
+        headline3: TextStyle(color: DarkColors.white),
+        headline2: TextStyle(color: DarkColors.white),
+        headline1: TextStyle(color: DarkColors.white),
+        subtitle1: TextStyle(color: DarkColors.white),
+        subtitle2: TextStyle(color: DarkColors.white),
+        bodyText1: TextStyle(color: DarkColors.white),
+        bodyText2: TextStyle(color: DarkColors.white),
+        button: TextStyle(
+            letterSpacing: 1.4,
+            fontSize: 16,
+            color: DarkColors.white
+        ),
+      ),
+
+      dialogTheme: DialogTheme(
+        shape: RoundedRectangleBorder( //to set border radius to button
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      cardTheme: CardTheme(
+        elevation: 2,
+        color: DarkColors.green,
+        margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+        shape: RoundedRectangleBorder( //to set border radius to button
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: DarkColors.white,
+          onPrimary: DarkColors.white,
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            primary: DarkColors.black,
+          )
+      ),
     )
   };
 
@@ -80,15 +141,18 @@ class MyTheme {
 abstract class LightColors {
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
+  static Color get black => const Color(0xFF000000);
   static Color get grey => const Color(0xFF717C89);
   static Color get white => const Color(0xFFFDFFFC);
-  static Color get black => const Color(0xFF000000);
   static Color get red => const Color(0xFFF8333C);
   static Color get yellow => const Color(0xFFFFBF46);
 }
 
 abstract class DarkColors {
-  static Color get background => const Color(0xFF10041A);
-  static Color get primaryContent => const Color(0xFFE1E1E1);
-  static Color get primaryAccent => const Color(0xFFC7482A);
+  static Color get green => const Color(0xFF2D936C);
+  static Color get black => const Color(0xFF0D1821);
+  static Color get darkBlue => const Color(0xFF234058);
+  static Color get grey => const Color(0xFFE9EAED);
+  static Color get white => const Color(0xFFFDFFFC);
+  static Color get red => const Color(0xFFA8201A);
 }

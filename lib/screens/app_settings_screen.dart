@@ -4,6 +4,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/screens/about.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/settings_auth.dart';
@@ -212,13 +213,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   childrenPadding: EdgeInsets.all(10),
                   children: [
                     _biometricsRevealed == false
-                        ? ElevatedButton(
-                            onPressed: () =>
+                        ? PeerButton(
+                            action: () =>
                                 revealAuthOptions(_settings.biometricsAllowed),
-                            child: Text(
+                            text:
                               AppLocalizations.instance
                                   .translate('app_settings_revealAuthButton'),
-                            ))
+                            )
                         : SettingsAuth(
                             _biometricsAllowed,
                             _biometricsAvailable,
@@ -234,13 +235,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   childrenPadding: EdgeInsets.all(10),
                   children: [
                     _seedPhrase == ''
-                        ? ElevatedButton(
-                            onPressed: () =>
+                        ? PeerButton(
+                            action: () =>
                                 revealSeedPhrase(_settings.biometricsAllowed),
-                            child: Text(
+                            text:
                               AppLocalizations.instance
                                   .translate('app_settings_revealSeedButton'),
-                            ))
+                            )
                         : Column(children: [
                             SizedBox(height: 20),
                             SelectableText(

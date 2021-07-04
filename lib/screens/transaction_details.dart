@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -104,14 +105,9 @@ class TransactionDetails extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Center(
-            child: ElevatedButton.icon(
-                onPressed: () => _launchURL(baseUrl + '${_tx.txid}'),
-                icon: Icon(
-                  Icons.search,
-                ),
-                label: Text(
-                  AppLocalizations.instance.translate('tx_view_in_explorer'),
-                )),
+            child: PeerButton(
+                action: () => _launchURL(baseUrl + '${_tx.txid}'),
+                text: AppLocalizations.instance.translate('tx_view_in_explorer'),),
           )
         ],
       ),

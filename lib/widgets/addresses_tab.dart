@@ -231,22 +231,22 @@ class _AddressTabState extends State<AddressTab> {
                 IconSlideAction(
                   caption: AppLocalizations.instance
                       .translate('addressbook_swipe_share'),
-                  color: Theme.of(context).accentColor,
-                  iconWidget: Icon(Icons.share, color: Colors.white),
+                  color: Theme.of(context).backgroundColor,
+                  iconWidget: Icon(Icons.share, color:Theme.of(context).accentColor,),
                   onTap: () => Share.share(addr.address),
                 ),
                 IconSlideAction(
                   caption: AppLocalizations.instance
                       .translate('addressbook_swipe_send'),
-                  color: Colors.white,
-                  iconWidget: Icon(Icons.send, color: Colors.grey),
+                  color: Theme.of(context).accentColor,
+                  iconWidget: Icon(Icons.send, color:Theme.of(context).backgroundColor,),
                   onTap: () =>
                       widget.changeIndex(Tabs.send, addr.address, addr.addressBookName),
                 ),
                 IconSlideAction(
                     caption: AppLocalizations.instance
                         .translate('addressbook_swipe_delete'),
-                    color: Colors.red,
+                    color: Theme.of(context).errorColor,
                     iconWidget: Icon(Icons.delete, color: Colors.white),
                     onTap: () async {
                       await showDialog(
@@ -333,8 +333,8 @@ class _AddressTabState extends State<AddressTab> {
                 IconSlideAction(
                   caption: AppLocalizations.instance
                       .translate('addressbook_swipe_share'),
-                  color: Theme.of(context).accentColor,
-                  iconWidget: Icon(Icons.share, color: Colors.white),
+                  color: Theme.of(context).backgroundColor,
+                  iconWidget: Icon(Icons.share, color:Theme.of(context).accentColor,),
                   onTap: () => Share.share(addr.address),
                 ),
               ],
