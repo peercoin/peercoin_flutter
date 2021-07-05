@@ -203,11 +203,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                child: ElevatedButton.icon(
-                  label: Text(AppLocalizations.instance
-                      .translate('paperwallet_confirm_import')),
-                  icon: Icon(Icons.send),
-                  onPressed: () async {
+                child: PeerButton(
+                  text: AppLocalizations.instance
+                      .translate('paperwallet_confirm_import'),
+                  action: () async {
                     if (_firstPress == false) return; //prevent double tap
                     try {
                       _firstPress = false;
@@ -308,9 +307,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             style: Theme.of(context).textTheme.headline6),
                         PeerButton(
                           action: () => handlePress(1),
-                          text: AppLocalizations.instance
-                                .translate('paperwallet_step_1_text',),
-                          small:true,
+                          text: AppLocalizations.instance.translate(
+                            'paperwallet_step_1_text',
+                          ),
+                          small: true,
                           active: _currentStep == 1,
                         ),
                       ],
@@ -327,7 +327,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         PeerButton(
                           action: () => handlePress(2),
                           text: AppLocalizations.instance
-                                .translate('paperwallet_step_2_text'),
+                              .translate('paperwallet_step_2_text'),
                           small: true,
                           active: _currentStep == 2,
                         ),
@@ -345,7 +345,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         PeerButton(
                           action: () => handlePress(3),
                           text: AppLocalizations.instance
-                                .translate('paperwallet_step_3_text'),
+                              .translate('paperwallet_step_3_text'),
                           small: true,
                           active: _currentStep == 3,
                         ),
@@ -367,7 +367,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         PeerButton(
                           action: () => handlePress(4),
                           text: AppLocalizations.instance
-                                .translate('paperwallet_step_4_text'),
+                              .translate('paperwallet_step_4_text'),
                           active: _currentStep == 4,
                         ),
                       ],

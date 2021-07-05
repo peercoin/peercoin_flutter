@@ -4,6 +4,7 @@ import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
 class SettingsAuth extends StatelessWidget {
@@ -120,11 +121,9 @@ class SettingsAuth extends StatelessWidget {
               _settings.setAuthenticationOptions('newWallet', newState);
               _saveSnack(context);
             }),
-        ElevatedButton(
-          onPressed: () => changePIN(context, _settings.biometricsAllowed),
-          child: Text(
-            AppLocalizations.instance.translate('app_settings_changeCode'),
-          ),
+        PeerButton(
+          action: () => changePIN(context, _settings.biometricsAllowed),
+          text: AppLocalizations.instance.translate('app_settings_changeCode'),
         )
       ],
     );

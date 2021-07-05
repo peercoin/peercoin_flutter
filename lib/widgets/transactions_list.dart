@@ -4,7 +4,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/wallet_home_connection.dart';
+import 'package:peercoin/widgets/wallet_balance_header.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -52,55 +52,7 @@ class _TransactionListState extends State<TransactionList> {
 
     return Stack(
       children: [
-        Column(
-          children: [
-            SizedBox(
-              height: 32,
-            ),
-            WalletHomeConnection(widget._connectionState),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      (widget._wallet.balance / 1000000).toString(),
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.grey[100],
-                        letterSpacing: 1.2,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    widget._wallet.unconfirmedBalance > 0
-                        ? Text(
-                            (widget._wallet.unconfirmedBalance / 1000000)
-                                .toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[300],
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  widget._wallet.letterCode,
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.grey[100],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+        WalletBalanceHeader(widget._connectionState, widget._wallet),
         widget._walletTransactions
                 .where((element) =>
                     element.timestamp != -1) //don't count "phantom" tx

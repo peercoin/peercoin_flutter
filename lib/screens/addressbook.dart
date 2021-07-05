@@ -306,7 +306,9 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
                         color: Theme.of(context).accentColor,
                         iconWidget: Icon(Icons.share, color: Colors.white),
                         onTap: () => WalletHomeQr.showQrDialog(
-                            context, _filteredAddr[i].address),
+                            //TODO: opens share overlay directly?!
+                            context,
+                            _filteredAddr[i].address),
                       ),
                       if (_pageIndex == 1)
                         IconSlideAction(

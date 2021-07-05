@@ -151,8 +151,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => AboutScreen()),
+                  MaterialPageRoute(builder: (context) => AboutScreen()),
                 );
               },
             ),
@@ -216,10 +215,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         ? PeerButton(
                             action: () =>
                                 revealAuthOptions(_settings.biometricsAllowed),
-                            text:
-                              AppLocalizations.instance
-                                  .translate('app_settings_revealAuthButton'),
-                            )
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealAuthButton'),
+                          )
                         : SettingsAuth(
                             _biometricsAllowed,
                             _biometricsAvailable,
@@ -238,10 +236,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         ? PeerButton(
                             action: () =>
                                 revealSeedPhrase(_settings.biometricsAllowed),
-                            text:
-                              AppLocalizations.instance
-                                  .translate('app_settings_revealSeedButton'),
-                            )
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealSeedButton'),
+                          )
                         : Column(children: [
                             SizedBox(height: 20),
                             SelectableText(
@@ -249,12 +246,10 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () => Share.share(_seedPhrase),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('app_settings_shareSeed'),
-                              ),
+                            PeerButton(
+                              action: () => Share.share(_seedPhrase),
+                              text: AppLocalizations.instance
+                                  .translate('app_settings_shareSeed'),
                             )
                           ])
                   ]),

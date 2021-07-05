@@ -6,7 +6,11 @@ class PeerButton extends StatelessWidget {
   final String text;
   final bool small;
   final bool active;
-  PeerButton({required this.text, required this.action, this.small=false, this.active=true});
+  PeerButton(
+      {required this.text,
+      required this.action,
+      this.small = false,
+      this.active = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +18,22 @@ class PeerButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).primaryColor,
         onPrimary: Theme.of(context).accentColor,
-        fixedSize: Size(MediaQuery.of(context).size.width/(small?2:1.5), 40),
-        shape: RoundedRectangleBorder( //to set border radius to button
-            borderRadius: BorderRadius.circular(30)
-        ),
+        fixedSize:
+            Size(MediaQuery.of(context).size.width / (small ? 2 : 1.5), 40),
+        shape: RoundedRectangleBorder(
+            //to set border radius to button
+            borderRadius: BorderRadius.circular(30)),
         elevation: 0,
       ),
       onPressed: action,
-      child: Text(
-        text,
-        style: TextStyle(
-          letterSpacing: 1.4,
-          fontSize: 16,
-          color: active?LightColors.white:LightColors.grey,
+      child: FittedBox(
+        child: Text(
+          text,
+          style: TextStyle(
+            letterSpacing: 1.4,
+            fontSize: 16,
+            color: active ? LightColors.white : LightColors.grey,
+          ),
         ),
       ),
     );
@@ -44,20 +51,23 @@ class PeerButtonBorder extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).backgroundColor,
-        fixedSize: Size(MediaQuery.of(context).size.width/1.5, 40),
-        shape: RoundedRectangleBorder( //to set border radius to button
+        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
+        shape: RoundedRectangleBorder(
+          //to set border radius to button
           borderRadius: BorderRadius.circular(30),
-          side: BorderSide(width:2, color:Theme.of(context).primaryColor),
+          side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
         ),
         elevation: 0,
       ),
       onPressed: action,
-      child: Text(
-        text,
-        style: TextStyle(
-            letterSpacing: 1.4,
-            fontSize: 16,
-            color: Theme.of(context).primaryColor),
+      child: FittedBox(
+        child: Text(
+          text,
+          style: TextStyle(
+              letterSpacing: 1.4,
+              fontSize: 16,
+              color: Theme.of(context).primaryColor),
+        ),
       ),
     );
   }
