@@ -140,7 +140,7 @@ class _TransactionListState extends State<TransactionList> {
                             ]),
                             leading: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   AnimatedContainer(
                                       duration: Duration(milliseconds: 500),
