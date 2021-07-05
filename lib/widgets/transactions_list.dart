@@ -12,7 +12,8 @@ class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
   final _wallet;
   final _connectionState;
-  TransactionList(this._walletTransactions, this._wallet, this._connectionState);
+  TransactionList(
+      this._walletTransactions, this._wallet, this._connectionState);
 
   @override
   _TransactionListState createState() => _TransactionListState();
@@ -32,7 +33,7 @@ class _TransactionListState extends State<TransactionList> {
         .read<ActiveWallets>()
         .getLabelForAddress(widget._wallet.name, address);
     if (result != '') return '$result';
-    return address.substring(0, 10)+'...';
+    return address.substring(0, 10) + '...';
   }
 
   @override
@@ -53,9 +54,13 @@ class _TransactionListState extends State<TransactionList> {
       children: [
         Column(
           children: [
-            SizedBox(height: 32,),
+            SizedBox(
+              height: 32,
+            ),
             WalletHomeConnection(widget._connectionState),
-            SizedBox(height: 16,),
+            SizedBox(
+              height: 16,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -75,8 +80,8 @@ class _TransactionListState extends State<TransactionList> {
                             (widget._wallet.unconfirmedBalance / 1000000)
                                 .toString(),
                             style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[100],
+                              fontSize: 12,
+                              color: Colors.grey[300],
                             ),
                           )
                         : Container(),
@@ -139,7 +144,8 @@ class _TransactionListState extends State<TransactionList> {
                               ModalRoute.of(context)!.settings.arguments
                             ]),
                             leading: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   AnimatedContainer(
@@ -158,9 +164,11 @@ class _TransactionListState extends State<TransactionList> {
                                               currentStep: currentConfirmations,
                                               width: 20,
                                               height: 20,
-                                              selectedColor: Theme.of(context).primaryColor,
-                                              unselectedColor:
-                                                  Theme.of(context).unselectedWidgetColor.withOpacity(0.5),
+                                              selectedColor: Theme.of(context)
+                                                  .primaryColor,
+                                              unselectedColor: Theme.of(context)
+                                                  .unselectedWidgetColor
+                                                  .withOpacity(0.5),
                                               stepSize: 4,
                                               roundedCap: (_, __) => true,
                                             )),
@@ -184,7 +192,8 @@ class _TransactionListState extends State<TransactionList> {
                                 ]),
                             title: Center(
                               child: Text(
-                                _filteredTx[i - 1].txid.substring(0,20)+'...',
+                                _filteredTx[i - 1].txid.substring(0, 20) +
+                                    '...',
                                 overflow: TextOverflow.ellipsis,
                                 textScaleFactor: 0.9,
                               ),
@@ -207,14 +216,13 @@ class _TransactionListState extends State<TransactionList> {
                                       (_filteredTx[i - 1].value / 1000000)
                                           .toStringAsFixed(2),
                                   style: TextStyle(
-                                      fontWeight:
-                                          _filteredTx[i - 1].timestamp != null
-                                              ? FontWeight.bold
-                                              : FontWeight.w300,
-                                      color:
-                                          _filteredTx[i - 1].direction == 'out'
-                                              ? Theme.of(context).errorColor
-                                              : Theme.of(context).bottomAppBarColor,
+                                    fontWeight:
+                                        _filteredTx[i - 1].timestamp != 0
+                                            ? FontWeight.bold
+                                            : FontWeight.w300,
+                                    color: _filteredTx[i - 1].direction == 'out'
+                                        ? Theme.of(context).errorColor
+                                        : Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
                               ],
@@ -222,7 +230,8 @@ class _TransactionListState extends State<TransactionList> {
                           ),
                         ),
                       );
-                    } else if (i == 0 && widget._walletTransactions.isNotEmpty) {
+                    } else if (i == 0 &&
+                        widget._walletTransactions.isNotEmpty) {
                       return Column(
                         children: [
                           SizedBox(height: 130),
