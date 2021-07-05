@@ -42,7 +42,7 @@ class WalletHomeConnection extends StatelessWidget {
           width: 10,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
+          width: 100,
           child: Center(child: widget,),
         ),
       ],

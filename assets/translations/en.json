@@ -167,6 +167,7 @@
     "tx_value": "Value",
     "tx_view_in_explorer": "View in explorer",
     "unconfirmed": "unconfirmed",
+    "wallet_bottom_nav_addr": "Addresses",
     "wallet_bottom_nav_receive": "Receive",
     "wallet_bottom_nav_send": "Send",
     "wallet_bottom_nav_tx": "Transactions",

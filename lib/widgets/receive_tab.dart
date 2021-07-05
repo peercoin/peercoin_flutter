@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
+import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet_home_connection.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
@@ -175,7 +176,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         stringBuilder();
                       },
                       decoration: InputDecoration(
-                        icon: Icon(Icons.bookmark),
+                        icon: Icon(Icons.bookmark,color: Theme.of(context).unselectedWidgetColor,),
                         labelText: AppLocalizations.instance.translate('send_label'),
                       ),
                       maxLength: 32,
@@ -194,7 +195,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         ],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         decoration: InputDecoration(
-                          icon: Icon(Icons.money),
+                          icon: Icon(Icons.money,color: Theme.of(context).unselectedWidgetColor,),
                           labelText: AppLocalizations.instance
                               .translate('receive_requested_amount'),
                           suffix: Text(_wallet.letterCode),

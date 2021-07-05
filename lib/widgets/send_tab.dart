@@ -15,6 +15,8 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet_home_connection.dart';
 import 'package:provider/provider.dart';
 
@@ -321,7 +323,7 @@ class _SendTabState extends State<SendTab> {
                         controller: addressController,
                         autocorrect: false,
                         decoration: InputDecoration(
-                          icon: Icon(Icons.shuffle),
+                          icon: Icon(Icons.shuffle,color: Theme.of(context).unselectedWidgetColor,),
                           labelText: AppLocalizations.instance.translate('tx_address'),
                           suffixIcon: IconButton(
                             onPressed: () async {
@@ -370,7 +372,7 @@ class _SendTabState extends State<SendTab> {
                       controller: labelController,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        icon: Icon(Icons.bookmark),
+                        icon: Icon(Icons.bookmark,color: Theme.of(context).unselectedWidgetColor,),
                         labelText: AppLocalizations.instance.translate('send_label'),
                       ),
                       maxLength: 32,
@@ -386,7 +388,7 @@ class _SendTabState extends State<SendTab> {
                         ],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         decoration: InputDecoration(
-                          icon: Icon(Icons.money),
+                          icon: Icon(Icons.money,color: Theme.of(context).unselectedWidgetColor,),
                           labelText: AppLocalizations.instance.translate('send_amount'),
                           suffix: Text(_wallet.letterCode),
                         ),

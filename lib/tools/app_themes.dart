@@ -112,6 +112,15 @@ class MyTheme {
             primary: DarkColors.black,
           )
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(color: DarkColors.grey),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: DarkColors.white),
+        ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: DarkColors.white,
+      ),
     )
   };
 
