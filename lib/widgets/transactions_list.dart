@@ -129,7 +129,7 @@ class _TransactionListState extends State<TransactionList> {
                                             )),
                                   Text(
                                     DateFormat('d. MMM').format(
-                                        _filteredTx[i - 1].timestamp != null
+                                        _filteredTx[i - 1].timestamp != 0
                                             ? DateTime
                                                 .fromMillisecondsSinceEpoch(
                                                     _filteredTx[i - 1]
@@ -138,7 +138,7 @@ class _TransactionListState extends State<TransactionList> {
                                             : DateTime.now()),
                                     style: TextStyle(
                                       fontWeight:
-                                          _filteredTx[i - 1].timestamp != null
+                                          _filteredTx[i - 1].timestamp != 0
                                               ? FontWeight.w500
                                               : FontWeight.w300,
                                     ),
