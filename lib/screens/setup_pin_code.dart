@@ -7,6 +7,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
@@ -86,8 +87,8 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     });
                   }
                 }),
-            ElevatedButton(
-              onPressed: () async {
+            PeerButtonBorder(
+              action: () async {
                 await screenLock(
                   title: HeadingTitle(
                       text: AppLocalizations.instance
@@ -118,10 +119,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                   },
                 );
               },
-              child: Text(
-                AppLocalizations.instance.translate('setup_create_pin'),
-                style: TextStyle(fontSize: 18),
-              ),
+              text: AppLocalizations.instance.translate('setup_create_pin'),
             )
           ],
         ),

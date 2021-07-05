@@ -5,6 +5,7 @@ import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
@@ -120,18 +121,17 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                 ),
                 _loading
                     ? LoadingIndicator()
-                    : ElevatedButton.icon(
-                        onPressed: () {
+                    : PeerButtonBorder(
+                        action: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             createWallet(context);
                           }
                         },
-                        key: Key('importKey'),
-                        icon: Icon(Icons.input),
-                        label: Text(AppLocalizations.instance.translate(
+                        text: AppLocalizations.instance.translate(
                           'import_seed_button',
-                        ))),
+                        ),
+                      ),
               ]),
         ),
       ),

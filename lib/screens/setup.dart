@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
@@ -63,30 +64,21 @@ class _SetupScreenState extends State<SetupScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          key: const Key('newseed'),
-                          onPressed: () => {createWallet(context)},
-                          child: Text(
-                            AppLocalizations.instance.translate(
-                              'create_wallet_new_seed',
-                            ),
-                            style: TextStyle(fontSize: 18),
-                          ),
+                        PeerButtonBorder(
+                          text: AppLocalizations.instance
+                              .translate('create_wallet_new_seed'),
+                          action: () => {createWallet(context)},
                         ),
                         Text(
                             AppLocalizations.instance.translate(
                               'create_wallet_or',
                             ),
                             style: TextStyle(color: Colors.white)),
-                        ElevatedButton(
-                          key: const Key('import'),
-                          onPressed: () => Navigator.of(context)
+                        PeerButtonBorder(
+                          text: AppLocalizations.instance
+                              .translate('create_wallet_existing_seed'),
+                          action: () => Navigator.of(context)
                               .pushNamed(Routes.SetupImport),
-                          child: Text(
-                            AppLocalizations.instance
-                                .translate('create_wallet_existing_seed'),
-                            style: TextStyle(fontSize: 18),
-                          ),
                         )
                       ],
                     )

@@ -101,7 +101,10 @@ class _TransactionListState extends State<TransactionList> {
             ),
           ],
         ),
-        widget._walletTransactions.isEmpty
+        widget._walletTransactions
+                .where((element) =>
+                    element.timestamp != -1) //don't count "phantom" tx
+                .isEmpty
             ? Center(
                 child: Text(
                 AppLocalizations.instance.translate('transactions_none'),

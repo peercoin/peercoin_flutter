@@ -5,6 +5,7 @@ import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -145,9 +146,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                     Container(
                       padding: EdgeInsets.all(10),
                       child: _sharedYet
-                          ? ElevatedButton(
-                              key: Key('continue'),
-                              onPressed: () async {
+                          ? PeerButtonBorder(
+                              action: () async {
                                 var prefs =
                                     await Provider.of<UnencryptedOptions>(
                                             context,
@@ -157,18 +157,13 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                                 await Navigator.popAndPushNamed(
                                     context, Routes.SetUpPin);
                               },
-                              child: Text(
-                                AppLocalizations.instance.translate('continue'),
-                                style: TextStyle(fontSize: 18),
-                              ),
+                              text: AppLocalizations.instance
+                                  .translate('continue'),
                             )
-                          : ElevatedButton(
-                              onPressed: () async => await shareSeed(_seed),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('export_now'),
-                                style: TextStyle(fontSize: 18),
-                              ),
+                          : PeerButtonBorder(
+                              action: () async => await shareSeed(_seed),
+                              text: AppLocalizations.instance
+                                  .translate('export_now'),
                             ),
                     )
                   ],
