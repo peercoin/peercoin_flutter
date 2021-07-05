@@ -177,6 +177,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                   ),
                   key: Key('${_servers[index].address}'),
                   child: Card(
+                    margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                     child: ListTile(
                       leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

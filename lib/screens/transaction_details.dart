@@ -4,6 +4,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetails extends StatelessWidget {
@@ -104,14 +105,9 @@ class TransactionDetails extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Center(
-            child: ElevatedButton.icon(
-                onPressed: () => _launchURL(baseUrl + '${_tx.txid}'),
-                icon: Icon(
-                  Icons.search,
-                ),
-                label: Text(
-                  AppLocalizations.instance.translate('tx_view_in_explorer'),
-                )),
+            child: PeerButton(
+                action: () => _launchURL(baseUrl + '${_tx.txid}'),
+                text: AppLocalizations.instance.translate('tx_view_in_explorer'),),
           )
         ],
       ),

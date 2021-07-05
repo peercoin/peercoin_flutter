@@ -7,6 +7,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -305,20 +306,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_1'),
                             style: Theme.of(context).textTheme.headline6),
-                        ElevatedButton.icon(
-                          onPressed: () => handlePress(1),
-                          icon: Icon(Icons.camera,
-                              color: _currentStep == 1
-                                  ? Colors.white
-                                  : Theme.of(context).accentColor),
-                          label: Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_1_text'),
-                            style: TextStyle(
-                                color: _currentStep == 1
-                                    ? Colors.white
-                                    : Theme.of(context).accentColor),
-                          ),
+                        PeerButton(
+                          action: () => handlePress(1),
+                          text: AppLocalizations.instance
+                                .translate('paperwallet_step_1_text',),
+                          small:true,
+                          active: _currentStep == 1,
                         ),
                       ],
                     ),
@@ -331,20 +324,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_2'),
                             style: Theme.of(context).textTheme.headline6),
-                        ElevatedButton.icon(
-                          onPressed: () => handlePress(2),
-                          icon: Icon(Icons.camera,
-                              color: _currentStep == 2
-                                  ? Colors.white
-                                  : Theme.of(context).accentColor),
-                          label: Text(
-                            AppLocalizations.instance
+                        PeerButton(
+                          action: () => handlePress(2),
+                          text: AppLocalizations.instance
                                 .translate('paperwallet_step_2_text'),
-                            style: TextStyle(
-                                color: _currentStep == 2
-                                    ? Colors.white
-                                    : Theme.of(context).accentColor),
-                          ),
+                          small: true,
+                          active: _currentStep == 2,
                         ),
                       ],
                     ),
@@ -357,20 +342,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_3'),
                             style: Theme.of(context).textTheme.headline6),
-                        ElevatedButton.icon(
-                          onPressed: () => handlePress(3),
-                          icon: Icon(Icons.payments,
-                              color: _currentStep == 3
-                                  ? Colors.white
-                                  : Theme.of(context).accentColor),
-                          label: Text(
-                            AppLocalizations.instance
+                        PeerButton(
+                          action: () => handlePress(3),
+                          text: AppLocalizations.instance
                                 .translate('paperwallet_step_3_text'),
-                            style: TextStyle(
-                                color: _currentStep == 3
-                                    ? Colors.white
-                                    : Theme.of(context).accentColor),
-                          ),
+                          small: true,
+                          active: _currentStep == 3,
                         ),
                       ],
                     ),
@@ -387,20 +364,11 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                             AppLocalizations.instance
                                 .translate('paperwallet_step_4'),
                             style: Theme.of(context).textTheme.headline6),
-                        ElevatedButton.icon(
-                          onPressed: () => handlePress(4),
-                          icon: Icon(Icons.arrow_circle_down,
-                              color: _currentStep == 4
-                                  ? Colors.white
-                                  : Theme.of(context).accentColor),
-                          label: Text(
-                            AppLocalizations.instance
+                        PeerButton(
+                          action: () => handlePress(4),
+                          text: AppLocalizations.instance
                                 .translate('paperwallet_step_4_text'),
-                            style: TextStyle(
-                                color: _currentStep == 4
-                                    ? Colors.white
-                                    : Theme.of(context).accentColor),
-                          ),
+                          active: _currentStep == 4,
                         ),
                       ],
                     ),
