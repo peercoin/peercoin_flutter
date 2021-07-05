@@ -179,5 +179,12 @@
     "buy_peercoin_dialog_title": "Du wirst jetzt auf die Website eines Drittanbieters weitergeleitet.",
     "buy_peercoin_dialog_content": "Die Autoren dieser App sind nicht für ihren Inhalt verantwortlich.",
     "buy_peercoin": "Peercoin Kaufen",
-    "send_amount_below_minimum_unable": "Der Mindestbetrag beträgt $amount.\nDu hast nicht genug Guthaben um die Gebühren zu bezahlen."
+    "send_amount_below_minimum_unable": "Der Mindestbetrag beträgt $amount.\nDu hast nicht genug Guthaben um die Gebühren zu bezahlen.",
+    "receive_faucet": "Faucet öffnen",
+    "addressbook_search": "Adressen oder Labels einfügen",
+    "receive_obtain": "tPPC erhalten",
+    "receive_website": "Website öffnen",
+    "send_qr": "QR-Code",
+    "wallet_bottom_nav_addr": "Adressen",
+    "wallet__send_label_hint": "Hinweis: Den QR-Code scannen wird etwas Zeit sparen"
 }
