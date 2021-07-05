@@ -8,7 +8,7 @@ Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.
 Basic testing successfull on iOS 14.4 and Android 10.  
 **Use at own risk.**  
 
-![Screenshot_1625509784](https://user-images.githubusercontent.com/11148913/124509320-06176800-ddd2-11eb-893f-9ecfc59f4f2b.png)
+![Screenshot_small](https://user-images.githubusercontent.com/11148913/124509449-470f7c80-ddd2-11eb-9daf-56de7eb83594.png)
 
 ## Help Translate
 <a href="https://weblate.ppc.lol/engage/peercoin-flutter/">
