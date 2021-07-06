@@ -36,8 +36,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   String? _address;
   String? _label;
 
-  void changeIndex(int i,[String? addr,String? lab]) {
-    if (i==Tabs.send) {
+  void changeIndex(int i, [String? addr, String? lab]) {
+    if (i == Tabs.send) {
       //Passes address from addresses_tab to send_tab (send to)
       _address = addr;
       _label = lab;
@@ -124,8 +124,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   void rebroadCastUnsendTx() {
-    var nonBroadcastedTx =
-        _walletTransactions.where((element) => element.broadCasted == false);
+    var nonBroadcastedTx = _walletTransactions.where((element) =>
+        element.broadCasted == false && element.confirmations == 0);
     nonBroadcastedTx.forEach((element) {
       _connectionProvider!.broadcastTransaction(
         element.broadcastHex,
@@ -243,7 +243,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_rounded),
-            label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
+            label:
+                AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
             backgroundColor: back,
           ),
           BottomNavigationBarItem(
@@ -317,12 +318,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 }
 
-
-class Tabs{
+class Tabs {
   Tabs._();
   static const int receive = 0;
   static const int transactions = 1;
   static const int addresses = 2;
   static const int send = 3;
-
 }

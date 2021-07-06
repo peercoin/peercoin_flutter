@@ -36,6 +36,35 @@ class _TransactionListState extends State<TransactionList> {
     return address.substring(0, 10) + '...';
   }
 
+  Widget renderConfirmationIndicator(WalletTransaction tx) {
+    if (tx.confirmations == -1) {
+      return Text(
+        'X',
+        textScaleFactor: 0.9,
+        style: TextStyle(color: Colors.red),
+      );
+    }
+    return tx.broadCasted == false
+        ? Text(
+            '?',
+            textScaleFactor: 0.9,
+            style: TextStyle(color: Theme.of(context).accentColor),
+          )
+        : CircularStepProgressIndicator(
+            selectedStepSize: 5,
+            unselectedStepSize: 5,
+            totalSteps: 6,
+            currentStep: tx.confirmations,
+            width: 20,
+            height: 20,
+            selectedColor: Theme.of(context).primaryColor,
+            unselectedColor:
+                Theme.of(context).unselectedWidgetColor.withOpacity(0.5),
+            stepSize: 4,
+            roundedCap: (_, __) => true,
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     var _reversedTx = widget._walletTransactions
@@ -86,9 +115,7 @@ class _TransactionListState extends State<TransactionList> {
                 child: ListView.builder(
                   itemCount: _filteredTx.length + 1,
                   itemBuilder: (_, i) {
-                    var currentConfirmations;
                     if (i > 0) {
-                      currentConfirmations = _filteredTx[i - 1].confirmations;
                       return Container(
                         color: Theme.of(context).primaryColor,
                         child: Card(
@@ -104,29 +131,11 @@ class _TransactionListState extends State<TransactionList> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   AnimatedContainer(
-                                      duration: Duration(milliseconds: 500),
-                                      child: _filteredTx[i - 1].broadCasted ==
-                                              false
-                                          ? Text('?',
-                                              textScaleFactor: 0.9,
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .accentColor))
-                                          : CircularStepProgressIndicator(
-                                              selectedStepSize: 5,
-                                              unselectedStepSize: 5,
-                                              totalSteps: 6,
-                                              currentStep: currentConfirmations,
-                                              width: 20,
-                                              height: 20,
-                                              selectedColor: Theme.of(context)
-                                                  .primaryColor,
-                                              unselectedColor: Theme.of(context)
-                                                  .unselectedWidgetColor
-                                                  .withOpacity(0.5),
-                                              stepSize: 4,
-                                              roundedCap: (_, __) => true,
-                                            )),
+                                    duration: Duration(milliseconds: 500),
+                                    child: renderConfirmationIndicator(
+                                      _filteredTx[i - 1],
+                                    ),
+                                  ),
                                   Text(
                                     DateFormat('d. MMM').format(
                                         _filteredTx[i - 1].timestamp != 0

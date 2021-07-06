@@ -100,14 +100,17 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('tx_confirmations'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.confirmations.toString())
+              SelectableText(_tx.confirmations == -1
+                  ? AppLocalizations.instance.translate('tx_rejected')
+                  : _tx.confirmations.toString())
             ],
           ),
           SizedBox(height: 20),
           Center(
             child: PeerButton(
-                action: () => _launchURL(baseUrl + '${_tx.txid}'),
-                text: AppLocalizations.instance.translate('tx_view_in_explorer'),),
+              action: () => _launchURL(baseUrl + '${_tx.txid}'),
+              text: AppLocalizations.instance.translate('tx_view_in_explorer'),
+            ),
           )
         ],
       ),

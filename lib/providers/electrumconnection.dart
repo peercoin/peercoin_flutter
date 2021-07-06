@@ -209,7 +209,7 @@ class ElectrumConnection with ChangeNotifier {
       } else if (idString.startsWith('paperwallet_')) {
         handlePaperWallet(id, result);
       } else if (idString.startsWith('broadcast_')) {
-        handleBroadcast(id, result);
+        handleBroadcast(id, result ?? decoded['error']['code'].toString());
       } else if (idString == 'blocks') {
         handleBlock(result['height']);
       } else if (_addresses[idString] != null) {
@@ -437,10 +437,12 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleBroadcast(String id, String result) {
     var txId = id.replaceFirst('broadcast_', '');
-    if (txId != 'import') {
+    if (result == '1') {
+      print('tx rejected by server');
+      _activeWallets.updateRejected(_coinName, txId, true);
+    } else if (txId != 'import') {
       _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
-    //TODO error handling if server rejects tx
   }
 
   String get connectedServerUrl {

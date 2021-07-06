@@ -578,6 +578,19 @@ class ActiveWallets with ChangeNotifier {
     openWallet.save();
   }
 
+  void updateRejected(String identifier, String txId, bool rejected) {
+    var openWallet = getSpecificCoinWallet(identifier);
+    var tx =
+        openWallet.transactions.firstWhere((element) => element.txid == txId);
+    if (rejected) {
+      tx.newConfirmations = -1;
+    } else {
+      tx.newConfirmations = 0;
+    }
+    tx.resetBroadcastHex();
+    openWallet.save();
+  }
+
   void updateLabel(String identifier, String address, String label) {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
