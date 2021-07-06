@@ -340,7 +340,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void startPingTimer() {
     _pingTimer ??= Timer.periodic(
-      Duration(minutes: 8),
+      Duration(minutes: 7),
       (_) {
         sendMessage('server.ping', 'ping');
       },
