@@ -111,7 +111,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _latestBlock = _connectionProvider!.latestBlock;
 
         var unconfirmedTx = _walletTransactions.where((element) =>
-            element.confirmations < 6 && element.timestamp != -1 ||
+            element.confirmations < 6 &&
+                element.confirmations != -1 &&
+                element.timestamp != -1 ||
             element.timestamp == null);
         unconfirmedTx.forEach((element) {
           print('requesting update for ${element.txid}');

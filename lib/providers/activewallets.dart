@@ -591,6 +591,7 @@ class ActiveWallets with ChangeNotifier {
     }
     tx.resetBroadcastHex();
     await openWallet.save();
+    notifyListeners();
   }
 
   void updateLabel(String identifier, String address, String label) {
