@@ -435,13 +435,13 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  void handleBroadcast(String id, String result) {
+  void handleBroadcast(String id, String result) async {
     var txId = id.replaceFirst('broadcast_', '');
     if (result == '1') {
       print('tx rejected by server');
-      _activeWallets.updateRejected(_coinName, txId, true);
+      await _activeWallets.updateRejected(_coinName, txId, true);
     } else if (txId != 'import') {
-      _activeWallets.updateBroadcasted(_coinName, txId, true);
+      await _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
   }
 

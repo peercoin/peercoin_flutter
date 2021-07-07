@@ -569,26 +569,28 @@ class ActiveWallets with ChangeNotifier {
     return (reverseString(hash));
   }
 
-  void updateBroadcasted(String identifier, String txId, bool broadcasted) {
+  Future<void> updateBroadcasted(
+      String identifier, String txId, bool broadcasted) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var tx =
         openWallet.transactions.firstWhere((element) => element.txid == txId);
     tx.broadCasted = broadcasted;
     tx.resetBroadcastHex();
-    openWallet.save();
+    await openWallet.save();
   }
 
-  void updateRejected(String identifier, String txId, bool rejected) {
+  Future<void> updateRejected(
+      String identifier, String txId, bool rejected) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    var tx =
-        openWallet.transactions.firstWhere((element) => element.txid == txId);
+    var tx = openWallet.transactions.firstWhere(
+        (element) => element.txid == txId && element.confirmations != -1);
     if (rejected) {
       tx.newConfirmations = -1;
     } else {
       tx.newConfirmations = 0;
     }
     tx.resetBroadcastHex();
-    openWallet.save();
+    await openWallet.save();
   }
 
   void updateLabel(String identifier, String address, String label) {
