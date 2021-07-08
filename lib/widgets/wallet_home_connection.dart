@@ -28,7 +28,7 @@ class WalletHomeConnection extends StatelessWidget {
         ),
       );
     } else {
-      widget = LoadingIndicator();
+      widget = Container(width: 88, child: LoadingIndicator());
     }
 
     return Row(
@@ -41,7 +41,7 @@ class WalletHomeConnection extends StatelessWidget {
         SizedBox(
           width: 10,
         ),
-        widget,
+        widget
       ],
     );
   }

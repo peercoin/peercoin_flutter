@@ -68,7 +68,7 @@ class _TransactionListState extends State<TransactionList> {
   @override
   Widget build(BuildContext context) {
     var _reversedTx = widget._walletTransactions
-        .where((element) => element.timestamp != -1) //filter phatom tx
+        .where((element) => element.timestamp != -1) //filter "phantom" tx
         .toList()
         .reversed
         .toList();
