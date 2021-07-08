@@ -147,6 +147,7 @@ class PeercoinApp extends StatelessWidget {
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
         ],
         locale: _locale == Locale('und') ? null : _locale,
         themeMode: _themeMode,
