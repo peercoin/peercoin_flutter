@@ -46,8 +46,8 @@
     "authenticate_retry_warning_title": "Attenzione, hai solo un tentativo rimasto.",
     "authenticate_subtitle_plural": "$retriesLeft tentativi rimasti",
     "authenticate_subtitle_singular": "$retriesLeft tentativo rimasto",
-    "authenticate_title": "Inserisci il tuo PIN\n",
-    "authenticate_title_new": "Inserisci il tuo nuovo PIN\n",
+    "authenticate_title": "Inserisci il tuo PIN",
+    "authenticate_title_new": "Inserisci il tuo nuovo PIN",
     "buy_peercoin": "Acquista Peercoin",
     "buy_peercoin_dialog_content": "Gli sviluppatori di questa app non sono responsabili del suo contenuto.",
     "continue": "Continua",
@@ -179,5 +179,12 @@
     "setup_seed_slider_label": "Trascina per cambiare il numero di parole",
     "setup_securebox_fail": "Siamo spiacenti.\nIl tuo dispositivo non é in grado di salvare le chiavi in maniera sicura.",
     "about_foundation": "Questo progetto é supportato finanziariamente dalla Peercoin Foundation.\nQualsiasi donazione alla fondazione contribuirà allo sviluppo di questa applicazione.",
-    "wallet_rescan_content": "Riavvia la scansione del portafoglio. Può servire in caso di problemi con transazioni o importi.\nPotrebbe richiedere qualche istante."
+    "wallet_rescan_content": "Riavvia la scansione del portafoglio. Può servire in caso di problemi con transazioni o importi.\nPotrebbe richiedere qualche istante.",
+    "receive_faucet": "Apri faucet",
+    "addressbook_search": "Inserisci indirizzi, etichette",
+    "receive_obtain": "Ottieni tPPC",
+    "receive_website": "Apri il sito",
+    "send_qr": "QR-Code",
+    "wallet_bottom_nav_addr": "Indirizzi",
+    "wallet__send_label_hint": "Scansionando un QR-Code sarà tutto più veloce"
 }
