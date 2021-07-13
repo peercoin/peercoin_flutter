@@ -120,7 +120,7 @@ class _TransactionListState extends State<TransactionList> {
                         color: Theme.of(context).primaryColor,
                         child: Card(
                           child: ListTile(
-                            horizontalTitleGap: 24.0,
+                            horizontalTitleGap: 32.0,
                             onTap: () => Navigator.of(context)
                                 .pushNamed(Routes.Transaction, arguments: [
                               _filteredTx[i - 1],
