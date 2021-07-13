@@ -77,11 +77,9 @@ class _WalletListScreenState extends State<WalletListScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.settings_rounded),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AppSettingsScreen()),
-            );
+          onPressed: () async {
+            await Navigator.pushNamed(context, Routes.AppSettings);
+            setState(() {});
           },
         ),
         actions: [

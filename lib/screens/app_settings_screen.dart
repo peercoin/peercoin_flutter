@@ -25,7 +25,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   String _lang = '';
   String _defaultWallet = '';
   String _selectedTheme = '';
-  bool _languageChangeInfoDisplayed = false;
   late AppSettings _settings;
   late ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
@@ -82,19 +81,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   void saveLang(String lang) async {
     await _settings.setSelectedLang(lang);
-    if (_languageChangeInfoDisplayed == false) {
-      //show notification
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('app_settings_language_restart'),
-          textAlign: TextAlign.center,
-        ),
-        duration: Duration(seconds: 2),
-      ));
-      setState(() {
-        _languageChangeInfoDisplayed = true;
-      });
-    }
+    await AppLocalizations.delegate.load(Locale(lang));
+
+    //show notification
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('app_settings_saved_snack'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 2),
+    ));
   }
 
   void saveTheme(String theme) async {
