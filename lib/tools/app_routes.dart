@@ -7,6 +7,7 @@ import 'package:peercoin/screens/qrcodescanner.dart';
 import 'package:peercoin/screens/server_add.dart';
 import 'package:peercoin/screens/server_settings.dart';
 import 'package:peercoin/screens/setup_import_seed.dart';
+import 'package:peercoin/screens/setup_language.dart';
 import 'package:peercoin/screens/setup_pin_code.dart';
 import 'package:peercoin/screens/setup_save_seed.dart';
 import 'package:peercoin/screens/transaction_details.dart';
@@ -22,6 +23,7 @@ class Routes {
   static const String SetUpPin = '/setup-pin';
   static const String SetupScreen = '/setup-save-seed';
   static const String SetupImport = '/setup-import-seed';
+  static const String SetupLanguage = '/setup-language';
   static const String Transaction = '/tx-detail';
   static const String WalletHome = '/wallet-home';
   static const String WalletImportScan = '/wallet-import-scan';
@@ -35,6 +37,7 @@ class Routes {
     return {
       Routes.SetupScreen: (context) => SetupSaveScreen(),
       Routes.SetUpPin: (context) => SetupPinCodeScreen(),
+      Routes.SetupLanguage: (context) => SetupLanguageScreen(),
       Routes.WalletList: (context) => WalletListScreen(),
       Routes.WalletHome: (context) => WalletHomeScreen(),
       Routes.QRScan: (context) => QRScanner(),
