@@ -29,7 +29,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           availableCoins[_coin]!.displayName,
           availableCoins[_coin]!.letterCode);
       var prefs =
-      await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
+          await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
 
       if (prefs.getBool('importedSeed') == true) {
         await Navigator.of(context).pushNamedAndRemoveUntil(
@@ -63,8 +63,8 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       });
     }
     var activeWalletList =
-    await Provider.of<ActiveWallets>(context, listen: false)
-        .activeWalletsKeys;
+        await Provider.of<ActiveWallets>(context, listen: false)
+            .activeWalletsKeys;
     activeWalletList.forEach((element) {
       if (availableCoins.keys.contains(element)) {
         setState(() {
@@ -84,29 +84,28 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         .toList();
 
     if (actualAvailableWallets.isNotEmpty) {
-      for(var wallet in actualAvailableWallets){
-        list.add(
-            SimpleDialogOption(
-              onPressed: () { _coin = wallet; addWallet(context); },
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Image.asset(
-                      AvailableCoins()
-                          .getSpecificCoin(availableCoins[wallet]!
-                          .name)
-                          .iconPath,
-                      width: 16),
-                ),
-                title: Text(availableCoins[wallet]!.displayName),
-              ),
-            )
-        );
+      for (var wallet in actualAvailableWallets) {
+        list.add(SimpleDialogOption(
+          onPressed: () {
+            _coin = wallet;
+            addWallet(context);
+          },
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Image.asset(
+                  AvailableCoins()
+                      .getSpecificCoin(availableCoins[wallet]!.name)
+                      .iconPath,
+                  width: 16),
+            ),
+            title: Text(availableCoins[wallet]!.displayName),
+          ),
+        ));
       }
-    }else{
+    } else {
       list.add(Center(
-        child:
-        Text(AppLocalizations.instance.translate('no_new_wallet')),
+        child: Text(AppLocalizations.instance.translate('no_new_wallet')),
       ));
     }
 

@@ -142,6 +142,8 @@
     "server_settings_alert_hardcoded_title": "Hard coded server",
     "server_settings_alert_hardcoded_content": "Hard coded servers can not be deleted, only deactivated.",
     "server_settings_error_no_server_left": "At least one connectable server is required!",
+    "setup_continue_alert_title": "Before you continue",
+    "setup_continue_alert_content": "Make sure you have saved your seed phrase.\nYou can access it later on in the app settings.",
     "setup_create_pin": "Create PIN",
     "setup_import_title": "Import Seed",
     "setup_import_note": "Please enter the wallet seed you wish to import.\nThis is not to be confused with a private key.",

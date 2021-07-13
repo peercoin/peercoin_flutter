@@ -72,6 +72,45 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
     });
   }
 
+  Future<void> handleContinue() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('setup_continue_alert_title'),
+          ),
+          content: Text(
+            AppLocalizations.instance.translate('setup_continue_alert_content'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                var prefs = await Provider.of<UnencryptedOptions>(context,
+                        listen: false)
+                    .prefs;
+                await prefs.setBool('importedSeed', false);
+                await Navigator.popAndPushNamed(context, Routes.SetUpPin);
+              },
+              child: Text(
+                AppLocalizations.instance.translate('continue'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,16 +186,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       padding: EdgeInsets.all(10),
                       child: _sharedYet
                           ? PeerButtonBorder(
-                              action: () async {
-                                var prefs =
-                                    await Provider.of<UnencryptedOptions>(
-                                            context,
-                                            listen: false)
-                                        .prefs;
-                                await prefs.setBool('importedSeed', false);
-                                await Navigator.popAndPushNamed(
-                                    context, Routes.SetUpPin);
-                              },
+                              action: () async => await handleContinue(),
                               text: AppLocalizations.instance
                                   .translate('continue'),
                             )
