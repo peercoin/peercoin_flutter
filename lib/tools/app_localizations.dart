@@ -20,12 +20,12 @@ class AppLocalizations {
 
   static const Map<String, String> availableLocales = {
     'en': 'English',
-    'nl': 'Nederlands',
     'de': 'Deutsch',
+    'it': 'Italiano',
+    'nl': 'Nederlands',
     'ro': 'Română',
     'ru': 'русский',
-    'zh': '中文 (Zhōngwén)',
-    'it': 'Italiano'
+    'zh': '中文 (Zhōngwén)'
   };
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
