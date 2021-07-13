@@ -12,8 +12,6 @@ import 'package:peercoin/widgets/new_wallet.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
-import 'app_settings_screen.dart';
-
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
 
