@@ -41,49 +41,63 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                   ],
                 )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset(
-                      'assets/icon/ppc-icon-white-256.png',
-                      width: 50,
-                    ),
-                    Text(
-                      AppLocalizations.instance.translate('setup_welcome'),
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      child: Text(
-                        AppLocalizations.instance
-                            .translate('setup_files_for_wallet'),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+              : Stack(children: [
+                  Positioned(
+                    top: 25,
+                    right: 25,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      onPressed: () => print('hi'),
+                      child: Icon(
+                        Icons.language_rounded,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PeerButtonBorder(
-                          text: AppLocalizations.instance
-                              .translate('create_wallet_new_seed'),
-                          action: () => {createWallet(context)},
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset(
+                        'assets/icon/ppc-icon-white-256.png',
+                        width: 50,
+                      ),
+                      Text(
+                        AppLocalizations.instance.translate('setup_welcome'),
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('setup_files_for_wallet'),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Text(
-                            AppLocalizations.instance.translate(
-                              'create_wallet_or',
-                            ),
-                            style: TextStyle(color: Colors.white)),
-                        PeerButtonBorder(
-                          text: AppLocalizations.instance
-                              .translate('create_wallet_existing_seed'),
-                          action: () => Navigator.of(context)
-                              .pushNamed(Routes.SetupImport),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          PeerButtonBorder(
+                            text: AppLocalizations.instance
+                                .translate('create_wallet_new_seed'),
+                            action: () => {createWallet(context)},
+                          ),
+                          Text(
+                              AppLocalizations.instance.translate(
+                                'create_wallet_or',
+                              ),
+                              style: TextStyle(color: Colors.white)),
+                          PeerButtonBorder(
+                            text: AppLocalizations.instance
+                                .translate('create_wallet_existing_seed'),
+                            action: () => Navigator.of(context)
+                                .pushNamed(Routes.SetupImport),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ]),
         ),
       ),
     );
