@@ -28,6 +28,7 @@ void main() {
         runInShell: true,
       ); //TODO removes "share" overlay - does not work on iphone
       await driver.tap(find.text('Continue'));
+      await driver.tap(find.text('Continue'));
       await driver.tap(elevatedButtonFinder); //pin pad
       for (var i = 1; i <= 12; i++) {
         await driver.tap(find.text('0'));
