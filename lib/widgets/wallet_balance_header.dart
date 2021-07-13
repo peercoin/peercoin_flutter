@@ -37,8 +37,8 @@ class WalletBalanceHeader extends StatelessWidget {
                     ? Text(
                         (_wallet.unconfirmedBalance / 1000000).toString(),
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[100],
+                          fontSize: 12,
+                          color: Colors.grey[200],
                         ),
                       )
                     : Container(),
