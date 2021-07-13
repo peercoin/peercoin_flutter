@@ -33,7 +33,7 @@ class _TransactionListState extends State<TransactionList> {
         .read<ActiveWallets>()
         .getLabelForAddress(widget._wallet.name, address);
     if (result != '') return '$result';
-    return address.substring(0, 10) + '...';
+    return address;
   }
 
   Widget renderConfirmationIndicator(WalletTransaction tx) {
@@ -120,6 +120,7 @@ class _TransactionListState extends State<TransactionList> {
                         color: Theme.of(context).primaryColor,
                         child: Card(
                           child: ListTile(
+                            horizontalTitleGap: 24.0,
                             onTap: () => Navigator.of(context)
                                 .pushNamed(Routes.Transaction, arguments: [
                               _filteredTx[i - 1],
@@ -156,8 +157,7 @@ class _TransactionListState extends State<TransactionList> {
                                 ]),
                             title: Center(
                               child: Text(
-                                _filteredTx[i - 1].txid.substring(0, 20) +
-                                    '...',
+                                _filteredTx[i - 1].txid,
                                 overflow: TextOverflow.ellipsis,
                                 textScaleFactor: 0.9,
                               ),
@@ -178,7 +178,7 @@ class _TransactionListState extends State<TransactionList> {
                                           ? '+'
                                           : '-') +
                                       (_filteredTx[i - 1].value / 1000000)
-                                          .toStringAsFixed(2),
+                                          .toString(),
                                   style: TextStyle(
                                     fontWeight:
                                         _filteredTx[i - 1].timestamp != 0
