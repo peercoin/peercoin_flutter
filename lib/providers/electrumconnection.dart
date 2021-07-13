@@ -440,6 +440,9 @@ class ElectrumConnection with ChangeNotifier {
     if (result == '1') {
       print('tx rejected by server');
       await _activeWallets.updateRejected(_coinName, txId, true);
+    } else if (result == '2') {
+      print('tx not found');
+      //TODO figure out what to do in that case ... it might still get confirmed after some time
     } else if (txId != 'import') {
       await _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
