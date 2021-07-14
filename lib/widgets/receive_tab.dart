@@ -8,6 +8,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet_balance_header.dart';
+import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 import 'package:provider/provider.dart';
@@ -178,27 +179,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     PeerButtonBorder(
                       text: 'Show QR-Code',
                       action: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SimpleDialog(children: [
-                              Center(
-                                child: SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.33,
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  child: Center(
-                                    child: QrImage(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.black,
-                                      data: _qrString!,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ]);
-                          },
-                        );
+                        WalletHomeQr.showQrDialog(context, _qrString!, true);
                       },
                     ),
                     SizedBox(height: 8),
