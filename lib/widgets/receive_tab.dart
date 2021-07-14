@@ -9,7 +9,6 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet_balance_header.dart';
 import 'package:peercoin/widgets/wallet_home_qr.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
