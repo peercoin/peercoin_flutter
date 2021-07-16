@@ -12,7 +12,7 @@ Basic testing successfull on iOS 14.4 and Android 10.
 
 ## Help Translate
 <a href="https://weblate.ppc.lol/engage/peercoin-flutter/">
-<img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/multi-auto.svg" alt="Übersetzungsstatus" />
+<img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/multi-auto.svg" alt="Translation status" />
 </a>
 
 ## Known Limitations
