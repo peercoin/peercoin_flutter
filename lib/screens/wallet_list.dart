@@ -20,10 +20,13 @@ class WalletListScreen extends StatefulWidget {
   WalletListScreen({this.fromColdStart = false});
 }
 
-class _WalletListScreenState extends State<WalletListScreen> {
+class _WalletListScreenState extends State<WalletListScreen>
+    with SingleTickerProviderStateMixin {
   bool _isLoading = false;
   bool _initial = true;
   late ActiveWallets _activeWallets;
+  late Animation<double> animation;
+  late AnimationController controller;
 
   @override
   void didChangeDependencies() async {
@@ -35,6 +38,13 @@ class _WalletListScreenState extends State<WalletListScreen> {
       setState(() {
         _initial = false;
       });
+      controller = AnimationController(
+        duration: Duration(milliseconds: 1500),
+        vsync: this,
+      );
+      animation = Tween(begin: 88.0, end: 92.0).animate(controller);
+      await controller.repeat(reverse: true);
+
       if (widget.fromColdStart == false) {
         if (_appSettings.authenticationOptions!['walletList']!) {
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
@@ -63,6 +73,12 @@ class _WalletListScreenState extends State<WalletListScreen> {
     }
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,33 +121,45 @@ class _WalletListScreenState extends State<WalletListScreen> {
               padding: EdgeInsets.all(10),
               child: Column(
                 children: [
-                  Container(
-                    height: 80.0,
-                    width: 80.0,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).shadowColor,
-                      borderRadius:
-                          BorderRadius.all(const Radius.circular(50.0)),
-                      border: Border.all(
-                          color: Theme.of(context).backgroundColor, width: 2),
-                    ),
-                    child: GestureDetector(
-                      onTap: () => Share.share(
-                          'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
-                      child: Image.asset(
-                        'assets/icon/ppc-logo.png',
-                        height: MediaQuery.of(context).size.height / 12,
-                      ),
-                    ),
+                  AnimatedBuilder(
+                    animation: animation,
+                    builder: (ctx, child) {
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 92,
+                        ),
+                        child: Container(
+                          height: animation.value,
+                          width: animation.value,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).shadowColor,
+                            borderRadius:
+                                BorderRadius.all(const Radius.circular(50.0)),
+                            border: Border.all(
+                              color: Theme.of(context).backgroundColor,
+                              width: 2,
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () => Share.share(
+                                'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
+                            child: Image.asset(
+                              'assets/icon/ppc-logo.png',
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Text(
                       'Peercoin Wallet',
                       style: TextStyle(
-                          letterSpacing: 1.4,
-                          fontSize: 24,
-                          color: Theme.of(context).backgroundColor),
+                        letterSpacing: 1.4,
+                        fontSize: 24,
+                        color: Theme.of(context).backgroundColor,
+                      ),
                     ),
                   ),
                   SizedBox(
