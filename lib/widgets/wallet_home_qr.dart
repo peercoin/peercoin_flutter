@@ -11,7 +11,6 @@ class WalletHomeQr extends StatelessWidget {
 
   static void showQrDialog(BuildContext context, String address,
       [bool hideShareButton = false]) {
-    print(hideShareButton);
     showDialog(
       context: context,
       builder: (BuildContext context) {
