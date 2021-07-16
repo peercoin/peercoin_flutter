@@ -42,6 +42,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   ],
                 )
               : Stack(
+                  fit: StackFit.expand,
                   children: [
                     Positioned(
                       top: 25,
