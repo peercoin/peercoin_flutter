@@ -432,6 +432,10 @@ class ElectrumConnection with ChangeNotifier {
     var addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
       await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
+    } else {
+      print('tx not found');
+      //TODO figure out what to do in that case ...
+      //if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
     }
   }
 
@@ -440,9 +444,6 @@ class ElectrumConnection with ChangeNotifier {
     if (result == '1') {
       print('tx rejected by server');
       await _activeWallets.updateRejected(_coinName, txId, true);
-    } else if (result == '2') {
-      print('tx not found');
-      //TODO figure out what to do in that case ... it might still get confirmed after some time
     } else if (txId != 'import') {
       await _activeWallets.updateBroadcasted(_coinName, txId, true);
     }
