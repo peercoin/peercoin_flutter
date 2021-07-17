@@ -35,5 +35,5 @@ The original library is not compatible, due to transaction timestamp incompabili
 `flutter pub run flutter_native_splash:create`
 
 ## Basic e2e testing
-`flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart`
+`flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart`  
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart`
