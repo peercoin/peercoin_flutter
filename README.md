@@ -18,6 +18,7 @@ Basic testing successfull on iOS 14.4 and Android 10.
 ## Known Limitations
 - can't send to Multisig addresses
 - adds 1 Satoshi extra fee due to sporadic internal rounding errors 
+- will not mint
 
 ## Development
 This repository currently relies on a fork of bitcoin_flutter, which can be found here: 
