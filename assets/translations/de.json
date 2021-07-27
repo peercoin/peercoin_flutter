@@ -189,5 +189,8 @@
     "wallet__send_label_hint": "Hinweis: Den QR-Code scannen wird etwas Zeit sparen",
     "tx_rejected": "Transaktion vom Netzwerk abgelehnt. Bitte erneut versuchen.",
     "setup_continue_alert_title": "Bevor du fortfährst",
-    "setup_continue_alert_content": "Stelle sicher, dass du deinen Seed gesichert hast.\nDu kannst später in den App Einstellungen auf ihn zugreifen."
+    "setup_continue_alert_content": "Stelle sicher, dass du deinen Seed gesichert hast.\nDu kannst später in den App Einstellungen auf ihn zugreifen.",
+    "receive_website_exchandes": "Liste der Handelsplätze öffnen",
+    "receive_website_description": "Du kannst Peercoin direkt mit einer Kreditkarte (nur Kunden außerhalb der USA) oder von diversen Börsen und Anbietern erwerben.",
+    "receive_website_credit": "Mit Kreditkarte kaufen"
 }
