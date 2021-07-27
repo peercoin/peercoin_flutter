@@ -88,8 +88,42 @@ class _ReceiveTabState extends State<ReceiveTab> {
     return RegExp(expression);
   }
 
-  void launchURL(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  void launchURL(String url) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('buy_peercoin_dialog_title'),
+          ),
+          content: Text(
+            AppLocalizations.instance.translate('buy_peercoin_dialog_content'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                await canLaunch(url)
+                    ? await launch(url)
+                    : throw 'Could not launch $url';
+              },
+              child: Text(
+                AppLocalizations.instance.translate('continue'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +265,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           text: AppLocalizations.instance
                               .translate('receive_faucet'),
                           action: () {
-                            launchURL('https://peercoinexplorer.net/faucet/');
+                            launchURL('https://ppc.lol/faucet/');
                           },
                         ),
                       ],
@@ -247,20 +281,22 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         SizedBox(height: 20),
                         Text(
                           AppLocalizations.instance
-                              .translate('buy_peercoin_dialog_title'),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('buy_peercoin_dialog_content'),
+                              .translate('receive_website_description'),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 20),
                         PeerButton(
                           text: AppLocalizations.instance
-                              .translate('receive_website'),
+                              .translate('receive_website_credit'),
                           action: () {
                             launchURL('https://ppc.lol/buy');
+                          },
+                        ),
+                        PeerButton(
+                          text: AppLocalizations.instance
+                              .translate('receive_website_exchandes'),
+                          action: () {
+                            launchURL('https://ppc.lol/exchanges');
                           },
                         ),
                       ],
