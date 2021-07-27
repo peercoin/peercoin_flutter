@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
@@ -43,8 +45,6 @@ class _WalletListScreenState extends State<WalletListScreen>
         vsync: this,
       );
       animation = Tween(begin: 88.0, end: 92.0).animate(controller);
-      await controller.repeat(reverse: true);
-
       if (widget.fromColdStart == false) {
         if (_appSettings.authenticationOptions!['walletList']!) {
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
@@ -63,13 +63,14 @@ class _WalletListScreenState extends State<WalletListScreen>
           final defaultWallet = values.firstWhereOrNull(
               (elem) => elem.letterCode == _appSettings.defaultWallet);
           if (defaultWallet != null) {
-            await Navigator.of(context).pushReplacementNamed(
+            await Navigator.of(context).pushNamed(
               Routes.WalletHome,
               arguments: defaultWallet,
             );
           }
         }
       }
+      await controller.repeat(reverse: true);
     }
 
     super.didChangeDependencies();
@@ -142,7 +143,10 @@ class _WalletListScreenState extends State<WalletListScreen>
                           ),
                           child: GestureDetector(
                             onTap: () => Share.share(
-                                'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'),
+                              Platform.isAndroid
+                                  ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
+                                  : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
+                            ),
                             child: Image.asset(
                               'assets/icon/ppc-logo.png',
                             ),
@@ -204,11 +208,13 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         setState(() {
                                           _isLoading = true;
                                         });
-                                        await Navigator.of(context)
-                                            .pushReplacementNamed(
+                                        await Navigator.of(context).pushNamed(
                                           Routes.WalletHome,
                                           arguments: _wallet,
                                         );
+                                        setState(() {
+                                          _isLoading = false;
+                                        });
                                       },
                                       child: ListTile(
                                         leading: CircleAvatar(

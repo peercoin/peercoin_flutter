@@ -263,7 +263,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+            Navigator.of(context).pop();
           },
         ),
         actions: [
