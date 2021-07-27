@@ -37,6 +37,7 @@ class _WalletListScreenState extends State<WalletListScreen>
       vsync: this,
     );
     animation = Tween(begin: 88.0, end: 92.0).animate(controller);
+    controller.repeat(reverse: true);
     super.initState();
   }
 
@@ -89,7 +90,6 @@ class _WalletListScreenState extends State<WalletListScreen>
       setState(() {
         _initial = false;
       });
-      await controller.repeat(reverse: true);
     }
 
     super.didChangeDependencies();

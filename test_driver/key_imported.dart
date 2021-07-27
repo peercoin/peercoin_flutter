@@ -29,13 +29,15 @@ void main() {
       for (var i = 1; i <= 12; i++) {
         await driver.tap(find.text('0'));
       }
-      await driver.tap(find.byValueKey('newWalletIconButton'));
-      await driver.tap(find.text('Peercoin Testnet'));
-      await driver.tap(find.text('Peercoin Testnet')); //tap into wallet
-      await driver.tap(
-        find.text('Peercoin Testnet'),
-        timeout: Duration(minutes: 1),
-      ); //tap into wallet
+      await driver.runUnsynchronized(() async {
+        await driver.tap(find.byValueKey('newWalletIconButton'));
+        await driver.tap(find.text('Peercoin Testnet'));
+        await driver.tap(find.text('Peercoin Testnet')); //tap into wallet
+        await driver.tap(
+          find.text('Peercoin Testnet'),
+          timeout: Duration(minutes: 1),
+        );
+      });
       expect(await driver.getText(find.text('connected')), 'connected');
     });
   });
