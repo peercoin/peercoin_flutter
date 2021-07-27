@@ -1,0 +1,17 @@
+Send and receive Peercoin, the first Proof-of-Stake cryptocurrency, on your phone.
+
+Keep your wallet seed protected. 
+This app comes with absolutely no warranty. 
+Use at own risk.
+
+Features:
+- Based on electrum protocol.
+- Send and receive peercoin.
+- Ready to transact after installation (no waiting).
+- Peercoin and Peercoin testnet wallets.
+- Address book management.
+- Import paper wallets.
+- Server management.
+- Multi-language support.
+
+Known limitations can be found in the Github repository.
