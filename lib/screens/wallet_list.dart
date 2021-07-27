@@ -31,20 +31,22 @@ class _WalletListScreenState extends State<WalletListScreen>
   late AnimationController controller;
 
   @override
+  void initState() {
+    controller = AnimationController(
+      duration: Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    animation = Tween(begin: 88.0, end: 92.0).animate(controller);
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
     var _appSettings = Provider.of<AppSettings>(context, listen: false);
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
-      setState(() {
-        _initial = false;
-      });
-      controller = AnimationController(
-        duration: Duration(milliseconds: 1500),
-        vsync: this,
-      );
-      animation = Tween(begin: 88.0, end: 92.0).animate(controller);
       if (widget.fromColdStart == false) {
         if (_appSettings.authenticationOptions!['walletList']!) {
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
@@ -54,22 +56,39 @@ class _WalletListScreenState extends State<WalletListScreen>
         final values = await _activeWallets.activeWalletsValues;
         if (values.length == 1) {
           //only one wallet available, pushing to that one
-          await Navigator.of(context).pushReplacementNamed(
+          setState(() {
+            _isLoading = true;
+            _initial = false;
+          });
+          await Navigator.of(context).pushNamed(
             Routes.WalletHome,
             arguments: values[0],
           );
+          setState(() {
+            _isLoading = false;
+          });
         } else if (values.length > 1) {
           //find default wallet
           final defaultWallet = values.firstWhereOrNull(
               (elem) => elem.letterCode == _appSettings.defaultWallet);
           if (defaultWallet != null) {
+            setState(() {
+              _isLoading = true;
+              _initial = false;
+            });
             await Navigator.of(context).pushNamed(
               Routes.WalletHome,
               arguments: defaultWallet,
             );
+            setState(() {
+              _isLoading = false;
+            });
           }
         }
       }
+      setState(() {
+        _initial = false;
+      });
       await controller.repeat(reverse: true);
     }
 

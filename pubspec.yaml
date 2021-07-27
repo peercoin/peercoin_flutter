@@ -75,7 +75,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icon/ppc-icon.png"
-  image_path_ios: "assets/icon/ppc-icon-white-bg.png"
+  image_path_ios: "assets/icon/ppc-ios-app-xxl.png"
   remove_alpha_ios: true
 
   flutter_launcher_name:
@@ -101,6 +101,7 @@ flutter:
     - assets/icon/ppc-icon-white-256.png
     - assets/icon/ppc-icon-white-48.png
     - assets/icon/ppc-logo.png
+    - assets/icon/ppc-ios-app-xxl.png
     - assets/translations/en.json
     - assets/translations/nl.json
     - assets/translations/de.json
