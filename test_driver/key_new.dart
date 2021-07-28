@@ -8,9 +8,22 @@ void main() {
     final elevatedButtonFinder = find.byType('ElevatedButton');
     late FlutterDriver driver;
 
+    Future<FlutterDriver> setupAndGetDriver() async {
+      var driver = await FlutterDriver.connect();
+      var connected = false;
+      while (!connected) {
+        try {
+          await driver.waitUntilFirstFrameRasterized();
+          connected = true;
+          // ignore: empty_catches
+        } catch (error) {}
+      }
+      return driver;
+    }
+
     setUpAll(() async {
       useMemoryFileSystemForTesting();
-      driver = await FlutterDriver.connect();
+      driver = await setupAndGetDriver();
     });
 
     tearDownAll(() async {
