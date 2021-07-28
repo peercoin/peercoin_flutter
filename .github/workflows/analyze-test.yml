@@ -1,4 +1,4 @@
-name:  E2E Tests
+name: Analyze & Test
 on: [push]
 
 jobs:
