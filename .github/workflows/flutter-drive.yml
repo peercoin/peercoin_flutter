@@ -14,20 +14,21 @@ jobs:
       with:
         channel: 'stable' # or: 'beta', 'dev' or 'master'
     - run: flutter pub get
-    - run: flutter test
       # run static analys code
     - run: flutter analyze
 
-  drive_android:
+  e2e-test:
     runs-on: macos-latest
-    #creates a build matrix for your jobs
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: run e2e tests
+
+      - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: | 
-            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
-            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
+          script: ./gradlew connectedCheck
+
+          #script: | 
+           #flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
+           #flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
