@@ -16,7 +16,6 @@ jobs:
     - run: flutter pub get
     - run: flutter test
       # run static analys code
-    - name: run analyze
     - run: flutter analyze
 
   drive_android:
