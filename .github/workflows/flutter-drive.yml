@@ -37,4 +37,4 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: "pixel_xl"
-          script: flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart
+          script: flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart && flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
