@@ -114,6 +114,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 await canLaunch(url)
                     ? await launch(url)
                     : throw 'Could not launch $url';
+
+                Navigator.of(context).pop();
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),
@@ -252,12 +254,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         SizedBox(height: 20),
                         Text(
                           AppLocalizations.instance
-                              .translate('buy_peercoin_dialog_title'),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('buy_peercoin_dialog_content'),
+                              .translate('receive_website_faucet'),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 20),
