@@ -2,7 +2,7 @@ name:  Build and Test Flutter App
 on: [push,pull_request]
 
 jobs:
-  test:
+  code-analysis:
     runs-on: macos-latest
     #sequence of tasks called
     steps:
@@ -27,8 +27,6 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2.19.1
         with:
           api-level: 29
-          script: ./gradlew connectedCheck
-
-          #script: | 
-           #flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
-           #flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
+          script: | 
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
