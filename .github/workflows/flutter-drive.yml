@@ -36,5 +36,5 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
-          profile: Nexus 6
+          profile: "pixel_xl"
           script: flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart
