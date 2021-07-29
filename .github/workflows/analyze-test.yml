@@ -4,7 +4,7 @@ on: [push]
 jobs:
   code-analysis:
     runs-on: macos-latest
-    #sequence of tasks called
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-java@v1
@@ -12,13 +12,14 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        channel: 'stable' # or: 'beta', 'dev' or 'master'
+        channel: 'stable' 
     - run: flutter pub get
       # run static analys code
     - run: flutter analyze
 
   e2e-test:
     runs-on: macos-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable' # or: 'beta', 'dev' or 'master'
+          channel: 'stable'
       - name: run tests
         uses: ReactiveCircus/android-emulator-runner@v2.19.1
         with:
