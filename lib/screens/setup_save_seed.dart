@@ -6,6 +6,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -79,6 +80,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
         return AlertDialog(
           title: Text(
             AppLocalizations.instance.translate('setup_continue_alert_title'),
+            textAlign: TextAlign.center,
           ),
           content: Text(
             AppLocalizations.instance.translate('setup_continue_alert_content'),
@@ -139,14 +141,18 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                     ),
-                    SelectableText(
-                      _seed,
-                      minLines: 4,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+                    DoubleTabToClipboard(
+                      clipBoardData: _seed,
+                      child: SelectableText(
+                        _seed,
+                        minLines: 4,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          wordSpacing: 10),
+                          wordSpacing: 10,
+                        ),
+                      ),
                     ),
                     Column(
                       children: [
