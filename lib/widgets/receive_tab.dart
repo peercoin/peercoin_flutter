@@ -6,6 +6,7 @@ import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet_balance_header.dart';
 import 'package:peercoin/widgets/wallet_home_qr.dart';
@@ -154,9 +155,12 @@ class _ReceiveTabState extends State<ReceiveTab> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FittedBox(
-                          child: SelectableText(
-                            widget._unusedAddress,
-                            style: TextStyle(color: Colors.black),
+                          child: DoubleTabToClipboard(
+                            clipBoardData: widget._unusedAddress,
+                            child: SelectableText(
+                              widget._unusedAddress,
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
                       ),

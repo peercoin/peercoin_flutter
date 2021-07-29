@@ -35,8 +35,10 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('id'),
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalizations.instance.translate('id'),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               SelectableText(_tx.txid)
             ],
           ),
@@ -46,10 +48,12 @@ class TransactionDetails extends StatelessWidget {
             children: [
               Text(AppLocalizations.instance.translate('time'),
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(_tx.timestamp! != 0
-                  ? DateFormat().format(DateTime.fromMillisecondsSinceEpoch(
-                      _tx.timestamp! * 1000))
-                  : AppLocalizations.instance.translate('unconfirmed'))
+              SelectableText(
+                _tx.timestamp! != 0
+                    ? DateFormat().format(DateTime.fromMillisecondsSinceEpoch(
+                        _tx.timestamp! * 1000))
+                    : AppLocalizations.instance.translate('unconfirmed'),
+              )
             ],
           ),
           Divider(),
@@ -79,8 +83,10 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_address'),
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalizations.instance.translate('tx_address'),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               SelectableText(_tx.address),
               // Text("") TODO might add address label here in the future
             ],
@@ -89,8 +95,10 @@ class TransactionDetails extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('tx_direction'),
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalizations.instance.translate('tx_direction'),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               SelectableText(_tx.direction)
             ],
           ),

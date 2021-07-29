@@ -4,6 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 
 import 'buttons.dart';
+import 'double_tab_to_clipboard.dart';
 
 class WalletHomeQr extends StatelessWidget {
   final String _unusedAddress;
@@ -32,9 +33,12 @@ class WalletHomeQr extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FittedBox(
-                  child: SelectableText(
-                    address,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  child: DoubleTabToClipboard(
+                    clipBoardData: address,
+                    child: SelectableText(
+                      address,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),

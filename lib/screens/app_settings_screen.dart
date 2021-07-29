@@ -7,6 +7,7 @@ import 'package:peercoin/screens/about.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/settings_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -237,9 +238,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           )
                         : Column(children: [
                             SizedBox(height: 20),
-                            SelectableText(
-                              _seedPhrase,
-                              textAlign: TextAlign.center,
+                            DoubleTabToClipboard(
+                              clipBoardData: _seedPhrase,
+                              child: SelectableText(
+                                _seedPhrase,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                             SizedBox(height: 20),
                             PeerButton(
