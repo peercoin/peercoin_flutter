@@ -27,7 +27,6 @@ class _SetupScreenState extends State<SetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SetupProgressIndicator(1),
       body: Container(
         color: Theme.of(context).primaryColor,
         child: Container(
@@ -45,61 +44,70 @@ class _SetupScreenState extends State<SetupScreen> {
                   fit: StackFit.expand,
                   children: [
                     Positioned(
-                      top: 25,
+                      top: 40,
                       right: 25,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
+                      child: IconButton(
                         onPressed: () async {
                           await Navigator.of(context)
                               .pushNamed(Routes.SetupLanguage);
                           setState(() {});
                         },
-                        child: Icon(
+                        icon: Icon(
                           Icons.language_rounded,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).backgroundColor,
                         ),
                       ),
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          'assets/icon/ppc-icon-white-256.png',
-                          width: 50,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                          child: SetupProgressIndicator(1),
                         ),
-                        Text(
-                          AppLocalizations.instance.translate('setup_welcome'),
-                          style: TextStyle(color: Colors.white, fontSize: 24),
+                        Image.asset(
+                          'assets/images/90-Start-Up.png',
+                          height: MediaQuery.of(context).size.height/2.5,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 50),
-                          child: Text(
-                            AppLocalizations.instance
-                                .translate('setup_files_for_wallet'),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Welcome',
+                                style: TextStyle(color: Colors.white, fontSize: 40),
+                              ),
+                              Text(
+                                'to Peercoin Wallet',
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                            ],
                           ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            PeerButtonBorder(
-                              text: AppLocalizations.instance
-                                  .translate('create_wallet_new_seed'),
-                              action: () => {createWallet(context)},
-                            ),
-                            Text(
-                                AppLocalizations.instance.translate(
-                                  'create_wallet_or',
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                child: Text(
+                                      'If you already have a Seed select "Import Seed" otherwise create a new wallet.',
+                                  style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
+                                  textAlign: TextAlign.center,
                                 ),
-                                style: TextStyle(color: Colors.white)),
-                            PeerButtonBorder(
-                              text: AppLocalizations.instance
-                                  .translate('create_wallet_existing_seed'),
-                              action: () => Navigator.of(context)
-                                  .pushNamed(Routes.SetupImport),
-                            )
-                          ],
+                              ),
+                              PeerButtonBorder(
+                                text: 'Create Wallet',
+                                action: () => {createWallet(context)},
+                              ),
+                              PeerButtonBorder(
+                                text: 'Import Seed',
+                                action: () => Navigator.of(context)
+                                    .pushNamed(Routes.SetupImport),
+                              ),
+                              SizedBox(height: 8,),
+                            ],
+                          ),
                         )
                       ],
                     ),

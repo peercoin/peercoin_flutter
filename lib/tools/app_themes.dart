@@ -152,7 +152,7 @@ abstract class LightColors {
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF000000);
   static Color get grey => const Color(0xFF717C89);
-  static Color get white => const Color(0xFFFDFFFC);
+  static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFF8333C);
   static Color get yellow => const Color(0xFFFFBF46);
 }
@@ -162,6 +162,6 @@ abstract class DarkColors {
   static Color get black => const Color(0xFF0D1821);
   static Color get darkBlue => const Color(0xFF234058);
   static Color get grey => const Color(0xFFE9EAED);
-  static Color get white => const Color(0xFFFDFFFC);
+  static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFA8201A);
 }

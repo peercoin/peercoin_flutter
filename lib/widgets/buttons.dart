@@ -55,7 +55,6 @@ class PeerButtonBorder extends StatelessWidget {
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
-          side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
         ),
         elevation: 0,
       ),
