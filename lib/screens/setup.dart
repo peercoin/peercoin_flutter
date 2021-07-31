@@ -29,91 +29,88 @@ class _SetupScreenState extends State<SetupScreen> {
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
-        child: Container(
-          width: double.infinity,
-          child: _loading
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    LinearProgressIndicator(
-                      backgroundColor: Colors.white,
-                    ),
-                  ],
-                )
-              : Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Positioned(
-                      top: 40,
-                      right: 25,
-                      child: IconButton(
-                        onPressed: () async {
-                          await Navigator.of(context)
-                              .pushNamed(Routes.SetupLanguage);
-                          setState(() {});
-                        },
-                        icon: Icon(
-                          Icons.language_rounded,
-                          color: Theme.of(context).backgroundColor,
-                        ),
+        child: _loading
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  LinearProgressIndicator(
+                    backgroundColor: Colors.white,
+                  ),
+                ],
+              )
+            : Stack(
+                fit: StackFit.expand,
+                children: [
+                  Positioned(
+                    top: 40,
+                    right: 25,
+                    child: IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context)
+                            .pushNamed(Routes.SetupLanguage);
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.language_rounded,
+                        color: Theme.of(context).backgroundColor,
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-                          child: SetupProgressIndicator(1),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                        child: SetupProgressIndicator(1),
+                      ),
+                      Image.asset(
+                        'assets/images/90-Start-Up.png',
+                        height: MediaQuery.of(context).size.height/3,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Welcome',
+                              style: TextStyle(color: Colors.white, fontSize: 40),
+                            ),
+                            Text(
+                              'to Peercoin Wallet',
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ],
                         ),
-                        Image.asset(
-                          'assets/images/90-Start-Up.png',
-                          height: MediaQuery.of(context).size.height/2.5,
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Text(
+                                    'If you already have a Seed select "Import Seed" otherwise create a new wallet.',
+                                style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            PeerButtonBorder(
+                              text: 'Create Wallet',
+                              action: () => {createWallet(context)},
+                            ),
+                            PeerButtonBorder(
+                              text: 'Import Seed',
+                              action: () => Navigator.of(context)
+                                  .pushNamed(Routes.SetupImport),
+                            ),
+                            SizedBox(height: 8,),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Welcome',
-                                style: TextStyle(color: Colors.white, fontSize: 40),
-                              ),
-                              Text(
-                                'to Peercoin Wallet',
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24),
-                                child: Text(
-                                      'If you already have a Seed select "Import Seed" otherwise create a new wallet.',
-                                  style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              PeerButtonBorder(
-                                text: 'Create Wallet',
-                                action: () => {createWallet(context)},
-                              ),
-                              PeerButtonBorder(
-                                text: 'Import Seed',
-                                action: () => Navigator.of(context)
-                                    .pushNamed(Routes.SetupImport),
-                              ),
-                              SizedBox(height: 8,),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }
