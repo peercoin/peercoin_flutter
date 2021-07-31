@@ -83,28 +83,28 @@ class _SetupScreenState extends State<SetupScreen> {
                         ),
                       ),
                       Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24),
-                              child: Text(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
                                     'If you already have a Seed select "Import Seed" otherwise create a new wallet.',
                                 style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
                                 textAlign: TextAlign.center,
                               ),
-                            ),
-                            PeerButtonBorder(
-                              text: 'Create Wallet',
-                              action: () => {createWallet(context)},
-                            ),
-                            PeerButtonBorder(
-                              text: 'Import Seed',
-                              action: () => Navigator.of(context)
-                                  .pushNamed(Routes.SetupImport),
-                            ),
-                            SizedBox(height: 8,),
-                          ],
+                              PeerButtonBorder(
+                                text: 'Create Wallet',
+                                action: () => {createWallet(context)},
+                              ),
+                              PeerButtonBorder(
+                                text: 'Import Seed',
+                                action: () => Navigator.of(context)
+                                    .pushNamed(Routes.SetupImport),
+                              ),
+                              SizedBox(height: 8,),
+                            ],
+                          ),
                         ),
                       )
                     ],

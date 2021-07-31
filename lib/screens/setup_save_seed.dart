@@ -198,7 +198,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       child: Text(
                         'This list of words is used to generate your private key and gives full access to your wallet. Keep it safe !',
                         style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                        textAlign: TextAlign.justify,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                     if (_sharedYet)
@@ -221,102 +221,5 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
       ),
     );
 
-
-
-
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                height: MediaQuery.of(context).size.height,
-                color: Theme.of(context).primaryColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset(
-                      'assets/icon/ppc-icon-white-256.png',
-                      width: 50,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      child: Text(
-                        AppLocalizations.instance
-                            .translate('label_wallet_seed'),
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                      ),
-                    ),
-                    DoubleTabToClipboard(
-                      clipBoardData: _seed,
-                      child: SelectableText(
-                        _seed,
-                        minLines: 4,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          wordSpacing: 10,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Slider(
-                          activeColor: Colors.white,
-                          inactiveColor: Theme.of(context).accentColor,
-                          value: _currentSliderValue,
-                          min: 12,
-                          max: 24,
-                          divisions: 3,
-                          label: _currentSliderValue.round().toString(),
-                          onChanged: (value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
-                            if (value % 4 == 0) {
-                              recreatePhrase(value);
-                            }
-                          },
-                        ),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('setup_seed_slider_label'),
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      AppLocalizations.instance.translate(
-                          'label_keep_seed_safe', {
-                        'numberOfWords': _currentSliderValue.round().toString()
-                      }),
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: _sharedYet
-                          ? PeerButtonBorder(
-                              action: () async => await handleContinue(),
-                              text: AppLocalizations.instance
-                                  .translate('continue'),
-                            )
-                          : PeerButtonBorder(
-                              action: () async => await shareSeed(_seed),
-                              text: AppLocalizations.instance
-                                  .translate('export_now'),
-                            ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
