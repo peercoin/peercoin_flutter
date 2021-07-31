@@ -20,6 +20,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void createWallet(context) async {
     setState(() {
       _loading = true;
@@ -47,81 +53,98 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var border = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(20)),
+      borderSide: BorderSide(width: 1, color: Colors.transparent,),
+    );
+
     return Scaffold(
-      appBar: SetupProgressIndicator(2),
       body: SingleChildScrollView(
         child: Container(
-          color: Theme.of(context).primaryColor,
           height: MediaQuery.of(context).size.height,
+          color: Theme.of(context).primaryColor,
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Image.asset(
-                  'assets/icon/ppc-icon-white-256.png',
-                  width: 50,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                child: SetupProgressIndicator(2),
+              ),
+              Image.asset(
+                'assets/images/59-Cybersecurity.png',
+                height: MediaQuery.of(context).size.height/3,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Text(
+                  'Import Seed',
+                  style: TextStyle(color: Colors.white, fontSize: 32),
                 ),
-                Text(
-                  AppLocalizations.instance.translate('setup_import_title'),
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    AppLocalizations.instance.translate(
-                      'setup_import_note',
-                    ),
-                    style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(20),
-                      child: TextFormField(
-                        textInputAction: TextInputAction.done,
-                        key: Key('importTextField'),
-                        controller: _controller,
-                        validator: (value) {
-                          if (value!.split(' ').length < 12) {
-                            return AppLocalizations.instance.translate(
-                              'import_seed_error_1',
-                            );
-                          }
-                          if (bip39.validateMnemonic(value) == false) {
-                            return AppLocalizations.instance.translate(
-                              'import_seed_error_2',
-                            );
-                          }
-                          return null;
-                        },
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () async {
-                              var data = await Clipboard.getData('text/plain');
-                              if (data != null) {
-                                _controller.text = data.text!;
-                              }
-                              FocusScope.of(context).unfocus(); //hide keyboard
-                            },
-                            icon: Icon(Icons.paste,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                        keyboardType: TextInputType.multiline,
-                        minLines: 5,
-                        maxLines: 5,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        'Please enter your wallet seed, separating words with whitespaces.',
+                        style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ),
-                ),
-                _loading
-                    ? LoadingIndicator()
-                    : PeerButtonBorder(
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          textInputAction: TextInputAction.done,
+                          key: Key('importTextField'),
+                          controller: _controller,
+                          validator: (value) {
+                            if (value!.split(' ').length < 12) {
+                              return AppLocalizations.instance.translate(
+                                'import_seed_error_1',
+                              );
+                            }
+                            if (bip39.validateMnemonic(value) == false) {
+                              return AppLocalizations.instance.translate(
+                                'import_seed_error_2',
+                              );
+                            }
+                            return null;
+                          },
+                          style: TextStyle(color: Theme.of(context).accentColor),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                var data = await Clipboard.getData('text/plain');
+                                if (data != null) {
+                                  _controller.text = data.text!;
+                                }
+                                FocusScope.of(context).unfocus(); //hide keyboard
+                              },
+                              icon: Icon(Icons.paste,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            border: border,
+                            focusedBorder: border,
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20)),
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: Theme.of(context).errorColor,
+                              ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.multiline,
+                          minLines: 5,
+                          maxLines: 5,
+                        ),
+                      ),
+                      _loading
+                          ? LoadingIndicator()
+                          : PeerButtonBorder(
                         action: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
@@ -132,7 +155,13 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           'import_seed_button',
                         ),
                       ),
-              ]),
+                      SizedBox(height: 8,),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

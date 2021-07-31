@@ -55,7 +55,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
             ),
             Image.asset(
               'assets/images/55-Protection.png',
-              height: MediaQuery.of(context).size.height/3,
+              height: MediaQuery.of(context).size.height/3.5,
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
