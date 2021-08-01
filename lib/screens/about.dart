@@ -148,6 +148,17 @@ class _AboutScreenState extends State<AboutScreen> {
                                     .translate('about_send_mail'),
                               ),
                             ),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
+                              'App illustrations thanks to the courtesy of DesignAi',
+                            ),
+                            TextButton(
+                              onPressed: () async => launchMailto(),
+                              child: Text(
+                                'Link da inserire...',
+                              ),
+                            ),
                           ]),
                     ),
             ),
