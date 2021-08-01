@@ -55,13 +55,13 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
             ),
             Image.asset(
               'assets/images/55-Protection.png',
-              height: MediaQuery.of(context).size.height/3.5,
+              height: MediaQuery.of(context).size.height/3,
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
                 'Security',
-                style: TextStyle(color: Colors.white, fontSize: 40),
+                style: TextStyle(color: Colors.white, fontSize: 32),
               ),
             ),
             Expanded(
@@ -96,7 +96,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                           }
                         }),
                   ),
-                  PeerButtonBorder(
+                  PeerButtonSetup(
                     action: () async {
                       await screenLock(
                         title: HeadingTitle(

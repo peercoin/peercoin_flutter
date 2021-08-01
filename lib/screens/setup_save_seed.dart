@@ -140,7 +140,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16),
                           child: Text(
-                            'Double tap the list to copy on the clipboard.',
+                            'Double tap the list to copy it.',
                             style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
                             textAlign: TextAlign.center,
                           ),
@@ -193,24 +193,21 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'This list of words is used to generate your private key and gives full access to your wallet. Keep it safe !',
-                        style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
                     if (_sharedYet)
-                      PeerButtonBorder(
+                      PeerButtonSetup(
                         action: () async => await handleContinue(),
                         text: AppLocalizations.instance.translate('continue'),
                       )
                     else
-                      PeerButtonBorder(
+                      PeerButtonSetupBorder(
                         action: () async => await shareSeed(_seed),
                         text: AppLocalizations.instance.translate('export_now'),
                       ),
+                    Text(
+                      'WARNING: Store this list safely!',
+                      style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.center,
+                    ),
                     SizedBox(height: 8,),
                   ],
                 ),

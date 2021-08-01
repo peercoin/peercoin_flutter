@@ -29,16 +29,7 @@ class _SetupScreenState extends State<SetupScreen> {
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
-        child: _loading
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  LinearProgressIndicator(
-                    backgroundColor: Colors.white,
-                  ),
-                ],
-              )
-            : Stack(
+        child: Stack(
                 fit: StackFit.expand,
                 children: [
                   Positioned(
@@ -89,15 +80,21 @@ class _SetupScreenState extends State<SetupScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                    'If you already have a Seed select "Import Seed" otherwise create a new wallet.',
+                                'Seed is a list of english words that combined together generates your private key.',
                                 style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
                                 textAlign: TextAlign.center,
                               ),
-                              PeerButtonBorder(
+                              Text(
+                                'If you already have a Seed select "Import Seed", otherwise create a new wallet.',
+                                style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
+                                textAlign: TextAlign.center,
+                              ),
+                              PeerButtonSetup(
                                 text: 'Create Wallet',
                                 action: () => {createWallet(context)},
+                                loading: _loading,
                               ),
-                              PeerButtonBorder(
+                              PeerButtonSetup(
                                 text: 'Import Seed',
                                 action: () => Navigator.of(context)
                                     .pushNamed(Routes.SetupImport),

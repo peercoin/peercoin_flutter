@@ -6,7 +6,6 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +54,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
   Widget build(BuildContext context) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      borderSide: BorderSide(width: 1, color: Colors.transparent,),
+      borderSide: BorderSide(width: 2, color: Colors.transparent,),
     );
 
     return Scaffold(
@@ -88,7 +87,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        'Please enter your wallet seed, separating words with whitespaces.',
+                        'Please enter your wallet seed, with a whitespace separating words.',
                         style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
                         textAlign: TextAlign.center,
                       ),
@@ -128,6 +127,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             ),
                             border: border,
                             focusedBorder: border,
+                            enabledBorder: border,
                             errorBorder: OutlineInputBorder(
                               borderRadius:
                               BorderRadius.all(Radius.circular(20)),
@@ -142,9 +142,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           maxLines: 5,
                         ),
                       ),
-                      _loading
-                          ? LoadingIndicator()
-                          : PeerButtonBorder(
+                      PeerButtonSetup(
                         action: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
@@ -154,6 +152,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         text: AppLocalizations.instance.translate(
                           'import_seed_button',
                         ),
+                        loading: _loading,
                       ),
                       SizedBox(height: 8,),
                     ],
