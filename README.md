@@ -2,7 +2,7 @@
 <a href="https://weblate.ppc.lol/engage/peercoin-flutter/">
 <img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/svg-badge.svg" alt="Übersetzungsstatus" /></a>
 [![Codemagic build status](https://api.codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/status_badge.svg)](https://codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/latest_build)
-[![Build and Test Flutter App](https://github.com/peercoin/peercoin_flutter/actions/workflows/flutter-drive.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/flutter-drive.yml)
+[![Analyze & Test](https://github.com/peercoin/peercoin_flutter/actions/workflows/analyze-test.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/analyze-test.yml)
 # peercoin_flutter
 Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.  
 **App in constant development**  
