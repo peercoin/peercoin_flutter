@@ -68,7 +68,7 @@ dev_dependencies:
     sdk: flutter
   test: any
   build_runner: ^2.0.4
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.9.1
   flutter_native_splash: ^1.1.8+4
   
 flutter_icons:
@@ -135,5 +135,3 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
