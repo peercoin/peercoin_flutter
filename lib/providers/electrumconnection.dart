@@ -111,12 +111,12 @@ class ElectrumConnection with ChangeNotifier {
     _serverUrl = _availableServers[_connectionAttempt];
     print('connecting to $_serverUrl');
 
-    _connectionAttempt++;
     try {
       _connection = IOWebSocketChannel.connect(
         _serverUrl,
       );
     } catch (e) {
+      _connectionAttempt++;
       print('connection error: $e');
     }
   }
