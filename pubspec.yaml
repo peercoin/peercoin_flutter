@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.5.9+52
+version: 0.6.0+53
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -58,6 +58,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.3
   collection: ^1.15.0-nullsafety.4
+  theme_mode_handler: ^3.0.0
 
 dev_dependencies:
   integration_test:
@@ -110,6 +111,7 @@ flutter:
     - assets/translations/zh.json
     - assets/translations/it.json
     - assets/translations/hr.json
+    - assets/translations/pt.json
     # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
