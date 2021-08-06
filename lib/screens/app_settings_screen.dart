@@ -11,6 +11,7 @@ import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/settings_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:theme_mode_handler/theme_mode_handler.dart';
 
 class AppSettingsScreen extends StatefulWidget {
   @override
@@ -29,11 +30,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   late AppSettings _settings;
   late ActiveWallets _activeWallets;
   List<CoinWallet> _availableWallets = [];
-  final List _availableThemes = [
-    'system',
-    'light',
-    'dark',
-  ];
+  final Map _availableThemes = {
+    'system': ThemeMode.system,
+    'light': ThemeMode.light,
+    'dark': ThemeMode.dark,
+  };
 
   @override
   void didChangeDependencies() async {
@@ -43,6 +44,10 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       _availableWallets = await _activeWallets.activeWalletsValues;
       var localAuth = LocalAuthentication();
       _biometricsAvailable = await localAuth.canCheckBiometrics;
+      _selectedTheme = ThemeModeHandler.of(context)!
+          .themeMode
+          .toString()
+          .replaceFirst('ThemeMode.', '');
       if (_biometricsAvailable == false) {
         _settings.setBiometricsAllowed(false);
       }
@@ -94,12 +99,15 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     ));
   }
 
-  void saveTheme(String theme) async {
-    await _settings.setSelectedTheme(theme);
+  void saveTheme(String label, ThemeMode theme) async {
+    await ThemeModeHandler.of(context)!.saveThemeMode(theme);
+    setState(() {
+      _selectedTheme = label;
+    });
     //show notification
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        AppLocalizations.instance.translate('app_settings_language_restart'),
+        AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,
       ),
       duration: Duration(seconds: 2),
@@ -127,7 +135,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
     _defaultWallet = _settings.defaultWallet;
-    _selectedTheme = _settings.selectedTheme ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -258,9 +265,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     AppLocalizations.instance.translate('app_settings_theme'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
-                children: _availableThemes.map((theme) {
+                children: _availableThemes.keys.map((theme) {
                   return InkWell(
-                    onTap: () => saveTheme(theme),
+                    onTap: () => saveTheme(theme, _availableThemes[theme]),
                     child: ListTile(
                       title: Text(
                         AppLocalizations.instance
@@ -269,7 +276,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       leading: Radio(
                         value: theme,
                         groupValue: _selectedTheme,
-                        onChanged: (dynamic _) => saveTheme(theme),
+                        onChanged: (dynamic _) =>
+                            saveTheme(theme, _availableThemes[theme]),
                       ),
                     ),
                   );

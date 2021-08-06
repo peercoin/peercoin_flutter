@@ -9,8 +9,10 @@ import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/screens/auth_jail.dart';
+import 'package:peercoin/tools/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:theme_mode_handler/theme_mode_handler.dart';
 
 import './models/coinwallet.dart';
 import './models/walletaddress.dart';
@@ -29,7 +31,6 @@ import './tools/app_themes.dart';
 late bool setupFinished;
 late Widget _homeWidget;
 late Locale _locale;
-late ThemeMode _themeMode;
 
 void main() async {
   //init sharedpreferences
@@ -37,16 +38,6 @@ void main() async {
   var prefs = await SharedPreferences.getInstance();
   setupFinished = prefs.getBool('setupFinished') ?? false;
   _locale = Locale(prefs.getString('language_code') ?? 'und');
-
-  //compute theme setting
-  var _themeString = prefs.getString('theme_mode') ?? 'system';
-  if (_themeString == 'system') {
-    _themeMode = ThemeMode.system;
-  } else if (_themeString == 'dark') {
-    _themeMode = ThemeMode.dark;
-  } else {
-    _themeMode = ThemeMode.light;
-  }
 
   //init hive
   await Hive.initFlutter();
@@ -139,22 +130,27 @@ class PeercoinApp extends StatelessWidget {
           },
         ),
       ],
-      child: MaterialApp(
-        title: 'Peercoin',
-        debugShowCheckedModeBanner: false,
-        supportedLocales:
-            AppLocalizations.availableLocales.keys.map((lang) => Locale(lang)),
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate
-        ],
-        locale: _locale == Locale('und') ? null : _locale,
-        themeMode: _themeMode,
-        theme: MyTheme.getTheme(ThemeMode.light),
-        darkTheme: MyTheme.getTheme(ThemeMode.dark),
-        home: _homeWidget,
-        routes: Routes.getRoutes(),
+      child: ThemeModeHandler(
+        manager: ThemeManager(),
+        builder: (ThemeMode themeMode) {
+          return MaterialApp(
+            title: 'Peercoin',
+            debugShowCheckedModeBanner: false,
+            supportedLocales: AppLocalizations.availableLocales.keys
+                .map((lang) => Locale(lang)),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate
+            ],
+            locale: _locale == Locale('und') ? null : _locale,
+            themeMode: themeMode,
+            theme: MyTheme.getTheme(ThemeMode.light),
+            darkTheme: MyTheme.getTheme(ThemeMode.dark),
+            home: _homeWidget,
+            routes: Routes.getRoutes(),
+          );
+        },
       ),
     );
   }

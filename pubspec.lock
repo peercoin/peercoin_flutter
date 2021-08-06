@@ -892,6 +892,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.19"
+  theme_mode_handler:
+    dependency: "direct main"
+    description:
+      name: theme_mode_handler
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   timezone:
     dependency: transitive
     description:
