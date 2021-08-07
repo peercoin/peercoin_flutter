@@ -69,7 +69,9 @@ class _SetupScreenState extends State<SetupScreen> {
                                 loading: _loading,
                               ),
                               PeerButtonSetup(
-                                text: AppLocalizations.instance.translate('setup_option2'),
+                                text: AppLocalizations.instance.translate(
+                                  'import_seed_button',
+                                ),
                                 action: () => Navigator.of(context)
                                     .pushNamed(Routes.SetupImport),
                               ),
