@@ -111,12 +111,12 @@ class ElectrumConnection with ChangeNotifier {
     _serverUrl = _availableServers[_connectionAttempt];
     print('connecting to $_serverUrl');
 
-    _connectionAttempt++;
     try {
       _connection = IOWebSocketChannel.connect(
         _serverUrl,
       );
     } catch (e) {
+      _connectionAttempt++;
       print('connection error: $e');
     }
   }
@@ -289,7 +289,7 @@ class ElectrumConnection with ChangeNotifier {
     }
     if (_scanMode == true) {
       if (newStatus == null) {
-        subscribeNextDerivedAddress();
+        await subscribeNextDerivedAddress();
       } else {
         //increase depth because we found one != null
         if (_depthPointer == 1) {
@@ -303,12 +303,12 @@ class ElectrumConnection with ChangeNotifier {
         //saving to wallet
         _activeWallets.addAddressFromScan(_coinName, address);
         //try next
-        subscribeNextDerivedAddress();
+        await subscribeNextDerivedAddress();
       }
     }
   }
 
-  void subscribeNextDerivedAddress() async {
+  Future<void> subscribeNextDerivedAddress() async {
     var currentPointer = _queryDepth.keys.toList()[_depthPointer];
 
     if (_depthPointer == 1 && _queryDepth[currentPointer]! < _maxChainDepth ||
@@ -334,7 +334,7 @@ class ElectrumConnection with ChangeNotifier {
       print('move pointer');
       _queryDepth[currentPointer] = 0;
       _depthPointer++;
-      subscribeNextDerivedAddress();
+      await subscribeNextDerivedAddress();
     }
   }
 
