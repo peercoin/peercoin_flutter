@@ -32,28 +32,10 @@ class _SetupScreenState extends State<SetupScreen> {
         child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Positioned(
-                    top: 40,
-                    right: 25,
-                    child: IconButton(
-                      onPressed: () async {
-                        await Navigator.of(context)
-                            .pushNamed(Routes.SetupLanguage);
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.language_rounded,
-                        color: Theme.of(context).backgroundColor,
-                      ),
-                    ),
-                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-                        child: SetupProgressIndicator(1),
-                      ),
+                      PeerProgress(1),
                       Image.asset(
                         'assets/images/90-Start-Up.png',
                         height: MediaQuery.of(context).size.height/3,
@@ -63,12 +45,12 @@ class _SetupScreenState extends State<SetupScreen> {
                         child: Column(
                           children: [
                             Text(
-                              'Welcome',
-                              style: TextStyle(color: Colors.white, fontSize: 40),
+                              AppLocalizations.instance.translate('setup_title'),
+                              style: TextStyle(color: Colors.white, fontSize: 46),
                             ),
                             Text(
-                              'to Peercoin Wallet',
-                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              AppLocalizations.instance.translate('setup_subtitle'),
+                              style: TextStyle(color: Colors.white, fontSize: 24),
                             ),
                           ],
                         ),
@@ -79,23 +61,15 @@ class _SetupScreenState extends State<SetupScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text(
-                                'Seed is a list of english words that combined together generates your private key.',
-                                style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'If you already have a Seed select "Import Seed", otherwise create a new wallet.',
-                                style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                                textAlign: TextAlign.center,
-                              ),
+                              PeerExplanationText(AppLocalizations.instance.translate('setup_text1')),
+                              PeerExplanationText(AppLocalizations.instance.translate('setup_text2')),
                               PeerButtonSetup(
-                                text: 'Create Wallet',
+                                text: AppLocalizations.instance.translate('setup_option1'),
                                 action: () => {createWallet(context)},
                                 loading: _loading,
                               ),
                               PeerButtonSetup(
-                                text: 'Import Seed',
+                                text: AppLocalizations.instance.translate('setup_option2'),
                                 action: () => Navigator.of(context)
                                     .pushNamed(Routes.SetupImport),
                               ),
@@ -106,9 +80,54 @@ class _SetupScreenState extends State<SetupScreen> {
                       )
                     ],
                   ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.height/8,
+                    right: 25,
+                    child: IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context)
+                            .pushNamed(Routes.SetupLanguage);
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.language_rounded,
+                        color: Theme.of(context).backgroundColor,
+                        size: 32,
+                      ),
+                    ),
+                  ),
                 ],
               ),
       ),
     );
   }
 }
+
+class PeerExplanationText extends StatelessWidget {
+  final String text;
+  PeerExplanationText(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+          color: Colors.white, fontStyle: FontStyle.italic, fontSize: 17),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class PeerProgress extends StatelessWidget {
+  final int num;
+  PeerProgress(this.num);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+      child: SetupProgressIndicator(num),
+    );
+  }
+}
+

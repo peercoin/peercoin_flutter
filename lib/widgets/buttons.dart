@@ -89,7 +89,7 @@ class PeerButtonSetup extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
       ),
-      onPressed: action,
+      onPressed: onPressed,
       child: FittedBox(
         child: loading
             ? SizedBox(
@@ -102,43 +102,16 @@ class PeerButtonSetup extends StatelessWidget {
                 style: TextStyle(
                     letterSpacing: 1.2,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 18,
                     color: Theme.of(context).primaryColor),
               ),
       ),
     );
   }
-}
 
-class PeerButtonSetupBorder extends StatelessWidget {
-  final Function() action;
-  final String text;
-  PeerButtonSetupBorder({required this.text, required this.action});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).primaryColor,
-        onPrimary: Theme.of(context).shadowColor,
-        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
-        shape: RoundedRectangleBorder(
-          //to set border radius to button
-          borderRadius: BorderRadius.circular(30),
-          side: BorderSide(width: 3, color: Theme.of(context).backgroundColor),
-        ),
-      ),
-      onPressed: action,
-      child: FittedBox(
-        child: Text(
-          text,
-          style: TextStyle(
-              letterSpacing: 1.2,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Theme.of(context).backgroundColor),
-        ),
-      ),
-    );
+  void onPressed(){
+    Future.delayed(const Duration(milliseconds: 400), () {
+      action();
+    });
   }
 }

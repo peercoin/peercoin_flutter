@@ -80,6 +80,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('about_license'),
+                                  textAlign: TextAlign.center,
                                 )),
                             Divider(),
                             SizedBox(height: 10),
@@ -92,6 +93,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('about_view_source'),
+                                  textAlign: TextAlign.center,
                                 )),
                             Divider(),
                             SizedBox(height: 10),
@@ -105,6 +107,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_data_declaration'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Divider(),
@@ -119,6 +122,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_foundation_button'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Divider(),
@@ -133,6 +137,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_go_weblate'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Divider(),
@@ -146,17 +151,22 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_send_mail'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Divider(),
                             SizedBox(height: 10),
                             Text(
-                              'App illustrations thanks to the courtesy of DesignAi',
+                              AppLocalizations.instance
+                                  .translate('about_illustrations'),
                             ),
                             TextButton(
-                              onPressed: () async => launchMailto(),
+                              onPressed: () async =>
+                                  _launchURL('https://designs.ai'),
                               child: Text(
-                                'Link da inserire...',
+                                AppLocalizations.instance
+                                    .translate('about_illustrations_button'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ]),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
+import 'package:peercoin/screens/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
@@ -65,10 +65,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-                child: SetupProgressIndicator(2),
-              ),
+              PeerProgress(2),
               Image.asset(
                 'assets/images/59-Cybersecurity.png',
                 height: MediaQuery.of(context).size.height/3,
@@ -77,7 +74,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Text(
                   'Import Seed',
-                  style: TextStyle(color: Colors.white, fontSize: 32),
+                  style: TextStyle(color: Colors.white, fontSize: 34),
                 ),
               ),
               Expanded(
@@ -86,11 +83,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        'Please enter your wallet seed, with a whitespace separating words.',
-                        style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                        textAlign: TextAlign.center,
-                      ),
+                      PeerExplanationText(AppLocalizations.instance.translate('setup_import_text'),),
                       Form(
                         key: _formKey,
                         child: TextFormField(

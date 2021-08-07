@@ -3,12 +3,12 @@ import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupPinCodeScreen extends StatefulWidget {
@@ -49,20 +49,14 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-              child: SetupProgressIndicator(3),
-            ),
+            PeerProgress(3),
             Image.asset(
               'assets/images/55-Protection.png',
               height: MediaQuery.of(context).size.height/3,
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Text(
-                'Security',
-                style: TextStyle(color: Colors.white, fontSize: 32),
-              ),
+            Text(
+              AppLocalizations.instance.translate('setup_pin_title'),
+              style: TextStyle(color: Colors.white, fontSize: 34),
             ),
             Expanded(
               child: Column(
@@ -74,7 +68,8 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                       title: Text(
                         AppLocalizations.instance
                             .translate('app_settings_biometrics'),
-                        style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
+                        style: TextStyle(
+                            color: Colors.white, fontStyle: FontStyle.italic, fontSize: 17),
                       ),
                         value: _biometricsAllowed,
                         activeColor: Theme.of(context).backgroundColor,
@@ -128,7 +123,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                         },
                       );
                     },
-                    text: AppLocalizations.instance.translate('setup_create_pin'),
+                    text: AppLocalizations.instance.translate('setup_pin_button'),
                   ),
                   SizedBox(height: 8,),
                 ],

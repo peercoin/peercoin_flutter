@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
+import 'package:peercoin/screens/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
-import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -121,10 +121,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-              child: SetupProgressIndicator(2),
-            ),
+            PeerProgress(2),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -132,18 +129,14 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      'Your Seed',
-                      style: TextStyle(color: Colors.white, fontSize: 32),
+                      AppLocalizations.instance.translate('setup_save_title'),
+                      style: TextStyle(color: Colors.white, fontSize: 34),
                     ),
                     Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16),
-                          child: Text(
-                            'Double tap the list to copy it.',
-                            style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                            textAlign: TextAlign.center,
-                          ),
+                          child: PeerExplanationText(AppLocalizations.instance.translate('setup_save_text1'),),
                         ),
                         Container(
                           padding: EdgeInsets.all(16),
@@ -160,6 +153,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 16,
                                 wordSpacing: 10,
                               ),
                             ),
@@ -169,11 +163,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                     ),
                     Column(
                       children: [
-                        Text(
-                          'Slide to change the number of words.',
-                          style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.center,
-                        ),
+                        PeerExplanationText(AppLocalizations.instance.translate('setup_save_text2'),),
                         Slider(
                           activeColor: Colors.white,
                           inactiveColor: Theme.of(context).disabledColor,
@@ -199,15 +189,11 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         text: AppLocalizations.instance.translate('continue'),
                       )
                     else
-                      PeerButtonSetupBorder(
+                      PeerButtonSetup(
                         action: () async => await shareSeed(_seed),
                         text: AppLocalizations.instance.translate('export_now'),
                       ),
-                    Text(
-                      'WARNING: Store this list safely!',
-                      style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-                      textAlign: TextAlign.center,
-                    ),
+                    PeerExplanationText(AppLocalizations.instance.translate('setup_save_warning')),
                     SizedBox(height: 8,),
                   ],
                 ),
