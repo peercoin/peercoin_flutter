@@ -35,8 +35,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       await _activeWallets.prepareForRescan(_coinName);
       await _connectionProvider!.init(_coinName, scanMode: true);
 
-      _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-        var dueTime = _latestUpdate + 5;
+      _timer = Timer.periodic(Duration(seconds: 7), (timer) async {
+        var dueTime = _latestUpdate + 7;
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {

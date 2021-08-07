@@ -24,6 +24,7 @@ class AppLocalizations {
     'de': 'Deutsch',
     'it': 'Italiano',
     'nl': 'Nederlands',
+    'pt': 'Português',
     'ro': 'Română',
     'ru': 'русский',
     'zh': '中文 (Zhōngwén)'

@@ -52,7 +52,7 @@ void main() {
               await driver.tap(find.text('Peercoin Testnet'));
               await driver.tap(
                 find.text('Peercoin Testnet'),
-                timeout: Duration(minutes: 1),
+                timeout: Duration(minutes: 2),
               ); //tap into wallet
               await driver.tap(find.text('Peercoin Testnet'));
             },
