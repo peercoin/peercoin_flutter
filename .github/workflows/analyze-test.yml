@@ -1,5 +1,10 @@
 name: Analyze & Test
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
   code-analysis:
