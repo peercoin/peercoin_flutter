@@ -9,12 +9,23 @@ Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.
 Basic testing successfull on iOS 14.4 and Android 10.  
 **Use at own risk.**  
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+
+<p align="center">
+     <a href="https://f-droid.org/packages/com.coinerella.peercoin/">
+<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/com.coinerella.peercoin/)
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
-     alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=com.coinerella.peercoin)
+     height="80"></a>
+<a href="https://play.google.com/store/apps/details?id=com.coinerella.peercoin"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play" height="80"></a>
+</p>
+<p align="center">
+     <a href="https://apps.apple.com/us/app/peercoin-wallet/id1571755170?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1626912000&h=8e86ea0b88a4e8559b76592c43b3fe60" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
+</p> 
+
+You can also sign up for our open beta testing here:
+
+* [Android](https://play.google.com/apps/testing/com.coinerella.peercoin)
+* [iOS](https://testflight.apple.com/join/iilc4SvQ)
 
 ![Screenshot_small](https://user-images.githubusercontent.com/11148913/124509449-470f7c80-ddd2-11eb-9daf-56de7eb83594.png)
 
