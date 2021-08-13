@@ -74,8 +74,44 @@ class PeerButtonBorder extends StatelessWidget {
 class PeerButtonSetup extends StatelessWidget {
   final Function() action;
   final String text;
+
+  PeerButtonSetup(
+      {required this.text, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).backgroundColor,
+        onPrimary: Theme.of(context).primaryColor,
+        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
+        shape: RoundedRectangleBorder(
+          //to set border radius to button
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+      onPressed: action,
+      child: FittedBox(
+        child: Text(
+          text,
+          style: TextStyle(
+              letterSpacing: 1.2,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Theme.of(context).primaryColor),
+        ),
+      ),
+    );
+  }
+}
+
+class PeerButtonSetupLoading extends StatelessWidget {
+  final Function() action;
+  final String text;
   final bool loading;
-  PeerButtonSetup({required this.text, required this.action, this.loading=false});
+
+  PeerButtonSetupLoading(
+      {required this.text, required this.action, this.loading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +131,9 @@ class PeerButtonSetup extends StatelessWidget {
             ? SizedBox(
                 height: 18,
                 width: 18,
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                ),
               )
             : Text(
                 text,
@@ -109,8 +147,8 @@ class PeerButtonSetup extends StatelessWidget {
     );
   }
 
-  void onPressed(){
-    Future.delayed(const Duration(milliseconds: 400), () {
+  void onPressed() {
+    Future.delayed(const Duration(milliseconds: 350), () {
       action();
     });
   }

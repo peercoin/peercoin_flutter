@@ -62,18 +62,18 @@ class _SetupScreenState extends State<SetupScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               PeerExplanationText(AppLocalizations.instance.translate('setup_text1')),
-                              PeerExplanationText(AppLocalizations.instance.translate('setup_text2')),
-                              PeerButtonSetup(
-                                text: AppLocalizations.instance.translate('setup_option1'),
-                                action: () => {createWallet(context)},
-                                loading: _loading,
-                              ),
                               PeerButtonSetup(
                                 text: AppLocalizations.instance.translate(
-                                  'import_seed_button',
+                                  'setup_import_title',
                                 ),
                                 action: () => Navigator.of(context)
                                     .pushNamed(Routes.SetupImport),
+                              ),
+                              PeerExplanationText(AppLocalizations.instance.translate('setup_text2')),
+                              PeerButtonSetupLoading(
+                                text: AppLocalizations.instance.translate('setup_save_title'),
+                                action: () => {createWallet(context)},
+                                loading: _loading,
                               ),
                               SizedBox(height: 8,),
                             ],

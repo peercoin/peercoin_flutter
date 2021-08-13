@@ -132,12 +132,10 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       AppLocalizations.instance.translate('setup_save_title'),
                       style: TextStyle(color: Colors.white, fontSize: 34),
                     ),
+                    PeerExplanationText(AppLocalizations.instance.translate('setup_save_text1')),
                     Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: PeerExplanationText(AppLocalizations.instance.translate('setup_save_text1'),),
-                        ),
+
                         Container(
                           padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -159,11 +157,23 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                             ),
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8, left:16),
+                            child: Text(
+                              AppLocalizations.instance.translate('setup_save_text2'),
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Column(
                       children: [
-                        PeerExplanationText(AppLocalizations.instance.translate('setup_save_text2'),),
+                        PeerExplanationText(AppLocalizations.instance.translate('setup_seed_slider_label'),),
                         Slider(
                           activeColor: Colors.white,
                           inactiveColor: Theme.of(context).disabledColor,
@@ -193,7 +203,6 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         action: () async => await shareSeed(_seed),
                         text: AppLocalizations.instance.translate('export_now'),
                       ),
-                    PeerExplanationText(AppLocalizations.instance.translate('setup_save_warning')),
                     SizedBox(height: 8,),
                   ],
                 ),

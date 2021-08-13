@@ -123,7 +123,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                         },
                       );
                     },
-                    text: AppLocalizations.instance.translate('setup_pin_button'),
+                    text: AppLocalizations.instance.translate('setup_create_pin'),
                   ),
                   SizedBox(height: 8,),
                 ],

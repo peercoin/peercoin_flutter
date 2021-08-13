@@ -83,7 +83,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      PeerExplanationText(AppLocalizations.instance.translate('setup_import_text'),),
+                      PeerExplanationText(AppLocalizations.instance.translate('import_seed'),),
                       Form(
                         key: _formKey,
                         child: TextFormField(
@@ -135,7 +135,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           maxLines: 5,
                         ),
                       ),
-                      PeerButtonSetup(
+                      PeerButtonSetupLoading(
                         action: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
