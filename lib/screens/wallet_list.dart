@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
@@ -9,10 +11,12 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/new_wallet.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
@@ -109,185 +113,261 @@ class _WalletListScreenState extends State<WalletListScreen>
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.settings_rounded),
-          onPressed: () async {
-            await Navigator.pushNamed(context, Routes.AppSettings);
-            setState(() {});
-          },
-        ),
         actions: [
-          IconButton(
-            key: Key('newWalletIconButton'),
-            onPressed: () {
-              if (_initial == false) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return NewWalletDialog();
-                    });
-              }
-            },
-            icon: Icon(Icons.add_rounded),
-          )
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: () async {
+                await Navigator.pushNamed(context, Routes.AppSettings);
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.settings_rounded,
+                color: Theme.of(context).backgroundColor,
+                size: 30,
+              ),
+            ),
+          ),
         ],
       ),
-      body: _isLoading || _initial
-          ? Center(
-              child: LoadingIndicator(),
-            )
-          : Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  AnimatedBuilder(
-                    animation: animation,
-                    builder: (ctx, child) {
-                      return ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: 92,
-                        ),
-                        child: Container(
-                          height: animation.value,
-                          width: animation.value,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).shadowColor,
-                            borderRadius:
-                                BorderRadius.all(const Radius.circular(50.0)),
-                            border: Border.all(
-                              color: Theme.of(context).backgroundColor,
-                              width: 2,
-                            ),
-                          ),
-                          child: GestureDetector(
-                            onTap: () => Share.share(
-                              Platform.isAndroid
-                                  ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
-                                  : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
-                            ),
-                            child: Image.asset(
-                              'assets/icon/ppc-logo.png',
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AnimatedBuilder(
+              animation: animation,
+              builder: (ctx, child) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 92,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(
-                      'Peercoin Wallet',
-                      style: TextStyle(
-                        letterSpacing: 1.4,
-                        fontSize: 24,
-                        color: Theme.of(context).backgroundColor,
+                  child: Container(
+                    height: animation.value,
+                    width: animation.value,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).shadowColor,
+                      borderRadius:
+                      BorderRadius.all(const Radius.circular(50.0)),
+                      border: Border.all(
+                        color: Theme.of(context).shadowColor,
+                        width: 3,
+                      ),
+                    ),
+                    child: GestureDetector(
+                      onTap: () => Share.share(
+                        Platform.isAndroid
+                            ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
+                            : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
+                      ),
+                      child: Image.asset(
+                        'assets/icon/ppc-logo.png',
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  FutureBuilder(
-                    future: _activeWallets.activeWalletsValues,
-                    builder: (_, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Expanded(
-                          child: Center(child: LoadingIndicator()),
-                        );
-                      }
-                      var listData = snapshot.data! as List;
-                      if (listData.isEmpty) {
-                        return Expanded(
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('wallets_none'),
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                  color: Theme.of(context).backgroundColor),
-                            ),
+                );
+              },
+            ),
+            SizedBox(height: 32,),
+            Text(
+              'Peercoin Wallet',
+              style: TextStyle(
+                letterSpacing: 1.2,
+                fontSize: 28,
+                color: Theme.of(context).backgroundColor,
+              ),
+            ),
+            SizedBox(height: 40,),
+            FutureBuilder(
+              future: _activeWallets.activeWalletsValues,
+              builder: (_, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    _isLoading ||
+                    _initial) {
+                  return Expanded(
+                    child: Center(child: LoadingIndicator()),
+                  );
+                }
+                var listData = snapshot.data! as List;
+                if (listData.isEmpty) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.instance.translate('wallets_none'),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            color: Theme.of(context).backgroundColor),
+                      ),
+                    ),
+                  );
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: listData.length+1,
+                    itemBuilder: (ctx, i) {
+
+                      if (i<listData.length) {
+                        CoinWallet _wallet = listData[i];
+                        return Card(
+                          elevation: 2,
+                          shadowColor: Theme.of(context).dividerColor,
+                          color: Theme.of(context).backgroundColor,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          child: Column(
+                            children: [
+                              InkWell(
+                                  onTap: () async {
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
+                                    await Navigator.of(context).pushNamed(
+                                      Routes.WalletHome,
+                                      arguments: _wallet,
+                                    );
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                  },
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 2,horizontal: 24),
+                                    leading: CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).backgroundColor,
+                                      child: Image.asset(
+                                        AvailableCoins()
+                                            .getSpecificCoin(_wallet.name)
+                                            .iconPath,
+                                        width: 25,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      _wallet.title,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2,
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                    subtitle: Row(
+                                      children: [
+                                        Text(
+                                          (_wallet.balance / 1000000).toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          _wallet.letterCode,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      color: Theme.of(context).dividerColor,
+                                    ),
+                                  )),
+                            ],
                           ),
                         );
                       }
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: listData.length,
-                          itemBuilder: (ctx, i) {
-                            CoinWallet _wallet = listData[i];
-                            return Card(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 16),
-                              color: Theme.of(context).backgroundColor,
-                              child: Column(
-                                children: [
-                                  InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        await Navigator.of(context).pushNamed(
-                                          Routes.WalletHome,
-                                          arguments: _wallet,
-                                        );
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-                                      },
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Image.asset(
-                                              AvailableCoins()
-                                                  .getSpecificCoin(_wallet.name)
-                                                  .iconPath,
-                                              width: 20),
-                                        ),
-                                        title: Text(
-                                          _wallet.title,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1.2,
-                                          ),
-                                        ),
-                                        subtitle: Row(
-                                          children: [
-                                            Text(
-                                              (_wallet.balance / 1000000)
-                                                  .toString(),
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              _wallet.letterCode,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          color: Theme.of(context).accentColor,
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      );
+                      else if (i==listData.length && listData.length<2){
+                        return Card(
+                          elevation: 2,
+                          shadowColor: Theme.of(context).dividerColor,
+                          color: Theme.of(context).backgroundColor,
+                          margin: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    if (_initial == false) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return NewWalletDialog();
+                                          });
+                                    }
+                                  },
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.fromLTRB(32, 2, 24, 2),
+                                    trailing: CircleAvatar(
+                                      backgroundColor: Theme.of(context).backgroundColor,
+                                      child: Icon(Icons.add, size: 30,),
+                                    ),
+                                    title: Text(
+                                      'Add wallet',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2,
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        );
+                      }
+                      else{
+                        return Container();
+                      }
                     },
                   ),
-                ],
-              ),
+                );
+              },
             ),
+            SizedBox(height: 16,)
+          ],
+        ),
+      ),
     );
   }
 }
+
+/*
+*Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: ElevatedButton(
+                  key: Key('newWalletIconButton'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).backgroundColor,
+                    onPrimary: Theme.of(context).primaryColor,
+                    shadowColor: Theme.of(context).dividerColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: 2,
+                  ),
+                  onPressed: () {
+                    if (_initial == false) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return NewWalletDialog();
+                          });
+                    }
+                  },
+                  child: FittedBox(
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                          letterSpacing: 1.4,
+                          fontSize: 16,
+                          color: Theme.of(context).dividerColor,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+*
+* */

@@ -11,6 +11,7 @@ class MyTheme {
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
+      dividerColor: LightColors.darkGreen,
       errorColor: LightColors.red,
       focusColor: LightColors.green,
       hintColor: LightColors.grey,
@@ -29,7 +30,7 @@ class MyTheme {
 
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder( //to set border radius to button
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       cardTheme: CardTheme(
@@ -37,7 +38,7 @@ class MyTheme {
         color: LightColors.white,
         margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
         shape: RoundedRectangleBorder( //to set border radius to button
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -148,6 +149,7 @@ class MyTheme {
 }
 
 abstract class LightColors {
+  static Color get darkGreen => const Color(0xFF31493C);
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF000000);
