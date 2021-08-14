@@ -53,6 +53,10 @@ class AvailableCoins {
     return _availableCoinList;
   }
 
+  int get availableCoinsLength {
+    return _availableCoinList.length;
+  }
+
   Coin getSpecificCoin(identifier) {
     return _availableCoinList[identifier]!;
   }

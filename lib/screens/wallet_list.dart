@@ -2,21 +2,16 @@ import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/new_wallet.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
@@ -191,15 +186,40 @@ class _WalletListScreenState extends State<WalletListScreen>
                 }
                 var listData = snapshot.data! as List;
                 if (listData.isEmpty) {
-                  return Expanded(
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.instance.translate('wallets_none'),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            color: Theme.of(context).backgroundColor),
-                      ),
+                  return Card(
+                    elevation: 2,
+                    shadowColor: Theme.of(context).dividerColor,
+                    color: Theme.of(context).backgroundColor,
+                    margin: const EdgeInsets.symmetric(vertical: 16),
+                    child: Column(
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              if (_initial == false) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return NewWalletDialog();
+                                    });
+                              }
+                            },
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.fromLTRB(32, 2, 24, 2),
+                              trailing: CircleAvatar(
+                                backgroundColor: Theme.of(context).backgroundColor,
+                                child: Icon(Icons.add, size: 30,),
+                              ),
+                              title: Text(
+                                'Add wallet',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.2,
+                                  color: Theme.of(context).dividerColor,
+                                ),
+                              ),
+                            )),
+                      ],
                     ),
                   );
                 }
@@ -207,7 +227,6 @@ class _WalletListScreenState extends State<WalletListScreen>
                   child: ListView.builder(
                     itemCount: listData.length+1,
                     itemBuilder: (ctx, i) {
-
                       if (i<listData.length) {
                         CoinWallet _wallet = listData[i];
                         return Card(
@@ -279,7 +298,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                           ),
                         );
                       }
-                      else if (i==listData.length && listData.length<2){
+                      else if (i==listData.length && listData.length<AvailableCoins().availableCoinsLength){
                         return Card(
                           elevation: 2,
                           shadowColor: Theme.of(context).dividerColor,
@@ -333,41 +352,3 @@ class _WalletListScreenState extends State<WalletListScreen>
   }
 }
 
-/*
-*Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: ElevatedButton(
-                  key: Key('newWalletIconButton'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).backgroundColor,
-                    onPrimary: Theme.of(context).primaryColor,
-                    shadowColor: Theme.of(context).dividerColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    elevation: 2,
-                  ),
-                  onPressed: () {
-                    if (_initial == false) {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return NewWalletDialog();
-                          });
-                    }
-                  },
-                  child: FittedBox(
-                    child: Text(
-                      'Add',
-                      style: TextStyle(
-                          letterSpacing: 1.4,
-                          fontSize: 16,
-                          color: Theme.of(context).dividerColor,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-*
-* */
