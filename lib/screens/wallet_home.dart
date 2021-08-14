@@ -35,6 +35,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   int _latestBlock = 0;
   String? _address;
   String? _label;
+  String _filterChoice = 'all';
 
   void changeIndex(int i, [String? addr, String? lab]) {
     if (i == Tabs.send) {
@@ -187,48 +188,74 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
   }
 
+  void _handleSelect(String newChoice) {
+    setState(() {
+      _filterChoice = newChoice;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var back = Theme.of(context).primaryColor;
+    var theme = Theme.of(context);
     var body;
+    var barTitle;
+
     switch (_pageIndex) {
       case Tabs.receive:
-        body = Expanded(child: ReceiveTab(_unusedAddress, _connectionState));
+        body = ReceiveTab(_unusedAddress, _connectionState);
         break;
       case Tabs.transactions:
-        body = Expanded(
-          child: TransactionList(
-            _walletTransactions,
-            _wallet,
-            _connectionState,
-          ),
+        body = TransactionList(
+          _walletTransactions,
+          _wallet,
+          _connectionState,
+          _filterChoice,
         );
         break;
       case Tabs.addresses:
-        body = Expanded(
-            child: AddressTab(
+        body = AddressTab(
           _wallet.name,
           _wallet.title,
           _wallet.addresses,
           changeIndex,
-        ));
+        );
         break;
       case Tabs.send:
-        body = Expanded(
-          child: SendTab(changeIndex, _address, _label, _connectionState),
-        );
+        body = SendTab(changeIndex, _address, _label, _connectionState);
         break;
 
       default:
         body = Container();
         break;
+    };
+
+    if (_connectionState == ElectrumConnectionState.connected) {
+      barTitle = Text(
+        AppLocalizations.instance.translate('wallet_connected'),
+        style: TextStyle(
+          color: Theme.of(context).backgroundColor,
+          letterSpacing: 1.4,
+          fontSize: 16,
+        ),
+      );
+    } else if (_connectionState == ElectrumConnectionState.offline) {
+      barTitle = Text(
+        AppLocalizations.instance.translate('wallet_offline'),
+        style: TextStyle(
+          color: Theme.of(context).backgroundColor,
+          fontSize: 16,
+          letterSpacing: 1.4,
+        ),
+      );
+    } else {
+      barTitle = Container(width: 88, child: LoadingIndicator());
     }
-    ;
 
     return Scaffold(
+      backgroundColor: theme.primaryColor,
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Theme.of(context).disabledColor,
-        selectedItemColor: Colors.white,
+        unselectedItemColor: theme.disabledColor,
+        selectedItemColor: theme.backgroundColor,
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [
@@ -236,86 +263,203 @@ class _WalletHomeState extends State<WalletHomeScreen>
             icon: Icon(Icons.download_rounded),
             label: AppLocalizations.instance
                 .translate('wallet_bottom_nav_receive'),
-            backgroundColor: back,
+            backgroundColor: theme.primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_rounded),
             label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-            backgroundColor: back,
+            backgroundColor: theme.primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_rounded),
             label:
                 AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
-            backgroundColor: back,
+            backgroundColor: theme.primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.upload_rounded),
             label:
                 AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-            backgroundColor: back,
+            backgroundColor: theme.primaryColor,
           ),
         ],
       ),
-      appBar: AppBar(
-        elevation: 1,
-        title: Center(child: Text(_wallet.title)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        actions: [
-          PopupMenuButton(
-            onSelected: (dynamic value) => selectPopUpMenuItem(value),
-            itemBuilder: (_) {
-              return [
-                PopupMenuItem(
-                  value: 'import_wallet',
-                  child: ListTile(
-                    leading: Icon(Icons.arrow_circle_down),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_paperwallet'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'server_settings',
-                  child: ListTile(
-                    leading: Icon(Icons.sync),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_servers'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'rescan',
-                  child: ListTile(
-                    leading: Icon(Icons.sync_problem),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_rescan'),
-                    ),
-                  ),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              forceElevated: true,
+              elevation: 2,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_rounded),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              title: barTitle,
+              centerTitle: true,
+              actions: [
+                PopupMenuButton(
+                  onSelected: (dynamic value) => selectPopUpMenuItem(value),
+                  itemBuilder: (_) {
+                    return [
+                      PopupMenuItem(
+                        value: 'import_wallet',
+                        child: ListTile(
+                          leading: Icon(Icons.arrow_circle_down),
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('wallet_pop_menu_paperwallet'),
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'server_settings',
+                        child: ListTile(
+                          leading: Icon(Icons.sync),
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('wallet_pop_menu_servers'),
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'rescan',
+                        child: ListTile(
+                          leading: Icon(Icons.sync_problem),
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('wallet_pop_menu_rescan'),
+                          ),
+                        ),
+                      )
+                    ];
+                  },
                 )
-              ];
-            },
-          )
-        ],
-      ),
-      body: _initial
-          ? Center(child: LoadingIndicator())
-          : Container(
-              color: Theme.of(context).primaryColor,
-              child: Column(
-                children: [
-                  body,
-                ],
+              ],
+            ),
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: theme.primaryColor,
+              title: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          (_wallet.balance / 1000000).toString(),
+                          style: TextStyle(
+                            fontSize: 26,
+                            color: theme.backgroundColor,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        _wallet.unconfirmedBalance > 0
+                            ? Text(
+                                (_wallet.unconfirmedBalance / 1000000).toString(),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[200],
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      _wallet.letterCode + '  |  ',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.grey[100],
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        _wallet.title,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: theme.backgroundColor,
+                          //letterSpacing: 1.2,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            SliverPadding(padding: const EdgeInsets.only(bottom: 24)),
+            SliverVisibility(
+              visible: _pageIndex == Tabs.transactions,
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: <Widget>[
+                          ChoiceChip(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            selectedColor: Theme.of(context).shadowColor,
+                            visualDensity:
+                                VisualDensity(horizontal: 0.0, vertical: -4),
+                            label: Container(
+                                child: Text(
+                              AppLocalizations.instance
+                                  .translate('transactions_in'),
+                              style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                              ),
+                            )),
+                            selected: _filterChoice == 'in',
+                            onSelected: (_) => _handleSelect('in'),
+                          ),
+                          ChoiceChip(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            selectedColor: Theme.of(context).shadowColor,
+                            visualDensity:
+                                VisualDensity(horizontal: 0.0, vertical: -4),
+                            label: Text(
+                                AppLocalizations.instance
+                                    .translate('transactions_all'),
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                )),
+                            selected: _filterChoice == 'all',
+                            onSelected: (_) => _handleSelect('all'),
+                          ),
+                          ChoiceChip(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            selectedColor: Theme.of(context).shadowColor,
+                            visualDensity:
+                                VisualDensity(horizontal: 0.0, vertical: -4),
+                            label: Text(
+                                AppLocalizations.instance
+                                    .translate('transactions_out'),
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                )),
+                            selected: _filterChoice == 'out',
+                            onSelected: (_) => _handleSelect('out'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            body,
+          ],
+        ),
+      ),
     );
   }
 }

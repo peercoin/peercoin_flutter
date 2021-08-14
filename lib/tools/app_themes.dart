@@ -35,8 +35,9 @@ class MyTheme {
       ),
       cardTheme: CardTheme(
         elevation: 2,
+        shadowColor: LightColors.darkGreen,
         color: LightColors.white,
-        margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         shape: RoundedRectangleBorder( //to set border radius to button
           borderRadius: BorderRadius.circular(20),
         ),
