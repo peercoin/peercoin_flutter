@@ -164,7 +164,7 @@
     "setup_text2" : "otherwise create a new Peercoin wallet",
 
     "setup_save_title": "Create wallet",
-    "setup_save_text1" : "The following word list is called \"seed phrase\". It is used as a password to access your wallet and gives full access to all your coins.",
+    "setup_save_text1" : "The following word list is called \"seed phrase\". It is a complex password that gives full access to your wallet and all your coins.",
     "setup_save_text2" : "Double tap to copy",
 
     "setup_import_title": "Import wallet",
