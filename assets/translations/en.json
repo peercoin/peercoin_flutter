@@ -51,6 +51,7 @@
     "app_settings_walletHome": "Require for coin wallet",
     "app_settings_walletList": "Require for list of wallets",
     "app_settings_saved_snack": "Your changes have been saved",
+    "app_settings_price_feed": "(Optional) Price Feed & Currency",
     "app_wallets": "Wallets",
     "authenticate_biometric_hint": "Verify identity",
     "authenticate_biometric_reason": "Please authenticate.",
