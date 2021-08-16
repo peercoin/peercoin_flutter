@@ -196,7 +196,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     var body;
     var barConnection;
 
@@ -229,19 +228,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
     };
 
     if (_connectionState == ElectrumConnectionState.connected) {
-      barConnection = SizedBox(width: 25, height: 25, child: Icon(CupertinoIcons.bolt_circle));
+      barConnection = SizedBox(width: 25, height: 25, child: Icon(CupertinoIcons.bolt_circle, color: Theme.of(context).backgroundColor,));
     } else if (_connectionState == ElectrumConnectionState.offline) {
-      barConnection = SizedBox(width: 25, height: 25, child: Icon(CupertinoIcons.bolt_slash));
+      barConnection = SizedBox(width: 25, height: 25, child: Icon(CupertinoIcons.bolt_slash, color: Theme.of(context).backgroundColor,));
     } else {
-      barConnection = SizedBox(width: 25, height: 25, child: CircularProgressIndicator(strokeWidth: 2,color: Colors.white,));
+      barConnection = SizedBox(width: 25, height: 25, child: CircularProgressIndicator(strokeWidth: 2,color: Theme.of(context).backgroundColor,));
     }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: theme.primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: theme.disabledColor,
-        selectedItemColor: theme.backgroundColor,
+        unselectedItemColor: Theme.of(context).disabledColor,
+        selectedItemColor: Theme.of(context).backgroundColor,
         onTap: (index) => changeIndex(index),
         currentIndex: _pageIndex,
         items: [
@@ -249,24 +248,24 @@ class _WalletHomeState extends State<WalletHomeScreen>
             icon: Icon(Icons.download_rounded),
             label: AppLocalizations.instance
                 .translate('wallet_bottom_nav_receive'),
-            backgroundColor: theme.primaryColor,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_rounded),
             label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-            backgroundColor: theme.primaryColor,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_rounded),
             label:
                 AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
-            backgroundColor: theme.primaryColor,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.upload_rounded),
             label:
                 AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-            backgroundColor: theme.primaryColor,
+            backgroundColor: Theme.of(context).primaryColor,
           ),
         ],
       ),
@@ -291,7 +290,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   _wallet.title.contains('Testnet')?'Testnet':'Mainnet',
                   style: TextStyle(
                       fontSize: 18,
-                      color: theme.backgroundColor,
+                      color: Theme.of(context).backgroundColor,
                       letterSpacing: 1.2,
                       //fontWeight: FontWeight.bold
                   ),
@@ -351,7 +350,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 padding: const EdgeInsets.only(top: 16, bottom:8),
                 sliver: SliverAppBar(
                   automaticallyImplyLeading: false,
-                  backgroundColor: theme.primaryColor,
+                  backgroundColor: Theme.of(context).primaryColor,
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -361,7 +360,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                             (_wallet.balance / 1000000).toString(),
                             style: TextStyle(
                               fontSize: 26,
-                              color: theme.backgroundColor,
+                              color: Theme.of(context).backgroundColor,
                               letterSpacing: 1.2,
                               fontWeight: FontWeight.bold,
                             ),
@@ -384,7 +383,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                         _wallet.letterCode,
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.grey[100],
+                          color: Theme.of(context).backgroundColor,
                         ),
                       ),
                     ],

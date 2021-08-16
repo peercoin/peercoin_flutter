@@ -64,6 +64,7 @@ class MyTheme {
       cardColor: DarkColors.green,
       dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
+      dividerColor: DarkColors.lightGreen,
       errorColor: DarkColors.red,
       focusColor: DarkColors.black,
       hintColor: DarkColors.white,
@@ -161,7 +162,9 @@ abstract class LightColors {
 }
 
 abstract class DarkColors {
+  static Color get darkGreen => const Color(0xFF31493C);
   static Color get green => const Color(0xFF2D936C);
+  static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF0D1821);
   static Color get darkBlue => const Color(0xFF234058);
   static Color get grey => const Color(0xFFE9EAED);
