@@ -286,17 +286,10 @@ class _SendTabState extends State<SendTab> {
                       AppLocalizations.instance.translate('tx_address'),
                       suffixIcon: IconButton(
                         onPressed: () async {
-                          if (addressController.text.isNotEmpty) {
-                            addressController.clear();
-                          }else{
-                            var data = await Clipboard.getData('text/plain');
-                            addressController.text = data!.text!;
-                          }
+                          var data = await Clipboard.getData('text/plain');
+                          addressController.text = data!.text!;
                         },
-                        icon: addressController.text.isNotEmpty?Icon(
-                          Icons.clear,
-                          color: Theme.of(context).primaryColor,
-                        ):Icon(
+                        icon: Icon(
                           Icons.paste_rounded,
                           color: Theme.of(context).primaryColor,
                         ),
