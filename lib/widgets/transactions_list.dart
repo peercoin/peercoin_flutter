@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/wallet_balance_header.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
   final _wallet;
-  final _connectionState;
   final _filterChoice;
   TransactionList(
-      this._walletTransactions, this._wallet, this._connectionState, this._filterChoice);
+      this._walletTransactions, this._wallet, this._filterChoice);
 
   @override
   _TransactionListState createState() => _TransactionListState();
@@ -117,7 +114,7 @@ class _TransactionListState extends State<TransactionList> {
                         _filteredTx[i].timestamp != 0
                             ? FontWeight.w500
                             : FontWeight.w300,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                       textScaleFactor: 0.8,
                     )
@@ -128,7 +125,7 @@ class _TransactionListState extends State<TransactionList> {
                   overflow: TextOverflow.ellipsis,
                   //textScaleFactor: 0.9,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -138,7 +135,7 @@ class _TransactionListState extends State<TransactionList> {
                       _filteredTx[i].address),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -150,7 +147,7 @@ class _TransactionListState extends State<TransactionList> {
                         ? '+'
                         : '-') +
                         (_filteredTx[i].value / 1000000)
-                            .toString(),
+                            .toStringAsFixed(2),
                     style: TextStyle(
                       fontWeight:
                       _filteredTx[i].timestamp != 0

@@ -8,7 +8,6 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet_balance_header.dart';
 import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:share/share.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ReceiveTab extends StatefulWidget {
   final _unusedAddress;
-  final _connectionState;
-  ReceiveTab(this._unusedAddress, this._connectionState);
+  ReceiveTab(this._unusedAddress);
 
   @override
   _ReceiveTabState createState() => _ReceiveTabState();
@@ -33,6 +31,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
   late CoinWallet _wallet;
   late Coin _availableCoin;
   String? _qrString;
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    labelController.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -287,6 +292,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           launchURL('https://ppc.lol/buy');
                         },
                       ),
+                      SizedBox(height: 8),
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('receive_website_exchandes'),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -8,7 +9,6 @@ import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/addresses_tab.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/receive_tab.dart';
 import 'package:peercoin/widgets/send_tab.dart';
 import 'package:peercoin/widgets/transactions_list.dart';
@@ -198,17 +198,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var body;
-    var barTitle;
+    var barConnection;
 
     switch (_pageIndex) {
       case Tabs.receive:
-        body = ReceiveTab(_unusedAddress, _connectionState);
+        body = ReceiveTab(_unusedAddress);
         break;
       case Tabs.transactions:
         body = TransactionList(
           _walletTransactions,
           _wallet,
-          _connectionState,
           _filterChoice,
         );
         break;
@@ -221,7 +220,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         );
         break;
       case Tabs.send:
-        body = SendTab(changeIndex, _address, _label, _connectionState);
+        body = SendTab(changeIndex, _address, _label);
         break;
 
       default:
@@ -230,28 +229,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
     };
 
     if (_connectionState == ElectrumConnectionState.connected) {
-      barTitle = Text(
-        AppLocalizations.instance.translate('wallet_connected'),
-        style: TextStyle(
-          color: Theme.of(context).backgroundColor,
-          letterSpacing: 1.4,
-          fontSize: 16,
-        ),
-      );
+      barConnection = SizedBox(width: 25, height: 25, child: Icon(CupertinoIcons.bolt_circle));
     } else if (_connectionState == ElectrumConnectionState.offline) {
-      barTitle = Text(
-        AppLocalizations.instance.translate('wallet_offline'),
-        style: TextStyle(
-          color: Theme.of(context).backgroundColor,
-          fontSize: 16,
-          letterSpacing: 1.4,
-        ),
-      );
+      barConnection = SizedBox(width: 25, height: 25, child: Icon(CupertinoIcons.bolt_slash));
     } else {
-      barTitle = Container(width: 88, child: LoadingIndicator());
+      barConnection = SizedBox(width: 25, height: 25, child: CircularProgressIndicator(strokeWidth: 2,color: Colors.white,));
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: theme.primaryColor,
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: theme.disabledColor,
@@ -288,6 +274,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
+              primary: true,
               pinned: true,
               forceElevated: true,
               elevation: 2,
@@ -297,7 +284,26 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   Navigator.of(context).pop();
                 },
               ),
-              title: barTitle,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Text(
+                  _wallet.title.contains('Testnet')?'Testnet':'Mainnet',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: theme.backgroundColor,
+                      letterSpacing: 1.2,
+                      //fontWeight: FontWeight.bold
+                  ),
+                ),
+                  SizedBox(width: 8,),
+                  AnimatedSwitcher(
+                    duration: const Duration(seconds: 1),
+                    child: barConnection,
+                    switchInCurve: Curves.bounceIn,
+                    switchOutCurve: Curves.bounceOut,
+                  ),
+              ],),
               centerTitle: true,
               actions: [
                 PopupMenuButton(
@@ -339,62 +345,53 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 )
               ],
             ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: theme.primaryColor,
-              title: Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          (_wallet.balance / 1000000).toString(),
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: theme.backgroundColor,
-                            letterSpacing: 1.2,
-                            fontWeight: FontWeight.bold,
+            SliverVisibility(
+              visible: _pageIndex != Tabs.addresses,
+                sliver: SliverPadding(
+                padding: const EdgeInsets.only(top: 16, bottom:8),
+                sliver: SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: theme.primaryColor,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            (_wallet.balance / 1000000).toString(),
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: theme.backgroundColor,
+                              letterSpacing: 1.2,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        _wallet.unconfirmedBalance > 0
-                            ? Text(
-                                (_wallet.unconfirmedBalance / 1000000).toString(),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[200],
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      _wallet.letterCode + '  |  ',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.grey[100],
+                          _wallet.unconfirmedBalance > 0
+                              ? Text(
+                                  (_wallet.unconfirmedBalance / 1000000).toString(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[200],
+                                  ),
+                                )
+                              : Container(),
+                        ],
                       ),
-                    ),
-                    Center(
-                      child: Text(
-                        _wallet.title,
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        _wallet.letterCode,
                         style: TextStyle(
-                          fontSize: 18,
-                          color: theme.backgroundColor,
-                          //letterSpacing: 1.2,
-                          fontWeight: FontWeight.bold
+                          fontSize: 20,
+                          color: Colors.grey[100],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-            SliverPadding(padding: const EdgeInsets.only(bottom: 24)),
             SliverVisibility(
               visible: _pageIndex == Tabs.transactions,
               sliver: SliverToBoxAdapter(

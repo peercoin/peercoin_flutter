@@ -8,7 +8,6 @@ import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/screens/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
@@ -210,69 +209,20 @@ class _AddressTabState extends State<AddressTab> {
   @override
   Widget build(BuildContext context) {
     var listReceive = <Widget>[];
-    var list = <Widget>[];
-    list.add(Container(
-      child: _search
-          ? Form(
-        key: _formKey,
-        child: Container(
-          padding: const EdgeInsets.only(left: 16),
-          child: TextFormField(
-            autofocus: true,
-            key: _searchKey,
-            textInputAction: TextInputAction.done,
-            autocorrect: false,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: AppLocalizations.instance
-                  .translate('addressbook_search'),
-              suffixIcon: IconButton(
-                icon: Center(child: Icon(Icons.clear)),
-                iconSize: 24,
-                onPressed: () {
-                  _search = false;
-                  applyFilter();
-                },
-              ),
-            ),
-            onChanged: applyFilter,
-          ),
-        ),
-      )
-          : Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          PeerServiceTitle(title: 'Address book'),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.youtube_searched_for),
-                onPressed: () {
-                  if (widget._walletAddresses!.isNotEmpty) {
-                    setState(() {
-                      _search = true;
-                    });
-                  }
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  _addressAddDialog(context);
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    ));
+    var listSend = <Widget>[];
+    var title;
+
     for (var addr in _filteredSend) {
-      list.add(
-        Card(
-          color: Theme.of(context).backgroundColor,
+      title = addr.addressBookName!=''?addr.addressBookName:addr.address.substring(0,6);
+      listSend.add(
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+          ),
           child: ClipRect(
             child: Slidable(
-              key: Key(addr.address),
+              key: Key(addr.address.substring(0,5)),
               actionPane: SlidableScrollActionPane(),
               secondaryActions: <Widget>[
                 IconSlideAction(
@@ -347,25 +297,26 @@ class _AddressTabState extends State<AddressTab> {
                           ],
                         ),
                       );
-                    })
+                    }),
               ],
               actionExtentRatio: 0.25,
-              child: ListTile(
-                subtitle: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Center(
-                    child: Text(addr.address),
-                  ),
-                ),
-                title: Center(
-                  child: Text(
-                    addr.addressBookName ?? '-',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
+              child: Row(
+                children: [
+                  Icon(CupertinoIcons.person_circle_fill,
+                      size: 35, color: Theme.of(context).shadowColor),
+                  Expanded(
+                    child: ListTile(
+                      title: Text(
+                        title,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(addr.address, overflow: TextOverflow.ellipsis,),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -373,12 +324,16 @@ class _AddressTabState extends State<AddressTab> {
       );
     }
     for (var addr in _filteredReceive) {
+      title = addr.addressBookName!=''?addr.addressBookName:addr.address.substring(0,6);
       listReceive.add(
-        Card(
-          color: Theme.of(context).backgroundColor,
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+          ),
           child: ClipRect(
             child: Slidable(
-              key: Key(addr.address),
+              key: Key(addr.address.substring(0,5)),
               actionPane: SlidableScrollActionPane(),
               secondaryActions: <Widget>[
                 IconSlideAction(
@@ -396,79 +351,27 @@ class _AddressTabState extends State<AddressTab> {
                     Icons.share,
                     color: Theme.of(context).accentColor,
                   ),
-                  onTap: () => WalletHomeQr.showQrDialog(
-                    context,
-                    addr.address,
-                  ),
+                  onTap: () => WalletHomeQr.showQrDialog(context, addr.address),
                 ),
               ],
               actionExtentRatio: 0.25,
-              child: ListTile(
-                subtitle: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Center(
-                    child: Text(addr.address),
-                  ),
-                ),
-                title: Center(
-                  child: Text(
-                    addr.addressBookName ?? '-',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
+              child: Row(
+                children: [
+                  Icon(CupertinoIcons.person_circle_fill,
+                      size: 35, color: Theme.of(context).shadowColor),
+                  Expanded(
+                    child: ListTile(
+                      title: Text(
+                        title,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(addr.address, overflow: TextOverflow.ellipsis,),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    for (var i=0;i<30;i++) {
-      list.add(
-        Card(
-          color: Theme.of(context).backgroundColor,
-          child: ClipRect(
-            child: Slidable(
-              key: Key(i.toString()),
-              actionPane: SlidableScrollActionPane(),
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_edit'),
-                  color: Theme.of(context).primaryColor,
-                  icon: Icons.edit,
-                  onTap: (){},
-                ),
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_share'),
-                  color: Theme.of(context).backgroundColor,
-                  iconWidget: Icon(
-                    Icons.share,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  onTap: (){},
-                ),
-              ],
-              actionExtentRatio: 0.25,
-              child: ListTile(
-                subtitle: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Center(
-                    child: Text('Address '+i.toString()),
-                  ),
-                ),
-                title: Center(
-                  child: Text(
-                    'Name',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                ],
               ),
             ),
           ),
@@ -479,33 +382,120 @@ class _AddressTabState extends State<AddressTab> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          PeerContainer(
-            child: Column(children: list,),
+          Container(
+            //margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              //borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).backgroundColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: _search
+                      ? Form(
+                    key: _formKey,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 16,top:8),
+                      child: TextFormField(
+                        autofocus: true,
+                        key: _searchKey,
+                        textInputAction: TextInputAction.done,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: AppLocalizations.instance
+                              .translate('addressbook_search'),
+                          suffixIcon: IconButton(
+                            icon: Center(child: Icon(Icons.clear)),
+                            iconSize: 24,
+                            onPressed: () {
+                              _search = false;
+                              applyFilter();
+                            },
+                          ),
+                        ),
+                        onChanged: applyFilter,
+                      ),
+                    ),
+                  )
+                      : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppLocalizations.instance
+                            .translate('addressbook_bottom_bar_sending_addresses'),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).dividerColor,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).shadowColor,
+                              shape: BoxShape.circle,
+                            ),
+                            height: 32,
+                            child: IconButton(
+                              icon: Icon(CupertinoIcons.search, color: Theme.of(context).dividerColor, size: 16),
+                              onPressed: () {
+                                if (widget._walletAddresses!.isNotEmpty) {
+                                  setState(() {
+                                    _search = true;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).shadowColor,
+                              shape: BoxShape.circle,
+                            ),
+                            height: 32,
+                            child: IconButton(
+                              icon: Icon(CupertinoIcons.add, color: Theme.of(context).dividerColor, size: 16),
+                              onPressed: () {
+                                _addressAddDialog(context);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Column(children: listSend,),
+                SizedBox(height: 16,),
+                Visibility(
+                  visible: !_search && listReceive.isNotEmpty,
+                  child: Container(
+                    child: Text(
+                    AppLocalizations.instance
+                        .translate('addressbook_bottom_bar_your_addresses'),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).dividerColor,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+                ),
+                Column(children: listReceive,),
+              ],
+            ),
           ),
         ]
       ),
     );
   }
 
-  void foo(){
-    var list =  [
-      SliverAppBar(
-        automaticallyImplyLeading: false,
-        floating: true,
-        backgroundColor: _search
-            ? Theme.of(context).backgroundColor
-            : Theme.of(context).primaryColor,
-      ),
-      SliverAppBar(
-        automaticallyImplyLeading: false,
-        title: Text(AppLocalizations.instance
-            .translate('addressbook_bottom_bar_sending_addresses')),
-      ),
-      SliverAppBar(
-        automaticallyImplyLeading: false,
-        title: Text(AppLocalizations.instance
-            .translate('addressbook_bottom_bar_your_addresses')),
-      ),
-    ];
-  }
 }
+
+

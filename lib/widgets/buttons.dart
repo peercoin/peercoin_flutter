@@ -17,18 +17,17 @@ class PeerButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).primaryColor,
-        onPrimary: Theme.of(context).accentColor,
+        onPrimary: Theme.of(context).backgroundColor,
         fixedSize:
         Size(MediaQuery.of(context).size.width / (small ? 2 : 1.5), 40),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        elevation: 0,
       ),
       onPressed: action,
       child: FittedBox(
         child: Text(
           text,
           style: TextStyle(
-            letterSpacing: 1.4,
+            letterSpacing: 1.2,
             fontSize: 16,
             color: active ? LightColors.white : LightColors.grey,
           ),
@@ -48,14 +47,13 @@ class PeerButtonBorder extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
-        onPrimary: Theme.of(context).backgroundColor,
+        onPrimary: Theme.of(context).primaryColor,
         fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
           side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
         ),
-        elevation: 0,
       ),
       onPressed: action,
       child: FittedBox(

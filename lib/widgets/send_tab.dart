@@ -17,15 +17,13 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet_balance_header.dart';
 import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
   final Function _changeIndex;
   final String? _address;
   final String? _label;
-  final _connectionState;
-  SendTab(this._changeIndex, this._address, this._label, this._connectionState);
+  SendTab(this._changeIndex, this._address, this._label);
 
   @override
   _SendTabState createState() => _SendTabState();
@@ -47,6 +45,14 @@ class _SendTabState extends State<SendTab> {
   int _totalValue = 0;
   WalletAddress? _transferedAddress;
   late List<WalletAddress> _availableAddresses = [];
+
+  @override
+  void dispose() {
+    addressController.dispose();
+    amountController.dispose();
+    labelController.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() async {
@@ -280,10 +286,17 @@ class _SendTabState extends State<SendTab> {
                       AppLocalizations.instance.translate('tx_address'),
                       suffixIcon: IconButton(
                         onPressed: () async {
-                          var data = await Clipboard.getData('text/plain');
-                          addressController.text = data!.text!;
+                          if (addressController.text.isNotEmpty) {
+                            addressController.clear();
+                          }else{
+                            var data = await Clipboard.getData('text/plain');
+                            addressController.text = data!.text!;
+                          }
                         },
-                        icon: Icon(
+                        icon: addressController.text.isNotEmpty?Icon(
+                          Icons.clear,
+                          color: Theme.of(context).primaryColor,
+                        ):Icon(
                           Icons.paste_rounded,
                           color: Theme.of(context).primaryColor,
                         ),
@@ -447,203 +460,9 @@ class _SendTabState extends State<SendTab> {
               ],
             ),
           ),
-        ),]
+        ),
+      ]
       ),
     );
-
-    /*
-    PeerContainer(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                PeerServiceTitle(
-                    title: AppLocalizations.instance
-                        .translate('wallet_bottom_nav_send')),
-                TypeAheadFormField(
-                  hideOnEmpty: true,
-                  key: _addressKey,
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: addressController,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.shuffle,
-                        color: Theme.of(context).unselectedWidgetColor,
-                      ),
-                      labelText:
-                          AppLocalizations.instance.translate('tx_address'),
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          var data = await Clipboard.getData('text/plain');
-                          addressController.text = data!.text!;
-                        },
-                        icon: Icon(
-                          Icons.paste_rounded,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  suggestionsCallback: (pattern) {
-                    return getSuggestions(pattern);
-                  },
-                  itemBuilder: (context, dynamic suggestion) {
-                    return ListTile(
-                      title: Text(suggestion.addressBookName ?? ''),
-                      subtitle: Text(suggestion.address),
-                    );
-                  },
-                  transitionBuilder: (context, suggestionsBox, controller) {
-                    return suggestionsBox;
-                  },
-                  onSuggestionSelected: (dynamic suggestion) {
-                    addressController.text = suggestion.address;
-                    labelController.text = suggestion.addressBookName;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return AppLocalizations.instance
-                          .translate('send_enter_address');
-                    }
-                    var sanitized = value.trim();
-                    if (Address.validateAddress(
-                            sanitized, _availableCoin.networkType) ==
-                        false) {
-                      return AppLocalizations.instance
-                          .translate('send_invalid_address');
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  textInputAction: TextInputAction.done,
-                  key: _labelKey,
-                  controller: labelController,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.bookmark,
-                      color: Theme.of(context).unselectedWidgetColor,
-                    ),
-                    labelText:
-                        AppLocalizations.instance.translate('send_label'),
-                  ),
-                  maxLength: 32,
-                ),
-                TextFormField(
-                    textInputAction: TextInputAction.done,
-                    key: _amountKey,
-                    controller: amountController,
-                    autocorrect: false,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                          getValidator(_availableCoin.fractions)),
-                    ],
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.money,
-                        color: Theme.of(context).unselectedWidgetColor,
-                      ),
-                      labelText: AppLocalizations.instance
-                          .translate('send_amount'),
-                      suffix: Text(_wallet.letterCode),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return AppLocalizations.instance
-                            .translate('send_enter_amount');
-                      }
-                      final convertedValue = value.replaceAll(',', '.');
-                      amountController.text = convertedValue;
-                      var txValueInSatoshis =
-                          (double.parse(convertedValue) * 1000000).toInt();
-                      print(
-                          'req value $txValueInSatoshis - ${_wallet.balance}');
-                      if (convertedValue.contains('.') &&
-                          convertedValue.split('.')[1].length >
-                              _availableCoin.fractions) {
-                        return AppLocalizations.instance
-                            .translate('send_amount_small');
-                      }
-                      if (txValueInSatoshis > _wallet.balance) {
-                        return AppLocalizations.instance
-                            .translate('send_amount_exceeds');
-                      }
-                      if (txValueInSatoshis <
-                          _availableCoin.minimumTxValue) {
-                        return AppLocalizations.instance.translate(
-                            'send_amount_below_minimum', {
-                          'amount':
-                              '${_availableCoin.minimumTxValue / 1000000}'
-                        });
-                      }
-                      if (txValueInSatoshis == _wallet.balance &&
-                          _wallet.balance ==
-                              _availableCoin.minimumTxValue) {
-                        return AppLocalizations.instance.translate(
-                          'send_amount_below_minimum_unable',
-                        );
-                      }
-
-                      return null;
-                    }),
-                SizedBox(height: 30),
-                PeerButtonBorder(
-                  text: AppLocalizations.instance.translate(
-                    'send_qr',
-                  ),
-                  action: () async {
-                    final result = await Navigator.of(context).pushNamed(
-                        Routes.QRScan,
-                        arguments:
-                            AppLocalizations.instance.translate('scan_qr'));
-                    if (result != null) parseQrResult(result as String);
-                  },
-                ),
-                SizedBox(height: 8),
-                PeerButton(
-                  text: AppLocalizations.instance.translate('send'),
-                  action: () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      FocusScope.of(context).unfocus(); //hide keyboard
-                      //check for required auth
-                      var _appSettings =
-                          Provider.of<AppSettings>(context, listen: false);
-                      if (_appSettings
-                          .authenticationOptions!['sendTransaction']!) {
-                        await Auth.requireAuth(
-                            context,
-                            _appSettings.biometricsAllowed,
-                            () => showTransactionConfirmation(context));
-                      } else {
-                        showTransactionConfirmation(context);
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.instance.translate(
-                        'send_errors_solve',
-                      ))));
-                    }
-                  },
-                ),
-                SizedBox(height: 10),
-                Text(
-                    AppLocalizations.instance.translate(
-                      'wallet__send_label_hint',
-                    ),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).accentColor,
-                    )),
-              ],
-            ),
-          ),
-        ),
-    * */
   }
 }

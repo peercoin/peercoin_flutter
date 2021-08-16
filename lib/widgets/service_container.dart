@@ -8,16 +8,17 @@ class PeerServiceTitle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
-                letterSpacing: 1.4,
+                color: Theme.of(context).dividerColor,
+                letterSpacing: 1.2,
               ),
             ),
           ),
