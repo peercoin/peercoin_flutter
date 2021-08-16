@@ -9,6 +9,7 @@ import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/settings_auth.dart';
+import 'package:peercoin/widgets/settings_price_ticker.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
@@ -289,7 +290,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         .translate('app_settings_price_feed'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
-                children: [Row()],
+                children: [SettingsPriceTicker(_settings)],
               )
             ],
           ),

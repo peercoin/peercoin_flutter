@@ -18,6 +18,9 @@ class AppOptionsStore extends HiveObject {
   @HiveField(2)
   String? _defaultWallet = '';
 
+  @HiveField(3)
+  String? _selectedCurrency = '';
+
   AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
@@ -44,6 +47,15 @@ class AppOptionsStore extends HiveObject {
 
   set defaultWallet(String newWallet) {
     _defaultWallet = newWallet;
+    save();
+  }
+
+  String get selectedCurrency {
+    return _selectedCurrency ?? '';
+  }
+
+  set selectedCurrency(String newCurrency) {
+    _selectedCurrency = newCurrency;
     save();
   }
 }

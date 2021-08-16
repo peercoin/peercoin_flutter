@@ -20,19 +20,22 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       fields[1] as bool?,
     )
       .._authenticationOptions = (fields[0] as Map?)?.cast<String, bool>()
-      .._defaultWallet = fields[2] as String?;
+      .._defaultWallet = fields[2] as String?
+      .._selectedCurrency = fields[3] as String?;
   }
 
   @override
   void write(BinaryWriter writer, AppOptionsStore obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj._authenticationOptions)
       ..writeByte(1)
       ..write(obj._allowBiometrics)
       ..writeByte(2)
-      ..write(obj._defaultWallet);
+      ..write(obj._defaultWallet)
+      ..writeByte(3)
+      ..write(obj._selectedCurrency);
   }
 
   @override

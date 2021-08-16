@@ -64,4 +64,13 @@ class AppSettings with ChangeNotifier {
     _appOptions.defaultWallet = newWallet;
     notifyListeners();
   }
+
+  String get selectedCurrency {
+    return _appOptions.selectedCurrency;
+  }
+
+  void setSelectedCurrency(String newCurrency) {
+    _appOptions.selectedCurrency = newCurrency;
+    notifyListeners();
+  }
 }
