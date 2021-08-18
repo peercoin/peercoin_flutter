@@ -23,11 +23,42 @@ class SettingsPriceTicker extends StatelessWidget {
     );
   }
 
+  List<Widget> renderCurrencies() {
+    if (_settings.exchangeRates.isNotEmpty &&
+        _settings.selectedCurrency.isNotEmpty) {
+      //copy data
+      final currencyData = _settings.exchangeRates;
+      currencyData['USD'] = 0; //add usd
+      currencyData.remove('PPC'); //don't show PPC
+
+      return currencyData.keys.map((currency) {
+        return InkWell(
+          onTap: () => _settings.setSelectedCurrency(currency),
+          child: ListTile(
+            title: Text(currency),
+            leading: Radio(
+              value: currency,
+              groupValue: _settings.selectedCurrency,
+              onChanged: (dynamic _) => _settings.setSelectedCurrency(currency),
+            ),
+          ),
+        );
+      }).toList();
+    }
+    //TODO maybe show current exchange rate?
+    //TODO show currency symbol
+    return [Container()];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [renderButton()],
+      children: [
+        Column(children: renderCurrencies()),
+        renderButton(),
+      ],
     );
   }
   //TODO show settings saved snack bar
+  //TODO toggle fetch when enabled for first time / exchangeRates is empty
 }

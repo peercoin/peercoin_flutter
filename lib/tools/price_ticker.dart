@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -34,6 +35,7 @@ class PriceTicker {
             data.values.every((element) => element.runtimeType == double);
         if (valuesValid) {
           //data valid
+          log('price data updated $data');
           _settings.setExchangeRates(data);
         } else {
           throw ('parser data not valid');
