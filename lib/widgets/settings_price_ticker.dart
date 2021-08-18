@@ -29,4 +29,5 @@ class SettingsPriceTicker extends StatelessWidget {
       children: [renderButton()],
     );
   }
+  //TODO show settings saved snack bar
 }

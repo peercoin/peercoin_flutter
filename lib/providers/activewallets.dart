@@ -532,14 +532,10 @@ class ActiveWallets with ChangeNotifier {
           'destroyedChange': _destroyedChange
         };
       } else {
-        //no utxos available
-        //TODO throw custom error
-        return {};
+        throw ('no utxos available');
       }
     } else {
-      //tx amount greater wallet balance
-      //TODO throw custom error
-      return {};
+      throw ('tx amount greater wallet balance');
     }
   }
 
