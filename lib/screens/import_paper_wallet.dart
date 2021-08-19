@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -227,7 +229,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ));
                       Navigator.of(context).pop();
                     } catch (e) {
-                      print('error $e');
+                      log('error $e');
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppLocalizations.instance.translate(

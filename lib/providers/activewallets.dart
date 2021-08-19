@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
@@ -99,7 +100,7 @@ class ActiveWallets with ChangeNotifier {
       return hdWallet.address;
     } else {
       var derivePath = "m/$account'/$chain/$address";
-      print(derivePath);
+      log(derivePath);
 
       return hdWallet.derivePath(derivePath).address;
     }
@@ -370,7 +371,7 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> updateAddressStatus(
       String identifier, String address, String? status) async {
-    print('updating $address to $status');
+    log('updating $address to $status');
     //set address to used
     //update status for address
     var openWallet = getSpecificCoinWallet(identifier);
@@ -444,8 +445,8 @@ class ActiveWallets with ChangeNotifier {
     var _needsChange = true;
     if (_txAmount == openWallet.balance) {
       _needsChange = false;
-      print('needschange $_needsChange, fee $fee');
-      print('change needed $_txAmount - $fee');
+      log('needschange $_needsChange, fee $fee');
+      log('change needed $_txAmount - $fee');
     }
     if (_txAmount <= openWallet.balance) {
       if (openWallet.utxos.isNotEmpty) {
@@ -467,7 +468,7 @@ class ActiveWallets with ChangeNotifier {
         tx.setVersion(1);
         if (_needsChange == true) {
           var changeAmount = _totalInputValue - _txAmount - fee;
-          print('change amount $changeAmount');
+          log('change amount $changeAmount');
           if (changeAmount < coin.minimumTxValue) {
             //change is too small! no change output
             _destroyedChange = changeAmount;
@@ -503,7 +504,7 @@ class ActiveWallets with ChangeNotifier {
         var keyMap = await generateKeyMap();
         //sign
         keyMap.forEach((key, value) {
-          print("signing - ${value["addr"]} - ${value["wif"]}");
+          log("signing - ${value["addr"]} - ${value["wif"]}");
           tx.sign(
             vin: key,
             keyPair: ECPair.fromWIF(value['wif'], network: network),
@@ -515,9 +516,9 @@ class ActiveWallets with ChangeNotifier {
             .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * 1000000;
         var requiredFeeInSatoshis = asDouble.toInt();
-        print('fee $requiredFeeInSatoshis, size: ${intermediate.txSize}');
+        log('fee $requiredFeeInSatoshis, size: ${intermediate.txSize}');
         if (dryRun == false) {
-          print('intermediate size: ${intermediate.txSize}');
+          log('intermediate size: ${intermediate.txSize}');
           _hex = intermediate.toHex();
         }
         //generate new wallet addr

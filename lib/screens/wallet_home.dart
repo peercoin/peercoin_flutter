@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -107,7 +109,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
       if (_connectionProvider!.latestBlock > _latestBlock) {
         //new block
-        print('new block ${_connectionProvider!.latestBlock}');
+        log('new block ${_connectionProvider!.latestBlock}');
         _latestBlock = _connectionProvider!.latestBlock;
 
         var unconfirmedTx = _walletTransactions.where((element) =>
@@ -116,7 +118,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 element.timestamp != -1 ||
             element.timestamp == null);
         unconfirmedTx.forEach((element) {
-          print('requesting update for ${element.txid}');
+          log('requesting update for ${element.txid}');
           _connectionProvider!.requestTxUpdate(element.txid);
         });
       }

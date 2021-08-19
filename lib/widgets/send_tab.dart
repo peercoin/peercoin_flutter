@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:flutter/material.dart';
@@ -210,7 +211,7 @@ class _SendTabState extends State<SendTab> {
                           //navigate back to tx list
                           widget._changeIndex(Tabs.transactions);
                         } catch (e) {
-                          print('error $e');
+                          log('error $e');
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -371,8 +372,7 @@ class _SendTabState extends State<SendTab> {
                           amountController.text = convertedValue;
                           var txValueInSatoshis =
                               (double.parse(convertedValue) * 1000000).toInt();
-                          print(
-                              'req value $txValueInSatoshis - ${_wallet.balance}');
+                          log('req value $txValueInSatoshis - ${_wallet.balance}');
                           if (convertedValue.contains('.') &&
                               convertedValue.split('.')[1].length >
                                   _availableCoin.fractions) {
