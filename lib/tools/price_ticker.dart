@@ -21,6 +21,19 @@ class PriceTicker {
     }
   }
 
+  static Map currencySymbols = {
+    'USD': '\$',
+    'EUR': '€',
+    'ARS': '\$',
+    'BRL': 'R\$',
+    'CNY': '¥',
+    'GBP': '£',
+    'HRK': 'kn',
+    'INR': '₹',
+    'RON': 'L',
+    'RUB': '₽'
+  };
+
   static void checkUpdate(AppSettings _settings) async {
     //check if last update was longer than an hour ago
     final oneHourAgo =

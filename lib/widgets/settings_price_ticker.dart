@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/buttons.dart';
 
 class SettingsPriceTicker extends StatelessWidget {
   final AppSettings _settings;
-
   SettingsPriceTicker(this._settings);
 
   Widget renderButton() {
@@ -27,26 +27,31 @@ class SettingsPriceTicker extends StatelessWidget {
     if (_settings.exchangeRates.isNotEmpty &&
         _settings.selectedCurrency.isNotEmpty) {
       //copy data
-      final currencyData = _settings.exchangeRates;
-      currencyData['USD'] = 0; //add usd
+      final currencyData = _settings.exchangeRates.keys.toList();
+      currencyData.insert(0, 'USD'); //add USD
       currencyData.remove('PPC'); //don't show PPC
 
-      return currencyData.keys.map((currency) {
+      return currencyData.map((currency) {
         return InkWell(
           onTap: () => _settings.setSelectedCurrency(currency),
           child: ListTile(
-            title: Text(currency),
-            leading: Radio(
-              value: currency,
-              groupValue: _settings.selectedCurrency,
-              onChanged: (dynamic _) => _settings.setSelectedCurrency(currency),
-            ),
-          ),
+              title: Text(
+                AppLocalizations.instance.translate('currency_$currency'),
+              ),
+              leading: Radio(
+                value: currency,
+                groupValue: _settings.selectedCurrency,
+                onChanged: (dynamic _) =>
+                    _settings.setSelectedCurrency(currency),
+              ),
+              trailing: Text(
+                PriceTicker.currencySymbols[currency] ?? '',
+                style: TextStyle(fontWeight: FontWeight.w500),
+              )),
         );
       }).toList();
     }
     //TODO maybe show current exchange rate?
-    //TODO show currency symbol
     return [Container()];
   }
 
@@ -60,5 +65,6 @@ class SettingsPriceTicker extends StatelessWidget {
     );
   }
   //TODO show settings saved snack bar
+  //TODO show data protection alert on enabling the price feed
   //TODO toggle fetch when enabled for first time / exchangeRates is empty
 }
