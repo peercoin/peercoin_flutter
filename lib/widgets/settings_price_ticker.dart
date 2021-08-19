@@ -38,6 +38,9 @@ class SettingsPriceTicker extends StatelessWidget {
               title: Text(
                 AppLocalizations.instance.translate('currency_$currency'),
               ),
+              subtitle: Text(
+                '1 PPC = ${PriceTicker.renderPrice(1, currency, _settings.exchangeRates).toStringAsFixed(6)} $currency',
+              ),
               leading: Radio(
                 value: currency,
                 groupValue: _settings.selectedCurrency,
@@ -51,7 +54,6 @@ class SettingsPriceTicker extends StatelessWidget {
         );
       }).toList();
     }
-    //TODO maybe show current exchange rate?
     return [Container()];
   }
 

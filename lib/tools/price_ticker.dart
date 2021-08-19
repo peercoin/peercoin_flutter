@@ -34,6 +34,13 @@ class PriceTicker {
     'RUB': '₽'
   };
 
+  static double renderPrice(double amount, String symbol, Map prices) {
+    if (symbol != 'USD') {
+      return prices[symbol] * amount * prices['PPC'];
+    }
+    return amount * prices['PPC'];
+  }
+
   static void checkUpdate(AppSettings _settings) async {
     //check if last update was longer than an hour ago
     final oneHourAgo =
@@ -58,7 +65,5 @@ class PriceTicker {
       _settings.setLatestTickerUpdate(DateTime.now());
     }
   }
-
-  //TODO app settings screen maps the currency dynamically - store currency symbols
   //TODO global listener AppLifecycleState.resumed to not only sync on app start... or just put a timer every hour?
 }
