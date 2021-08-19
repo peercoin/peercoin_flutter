@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
@@ -18,7 +18,7 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet_balance_header.dart';
+import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
 import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {

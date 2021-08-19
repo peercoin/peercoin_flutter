@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
-import 'package:peercoin/widgets/wallet_home_connection.dart';
+import 'package:peercoin/widgets/wallet/wallet_home_connection.dart';
 
 class WalletBalanceHeader extends StatelessWidget {
   final ElectrumConnectionState _connectionState;
