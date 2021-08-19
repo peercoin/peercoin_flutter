@@ -42,10 +42,12 @@ class PriceTicker {
   }
 
   static void checkUpdate(AppSettings _settings) async {
+    log('checking price update');
     //check if last update was longer than an hour ago
     final oneHourAgo =
         (DateTime.now()).subtract(Duration(minutes: Duration.minutesPerHour));
     if (_settings.latestTickerUpdate.isBefore(oneHourAgo)) {
+      log('last update older than 1 hour (${_settings.latestTickerUpdate})');
       //time to update
       //get data
       final data = await getDataFromTicker();
@@ -65,5 +67,4 @@ class PriceTicker {
       _settings.setLatestTickerUpdate(DateTime.now());
     }
   }
-  //TODO global listener AppLifecycleState.resumed to not only sync on app start... or just put a timer every hour?
 }

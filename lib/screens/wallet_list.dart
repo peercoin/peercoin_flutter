@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -30,6 +31,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   late ActiveWallets _activeWallets;
   late Animation<double> animation;
   late AnimationController controller;
+  late Timer _priceTimer;
 
   @override
   void initState() {
@@ -58,6 +60,13 @@ class _WalletListScreenState extends State<WalletListScreen>
         //toggle price ticker update if enabled in settings
         if (_appSettings.selectedCurrency.isNotEmpty) {
           PriceTicker.checkUpdate(_appSettings);
+          //start timer to update data hourly
+          _priceTimer = Timer.periodic(
+            const Duration(hours: 1),
+            (_) {
+              PriceTicker.checkUpdate(_appSettings);
+            },
+          );
         }
         //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
@@ -103,6 +112,7 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   void dispose() {
+    _priceTimer.cancel();
     controller.dispose();
     super.dispose();
   }

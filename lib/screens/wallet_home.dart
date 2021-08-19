@@ -9,6 +9,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/addresses_tab.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/receive_tab.dart';
@@ -32,6 +33,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       ElectrumConnectionState.waiting;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
+  late AppSettings _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
   int _latestBlock = 0;
@@ -64,8 +66,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      await _connectionProvider!
-          .init(_wallet.name, requestedFromWalletHome: true);
+      await _connectionProvider!.init(
+        _wallet.name,
+        requestedFromWalletHome: true,
+      );
+      PriceTicker.checkUpdate(_appSettings);
     }
   }
 
@@ -85,7 +90,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await _connectionProvider!
           .init(_wallet.name, requestedFromWalletHome: true);
 
-      var _appSettings = Provider.of<AppSettings>(context, listen: false);
+      _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       }
