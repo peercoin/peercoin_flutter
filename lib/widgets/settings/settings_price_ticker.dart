@@ -6,7 +6,9 @@ import 'package:peercoin/widgets/buttons.dart';
 
 class SettingsPriceTicker extends StatelessWidget {
   final AppSettings _settings;
-  SettingsPriceTicker(this._settings);
+  final Function _saveSnack;
+
+  SettingsPriceTicker(this._settings, this._saveSnack);
 
   Widget renderButton() {
     if (_settings.selectedCurrency.isEmpty) {
@@ -23,7 +25,12 @@ class SettingsPriceTicker extends StatelessWidget {
     );
   }
 
-  List<Widget> renderCurrencies() {
+  void saveCurrency(BuildContext ctx, String newCurrency) {
+    _settings.setSelectedCurrency(newCurrency);
+    _saveSnack(ctx);
+  }
+
+  List<Widget> renderCurrencies(BuildContext ctx) {
     if (_settings.exchangeRates.isNotEmpty &&
         _settings.selectedCurrency.isNotEmpty) {
       //copy data
@@ -33,7 +40,7 @@ class SettingsPriceTicker extends StatelessWidget {
 
       return currencyData.map((currency) {
         return InkWell(
-          onTap: () => _settings.setSelectedCurrency(currency),
+          onTap: () => saveCurrency(ctx, currency),
           child: ListTile(
               title: Text(
                 AppLocalizations.instance.translate('currency_$currency'),
@@ -42,11 +49,9 @@ class SettingsPriceTicker extends StatelessWidget {
                 '1 PPC = ${PriceTicker.renderPrice(1, currency, _settings.exchangeRates).toStringAsFixed(6)} $currency',
               ),
               leading: Radio(
-                value: currency,
-                groupValue: _settings.selectedCurrency,
-                onChanged: (dynamic _) =>
-                    _settings.setSelectedCurrency(currency),
-              ),
+                  value: currency,
+                  groupValue: _settings.selectedCurrency,
+                  onChanged: (dynamic _) => saveCurrency(ctx, currency)),
               trailing: Text(
                 PriceTicker.currencySymbols[currency] ?? '',
                 style: TextStyle(fontWeight: FontWeight.w500),
@@ -61,12 +66,12 @@ class SettingsPriceTicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Column(children: renderCurrencies()),
+        Column(children: renderCurrencies(context)),
         renderButton(),
       ],
     );
   }
-  //TODO show settings saved snack bar
   //TODO show data protection alert on enabling the price feed
   //TODO toggle fetch when enabled for first time / exchangeRates is empty
+  //TODO Animation for currency list
 }

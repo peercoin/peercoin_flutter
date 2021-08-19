@@ -290,7 +290,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         .translate('app_settings_price_feed'),
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
-                children: [SettingsPriceTicker(_settings)],
+                children: [SettingsPriceTicker(_settings, saveSnack)],
               )
             ],
           ),
