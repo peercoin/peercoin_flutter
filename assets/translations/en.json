@@ -75,6 +75,7 @@
     "create_wallet_or": "or",
     "export_now": "Export now",
     "id": "Id",
+    "import_button": "Import",
     "import_seed": "Please enter the seed you wish to import, separating each word with a whitespace.",
     "import_seed_button": "Import seed",
     "import_seed_error_1": "Must be 12 words or more",
@@ -161,10 +162,11 @@
     "setup_title": "Welcome",
     "setup_subtitle" : "to Peercoin Wallet",
     "setup_text1" : "If you already have created a wallet and you still have your seed phrase, then choose",
-    "setup_text2" : "otherwise create a new Peercoin wallet",
+    "setup_text2" : "create your new Peercoin wallet",
+    "setup_text3" : "or",
 
     "setup_save_title": "Create wallet",
-    "setup_save_text1" : "The following word list is called \"seed phrase\". It is a complex password that gives full access to your wallet and all your coins.",
+    "setup_save_text1" : "The following word list is called \"seed phrase\". It is a complex password that gives full access to your wallet and to all your coins.",
     "setup_save_text2" : "Double tap to copy",
 
     "setup_import_title": "Import wallet",

@@ -11,6 +11,7 @@ class MyTheme {
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
+      dividerColor: LightColors.darkGreen,
       errorColor: LightColors.red,
       focusColor: LightColors.green,
       hintColor: LightColors.grey,
@@ -29,22 +30,23 @@ class MyTheme {
 
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder( //to set border radius to button
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       cardTheme: CardTheme(
         elevation: 2,
+        shadowColor: LightColors.darkGreen,
         color: LightColors.white,
-        margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         shape: RoundedRectangleBorder( //to set border radius to button
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: LightColors.green,
-          onPrimary: LightColors.green,
-          textStyle: TextStyle(color: LightColors.white,)
+            primary: LightColors.green,
+            onPrimary: LightColors.green,
+            textStyle: TextStyle(color: LightColors.white,)
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -62,6 +64,7 @@ class MyTheme {
       cardColor: DarkColors.green,
       dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
+      dividerColor: DarkColors.lightGreen,
       errorColor: DarkColors.red,
       focusColor: DarkColors.black,
       hintColor: DarkColors.white,
@@ -148,6 +151,7 @@ class MyTheme {
 }
 
 abstract class LightColors {
+  static Color get darkGreen => const Color(0xFF31493C);
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF000000);
@@ -158,7 +162,9 @@ abstract class LightColors {
 }
 
 abstract class DarkColors {
+  static Color get darkGreen => const Color(0xFF31493C);
   static Color get green => const Color(0xFF2D936C);
+  static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF0D1821);
   static Color get darkBlue => const Color(0xFF234058);
   static Color get grey => const Color(0xFFE9EAED);

@@ -69,6 +69,12 @@ class _SetupScreenState extends State<SetupScreen> {
                                 action: () => Navigator.of(context)
                                     .pushNamed(Routes.SetupImport),
                               ),
+                              Text(
+                                AppLocalizations.instance.translate('setup_text3'),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
                               PeerExplanationText(AppLocalizations.instance.translate('setup_text2')),
                               PeerButtonSetupLoading(
                                 text: AppLocalizations.instance.translate('setup_save_title'),

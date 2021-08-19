@@ -58,6 +58,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     );
 
     return Scaffold(
+      appBar: AppBar(toolbarHeight: 0, automaticallyImplyLeading: false,),
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -73,7 +74,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Text(
-                  'Import Seed',
+                  AppLocalizations.instance.translate(
+                    'import_seed_button',
+                  ),
                   style: TextStyle(color: Colors.white, fontSize: 34),
                 ),
               ),
@@ -143,7 +146,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           }
                         },
                         text: AppLocalizations.instance.translate(
-                          'import_seed_button',
+                          'import_button',
                         ),
                         loading: _loading,
                       ),
