@@ -7,7 +7,6 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -132,66 +131,95 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       AppLocalizations.instance.translate('setup_save_title'),
                       style: TextStyle(color: Colors.white, fontSize: 34),
                     ),
-                    PeerExplanationText(AppLocalizations.instance.translate('setup_save_text1')),
                     Column(
                       children: [
-
                         Container(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context).backgroundColor,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            color: Theme.of(context).shadowColor,
                           ),
-                          child: DoubleTabToClipboard(
-                            clipBoardData: _seed,
-                            child: SelectableText(
-                              _seed,
-                              minLines: 5,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                wordSpacing: 10,
+                          //color: Theme.of(context).accentColor,
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(Icons.vpn_key_rounded, color: Theme.of(context).primaryColor, size: 40,),
+                                  SizedBox(width: 24,),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/1.7,
+                                    child: Text(
+                                      AppLocalizations.instance
+                                          .translate('setup_save_text1'),
+                                      style: TextStyle(
+                                          color: Theme.of(context).dividerColor, fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      //overflow: TextOverflow.fade,
+                                      maxLines: 5,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8, left:16),
-                            child: Text(
-                              AppLocalizations.instance.translate('setup_save_text2'),
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 15),
-                              textAlign: TextAlign.start,
+                            Container(
+                              height: MediaQuery.of(context).size.height/4,
+                              padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                color: Theme.of(context).backgroundColor,
+
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: getColumn(_seed,0),),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: getColumn(_seed,1),),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: getColumn(_seed,2),),
+                                ],),
                             ),
-                          ),
+                          ],),
                         ),
                       ],
                     ),
-                    Column(
-                      children: [
-                        PeerExplanationText(AppLocalizations.instance.translate('setup_seed_slider_label'),),
-                        Slider(
-                          activeColor: Colors.white,
-                          inactiveColor: Theme.of(context).disabledColor,
-                          value: _currentSliderValue,
-                          min: 12,
-                          max: 24,
-                          divisions: 3,
-                          label: _currentSliderValue.round().toString(),
-                          onChanged: (value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
-                            if (value % 4 == 0) {
-                              recreatePhrase(value);
-                            }
-                          },
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        children: [
+
+                          Slider(
+                            activeColor: Colors.white,
+                            inactiveColor: Theme.of(context).shadowColor,
+                            value: _currentSliderValue,
+                            min: 12,
+                            max: 24,
+                            divisions: 3,
+                            label: _currentSliderValue.round().toString(),
+                            onChanged: (value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                              });
+                              if (value % 4 == 0) {
+                                recreatePhrase(value);
+                              }
+                            },
+                          ),
+                          Text(
+                            AppLocalizations.instance.translate('setup_seed_slider_label'),
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 14),
+                            textAlign: TextAlign.center,
+                          ),
+
+                        ],
+                      ),
                     ),
                     if (_sharedYet)
                       PeerButtonSetup(
@@ -213,5 +241,23 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
       ),
     );
 
+  }
+
+  List<Widget> getColumn(String seed, int pos){
+    var list = <Widget>[];
+    var se = seed.split(' ');
+    var colSize = se.length~/3;
+    print(seed);
+    print(se.length.toString());
+    print(colSize);
+
+    for(var i=0; i<colSize; i++){
+      list.add(
+        Text((i*3+pos+1).toString() + ') ' + se[i*3+pos],style: TextStyle(color: Theme.of(context).dividerColor),)
+      );
+      print(se[i*3+pos]);
+    }
+    print('\n');
+    return list;
   }
 }
