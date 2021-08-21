@@ -69,7 +69,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                         AppLocalizations.instance
                             .translate('app_settings_biometrics'),
                         style: TextStyle(
-                            color: Colors.white, fontStyle: FontStyle.italic, fontSize: 17),
+                            color: Colors.white, fontSize: 17),
                       ),
                         value: _biometricsAllowed,
                         activeColor: Theme.of(context).backgroundColor,

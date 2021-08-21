@@ -106,10 +106,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             }
                             return null;
                           },
-                          style: TextStyle(color: Theme.of(context).accentColor),
+                          style: TextStyle(color: Theme.of(context).dividerColor),
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: Theme.of(context).backgroundColor,
                             suffixIcon: IconButton(
                               onPressed: () async {
                                 var data = await Clipboard.getData('text/plain');
@@ -122,13 +122,17 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                   color: Theme.of(context).primaryColor),
                             ),
                             border: border,
-                            focusedBorder: border,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              borderSide: BorderSide(width: 4, color: Theme.of(context).shadowColor),
+                            ),
                             enabledBorder: border,
+                            errorStyle: TextStyle(color: Theme.of(context).backgroundColor),
                             errorBorder: OutlineInputBorder(
                               borderRadius:
                               BorderRadius.all(Radius.circular(20)),
                               borderSide: BorderSide(
-                                width: 2,
+                                width: 4,
                                 color: Theme.of(context).errorColor,
                               ),
                             ),

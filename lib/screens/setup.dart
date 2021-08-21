@@ -22,6 +22,9 @@ class _SetupScreenState extends State<SetupScreen> {
     await _activeWallets.init();
     await _activeWallets.createPhrase();
     await Navigator.of(context).popAndPushNamed(Routes.SetupScreen);
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override

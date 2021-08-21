@@ -164,7 +164,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                               ),
                             ),
                             Container(
-                              height: MediaQuery.of(context).size.height/4,
+                              height: MediaQuery.of(context).size.height/3.5,
                               padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -247,17 +247,15 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
     var list = <Widget>[];
     var se = seed.split(' ');
     var colSize = se.length~/3;
-    print(seed);
-    print(se.length.toString());
-    print(colSize);
 
     for(var i=0; i<colSize; i++){
       list.add(
-        Text((i*3+pos+1).toString() + ') ' + se[i*3+pos],style: TextStyle(color: Theme.of(context).dividerColor),)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: Text((i*3+pos+1).toString() + ') ' + se[i*3+pos],style: TextStyle(color: Theme.of(context).dividerColor),),
+        )
       );
-      print(se[i*3+pos]);
     }
-    print('\n');
     return list;
   }
 }
