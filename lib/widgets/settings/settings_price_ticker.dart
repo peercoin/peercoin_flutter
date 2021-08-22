@@ -3,38 +3,108 @@ import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/expanded_section.dart';
 
-class SettingsPriceTicker extends StatelessWidget {
+class SettingsPriceTicker extends StatefulWidget {
   final AppSettings _settings;
   final Function _saveSnack;
 
   SettingsPriceTicker(this._settings, this._saveSnack);
 
-  Widget renderButton() {
-    if (_settings.selectedCurrency.isEmpty) {
+  @override
+  _SettingsPriceTickerState createState() => _SettingsPriceTickerState();
+}
+
+class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
+  late bool _listExpanded;
+
+  @override
+  void initState() {
+    if (widget._settings.exchangeRates.isNotEmpty &&
+        widget._settings.selectedCurrency.isNotEmpty) {
+      setState(() {
+        _listExpanded = true;
+      });
+    } else {
+      setState(() {
+        _listExpanded = false;
+      });
+    }
+    super.initState();
+  }
+
+  void enableFeed(BuildContext ctx) async {
+    await showDialog(
+      context: ctx,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('setup_continue_alert_title'),
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+            AppLocalizations.instance
+                .translate('app_settings_price_alert_content'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                widget._settings.setSelectedCurrency('USD');
+                PriceTicker.checkUpdate(widget._settings);
+                Navigator.pop(context);
+                setState(() {
+                  _listExpanded = true;
+                });
+              },
+              child: Text(
+                AppLocalizations.instance.translate('continue'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget renderButton(BuildContext ctx) {
+    if (widget._settings.selectedCurrency.isEmpty) {
       return PeerButton(
         text: AppLocalizations.instance
             .translate('app_settings_price_feed_enable_button'),
-        action: () => _settings.setSelectedCurrency('USD'),
+        action: () => enableFeed(ctx),
       );
     }
     return PeerButton(
       text: AppLocalizations.instance
           .translate('app_settings_price_feed_disable_button'),
-      action: () => _settings.setSelectedCurrency(''),
+      action: () {
+        widget._settings.setSelectedCurrency('');
+        setState(() {
+          _listExpanded = false;
+        });
+      },
     );
   }
 
   void saveCurrency(BuildContext ctx, String newCurrency) {
-    _settings.setSelectedCurrency(newCurrency);
-    _saveSnack(ctx);
+    widget._settings.setSelectedCurrency(newCurrency);
+    widget._saveSnack(ctx);
   }
 
   List<Widget> renderCurrencies(BuildContext ctx) {
-    if (_settings.exchangeRates.isNotEmpty &&
-        _settings.selectedCurrency.isNotEmpty) {
+    if (widget._settings.exchangeRates.isNotEmpty &&
+        widget._settings.selectedCurrency.isNotEmpty) {
       //copy data
-      final currencyData = _settings.exchangeRates.keys.toList();
+      final currencyData = widget._settings.exchangeRates.keys.toList();
       currencyData.insert(0, 'USD'); //add USD
       currencyData.remove('PPC'); //don't show PPC
 
@@ -42,20 +112,21 @@ class SettingsPriceTicker extends StatelessWidget {
         return InkWell(
           onTap: () => saveCurrency(ctx, currency),
           child: ListTile(
-              title: Text(
-                AppLocalizations.instance.translate('currency_$currency'),
-              ),
-              subtitle: Text(
-                '1 PPC = ${PriceTicker.renderPrice(1, currency, _settings.exchangeRates).toStringAsFixed(6)} $currency',
-              ),
-              leading: Radio(
-                  value: currency,
-                  groupValue: _settings.selectedCurrency,
-                  onChanged: (dynamic _) => saveCurrency(ctx, currency)),
-              trailing: Text(
-                PriceTicker.currencySymbols[currency] ?? '',
-                style: TextStyle(fontWeight: FontWeight.w500),
-              )),
+            title: Text(
+              AppLocalizations.instance.translate('currency_$currency'),
+            ),
+            subtitle: Text(
+              '1 PPC = ${PriceTicker.renderPrice(1, currency, widget._settings.exchangeRates).toStringAsFixed(6)} $currency',
+            ),
+            leading: Radio(
+                value: currency,
+                groupValue: widget._settings.selectedCurrency,
+                onChanged: (dynamic _) => saveCurrency(ctx, currency)),
+            trailing: Text(
+              PriceTicker.currencySymbols[currency] ?? '',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
         );
       }).toList();
     }
@@ -66,12 +137,14 @@ class SettingsPriceTicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Column(children: renderCurrencies(context)),
-        renderButton(),
+        ExpandedSection(
+          expand: _listExpanded,
+          child: Column(
+            children: renderCurrencies(context),
+          ),
+        ),
+        renderButton(context),
       ],
     );
   }
-  //TODO show data protection alert on enabling the price feed
-  //TODO toggle fetch when enabled for first time / exchangeRates is empty
-  //TODO Animation for currency list
 }
