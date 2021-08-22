@@ -136,7 +136,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
         ListView(
           children: [
             SizedBox(
-              height: 130,
+              height: 135,
             ),
             PeerContainer(
               child: Form(

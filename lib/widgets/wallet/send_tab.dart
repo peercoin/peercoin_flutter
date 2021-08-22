@@ -261,7 +261,7 @@ class _SendTabState extends State<SendTab> {
         ListView(
           children: [
             SizedBox(
-              height: 130,
+              height: 135,
             ),
             PeerContainer(
               child: Form(

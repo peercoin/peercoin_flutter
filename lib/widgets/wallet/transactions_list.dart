@@ -198,7 +198,7 @@ class _TransactionListState extends State<TransactionList> {
                         widget._walletTransactions.isNotEmpty) {
                       return Column(
                         children: [
-                          SizedBox(height: 130),
+                          SizedBox(height: 135),
                           Wrap(
                             spacing: 8.0,
                             children: <Widget>[
