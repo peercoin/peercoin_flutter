@@ -51,11 +51,13 @@ class WalletBalanceHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                _settings.selectedCurrency.isNotEmpty
+                _settings.selectedCurrency.isNotEmpty &&
+                        !_wallet.title.contains('Testnet')
                     ? Text(
                         '${PriceTicker.renderPrice(
                           _wallet.balance / 1000000,
                           _settings.selectedCurrency,
+                          _wallet.letterCode,
                           _settings.exchangeRates,
                         ).toStringAsFixed(2)} ${_settings.selectedCurrency}',
                         style: TextStyle(

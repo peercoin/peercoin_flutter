@@ -34,11 +34,12 @@ class PriceTicker {
     'RUB': '₽'
   };
 
-  static double renderPrice(double amount, String symbol, Map prices) {
-    if (symbol != 'USD') {
-      return prices[symbol] * amount * prices['PPC'];
+  static double renderPrice(
+      double amount, String currencySymbol, String coinLetterCode, Map prices) {
+    if (currencySymbol != 'USD') {
+      return prices[currencySymbol] * amount * prices[coinLetterCode];
     }
-    return amount * prices['PPC'];
+    return amount * prices[coinLetterCode];
   }
 
   static void checkUpdate(AppSettings _settings) async {
