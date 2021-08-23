@@ -36,6 +36,9 @@ class PriceTicker {
 
   static double renderPrice(
       double amount, String currencySymbol, String coinLetterCode, Map prices) {
+    if (prices.isEmpty) {
+      return 0.0;
+    }
     if (currencySymbol != 'USD') {
       return prices[currencySymbol] * amount * prices[coinLetterCode];
     }
