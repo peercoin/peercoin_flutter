@@ -194,5 +194,22 @@
     "receive_website_description": "Du kannst Peercoin direkt mit einer Kreditkarte (nur Kunden außerhalb der USA) oder von diversen Börsen und Anbietern erwerben.",
     "receive_website_credit": "Mit Kreditkarte kaufen",
     "receive_website_faucet": "Bei diesem Faucet kannst du gratis Testnet Münzen erhalten.",
-    "snack_copied": "In Zwischenablage kopiert"
+    "snack_copied": "In Zwischenablage kopiert",
+    "app_settings_price_alert_content": "Dies wird unseren datenschutzfreundlichen Preis Daten Feed aktivieren.\nEr kann jederzeit abgeschaltet werden.",
+    "wallet_value_alert_content": "Es ist risikoreich diesen Wert von Münzen in einer mobilen Wallet zu lagern.\nZiehe in Betracht deine Münzen in Cold Storage zu verschieben.",
+    "app_settings_price_feed": "Preis Feed & Währung",
+    "app_settings_price_feed_enable_button": "Preis Feed API aktivieren",
+    "app_settings_price_feed_disable_button": "Preis Feed API deaktivieren",
+    "currency_ARS": "Argentinischer Peso",
+    "currency_BRL": "Brasilianischer Real",
+    "currency_CNY": "Chinesischer Yuan Renminbi",
+    "currency_EUR": "Euro",
+    "currency_GBP": "Pfund Sterling",
+    "currency_HRK": "Kroatische Kuna",
+    "currency_INR": "Indische Rupie",
+    "currency_RON": "Rumänischer Leu",
+    "currency_RUB": "Russischer Rubel",
+    "currency_USD": "US-Dollar",
+    "not_again": "Nicht erneut anzeigen",
+    "wallet_value_alert_title": "Hoher Münzenwert"
 }
