@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class Servers with ChangeNotifier {
   };
 
   Future<void> init(String? coinIdentifier) async {
-    print('init server provider');
+    log('init server provider');
     _serverBox = await Hive.openBox<Server>(
       'serverBox-$coinIdentifier',
       encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>),
@@ -31,7 +32,7 @@ class Servers with ChangeNotifier {
 
     //check first run
     if (_serverBox.isEmpty) {
-      print('server storage is empty, initializing');
+      log('server storage is empty, initializing');
 
       _seeds[coinIdentifier!]!.asMap().forEach((index, hardcodedSeedAddress) {
         var newServer = Server(
@@ -49,7 +50,7 @@ class Servers with ChangeNotifier {
           (element) => element.getAddress == hardcodedSeedAddress);
       if (res == null) {
         //hard coded server not yet in storage
-        print('$hardcodedSeedAddress not yet in storage');
+        log('$hardcodedSeedAddress not yet in storage');
         addServer(hardcodedSeedAddress);
       }
     });
@@ -59,7 +60,7 @@ class Servers with ChangeNotifier {
           (element) => element == boxElement.address,
           orElse: () => null);
       if (res == null) {
-        print('${boxElement.address} not existant anymore');
+        log('${boxElement.address} not existant anymore');
         removeServer(boxElement);
       }
     });
@@ -98,7 +99,7 @@ class Servers with ChangeNotifier {
 
     final _prunedList =
         _availableServers.where((element) => element.isNotEmpty).toList();
-    print('available servers $_prunedList');
+    log('available servers $_prunedList');
 
     return _prunedList;
   }

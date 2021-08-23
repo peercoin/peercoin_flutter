@@ -6,9 +6,9 @@ import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/wallet_home_qr.dart';
+import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
 class AddressTab extends StatefulWidget {

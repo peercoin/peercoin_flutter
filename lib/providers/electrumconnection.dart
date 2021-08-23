@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:developer';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class ElectrumConnection with ChangeNotifier {
       _coinName = walletName;
       connectionState = ElectrumConnectionState.waiting;
       _scanMode = scanMode;
-      print('init server connection');
+      log('init server connection');
       await _servers.init(walletName);
       await connect();
       var stream = _connection!.stream;
@@ -85,11 +86,11 @@ class ElectrumConnection with ChangeNotifier {
       stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        print('stream error: $error');
+        log('stream error: $error');
         _connectionAttempt++;
       }, onDone: () {
         cleanUpOnDone();
-        print('connection done');
+        log('connection done');
       });
       tryHandShake();
       startPingTimer();
@@ -106,10 +107,10 @@ class ElectrumConnection with ChangeNotifier {
     if (_connectionAttempt > _availableServers.length - 1) {
       _connectionAttempt = 0;
     }
-    print('connection attempt $_connectionAttempt');
+    log('connection attempt $_connectionAttempt');
 
     _serverUrl = _availableServers[_connectionAttempt];
-    print('connecting to $_serverUrl');
+    log('connecting to $_serverUrl');
 
     try {
       _connection = IOWebSocketChannel.connect(
@@ -117,7 +118,7 @@ class ElectrumConnection with ChangeNotifier {
       );
     } catch (e) {
       _connectionAttempt++;
-      print('connection error: $e');
+      log('connection error: $e');
     }
   }
 
@@ -197,7 +198,7 @@ class ElectrumConnection with ChangeNotifier {
     var result = decoded['result'];
 
     if (decoded['id'] != null) {
-      print('replyhandler $idString');
+      log('replyhandler $idString');
       if (idString == 'version') {
         handleVersion(result);
       } else if (idString.startsWith('history_')) {
@@ -267,7 +268,7 @@ class ElectrumConnection with ChangeNotifier {
       sendMessage('blockchain.headers.subscribe', 'blocks');
     } else {
       //wrong genesis!
-      print('wrong genesis! disconnecting.');
+      log('wrong genesis! disconnecting.');
       closeConnection(false);
     }
   }
@@ -283,7 +284,7 @@ class ElectrumConnection with ChangeNotifier {
       //emulate scripthash subscribe push
       var hash = _addresses.entries
           .firstWhereOrNull((element) => element.key == address)!;
-      print('status changed! $oldStatus, $newStatus');
+      log('status changed! $oldStatus, $newStatus');
       //handle the status update
       handleScriptHashSubscribeNotification(hash.value, newStatus);
     }
@@ -299,7 +300,7 @@ class ElectrumConnection with ChangeNotifier {
           //address pointer
           _maxAddressDepth++;
         }
-        print('writing $address to wallet');
+        log('writing $address to wallet');
         //saving to wallet
         _activeWallets.addAddressFromScan(_coinName, address);
         //try next
@@ -313,7 +314,7 @@ class ElectrumConnection with ChangeNotifier {
 
     if (_depthPointer == 1 && _queryDepth[currentPointer]! < _maxChainDepth ||
         _depthPointer == 2 && _queryDepth[currentPointer]! < _maxAddressDepth) {
-      print(_queryDepth);
+      log('$_queryDepth');
 
       var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
         _coinName,
@@ -322,7 +323,7 @@ class ElectrumConnection with ChangeNotifier {
         _queryDepth['address']!,
       );
 
-      print(_nextAddr);
+      log('$_nextAddr');
 
       subscribeToScriptHashes(
         await _activeWallets.getWalletScriptHashes(_coinName, _nextAddr),
@@ -331,7 +332,7 @@ class ElectrumConnection with ChangeNotifier {
       var _number = _queryDepth[currentPointer] as int;
       _queryDepth[currentPointer] = _number + 1;
     } else if (_depthPointer < _queryDepth.keys.length - 1) {
-      print('move pointer');
+      log('move pointer');
       _queryDepth[currentPointer] = 0;
       _depthPointer++;
       await subscribeNextDerivedAddress();
@@ -360,7 +361,7 @@ class ElectrumConnection with ChangeNotifier {
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
         orElse: () => null);
-    print('update for $hashId');
+    log('update for $hashId');
     //update status so we flag that we proccessed this update already
     await _activeWallets.updateAddressStatus(_coinName, address, newStatus);
     //fire listunspent to get utxo
@@ -433,7 +434,7 @@ class ElectrumConnection with ChangeNotifier {
     if (tx != null) {
       await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     } else {
-      print('tx not found');
+      log('tx not found');
       //TODO figure out what to do in that case ...
       //if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
     }
@@ -442,7 +443,7 @@ class ElectrumConnection with ChangeNotifier {
   void handleBroadcast(String id, String result) async {
     var txId = id.replaceFirst('broadcast_', '');
     if (result == '1') {
-      print('tx rejected by server');
+      log('tx rejected by server');
       await _activeWallets.updateRejected(_coinName, txId, true);
     } else if (txId != 'import') {
       await _activeWallets.updateBroadcasted(_coinName, txId, true);

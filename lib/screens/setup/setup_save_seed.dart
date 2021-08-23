@@ -52,11 +52,14 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
     var _intValue = sliderValue.toInt();
 
     switch (_intValue) {
-      case 16:
+      case 15:
         _entropy = 160;
         break;
-      case 20:
+      case 18:
         _entropy = 192;
+        break;
+      case 21:
+        _entropy = 224;
         break;
       case 24:
         _entropy = 256;
@@ -162,13 +165,13 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                           value: _currentSliderValue,
                           min: 12,
                           max: 24,
-                          divisions: 3,
+                          divisions: 4,
                           label: _currentSliderValue.round().toString(),
                           onChanged: (value) {
                             setState(() {
                               _currentSliderValue = value;
                             });
-                            if (value % 4 == 0) {
+                            if (value % 3 == 0) {
                               recreatePhrase(value);
                             }
                           },

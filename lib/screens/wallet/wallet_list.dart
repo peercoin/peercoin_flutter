@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -9,8 +10,9 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/new_wallet.dart';
+import 'package:peercoin/widgets/wallet/new_wallet.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -29,9 +31,11 @@ class _WalletListScreenState extends State<WalletListScreen>
   late ActiveWallets _activeWallets;
   late Animation<double> animation;
   late AnimationController controller;
+  late Timer _priceTimer;
 
   @override
   void initState() {
+    //init animation controller
     controller = AnimationController(
       duration: Duration(milliseconds: 1500),
       vsync: this,
@@ -53,6 +57,17 @@ class _WalletListScreenState extends State<WalletListScreen>
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
         }
       } else {
+        //toggle price ticker update if enabled in settings
+        if (_appSettings.selectedCurrency.isNotEmpty) {
+          PriceTicker.checkUpdate(_appSettings);
+          //start timer to update data hourly
+          _priceTimer = Timer.periodic(
+            const Duration(hours: 1),
+            (_) {
+              PriceTicker.checkUpdate(_appSettings);
+            },
+          );
+        }
         //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
         if (values.length == 1) {
@@ -97,6 +112,7 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   void dispose() {
+    _priceTimer.cancel();
     controller.dispose();
     super.dispose();
   }
