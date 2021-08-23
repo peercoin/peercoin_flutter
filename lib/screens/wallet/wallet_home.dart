@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/models/wallettransaction.dart';
@@ -16,6 +18,7 @@ import 'package:peercoin/widgets/wallet/receive_tab.dart';
 import 'package:peercoin/widgets/wallet/send_tab.dart';
 import 'package:peercoin/widgets/wallet/transactions_list.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
@@ -36,6 +39,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late AppSettings _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
+  late SharedPreferences _prefs;
   int _latestBlock = 0;
   String? _address;
   String? _label;
@@ -84,6 +88,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _prefs = await Provider.of<UnencryptedOptions>(context).prefs;
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
@@ -93,6 +98,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+      }
+
+      if (Platform.isIOS || Platform.isAndroid) {
+        triggerHighValueAlert();
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
@@ -141,6 +150,43 @@ class _WalletHomeState extends State<WalletHomeScreen>
         element.txid,
       );
     });
+  }
+
+  void triggerHighValueAlert() {
+    var discarded = _prefs.getBool('highValueNotice') ?? false;
+    if (_appSettings.selectedCurrency.isNotEmpty && !discarded) {
+      _wallet.balance = 1000000000;
+      //price feed enabled
+      if (PriceTicker.renderPrice(_wallet.balance / 1000000, 'USD',
+              _wallet.letterCode, _appSettings.exchangeRates) >=
+          1000) {
+        //Coins worth 1000 USD or more
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(AppLocalizations.instance
+                .translate('wallet_value_alert_title')),
+            content: Text(AppLocalizations.instance
+                .translate('wallet_value_alert_content')),
+            actions: <Widget>[
+              TextButton.icon(
+                  label: Text(AppLocalizations.instance.translate('not_again')),
+                  icon: Icon(Icons.cancel),
+                  onPressed: () async {
+                    await _prefs.setBool('highValueNotice', true);
+                    Navigator.of(context).pop();
+                  }),
+              TextButton.icon(
+                label: Text(
+                    AppLocalizations.instance.translate('jail_dialog_button')),
+                icon: Icon(Icons.check),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 
   @override
