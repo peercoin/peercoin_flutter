@@ -39,7 +39,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late AppSettings _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
-  late SharedPreferences _prefs;
   int _latestBlock = 0;
   String? _address;
   String? _label;
@@ -88,7 +87,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _prefs = await Provider.of<UnencryptedOptions>(context).prefs;
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
@@ -152,8 +150,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
     });
   }
 
-  void triggerHighValueAlert() {
+  void triggerHighValueAlert() async {
     if (_appSettings.selectedCurrency.isNotEmpty) {
+      var _prefs =
+          await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
       var discarded = _prefs.getBool('highValueNotice') ?? false;
       //price feed enabled
       if (!discarded &&
@@ -161,7 +161,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   _wallet.letterCode, _appSettings.exchangeRates) >=
               1000) {
         //Coins worth 1000 USD or more
-        showDialog(
+        await showDialog(
           context: context,
           builder: (_) => AlertDialog(
             title: Text(AppLocalizations.instance
