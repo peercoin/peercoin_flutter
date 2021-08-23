@@ -152,10 +152,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   void triggerHighValueAlert() async {
     if (_appSettings.selectedCurrency.isNotEmpty) {
+      //price feed enabled
       var _prefs =
           await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
       var discarded = _prefs.getBool('highValueNotice') ?? false;
-      //price feed enabled
       if (!discarded &&
           PriceTicker.renderPrice(_wallet.balance / 1000000, 'USD',
                   _wallet.letterCode, _appSettings.exchangeRates) >=
