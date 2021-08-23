@@ -155,7 +155,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
   void triggerHighValueAlert() {
     var discarded = _prefs.getBool('highValueNotice') ?? false;
     if (_appSettings.selectedCurrency.isNotEmpty && !discarded) {
-      _wallet.balance = 1000000000;
       //price feed enabled
       if (PriceTicker.renderPrice(_wallet.balance / 1000000, 'USD',
               _wallet.letterCode, _appSettings.exchangeRates) >=
