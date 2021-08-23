@@ -153,12 +153,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   void triggerHighValueAlert() {
-    var discarded = _prefs.getBool('highValueNotice') ?? false;
-    if (_appSettings.selectedCurrency.isNotEmpty && !discarded) {
+    if (_appSettings.selectedCurrency.isNotEmpty) {
+      var discarded = _prefs.getBool('highValueNotice') ?? false;
       //price feed enabled
-      if (PriceTicker.renderPrice(_wallet.balance / 1000000, 'USD',
-              _wallet.letterCode, _appSettings.exchangeRates) >=
-          1000) {
+      if (!discarded &&
+          PriceTicker.renderPrice(_wallet.balance / 1000000, 'USD',
+                  _wallet.letterCode, _appSettings.exchangeRates) >=
+              1000) {
         //Coins worth 1000 USD or more
         showDialog(
           context: context,
