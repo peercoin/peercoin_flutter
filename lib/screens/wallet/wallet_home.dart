@@ -18,7 +18,6 @@ import 'package:peercoin/widgets/wallet/receive_tab.dart';
 import 'package:peercoin/widgets/wallet/send_tab.dart';
 import 'package:peercoin/widgets/wallet/transactions_list.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
