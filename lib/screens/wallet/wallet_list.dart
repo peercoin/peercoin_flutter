@@ -52,7 +52,6 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
-      print("initial wallet list");
       if (widget.fromColdStart == false) {
         if (_appSettings.authenticationOptions!['walletList']!) {
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
