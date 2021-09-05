@@ -52,22 +52,12 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
+      print("initial wallet list");
       if (widget.fromColdStart == false) {
         if (_appSettings.authenticationOptions!['walletList']!) {
           await Auth.requireAuth(context, _appSettings.biometricsAllowed);
         }
       } else {
-        //toggle price ticker update if enabled in settings
-        if (_appSettings.selectedCurrency.isNotEmpty) {
-          PriceTicker.checkUpdate(_appSettings);
-          //start timer to update data hourly
-          _priceTimer = Timer.periodic(
-            const Duration(hours: 1),
-            (_) {
-              PriceTicker.checkUpdate(_appSettings);
-            },
-          );
-        }
         //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
         if (values.length == 1) {
@@ -101,6 +91,17 @@ class _WalletListScreenState extends State<WalletListScreen>
             });
           }
         }
+      }
+      //toggle price ticker update if enabled in settings
+      if (_appSettings.selectedCurrency.isNotEmpty) {
+        PriceTicker.checkUpdate(_appSettings);
+        //start timer to update data hourly
+        _priceTimer = Timer.periodic(
+          const Duration(hours: 1),
+          (_) {
+            PriceTicker.checkUpdate(_appSettings);
+          },
+        );
       }
       setState(() {
         _initial = false;
