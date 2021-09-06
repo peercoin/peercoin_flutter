@@ -75,6 +75,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
               textAlign: TextAlign.center,
             ),
             SwitchListTile(
+                key: Key('setupApiSwitchKey'),
                 title: Text(
                     AppLocalizations.instance
                         .translate('setup_price_feed_allow'),
