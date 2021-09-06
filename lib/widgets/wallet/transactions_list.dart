@@ -189,6 +189,20 @@ class _TransactionListState extends State<TransactionList> {
                                         : Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
+                                _filteredTx[i - 1].direction == 'out'
+                                    ? Text(
+                                        '-' +
+                                            (_filteredTx[i - 1].fee / 1000000)
+                                                .toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Theme.of(context).errorColor,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height: 0,
+                                      )
                               ],
                             ),
                           ),
