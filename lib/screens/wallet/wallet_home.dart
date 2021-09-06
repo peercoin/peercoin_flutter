@@ -98,7 +98,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
 
       if (Platform.isIOS || Platform.isAndroid) {
-        triggerHighValueAlert();
+        if (!_wallet.title.contains('Testnet')) {
+          triggerHighValueAlert();
+        }
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;

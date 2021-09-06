@@ -46,6 +46,8 @@ void main() {
           for (var i = 1; i <= 12; i++) {
             await driver.tap(find.text('0'));
           }
+          await driver.tap(find.byValueKey('setupApiSwitchKey'));
+          await driver.tap(find.text('Finish Setup'));
           await driver.runUnsynchronized(
             () async {
               await driver.tap(find.byValueKey('newWalletIconButton'));

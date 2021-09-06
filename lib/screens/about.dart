@@ -105,6 +105,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_data_declaration'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Divider(),
@@ -119,6 +120,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('about_foundation_button'),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Divider(),
