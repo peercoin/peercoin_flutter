@@ -110,12 +110,8 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                     await settings.createInitialSettings(_biometricsAllowed,
                         AppLocalizations.instance.locale.toString());
 
-                    var prefs = await Provider.of<UnencryptedOptions>(context,
-                            listen: false)
-                        .prefs;
-                    await prefs.setBool('setupFinished', true);
                     await Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.WalletList, (_) => false);
+                        Routes.SetupDataFeeds, (_) => false);
                   },
                 );
               },
