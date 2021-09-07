@@ -504,7 +504,7 @@ class ActiveWallets with ChangeNotifier {
         var keyMap = await generateKeyMap();
         //sign
         keyMap.forEach((key, value) {
-          log("signing - ${value["addr"]} - ${value["wif"]}");
+          log("signing - ${value["addr"]}");
           tx.sign(
             vin: key,
             keyPair: ECPair.fromWIF(value['wif'], network: network),
