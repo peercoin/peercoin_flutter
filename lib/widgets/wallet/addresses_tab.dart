@@ -11,6 +11,8 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
+import '../double_tab_to_clipboard.dart';
+
 class AddressTab extends StatefulWidget {
   final String name;
   final String title;
@@ -212,101 +214,105 @@ class _AddressTabState extends State<AddressTab> {
     var listSend = <Widget>[];
     for (var addr in _filteredSend) {
       listSend.add(
-        Card(
-          color: Theme.of(context).backgroundColor,
-          child: ClipRect(
-            child: Slidable(
-              key: Key(addr.address),
-              actionPane: SlidableScrollActionPane(),
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_edit'),
-                  color: Theme.of(context).primaryColor,
-                  icon: Icons.edit,
-                  onTap: () => _addressEditDialog(context, addr),
-                ),
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_share'),
-                  color: Theme.of(context).backgroundColor,
-                  iconWidget: Icon(
-                    Icons.share,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  onTap: () => WalletHomeQr.showQrDialog(context, addr.address),
-                ),
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_send'),
-                  color: Theme.of(context).accentColor,
-                  iconWidget: Icon(
-                    Icons.send,
-                    color: Theme.of(context).backgroundColor,
-                  ),
-                  onTap: () => widget.changeIndex(
-                      Tabs.send, addr.address, addr.addressBookName),
-                ),
-                IconSlideAction(
+        DoubleTabToClipboard(
+          clipBoardData: addr.address,
+          child: Card(
+            child: ClipRect(
+              child: Slidable(
+                key: Key(addr.address),
+                actionPane: SlidableScrollActionPane(),
+                secondaryActions: <Widget>[
+                  IconSlideAction(
                     caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_delete'),
-                    color: Theme.of(context).errorColor,
-                    iconWidget: Icon(Icons.delete, color: Colors.white),
-                    onTap: () async {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: Text(AppLocalizations.instance
-                              .translate('addressbook_dialog_remove_title')),
-                          content: Text(addr.address),
-                          actions: <Widget>[
-                            TextButton.icon(
-                                label: Text(AppLocalizations.instance
-                                    .translate('server_settings_alert_cancel')),
-                                icon: Icon(Icons.cancel),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                            TextButton.icon(
-                              label: Text(AppLocalizations.instance
-                                  .translate('jail_dialog_button')),
-                              icon: Icon(Icons.check),
-                              onPressed: () {
-                                context
-                                    .read<ActiveWallets>()
-                                    .removeAddress(widget.name, addr);
-                                //applyFilter();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                    AppLocalizations.instance.translate(
-                                        'addressbook_dialog_remove_snack'),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                ));
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    })
-              ],
-              actionExtentRatio: 0.25,
-              child: ListTile(
-                subtitle: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Center(
-                    child: Text(addr.address),
+                        .translate('addressbook_swipe_edit'),
+                    color: Theme.of(context).primaryColor,
+                    icon: Icons.edit,
+                    onTap: () => _addressEditDialog(context, addr),
                   ),
-                ),
-                title: Center(
-                  child: Text(
-                    addr.addressBookName ?? '-',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_share'),
+                    color: Theme.of(context).backgroundColor,
+                    iconWidget: Icon(
+                      Icons.share,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onTap: () =>
+                        WalletHomeQr.showQrDialog(context, addr.address),
+                  ),
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_send'),
+                    color: Theme.of(context).accentColor,
+                    iconWidget: Icon(
+                      Icons.send,
+                      color: Theme.of(context).backgroundColor,
+                    ),
+                    onTap: () => widget.changeIndex(
+                        Tabs.send, addr.address, addr.addressBookName),
+                  ),
+                  IconSlideAction(
+                      caption: AppLocalizations.instance
+                          .translate('addressbook_swipe_delete'),
+                      color: Theme.of(context).errorColor,
+                      iconWidget: Icon(Icons.delete, color: Colors.white),
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: Text(AppLocalizations.instance
+                                .translate('addressbook_dialog_remove_title')),
+                            content: Text(addr.address),
+                            actions: <Widget>[
+                              TextButton.icon(
+                                  label: Text(AppLocalizations.instance
+                                      .translate(
+                                          'server_settings_alert_cancel')),
+                                  icon: Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              TextButton.icon(
+                                label: Text(AppLocalizations.instance
+                                    .translate('jail_dialog_button')),
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  context
+                                      .read<ActiveWallets>()
+                                      .removeAddress(widget.name, addr);
+                                  //applyFilter();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      AppLocalizations.instance.translate(
+                                          'addressbook_dialog_remove_snack'),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    duration: Duration(seconds: 5),
+                                  ));
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      })
+                ],
+                actionExtentRatio: 0.25,
+                child: ListTile(
+                  subtitle: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Center(
+                      child: Text(addr.address),
+                    ),
+                  ),
+                  title: Center(
+                    child: Text(
+                      addr.addressBookName ?? '-',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -318,48 +324,50 @@ class _AddressTabState extends State<AddressTab> {
     }
     for (var addr in _filteredReceive) {
       listReceive.add(
-        Card(
-          color: Theme.of(context).backgroundColor,
-          child: ClipRect(
-            child: Slidable(
-              key: Key(addr.address),
-              actionPane: SlidableScrollActionPane(),
-              secondaryActions: <Widget>[
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_edit'),
-                  color: Theme.of(context).primaryColor,
-                  icon: Icons.edit,
-                  onTap: () => _addressEditDialog(context, addr),
-                ),
-                IconSlideAction(
-                  caption: AppLocalizations.instance
-                      .translate('addressbook_swipe_share'),
-                  color: Theme.of(context).backgroundColor,
-                  iconWidget: Icon(
-                    Icons.share,
-                    color: Theme.of(context).accentColor,
+        DoubleTabToClipboard(
+          clipBoardData: addr.address,
+          child: Card(
+            child: ClipRect(
+              child: Slidable(
+                key: Key(addr.address),
+                actionPane: SlidableScrollActionPane(),
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_edit'),
+                    color: Theme.of(context).primaryColor,
+                    icon: Icons.edit,
+                    onTap: () => _addressEditDialog(context, addr),
                   ),
-                  onTap: () => WalletHomeQr.showQrDialog(
-                    context,
-                    addr.address,
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_share'),
+                    color: Theme.of(context).backgroundColor,
+                    iconWidget: Icon(
+                      Icons.share,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onTap: () => WalletHomeQr.showQrDialog(
+                      context,
+                      addr.address,
+                    ),
                   ),
-                ),
-              ],
-              actionExtentRatio: 0.25,
-              child: ListTile(
-                subtitle: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Center(
-                    child: Text(addr.address),
+                ],
+                actionExtentRatio: 0.25,
+                child: ListTile(
+                  subtitle: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Center(
+                      child: Text(addr.address),
+                    ),
                   ),
-                ),
-                title: Center(
-                  child: Text(
-                    addr.addressBookName ?? '-',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
+                  title: Center(
+                    child: Text(
+                      addr.addressBookName ?? '-',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
