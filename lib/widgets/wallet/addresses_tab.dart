@@ -235,7 +235,7 @@ class _AddressTabState extends State<AddressTab> {
                     color: Theme.of(context).backgroundColor,
                     iconWidget: Icon(
                       Icons.share,
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     onTap: () =>
                         WalletHomeQr.showQrDialog(context, addr.address),
@@ -243,7 +243,7 @@ class _AddressTabState extends State<AddressTab> {
                   IconSlideAction(
                     caption: AppLocalizations.instance
                         .translate('addressbook_swipe_send'),
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     iconWidget: Icon(
                       Icons.send,
                       color: Theme.of(context).backgroundColor,
@@ -345,7 +345,7 @@ class _AddressTabState extends State<AddressTab> {
                     color: Theme.of(context).backgroundColor,
                     iconWidget: Icon(
                       Icons.share,
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     onTap: () => WalletHomeQr.showQrDialog(
                       context,
