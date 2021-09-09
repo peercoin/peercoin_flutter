@@ -448,7 +448,7 @@ class _SendTabState extends State<SendTab> {
                         ),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         )),
                   ],
                 ),

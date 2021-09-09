@@ -290,7 +290,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         ),
                                         trailing: Icon(
                                           Icons.arrow_forward_ios_rounded,
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         ),
                                       )),
                                 ],

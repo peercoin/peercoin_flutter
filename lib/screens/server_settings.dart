@@ -53,7 +53,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     final evenItemColor = colorScheme.primary.withOpacity(0.3);
 
     if (!connectable) {
-      return Theme.of(context).accentColor;
+      return Theme.of(context).colorScheme.secondary;
     } else if (index.isOdd) {
       return oddItemColor;
     }

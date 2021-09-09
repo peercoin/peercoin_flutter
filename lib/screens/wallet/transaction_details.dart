@@ -69,16 +69,19 @@ class TransactionDetails extends StatelessWidget {
                   _coinWallet.letterCode)
             ],
           ),
-          Divider(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(AppLocalizations.instance.translate('tx_fee'),
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              SelectableText(
-                  (_tx.fee / 1000000).toString() + ' ' + _coinWallet.letterCode)
-            ],
-          ),
+          _tx.direction == 'out'
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Divider(),
+                    Text(AppLocalizations.instance.translate('tx_fee'),
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SelectableText((_tx.fee / 1000000).toString() +
+                        ' ' +
+                        _coinWallet.letterCode)
+                  ],
+                )
+              : Container(),
           Divider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

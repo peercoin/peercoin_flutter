@@ -161,7 +161,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       children: [
                         Slider(
                           activeColor: Colors.white,
-                          inactiveColor: Theme.of(context).accentColor,
+                          inactiveColor:
+                              Theme.of(context).colorScheme.secondary,
                           value: _currentSliderValue,
                           min: 12,
                           max: 24,

@@ -241,7 +241,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                             .translate('wallet_receive_label_hint'),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         )),
                   ],
                 ),

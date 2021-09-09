@@ -448,6 +448,7 @@ class ActiveWallets with ChangeNotifier {
       log('needschange $_needsChange, fee $fee');
       log('change needed $_txAmount - $fee');
     }
+
     if (_txAmount <= openWallet.balance) {
       if (openWallet.utxos.isNotEmpty) {
         //find eligible input utxos
@@ -516,6 +517,11 @@ class ActiveWallets with ChangeNotifier {
             .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * 1000000;
         var requiredFeeInSatoshis = asDouble.toInt();
+
+        // if (requiredFeeInSatoshis < 10000) {
+        //   requiredFeeInSatoshis = 10000; //minimum fee 1 kb
+        // } for V3 TX
+
         log('fee $requiredFeeInSatoshis, size: ${intermediate.txSize}');
         if (dryRun == false) {
           log('intermediate size: ${intermediate.txSize}');
