@@ -21,7 +21,7 @@ class _SetupScreenState extends State<SetupScreen> {
     var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
     await _activeWallets.init();
     await _activeWallets.createPhrase();
-    await Navigator.of(context).popAndPushNamed(Routes.SetupScreen);
+    await Navigator.of(context).pushNamed(Routes.SetupScreen);
     setState(() {
       _loading = false;
     });

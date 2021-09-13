@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/screens/setup.dart';
@@ -222,16 +223,24 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         ],
                       ),
                     ),
-                    if (_sharedYet)
-                      PeerButtonSetup(
-                        action: () async => await handleContinue(),
-                        text: AppLocalizations.instance.translate('continue'),
-                      )
-                    else
-                      PeerButtonSetup(
-                        action: () async => await shareSeed(_seed),
-                        text: AppLocalizations.instance.translate('export_now'),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        PeerButtonSetupBack(),
+                        if (_sharedYet)
+                        PeerButtonSetup(
+                          small: true,
+                          action: () async => await handleContinue(),
+                          text: AppLocalizations.instance.translate('continue'),
+                        )
+                      else
+                        PeerButtonSetup(
+                          small: true,
+                          action: () async => await shareSeed(_seed),
+                          text: AppLocalizations.instance.translate('export_now'),
+                        ),
+                    ],),
+
                     SizedBox(height: 8,),
                   ],
                 ),

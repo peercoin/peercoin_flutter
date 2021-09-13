@@ -179,17 +179,24 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         ],),
                       ),
 
-                      PeerButtonSetupLoading(
-                        action: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            createWallet(context);
-                          }
-                        },
-                        text: AppLocalizations.instance.translate(
-                          'import_button',
-                        ),
-                        loading: _loading,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          PeerButtonSetupBack(),
+                          PeerButtonSetupLoading(
+                            small: true,
+                            action: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                createWallet(context);
+                              }
+                            },
+                            text: AppLocalizations.instance.translate(
+                              'import_button',
+                            ),
+                            loading: _loading,
+                          ),
+                        ],
                       ),
                       SizedBox(height: 8,),
                     ],

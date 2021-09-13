@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_themes.dart';
 
@@ -74,9 +75,10 @@ class PeerButtonBorder extends StatelessWidget {
 class PeerButtonSetup extends StatelessWidget {
   final Function() action;
   final String text;
+  final bool small;
 
   PeerButtonSetup(
-      {required this.text, required this.action});
+      {required this.text, required this.action, this.small = false});
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,7 @@ class PeerButtonSetup extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
+        fixedSize: Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -98,7 +100,7 @@ class PeerButtonSetup extends StatelessWidget {
               letterSpacing: 1.2,
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: Theme.of(context).primaryColor),
+              color: Color(0xFF2A7A3A)),
         ),
       ),
     );
@@ -109,9 +111,10 @@ class PeerButtonSetupLoading extends StatelessWidget {
   final Function() action;
   final String text;
   final bool loading;
+  final bool small;
 
   PeerButtonSetupLoading(
-      {required this.text, required this.action, this.loading = false});
+      {required this.text, required this.action, this.loading = false, this.small = false});
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +122,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
+        fixedSize: Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -141,7 +144,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
                     letterSpacing: 1.2,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
-                    color: Theme.of(context).primaryColor),
+                    color: Color(0xFF2A7A3A)),
               ),
       ),
     );
@@ -153,3 +156,33 @@ class PeerButtonSetupLoading extends StatelessWidget {
     });
   }
 }
+
+class PeerButtonSetupBack extends StatelessWidget {
+  const PeerButtonSetupBack({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          splashColor: Theme.of(context).primaryColor,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: SizedBox(
+              width: 40,
+              height: 40,
+              child: Center(
+                child: Icon(
+                  CupertinoIcons.back,
+                  color: Color(0xFF2A7A3A),
+                  size: 26,
+                ),
+              )),
+        ),
+      ),
+    );
+  }
+}
+
