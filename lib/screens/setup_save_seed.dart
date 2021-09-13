@@ -129,7 +129,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                   children: [
                     Text(
                       AppLocalizations.instance.translate('setup_save_title'),
-                      style: TextStyle(color: Colors.white, fontSize: 34),
+                      style: TextStyle(color: Colors.white, fontSize: 28),
                     ),
                     Column(
                       children: [
@@ -139,7 +139,6 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             color: Theme.of(context).shadowColor,
                           ),
-                          //color: Theme.of(context).accentColor,
                           child: Column(children: [
                             Padding(
                               padding: const EdgeInsets.all(20),
@@ -156,7 +155,6 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                                       style: TextStyle(
                                           color: Theme.of(context).dividerColor, fontSize: 15),
                                       textAlign: TextAlign.left,
-                                      //overflow: TextOverflow.fade,
                                       maxLines: 5,
                                     ),
                                   ),
@@ -164,12 +162,15 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                               ),
                             ),
                             Container(
-                              height: MediaQuery.of(context).size.height/3.5,
+                              height: 220,
                               padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(20)),
                                 color: Theme.of(context).backgroundColor,
-
+                                  border: Border.all(
+                                      width: 2,
+                                      color: Theme.of(context).primaryColor,
+                                  ),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -250,11 +251,18 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
 
     for(var i=0; i<colSize; i++){
       list.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Text((i*3+pos+1).toString() + ') ' + se[i*3+pos],style: TextStyle(color: Theme.of(context).dividerColor),),
-        )
-      );
+          Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: i * 3 + pos + 1 < 10
+            ? Text(
+                '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
+                style: TextStyle(color: Theme.of(context).dividerColor),
+              )
+            : Text(
+                (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
+                style: TextStyle(color: Theme.of(context).dividerColor),
+              ),
+      ));
     }
     return list;
   }

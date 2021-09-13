@@ -56,7 +56,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
             ),
             Text(
               AppLocalizations.instance.translate('setup_pin_title'),
-              style: TextStyle(color: Colors.white, fontSize: 34),
+              style: TextStyle(color: Colors.white, fontSize: 28),
             ),
             Expanded(
               child: Column(

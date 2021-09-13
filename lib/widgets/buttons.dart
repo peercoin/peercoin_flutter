@@ -148,7 +148,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
   }
 
   void onPressed() {
-    Future.delayed(const Duration(milliseconds: 350), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       action();
     });
   }

@@ -71,14 +71,11 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                 'assets/images/59-Cybersecurity.png',
                 height: MediaQuery.of(context).size.height/3,
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Text(
-                  AppLocalizations.instance.translate(
-                    'import_seed_button',
-                  ),
-                  style: TextStyle(color: Colors.white, fontSize: 34),
+              Text(
+                AppLocalizations.instance.translate(
+                  'import_seed_button',
                 ),
+                style: TextStyle(color: Colors.white, fontSize: 28),
               ),
               Expanded(
                 child: Padding(
@@ -86,62 +83,102 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      PeerExplanationText(AppLocalizations.instance.translate('import_seed'),),
-                      Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          textInputAction: TextInputAction.done,
-                          key: Key('importTextField'),
-                          controller: _controller,
-                          validator: (value) {
-                            if (value!.split(' ').length < 12) {
-                              return AppLocalizations.instance.translate(
-                                'import_seed_error_1',
-                              );
-                            }
-                            if (bip39.validateMnemonic(value) == false) {
-                              return AppLocalizations.instance.translate(
-                                'import_seed_error_2',
-                              );
-                            }
-                            return null;
-                          },
-                          style: TextStyle(color: Theme.of(context).dividerColor),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Theme.of(context).backgroundColor,
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                var data = await Clipboard.getData('text/plain');
-                                if (data != null) {
-                                  _controller.text = data.text!;
-                                }
-                                FocusScope.of(context).unfocus(); //hide keyboard
-                              },
-                              icon: Icon(Icons.paste,
-                                  color: Theme.of(context).primaryColor),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          color: Theme.of(context).shadowColor,
+                        ),
+                        child: Column(children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.keyboard_rounded, color: Theme.of(context).primaryColor, size: 40,),
+                                SizedBox(width: 24,),
+                                Container(
+                                  width: MediaQuery.of(context).size.width/1.8,
+                                  child: Text(
+                                    AppLocalizations.instance.translate('setup_import_note'),
+                                    style: TextStyle(
+                                        color: Theme.of(context).dividerColor, fontSize: 15),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 5,
+                                  ),
+                                ),
+                              ],
                             ),
-                            border: border,
-                            focusedBorder: OutlineInputBorder(
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                              borderSide: BorderSide(width: 4, color: Theme.of(context).shadowColor),
+                              color: Theme.of(context).backgroundColor,
+                              border: Border.all(
+                                width: 2,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                            enabledBorder: border,
-                            errorStyle: TextStyle(color: Theme.of(context).backgroundColor),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(20)),
-                              borderSide: BorderSide(
-                                width: 4,
-                                color: Theme.of(context).errorColor,
+                            child: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                textInputAction: TextInputAction.done,
+                                key: Key('importTextField'),
+                                controller: _controller,
+                                validator: (value) {
+                                  if (value!.split(' ').length < 12) {
+                                    return AppLocalizations.instance.translate(
+                                      'import_seed_error_1',
+                                    );
+                                  }
+                                  if (bip39.validateMnemonic(value) == false) {
+                                    return AppLocalizations.instance.translate(
+                                      'import_seed_error_2',
+                                    );
+                                  }
+                                  return null;
+                                },
+                                style: TextStyle(color: Theme.of(context).dividerColor),
+                                decoration: InputDecoration(
+                                  hintText: 'e.g. mushrooms pepper courgette onion asparagus garlic sweetcorn nut pumpkin potato bean spinach',
+                                  filled: true,
+                                  fillColor: Theme.of(context).backgroundColor,
+                                  suffixIcon: IconButton(
+                                    onPressed: () async {
+                                      var data = await Clipboard.getData('text/plain');
+                                      if (data != null) {
+                                        _controller.text = data.text!;
+                                      }
+                                      FocusScope.of(context).unfocus(); //hide keyboard
+                                    },
+                                    icon: Icon(Icons.paste,
+                                        color: Theme.of(context).primaryColor),
+                                  ),
+                                  border: border,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderSide: BorderSide(width: 4, color: Theme.of(context).shadowColor),
+                                  ),
+                                  enabledBorder: border,
+                                  errorStyle: TextStyle(color: Theme.of(context).backgroundColor),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                    borderSide: BorderSide(
+                                      width: 4,
+                                      color: Theme.of(context).errorColor,
+                                    ),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.multiline,
+                                minLines: 5,
+                                maxLines: 5,
                               ),
                             ),
                           ),
-                          keyboardType: TextInputType.multiline,
-                          minLines: 5,
-                          maxLines: 5,
-                        ),
+                        ],),
                       ),
+
                       PeerButtonSetupLoading(
                         action: () {
                           if (_formKey.currentState!.validate()) {
