@@ -141,19 +141,19 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                           ),
                           child: Column(children: [
                             Padding(
-                              padding: const EdgeInsets.all(20),
+                              padding: const EdgeInsets.all(24),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Icon(Icons.vpn_key_rounded, color: Theme.of(context).primaryColor, size: 40,),
                                   SizedBox(width: 24,),
                                   Container(
-                                    width: MediaQuery.of(context).size.width/1.7,
+                                    width: MediaQuery.of(context).size.width/1.8,
                                     child: Text(
                                       AppLocalizations.instance
                                           .translate('setup_save_text1'),
                                       style: TextStyle(
-                                          color: Theme.of(context).dividerColor, fontSize: 15),
+                                          color: const Color(0xFF2A7A3A), fontSize: 15),
                                       textAlign: TextAlign.left,
                                       maxLines: 5,
                                     ),

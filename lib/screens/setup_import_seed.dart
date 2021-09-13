@@ -91,7 +91,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         ),
                         child: Column(children: [
                           Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(24),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -102,7 +102,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                   child: Text(
                                     AppLocalizations.instance.translate('setup_import_note'),
                                     style: TextStyle(
-                                        color: Theme.of(context).dividerColor, fontSize: 15),
+                                        color: const Color(0xFF2A7A3A), fontSize: 15),
                                     textAlign: TextAlign.left,
                                     maxLines: 5,
                                   ),
