@@ -224,23 +224,28 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         PeerButtonSetupBack(),
                         if (_sharedYet)
-                        PeerButtonSetup(
-                          small: true,
-                          action: () async => await handleContinue(),
-                          text: AppLocalizations.instance.translate('continue'),
-                        )
-                      else
-                        PeerButtonSetup(
-                          small: true,
-                          action: () async => await shareSeed(_seed),
-                          text: AppLocalizations.instance.translate('export_now'),
+                          PeerButtonSetup(
+                            small: true,
+                            action: () async => await handleContinue(),
+                            text:
+                                AppLocalizations.instance.translate('continue'),
+                          )
+                        else
+                          PeerButtonSetup(
+                            small: true,
+                            action: () async => await shareSeed(_seed),
+                            text: AppLocalizations.instance
+                                .translate('export_now'),
+                          ),
+                        SizedBox(
+                          width: 40,
                         ),
-                    ],),
-
+                      ],
+                    ),
                     SizedBox(height: 8,),
                   ],
                 ),

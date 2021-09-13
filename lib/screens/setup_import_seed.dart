@@ -111,6 +111,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             ),
                           ),
                           Container(
+                            padding: const EdgeInsets.only(bottom: 8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(20)),
                               color: Theme.of(context).backgroundColor,
@@ -155,20 +156,11 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         color: Theme.of(context).primaryColor),
                                   ),
                                   border: border,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    borderSide: BorderSide(width: 4, color: Theme.of(context).shadowColor),
-                                  ),
+                                  focusedBorder: border,
                                   enabledBorder: border,
-                                  errorStyle: TextStyle(color: Theme.of(context).backgroundColor),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                    borderSide: BorderSide(
-                                      width: 4,
-                                      color: Theme.of(context).errorColor,
-                                    ),
-                                  ),
+                                  errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                  errorBorder: border,
+                                  focusedErrorBorder: border,
                                 ),
                                 keyboardType: TextInputType.multiline,
                                 minLines: 5,
@@ -180,7 +172,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       ),
 
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           PeerButtonSetupBack(),
                           PeerButtonSetupLoading(
@@ -195,6 +187,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                               'import_button',
                             ),
                             loading: _loading,
+                          ),
+                          SizedBox(
+                            width: 40,
                           ),
                         ],
                       ),
