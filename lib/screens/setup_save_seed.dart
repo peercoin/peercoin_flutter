@@ -101,7 +101,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         listen: false)
                     .prefs;
                 await prefs.setBool('importedSeed', false);
-                await Navigator.popAndPushNamed(context, Routes.SetUpPin);
+                await Navigator.pushNamed(context, Routes.SetUpPin);
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),
@@ -128,9 +128,18 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      AppLocalizations.instance.translate('setup_save_title'),
-                      style: TextStyle(color: Colors.white, fontSize: 28),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        PeerButtonSetupBack(),
+                        Text(
+                          AppLocalizations.instance.translate('setup_save_title'),
+                          style: TextStyle(color: Colors.white, fontSize: 28),
+                        ),
+                        SizedBox(
+                          width: 40,
+                        ),
+                      ],
                     ),
                     Column(
                       children: [
@@ -223,29 +232,18 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PeerButtonSetupBack(),
-                        if (_sharedYet)
-                          PeerButtonSetup(
-                            small: true,
-                            action: () async => await handleContinue(),
-                            text:
-                                AppLocalizations.instance.translate('continue'),
-                          )
-                        else
-                          PeerButtonSetup(
-                            small: true,
-                            action: () async => await shareSeed(_seed),
-                            text: AppLocalizations.instance
-                                .translate('export_now'),
-                          ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                      ],
-                    ),
+                    if (_sharedYet)
+                      PeerButtonSetup(
+                        action: () async => await handleContinue(),
+                        text:
+                            AppLocalizations.instance.translate('continue'),
+                      )
+                    else
+                      PeerButtonSetup(
+                        action: () async => await shareSeed(_seed),
+                        text: AppLocalizations.instance
+                            .translate('export_now'),
+                      ),
                     SizedBox(height: 8,),
                   ],
                 ),

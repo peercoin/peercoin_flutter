@@ -54,9 +54,18 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
               'assets/images/55-Protection.png',
               height: MediaQuery.of(context).size.height/3,
             ),
-            Text(
-              AppLocalizations.instance.translate('setup_pin_title'),
-              style: TextStyle(color: Colors.white, fontSize: 28),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                PeerButtonSetupBack(),
+                Text(
+                  AppLocalizations.instance.translate('setup_pin_title'),
+                  style: TextStyle(color: Colors.white, fontSize: 28),
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+              ],
             ),
             Expanded(
               child: Column(

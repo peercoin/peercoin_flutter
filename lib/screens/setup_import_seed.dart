@@ -46,8 +46,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     var prefs =
         await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
     await prefs.setBool('importedSeed', true);
-    await Navigator.of(context)
-        .pushNamedAndRemoveUntil(Routes.SetUpPin, (_) => false);
+    await Navigator.of(context).pushNamed(Routes.SetUpPin);
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -71,11 +73,20 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                 'assets/images/59-Cybersecurity.png',
                 height: MediaQuery.of(context).size.height/3,
               ),
-              Text(
-                AppLocalizations.instance.translate(
-                  'import_seed_button',
-                ),
-                style: TextStyle(color: Colors.white, fontSize: 28),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  PeerButtonSetupBack(),
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'import_seed_button',
+                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 28),
+                  ),
+                  SizedBox(
+                    width: 40,
+                  ),
+                ],
               ),
               Expanded(
                 child: Padding(
@@ -172,27 +183,17 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         ],),
                       ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PeerButtonSetupBack(),
-                          PeerButtonSetupLoading(
-                            small: true,
-                            action: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                createWallet(context);
-                              }
-                            },
-                            text: AppLocalizations.instance.translate(
-                              'import_button',
-                            ),
-                            loading: _loading,
-                          ),
-                          SizedBox(
-                            width: 40,
-                          ),
-                        ],
+                      PeerButtonSetupLoading(
+                        action: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            createWallet(context);
+                          }
+                        },
+                        text: AppLocalizations.instance.translate(
+                          'import_button',
+                        ),
+                        loading: _loading,
                       ),
                       SizedBox(height: 8,),
                     ],

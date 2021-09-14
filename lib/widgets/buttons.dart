@@ -162,27 +162,11 @@ class PeerButtonSetupBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: Material(
-        color: Colors.white,
-        child: InkWell(
-          splashColor: Theme.of(context).primaryColor,
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: SizedBox(
-              width: 40,
-              height: 40,
-              child: Center(
-                child: Icon(
-                  CupertinoIcons.back,
-                  color: Color(0xFF2A7A3A),
-                  size: 26,
-                ),
-              )),
-        ),
-      ),
+    return IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(CupertinoIcons.back, color: Colors.white,),
     );
   }
 }
-
