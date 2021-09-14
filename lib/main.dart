@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -22,8 +24,8 @@ import './providers/activewallets.dart';
 import './providers/electrumconnection.dart';
 import './providers/encryptedbox.dart';
 import './providers/unencryptedOptions.dart';
-import './screens/setup.dart';
-import './screens/wallet_list.dart';
+import 'screens/setup/setup.dart';
+import './screens/wallet/wallet_list.dart';
 import './tools/app_localizations.dart';
 import './tools/app_routes.dart';
 import './tools/app_themes.dart';
@@ -71,7 +73,7 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     if (payload != null) {
-      debugPrint('notification payload: $payload');
+      log('notification payload: $payload');
     }
   });
 

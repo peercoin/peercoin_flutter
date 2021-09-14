@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 
 class MyTheme {
-
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(
-
+      colorScheme: ColorScheme(
+        primary: LightColors.green,
+        primaryVariant: LightColors.green,
+        secondary: LightColors.grey,
+        secondaryVariant: LightColors.grey,
+        surface: LightColors.white,
+        background: LightColors.grey,
+        error: LightColors.red,
+        onPrimary: LightColors.white,
+        onSecondary: LightColors.green,
+        onSurface: LightColors.green,
+        onBackground: LightColors.green,
+        onError: LightColors.red,
+        brightness: Brightness.light,
+      ),
       accentColor: LightColors.grey,
       backgroundColor: LightColors.white,
-      bottomAppBarColor: const Color(0xFF2A7A3A), //Incoming transaction: amount color
+      bottomAppBarColor:
+          const Color(0xFF2A7A3A), //Incoming transaction: amount color
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
@@ -22,14 +36,12 @@ class MyTheme {
 
       textTheme: TextTheme(
         button: TextStyle(
-            letterSpacing: 1.4,
-            fontSize: 16,
-            color: DarkColors.white
-        ),
+            letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
       ),
 
       dialogTheme: DialogTheme(
-        shape: RoundedRectangleBorder( //to set border radius to button
+        shape: RoundedRectangleBorder(
+          //to set border radius to button
           borderRadius: BorderRadius.circular(20),
         ),
       ),
@@ -38,7 +50,8 @@ class MyTheme {
         shadowColor: LightColors.darkGreen,
         color: LightColors.white,
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-        shape: RoundedRectangleBorder( //to set border radius to button
+        shape: RoundedRectangleBorder(
+          //to set border radius to button
           borderRadius: BorderRadius.circular(20),
         ),
       ),
@@ -46,21 +59,35 @@ class MyTheme {
         style: ElevatedButton.styleFrom(
             primary: LightColors.green,
             onPrimary: LightColors.green,
-            textStyle: TextStyle(color: LightColors.white,)
-        ),
+            textStyle: TextStyle(
+              color: LightColors.white,
+            )),
       ),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            primary: LightColors.green,
-          )
-      ),
+        primary: LightColors.green,
+      )),
     ),
-
     ThemeMode.dark: ThemeData.dark().copyWith(
-
+      colorScheme: ColorScheme(
+        primary: DarkColors.green,
+        primaryVariant: DarkColors.green,
+        secondary: DarkColors.white,
+        secondaryVariant: DarkColors.white,
+        surface: DarkColors.black,
+        background: DarkColors.green,
+        error: DarkColors.red,
+        onPrimary: DarkColors.green,
+        onSecondary: DarkColors.green,
+        onSurface: DarkColors.white,
+        onBackground: DarkColors.green,
+        onError: DarkColors.red,
+        brightness: Brightness.dark,
+      ),
       accentColor: DarkColors.white,
       backgroundColor: DarkColors.green,
-      bottomAppBarColor: DarkColors.darkBlue, //Incoming transaction: amount color
+      bottomAppBarColor:
+          DarkColors.darkBlue, //Incoming transaction: amount color
       cardColor: DarkColors.green,
       dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
@@ -85,14 +112,12 @@ class MyTheme {
         bodyText1: TextStyle(color: DarkColors.white),
         bodyText2: TextStyle(color: DarkColors.white),
         button: TextStyle(
-            letterSpacing: 1.4,
-            fontSize: 16,
-            color: DarkColors.white
-        ),
+            letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
       ),
 
       dialogTheme: DialogTheme(
-        shape: RoundedRectangleBorder( //to set border radius to button
+        shape: RoundedRectangleBorder(
+          //to set border radius to button
           borderRadius: BorderRadius.circular(10),
         ),
       ),
@@ -100,7 +125,8 @@ class MyTheme {
         elevation: 2,
         color: DarkColors.green,
         margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-        shape: RoundedRectangleBorder( //to set border radius to button
+        shape: RoundedRectangleBorder(
+          //to set border radius to button
           borderRadius: BorderRadius.circular(10),
         ),
       ),
@@ -112,9 +138,8 @@ class MyTheme {
       ),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            primary: DarkColors.black,
-          )
-      ),
+        primary: DarkColors.black,
+      )),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(color: DarkColors.grey),
         focusedBorder: UnderlineInputBorder(
@@ -131,7 +156,7 @@ class MyTheme {
     return appThemes[mode] ?? appThemes[ThemeMode.light]!;
   }
 
-  static MaterialColor materialColor(Color color){
+  static MaterialColor materialColor(Color color) {
     return MaterialColor(
       color.value,
       <int, Color>{

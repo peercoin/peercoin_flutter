@@ -4,7 +4,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/wallet_balance_header.dart';
+import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +48,7 @@ class _TransactionListState extends State<TransactionList> {
         ? Text(
             '?',
             textScaleFactor: 0.9,
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           )
         : CircularStepProgressIndicator(
             selectedStepSize: 5,
@@ -189,13 +189,27 @@ class _TransactionListState extends State<TransactionList> {
                                         : Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
+                                _filteredTx[i - 1].direction == 'out'
+                                    ? Text(
+                                        '-' +
+                                            (_filteredTx[i - 1].fee / 1000000)
+                                                .toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Theme.of(context).errorColor,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height: 0,
+                                      )
                               ],
                             ),
                           ),
                         ),
                       );
-                    }
-                    else if (i == 0 && widget._walletTransactions.isNotEmpty) {
+                    } else if (i == 0 &&
+                        widget._walletTransactions.isNotEmpty) {
                       return Column(
                         children: [
                           SizedBox(height: 100),
@@ -239,7 +253,7 @@ class _TransactionListState extends State<TransactionList> {
                                       AppLocalizations.instance
                                           .translate('transactions_in'),
                                       style: TextStyle(
-                                        color: Theme.of(context).accentColor,
+                                        color: Theme.of(context).colorScheme.secondary,
                                       ),
                                     )),
                                     selected: _filterChoice == 'in',
@@ -255,7 +269,7 @@ class _TransactionListState extends State<TransactionList> {
                                         AppLocalizations.instance
                                             .translate('transactions_all'),
                                         style: TextStyle(
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme.of(context).colorScheme.secondary,
                                         )),
                                     selected: _filterChoice == 'all',
                                     onSelected: (_) => _handleSelect('all'),
@@ -270,7 +284,7 @@ class _TransactionListState extends State<TransactionList> {
                                         AppLocalizations.instance
                                             .translate('transactions_out'),
                                         style: TextStyle(
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme.of(context).colorScheme.secondary,
                                         )),
                                     selected: _filterChoice == 'out',
                                     onSelected: (_) => _handleSelect('out'),

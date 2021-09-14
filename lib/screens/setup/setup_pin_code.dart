@@ -6,7 +6,6 @@ import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/screens/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
-import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
@@ -123,10 +122,6 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                           await settings.createInitialSettings(_biometricsAllowed,
                               AppLocalizations.instance.locale.toString());
 
-                          var prefs = await Provider.of<UnencryptedOptions>(context,
-                              listen: false)
-                              .prefs;
-                          await prefs.setBool('setupFinished', true);
                           await Navigator.of(context).pushNamedAndRemoveUntil(
                               Routes.WalletList, (_) => false);
                         },

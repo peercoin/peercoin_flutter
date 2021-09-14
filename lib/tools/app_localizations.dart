@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,8 +55,8 @@ class AppLocalizations {
     try {
       jsonString = await rootBundle.loadString(
           'assets/translations/${localeToBeLoaded.languageCode}.json');
-    } catch (exception) {
-      print(exception);
+    } catch (e) {
+      log('error $e');
       return localizedStrings;
     }
 
@@ -79,8 +80,7 @@ class AppLocalizations {
 
     arguments.forEach((argumentKey, value) {
       if (value == null) {
-        print(
-            'Value for "$argumentKey" is null in call of translate(\'$key\')');
+        log('Value for "$argumentKey" is null in call of translate(\'$key\')');
         value = '';
       }
       translation = translation!.replaceAll('\$$argumentKey', value);

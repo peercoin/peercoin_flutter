@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       ));
     } else {
       //continue: try to connect
-      print('trying to connect');
+      log('trying to connect');
 
       //close original server connection
       await Provider.of<ElectrumConnection>(context, listen: false)
@@ -71,7 +72,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           serverUrl,
         );
       } catch (e) {
-        print('connection error: $e');
+        log('connection error: $e');
       }
 
       void sendMessage(String method, String id, [List? params]) {
@@ -123,7 +124,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       _connection.stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        print('stream error: $error');
+        log('stream error: $error');
         setState(() {
           _loading = false;
         });

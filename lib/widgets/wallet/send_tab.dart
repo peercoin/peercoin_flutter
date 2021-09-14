@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/screens/wallet_home.dart';
+import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
@@ -17,7 +18,7 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet_balance_header.dart';
+import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
 import 'package:provider/provider.dart';
 
 class SendTab extends StatefulWidget {
@@ -210,7 +211,7 @@ class _SendTabState extends State<SendTab> {
                           //navigate back to tx list
                           widget._changeIndex(Tabs.transactions);
                         } catch (e) {
-                          print('error $e');
+                          log('error $e');
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -260,7 +261,7 @@ class _SendTabState extends State<SendTab> {
         ListView(
           children: [
             SizedBox(
-              height: 130,
+              height: 135,
             ),
             PeerContainer(
               child: Form(
@@ -371,8 +372,7 @@ class _SendTabState extends State<SendTab> {
                           amountController.text = convertedValue;
                           var txValueInSatoshis =
                               (double.parse(convertedValue) * 1000000).toInt();
-                          print(
-                              'req value $txValueInSatoshis - ${_wallet.balance}');
+                          log('req value $txValueInSatoshis - ${_wallet.balance}');
                           if (convertedValue.contains('.') &&
                               convertedValue.split('.')[1].length >
                                   _availableCoin.fractions) {
@@ -448,7 +448,7 @@ class _SendTabState extends State<SendTab> {
                         ),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         )),
                   ],
                 ),

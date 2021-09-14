@@ -64,4 +64,30 @@ class AppSettings with ChangeNotifier {
     _appOptions.defaultWallet = newWallet;
     notifyListeners();
   }
+
+  String get selectedCurrency {
+    return _appOptions.selectedCurrency;
+  }
+
+  void setSelectedCurrency(String newCurrency) {
+    _appOptions.selectedCurrency = newCurrency;
+    notifyListeners();
+  }
+
+  DateTime get latestTickerUpdate {
+    return _appOptions.latestTickerUpdate;
+  }
+
+  void setLatestTickerUpdate(DateTime newTime) {
+    _appOptions.latestTickerUpdate = newTime;
+  }
+
+  Map<String, dynamic> get exchangeRates {
+    return _appOptions.exchangeRates;
+  }
+
+  void setExchangeRates(Map<String, dynamic> newExchangeRates) {
+    _appOptions.exchangeRates = newExchangeRates;
+    notifyListeners();
+  }
 }

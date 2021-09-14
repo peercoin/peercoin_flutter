@@ -18,7 +18,7 @@ class PeerButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).primaryColor,
-        onPrimary: Theme.of(context).accentColor,
+        onPrimary: Theme.of(context).colorScheme.secondary,
         fixedSize:
         Size(MediaQuery.of(context).size.width / (small ? 2 : 1.5), 40),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
