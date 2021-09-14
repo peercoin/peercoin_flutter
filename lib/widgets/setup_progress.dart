@@ -22,6 +22,8 @@ class SetupProgressIndicator extends StatelessWidget with PreferredSizeWidget {
         selectedColor: Theme.of(context).backgroundColor,
         unselectedColor: Theme.of(context).accentColor,
         roundedEdges: Radius.circular(10),
+        size: 4,
+        padding: 4,
       ),
     );
   }

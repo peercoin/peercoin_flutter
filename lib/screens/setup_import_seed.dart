@@ -139,9 +139,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                   }
                                   return null;
                                 },
-                                style: TextStyle(color: Theme.of(context).dividerColor),
+                                style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
                                 decoration: InputDecoration(
                                   hintText: 'e.g. mushrooms pepper courgette onion asparagus garlic sweetcorn nut pumpkin potato bean spinach',
+                                  hintStyle: TextStyle(color: Theme.of(context).accentColor, fontSize: 16),
                                   filled: true,
                                   fillColor: Theme.of(context).backgroundColor,
                                   suffixIcon: IconButton(
@@ -153,7 +154,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                       FocusScope.of(context).unfocus(); //hide keyboard
                                     },
                                     icon: Icon(Icons.paste,
-                                        color: Theme.of(context).primaryColor),
+                                        color: Color(0xFF2A7A3A)),
                                   ),
                                   border: border,
                                   focusedBorder: border,

@@ -194,64 +194,95 @@ class _TransactionListState extends State<TransactionList> {
                           ),
                         ),
                       );
-                    } else if (i == 0 &&
-                        widget._walletTransactions.isNotEmpty) {
+                    }
+                    else if (i == 0 && widget._walletTransactions.isNotEmpty) {
                       return Column(
                         children: [
-                          SizedBox(height: 130),
-                          Wrap(
-                            spacing: 8.0,
-                            children: <Widget>[
-                              ChoiceChip(
-                                backgroundColor:
-                                    Theme.of(context).backgroundColor,
-                                selectedColor: Theme.of(context).shadowColor,
-                                visualDensity: VisualDensity(
-                                    horizontal: 0.0, vertical: -4),
-                                label: Container(
-                                    child: Text(
-                                  AppLocalizations.instance
-                                      .translate('transactions_in'),
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                  ),
-                                )),
-                                selected: _filterChoice == 'in',
-                                onSelected: (_) => _handleSelect('in'),
-                              ),
-                              ChoiceChip(
-                                backgroundColor:
-                                    Theme.of(context).backgroundColor,
-                                selectedColor: Theme.of(context).shadowColor,
-                                visualDensity: VisualDensity(
-                                    horizontal: 0.0, vertical: -4),
-                                label: Text(
-                                    AppLocalizations.instance
-                                        .translate('transactions_all'),
-                                    style: TextStyle(
-                                      color: Theme.of(context).accentColor,
-                                    )),
-                                selected: _filterChoice == 'all',
-                                onSelected: (_) => _handleSelect('all'),
-                              ),
-                              ChoiceChip(
-                                backgroundColor:
-                                    Theme.of(context).backgroundColor,
-                                selectedColor: Theme.of(context).shadowColor,
-                                visualDensity: VisualDensity(
-                                    horizontal: 0.0, vertical: -4),
-                                label: Text(
-                                    AppLocalizations.instance
-                                        .translate('transactions_out'),
-                                    style: TextStyle(
-                                      color: Theme.of(context).accentColor,
-                                    )),
-                                selected: _filterChoice == 'out',
-                                onSelected: (_) => _handleSelect('out'),
-                              ),
-                            ],
+                          SizedBox(height: 100),
+                          Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [
+                                      Color(0x003cb054),
+                                      Color(0x993cb054),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter
+                                )
+                            ),
                           ),
-                          SizedBox(height: 10),
+                          Container(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0x993cb054),
+                                    Color(0xff3cb054),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter
+                                )
+                            ),
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(
+                              child: Wrap(
+                                spacing: 8.0,
+                                children: <Widget>[
+                                  ChoiceChip(
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
+                                    selectedColor: Theme.of(context).shadowColor,
+                                    visualDensity: VisualDensity(
+                                        horizontal: 0.0, vertical: -4),
+                                    label: Container(
+                                        child: Text(
+                                      AppLocalizations.instance
+                                          .translate('transactions_in'),
+                                      style: TextStyle(
+                                        color: Theme.of(context).accentColor,
+                                      ),
+                                    )),
+                                    selected: _filterChoice == 'in',
+                                    onSelected: (_) => _handleSelect('in'),
+                                  ),
+                                  ChoiceChip(
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
+                                    selectedColor: Theme.of(context).shadowColor,
+                                    visualDensity: VisualDensity(
+                                        horizontal: 0.0, vertical: -4),
+                                    label: Text(
+                                        AppLocalizations.instance
+                                            .translate('transactions_all'),
+                                        style: TextStyle(
+                                          color: Theme.of(context).accentColor,
+                                        )),
+                                    selected: _filterChoice == 'all',
+                                    onSelected: (_) => _handleSelect('all'),
+                                  ),
+                                  ChoiceChip(
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
+                                    selectedColor: Theme.of(context).shadowColor,
+                                    visualDensity: VisualDensity(
+                                        horizontal: 0.0, vertical: -4),
+                                    label: Text(
+                                        AppLocalizations.instance
+                                            .translate('transactions_out'),
+                                        style: TextStyle(
+                                          color: Theme.of(context).accentColor,
+                                        )),
+                                    selected: _filterChoice == 'out',
+                                    onSelected: (_) => _handleSelect('out'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 10,
+                            color: Theme.of(context).primaryColor,
+                          )
                         ],
                       );
                     } else {

@@ -163,7 +163,7 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                               ),
                             ),
                             Container(
-                              height: 220,
+                              height: 244,
                               padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -270,11 +270,11 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
         child: i * 3 + pos + 1 < 10
             ? Text(
                 '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(color: Theme.of(context).dividerColor),
+                style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
               )
             : Text(
                 (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(color: Theme.of(context).dividerColor),
+                style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
               ),
       ));
     }
