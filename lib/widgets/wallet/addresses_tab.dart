@@ -217,6 +217,7 @@ class _AddressTabState extends State<AddressTab> {
         DoubleTabToClipboard(
           clipBoardData: addr.address,
           child: Card(
+            elevation: 0,
             child: ClipRect(
               child: Slidable(
                 key: Key(addr.address),
@@ -327,6 +328,7 @@ class _AddressTabState extends State<AddressTab> {
         DoubleTabToClipboard(
           clipBoardData: addr.address,
           child: Card(
+            elevation: 0,
             child: ClipRect(
               child: Slidable(
                 key: Key(addr.address),

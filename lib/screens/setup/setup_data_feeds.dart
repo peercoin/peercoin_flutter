@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
+import 'package:peercoin/screens/setup/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -51,46 +51,77 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SetupProgressIndicator(4),
       body: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 30),
         color: Theme.of(context).primaryColor,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/icon/ppc-icon-white-256.png',
-              width: 50,
+            PeerProgress(4),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 15,
+                  ),
+                  Image.asset(
+                    'assets/img/109-Negotiation.png',
+                    height: MediaQuery.of(context).size.height / 5,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      PeerButtonSetupBack(),
+                      Text(
+                        AppLocalizations.instance
+                            .translate('setup_price_feed_title'),
+                        style: TextStyle(color: Colors.white, fontSize: 28),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        PeerExplanationText(
+                          AppLocalizations.instance
+                              .translate('setup_price_feed_description'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SwitchListTile(
+                              key: Key('setupApiSwitchKey'),
+                              title: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_price_feed_allow'),
+                                  style: TextStyle(
+                                      color: Colors.white),),
+                              value: _dataFeedAllowed,
+                              activeColor: Colors.white,
+                              inactiveThumbColor: Colors.grey,
+                              onChanged: (newState) => toggleHandler(newState)),
+                        ),
+                      ],),
+                    ),
+                  ),
+                  PeerButton(
+                    action: () => _launchURL(
+                        'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
+                    text: AppLocalizations.instance
+                        .translate('about_data_declaration'),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              AppLocalizations.instance.translate('setup_price_feed_title'),
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            Text(
-              AppLocalizations.instance
-                  .translate('setup_price_feed_description'),
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-            SwitchListTile(
-                key: Key('setupApiSwitchKey'),
-                title: Text(
-                    AppLocalizations.instance
-                        .translate('setup_price_feed_allow'),
-                    style: TextStyle(color: Colors.white)),
-                value: _dataFeedAllowed,
-                activeColor: Colors.white,
-                inactiveThumbColor: Colors.grey,
-                onChanged: (newState) => toggleHandler(newState)),
-            PeerButton(
-              action: () => _launchURL(
-                  'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
-              text:
-                  AppLocalizations.instance.translate('about_data_declaration'),
-            ),
-            PeerButtonBorder(
+            PeerButtonSetup(
               text: AppLocalizations.instance.translate('setup_finish'),
               action: () async {
                 var prefs = await Provider.of<UnencryptedOptions>(context,
@@ -100,6 +131,9 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                 await Navigator.of(context)
                     .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
               },
+            ),
+            SizedBox(
+              height: 32,
             ),
           ],
         ),

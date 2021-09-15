@@ -3,7 +3,7 @@ import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/screens/setup.dart';
+import 'package:peercoin/screens/setup/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -49,27 +49,30 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             PeerProgress(3),
-            Image.asset(
-              'assets/images/55-Protection.png',
-              height: MediaQuery.of(context).size.height/3,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                PeerButtonSetupBack(),
-                Text(
-                  AppLocalizations.instance.translate('setup_pin_title'),
-                  style: TextStyle(color: Colors.white, fontSize: 28),
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-              ],
-            ),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  SizedBox(height: MediaQuery.of(context).size.height/15,),
+                  Image.asset(
+                    'assets/img/setup-protection.png',
+                    height: MediaQuery.of(context).size.height/5,
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height/15,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      PeerButtonSetupBack(),
+                      Text(
+                        AppLocalizations.instance.translate('setup_pin_title'),
+                        style: TextStyle(color: Colors.white, fontSize: 28),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height/15,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: SwitchListTile(
@@ -99,40 +102,39 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                           }
                         }),
                   ),
-                  PeerButtonSetup(
-                    action: () async {
-                      await screenLock(
-                        title: HeadingTitle(
-                            text: AppLocalizations.instance
-                                .translate('authenticate_title')),
-                        confirmTitle: HeadingTitle(
-                            text: AppLocalizations.instance
-                                .translate('authenticate_confirm_title')),
-                        context: context,
-                        correctString: '',
-                        digits: 6,
-                        confirmation: true,
-                        didConfirmed: (matchedText) async {
-                          await Provider.of<EncryptedBox>(context, listen: false)
-                              .setPassCode(matchedText);
-
-                          var settings =
-                          Provider.of<AppSettings>(context, listen: false);
-                          await settings.init(true);
-                          await settings.createInitialSettings(_biometricsAllowed,
-                              AppLocalizations.instance.locale.toString());
-
-                          await Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.WalletList, (_) => false);
-                        },
-                      );
-                    },
-                    text: AppLocalizations.instance.translate('setup_create_pin'),
-                  ),
-                  SizedBox(height: 8,),
                 ],
               ),
-            )
+            ),
+            PeerButtonSetup(
+              action: () async {
+                await screenLock(
+                  title: HeadingTitle(
+                      text: AppLocalizations.instance
+                          .translate('authenticate_title')),
+                  confirmTitle: HeadingTitle(
+                      text: AppLocalizations.instance
+                          .translate('authenticate_confirm_title')),
+                  context: context,
+                  correctString: '',
+                  digits: 6,
+                  confirmation: true,
+                  didConfirmed: (matchedText) async {
+                    await Provider.of<EncryptedBox>(context, listen: false)
+                        .setPassCode(matchedText);
+
+                    var settings =
+                    Provider.of<AppSettings>(context, listen: false);
+                    await settings.init(true);
+                    await settings.createInitialSettings(_biometricsAllowed,
+                        AppLocalizations.instance.locale.toString());
+                    Navigator.pop(context);
+                    await Navigator.of(context).pushNamed(Routes.SetupDataFeeds);
+                  },
+                );
+              },
+              text: AppLocalizations.instance.translate('setup_create_pin'),
+            ),
+            SizedBox(height: 32,),
           ],
         ),
       ),

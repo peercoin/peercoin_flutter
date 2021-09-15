@@ -260,8 +260,19 @@ class _SendTabState extends State<SendTab> {
         WalletBalanceHeader(widget._connectionState, _wallet),
         ListView(
           children: [
-            SizedBox(
-              height: 135,
+            SizedBox(height: 100),
+            Container(
+              height: 35,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        Color(0x003cb054),
+                        Color(0xFF3cb054),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter
+                  )
+              ),
             ),
             PeerContainer(
               child: Form(

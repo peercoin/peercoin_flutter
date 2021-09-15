@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
-import 'package:peercoin/screens/setup.dart';
+import 'package:peercoin/screens/setup/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
@@ -71,31 +71,31 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               PeerProgress(2),
-              Image.asset(
-                'assets/images/59-Cybersecurity.png',
-                height: MediaQuery.of(context).size.height/3,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  PeerButtonSetupBack(),
-                  Text(
-                    AppLocalizations.instance.translate(
-                      'import_seed_button',
-                    ),
-                    style: TextStyle(color: Colors.white, fontSize: 28),
-                  ),
-                  SizedBox(
-                    width: 40,
-                  ),
-                ],
-              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      Image.asset(
+                        'assets/img/setup-security.png',
+                        height: MediaQuery.of(context).size.height/5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          PeerButtonSetupBack(),
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'setup_import_title',
+                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 28),
+                          ),
+                          SizedBox(
+                            width: 40,
+                          ),
+                        ],
+                      ),
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
@@ -184,7 +184,6 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           ),
                         ],),
                       ),
-
                       PeerButtonSetupLoading(
                         action: () {
                           if (_formKey.currentState!.validate()) {

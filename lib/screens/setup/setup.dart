@@ -39,31 +39,30 @@ class _SetupScreenState extends State<SetupScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       PeerProgress(1),
-                      Image.asset(
-                        'assets/images/90-Start-Up.png',
-                        height: MediaQuery.of(context).size.height/3,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          children: [
-                            Text(
-                              AppLocalizations.instance.translate('setup_title'),
-                              style: TextStyle(color: Colors.white, fontSize: 46),
-                            ),
-                            Text(
-                              AppLocalizations.instance.translate('setup_subtitle'),
-                              style: TextStyle(color: Colors.white, fontSize: 24),
-                            ),
-                          ],
-                        ),
-                      ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              SizedBox(height: MediaQuery.of(context).size.height/20,),
+                              Image.asset(
+                                'assets/img/setup-launch.png',
+                                height: MediaQuery.of(context).size.height/5,
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    AppLocalizations.instance.translate('setup_title'),
+                                    style: TextStyle(color: Colors.white, fontSize: 46),
+                                  ),
+                                  Text(
+                                    AppLocalizations.instance.translate('setup_subtitle'),
+                                    style: TextStyle(color: Colors.white, fontSize: 24),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: MediaQuery.of(context).size.height/15,),
                               PeerExplanationText(AppLocalizations.instance.translate('setup_text1')),
                               PeerButtonSetup(
                                 text: AppLocalizations.instance.translate(

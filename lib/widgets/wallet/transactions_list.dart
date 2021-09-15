@@ -119,6 +119,7 @@ class _TransactionListState extends State<TransactionList> {
                       return Container(
                         color: Theme.of(context).primaryColor,
                         child: Card(
+                          elevation: 0,
                           child: ListTile(
                             horizontalTitleGap: 32.0,
                             onTap: () => Navigator.of(context)
@@ -214,7 +215,7 @@ class _TransactionListState extends State<TransactionList> {
                         children: [
                           SizedBox(height: 100),
                           Container(
-                            height: 30,
+                            height: 35,
                             decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                     colors: [

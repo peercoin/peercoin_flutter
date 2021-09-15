@@ -18,7 +18,6 @@ class MyTheme {
         onError: LightColors.red,
         brightness: Brightness.light,
       ),
-      accentColor: LightColors.grey,
       backgroundColor: LightColors.white,
       bottomAppBarColor:
           const Color(0xFF2A7A3A), //Incoming transaction: amount color
@@ -84,7 +83,6 @@ class MyTheme {
         onError: DarkColors.red,
         brightness: Brightness.dark,
       ),
-      accentColor: DarkColors.white,
       backgroundColor: DarkColors.green,
       bottomAppBarColor:
           DarkColors.darkBlue, //Incoming transaction: amount color
