@@ -187,7 +187,7 @@ class _TransactionListState extends State<TransactionList> {
                                             : FontWeight.w300,
                                     color: _filteredTx[i - 1].direction == 'out'
                                         ? Theme.of(context).errorColor
-                                        : Theme.of(context).bottomAppBarColor,
+                                        : Theme.of(context).colorScheme.primaryVariant,
                                   ),
                                 ),
                                 _filteredTx[i - 1].direction == 'out'
@@ -213,31 +213,22 @@ class _TransactionListState extends State<TransactionList> {
                         widget._walletTransactions.isNotEmpty) {
                       return Column(
                         children: [
-                          SizedBox(height: 100),
+                          SizedBox(height: 110),
                           Container(
-                            height: 35,
+                            height: 30,
                             decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [
-                                      Color(0x003cb054),
-                                      Color(0x993cb054),
-                                    ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter
-                                )
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
+                              gradient: LinearGradient(
                                   colors: [
-                                    Color(0x993cb054),
-                                    Color(0xff3cb054),
+                                    Theme.of(context).bottomAppBarColor,
+                                    Theme.of(context).primaryColor,
                                   ],
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter
-                                )
+                              ),
                             ),
+                          ),
+                          Container(
+                            color: Theme.of(context).primaryColor,
                             width: MediaQuery.of(context).size.width,
                             child: Center(
                               child: Wrap(

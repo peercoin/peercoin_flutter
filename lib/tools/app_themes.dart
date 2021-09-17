@@ -19,8 +19,7 @@ class MyTheme {
         brightness: Brightness.light,
       ),
       backgroundColor: LightColors.white,
-      bottomAppBarColor:
-          const Color(0xFF2A7A3A), //Incoming transaction: amount color
+      bottomAppBarColor: const Color(0x003cb054),
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
@@ -84,8 +83,7 @@ class MyTheme {
         brightness: Brightness.dark,
       ),
       backgroundColor: DarkColors.green,
-      bottomAppBarColor:
-          DarkColors.darkBlue, //Incoming transaction: amount color
+      bottomAppBarColor: const Color(0x000D1821),
       cardColor: DarkColors.green,
       dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
