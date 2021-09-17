@@ -72,13 +72,13 @@ class MyTheme {
         primary: DarkColors.green,
         primaryVariant: DarkColors.white,
         secondary: DarkColors.white,
-        secondaryVariant: DarkColors.white,
+        secondaryVariant: DarkColors.grey,
         surface: DarkColors.black,
         background: DarkColors.green,
         error: DarkColors.red,
         onPrimary: DarkColors.green,
         onSecondary: DarkColors.green,
-        onSurface: DarkColors.white,
+        onSurface: DarkColors.green,
         onBackground: DarkColors.green,
         onError: DarkColors.red,
         brightness: Brightness.dark,
@@ -190,7 +190,7 @@ abstract class DarkColors {
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF0D1821);
   static Color get darkBlue => const Color(0xFF234058);
-  static Color get grey => const Color(0xFFE9EAED);
+  static Color get grey => const Color(0xFF717C89);
   static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFA8201A);
 }
