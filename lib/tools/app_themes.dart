@@ -5,7 +5,7 @@ class MyTheme {
     ThemeMode.light: ThemeData(
       colorScheme: ColorScheme(
         primary: LightColors.green,
-        primaryVariant: LightColors.green,
+        primaryVariant: LightColors.darkGreen,
         secondary: LightColors.grey,
         secondaryVariant: LightColors.grey,
         surface: LightColors.white,
@@ -70,7 +70,7 @@ class MyTheme {
     ThemeMode.dark: ThemeData.dark().copyWith(
       colorScheme: ColorScheme(
         primary: DarkColors.green,
-        primaryVariant: DarkColors.green,
+        primaryVariant: DarkColors.white,
         secondary: DarkColors.white,
         secondaryVariant: DarkColors.white,
         surface: DarkColors.black,
@@ -174,7 +174,7 @@ class MyTheme {
 }
 
 abstract class LightColors {
-  static Color get darkGreen => const Color(0xFF31493C);
+  static Color get darkGreen => const Color(0xFF2A7A3A);
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF000000);
@@ -185,7 +185,7 @@ abstract class LightColors {
 }
 
 abstract class DarkColors {
-  static Color get darkGreen => const Color(0xFF31493C);
+  static Color get darkGreen => const Color(0xFF2A7A3A);
   static Color get green => const Color(0xFF2D936C);
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get black => const Color(0xFF0D1821);
