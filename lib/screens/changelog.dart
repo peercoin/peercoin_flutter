@@ -19,10 +19,9 @@ class ChangeLogScreen extends StatelessWidget {
         child: FutureBuilder(
           future: DefaultAssetBundle.of(context).loadString('CHANGELOG.md'),
           builder: (context, snapshot) {
-            var _changeLogData = '';
-            if (snapshot.hasData) {
-              _changeLogData = snapshot.data.toString();
-            }
+            var _changeLogData =
+                snapshot.hasData ? snapshot.data.toString() : '';
+
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
