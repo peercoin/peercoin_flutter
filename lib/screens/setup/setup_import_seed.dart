@@ -58,11 +58,17 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
   Widget build(BuildContext context) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      borderSide: BorderSide(width: 2, color: Colors.transparent,),
+      borderSide: BorderSide(
+        width: 2,
+        color: Colors.transparent,
+      ),
     );
 
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 0, automaticallyImplyLeading: false,),
+      appBar: AppBar(
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
+      ),
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -79,7 +85,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                     children: [
                       Image.asset(
                         'assets/img/setup-security.png',
-                        height: MediaQuery.of(context).size.height/5,
+                        height: MediaQuery.of(context).size.height / 5,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -102,87 +108,116 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: Theme.of(context).shadowColor,
                         ),
-                        child: Column(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(Icons.keyboard_rounded, color: Theme.of(context).primaryColor, size: 40,),
-                                SizedBox(width: 24,),
-                                Container(
-                                  width: MediaQuery.of(context).size.width/1.8,
-                                  child: Text(
-                                    AppLocalizations.instance.translate('setup_import_note'),
-                                    style: TextStyle(
-                                        color: const Color(0xFF2A7A3A), fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 5,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(
+                                    Icons.keyboard_rounded,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 40,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                              color: Theme.of(context).backgroundColor,
-                              border: Border.all(
-                                width: 2,
-                                color: Theme.of(context).primaryColor,
+                                  SizedBox(
+                                    width: 24,
+                                  ),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.8,
+                                    child: Text(
+                                      AppLocalizations.instance
+                                          .translate('setup_import_note'),
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primaryVariant,
+                                          fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 5,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            child: Form(
-                              key: _formKey,
-                              child: TextFormField(
-                                textInputAction: TextInputAction.done,
-                                key: Key('importTextField'),
-                                controller: _controller,
-                                validator: (value) {
-                                  if (value!.split(' ').length < 12) {
-                                    return AppLocalizations.instance.translate(
-                                      'import_seed_error_1',
-                                    );
-                                  }
-                                  if (bip39.validateMnemonic(value) == false) {
-                                    return AppLocalizations.instance.translate(
-                                      'import_seed_error_2',
-                                    );
-                                  }
-                                  return null;
-                                },
-                                style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
-                                decoration: InputDecoration(
-                                  hintText: 'e.g. mushrooms pepper courgette onion asparagus garlic sweetcorn nut pumpkin potato bean spinach',
-                                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16),
-                                  filled: true,
-                                  fillColor: Theme.of(context).backgroundColor,
-                                  suffixIcon: IconButton(
-                                    onPressed: () async {
-                                      var data = await Clipboard.getData('text/plain');
-                                      if (data != null) {
-                                        _controller.text = data.text!;
-                                      }
-                                      FocusScope.of(context).unfocus(); //hide keyboard
-                                    },
-                                    icon: Icon(Icons.paste,
-                                        color: Color(0xFF2A7A3A)),
-                                  ),
-                                  border: border,
-                                  focusedBorder: border,
-                                  enabledBorder: border,
-                                  errorStyle: TextStyle(color: Theme.of(context).errorColor),
-                                  errorBorder: border,
-                                  focusedErrorBorder: border,
+                            Container(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                color: Theme.of(context).backgroundColor,
+                                border: Border.all(
+                                  width: 2,
+                                  color: Theme.of(context).primaryColor,
                                 ),
-                                keyboardType: TextInputType.multiline,
-                                minLines: 5,
-                                maxLines: 5,
+                              ),
+                              child: Form(
+                                key: _formKey,
+                                child: TextFormField(
+                                  textInputAction: TextInputAction.done,
+                                  key: Key('importTextField'),
+                                  controller: _controller,
+                                  validator: (value) {
+                                    if (value!.split(' ').length < 12) {
+                                      return AppLocalizations.instance
+                                          .translate(
+                                        'import_seed_error_1',
+                                      );
+                                    }
+                                    if (bip39.validateMnemonic(value) ==
+                                        false) {
+                                      return AppLocalizations.instance
+                                          .translate(
+                                        'import_seed_error_2',
+                                      );
+                                    }
+                                    return null;
+                                  },
+                                  style: TextStyle(
+                                      color: Theme.of(context).dividerColor,
+                                      fontSize: 16),
+                                  decoration: InputDecoration(
+                                    hintText:
+                                        'e.g. mushrooms pepper courgette onion asparagus garlic sweetcorn nut pumpkin potato bean spinach',
+                                    hintStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontSize: 16),
+                                    filled: true,
+                                    fillColor:
+                                        Theme.of(context).backgroundColor,
+                                    suffixIcon: IconButton(
+                                      onPressed: () async {
+                                        var data = await Clipboard.getData(
+                                            'text/plain');
+                                        if (data != null) {
+                                          _controller.text = data.text!;
+                                        }
+                                        FocusScope.of(context)
+                                            .unfocus(); //hide keyboard
+                                      },
+                                      icon: Icon(Icons.paste,
+                                          color: Color(0xFF2A7A3A)),
+                                    ),
+                                    border: border,
+                                    focusedBorder: border,
+                                    enabledBorder: border,
+                                    errorStyle: TextStyle(
+                                        color: Theme.of(context).errorColor),
+                                    errorBorder: border,
+                                    focusedErrorBorder: border,
+                                  ),
+                                  keyboardType: TextInputType.multiline,
+                                  minLines: 5,
+                                  maxLines: 5,
+                                ),
                               ),
                             ),
-                          ),
-                        ],),
+                          ],
+                        ),
                       ),
                       PeerButtonSetupLoading(
                         action: () {
@@ -196,7 +231,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         ),
                         loading: _loading,
                       ),
-                      SizedBox(height: 8,),
+                      SizedBox(
+                        height: 8,
+                      ),
                     ],
                   ),
                 ),
