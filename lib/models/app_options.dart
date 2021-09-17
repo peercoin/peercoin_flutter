@@ -27,6 +27,9 @@ class AppOptionsStore extends HiveObject {
   @HiveField(5)
   Map<String, dynamic>? _exchangeRates;
 
+  @HiveField(6)
+  String? _buildIdentifier;
+
   AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
@@ -80,6 +83,15 @@ class AppOptionsStore extends HiveObject {
 
   set exchangeRates(Map<String, dynamic> newRates) {
     _exchangeRates = newRates;
+    save();
+  }
+
+  String get buildIdentifier {
+    return _buildIdentifier ?? '0';
+  }
+
+  set buildIdentifier(String newBuild) {
+    _buildIdentifier = newBuild;
     save();
   }
 }
