@@ -7,11 +7,12 @@ class PeerButton extends StatelessWidget {
   final String text;
   final bool small;
   final bool active;
-  PeerButton(
-      {required this.text,
-        required this.action,
-        this.small = false,
-        this.active = true});
+  PeerButton({
+    required this.text,
+    required this.action,
+    this.small = false,
+    this.active = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class PeerButton extends StatelessWidget {
         primary: Theme.of(context).primaryColor,
         onPrimary: Theme.of(context).colorScheme.secondary,
         fixedSize:
-        Size(MediaQuery.of(context).size.width / (small ? 2 : 1.5), 40),
+            Size(MediaQuery.of(context).size.width / (small ? 2 : 1.5), 40),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         elevation: 0,
       ),
@@ -77,8 +78,11 @@ class PeerButtonSetup extends StatelessWidget {
   final String text;
   final bool small;
 
-  PeerButtonSetup(
-      {required this.text, required this.action, this.small = false});
+  PeerButtonSetup({
+    required this.text,
+    required this.action,
+    this.small = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +90,8 @@ class PeerButtonSetup extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize: Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
+        fixedSize:
+            Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -97,10 +102,11 @@ class PeerButtonSetup extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-              letterSpacing: 1.2,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Color(0xFF2A7A3A)),
+            letterSpacing: 1.2,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
     );
@@ -113,8 +119,12 @@ class PeerButtonSetupLoading extends StatelessWidget {
   final bool loading;
   final bool small;
 
-  PeerButtonSetupLoading(
-      {required this.text, required this.action, this.loading = false, this.small = false});
+  PeerButtonSetupLoading({
+    required this.text,
+    required this.action,
+    this.loading = false,
+    this.small = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +132,8 @@ class PeerButtonSetupLoading extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize: Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
+        fixedSize:
+            Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -135,16 +146,18 @@ class PeerButtonSetupLoading extends StatelessWidget {
                 height: 18,
                 width: 18,
                 child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.secondary,
                   strokeWidth: 3,
                 ),
               )
             : Text(
                 text,
                 style: TextStyle(
-                    letterSpacing: 1.2,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Color(0xFF2A7A3A)),
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
       ),
     );
@@ -163,10 +176,13 @@ class PeerButtonSetupBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: Icon(CupertinoIcons.back, color: Colors.white,),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      icon: Icon(
+        CupertinoIcons.back,
+        color: Colors.white,
+      ),
     );
   }
 }
