@@ -233,11 +233,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   children: [
                     _seedPhrase == ''
                         ? PeerButton(
-                          action: () => revealSeedPhrase(
-                              _settings.biometricsAllowed),
-                          text: AppLocalizations.instance
-                              .translate('app_settings_revealSeedButton'),
-                        )
+                            action: () =>
+                                revealSeedPhrase(_settings.biometricsAllowed),
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealSeedButton'),
+                          )
                         : Column(children: [
                             SizedBox(height: 20),
                             DoubleTabToClipboard(
@@ -251,7 +251,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             PeerButton(
                               action: () => Share.share(_seedPhrase),
                               text: AppLocalizations.instance
-                                  .translate('app_settings_shareSeed'),
+                                  .translate('app_settings_shareseed'),
                             )
                           ])
                   ]),

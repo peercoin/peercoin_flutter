@@ -53,18 +53,23 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: MediaQuery.of(context).size.height/15,),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 15,
+                  ),
                   Image.asset(
                     'assets/img/setup-protection.png',
-                    height: MediaQuery.of(context).size.height/5,
+                    height: MediaQuery.of(context).size.height / 5,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height/15,),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 15,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       PeerButtonSetupBack(),
                       Text(
-                        AppLocalizations.instance.translate('setup_pin_title'),
+                        AppLocalizations.instance
+                            .translate('app_settings_auth_header'),
                         style: TextStyle(color: Colors.white, fontSize: 28),
                       ),
                       SizedBox(
@@ -72,16 +77,17 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height/15,),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 15,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: SwitchListTile(
-                      title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_biometrics'),
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 17),
-                      ),
+                        title: Text(
+                          AppLocalizations.instance
+                              .translate('app_settings_biometrics'),
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
                         value: _biometricsAllowed,
                         activeColor: Theme.of(context).backgroundColor,
                         inactiveThumbColor: Colors.grey,
@@ -123,18 +129,21 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                         .setPassCode(matchedText);
 
                     var settings =
-                    Provider.of<AppSettings>(context, listen: false);
+                        Provider.of<AppSettings>(context, listen: false);
                     await settings.init(true);
                     await settings.createInitialSettings(_biometricsAllowed,
                         AppLocalizations.instance.locale.toString());
                     Navigator.pop(context);
-                    await Navigator.of(context).pushNamed(Routes.SetupDataFeeds);
+                    await Navigator.of(context)
+                        .pushNamed(Routes.SetupDataFeeds);
                   },
                 );
               },
               text: AppLocalizations.instance.translate('setup_create_pin'),
             ),
-            SizedBox(height: 32,),
+            SizedBox(
+              height: 32,
+            ),
           ],
         ),
       ),
