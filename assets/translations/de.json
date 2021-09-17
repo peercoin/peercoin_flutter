@@ -119,9 +119,9 @@
     "server_settings_alert_hardcoded_content": "Vorinstallierte Server können nicht gelöscht, sondern nur deaktiviert werden.",
     "server_settings_error_no_server_left": "Es muss mindestens ein Server verbleiben!",
     "setup_create_pin": "PIN erstellen",
-    "setup_files_for_wallet": "Erstelle alle notwenigen Dateien um mit deiner Wallet loszulegen.\n Bitte wähle eine Option.",
+    "setup_files_for_wallet": "Erstelle alle notwenigen Dateien um mit deiner Wallet loszulegen.\nBitte wähle eine Option.",
     "setup_import_title": "Seed importieren",
-    "setup_import_note": "Bitte gib den Wallet Seed ein, den du importieren möchtest.\n Es handelt sich nicht um einen geheimen Schlüssel.",
+    "setup_import_note": "Bitte gib den Wallet Seed ein, den du importieren möchtest.\nEs handelt sich nicht um einen geheimen Schlüssel.",
     "setup_pin": "Bitte setze eine PIN bevor du fortfährst.",
     "setup_pin_title": "Sicherheit",
     "setup_securebox_fail": "Es tut uns sehr leid.\n Dein Gerät unterstützt keine ausreichend sichere Methode um Schlüssel zu speichern.",
@@ -211,5 +211,11 @@
     "currency_RUB": "Russischer Rubel",
     "currency_USD": "US-Dollar",
     "not_again": "Nicht erneut anzeigen",
-    "wallet_value_alert_title": "Hoher Münzenwert"
+    "wallet_value_alert_title": "Hoher Münzenwert",
+    "changelog_appbar": "Änderungshistorie",
+    "changelog_headline": "Was ist neu?",
+    "setup_finish": "Einrichtung abschließen",
+    "setup_price_feed_allow": "Externe Preis-Feed-API erlauben",
+    "setup_price_feed_description": "Du kannst hier unseren optionalen Preis-Feed aktivieren.\nDies ermöglicht deinen Kontostand in Echtzeit in anderen Währungen anzuzeigen.",
+    "setup_price_feed_title": "Externe APIs"
 }
