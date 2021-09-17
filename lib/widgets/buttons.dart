@@ -76,12 +76,10 @@ class PeerButtonBorder extends StatelessWidget {
 class PeerButtonSetup extends StatelessWidget {
   final Function() action;
   final String text;
-  final bool small;
 
   PeerButtonSetup({
     required this.text,
     required this.action,
-    this.small = false,
   });
 
   @override
@@ -91,7 +89,7 @@ class PeerButtonSetup extends StatelessWidget {
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
         fixedSize:
-            Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
+            Size(MediaQuery.of(context).size.width / 1.5, 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -117,13 +115,11 @@ class PeerButtonSetupLoading extends StatelessWidget {
   final Function() action;
   final String text;
   final bool loading;
-  final bool small;
 
   PeerButtonSetupLoading({
     required this.text,
     required this.action,
     this.loading = false,
-    this.small = false,
   });
 
   @override
@@ -133,7 +129,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
         fixedSize:
-            Size(MediaQuery.of(context).size.width / (small ? 1.8 : 1.5), 40),
+            Size(MediaQuery.of(context).size.width / 1.5, 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),

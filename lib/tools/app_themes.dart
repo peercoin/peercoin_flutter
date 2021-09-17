@@ -12,7 +12,7 @@ class MyTheme {
         background: LightColors.grey,
         error: LightColors.red,
         onPrimary: LightColors.white,
-        onSecondary: LightColors.green,
+        onSecondary: LightColors.blackGreen,
         onSurface: LightColors.green,
         onBackground: LightColors.green,
         onError: LightColors.red,
@@ -174,10 +174,11 @@ class MyTheme {
 }
 
 abstract class LightColors {
+  static Color get black => const Color(0xFF000000);
+  static Color get blackGreen => const Color(0xFF31493C);
   static Color get darkGreen => const Color(0xFF2A7A3A);
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
-  static Color get black => const Color(0xFF000000);
   static Color get grey => const Color(0xFF717C89);
   static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFF8333C);
@@ -185,10 +186,10 @@ abstract class LightColors {
 }
 
 abstract class DarkColors {
+  static Color get black => const Color(0xFF0D1821);
   static Color get darkGreen => const Color(0xFF2A7A3A);
   static Color get green => const Color(0xFF2D936C);
   static Color get lightGreen => const Color(0xffB3E5BD);
-  static Color get black => const Color(0xFF0D1821);
   static Color get darkBlue => const Color(0xFF234058);
   static Color get grey => const Color(0xFF717C89);
   static Color get white => const Color(0xFFFAFAFA);

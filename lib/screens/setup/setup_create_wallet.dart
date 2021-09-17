@@ -121,180 +121,193 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var padding = MediaQuery.of(context).padding;
+    var correctHeight = height - padding.top - padding.bottom;
+
     return Scaffold(
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            PeerProgress(2),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        PeerButtonSetupBack(),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('setup_save_title'),
-                          style: TextStyle(color: Colors.white, fontSize: 28),
-                        ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            color: Theme.of(context).shadowColor,
+      appBar: AppBar(
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? correctHeight
+              : MediaQuery.of(context).size.height * 2,
+          color: Theme.of(context).primaryColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              PeerProgress(2),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          PeerButtonSetupBack(),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('setup_save_title'),
+                            style: TextStyle(color: Colors.white, fontSize: 28),
                           ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(24),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Icon(
-                                      Icons.vpn_key_rounded,
-                                      color: Theme.of(context).primaryColor,
-                                      size: 40,
-                                    ),
-                                    SizedBox(
-                                      width: 24,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width /
-                                          1.8,
-                                      child: Text(
-                                        AppLocalizations.instance
-                                            .translate('setup_save_text1'),
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primaryVariant,
-                                            fontSize: 15),
-                                        textAlign: TextAlign.left,
-                                        maxLines: 5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onDoubleTap: () {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(
-                                      AppLocalizations.instance
-                                          .translate('snack_copied'),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    duration: Duration(seconds: 1),
-                                  ));
-                                  Clipboard.setData(
-                                    ClipboardData(text: _seed),
-                                  );
-                                  setState(() {
-                                    _sharedYet = true;
-                                  });
-                                },
-                                child: Container(
-                                  height: 250,
-                                  padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    color: Theme.of(context).backgroundColor,
-                                    border: Border.all(
-                                      width: 2,
-                                      color: _sharedYet
-                                          ? Theme.of(context).shadowColor
-                                          : Theme.of(context).primaryColor,
-                                    ),
-                                  ),
+                          SizedBox(
+                            width: 40,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              color: Theme.of(context).shadowColor,
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(24),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: getColumn(_seed, 0),
+                                      Icon(
+                                        Icons.vpn_key_rounded,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 40,
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: getColumn(_seed, 1),
+                                      SizedBox(
+                                        width: 24,
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: getColumn(_seed, 2),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width /
+                                            1.8,
+                                        child: Text(
+                                          AppLocalizations.instance
+                                              .translate('setup_save_text1'),
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryVariant,
+                                              fontSize: 15),
+                                          textAlign: TextAlign.left,
+                                          maxLines: 5,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            ],
+                                GestureDetector(
+                                  onDoubleTap: () {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                        AppLocalizations.instance
+                                            .translate('snack_copied'),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 1),
+                                    ));
+                                    Clipboard.setData(
+                                      ClipboardData(text: _seed),
+                                    );
+                                    setState(() {
+                                      _sharedYet = true;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 250,
+                                    padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      color: Theme.of(context).backgroundColor,
+                                      border: Border.all(
+                                        width: 2,
+                                        color: _sharedYet
+                                            ? Theme.of(context).shadowColor
+                                            : Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: getColumn(_seed, 0),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: getColumn(_seed, 1),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: getColumn(_seed, 2),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Slider(
-                          activeColor: Colors.white,
-                          inactiveColor: Theme.of(context).shadowColor,
-                          value: _currentSliderValue,
-                          min: 12,
-                          max: 24,
-                          divisions: 4,
-                          label: _currentSliderValue.round().toString(),
-                          onChanged: (value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
-                            if (value % 3 == 0) {
-                              recreatePhrase(value);
-                            }
-                          },
-                        ),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('setup_seed_slider_label'),
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Slider(
+                            activeColor: Colors.white,
+                            inactiveColor: Theme.of(context).shadowColor,
+                            value: _currentSliderValue,
+                            min: 12,
+                            max: 24,
+                            divisions: 4,
+                            label: _currentSliderValue.round().toString(),
+                            onChanged: (value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                              });
+                              if (value % 3 == 0) {
+                                recreatePhrase(value);
+                              }
+                            },
+                          ),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('setup_seed_slider_label'),
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            if (_sharedYet)
-              PeerButtonSetup(
-                action: () async => await handleContinue(),
-                text: AppLocalizations.instance.translate('continue'),
-              )
-            else
-              PeerButtonSetup(
-                action: () async => await shareSeed(_seed),
-                text: AppLocalizations.instance.translate('export_now'),
+              if (_sharedYet)
+                PeerButtonSetup(
+                  action: () async => await handleContinue(),
+                  text: AppLocalizations.instance.translate('continue'),
+                )
+              else
+                PeerButtonSetup(
+                  action: () async => await shareSeed(_seed),
+                  text: AppLocalizations.instance.translate('export_now'),
+                ),
+              SizedBox(
+                height: 32,
               ),
-            SizedBox(
-              height: 32,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -312,12 +325,12 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
             ? Text(
                 '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
                 style: TextStyle(
-                    color: Theme.of(context).dividerColor, fontSize: 16),
+                    color: Theme.of(context).colorScheme.onSecondary, fontSize: 16),
               )
             : Text(
                 (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
                 style: TextStyle(
-                    color: Theme.of(context).dividerColor, fontSize: 16),
+                    color: Theme.of(context).colorScheme.onSecondary, fontSize: 16),
               ),
       ));
     }

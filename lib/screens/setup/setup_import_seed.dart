@@ -56,6 +56,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var padding = MediaQuery.of(context).padding;
+    var correctHeight = height - padding.top - padding.bottom;
+
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
@@ -71,7 +75,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? correctHeight
+              : MediaQuery.of(context).size.height * 1.5,
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -176,7 +182,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     return null;
                                   },
                                   style: TextStyle(
-                                      color: Theme.of(context).dividerColor,
+                                      color: Theme.of(context).colorScheme.onSecondary,
                                       fontSize: 16),
                                   decoration: InputDecoration(
                                     hintText:
@@ -200,7 +206,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                             .unfocus(); //hide keyboard
                                       },
                                       icon: Icon(Icons.paste,
-                                          color: Color(0xFF2A7A3A)),
+                                          color: Theme.of(context).colorScheme.primaryVariant),
                                     ),
                                     border: border,
                                     focusedBorder: border,
@@ -219,25 +225,26 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           ],
                         ),
                       ),
-                      PeerButtonSetupLoading(
-                        action: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            createWallet(context);
-                          }
-                        },
-                        text: AppLocalizations.instance.translate(
-                          'import_button',
-                        ),
-                        loading: _loading,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
+
                     ],
                   ),
                 ),
-              )
+              ),
+              PeerButtonSetupLoading(
+                action: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    createWallet(context);
+                  }
+                },
+                text: AppLocalizations.instance.translate(
+                  'import_button',
+                ),
+                loading: _loading,
+              ),
+              SizedBox(
+                height: 32,
+              ),
             ],
           ),
         ),
