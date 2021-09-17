@@ -65,8 +65,8 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                     height: MediaQuery.of(context).size.height / 15,
                   ),
                   Image.asset(
-                    'assets/img/109-Negotiation.png',
-                    height: MediaQuery.of(context).size.height / 5,
+                    'assets/img/setup-consent.png',
+                    height: MediaQuery.of(context).size.height / 4,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 15,
@@ -91,25 +91,27 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        PeerExplanationText(
-                          AppLocalizations.instance
-                              .translate('setup_price_feed_description'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SwitchListTile(
-                              key: Key('setupApiSwitchKey'),
-                              title: Text(
+                          PeerExplanationText(
+                            AppLocalizations.instance
+                                .translate('setup_price_feed_description'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: SwitchListTile(
+                                key: Key('setupApiSwitchKey'),
+                                title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_price_feed_allow'),
-                                  style: TextStyle(
-                                      color: Colors.white),),
-                              value: _dataFeedAllowed,
-                              activeColor: Colors.white,
-                              inactiveThumbColor: Colors.grey,
-                              onChanged: (newState) => toggleHandler(newState)),
-                        ),
-                      ],),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                value: _dataFeedAllowed,
+                                activeColor: Colors.white,
+                                inactiveThumbColor: Colors.grey,
+                                onChanged: (newState) =>
+                                    toggleHandler(newState)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   PeerButton(
