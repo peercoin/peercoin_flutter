@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 0.6.2+55
+version: 0.6.3+56
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -45,6 +45,7 @@ dependencies:
   http: ^0.13.3
   cupertino_icons: ^1.0.3
   collection: ^1.15.0-nullsafety.4
+  flutter_markdown: ^0.6.6
 
 dev_dependencies:
   integration_test:
@@ -78,3 +79,4 @@ flutter:
     - assets/icon/
     - assets/translations/
     - assets/img/
+    - CHANGELOG.md

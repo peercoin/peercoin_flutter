@@ -142,12 +142,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         title: Text(
           AppLocalizations.instance.translate('app_settings_appbar'),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
