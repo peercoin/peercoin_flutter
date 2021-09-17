@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -29,6 +30,11 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]); //TODO fix layout to allowlandscape
+
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
