@@ -155,7 +155,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                 style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
                                 decoration: InputDecoration(
                                   hintText: 'e.g. mushrooms pepper courgette onion asparagus garlic sweetcorn nut pumpkin potato bean spinach',
-                                  hintStyle: TextStyle(color: Theme.of(context).accentColor, fontSize: 16),
+                                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16),
                                   filled: true,
                                   fillColor: Theme.of(context).backgroundColor,
                                   suffixIcon: IconButton(
