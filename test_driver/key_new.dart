@@ -35,7 +35,7 @@ void main() {
       'create new wallet from scratch',
       () async {
         //creates a brand new peercoin testnet wallet from scratch and check if it connects
-        await driver.tap(find.text('Create wallet with new seed'));
+        await driver.tap(find.text('Create Wallet'));
         await driver.tap(elevatedButtonFinder);
         await Process.run(
           'adb',
@@ -50,6 +50,11 @@ void main() {
         }
         await driver.tap(find.byValueKey('setupApiSwitchKey'));
         await driver.tap(find.text('Finish Setup'));
+        await Process.run(
+          'adb',
+          <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
+          runInShell: true,
+        );
         await driver.runUnsynchronized(() async {
           await driver.tap(find.byValueKey('newWalletIconButton'));
           await driver.tap(find.text('Peercoin Testnet'));

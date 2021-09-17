@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -35,12 +37,12 @@ void main() {
         'create wallet from imported seed',
         () async {
           //creates a peercoin testnet wallet from an imported seed and checks if it connects
-          await driver.tap(find.text('Import existing seed'));
+          await driver.tap(find.text('Import Seed'));
           await driver.tap(find.byValueKey('importTextField'));
           await driver.enterText(
             'vapor please suffer wood enrich quality position chest quantum fog rival museum',
           );
-          await driver.tap(find.text('Import seed'));
+          await driver.tap(find.text('Import'));
 
           await driver.tap(elevatedButtonFinder); //pin pad
           for (var i = 1; i <= 12; i++) {
@@ -48,6 +50,11 @@ void main() {
           }
           await driver.tap(find.byValueKey('setupApiSwitchKey'));
           await driver.tap(find.text('Finish Setup'));
+          await Process.run(
+            'adb',
+            <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
+            runInShell: true,
+          );
           await driver.runUnsynchronized(
             () async {
               await driver.tap(find.byValueKey('newWalletIconButton'));
