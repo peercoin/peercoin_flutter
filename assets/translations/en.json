@@ -71,6 +71,8 @@
     "buy_peercoin": "Purchase Peercoin",
     "buy_peercoin_dialog_title": "You will now be forwarded to a third party website.",
     "buy_peercoin_dialog_content": "The mainters of this app are not responsible for its content.",
+    "changelog_appbar": "Changelog",
+    "changelog_headline": "What's new?",
     "continue": "Continue",
     "create_wallet_existing_seed": "Import existing seed",
     "create_wallet_new_seed": "Create wallet with new seed",

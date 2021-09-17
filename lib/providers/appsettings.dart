@@ -90,4 +90,13 @@ class AppSettings with ChangeNotifier {
     _appOptions.exchangeRates = newExchangeRates;
     notifyListeners();
   }
+
+  String get buildIdentifier {
+    return _appOptions.buildIdentifier;
+  }
+
+  void setBuildIdentifier(String newIdentifier) {
+    _appOptions.buildIdentifier = newIdentifier;
+    notifyListeners();
+  }
 }

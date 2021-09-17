@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/changelog.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -52,10 +54,27 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
-      if (widget.fromColdStart == false) {
-        if (_appSettings.authenticationOptions!['walletList']!) {
-          await Auth.requireAuth(context, _appSettings.biometricsAllowed);
-        }
+      //toggle price ticker update if enabled in settings
+      if (_appSettings.selectedCurrency.isNotEmpty) {
+        PriceTicker.checkUpdate(_appSettings);
+        //start timer to update data hourly
+        _priceTimer = Timer.periodic(
+          const Duration(hours: 1),
+          (_) {
+            PriceTicker.checkUpdate(_appSettings);
+          },
+        );
+      }
+      //toggle check for "whats new" changelog
+      var _packageInfo = await PackageInfo.fromPlatform();
+      if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
+        await Navigator.of(context).pushNamed(Routes.ChangeLog);
+        _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
+      }
+
+      if (widget.fromColdStart == true &&
+          _appSettings.authenticationOptions!['walletList']!) {
+        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       } else {
         //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
@@ -91,17 +110,7 @@ class _WalletListScreenState extends State<WalletListScreen>
           }
         }
       }
-      //toggle price ticker update if enabled in settings
-      if (_appSettings.selectedCurrency.isNotEmpty) {
-        PriceTicker.checkUpdate(_appSettings);
-        //start timer to update data hourly
-        _priceTimer = Timer.periodic(
-          const Duration(hours: 1),
-          (_) {
-            PriceTicker.checkUpdate(_appSettings);
-          },
-        );
-      }
+
       setState(() {
         _initial = false;
       });
