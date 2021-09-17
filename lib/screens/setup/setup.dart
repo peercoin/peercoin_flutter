@@ -21,7 +21,7 @@ class _SetupScreenState extends State<SetupScreen> {
     var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
     await _activeWallets.init();
     await _activeWallets.createPhrase();
-    await Navigator.of(context).pushNamed(Routes.SetupScreen);
+    await Navigator.of(context).pushNamed(Routes.SetupCreateWallet);
     setState(() {
       _loading = false;
     });
@@ -33,81 +33,92 @@ class _SetupScreenState extends State<SetupScreen> {
       body: Container(
         color: Theme.of(context).primaryColor,
         child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      PeerProgress(1),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(height: MediaQuery.of(context).size.height/20,),
-                              Image.asset(
-                                'assets/img/setup-launch.png',
-                                height: MediaQuery.of(context).size.height/5,
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    AppLocalizations.instance.translate('setup_title'),
-                                    style: TextStyle(color: Colors.white, fontSize: 46),
-                                  ),
-                                  Text(
-                                    AppLocalizations.instance.translate('setup_subtitle'),
-                                    style: TextStyle(color: Colors.white, fontSize: 24),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: MediaQuery.of(context).size.height/15,),
-                              PeerExplanationText(AppLocalizations.instance.translate('setup_text1')),
-                              PeerButtonSetup(
-                                text: AppLocalizations.instance.translate(
-                                  'setup_import_title',
-                                ),
-                                action: () => Navigator.of(context)
-                                    .pushNamed(Routes.SetupImport),
-                              ),
-                              Text(
-                                AppLocalizations.instance.translate('setup_text3'),
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                              PeerExplanationText(AppLocalizations.instance.translate('setup_text2')),
-                              PeerButtonSetupLoading(
-                                text: AppLocalizations.instance.translate('setup_save_title'),
-                                action: () => {createWallet(context)},
-                                loading: _loading,
-                              ),
-                              SizedBox(height: 8,),
-                            ],
-                          ),
+          fit: StackFit.expand,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                PeerProgress(1),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 20,
                         ),
-                      )
-                    ],
-                  ),
-                  Positioned(
-                    top: MediaQuery.of(context).size.height/8,
-                    right: 25,
-                    child: IconButton(
-                      onPressed: () async {
-                        await Navigator.of(context)
-                            .pushNamed(Routes.SetupLanguage);
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.language_rounded,
-                        color: Theme.of(context).backgroundColor,
-                        size: 32,
-                      ),
+                        Image.asset(
+                          'assets/img/setup-launch.png',
+                          height: MediaQuery.of(context).size.height / 5,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('setup_title'),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 46),
+                            ),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('setup_subtitle'),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 24),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 15,
+                        ),
+                        PeerExplanationText(
+                            AppLocalizations.instance.translate('setup_text1')),
+                        PeerButtonSetup(
+                          text: AppLocalizations.instance.translate(
+                            'setup_import_title',
+                          ),
+                          action: () => Navigator.of(context)
+                              .pushNamed(Routes.SetupImport),
+                        ),
+                        Text(
+                          AppLocalizations.instance.translate('setup_text3'),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        PeerExplanationText(
+                            AppLocalizations.instance.translate('setup_text2')),
+                        PeerButtonSetupLoading(
+                          text: AppLocalizations.instance
+                              .translate('setup_save_title'),
+                          action: () => {createWallet(context)},
+                          loading: _loading,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                )
+              ],
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height / 8,
+              right: 25,
+              child: IconButton(
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed(Routes.SetupLanguage);
+                  setState(() {});
+                },
+                icon: Icon(
+                  Icons.language_rounded,
+                  color: Theme.of(context).backgroundColor,
+                  size: 32,
+                ),
               ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -140,4 +151,3 @@ class PeerProgress extends StatelessWidget {
     );
   }
 }
-

@@ -12,12 +12,13 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
-class SetupSaveScreen extends StatefulWidget {
+class SetupCreateWalletScreen extends StatefulWidget {
   @override
-  _SetupSaveScreenState createState() => _SetupSaveScreenState();
+  _SetupCreateWalletScreenState createState() =>
+      _SetupCreateWalletScreenState();
 }
 
-class _SetupSaveScreenState extends State<SetupSaveScreen> {
+class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   bool _sharedYet = false;
   bool _initial = true;
   String _seed = '';
