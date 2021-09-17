@@ -181,7 +181,7 @@
 
     "setup_title": "Welcome",
     "setup_subtitle" : "to Peercoin Wallet",
-    "setup_text1" : "If you already have created a wallet and you still have your seed phrase, then choose",
+    "setup_text1" : "If you have already created a wallet and you still have your seed phrase, then choose",
     "setup_text2" : "create your new Peercoin wallet",
     "setup_text3" : "or",
 
