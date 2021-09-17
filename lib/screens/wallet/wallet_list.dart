@@ -5,7 +5,6 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/screens/changelog.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
