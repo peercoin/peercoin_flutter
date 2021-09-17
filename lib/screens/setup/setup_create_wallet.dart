@@ -179,7 +179,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                         AppLocalizations.instance
                                             .translate('setup_save_text1'),
                                         style: TextStyle(
-                                            color: const Color(0xFF2A7A3A),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primaryVariant,
                                             fontSize: 15),
                                         textAlign: TextAlign.left,
                                         maxLines: 5,
