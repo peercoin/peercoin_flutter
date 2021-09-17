@@ -138,7 +138,8 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                       children: [
                         PeerButtonSetupBack(),
                         Text(
-                          AppLocalizations.instance.translate('setup_save_title'),
+                          AppLocalizations.instance
+                              .translate('setup_save_title'),
                           style: TextStyle(color: Colors.white, fontSize: 28),
                         ),
                         SizedBox(
@@ -154,79 +155,100 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             color: Theme.of(context).shadowColor,
                           ),
-                          child: Column(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.vpn_key_rounded, color: Theme.of(context).primaryColor, size: 40,),
-                                  SizedBox(width: 24,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width/1.8,
-                                    child: Text(
-                                      AppLocalizations.instance
-                                          .translate('setup_save_text1'),
-                                      style: TextStyle(
-                                          color: const Color(0xFF2A7A3A), fontSize: 15),
-                                      textAlign: TextAlign.left,
-                                      maxLines: 5,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Icon(
+                                      Icons.vpn_key_rounded,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 40,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: 24,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                          1.8,
+                                      child: Text(
+                                        AppLocalizations.instance
+                                            .translate('setup_save_text1'),
+                                        style: TextStyle(
+                                            color: const Color(0xFF2A7A3A),
+                                            fontSize: 15),
+                                        textAlign: TextAlign.left,
+                                        maxLines: 5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            GestureDetector(
-                              onDoubleTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                    AppLocalizations.instance.translate('snack_copied'),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  duration: Duration(seconds: 1),
-                                ));
-                                Clipboard.setData(
-                                  ClipboardData(text: _seed),
-                                );
-                                setState(() {
-                                  _sharedYet = true;
-                                });
-                              },
-                              child: Container(
-                                height: 250,
-                                padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                                  color: Theme.of(context).backgroundColor,
-                                  border: Border.all(
+                              GestureDetector(
+                                onDoubleTap: () {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      AppLocalizations.instance
+                                          .translate('snack_copied'),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    duration: Duration(seconds: 1),
+                                  ));
+                                  Clipboard.setData(
+                                    ClipboardData(text: _seed),
+                                  );
+                                  setState(() {
+                                    _sharedYet = true;
+                                  });
+                                },
+                                child: Container(
+                                  height: 250,
+                                  padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    color: Theme.of(context).backgroundColor,
+                                    border: Border.all(
                                       width: 2,
                                       color: _sharedYet
                                           ? Theme.of(context).shadowColor
                                           : Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: getColumn(_seed,0),),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: getColumn(_seed,1),),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: getColumn(_seed,2),),
-                                  ],),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: getColumn(_seed, 0),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: getColumn(_seed, 1),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: getColumn(_seed, 2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                     Column(
                       children: [
-
                         Slider(
                           activeColor: Colors.white,
                           inactiveColor: Theme.of(context).shadowColor,
@@ -245,12 +267,11 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
                           },
                         ),
                         Text(
-                          AppLocalizations.instance.translate('setup_seed_slider_label'),
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 14),
+                          AppLocalizations.instance
+                              .translate('setup_seed_slider_label'),
+                          style: TextStyle(color: Colors.white, fontSize: 14),
                           textAlign: TextAlign.center,
                         ),
-
                       ],
                     ),
                   ],
@@ -260,41 +281,40 @@ class _SetupSaveScreenState extends State<SetupSaveScreen> {
             if (_sharedYet)
               PeerButtonSetup(
                 action: () async => await handleContinue(),
-                text:
-                AppLocalizations.instance.translate('continue'),
+                text: AppLocalizations.instance.translate('continue'),
               )
             else
               PeerButtonSetup(
                 action: () async => await shareSeed(_seed),
-                text: AppLocalizations.instance
-                    .translate('export_now'),
+                text: AppLocalizations.instance.translate('export_now'),
               ),
-            SizedBox(height: 32,),
+            SizedBox(
+              height: 32,
+            ),
           ],
         ),
       ),
     );
-
   }
 
-  List<Widget> getColumn(String seed, int pos){
+  List<Widget> getColumn(String seed, int pos) {
     var list = <Widget>[];
     var se = seed.split(' ');
-    var colSize = se.length~/3;
-    print(se.length);
+    var colSize = se.length ~/ 3;
 
-    for(var i=0; i<colSize; i++){
-      list.add(
-          Padding(
+    for (var i = 0; i < colSize; i++) {
+      list.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: i * 3 + pos + 1 < 10
             ? Text(
                 '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
+                style: TextStyle(
+                    color: Theme.of(context).dividerColor, fontSize: 16),
               )
             : Text(
                 (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 16),
+                style: TextStyle(
+                    color: Theme.of(context).dividerColor, fontSize: 16),
               ),
       ));
     }
