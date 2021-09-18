@@ -165,7 +165,7 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void cleanUpOnDone() {
-    _pingTimer!.cancel();
+    _pingTimer?.cancel();
     _pingTimer = null;
     connectionState = ElectrumConnectionState.waiting; //setter!
     _connection = null;

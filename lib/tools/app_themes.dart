@@ -7,7 +7,7 @@ class MyTheme {
         primary: LightColors.green,
         primaryVariant: LightColors.darkGreen,
         secondary: LightColors.grey,
-        secondaryVariant: LightColors.grey,
+        secondaryVariant: LightColors.lightGrey,
         surface: LightColors.white,
         background: LightColors.grey,
         error: LightColors.red,
@@ -180,6 +180,7 @@ abstract class LightColors {
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get grey => const Color(0xFF717C89);
+  static Color get lightGrey => const Color(0x55717C89);
   static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFF8333C);
   static Color get yellow => const Color(0xFFFFBF46);
