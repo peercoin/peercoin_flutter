@@ -90,6 +90,7 @@ class MyTheme {
       focusColor: DarkColors.black,
       hintColor: DarkColors.white,
       primaryColor: DarkColors.black,
+      iconTheme: IconThemeData(color: Colors.white),
       scaffoldBackgroundColor: DarkColors.green,
       shadowColor: DarkColors.darkBlue,
       unselectedWidgetColor: DarkColors.grey,
