@@ -90,9 +90,14 @@ class MyTheme {
       focusColor: DarkColors.black,
       hintColor: DarkColors.white,
       primaryColor: DarkColors.black,
-      iconTheme: IconThemeData(color: Colors.white),
+      iconTheme: IconThemeData(color: DarkColors.white),
       scaffoldBackgroundColor: DarkColors.green,
       shadowColor: DarkColors.darkBlue,
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: DarkColors.darkBlue,
+        contentTextStyle: TextStyle(color: DarkColors.white),
+      ),
+      sliderTheme: SliderThemeData(valueIndicatorColor: DarkColors.darkBlue),
       unselectedWidgetColor: DarkColors.white,
       textTheme: TextTheme(
         headline6: TextStyle(color: DarkColors.white),

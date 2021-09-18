@@ -182,7 +182,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     return null;
                                   },
                                   style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onSecondary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryVariant,
                                       fontSize: 16),
                                   decoration: InputDecoration(
                                     hintText:
@@ -206,7 +208,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                             .unfocus(); //hide keyboard
                                       },
                                       icon: Icon(Icons.paste,
-                                          color: Theme.of(context).colorScheme.primaryVariant),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primaryVariant),
                                     ),
                                     border: border,
                                     focusedBorder: border,
@@ -225,7 +229,6 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
