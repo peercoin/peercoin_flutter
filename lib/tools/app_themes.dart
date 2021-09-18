@@ -93,7 +93,7 @@ class MyTheme {
       iconTheme: IconThemeData(color: Colors.white),
       scaffoldBackgroundColor: DarkColors.green,
       shadowColor: DarkColors.darkBlue,
-      unselectedWidgetColor: DarkColors.grey,
+      unselectedWidgetColor: DarkColors.white,
       textTheme: TextTheme(
         headline6: TextStyle(color: DarkColors.white),
         headline5: TextStyle(color: DarkColors.white),
