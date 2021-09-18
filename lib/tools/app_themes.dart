@@ -5,25 +5,25 @@ class MyTheme {
     ThemeMode.light: ThemeData(
       colorScheme: ColorScheme(
         primary: LightColors.green,
-        primaryVariant: LightColors.green,
+        primaryVariant: LightColors.darkGreen,
         secondary: LightColors.grey,
         secondaryVariant: LightColors.grey,
         surface: LightColors.white,
         background: LightColors.grey,
         error: LightColors.red,
         onPrimary: LightColors.white,
-        onSecondary: LightColors.green,
+        onSecondary: LightColors.blackGreen,
         onSurface: LightColors.green,
         onBackground: LightColors.green,
         onError: LightColors.red,
         brightness: Brightness.light,
       ),
       backgroundColor: LightColors.white,
-      bottomAppBarColor:
-          const Color(0xFF2A7A3A), //Incoming transaction: amount color
+      bottomAppBarColor: const Color(0x003cb054),
       cardColor: LightColors.white,
       dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
+      dividerColor: LightColors.darkGreen,
       errorColor: LightColors.red,
       focusColor: LightColors.green,
       hintColor: LightColors.grey,
@@ -31,25 +31,24 @@ class MyTheme {
       primarySwatch: materialColor(LightColors.grey),
       shadowColor: LightColors.lightGreen,
       unselectedWidgetColor: LightColors.grey,
-
       textTheme: TextTheme(
         button: TextStyle(
             letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
       ),
-
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           //to set border radius to button
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       cardTheme: CardTheme(
         elevation: 2,
+        shadowColor: LightColors.darkGreen,
         color: LightColors.white,
-        margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         shape: RoundedRectangleBorder(
           //to set border radius to button
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -68,33 +67,33 @@ class MyTheme {
     ThemeMode.dark: ThemeData.dark().copyWith(
       colorScheme: ColorScheme(
         primary: DarkColors.green,
-        primaryVariant: DarkColors.green,
+        primaryVariant: DarkColors.white,
         secondary: DarkColors.white,
-        secondaryVariant: DarkColors.white,
+        secondaryVariant: DarkColors.grey,
         surface: DarkColors.black,
         background: DarkColors.green,
         error: DarkColors.red,
         onPrimary: DarkColors.green,
         onSecondary: DarkColors.green,
-        onSurface: DarkColors.white,
+        onSurface: DarkColors.green,
         onBackground: DarkColors.green,
         onError: DarkColors.red,
         brightness: Brightness.dark,
       ),
       backgroundColor: DarkColors.green,
-      bottomAppBarColor:
-          DarkColors.darkBlue, //Incoming transaction: amount color
+      bottomAppBarColor: const Color(0x000D1821),
       cardColor: DarkColors.green,
       dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
+      dividerColor: DarkColors.lightGreen,
       errorColor: DarkColors.red,
       focusColor: DarkColors.black,
       hintColor: DarkColors.white,
       primaryColor: DarkColors.black,
+      iconTheme: IconThemeData(color: Colors.white),
       scaffoldBackgroundColor: DarkColors.green,
       shadowColor: DarkColors.darkBlue,
-      unselectedWidgetColor: DarkColors.grey,
-
+      unselectedWidgetColor: DarkColors.white,
       textTheme: TextTheme(
         headline6: TextStyle(color: DarkColors.white),
         headline5: TextStyle(color: DarkColors.white),
@@ -109,7 +108,6 @@ class MyTheme {
         button: TextStyle(
             letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
       ),
-
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           //to set border radius to button
@@ -136,7 +134,7 @@ class MyTheme {
         primary: DarkColors.black,
       )),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(color: DarkColors.grey),
+        labelStyle: TextStyle(color: DarkColors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: DarkColors.white),
         ),
@@ -171,20 +169,24 @@ class MyTheme {
 }
 
 abstract class LightColors {
+  static Color get black => const Color(0xFF000000);
+  static Color get blackGreen => const Color(0xFF31493C);
+  static Color get darkGreen => const Color(0xFF2A7A3A);
   static Color get green => const Color(0xff3cb054);
   static Color get lightGreen => const Color(0xffB3E5BD);
-  static Color get black => const Color(0xFF000000);
   static Color get grey => const Color(0xFF717C89);
-  static Color get white => const Color(0xFFFDFFFC);
+  static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFF8333C);
   static Color get yellow => const Color(0xFFFFBF46);
 }
 
 abstract class DarkColors {
-  static Color get green => const Color(0xFF2D936C);
   static Color get black => const Color(0xFF0D1821);
+  static Color get darkGreen => const Color(0xFF2A7A3A);
+  static Color get green => const Color(0xFF2D936C);
+  static Color get lightGreen => const Color(0xffB3E5BD);
   static Color get darkBlue => const Color(0xFF234058);
-  static Color get grey => const Color(0xFFE9EAED);
-  static Color get white => const Color(0xFFFDFFFC);
+  static Color get grey => const Color(0xFF717C89);
+  static Color get white => const Color(0xFFFAFAFA);
   static Color get red => const Color(0xFFA8201A);
 }

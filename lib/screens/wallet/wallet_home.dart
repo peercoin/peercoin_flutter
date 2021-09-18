@@ -328,7 +328,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 PopupMenuItem(
                   value: 'import_wallet',
                   child: ListTile(
-                    leading: Icon(Icons.arrow_circle_down),
+                    leading: Icon(
+                      Icons.arrow_circle_down,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_paperwallet'),
@@ -338,7 +341,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 PopupMenuItem(
                   value: 'server_settings',
                   child: ListTile(
-                    leading: Icon(Icons.sync),
+                    leading: Icon(
+                      Icons.sync,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_servers'),
@@ -348,7 +354,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 PopupMenuItem(
                   value: 'rescan',
                   child: ListTile(
-                    leading: Icon(Icons.sync_problem),
+                    leading: Icon(
+                      Icons.sync_problem,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_rescan'),

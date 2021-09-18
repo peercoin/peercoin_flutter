@@ -173,6 +173,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     onTap: () => saveLang(lang),
                     child: ListTile(
                       title: Text(AppLocalizations.availableLocales[lang]!),
+                      key: Key(lang),
                       leading: Radio(
                         value: lang,
                         groupValue: _lang,
@@ -251,7 +252,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             PeerButton(
                               action: () => Share.share(_seedPhrase),
                               text: AppLocalizations.instance
-                                  .translate('app_settings_shareSeed'),
+                                  .translate('app_settings_shareseed'),
                             )
                           ])
                   ]),

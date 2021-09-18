@@ -3,11 +3,11 @@ import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/screens/setup/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/setup_progress.dart';
 import 'package:provider/provider.dart';
 
 class SetupPinCodeScreen extends StatefulWidget {
@@ -42,81 +42,120 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var padding = MediaQuery.of(context).padding;
+    var correctHeight = height - padding.top - padding.bottom;
+
     return Scaffold(
-      appBar: SetupProgressIndicator(3),
-      body: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        color: Theme.of(context).primaryColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icon/ppc-icon-white-256.png',
-              width: 50,
-            ),
-            Text(
-              AppLocalizations.instance.translate('setup_pin_title'),
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            Text(AppLocalizations.instance.translate('setup_pin'),
-                style: TextStyle(color: Colors.white)),
-            SwitchListTile(
-                title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_biometrics'),
-                    style: TextStyle(color: Colors.white)),
-                value: _biometricsAllowed,
-                activeColor: Colors.white,
-                inactiveThumbColor: Colors.grey,
-                onChanged: (newState) {
-                  if (_biometricsAvailable == false) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        AppLocalizations.instance
-                            .translate('setup_pin_no_biometrics'),
-                        textAlign: TextAlign.center,
-                      ),
-                      duration: Duration(seconds: 5),
-                    ));
-                  } else {
-                    setState(() {
-                      _biometricsAllowed = newState;
-                    });
-                  }
-                }),
-            PeerButtonBorder(
-              action: () async {
-                await screenLock(
-                  title: HeadingTitle(
-                      text: AppLocalizations.instance
-                          .translate('authenticate_title')),
-                  confirmTitle: HeadingTitle(
-                      text: AppLocalizations.instance
-                          .translate('authenticate_confirm_title')),
-                  context: context,
-                  correctString: '',
-                  digits: 6,
-                  confirmation: true,
-                  didConfirmed: (matchedText) async {
-                    await Provider.of<EncryptedBox>(context, listen: false)
-                        .setPassCode(matchedText);
+      appBar: AppBar(
+        toolbarHeight: 0,
+        automaticallyImplyLeading: false,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: correctHeight,
+          color: Theme.of(context).primaryColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              PeerProgress(3),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 15,
+                    ),
+                    Image.asset(
+                      'assets/img/setup-protection.png',
+                      height: MediaQuery.of(context).size.height / 5,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        PeerButtonSetupBack(),
+                        Text(
+                          AppLocalizations.instance
+                              .translate('app_settings_auth_header'),
+                          style: TextStyle(color: Colors.white, fontSize: 28),
+                        ),
+                        SizedBox(
+                          width: 40,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: SwitchListTile(
+                          title: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_biometrics'),
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                          value: _biometricsAllowed,
+                          activeColor: Theme.of(context).backgroundColor,
+                          inactiveThumbColor: Colors.grey,
+                          onChanged: (newState) {
+                            if (_biometricsAvailable == false) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_pin_no_biometrics'),
+                                  textAlign: TextAlign.center,
+                                ),
+                                duration: Duration(seconds: 5),
+                              ));
+                            } else {
+                              setState(() {
+                                _biometricsAllowed = newState;
+                              });
+                            }
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+              PeerButtonSetup(
+                action: () async {
+                  await screenLock(
+                    title: HeadingTitle(
+                        text: AppLocalizations.instance
+                            .translate('authenticate_title')),
+                    confirmTitle: HeadingTitle(
+                        text: AppLocalizations.instance
+                            .translate('authenticate_confirm_title')),
+                    context: context,
+                    correctString: '',
+                    digits: 6,
+                    confirmation: true,
+                    didConfirmed: (matchedText) async {
+                      await Provider.of<EncryptedBox>(context, listen: false)
+                          .setPassCode(matchedText);
 
-                    var settings =
-                        Provider.of<AppSettings>(context, listen: false);
-                    await settings.init(true);
-                    await settings.createInitialSettings(_biometricsAllowed,
-                        AppLocalizations.instance.locale.toString());
-
-                    await Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.SetupDataFeeds, (_) => false);
-                  },
-                );
-              },
-              text: AppLocalizations.instance.translate('setup_create_pin'),
-            )
-          ],
+                      var settings =
+                          Provider.of<AppSettings>(context, listen: false);
+                      await settings.init(true);
+                      await settings.createInitialSettings(_biometricsAllowed,
+                          AppLocalizations.instance.locale.toString());
+                      Navigator.pop(context);
+                      await Navigator.of(context)
+                          .pushNamed(Routes.SetupDataFeeds);
+                    },
+                  );
+                },
+                text: AppLocalizations.instance.translate('setup_create_pin'),
+              ),
+              SizedBox(
+                height: 32,
+              ),
+            ],
+          ),
         ),
       ),
     );

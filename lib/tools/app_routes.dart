@@ -10,7 +10,7 @@ import 'package:peercoin/screens/server_settings.dart';
 import 'package:peercoin/screens/setup/setup_import_seed.dart';
 import 'package:peercoin/screens/setup/setup_language.dart';
 import 'package:peercoin/screens/setup/setup_pin_code.dart';
-import 'package:peercoin/screens/setup/setup_save_seed.dart';
+import 'package:peercoin/screens/setup/setup_create_wallet.dart';
 import 'package:peercoin/screens/wallet/transaction_details.dart';
 import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/screens/wallet/wallet_import_scan.dart';
@@ -22,7 +22,7 @@ class Routes {
   static const String AppSettings = '/app-settings';
   static const String QRScan = '/qr-scan';
   static const String SetUpPin = '/setup-pin';
-  static const String SetupScreen = '/setup-save-seed';
+  static const String SetupCreateWallet = '/setup-create-wallet';
   static const String SetupImport = '/setup-import-seed';
   static const String SetupLanguage = '/setup-language';
   static const String SetupDataFeeds = '/setup-feeds';
@@ -37,7 +37,7 @@ class Routes {
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      Routes.SetupScreen: (context) => SetupSaveScreen(),
+      Routes.SetupCreateWallet: (context) => SetupCreateWalletScreen(),
       Routes.SetUpPin: (context) => SetupPinCodeScreen(),
       Routes.SetupLanguage: (context) => SetupLanguageScreen(),
       Routes.WalletList: (context) => WalletListScreen(),
