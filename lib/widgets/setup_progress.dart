@@ -19,7 +19,7 @@ class SetupProgressIndicator extends StatelessWidget with PreferredSizeWidget {
       child: StepProgressIndicator(
         totalSteps: 4,
         currentStep: step,
-        selectedColor: Colors.white,
+        selectedColor: Theme.of(context).colorScheme.secondary,
         unselectedColor: Theme.of(context).colorScheme.secondaryVariant,
         roundedEdges: Radius.circular(90),
         size: 4,
