@@ -264,14 +264,10 @@ class _SendTabState extends State<SendTab> {
             Container(
               height: 30,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).bottomAppBarColor,
-                      Theme.of(context).primaryColor,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter
-                ),
+                gradient: LinearGradient(colors: [
+                  Theme.of(context).bottomAppBarColor,
+                  Theme.of(context).primaryColor,
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               ),
             ),
             PeerContainer(
@@ -292,7 +288,7 @@ class _SendTabState extends State<SendTab> {
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.shuffle,
-                            color: Theme.of(context).unselectedWidgetColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                           labelText:
                               AppLocalizations.instance.translate('tx_address'),
@@ -347,7 +343,7 @@ class _SendTabState extends State<SendTab> {
                       decoration: InputDecoration(
                         icon: Icon(
                           Icons.bookmark,
-                          color: Theme.of(context).unselectedWidgetColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         labelText:
                             AppLocalizations.instance.translate('send_label'),
@@ -368,7 +364,7 @@ class _SendTabState extends State<SendTab> {
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.money,
-                            color: Theme.of(context).unselectedWidgetColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance
                               .translate('send_amount'),

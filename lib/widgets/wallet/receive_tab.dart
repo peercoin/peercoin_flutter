@@ -139,14 +139,10 @@ class _ReceiveTabState extends State<ReceiveTab> {
             Container(
               height: 30,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).bottomAppBarColor,
-                        Theme.of(context).primaryColor,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter
-                  ),
+                gradient: LinearGradient(colors: [
+                  Theme.of(context).bottomAppBarColor,
+                  Theme.of(context).primaryColor,
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               ),
             ),
             PeerContainer(
@@ -161,7 +157,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(
-                          color: const Color(0x55717C89),
+                          color: Theme.of(context).colorScheme.secondaryVariant,
                           borderRadius: BorderRadius.all(Radius.circular(4))),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -170,7 +166,6 @@ class _ReceiveTabState extends State<ReceiveTab> {
                             clipBoardData: widget._unusedAddress,
                             child: SelectableText(
                               widget._unusedAddress,
-                              style: TextStyle(color: Colors.black),
                             ),
                           ),
                         ),
@@ -188,7 +183,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                       decoration: InputDecoration(
                         icon: Icon(
                           Icons.bookmark,
-                          color: Theme.of(context).unselectedWidgetColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         labelText:
                             AppLocalizations.instance.translate('send_label'),
@@ -212,7 +207,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.money,
-                            color: Theme.of(context).unselectedWidgetColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance
                               .translate('receive_requested_amount'),

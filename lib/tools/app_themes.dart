@@ -31,12 +31,10 @@ class MyTheme {
       primarySwatch: materialColor(LightColors.grey),
       shadowColor: LightColors.lightGreen,
       unselectedWidgetColor: LightColors.grey,
-
       textTheme: TextTheme(
         button: TextStyle(
             letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
       ),
-
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           //to set border radius to button
@@ -95,7 +93,6 @@ class MyTheme {
       scaffoldBackgroundColor: DarkColors.green,
       shadowColor: DarkColors.darkBlue,
       unselectedWidgetColor: DarkColors.grey,
-
       textTheme: TextTheme(
         headline6: TextStyle(color: DarkColors.white),
         headline5: TextStyle(color: DarkColors.white),
@@ -110,7 +107,6 @@ class MyTheme {
         button: TextStyle(
             letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
       ),
-
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           //to set border radius to button
@@ -137,7 +133,7 @@ class MyTheme {
         primary: DarkColors.black,
       )),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(color: DarkColors.grey),
+        labelStyle: TextStyle(color: DarkColors.white),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: DarkColors.white),
         ),
