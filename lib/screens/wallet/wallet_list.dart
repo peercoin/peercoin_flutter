@@ -30,26 +30,27 @@ class _WalletListScreenState extends State<WalletListScreen>
   bool _isLoading = false;
   bool _initial = true;
   late ActiveWallets _activeWallets;
-  late Animation<double> animation;
-  late AnimationController controller;
+  late Animation<double> _animation;
+  late AnimationController _controller;
   late Timer _priceTimer;
+  late AppSettings _appSettings;
 
   @override
   void initState() {
     //init animation controller
-    controller = AnimationController(
+    _controller = AnimationController(
       duration: Duration(milliseconds: 1500),
       vsync: this,
     );
-    animation = Tween(begin: 88.0, end: 92.0).animate(controller);
-    controller.repeat(reverse: true);
+    _animation = Tween(begin: 88.0, end: 92.0).animate(_controller);
+    _controller.repeat(reverse: true);
     super.initState();
   }
 
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
-    var _appSettings = Provider.of<AppSettings>(context, listen: false);
+    _appSettings = Provider.of<AppSettings>(context, listen: false);
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
@@ -120,8 +121,10 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   void dispose() {
-    _priceTimer.cancel();
-    controller.dispose();
+    if (_appSettings.selectedCurrency.isNotEmpty) {
+      _priceTimer.cancel();
+    }
+    _controller.dispose();
     super.dispose();
   }
 
@@ -166,15 +169,15 @@ class _WalletListScreenState extends State<WalletListScreen>
               child: Column(
                 children: [
                   AnimatedBuilder(
-                    animation: animation,
+                    animation: _animation,
                     builder: (ctx, child) {
                       return ConstrainedBox(
                         constraints: BoxConstraints(
                           minHeight: 92,
                         ),
                         child: Container(
-                          height: animation.value,
-                          width: animation.value,
+                          height: _animation.value,
+                          width: _animation.value,
                           decoration: BoxDecoration(
                             color: Theme.of(context).shadowColor,
                             borderRadius:
