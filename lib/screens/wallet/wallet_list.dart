@@ -71,11 +71,16 @@ class _WalletListScreenState extends State<WalletListScreen>
         await Navigator.of(context).pushNamed(Routes.ChangeLog);
         _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
       }
-
+      //check if we just finished a scan
+      var fromScan = false;
+      if (ModalRoute.of(context)?.settings.arguments != null) {
+        var map = ModalRoute.of(context)!.settings.arguments as Map;
+        fromScan = map['fromScan'] ?? false;
+      }
       if (widget.fromColdStart == true &&
           _appSettings.authenticationOptions!['walletList']!) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
-      } else {
+      } else if (fromScan == false) {
         //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
         if (values.length == 1) {

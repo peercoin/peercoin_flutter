@@ -42,7 +42,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
           _timer.cancel();
-          await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+          await Navigator.of(context).pushReplacementNamed(Routes.WalletList,
+              arguments: {'fromScan': true});
         }
       });
     } else if (_connectionProvider != null) {
