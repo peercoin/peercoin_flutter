@@ -165,7 +165,8 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                           Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                               color: Theme.of(context).shadowColor,
                             ),
                             child: Column(
@@ -185,8 +186,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                         width: 24,
                                       ),
                                       Container(
-                                        width: MediaQuery.of(context).size.width /
-                                            1.8,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                1.8,
                                         child: Text(
                                           AppLocalizations.instance
                                               .translate('setup_save_text1'),
@@ -222,7 +224,8 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                   },
                                   child: Container(
                                     height: 250,
-                                    padding: EdgeInsets.fromLTRB(16, 32, 16, 24),
+                                    padding:
+                                        EdgeInsets.fromLTRB(16, 32, 16, 24),
                                     decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(20)),
@@ -325,12 +328,14 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
             ? Text(
                 '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondary, fontSize: 16),
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                    fontSize: 16),
               )
             : Text(
                 (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondary, fontSize: 16),
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                    fontSize: 16),
               ),
       ));
     }

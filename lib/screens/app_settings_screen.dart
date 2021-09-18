@@ -173,6 +173,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     onTap: () => saveLang(lang),
                     child: ListTile(
                       title: Text(AppLocalizations.availableLocales[lang]!),
+                      key: Key(lang),
                       leading: Radio(
                         value: lang,
                         groupValue: _lang,
