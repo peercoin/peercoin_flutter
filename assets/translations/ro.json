@@ -211,5 +211,11 @@
     "currency_USD": "Dolar american",
     "not_again": "Nu mai arăta din nou",
     "wallet_value_alert_title": "Valoare ridicată a monedelor",
-    "wallet_value_alert_content": "Stocarea acestei valori de monede în portofel mobil este riscantă.\nLuați în considerare mutarea monedelor în depozit rece."
+    "wallet_value_alert_content": "Stocarea acestei valori de monede în portofel mobil este riscantă.\nLuați în considerare mutarea monedelor în depozit rece.",
+    "changelog_headline": "Ce mai e nou?",
+    "setup_finish": "Finalizați configurarea",
+    "setup_price_feed_description": "Puteți activa feed-ul nostru opțional de prețuri externe aici.\nAcest lucru va permite ca soldul portofelului dvs. să fie afișat la valoarea de schimb în timp real.",
+    "changelog_appbar": "Log-ul schimbărilor",
+    "setup_price_feed_allow": "Permiteți feed-ul API cu preț extern",
+    "setup_price_feed_title": "API-uri externe"
 }
