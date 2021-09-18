@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -33,9 +32,6 @@ class _SetupScreenState extends State<SetupScreen> {
     var height = MediaQuery.of(context).size.height;
     var padding = MediaQuery.of(context).padding;
     var correctHeight = height - padding.top - padding.bottom;
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]); //TODO fix layout to allowlandscape
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +40,9 @@ class _SetupScreenState extends State<SetupScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait ? correctHeight : MediaQuery.of(context).size.height * 1.5,
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? correctHeight
+              : MediaQuery.of(context).size.height * 1.5,
           color: Theme.of(context).primaryColor,
           child: Stack(
             fit: StackFit.expand,
@@ -71,22 +69,22 @@ class _SetupScreenState extends State<SetupScreen> {
                               Text(
                                 AppLocalizations.instance
                                     .translate('setup_title'),
-                                style:
-                                    TextStyle(color: Colors.white, fontSize: 46),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 46),
                               ),
                               Text(
                                 AppLocalizations.instance
                                     .translate('setup_subtitle'),
-                                style:
-                                    TextStyle(color: Colors.white, fontSize: 24),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 24),
                               ),
                             ],
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height / 15,
                           ),
-                          PeerExplanationText(
-                              AppLocalizations.instance.translate('setup_text1')),
+                          PeerExplanationText(AppLocalizations.instance
+                              .translate('setup_text1')),
                           PeerButtonSetup(
                             text: AppLocalizations.instance.translate(
                               'setup_import_title',
@@ -99,8 +97,8 @@ class _SetupScreenState extends State<SetupScreen> {
                             style: TextStyle(color: Colors.white, fontSize: 20),
                             textAlign: TextAlign.center,
                           ),
-                          PeerExplanationText(
-                              AppLocalizations.instance.translate('setup_text2')),
+                          PeerExplanationText(AppLocalizations.instance
+                              .translate('setup_text2')),
                           PeerButtonSetupLoading(
                             text: AppLocalizations.instance
                                 .translate('setup_save_title'),
