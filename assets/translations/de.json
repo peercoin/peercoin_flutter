@@ -121,7 +121,7 @@
     "setup_create_pin": "PIN erstellen",
     "setup_files_for_wallet": "Erstelle alle notwenigen Dateien um mit deiner Wallet loszulegen.\nBitte wähle eine Option.",
     "setup_import_title": "Seed importieren",
-    "setup_import_note": "Bitte gib den Wallet Seed ein, den du importieren möchtest.\nEs handelt sich nicht um einen geheimen Schlüssel.",
+    "setup_import_note": "Bitte gib den Seed ein, den du importieren möchtest. Es handelt sich nicht um einen geheimen Schlüssel.",
     "setup_pin": "Bitte setze eine PIN bevor du fortfährst.",
     "setup_pin_title": "Sicherheit",
     "setup_securebox_fail": "Es tut uns sehr leid.\n Dein Gerät unterstützt keine ausreichend sichere Methode um Schlüssel zu speichern.",
@@ -216,6 +216,17 @@
     "changelog_headline": "Was ist neu?",
     "setup_finish": "Einrichtung abschließen",
     "setup_price_feed_allow": "Externe Preis-Feed-API erlauben",
-    "setup_price_feed_description": "Du kannst hier unseren optionalen Preis-Feed aktivieren.\nDies ermöglicht deinen Kontostand in Echtzeit in anderen Währungen anzuzeigen.",
-    "setup_price_feed_title": "Externe APIs"
+    "setup_price_feed_description": "Du kannst hier unseren optionalen Preis-Feed aktivieren. Dies ermöglicht deinen Kontostand in Echtzeit in anderen Währungen anzuzeigen.",
+    "setup_price_feed_title": "Externe APIs",
+    "store_short": "Deine mobile Wallet für Peercoin und Peercoin Testnet.",
+    "store_description": "Sende und empfange Peercoin auf deinem Telefon.\n\nBeschütze deinen Wallet Seed.\nDiese App kommt frei von jedweder Garantie.\nBenutzung auf eigene Gefahr.\n\nEigenschaften:\n-Basiert auf dem Elektrum-Protokoll\n-Peercoin senden und empfangen\n-Direkt nach der Installation bereit für Transaktionen (kein warten)\n-Peercoin und Peercoin Testnet Wallets\n-Adressbuch\n-Import von Papier-Wallets \n-Server-Verwaltung\n-Mehrsprachig\n\nBekannte Einschränkungen können im Github Repository eingesehen werden.",
+    "about_illustrations_button": "designs.AI",
+    "about_illustrations": "Einrichtungsillustrationen bereitgestellt von",
+    "import_button": "Importieren",
+    "setup_title": "Willkommen",
+    "setup_subtitle": "bei Peercoin Wallet",
+    "setup_text1": "Wenn du bereits eine Wallet erstellt und deinen Seed zur Hand hast, wähle",
+    "setup_text2": "erstelle deine neue Peercoin Wallet",
+    "setup_save_title": "Wallet erstellen",
+    "setup_save_text1": "Die nachfolgende Wortliste nennt sich Seed. Es ist ein komplexes Passwort dass volle Kontrolle über deine Wallet und Münzen erlaubt."
 }
