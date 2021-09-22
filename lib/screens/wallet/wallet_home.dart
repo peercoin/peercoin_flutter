@@ -72,7 +72,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _wallet.name,
         requestedFromWalletHome: true,
       );
-      PriceTicker.checkUpdate(_appSettings);
+      if (_appSettings.selectedCurrency.isNotEmpty) {
+        PriceTicker.checkUpdate(_appSettings);
+      }
     }
   }
 
