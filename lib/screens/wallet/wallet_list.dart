@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:background_fetch/background_fetch.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -11,6 +13,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/tools/notification.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/wallet/new_wallet.dart';
@@ -37,6 +40,8 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   void initState() {
+    //init background tasks
+    initPlatformState();
     //init animation controller
     _controller = AnimationController(
       duration: Duration(milliseconds: 1500),
@@ -45,6 +50,67 @@ class _WalletListScreenState extends State<WalletListScreen>
     _animation = Tween(begin: 88.0, end: 92.0).animate(_controller);
     _controller.repeat(reverse: true);
     super.initState();
+  }
+
+  static Future<void> backgroundTask() async {
+    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'New transaction received',
+      'test notification',
+      LocalNotificationSettings.platformChannelSpecifics,
+      payload: 'test',
+    );
+  }
+
+  static void backgroundFetchHeadlessTask(HeadlessTask task) async {
+    var taskId = task.taskId;
+    var isTimeout = task.timeout;
+    if (isTimeout) {
+      print('[BackgroundFetch] Headless task timed-out: $taskId');
+      BackgroundFetch.finish(taskId);
+      return;
+    }
+    print('[BackgroundFetch] Headless event received.');
+    await backgroundTask();
+    BackgroundFetch.finish(taskId);
+  }
+
+  Future<void> initPlatformState() async {
+    // Configure BackgroundFetch.
+    var status = await BackgroundFetch.configure(
+        BackgroundFetchConfig(
+          minimumFetchInterval: 15,
+          startOnBoot: true,
+          stopOnTerminate: false,
+          enableHeadless: Platform.isAndroid ? true : false,
+          requiresBatteryNotLow: false,
+          requiresCharging: false,
+          requiresStorageNotLow: false,
+          requiresDeviceIdle: false,
+          requiredNetworkType: NetworkType.ANY,
+        ), (String taskId) async {
+      // <-- Event handler
+      // This is the fetch-event callback.
+      print('[BackgroundFetch] Event received $taskId');
+      await backgroundTask();
+
+      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+      // for taking too long in the background.
+      BackgroundFetch.finish(taskId);
+    }, (String taskId) async {
+      // <-- Task timeout handler.
+      // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+      print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
+      BackgroundFetch.finish(taskId);
+    });
+    print('[BackgroundFetch] configure success: $status');
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
   }
 
   @override
@@ -115,7 +181,7 @@ class _WalletListScreenState extends State<WalletListScreen>
           }
         }
       }
-
+      await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
       setState(() {
         _initial = false;
       });

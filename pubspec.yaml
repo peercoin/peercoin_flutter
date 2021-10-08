@@ -46,6 +46,7 @@ dependencies:
   cupertino_icons: ^1.0.3
   collection: ^1.15.0-nullsafety.4
   flutter_markdown: ^0.6.6
+  background_fetch: ^1.0.1
 
 dev_dependencies:
   integration_test:
