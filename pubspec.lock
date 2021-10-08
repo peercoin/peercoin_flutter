@@ -348,7 +348,7 @@ packages:
       name: flutter_native_splash
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.8+4"
+    version: "1.2.4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -475,7 +475,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.8"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -641,7 +641,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.3.0"
   platform:
     dependency: transitive
     description:
@@ -1045,7 +1045,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.1"
+    version: "5.3.0"
   yaml:
     dependency: transitive
     description:
@@ -1054,5 +1054,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.13.0 <3.0.0"
+  dart: ">=2.14.0 <3.0.0"
   flutter: ">=2.2.0"
