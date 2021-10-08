@@ -181,7 +181,9 @@ class _WalletListScreenState extends State<WalletListScreen>
           }
         }
       }
-      await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+      if (Platform.isAndroid) {
+        await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+      }
       setState(() {
         _initial = false;
       });

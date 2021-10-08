@@ -1,5 +1,5 @@
 ### **0.6.5** (2021-10-08)
-* Fix for older Android 10 devices
+* Background notifications can now be enabled in app settings
 ### **0.6.4** (2021-10-08)
 * Fix for older Android 10 devices
 * Fix for price data feed
