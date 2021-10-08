@@ -1,3 +1,5 @@
+### **0.6.5** (2021-10-08)
+* Fix for older Android 10 devices
 ### **0.6.4** (2021-10-08)
 * Fix for older Android 10 devices
 * Fix for price data feed
