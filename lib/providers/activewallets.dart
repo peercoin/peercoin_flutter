@@ -329,8 +329,8 @@ class ActiveWallets with ChangeNotifier {
 
         if (direction == 'in') {
           await flutterLocalNotificationsPlugin.show(
-            0,
-            'New transaction received',
+            0, //TODO will always overwrite previous notification ... mhm
+            'New transaction received', //TODO i18n
             tx['txid'],
             LocalNotificationSettings.platformChannelSpecifics,
             payload: identifier,

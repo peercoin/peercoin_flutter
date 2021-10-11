@@ -4,8 +4,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
+import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/models/server.dart';
+import 'package:peercoin/models/walletaddress.dart';
+import 'package:peercoin/models/wallettransaction.dart';
+import 'package:peercoin/models/walletutxo.dart';
 import 'package:peercoin/tools/notification.dart';
 
 class BackgroundSync {
@@ -23,6 +29,15 @@ class BackgroundSync {
     } else {
       return;
     }
+
+    //init hive - sadly we have to register all of them here
+    await Hive.initFlutter();
+    Hive.registerAdapter(CoinWalletAdapter());
+    Hive.registerAdapter(WalletTransactionAdapter());
+    Hive.registerAdapter(WalletAddressAdapter());
+    Hive.registerAdapter(WalletUtxoAdapter());
+    Hive.registerAdapter(AppOptionsStoreAdapter());
+    Hive.registerAdapter(ServerAdapter());
 
     //open wallet box
     var walletBox = await Hive.openBox<CoinWallet>(
