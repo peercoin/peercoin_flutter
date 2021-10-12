@@ -30,6 +30,12 @@ class AppOptionsStore extends HiveObject {
   @HiveField(6)
   String? _buildIdentifier;
 
+  @HiveField(7)
+  int? _notificationInterval = 0;
+
+  @HiveField(8)
+  List<String>? _notificationActiveWallets = [];
+
   AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
@@ -92,6 +98,24 @@ class AppOptionsStore extends HiveObject {
 
   set buildIdentifier(String newBuild) {
     _buildIdentifier = newBuild;
+    save();
+  }
+
+  int get notificationInterval {
+    return _notificationInterval ?? 0;
+  }
+
+  set notificationInterval(int newInterval) {
+    _notificationInterval = newInterval;
+    save();
+  }
+
+  List<String> get notificationActiveWallets {
+    return _notificationActiveWallets ?? [];
+  }
+
+  set notificationActiveWallets(List<String> newList) {
+    _notificationActiveWallets = newList;
     save();
   }
 }

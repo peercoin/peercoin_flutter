@@ -17,7 +17,8 @@ class LocalNotificationSettings {
 
   static NotificationDetails get platformChannelSpecifics {
     return NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
   }
 }

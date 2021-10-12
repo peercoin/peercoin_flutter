@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
@@ -37,11 +36,10 @@ class _WalletListScreenState extends State<WalletListScreen>
   late AnimationController _controller;
   late Timer _priceTimer;
   late AppSettings _appSettings;
+  int _notificationIntervalCache = 0;
 
   @override
   void initState() {
-    //init background tasks
-    initPlatformState();
     //init animation controller
     _controller = AnimationController(
       duration: Duration(milliseconds: 1500),
@@ -68,7 +66,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   Future<void> initPlatformState() async {
     var status = await BackgroundFetch.configure(
         BackgroundFetchConfig(
-          minimumFetchInterval: 15, //TODO enable in settings
+          minimumFetchInterval: _appSettings.notificationInterval,
           startOnBoot: true,
           stopOnTerminate: false,
           enableHeadless: Platform.isAndroid ? true : false,
@@ -89,10 +87,23 @@ class _WalletListScreenState extends State<WalletListScreen>
     if (!mounted) return;
   }
 
+  Future<void> activeBackgroundSync([bool wasDisabled = false]) async {
+    await initPlatformState();
+    if (Platform.isAndroid) {
+      await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+    }
+    if (wasDisabled) {
+      await BackgroundFetch.start();
+    }
+    setState(() {
+      _notificationIntervalCache = _appSettings.notificationInterval;
+    });
+  }
+
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
-    _appSettings = Provider.of<AppSettings>(context, listen: false);
+    _appSettings = Provider.of<AppSettings>(context);
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
@@ -157,12 +168,22 @@ class _WalletListScreenState extends State<WalletListScreen>
           }
         }
       }
-      if (Platform.isAndroid) {
-        await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+      //init background tasks
+      if (_appSettings.notificationInterval > 0) {
+        await activeBackgroundSync();
       }
+
       setState(() {
         _initial = false;
       });
+    }
+
+    //enable / disable background taks if changed in settings
+    if (_appSettings.notificationInterval != _notificationIntervalCache &&
+        _appSettings.notificationInterval > 0) {
+      await activeBackgroundSync(true);
+    } else if (_appSettings.notificationInterval == 0) {
+      _notificationIntervalCache = 0;
     }
 
     super.didChangeDependencies();

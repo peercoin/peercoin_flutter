@@ -76,7 +76,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
       }
-      await resetNotifications(); //TODO check here if background sync is enabled for lettercode
+      if (_appSettings.notificationActiveWallets.contains(_wallet.letterCode)) {
+        await resetNotifications();
+      }
     }
   }
 
@@ -106,7 +108,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
           triggerHighValueAlert();
         }
       }
-      await resetNotifications(); //TODO check here if background sync is enabled for lettercode
+      if (_appSettings.notificationActiveWallets.contains(_wallet.letterCode)) {
+        await resetNotifications();
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
