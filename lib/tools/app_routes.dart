@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/app_settings_notifications.dart';
 import 'package:peercoin/screens/app_settings_screen.dart';
 import 'package:peercoin/screens/auth_jail.dart';
 import 'package:peercoin/screens/changelog.dart';
@@ -20,6 +21,7 @@ class Routes {
   // Route name constants
   static const String WalletList = '/wallet-list';
   static const String AppSettings = '/app-settings';
+  static const String AppSettingsNotifications = '/app-settings-notifications';
   static const String QRScan = '/qr-scan';
   static const String SetUpPin = '/setup-pin';
   static const String SetupCreateWallet = '/setup-create-wallet';
@@ -52,7 +54,9 @@ class Routes {
       Routes.ServerSettings: (context) => ServerSettingsScreen(),
       Routes.ServerAdd: (context) => ServerAddScreen(),
       Routes.SetupDataFeeds: (context) => SetupDataFeedsScreen(),
-      Routes.ChangeLog: (context) => ChangeLogScreen()
+      Routes.ChangeLog: (context) => ChangeLogScreen(),
+      Routes.AppSettingsNotifications: (context) =>
+          AppSettingsNotificationsScreen()
     };
   }
 }

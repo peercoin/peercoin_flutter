@@ -56,11 +56,11 @@ class _WalletListScreenState extends State<WalletListScreen>
     var taskId = task.taskId;
     var isTimeout = task.timeout;
     if (isTimeout) {
-      log('[BackgroundFetch] Headless task timed-out: $taskId');
+      print('[BackgroundFetch] Headless task timed-out: $taskId');
       BackgroundFetch.finish(taskId);
       return;
     }
-    log('[BackgroundFetch] Headless event received.');
+    print('[BackgroundFetch] Headless event received.');
     await BackgroundSync.executeSync();
     BackgroundFetch.finish(taskId);
   }
@@ -78,14 +78,14 @@ class _WalletListScreenState extends State<WalletListScreen>
           requiresDeviceIdle: false,
           requiredNetworkType: NetworkType.ANY,
         ), (String taskId) async {
-      log('[BackgroundFetch] Event received $taskId');
+      print('[BackgroundFetch] Event received $taskId');
       await BackgroundSync.executeSync();
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {
-      log('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
+      print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
       BackgroundFetch.finish(taskId);
     });
-    log('[BackgroundFetch] configure success: $status');
+    print('[BackgroundFetch] configure success: $status');
     if (!mounted) return;
   }
 

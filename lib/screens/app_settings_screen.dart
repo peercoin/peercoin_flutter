@@ -5,6 +5,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/screens/about.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
@@ -286,6 +287,22 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     style: Theme.of(context).textTheme.headline6),
                 childrenPadding: EdgeInsets.all(10),
                 children: [SettingsPriceTicker(_settings, saveSnack)],
+              ),
+              ExpansionTile(
+                title: Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_notifications'),
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: [
+                  PeerButton(
+                    text: AppLocalizations.instance
+                        .translate('app_settings_notifications_button'),
+                    action: () => Navigator.of(context).pushNamed(
+                      Routes.AppSettingsNotifications,
+                    ),
+                  )
+                ],
               )
             ],
           ),
