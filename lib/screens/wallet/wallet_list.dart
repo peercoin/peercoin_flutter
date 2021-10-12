@@ -103,7 +103,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
-    _appSettings = Provider.of<AppSettings>(context);
+    _appSettings = Provider.of<AppSettings>(context, listen: false);
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {

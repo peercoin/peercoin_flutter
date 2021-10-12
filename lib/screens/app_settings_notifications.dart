@@ -115,3 +115,7 @@ class _AppSettingsNotificationsScreenState
 
 //TODO i18n
 //TODO slider for interval
+//TODO add data protection notice and enable dialog
+//TODO add background notifications to setup
+//TODO enable background notifications on wallet create 
+//TODO save snack for the toggles
