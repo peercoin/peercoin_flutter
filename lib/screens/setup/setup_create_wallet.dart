@@ -342,3 +342,5 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
     return list;
   }
 }
+
+//TODO Fix iphone6 problems (containers break)

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -60,6 +61,12 @@ class BackgroundSync {
     var _sharedPrefs = await SharedPreferences.getInstance();
     var _pendingNotifications =
         _sharedPrefs.getStringList('pendingNotifications') ?? [];
+
+    //init app delegate
+    await AppLocalizations.delegate.load(
+      Locale(_sharedPrefs.getString('language_code') ?? 'und'),
+    );
+
     //loop through wallets
     var i = 0;
     _walletBox.values.forEach(

@@ -70,6 +70,8 @@
     "label_keep_seed_safe": "Achte darauf, dass er sicher bleibt. \nBehandle ihn wie ein Passwort. \nDiese $numberOfWords einfachen Worte erlauben vollen Zugriff auf deine Wallet.",
     "label_wallet_seed": "Dein Wallet Seed",
     "no_new_wallet": "Derzeit sind keine neuen Wallets verfügbar.",
+    "notification_title": "$walletTitle - Neue Transaktion empfangen",
+    "notification_body" : "App öffnen um Transaktion zu sehen",
     "paperwallet_confirm_import": "Bestätigen & importieren",
     "paperwallet_error_1": "Wallet leer\noder Betrag unter Mindestbetrag",
     "paperwallet_step_1": "Schritt 1",
