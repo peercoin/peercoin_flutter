@@ -1,5 +1,7 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/coinwallet.dart';
+import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -17,10 +19,15 @@ class _AppSettingsNotificationsScreenState
     extends State<AppSettingsNotificationsScreen> {
   bool _initial = true;
   late AppSettings _appSettings;
+  late ActiveWallets _activeWallets;
+  List<CoinWallet> _availableWallets = [];
+
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_initial == true) {
       _appSettings = Provider.of<AppSettings>(context);
+      _activeWallets = context.watch<ActiveWallets>();
+      _availableWallets = await _activeWallets.activeWalletsValues;
       setState(() {
         _initial = false;
       });
@@ -32,10 +39,11 @@ class _AppSettingsNotificationsScreenState
     return Column(
       children: [
         PeerButton(
-            text: 'Enable',
-            action: () {
-              _appSettings.setNotificationInterval(15);
-            })
+          text: 'Enable',
+          action: () {
+            _appSettings.setNotificationInterval(15);
+          },
+        )
       ],
     );
   }
@@ -43,11 +51,31 @@ class _AppSettingsNotificationsScreenState
   Widget manageBlock() {
     return Column(
       children: [
+        Column(
+          children: _availableWallets.map((wallet) {
+            return SwitchListTile(
+              key: Key(wallet.letterCode),
+              title: Text(wallet.title),
+              value: _appSettings.notificationActiveWallets
+                  .contains(wallet.letterCode),
+              onChanged: (newState) {
+                var _newList = _appSettings.notificationActiveWallets;
+                if (newState == true) {
+                  _newList.add(wallet.letterCode);
+                } else {
+                  _newList.remove(wallet.letterCode);
+                }
+                _appSettings.setNotificationActiveWallets(_newList);
+              },
+            );
+          }).toList(),
+        ),
         PeerButton(
           text: 'Turn off',
           action: () async {
             await BackgroundFetch.stop();
             _appSettings.setNotificationInterval(0);
+            _appSettings.setNotificationActiveWallets([]);
           },
         )
       ],
@@ -84,3 +112,6 @@ class _AppSettingsNotificationsScreenState
     );
   }
 }
+
+//TODO i18n
+//TODO slider for interval

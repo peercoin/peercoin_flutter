@@ -44,78 +44,86 @@ class BackgroundSync {
     }
 
     //open wallet box
-    var walletBox = await Hive.openBox<CoinWallet>(
+    var _walletBox = await Hive.openBox<CoinWallet>(
       'wallets',
       encryptionCipher: HiveAesCipher(_encryptionKey),
     );
+
+    //open settings box
+    var _optionsBox = await Hive.openBox(
+      'optionsBox',
+      encryptionCipher: HiveAesCipher(_encryptionKey),
+    );
+    AppOptionsStore _appOptions = _optionsBox.get('appOptions');
 
     //check pending notifications
     var _sharedPrefs = await SharedPreferences.getInstance();
     var _pendingNotifications =
         _sharedPrefs.getStringList('pendingNotifications') ?? [];
-
     //loop through wallets
     var i = 0;
-    walletBox.values.forEach(
+    _walletBox.values.forEach(
       (wallet) async {
         //increment identifier for notifications
         i++;
-        //TODO check here if background sync is enabled for lettercode
-        wallet.addresses.forEach(
-          (walletAddress) async {
-            print(walletAddress.address);
+        if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
+          wallet.addresses.forEach(
+            (walletAddress) async {
+              print(walletAddress.address);
 
-            var response = await http.read(
-              Uri.parse(
-                AvailableCoins().getSpecificCoin(wallet.name).explorerUrl +
-                    '/api/address/' +
-                    walletAddress.address,
-              ),
-            );
-            var jsonResponse = jsonDecode(response) as Map;
-            if (jsonResponse.containsKey('txApperances')) {
-              //txApperances in reply, continue
+              var response = await http.read(
+                Uri.parse(
+                  AvailableCoins().getSpecificCoin(wallet.name).explorerUrl +
+                      '/api/address/' +
+                      walletAddress.address,
+                ),
+              );
+              var jsonResponse = jsonDecode(response) as Map;
+              if (jsonResponse.containsKey('txApperances')) {
+                //txApperances in reply, continue
 
-              var numberOfTx = wallet.transactions
-                  .where(
-                    (element) => element.address == walletAddress.address,
-                  )
-                  .length;
-              print(walletAddress.address + ' ' + numberOfTx.toString());
-              print(
-                  "in explorer: confirmed ${jsonResponse['txApperances']} - unconfirmed ${jsonResponse['unconfirmedTxApperances']}");
+                var numberOfTx = wallet.transactions
+                    .where(
+                      (element) => element.address == walletAddress.address,
+                    )
+                    .length;
+                print(walletAddress.address + ' ' + numberOfTx.toString());
+                print(
+                    "in explorer: confirmed ${jsonResponse['txApperances']} - unconfirmed ${jsonResponse['unconfirmedTxApperances']}");
 
-              if (jsonResponse['txApperances'] > numberOfTx) {
-                //number greater than what we have in the data base -> new confirmed tx
-                _shouldNotify = true;
-              } else if (jsonResponse.containsKey('unconfirmedTxApperances')) {
-                if (jsonResponse['unconfirmedTxApperances'] +
-                        jsonResponse['txApperances'] >
-                    numberOfTx) {
-                  //new unconfirmed tx
+                if (jsonResponse['txApperances'] > numberOfTx) {
+                  //number greater than what we have in the data base -> new confirmed tx
                   _shouldNotify = true;
+                } else if (jsonResponse
+                    .containsKey('unconfirmedTxApperances')) {
+                  if (jsonResponse['unconfirmedTxApperances'] +
+                          jsonResponse['txApperances'] >
+                      numberOfTx) {
+                    //new unconfirmed tx
+                    _shouldNotify = true;
+                  }
                 }
               }
-            }
-            if (_shouldNotify == true &&
-                !_pendingNotifications.contains(
-                  wallet.letterCode,
-                )) {
-              await flutterLocalNotificationsPlugin.show(
-                i,
-                AppLocalizations.instance.translate(
-                    'notification_title', {'walletTitle': wallet.title}),
-                AppLocalizations.instance.translate('notification_body'),
-                LocalNotificationSettings.platformChannelSpecifics,
-                payload: wallet.name,
-              );
-              //write to pending notificatons
-              _pendingNotifications.add(wallet.letterCode);
-              await _sharedPrefs.setStringList(
-                  'pendingNotifications', _pendingNotifications);
-            }
-          },
-        );
+              if (_shouldNotify == true &&
+                  !_pendingNotifications.contains(
+                    wallet.letterCode,
+                  )) {
+                await flutterLocalNotificationsPlugin.show(
+                  i,
+                  AppLocalizations.instance.translate(
+                      'notification_title', {'walletTitle': wallet.title}),
+                  AppLocalizations.instance.translate('notification_body'),
+                  LocalNotificationSettings.platformChannelSpecifics,
+                  payload: wallet.name,
+                );
+                //write to pending notificatons
+                _pendingNotifications.add(wallet.letterCode);
+                await _sharedPrefs.setStringList(
+                    'pendingNotifications', _pendingNotifications);
+              }
+            },
+          );
+        }
       },
     );
   }
