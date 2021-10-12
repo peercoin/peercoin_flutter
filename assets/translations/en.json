@@ -98,6 +98,8 @@
     "net_display_name": "Peercoin $testormain net",
     "no_new_wallet": "No new wallets available at this time.",
     "not_again": "Don't show again",
+    "notification_title": "$walletTitle - New transaction received",
+    "notification_body" : "Open app to see transaction",
     "paperwallet_confirm_import": "Confirm & Import",
     "paperwallet_error_1": "Wallet empty \nor amount below minimum output",
     "paperwallet_step_1": "Step 1",

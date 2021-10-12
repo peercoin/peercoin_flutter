@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
@@ -55,11 +56,11 @@ class _WalletListScreenState extends State<WalletListScreen>
     var taskId = task.taskId;
     var isTimeout = task.timeout;
     if (isTimeout) {
-      print('[BackgroundFetch] Headless task timed-out: $taskId');
+      log('[BackgroundFetch] Headless task timed-out: $taskId');
       BackgroundFetch.finish(taskId);
       return;
     }
-    print('[BackgroundFetch] Headless event received.');
+    log('[BackgroundFetch] Headless event received.');
     await BackgroundSync.executeSync();
     BackgroundFetch.finish(taskId);
   }
@@ -77,14 +78,14 @@ class _WalletListScreenState extends State<WalletListScreen>
           requiresDeviceIdle: false,
           requiredNetworkType: NetworkType.ANY,
         ), (String taskId) async {
-      print('[BackgroundFetch] Event received $taskId');
+      log('[BackgroundFetch] Event received $taskId');
       await BackgroundSync.executeSync();
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {
-      print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
+      log('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
       BackgroundFetch.finish(taskId);
     });
-    print('[BackgroundFetch] configure success: $status');
+    log('[BackgroundFetch] configure success: $status');
     if (!mounted) return;
   }
 

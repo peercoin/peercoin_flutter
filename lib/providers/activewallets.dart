@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:peercoin/tools/app_localizations.dart';
 
 import '../models/availablecoins.dart';
 import '../models/coinwallet.dart';
@@ -329,8 +330,9 @@ class ActiveWallets with ChangeNotifier {
 
         if (direction == 'in') {
           await flutterLocalNotificationsPlugin.show(
-            0, //TODO will always overwrite previous notification ... mhm
-            'New transaction received', //TODO i18n
+            DateTime.now().millisecondsSinceEpoch ~/ 10000,
+            AppLocalizations.instance.translate(
+                'notification_title', {'walletTitle': openWallet.title}),
             tx['txid'],
             LocalNotificationSettings.platformChannelSpecifics,
             payload: identifier,

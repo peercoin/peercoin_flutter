@@ -74,6 +74,7 @@ void main() async {
       onSelectNotification: (String? payload) async {
     if (payload != null) {
       log('notification payload: $payload');
+      //TODO open wallet directly from notification
     }
   });
 

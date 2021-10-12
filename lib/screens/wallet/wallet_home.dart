@@ -18,6 +18,7 @@ import 'package:peercoin/widgets/wallet/receive_tab.dart';
 import 'package:peercoin/widgets/wallet/send_tab.dart';
 import 'package:peercoin/widgets/wallet/transactions_list.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
@@ -75,6 +76,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
       }
+      await resetNotifications(); //TODO check here if background sync is enabled for lettercode
     }
   }
 
@@ -104,6 +106,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           triggerHighValueAlert();
         }
       }
+      await resetNotifications(); //TODO check here if background sync is enabled for lettercode
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
@@ -140,6 +143,18 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
 
     super.didChangeDependencies();
+  }
+
+  Future<void> resetNotifications() async {
+    var _sharedPrefs = await SharedPreferences.getInstance();
+    var _pendingNotifications =
+        _sharedPrefs.getStringList('pendingNotifications') ?? [];
+    if (_pendingNotifications.contains(_wallet.letterCode)) {
+      _pendingNotifications
+          .removeWhere((element) => element == _wallet.letterCode);
+      await _sharedPrefs.setStringList(
+          'pendingNotifications', _pendingNotifications);
+    }
   }
 
   void rebroadCastUnsendTx() {

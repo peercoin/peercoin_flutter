@@ -12,7 +12,9 @@ import 'package:peercoin/models/server.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/models/walletutxo.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BackgroundSync {
   static Future<void> executeSync() async {
@@ -31,13 +33,15 @@ class BackgroundSync {
     }
 
     //init hive - sadly we have to register all of them here
-    await Hive.initFlutter();
-    Hive.registerAdapter(CoinWalletAdapter());
-    Hive.registerAdapter(WalletTransactionAdapter());
-    Hive.registerAdapter(WalletAddressAdapter());
-    Hive.registerAdapter(WalletUtxoAdapter());
-    Hive.registerAdapter(AppOptionsStoreAdapter());
-    Hive.registerAdapter(ServerAdapter());
+    if (!Hive.isAdapterRegistered(1)) {
+      await Hive.initFlutter();
+      Hive.registerAdapter(CoinWalletAdapter());
+      Hive.registerAdapter(WalletTransactionAdapter());
+      Hive.registerAdapter(WalletAddressAdapter());
+      Hive.registerAdapter(WalletUtxoAdapter());
+      Hive.registerAdapter(AppOptionsStoreAdapter());
+      Hive.registerAdapter(ServerAdapter());
+    }
 
     //open wallet box
     var walletBox = await Hive.openBox<CoinWallet>(
@@ -45,9 +49,17 @@ class BackgroundSync {
       encryptionCipher: HiveAesCipher(_encryptionKey),
     );
 
+    //check pending notifications
+    var _sharedPrefs = await SharedPreferences.getInstance();
+    var _pendingNotifications =
+        _sharedPrefs.getStringList('pendingNotifications') ?? [];
+
     //loop through wallets
+    var i = 0;
     walletBox.values.forEach(
       (wallet) async {
+        //increment identifier for notifications
+        i++;
         //TODO check here if background sync is enabled for lettercode
         wallet.addresses.forEach(
           (walletAddress) async {
@@ -85,16 +97,22 @@ class BackgroundSync {
                 }
               }
             }
-            if (_shouldNotify == true) {
+            if (_shouldNotify == true &&
+                !_pendingNotifications.contains(
+                  wallet.letterCode,
+                )) {
               await flutterLocalNotificationsPlugin.show(
-                0,
-                '${wallet.title} - New transaction received', //TODO i18n
-                'Open app to see transaction', //TODO i18n
+                i,
+                AppLocalizations.instance.translate(
+                    'notification_title', {'walletTitle': wallet.title}),
+                AppLocalizations.instance.translate('notification_body'),
                 LocalNotificationSettings.platformChannelSpecifics,
                 payload: wallet.name,
-                //TODO only show one notification per one wallet at a time
-                //TODO don't show notification again if tx confirms and app wasn't opened in the meantime
               );
+              //write to pending notificatons
+              _pendingNotifications.add(wallet.letterCode);
+              await _sharedPrefs.setStringList(
+                  'pendingNotifications', _pendingNotifications);
             }
           },
         );
