@@ -188,7 +188,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width /
-                                                1.8,
+                                                1.9,
                                         child: Text(
                                           AppLocalizations.instance
                                               .translate('setup_save_text1'),
