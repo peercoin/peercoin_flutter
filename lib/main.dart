@@ -69,14 +69,15 @@ void main() async {
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
-
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     if (payload != null) {
       log('notification payload: $payload');
-      //TODO open wallet directly from notification
     }
   });
+
+  final notificationAppLaunchDetails =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
   //check if app is locked
   final _secureStorage = const FlutterSecureStorage();
@@ -87,7 +88,10 @@ void main() async {
   } else if (failedAuths > 0) {
     _homeWidget = AuthJailScreen(true);
   } else {
-    _homeWidget = WalletListScreen(fromColdStart: true);
+    _homeWidget = WalletListScreen(
+      fromColdStart: true,
+      walletToOpenDirectly: notificationAppLaunchDetails?.payload ?? '',
+    );
   }
 
   //run

@@ -4,6 +4,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/backgroundsync.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
@@ -40,8 +41,12 @@ class _AppSettingsNotificationsScreenState
       children: [
         PeerButton(
           text: 'Enable',
-          action: () {
+          action: () async {
             _appSettings.setNotificationInterval(15);
+            await BackgroundSync.init(
+              notificationInterval: _appSettings.notificationInterval,
+              needsStart: true,
+            );
           },
         )
       ],
@@ -118,4 +123,5 @@ class _AppSettingsNotificationsScreenState
 //TODO add data protection notice and enable dialog
 //TODO add background notifications to setup
 //TODO enable background notifications on wallet create 
-//TODO save snack for the toggles
+//TODO save snack for the toggle
+//TODO enable bg sync for all wallets when turing them on

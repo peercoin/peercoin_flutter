@@ -33,7 +33,8 @@ class BackgroundSync {
     BackgroundFetch.finish(taskId);
   }
 
-  static Future<void> init(notificationInterval) async {
+  static Future<void> init(
+      {required int notificationInterval, bool needsStart = false}) async {
     Future<void> initPlatformState() async {
       var status = await BackgroundFetch.configure(
           BackgroundFetchConfig(
@@ -60,6 +61,9 @@ class BackgroundSync {
     await initPlatformState();
     if (Platform.isAndroid) {
       await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+    }
+    if (needsStart == true) {
+      await BackgroundFetch.start();
     }
   }
 
