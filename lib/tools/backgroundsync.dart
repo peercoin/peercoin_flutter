@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +20,49 @@ import 'package:peercoin/tools/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BackgroundSync {
+  static void backgroundFetchHeadlessTask(HeadlessTask task) async {
+    var taskId = task.taskId;
+    var isTimeout = task.timeout;
+    if (isTimeout) {
+      print('[BackgroundFetch] Headless task timed-out: $taskId');
+      BackgroundFetch.finish(taskId);
+      return;
+    }
+    print('[BackgroundFetch] Headless event received.');
+    await BackgroundSync.executeSync();
+    BackgroundFetch.finish(taskId);
+  }
+
+  static Future<void> init(notificationInterval) async {
+    Future<void> initPlatformState() async {
+      var status = await BackgroundFetch.configure(
+          BackgroundFetchConfig(
+            minimumFetchInterval: notificationInterval,
+            startOnBoot: true,
+            stopOnTerminate: false,
+            enableHeadless: Platform.isAndroid ? true : false,
+            requiresBatteryNotLow: false,
+            requiresCharging: false,
+            requiresStorageNotLow: false,
+            requiresDeviceIdle: false,
+            requiredNetworkType: NetworkType.ANY,
+          ), (String taskId) async {
+        print('[BackgroundFetch] Event received $taskId');
+        await BackgroundSync.executeSync();
+        BackgroundFetch.finish(taskId);
+      }, (String taskId) async {
+        print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
+        BackgroundFetch.finish(taskId);
+      });
+      print('[BackgroundFetch] configure success: $status');
+    }
+
+    await initPlatformState();
+    if (Platform.isAndroid) {
+      await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+    }
+  }
+
   static Future<void> executeSync() async {
     //this static method can't access the providers we already have so we have to re-invent some things here...
     Uint8List _encryptionKey;

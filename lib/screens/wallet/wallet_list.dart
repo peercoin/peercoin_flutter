@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:background_fetch/background_fetch.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
@@ -36,7 +35,6 @@ class _WalletListScreenState extends State<WalletListScreen>
   late AnimationController _controller;
   late Timer _priceTimer;
   late AppSettings _appSettings;
-  int _notificationIntervalCache = 0;
 
   @override
   void initState() {
@@ -50,56 +48,6 @@ class _WalletListScreenState extends State<WalletListScreen>
     super.initState();
   }
 
-  static void backgroundFetchHeadlessTask(HeadlessTask task) async {
-    var taskId = task.taskId;
-    var isTimeout = task.timeout;
-    if (isTimeout) {
-      print('[BackgroundFetch] Headless task timed-out: $taskId');
-      BackgroundFetch.finish(taskId);
-      return;
-    }
-    print('[BackgroundFetch] Headless event received.');
-    await BackgroundSync.executeSync();
-    BackgroundFetch.finish(taskId);
-  }
-
-  Future<void> initPlatformState() async {
-    var status = await BackgroundFetch.configure(
-        BackgroundFetchConfig(
-          minimumFetchInterval: _appSettings.notificationInterval,
-          startOnBoot: true,
-          stopOnTerminate: false,
-          enableHeadless: Platform.isAndroid ? true : false,
-          requiresBatteryNotLow: false,
-          requiresCharging: false,
-          requiresStorageNotLow: false,
-          requiresDeviceIdle: false,
-          requiredNetworkType: NetworkType.ANY,
-        ), (String taskId) async {
-      print('[BackgroundFetch] Event received $taskId');
-      await BackgroundSync.executeSync();
-      BackgroundFetch.finish(taskId);
-    }, (String taskId) async {
-      print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
-      BackgroundFetch.finish(taskId);
-    });
-    print('[BackgroundFetch] configure success: $status');
-    if (!mounted) return;
-  }
-
-  Future<void> activeBackgroundSync([bool wasDisabled = false]) async {
-    await initPlatformState();
-    if (Platform.isAndroid) {
-      await BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
-    }
-    if (wasDisabled) {
-      await BackgroundFetch.start();
-    }
-    setState(() {
-      _notificationIntervalCache = _appSettings.notificationInterval;
-    });
-  }
-
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
@@ -107,6 +55,10 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
+      //init background tasks
+      if (_appSettings.notificationInterval > 0) {
+        await BackgroundSync.init(_appSettings.notificationInterval);
+      }
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
@@ -168,24 +120,11 @@ class _WalletListScreenState extends State<WalletListScreen>
           }
         }
       }
-      //init background tasks
-      if (_appSettings.notificationInterval > 0) {
-        await activeBackgroundSync();
-      }
 
       setState(() {
         _initial = false;
       });
     }
-
-    //enable / disable background taks if changed in settings
-    if (_appSettings.notificationInterval != _notificationIntervalCache &&
-        _appSettings.notificationInterval > 0) {
-      await activeBackgroundSync(true);
-    } else if (_appSettings.notificationInterval == 0) {
-      _notificationIntervalCache = 0;
-    }
-
     super.didChangeDependencies();
   }
 
