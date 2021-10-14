@@ -40,9 +40,17 @@ class _AppSettingsNotificationsScreenState
     return Column(
       children: [
         PeerButton(
-          text: 'Enable',
+          text: AppLocalizations.instance
+              .translate('app_settings_notifications_enable_button'),
           action: () async {
             _appSettings.setNotificationInterval(15);
+
+            var walletList = <String>[];
+            _availableWallets.forEach((element) {
+              walletList.add(element.letterCode);
+            });
+            _appSettings.setNotificationActiveWallets(walletList);
+
             await BackgroundSync.init(
               notificationInterval: _appSettings.notificationInterval,
               needsStart: true,
@@ -76,7 +84,8 @@ class _AppSettingsNotificationsScreenState
           }).toList(),
         ),
         PeerButton(
-          text: 'Turn off',
+          text: AppLocalizations.instance
+              .translate('app_settings_notifications_disable_button'),
           action: () async {
             await BackgroundFetch.stop();
             _appSettings.setNotificationInterval(0);
@@ -118,10 +127,7 @@ class _AppSettingsNotificationsScreenState
   }
 }
 
-//TODO i18n
 //TODO slider for interval
 //TODO add data protection notice and enable dialog
 //TODO add background notifications to setup
-//TODO enable background notifications on wallet create 
 //TODO save snack for the toggle
-//TODO enable bg sync for all wallets when turing them on

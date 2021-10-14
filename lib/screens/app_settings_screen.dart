@@ -297,7 +297,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 children: [
                   PeerButton(
                     text: AppLocalizations.instance
-                        .translate('app_settings_notifications_button'),
+                        .translate('app_settings_notifications_open_button'),
                     action: () => Navigator.of(context).pushNamed(
                       Routes.AppSettingsNotifications,
                     ),

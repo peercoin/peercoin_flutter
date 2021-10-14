@@ -154,8 +154,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     var _pendingNotifications =
         _sharedPrefs.getStringList('pendingNotifications') ?? [];
     if (_pendingNotifications.contains(_wallet.letterCode)) {
-      _pendingNotifications
-          .removeWhere((element) => element == _wallet.letterCode);
+      _pendingNotifications.remove(_wallet.letterCode);
       await _sharedPrefs.setStringList(
           'pendingNotifications', _pendingNotifications);
     }
