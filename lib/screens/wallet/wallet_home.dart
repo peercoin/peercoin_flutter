@@ -76,9 +76,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
       }
-      // if (_appSettings.notificationActiveWallets.contains(_wallet.letterCode)) {
-      //   await resetNotifications();
-      // }
+      if (_appSettings.notificationActiveWallets.contains(_wallet.letterCode)) {
+        await resetNotifications();
+      }
     }
   }
 
@@ -108,9 +108,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
           triggerHighValueAlert();
         }
       }
-      // if (_appSettings.notificationActiveWallets.contains(_wallet.letterCode)) {
-      //   await resetNotifications();
-      // }
+      if (_appSettings.notificationActiveWallets.contains(_wallet.letterCode)) {
+        await resetNotifications();
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
@@ -149,16 +149,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
     super.didChangeDependencies();
   }
 
-  // Future<void> resetNotifications() async {
-  //   var _sharedPrefs = await SharedPreferences.getInstance();
-  //   var _pendingNotifications =
-  //       _sharedPrefs.getStringList('pendingNotifications') ?? [];
-  //   if (_pendingNotifications.contains(_wallet.letterCode)) {
-  //     _pendingNotifications.remove(_wallet.letterCode);
-  //     await _sharedPrefs.setStringList(
-  //         'pendingNotifications', _pendingNotifications);
-  //   }
-  // }
+  Future<void> resetNotifications() async {
+    var _sharedPrefs = await SharedPreferences.getInstance();
+    var _pendingNotifications =
+        _sharedPrefs.getStringList('pendingNotifications') ?? [];
+    if (_pendingNotifications.contains(_wallet.letterCode)) {
+      _pendingNotifications.remove(_wallet.letterCode);
+      await _sharedPrefs.setStringList(
+          'pendingNotifications', _pendingNotifications);
+    }
+  }
 
   void rebroadCastUnsendTx() {
     var nonBroadcastedTx = _walletTransactions.where((element) =>
