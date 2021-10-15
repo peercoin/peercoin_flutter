@@ -104,10 +104,10 @@ class BackgroundSync {
     );
     AppOptionsStore _appOptions = _optionsBox.get('appOptions');
 
-    //check pending notifications
     var _sharedPrefs = await SharedPreferences.getInstance();
-    var _pendingNotifications =
-        _sharedPrefs.getStringList('pendingNotifications') ?? [];
+    //check pending notifications
+    // var _pendingNotifications =
+    //     _sharedPrefs.getStringList('pendingNotifications') ?? [];
 
     //init app delegate
     await AppLocalizations.delegate.load(
@@ -115,11 +115,8 @@ class BackgroundSync {
     );
 
     //loop through wallets
-    var i = 0;
     _walletBox.values.forEach(
       (wallet) async {
-        //increment identifier for notifications
-        i++;
         if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
           //if activated, parse all addresses to a list that will be POSTed to backend later on
           var adressesToQuery = <String, int>{};
@@ -151,12 +148,14 @@ class BackgroundSync {
             print('foundDifference result: $_shouldNotify');
           }
 
-          if (_shouldNotify == true &&
-              !_pendingNotifications.contains(
-                wallet.letterCode,
-              )) {
+          if (_shouldNotify == true
+              //  &&
+              // !_pendingNotifications.contains(
+              //   wallet.letterCode,
+              // ))
+              ) {
             await flutterLocalNotificationsPlugin.show(
-              i,
+              DateTime.now().millisecondsSinceEpoch ~/ 10000,
               AppLocalizations.instance.translate(
                   'notification_title', {'walletTitle': wallet.title}),
               AppLocalizations.instance.translate('notification_body'),
@@ -164,9 +163,9 @@ class BackgroundSync {
               payload: wallet.name,
             );
             //write to pending notificatons
-            _pendingNotifications.add(wallet.letterCode);
-            await _sharedPrefs.setStringList(
-                'pendingNotifications', _pendingNotifications);
+            // _pendingNotifications.add(wallet.letterCode);
+            // await _sharedPrefs.setStringList(
+            //     'pendingNotifications', _pendingNotifications);
           }
         }
       },
