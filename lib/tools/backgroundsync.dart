@@ -123,62 +123,53 @@ class BackgroundSync {
         //increment identifier for notifications
         i++;
         if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
-          wallet.addresses.forEach(
-            (walletAddress) async {
-              print(walletAddress.address);
+          //if activated, parse all addresses to a list that will be POSTed to backend later on
+          var adressesToQuery = <String, int>{};
+          wallet.addresses.forEach((walletAddress) async {
+            adressesToQuery[walletAddress.address] = wallet.transactions
+                .where(
+                  (element) => element.address == walletAddress.address,
+                )
+                .length;
+          });
 
-              var response = await http.read(
-                Uri.parse(
-                  AvailableCoins().getSpecificCoin(wallet.name).explorerUrl +
-                      '/api/address/' +
-                      walletAddress.address,
-                ),
-              );
-              var jsonResponse = jsonDecode(response) as Map;
-              if (jsonResponse.containsKey('txApperances')) {
-                //txApperances in reply, continue
+          print(adressesToQuery);
 
-                var numberOfTx = wallet.transactions
-                    .where(
-                      (element) => element.address == walletAddress.address,
-                    )
-                    .length;
-                print(walletAddress.address + ' ' + numberOfTx.toString());
-                print(
-                    "in explorer: confirmed ${jsonResponse['txApperances']} - unconfirmed ${jsonResponse['unconfirmedTxApperances']}");
-
-                if (jsonResponse['txApperances'] > numberOfTx) {
-                  //number greater than what we have in the data base -> new confirmed tx
-                  _shouldNotify = true;
-                } else if (jsonResponse
-                    .containsKey('unconfirmedTxApperances')) {
-                  if (jsonResponse['unconfirmedTxApperances'] +
-                          jsonResponse['txApperances'] >
-                      numberOfTx) {
-                    //new unconfirmed tx
-                    _shouldNotify = true;
-                  }
-                }
-              }
-              if (_shouldNotify == true &&
-                  !_pendingNotifications.contains(
-                    wallet.letterCode,
-                  )) {
-                await flutterLocalNotificationsPlugin.show(
-                  i,
-                  AppLocalizations.instance.translate(
-                      'notification_title', {'walletTitle': wallet.title}),
-                  AppLocalizations.instance.translate('notification_body'),
-                  LocalNotificationSettings.platformChannelSpecifics,
-                  payload: wallet.name,
-                );
-                //write to pending notificatons
-                _pendingNotifications.add(wallet.letterCode);
-                await _sharedPrefs.setStringList(
-                    'pendingNotifications', _pendingNotifications);
-              }
+          var result = await http.post(
+            Uri.parse('https://peercoinexplorer.net/address-status'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
             },
+            body: jsonEncode({
+              'coin': wallet.name,
+              'addresses': [adressesToQuery]
+            }),
           );
+
+          var _shouldNotify = false;
+          if (result.body.contains('foundDifference')) {
+            //valid answer
+            _shouldNotify = jsonDecode(result.body)['foundDifference'];
+            print('foundDifference result: $_shouldNotify');
+          }
+
+          if (_shouldNotify == true &&
+              !_pendingNotifications.contains(
+                wallet.letterCode,
+              )) {
+            await flutterLocalNotificationsPlugin.show(
+              i,
+              AppLocalizations.instance.translate(
+                  'notification_title', {'walletTitle': wallet.title}),
+              AppLocalizations.instance.translate('notification_body'),
+              LocalNotificationSettings.platformChannelSpecifics,
+              payload: wallet.name,
+            );
+            //write to pending notificatons
+            _pendingNotifications.add(wallet.letterCode);
+            await _sharedPrefs.setStringList(
+                'pendingNotifications', _pendingNotifications);
+          }
         }
       },
     );
