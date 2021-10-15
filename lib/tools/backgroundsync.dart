@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/app_options.dart';
-import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/server.dart';
@@ -71,7 +70,6 @@ class BackgroundSync {
     //this static method can't access the providers we already have so we have to re-invent some things here...
     Uint8List _encryptionKey;
     var _secureStorage = const FlutterSecureStorage();
-    var _shouldNotify = false;
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     //check if key exists or return
