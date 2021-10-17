@@ -96,7 +96,7 @@
     "send_enter_amount": "Importo mancante",
     "send_invalid_address": "Indirizzo non valido",
     "select_coin": "Seleziona una moneta",
-    "send_dust": "Dust: -$amount $letter_code",
+    "send_dust": "Polvere: -$amount $letter_code",
     "receive_enter_amount": "Inserisci un importo",
     "send_amount_exceeds": "Importo superiore alla disponibilità",
     "send_errors_solve": "Per favore, controlla gli errori…",
@@ -227,5 +227,6 @@
     "setup_subtitle": "nel wallet di Peercoin",
     "setup_text1": "Se avevi già creato un wallet e hai ancora la tua seed password, allora scegli",
     "setup_text2": "crea il tuo nuovo wallet di Peercoin",
-    "setup_save_title": "Crea wallet"
+    "setup_save_title": "Crea wallet",
+    "wallet_value_alert_title": "Alto valore delle monete"
 }
