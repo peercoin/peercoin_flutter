@@ -106,8 +106,6 @@ class BackgroundSync {
 
     //check pending notifications
     var _sharedPrefs = await SharedPreferences.getInstance();
-    var _pendingNotifications =
-        _sharedPrefs.getStringList('pendingNotifications') ?? [];
 
     //init app delegate
     await AppLocalizations.delegate.load(
@@ -124,11 +122,23 @@ class BackgroundSync {
           //if activated, parse all addresses to a list that will be POSTed to backend later on
           var adressesToQuery = <String, int>{};
           wallet.addresses.forEach((walletAddress) async {
-            adressesToQuery[walletAddress.address] = wallet.transactions
-                .where(
-                  (element) => element.address == walletAddress.address,
-                )
-                .length;
+            if (wallet.pendingTransactionNotifications.isNotEmpty) {
+              var res = wallet.pendingTransactionNotifications.firstWhere(
+                  (element) =>
+                      element.keys.toList()[0] == walletAddress.address,
+                  orElse: () => {});
+
+              print('this $res');
+              if (res.isNotEmpty) {
+                print("found something"); //TODO compare
+              }
+            } else {
+              adressesToQuery[walletAddress.address] = wallet.transactions
+                  .where(
+                    (element) => element.address == walletAddress.address,
+                  )
+                  .length;
+            }
           });
 
           print(adressesToQuery);
@@ -145,16 +155,26 @@ class BackgroundSync {
           );
 
           var _shouldNotify = false;
+          var _foundDifference;
           if (result.body.contains('foundDifference')) {
             //valid answer
-            _shouldNotify = jsonDecode(result.body)['foundDifference'];
-            print('foundDifference result: $_shouldNotify');
+            var bodyDecoded = jsonDecode(result.body);
+            _foundDifference = bodyDecoded['foundDifference'];
+            print('foundDifference result: $_foundDifference');
+            if (_foundDifference == true) {
+              print(bodyDecoded);
+              //loop through addresses in result
+              var addresses = bodyDecoded['addresses'];
+              addresses.forEach((element) {
+                //write tx result from API into coinwallet
+                wallet.putPendingTransactionNotification(
+                    {element['address']: element['tx']});
+              });
+              _shouldNotify = true;
+            }
           }
 
-          if (_shouldNotify == true &&
-              !_pendingNotifications.contains(
-                wallet.letterCode,
-              )) {
+          if (_shouldNotify == true) {
             await flutterLocalNotificationsPlugin.show(
               i,
               AppLocalizations.instance.translate(
@@ -163,10 +183,6 @@ class BackgroundSync {
               LocalNotificationSettings.platformChannelSpecifics,
               payload: wallet.name,
             );
-            //write to pending notificatons
-            _pendingNotifications.add(wallet.letterCode);
-            await _sharedPrefs.setStringList(
-                'pendingNotifications', _pendingNotifications);
           }
         }
       },

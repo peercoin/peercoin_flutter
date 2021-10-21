@@ -34,6 +34,9 @@ class CoinWallet extends HiveObject {
   @HiveField(7)
   int _unconfirmedBalance = 0;
 
+  @HiveField(8)
+  List<Map<String, int>>? _pendingTransactionNotifications = [];
+
   CoinWallet(this._name, this._title, this._letterCode);
 
   String get name {
@@ -66,6 +69,10 @@ class CoinWallet extends HiveObject {
 
   String get title {
     return _title;
+  }
+
+  List<Map<String, int>> get pendingTransactionNotifications {
+    return _pendingTransactionNotifications ?? [];
   }
 
   set balance(int newBalance) {
@@ -106,5 +113,14 @@ class CoinWallet extends HiveObject {
     _addresses
         .removeWhere((element) => element.address == walletAddress.address);
     save();
+  }
+
+  void clearPendingTransactionNotifications() {
+    _pendingTransactionNotifications = [];
+    save();
+  }
+
+  void putPendingTransactionNotification(Map<String, int> tx) {
+    _pendingTransactionNotifications!.add(tx);
   }
 }
