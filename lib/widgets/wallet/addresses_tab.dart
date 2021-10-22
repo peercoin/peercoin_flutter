@@ -281,7 +281,7 @@ class _AddressTabState extends State<AddressTab> {
                                   context
                                       .read<ActiveWallets>()
                                       .removeAddress(widget.name, addr);
-                                  //applyFilter();
+                                  applyFilter();
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                     content: Text(
