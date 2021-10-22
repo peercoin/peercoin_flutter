@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
+import 'package:peercoin/models/pendingNotifications.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/models/wallettransaction.dart';
 import 'package:peercoin/models/walletutxo.dart';
@@ -35,7 +36,7 @@ class CoinWallet extends HiveObject {
   int _unconfirmedBalance = 0;
 
   @HiveField(8)
-  List<Map<String, int>>? _pendingTransactionNotifications = [];
+  List<PendingNotification>? _pendingTransactionNotifications = [];
 
   CoinWallet(this._name, this._title, this._letterCode);
 
@@ -71,7 +72,7 @@ class CoinWallet extends HiveObject {
     return _title;
   }
 
-  List<Map<String, int>> get pendingTransactionNotifications {
+  List<PendingNotification> get pendingTransactionNotifications {
     return _pendingTransactionNotifications ?? [];
   }
 
@@ -120,7 +121,25 @@ class CoinWallet extends HiveObject {
     save();
   }
 
-  void putPendingTransactionNotification(Map<String, int> tx) {
-    _pendingTransactionNotifications!.add(tx);
+  void putPendingTransactionNotification(PendingNotification tx) {
+    if (_pendingTransactionNotifications == null) {
+      _pendingTransactionNotifications = [tx];
+    } else {
+      var res = pendingTransactionNotifications
+          .where(
+            (element) => element.address == tx.address,
+          )
+          .toList();
+      if (res.isEmpty) {
+        //prevent double write
+        _pendingTransactionNotifications!.add(tx);
+      } else {
+        //replace with new tx
+        _pendingTransactionNotifications!
+            .removeWhere((element) => element.address == tx.address);
+        _pendingTransactionNotifications!.add(tx);
+      }
+    }
+    save();
   }
 }

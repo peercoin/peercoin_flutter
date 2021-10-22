@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:peercoin/models/app_options.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/models/pendingNotifications.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/models/wallettransaction.dart';
@@ -89,6 +90,7 @@ class BackgroundSync {
       Hive.registerAdapter(WalletUtxoAdapter());
       Hive.registerAdapter(AppOptionsStoreAdapter());
       Hive.registerAdapter(ServerAdapter());
+      Hive.registerAdapter(PendingNotificationAdapter());
     }
 
     //open wallet box
@@ -122,17 +124,17 @@ class BackgroundSync {
           //if activated, parse all addresses to a list that will be POSTed to backend later on
           var adressesToQuery = <String, int>{};
           wallet.addresses.forEach((walletAddress) async {
-            if (wallet.pendingTransactionNotifications.isNotEmpty) {
-              var res = wallet.pendingTransactionNotifications.firstWhere(
-                  (element) =>
-                      element.keys.toList()[0] == walletAddress.address,
-                  orElse: () => {});
-
-              print('this $res');
-              if (res.isNotEmpty) {
-                print("found something"); //TODO compare
-              }
+            //check if that address already has a pending notification
+            var res = wallet.pendingTransactionNotifications
+                .where(
+                  (element) => element.address == walletAddress.address,
+                )
+                .toList();
+            if (res.isNotEmpty) {
+              //addr does have a pending notification
+              adressesToQuery[walletAddress.address] = res[0].tx;
             } else {
+              //addr does not have a pending notification
               adressesToQuery[walletAddress.address] = wallet.transactions
                   .where(
                     (element) => element.address == walletAddress.address,
@@ -141,7 +143,7 @@ class BackgroundSync {
             }
           });
 
-          print(adressesToQuery);
+          print('addressesToQuery $adressesToQuery');
 
           var result = await http.post(
             Uri.parse('https://peercoinexplorer.net/address-status'),
@@ -160,15 +162,13 @@ class BackgroundSync {
             //valid answer
             var bodyDecoded = jsonDecode(result.body);
             _foundDifference = bodyDecoded['foundDifference'];
-            print('foundDifference result: $_foundDifference');
             if (_foundDifference == true) {
-              print(bodyDecoded);
               //loop through addresses in result
               var addresses = bodyDecoded['addresses'];
               addresses.forEach((element) {
                 //write tx result from API into coinwallet
-                wallet.putPendingTransactionNotification(
-                    {element['address']: element['tx']});
+                wallet.putPendingTransactionNotification(PendingNotification(
+                    address: element['address'], tx: element['tx']));
               });
               _shouldNotify = true;
             }

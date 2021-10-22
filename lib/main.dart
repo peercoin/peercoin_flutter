@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/app_options.dart';
+import 'package:peercoin/models/pendingNotifications.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/servers.dart';
@@ -49,6 +50,7 @@ void main() async {
   Hive.registerAdapter(WalletUtxoAdapter());
   Hive.registerAdapter(AppOptionsStoreAdapter());
   Hive.registerAdapter(ServerAdapter());
+  Hive.registerAdapter(PendingNotificationAdapter());
 
   //init notifications
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
