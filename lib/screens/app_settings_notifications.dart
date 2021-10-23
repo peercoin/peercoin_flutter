@@ -64,6 +64,7 @@ class _AppSettingsNotificationsScreenState
   Widget manageBlock() {
     return Column(
       children: [
+        Text('Manage notifications for wallets'), //TODO heading
         Column(
           children: _availableWallets.map((wallet) {
             return SwitchListTile(
@@ -83,6 +84,22 @@ class _AppSettingsNotificationsScreenState
             );
           }).toList(),
         ),
+        Divider(),
+        Text('Notification interval'), //TODO heading
+        Text(
+            'Sets the interval in which the app will check for new transactions'), //TODO hint size
+        Slider(
+          value: _appSettings.notificationInterval.toDouble(),
+          min: 15,
+          max: 60,
+          divisions: 3,
+          label: _appSettings.notificationInterval.toString(),
+          onChanged: (e) => _appSettings.setNotificationInterval(
+            e.toInt(),
+          ),
+        ),
+        Text('Hint.... will be delayed and such'), //TODO hint size
+        Divider(),
         PeerButton(
           text: AppLocalizations.instance
               .translate('app_settings_notifications_disable_button'),
@@ -125,9 +142,7 @@ class _AppSettingsNotificationsScreenState
       ),
     );
   }
-}
-
-//TODO slider for interval
 //TODO add data protection notice and enable dialog
 //TODO add background notifications to setup
 //TODO save snack for the toggle
+}
