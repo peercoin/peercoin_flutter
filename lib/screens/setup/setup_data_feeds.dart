@@ -67,114 +67,128 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
-      body: Container(
-        height: correctHeight,
-        color: Theme.of(context).primaryColor,
-        padding: const EdgeInsets.all(20.0),
-        width: double.infinity,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? correctHeight
+              : MediaQuery.of(context).size.height * 1.5,
+          color: Theme.of(context).primaryColor,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               PeerProgress(4),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 25,
-                  ),
-                  Image.asset(
-                    'assets/img/setup-consent.png',
-                    height: MediaQuery.of(context).size.height / 5,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 25,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      PeerButtonSetupBack(),
-                      Text(
-                        AppLocalizations.instance
-                            .translate('setup_price_feed_title'),
-                        style: TextStyle(color: Colors.white, fontSize: 28),
-                      ),
-                      SizedBox(width: 40),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 15,
+                    ),
+                    Image.asset(
+                      'assets/img/setup-consent.png',
+                      height: MediaQuery.of(context).size.height / 4,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 15,
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SwitchListTile(
-                              key: Key('setupApiTickerSwitchKey'),
-                              title: Text(
-                                AppLocalizations.instance
-                                    .translate('setup_price_feed_allow'),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              value: _dataFeedAllowed,
-                              activeColor: Colors.white,
-                              inactiveThumbColor: Colors.grey,
-                              onChanged: (newState) =>
-                                  togglePriceTickerHandler(newState)),
-                        ),
+                        PeerButtonSetupBack(),
                         Text(
                           AppLocalizations.instance
-                              .translate('setup_price_feed_description'),
-                          style: TextStyle(color: Colors.white),
+                              .translate('setup_price_feed_title'),
+                          style: TextStyle(color: Colors.white, fontSize: 28),
                         ),
-                        SizedBox(height: 20),
-                        Divider(),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SwitchListTile(
-                              key: Key('setupApiBGSwitchKey'),
-                              title: Text(
-                                AppLocalizations.instance
-                                    .translate('setup_bg_sync_allow'),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              value: _bgSyncdAllowed,
-                              activeColor: Colors.white,
-                              inactiveThumbColor: Colors.grey,
-                              onChanged: (newState) =>
-                                  toggleBGSyncHandler(newState)),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('setup_bg_sync_description'),
-                          style: TextStyle(color: Colors.white),
+                        SizedBox(
+                          width: 40,
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 25,
-                  ),
-                  PeerButton(
-                    action: () => _launchURL(
-                        'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
-                    text: AppLocalizations.instance
-                        .translate('about_data_declaration'),
-                  ),
-                  PeerButtonSetup(
-                    text: AppLocalizations.instance.translate('setup_finish'),
-                    action: () async {
-                      var prefs = await Provider.of<UnencryptedOptions>(context,
-                              listen: false)
-                          .prefs;
-                      await prefs.setBool('setupFinished', true);
-                      await Navigator.of(context).pushNamedAndRemoveUntil(
-                          Routes.WalletList, (_) => false);
-                    },
-                  ),
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: SwitchListTile(
+                                key: Key('setupApiSwitchKey'),
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_price_feed_allow'),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                value: _dataFeedAllowed,
+                                activeColor: Colors.white,
+                                inactiveThumbColor: Colors.grey,
+                                onChanged: (newState) =>
+                                    togglePriceTickerHandler(newState),
+                              ),
+                            ),
+                            PeerExplanationText(
+                              AppLocalizations.instance
+                                  .translate('setup_price_feed_description'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: SwitchListTile(
+                                key: Key('setupApiBGSwitchKey'),
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_bg_sync_allow'),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                value: _bgSyncdAllowed,
+                                activeColor: Colors.white,
+                                inactiveThumbColor: Colors.grey,
+                                onChanged: (newState) =>
+                                    toggleBGSyncHandler(newState),
+                              ),
+                            ),
+                            PeerExplanationText(
+                              AppLocalizations.instance
+                                  .translate('setup_bg_sync_description'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PeerButton(
+                      action: () => _launchURL(
+                          'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
+                      text: AppLocalizations.instance
+                          .translate('about_data_declaration'),
+                    ),
+                  ],
+                ),
+              ),
+              PeerButtonSetup(
+                text: AppLocalizations.instance.translate('setup_finish'),
+                action: () async {
+                  var prefs = await Provider.of<UnencryptedOptions>(context,
+                          listen: false)
+                      .prefs;
+                  await prefs.setBool('setupFinished', true);
+                  await Navigator.of(context)
+                      .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
+                },
+              ),
+              SizedBox(
+                height: 32,
               ),
             ],
           ),
