@@ -58,30 +58,36 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var padding = MediaQuery.of(context).padding;
+    var correctHeight = height - padding.top - padding.bottom;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Theme.of(context).primaryColor,
+      body: Container(
+        height: correctHeight,
+        color: Theme.of(context).primaryColor,
+        padding: const EdgeInsets.all(20.0),
+        width: double.infinity,
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               PeerProgress(4),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height / 15,
+                    height: MediaQuery.of(context).size.height / 25,
                   ),
                   Image.asset(
                     'assets/img/setup-consent.png',
-                    height: MediaQuery.of(context).size.height / 4,
+                    height: MediaQuery.of(context).size.height / 5,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height / 15,
+                    height: MediaQuery.of(context).size.height / 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -121,7 +127,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                               .translate('setup_price_feed_description'),
                           style: TextStyle(color: Colors.white),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Divider(),
                         SizedBox(height: 10),
                         Padding(
@@ -148,27 +154,27 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 25,
+                  ),
                   PeerButton(
                     action: () => _launchURL(
                         'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
                     text: AppLocalizations.instance
                         .translate('about_data_declaration'),
                   ),
+                  PeerButtonSetup(
+                    text: AppLocalizations.instance.translate('setup_finish'),
+                    action: () async {
+                      var prefs = await Provider.of<UnencryptedOptions>(context,
+                              listen: false)
+                          .prefs;
+                      await prefs.setBool('setupFinished', true);
+                      await Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.WalletList, (_) => false);
+                    },
+                  ),
                 ],
-              ),
-              PeerButtonSetup(
-                text: AppLocalizations.instance.translate('setup_finish'),
-                action: () async {
-                  var prefs = await Provider.of<UnencryptedOptions>(context,
-                          listen: false)
-                      .prefs;
-                  await prefs.setBool('setupFinished', true);
-                  await Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
-                },
-              ),
-              SizedBox(
-                height: 32,
               ),
             ],
           ),

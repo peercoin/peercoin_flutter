@@ -12,6 +12,7 @@ import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/screens/auth_jail.dart';
+import 'package:peercoin/screens/setup/setup_data_feeds.dart';
 import 'package:peercoin/tools/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,7 +87,7 @@ void main() async {
   final failedAuths =
       int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
   if (setupFinished == false) {
-    _homeWidget = SetupScreen();
+    _homeWidget = SetupDataFeedsScreen();
   } else if (failedAuths > 0) {
     _homeWidget = AuthJailScreen(true);
   } else {
