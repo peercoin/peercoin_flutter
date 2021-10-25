@@ -1,4 +1,4 @@
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 
 class Coin {
   final String name;

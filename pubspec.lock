@@ -43,15 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  bech32:
-    dependency: transitive
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "3216ee1cec2f98b92d10eb1437c21812b0f12d87"
-      url: "https://github.com/saeveritt/bech32.git"
-    source: git
-    version: "0.2.0"
   bip32:
     dependency: transitive
     description:
@@ -66,15 +57,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
-  bitcoin_flutter:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: null_safety_v1
-      resolved-ref: "429aaf7b89de06af88778fd1316512a73a4ab653"
-      url: "https://github.com/Vesta-wallet/bitcoin_flutter.git"
-    source: git
-    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -187,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  coinslib:
+    dependency: "direct main"
+    description:
+      name: coinslib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   collection:
     dependency: "direct main"
     description:

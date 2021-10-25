@@ -16,10 +16,7 @@ dependencies:
   web_socket_channel: ^2.1.0
   crypto: ^3.0.1
   bip39: ^1.0.6
-  bitcoin_flutter:
-    git:
-      url: https://github.com/Vesta-wallet/bitcoin_flutter.git
-      ref: null_safety_v1 #TODO v0.11 main net release: change to coinslib
+  coinslib: ^3.0.1
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   hive_generator: ^1.1.0
