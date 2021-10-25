@@ -225,5 +225,4 @@ class _AppSettingsNotificationsScreenState
       ),
     );
   }
-//TODO add background notifications to setup
 }

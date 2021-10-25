@@ -48,7 +48,8 @@ void main() {
         for (var i = 1; i <= 12; i++) {
           await driver.tap(find.text('0'));
         }
-        await driver.tap(find.byValueKey('setupApiSwitchKey'));
+        await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
+        await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
         await driver.tap(find.text('Finish Setup'));
         await Process.run(
           'adb',
