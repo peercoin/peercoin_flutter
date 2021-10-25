@@ -1,5 +1,6 @@
-### **0.6.5** (2021-10-08)
+### **0.7.0** (2021-10-08)
 * Background notifications can now be enabled in app settings
+* Transactions will now be send without timestamp (version 3, 0.11 hard fork)
 ### **0.6.4** (2021-10-08)
 * Fix for older Android 10 devices
 * Fix for price data feed

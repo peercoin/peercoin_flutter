@@ -36,35 +36,95 @@ class _AppSettingsNotificationsScreenState
     super.didChangeDependencies();
   }
 
+  Future<void> enableNotifications(BuildContext ctx) async {
+    await showDialog(
+      context: ctx,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('setup_continue_alert_title'),
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+            AppLocalizations.instance
+                .translate('app_settings_notifications_alert_content'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                _appSettings.setNotificationInterval(15);
+
+                var walletList = <String>[];
+                _availableWallets.forEach((element) {
+                  walletList.add(element.letterCode);
+                });
+                _appSettings.setNotificationActiveWallets(walletList);
+
+                await BackgroundSync.init(
+                  notificationInterval: _appSettings.notificationInterval,
+                  needsStart: true,
+                );
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance.translate('continue'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget enableBlock() {
     return Column(
       children: [
+        Text(
+          AppLocalizations.instance
+              .translate('app_settings_notifications_not_enabled'),
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        SizedBox(height: 10),
+        Divider(),
         PeerButton(
           text: AppLocalizations.instance
               .translate('app_settings_notifications_enable_button'),
           action: () async {
-            _appSettings.setNotificationInterval(15);
-
-            var walletList = <String>[];
-            _availableWallets.forEach((element) {
-              walletList.add(element.letterCode);
-            });
-            _appSettings.setNotificationActiveWallets(walletList);
-
-            await BackgroundSync.init(
-              notificationInterval: _appSettings.notificationInterval,
-              needsStart: true,
-            );
+            await enableNotifications(context);
           },
         )
       ],
     );
   }
 
+  void saveSnack(context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('app_settings_saved_snack'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 2),
+    ));
+  }
+
   Widget manageBlock() {
     return Column(
       children: [
-        Text('Manage notifications for wallets'), //TODO heading
+        Text(
+          AppLocalizations.instance
+              .translate('app_settings_notifications_heading_manage_wallets'),
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        SizedBox(height: 10),
         Column(
           children: _availableWallets.map((wallet) {
             return SwitchListTile(
@@ -80,26 +140,49 @@ class _AppSettingsNotificationsScreenState
                   _newList.remove(wallet.letterCode);
                 }
                 _appSettings.setNotificationActiveWallets(_newList);
+                saveSnack(context);
               },
             );
           }).toList(),
         ),
+        SizedBox(height: 10),
         Divider(),
-        Text('Notification interval'), //TODO heading
+        SizedBox(height: 10),
         Text(
-            'Sets the interval in which the app will check for new transactions'), //TODO hint size
+          AppLocalizations.instance
+              .translate('app_settings_notifications_heading_interval'),
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        SizedBox(height: 10),
+        Text(
+          AppLocalizations.instance
+              .translate('app_settings_notifications_hint_sync_1', {
+            'minutes': _appSettings.notificationInterval.toString(),
+          }),
+        ),
         Slider(
+          activeColor: Theme.of(context).primaryColor,
+          inactiveColor: Theme.of(context).shadowColor,
           value: _appSettings.notificationInterval.toDouble(),
           min: 15,
           max: 60,
           divisions: 3,
+          onChangeEnd: (e) => saveSnack(context),
           label: _appSettings.notificationInterval.toString(),
           onChanged: (e) => _appSettings.setNotificationInterval(
             e.toInt(),
           ),
         ),
-        Text('Hint.... will be delayed and such'), //TODO hint size
+        Text(
+            AppLocalizations.instance
+                .translate('app_settings_notifications_hint_sync_2'),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.secondary,
+            )),
+        SizedBox(height: 10),
         Divider(),
+        SizedBox(height: 10),
         PeerButton(
           text: AppLocalizations.instance
               .translate('app_settings_notifications_disable_button'),
@@ -142,7 +225,5 @@ class _AppSettingsNotificationsScreenState
       ),
     );
   }
-//TODO add data protection notice and enable dialog
 //TODO add background notifications to setup
-//TODO save snack for the toggle
 }
