@@ -30,7 +30,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           availableCoins[_coin]!.letterCode);
 
       //enable notifications
-      var _appSettings = Provider.of<AppSettings>(context);
+      var _appSettings = Provider.of<AppSettings>(context, listen: false);
       var _notificationList = _appSettings.notificationActiveWallets;
       _notificationList.add(availableCoins[_coin]!.letterCode);
       _appSettings.setNotificationActiveWallets(_notificationList);
