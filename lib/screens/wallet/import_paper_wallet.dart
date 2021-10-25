@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/availablecoins.dart';

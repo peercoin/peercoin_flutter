@@ -24,13 +24,15 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       .._selectedCurrency = fields[3] as String?
       .._latestTickerUpdate = fields[4] as DateTime?
       .._exchangeRates = (fields[5] as Map?)?.cast<String, dynamic>()
-      .._buildIdentifier = fields[6] as String?;
+      .._buildIdentifier = fields[6] as String?
+      .._notificationInterval = fields[7] as int?
+      .._notificationActiveWallets = (fields[8] as List?)?.cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, AppOptionsStore obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj._authenticationOptions)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       ..writeByte(5)
       ..write(obj._exchangeRates)
       ..writeByte(6)
-      ..write(obj._buildIdentifier);
+      ..write(obj._buildIdentifier)
+      ..writeByte(7)
+      ..write(obj._notificationInterval)
+      ..writeByte(8)
+      ..write(obj._notificationActiveWallets);
   }
 
   @override

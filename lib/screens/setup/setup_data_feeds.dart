@@ -25,6 +25,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   }
 
   bool _dataFeedAllowed = false;
+  bool _bgSyncdAllowed = false;
   bool _initial = true;
   late AppSettings _settings;
 
@@ -40,11 +41,18 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
     super.didChangeDependencies();
   }
 
-  void toggleHandler(bool newState) {
+  void togglePriceTickerHandler(bool newState) {
     _settings.setSelectedCurrency(newState == true ? 'USD' : '');
 
     setState(() {
       _dataFeedAllowed = newState;
+    });
+  }
+
+  void toggleBGSyncHandler(bool newState) {
+    _settings.setNotificationInterval(newState == true ? 15 : 0);
+    setState(() {
+      _bgSyncdAllowed = newState;
     });
   }
 
@@ -103,24 +111,57 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: SwitchListTile(
+                                key: Key('setupApiTickerSwitchKey'),
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_price_feed_allow'),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                value: _dataFeedAllowed,
+                                activeColor: Colors.white,
+                                inactiveThumbColor: Colors.grey,
+                                onChanged: (newState) =>
+                                    togglePriceTickerHandler(newState),
+                              ),
+                            ),
                             PeerExplanationText(
                               AppLocalizations.instance
                                   .translate('setup_price_feed_description'),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: SwitchListTile(
-                                  key: Key('setupApiSwitchKey'),
-                                  title: Text(
-                                    AppLocalizations.instance
-                                        .translate('setup_price_feed_allow'),
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  value: _dataFeedAllowed,
-                                  activeColor: Colors.white,
-                                  inactiveThumbColor: Colors.grey,
-                                  onChanged: (newState) =>
-                                      toggleHandler(newState)),
+                                key: Key('setupApiBGSwitchKey'),
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_bg_sync_allow'),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                value: _bgSyncdAllowed,
+                                activeColor: Colors.white,
+                                inactiveThumbColor: Colors.grey,
+                                onChanged: (newState) =>
+                                    toggleBGSyncHandler(newState),
+                              ),
+                            ),
+                            PeerExplanationText(
+                              AppLocalizations.instance
+                                  .translate('setup_bg_sync_description'),
                             ),
                           ],
                         ),

@@ -11,6 +11,7 @@ import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/tools/backgroundsync.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/wallet/new_wallet.dart';
@@ -19,10 +20,14 @@ import 'package:share/share.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
+  final String walletToOpenDirectly;
 
   @override
   _WalletListScreenState createState() => _WalletListScreenState();
-  WalletListScreen({this.fromColdStart = false});
+  WalletListScreen({
+    this.fromColdStart = false,
+    this.walletToOpenDirectly = '',
+  });
 }
 
 class _WalletListScreenState extends State<WalletListScreen>
@@ -54,6 +59,12 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
+      //init background tasks
+      if (_appSettings.notificationInterval > 0) {
+        await BackgroundSync.init(
+          notificationInterval: _appSettings.notificationInterval,
+        );
+      }
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
@@ -81,8 +92,18 @@ class _WalletListScreenState extends State<WalletListScreen>
           _appSettings.authenticationOptions!['walletList']!) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       } else if (fromScan == false) {
-        //push to default wallet
         final values = await _activeWallets.activeWalletsValues;
+        //find default wallet
+        late var defaultWallet;
+        //push to wallet directly (from notification) or to default wallet
+        if (widget.walletToOpenDirectly.isNotEmpty) {
+          defaultWallet = values.firstWhereOrNull(
+              (elem) => elem.name == widget.walletToOpenDirectly);
+        } else {
+          defaultWallet = values.firstWhereOrNull(
+              (elem) => elem.letterCode == _appSettings.defaultWallet);
+        }
+        //push to default wallet
         if (values.length == 1) {
           //only one wallet available, pushing to that one
           setState(() {
@@ -97,9 +118,6 @@ class _WalletListScreenState extends State<WalletListScreen>
             _isLoading = false;
           });
         } else if (values.length > 1) {
-          //find default wallet
-          final defaultWallet = values.firstWhereOrNull(
-              (elem) => elem.letterCode == _appSettings.defaultWallet);
           if (defaultWallet != null) {
             setState(() {
               _isLoading = true;
@@ -120,7 +138,6 @@ class _WalletListScreenState extends State<WalletListScreen>
         _initial = false;
       });
     }
-
     super.didChangeDependencies();
   }
 

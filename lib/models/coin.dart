@@ -1,4 +1,4 @@
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 
 class Coin {
   final String name;
@@ -11,7 +11,7 @@ class Coin {
   final int fractions;
   final int minimumTxValue;
   final double feePerKb;
-  final String explorerTxDetailUrl;
+  final String explorerUrl;
   final String genesisHash;
   final int txVersion;
 
@@ -26,7 +26,7 @@ class Coin {
     required this.fractions,
     required this.minimumTxValue,
     required this.feePerKb,
-    required this.explorerTxDetailUrl,
+    required this.explorerUrl,
     required this.genesisHash,
     required this.txVersion,
   });

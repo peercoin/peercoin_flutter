@@ -28,6 +28,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           _coin,
           availableCoins[_coin]!.displayName,
           availableCoins[_coin]!.letterCode);
+
+      //enable notifications
+      var _appSettings = Provider.of<AppSettings>(context, listen: false);
+      var _notificationList = _appSettings.notificationActiveWallets;
+      _notificationList.add(availableCoins[_coin]!.letterCode);
+      _appSettings.setNotificationActiveWallets(_notificationList);
+
       var prefs =
           await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
 

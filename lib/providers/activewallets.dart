@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:typed_data';
 
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:peercoin/tools/app_localizations.dart';
 
 import '../models/availablecoins.dart';
 import '../models/coinwallet.dart';
@@ -329,8 +330,9 @@ class ActiveWallets with ChangeNotifier {
 
         if (direction == 'in') {
           await flutterLocalNotificationsPlugin.show(
-            0,
-            'New transaction received',
+            DateTime.now().millisecondsSinceEpoch ~/ 10000,
+            AppLocalizations.instance.translate(
+                'notification_title', {'walletTitle': openWallet.title}),
             tx['txid'],
             LocalNotificationSettings.platformChannelSpecifics,
             payload: identifier,
@@ -569,7 +571,7 @@ class ActiveWallets with ChangeNotifier {
 
   String getScriptHash(String identifier, String address) {
     var network = AvailableCoins().getSpecificCoin(identifier).networkType;
-    var script = Address.addressToOutputScript(address, network)!;
+    var script = Address.addressToOutputScript(address, network);
     var hash = sha256.convert(script).toString();
     return (reverseString(hash));
   }

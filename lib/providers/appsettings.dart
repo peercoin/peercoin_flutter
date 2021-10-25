@@ -99,4 +99,22 @@ class AppSettings with ChangeNotifier {
     _appOptions.buildIdentifier = newIdentifier;
     notifyListeners();
   }
+
+  int get notificationInterval {
+    return _appOptions.notificationInterval;
+  }
+
+  void setNotificationInterval(int newInterval) {
+    _appOptions.notificationInterval = newInterval;
+    notifyListeners();
+  }
+
+  List<String> get notificationActiveWallets {
+    return _appOptions.notificationActiveWallets;
+  }
+
+  void setNotificationActiveWallets(List<String> newList) {
+    _appOptions.notificationActiveWallets = newList;
+    notifyListeners();
+  }
 }

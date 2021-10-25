@@ -75,6 +75,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
       }
+      if (_wallet.pendingTransactionNotifications.isNotEmpty) {
+        _wallet.clearPendingTransactionNotifications();
+      }
     }
   }
 
@@ -103,6 +106,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
         if (!_wallet.title.contains('Testnet')) {
           triggerHighValueAlert();
         }
+      }
+      if (_wallet.pendingTransactionNotifications.isNotEmpty) {
+        _wallet.clearPendingTransactionNotifications();
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;

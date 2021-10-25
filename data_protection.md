@@ -12,8 +12,14 @@ There is **no analytics**- **or advertising** software inside.
 **Optional Price Ticker**  
 The price ticker for PPC and FIAT exchange rates can be enabled or disabled optionally during setup or in "App Settings."
 
-The ticker is hosted as a "Cloudflare Worker" on Cloudflare.  
+**Optional Background Notifications**  
+Background notifications can be enabled or disabled optionally during setup or in "App Settings."
+
+The ticker and background notifications API are hosted as "Cloudflare Workers" on Cloudflare.  
 Cloudflare Privacy Policy: https://www.cloudflare.com/privacypolicy/
 
 Ticker source code: 
 https://github.com/bananenwilly/ppc-worker-ticker
+
+Background Notification API source code:
+https://github.com/bananenwilly/ppc-worker-address-status
