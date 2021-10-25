@@ -115,11 +115,9 @@ class BackgroundSync {
     );
 
     //loop through wallets
-    var i = 0;
     _walletBox.values.forEach(
       (wallet) async {
         //increment identifier for notifications
-        i++;
         if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
           //if activated, parse all addresses to a list that will be POSTed to backend later on
           var adressesToQuery = <String, int>{};
@@ -176,7 +174,7 @@ class BackgroundSync {
 
           if (_shouldNotify == true) {
             await flutterLocalNotificationsPlugin.show(
-              i,
+              DateTime.now().millisecondsSinceEpoch ~/ 10000,
               AppLocalizations.instance.translate(
                   'notification_title', {'walletTitle': wallet.title}),
               AppLocalizations.instance.translate('notification_body'),
