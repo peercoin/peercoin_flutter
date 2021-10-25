@@ -115,7 +115,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: SwitchListTile(
-                                key: Key('setupApiSwitchKey'),
+                                key: Key('setupApiTickerSwitchKey'),
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_price_feed_allow'),
