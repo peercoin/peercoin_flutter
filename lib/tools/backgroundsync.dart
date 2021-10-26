@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:background_fetch/background_fetch.dart';
@@ -141,7 +142,7 @@ class BackgroundSync {
             }
           });
 
-          print('addressesToQuery $adressesToQuery');
+          log('addressesToQuery $adressesToQuery');
 
           var result = await http.post(
             Uri.parse('https://peercoinexplorer.net/address-status'),
