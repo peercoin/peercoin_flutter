@@ -65,12 +65,12 @@ void main() {
                 timeout: Duration(minutes: 2),
               ); //tap into wallet
               await driver.tap(find.text('Peercoin Testnet'));
+              expect(await driver.getText(find.text('connected')), 'connected');
             },
             timeout: Duration(
               minutes: 15,
             ),
           );
-          expect(await driver.getText(find.text('connected')), 'connected');
         },
         timeout: Timeout.none,
       );

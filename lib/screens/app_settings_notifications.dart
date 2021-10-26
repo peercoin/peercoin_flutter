@@ -167,7 +167,12 @@ class _AppSettingsNotificationsScreenState
           min: 15,
           max: 60,
           divisions: 3,
-          onChangeEnd: (e) => saveSnack(context),
+          onChangeEnd: (e) async {
+            saveSnack(context);
+            await BackgroundSync.init(
+              notificationInterval: _appSettings.notificationInterval,
+            );
+          },
           label: _appSettings.notificationInterval.toString(),
           onChanged: (e) => _appSettings.setNotificationInterval(
             e.toInt(),
