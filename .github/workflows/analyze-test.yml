@@ -35,9 +35,9 @@ jobs:
         with:
           channel: 'stable'
       - name: run tests
-        uses: ReactiveCircus/android-emulator-runner@v2.19.1
+        uses: ReactiveCircus/android-emulator-runner@v2.21.0
         with:
-          api-level: 29
+          api-level: 30
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
