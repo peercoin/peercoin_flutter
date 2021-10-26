@@ -39,6 +39,7 @@ class ElectrumConnection with ChangeNotifier {
   int _maxChainDepth = 5;
   int _maxAddressDepth = 0; //no address depth scan for now
   Map<String, int> _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
+  final List _openReplies = [];
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -140,6 +141,15 @@ class ElectrumConnection with ChangeNotifier {
     notifyListeners();
   }
 
+  List get openReplies {
+    return _openReplies;
+  }
+
+  void replyReceived(String id) {
+    _openReplies.removeWhere((element) => element == id);
+    notifyListeners();
+  }
+
   Map get listenedAddresses {
     return _addresses;
   }
@@ -229,9 +239,11 @@ class ElectrumConnection with ChangeNotifier {
           break;
       }
     }
+    replyReceived(idString);
   }
 
   void sendMessage(String method, String? id, [List? params]) {
+    _openReplies.add(id);
     if (_connection != null) {
       _connection!.sink.add(
         json.encode(

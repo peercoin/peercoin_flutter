@@ -53,6 +53,21 @@ class _WalletHomeState extends State<WalletHomeScreen>
     });
   }
 
+  void checkPendingNotifications() {
+    if (_wallet.pendingTransactionNotifications.isNotEmpty) {
+      Future.delayed(
+        Duration(seconds: 2),
+        () {
+          if (_connectionProvider!.openReplies.isEmpty) {
+            _wallet.clearPendingTransactionNotifications();
+          } else {
+            checkPendingNotifications();
+          }
+        },
+      );
+    }
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance!.addObserver(this);
@@ -75,9 +90,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
       }
-      if (_wallet.pendingTransactionNotifications.isNotEmpty) {
-        _wallet.clearPendingTransactionNotifications();
-      }
+      checkPendingNotifications();
     }
   }
 
@@ -107,9 +120,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
           triggerHighValueAlert();
         }
       }
-      if (_wallet.pendingTransactionNotifications.isNotEmpty) {
-        _wallet.clearPendingTransactionNotifications();
-      }
+
+      checkPendingNotifications();
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;

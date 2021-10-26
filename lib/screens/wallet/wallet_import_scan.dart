@@ -60,6 +60,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           //subscribe to hd master
           _connectionProvider!.subscribeToScriptHashes(await _activeWallets
               .getWalletScriptHashes(_coinName, _masterAddr));
+
           setState(() {
             _scanStarted = true;
           });
