@@ -136,7 +136,9 @@ class BackgroundSync {
               //addr does not have a pending notification
               adressesToQuery[walletAddress.address] = wallet.transactions
                   .where(
-                    (element) => element.address == walletAddress.address,
+                    (element) =>
+                        element.address == walletAddress.address &&
+                        element.direction == 'in',
                   )
                   .length;
             }
@@ -160,6 +162,7 @@ class BackgroundSync {
           if (result.body.contains('foundDifference')) {
             //valid answer
             var bodyDecoded = jsonDecode(result.body);
+            print(bodyDecoded);
             _foundDifference = bodyDecoded['foundDifference'];
             if (_foundDifference == true) {
               //loop through addresses in result

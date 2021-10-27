@@ -525,10 +525,6 @@ class ActiveWallets with ChangeNotifier {
         var asDouble = double.parse(number) * 1000000;
         var requiredFeeInSatoshis = asDouble.toInt();
 
-        // if (requiredFeeInSatoshis < 10000) {
-        //   requiredFeeInSatoshis = 10000; //minimum fee 1 kb
-        // } for V3 TX
-
         log('fee $requiredFeeInSatoshis, size: ${intermediate.txSize}');
         if (dryRun == false) {
           log('intermediate size: ${intermediate.txSize}');
