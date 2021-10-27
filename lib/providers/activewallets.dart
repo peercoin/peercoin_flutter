@@ -529,6 +529,21 @@ class ActiveWallets with ChangeNotifier {
         if (dryRun == false) {
           log('intermediate size: ${intermediate.txSize}');
           _hex = intermediate.toHex();
+
+          //add notification_dummy tx to change address
+          openWallet.putTransaction(
+            WalletTransaction(
+              txid: 'notification_dummy',
+              timestamp: -1, //flags phantom tx
+              value: 0,
+              fee: 0,
+              address: _unusedAddress,
+              direction: 'in',
+              broadCasted: true,
+              confirmations: 0,
+              broadcastHex: '',
+            ),
+          );
         }
         //generate new wallet addr
         await generateUnusedAddress(identifier);
