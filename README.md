@@ -40,8 +40,8 @@ You can also sign up for our open beta testing here:
 - will not mint
 
 ## Development
-This repository currently relies on a fork of bitcoin_flutter, which can be found here: 
-[peercoin/bitcoin_flutter](https://github.com/peercoin/bitcoin_flutter "github.com/peercoin/bitcoin_flutter")
+This repository currently relies on 
+[Vesta-wallet/coinslib](https://github.com/Vesta-wallet/coinslib "github.com/peercoin/bitcoin_flutter")
 
 The original library is not compatible, due to transaction timestamp incompability. 
 
