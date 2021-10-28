@@ -544,6 +544,12 @@ class ActiveWallets with ChangeNotifier {
               broadcastHex: '',
             ),
           );
+          //flag addr as change addr
+          var addrInWallet = openWallet.addresses
+              .firstWhereOrNull((element) => element.address == _unusedAddress);
+          if (addrInWallet != null) {
+            addrInWallet.isChangeAddr = true;
+          }
         }
         //generate new wallet addr
         await generateUnusedAddress(identifier);
