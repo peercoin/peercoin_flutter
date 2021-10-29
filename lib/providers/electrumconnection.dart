@@ -39,7 +39,7 @@ class ElectrumConnection with ChangeNotifier {
   int _maxChainDepth = 5;
   int _maxAddressDepth = 0; //no address depth scan for now
   Map<String, int> _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
-  final List _openReplies = [];
+  List _openReplies = [];
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -183,6 +183,7 @@ class ElectrumConnection with ChangeNotifier {
     _latestBlock = null;
     _scanMode = false;
     _paperWalletUtxos = {};
+    _openReplies = [];
     _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
     _maxChainDepth = 5;
     _maxAddressDepth = 0; //no address depth scan for now
