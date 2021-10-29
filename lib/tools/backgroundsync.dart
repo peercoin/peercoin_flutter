@@ -68,7 +68,7 @@ class BackgroundSync {
     }
   }
 
-  static Future<void> executeSync() async {
+  static Future<void> executeSync({bool fromScan = false}) async {
     //this static method can't access the providers we already have so we have to re-invent some things here...
     Uint8List _encryptionKey;
     var _secureStorage = const FlutterSecureStorage();
@@ -172,7 +172,13 @@ class BackgroundSync {
                 wallet.putPendingTransactionNotification(PendingNotification(
                     address: element['address'], tx: element['tx']));
               });
-              _shouldNotify = true;
+
+              if (fromScan == true) {
+                //persist backend data
+                wallet.clearPendingTransactionNotifications();
+              } else {
+                _shouldNotify = true;
+              }
             }
           }
 
