@@ -23,6 +23,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
   late Timer _timer;
+  bool _reconnected = false;
 
   @override
   void didChangeDependencies() async {
@@ -64,6 +65,24 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           setState(() {
             _scanStarted = true;
           });
+        }
+
+        if (_connectionProvider!.openReplies.isEmpty) {
+          //no more replies left - check what is left to do
+          if (_reconnected == false) {
+            await _connectionProvider!.closeConnection();
+            await Future.delayed(
+              Duration(seconds: 1),
+              () async {
+                await _connectionProvider!.init(_coinName);
+                _connectionProvider!.subscribeToScriptHashes(
+                    await _activeWallets.getWalletScriptHashes(_coinName));
+              },
+            );
+            setState(() {
+              _reconnected = true;
+            });
+          }
         }
       }
     }
