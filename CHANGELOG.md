@@ -1,5 +1,6 @@
 ### **0.7.0** (2021-10-08)
-* Background notifications can now be enabled in app settings
+* Background notifications can now be enabled in app settings  
+Please perform a wallet scan to avoid unnecessary notifications. 
 * Transactions will now be send without timestamp (version 3, 0.11 hard fork)
 
 ### **0.6.4** (2021-10-08)

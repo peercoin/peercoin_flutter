@@ -53,9 +53,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     });
   }
 
-  void checkPendingNotifications() {
+  void checkPendingNotifications() async {
     if (_wallet.pendingTransactionNotifications.isNotEmpty) {
-      Future.delayed(
+      await Future.delayed(
         Duration(seconds: 2),
         () {
           if (_connectionProvider!.openReplies.isEmpty) {

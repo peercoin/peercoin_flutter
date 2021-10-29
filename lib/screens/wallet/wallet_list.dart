@@ -59,12 +59,6 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
-      //init background tasks
-      if (_appSettings.notificationInterval > 0) {
-        await BackgroundSync.init(
-          notificationInterval: _appSettings.notificationInterval,
-        );
-      }
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
@@ -92,6 +86,12 @@ class _WalletListScreenState extends State<WalletListScreen>
           _appSettings.authenticationOptions!['walletList']!) {
         await Auth.requireAuth(context, _appSettings.biometricsAllowed);
       } else if (fromScan == false) {
+        //init background tasks
+        if (_appSettings.notificationInterval > 0) {
+          await BackgroundSync.init(
+            notificationInterval: _appSettings.notificationInterval,
+          );
+        }
         final values = await _activeWallets.activeWalletsValues;
         //find default wallet
         late var defaultWallet;

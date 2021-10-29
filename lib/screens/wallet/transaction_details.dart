@@ -22,7 +22,7 @@ class TransactionDetails extends StatelessWidget {
     final WalletTransaction _tx = args[0];
     final CoinWallet _coinWallet = args[1];
     final baseUrl =
-        AvailableCoins().getSpecificCoin(_coinWallet.name).explorerUrl + '/tx';
+        AvailableCoins().getSpecificCoin(_coinWallet.name).explorerUrl + '/tx/';
 
     return Scaffold(
       appBar: AppBar(

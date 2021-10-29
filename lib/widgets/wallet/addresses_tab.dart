@@ -506,4 +506,5 @@ class _AddressTabState extends State<AddressTab> {
       ],
     );
   }
+  //TODO allow change addresses to be hidden in the list
 }

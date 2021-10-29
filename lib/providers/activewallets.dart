@@ -525,14 +525,31 @@ class ActiveWallets with ChangeNotifier {
         var asDouble = double.parse(number) * 1000000;
         var requiredFeeInSatoshis = asDouble.toInt();
 
-        // if (requiredFeeInSatoshis < 10000) {
-        //   requiredFeeInSatoshis = 10000; //minimum fee 1 kb
-        // } for V3 TX
-
         log('fee $requiredFeeInSatoshis, size: ${intermediate.txSize}');
         if (dryRun == false) {
           log('intermediate size: ${intermediate.txSize}');
           _hex = intermediate.toHex();
+
+          //add notification_dummy tx to change address
+          openWallet.putTransaction(
+            WalletTransaction(
+              txid: 'notification_dummy',
+              timestamp: -1, //flags phantom tx
+              value: 0,
+              fee: 0,
+              address: _unusedAddress,
+              direction: 'in',
+              broadCasted: true,
+              confirmations: 0,
+              broadcastHex: '',
+            ),
+          );
+          //flag addr as change addr
+          var addrInWallet = openWallet.addresses
+              .firstWhereOrNull((element) => element.address == _unusedAddress);
+          if (addrInWallet != null) {
+            addrInWallet.isChangeAddr = true;
+          }
         }
         //generate new wallet addr
         await generateUnusedAddress(identifier);

@@ -5,6 +5,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/tools/backgroundsync.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
   late Timer _timer;
+  bool _reconnected = false;
 
   @override
   void didChangeDependencies() async {
@@ -41,6 +43,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+          //sync notification backend
+          await BackgroundSync.executeSync(fromScan: true);
           _timer.cancel();
           await Navigator.of(context).pushReplacementNamed(Routes.WalletList,
               arguments: {'fromScan': true});
@@ -64,6 +68,24 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           setState(() {
             _scanStarted = true;
           });
+        }
+
+        if (_connectionProvider!.openReplies.isEmpty) {
+          //no more replies left - check what is left to do
+          if (_reconnected == false) {
+            await _connectionProvider!.closeConnection();
+            await Future.delayed(
+              Duration(seconds: 1),
+              () async {
+                await _connectionProvider!.init(_coinName);
+                _connectionProvider!.subscribeToScriptHashes(
+                    await _activeWallets.getWalletScriptHashes(_coinName));
+              },
+            );
+            setState(() {
+              _reconnected = true;
+            });
+          }
         }
       }
     }
