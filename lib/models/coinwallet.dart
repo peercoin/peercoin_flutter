@@ -121,7 +121,9 @@ class CoinWallet extends HiveObject {
       pendingTransactionNotifications.forEach((pendingNotifcation) {
         var nOfTxInHive = transactions
             .where(
-              (element) => element.address == pendingNotifcation.address,
+              (element) =>
+                  element.address == pendingNotifcation.address &&
+                  element.direction == 'in',
             )
             .length;
         if (pendingNotifcation.tx != nOfTxInHive) {

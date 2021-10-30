@@ -123,24 +123,26 @@ class BackgroundSync {
           //if activated, parse all addresses to a list that will be POSTed to backend later on
           var adressesToQuery = <String, int>{};
           wallet.addresses.forEach((walletAddress) async {
-            //check if that address already has a pending notification
-            var res = wallet.pendingTransactionNotifications
-                .where(
-                  (element) => element.address == walletAddress.address,
-                )
-                .toList();
-            if (res.isNotEmpty) {
-              //addr does have a pending notification
-              adressesToQuery[walletAddress.address] = res[0].tx;
-            } else {
-              //addr does not have a pending notification
-              adressesToQuery[walletAddress.address] = wallet.transactions
+            if (walletAddress.isOurs == true) {
+              //check if that address already has a pending notification
+              var res = wallet.pendingTransactionNotifications
                   .where(
-                    (element) =>
-                        element.address == walletAddress.address &&
-                        element.direction == 'in',
+                    (element) => element.address == walletAddress.address,
                   )
-                  .length;
+                  .toList();
+              if (res.isNotEmpty) {
+                //addr does have a pending notification
+                adressesToQuery[walletAddress.address] = res[0].tx;
+              } else {
+                //addr does not have a pending notification
+                adressesToQuery[walletAddress.address] = wallet.transactions
+                    .where(
+                      (element) =>
+                          element.address == walletAddress.address &&
+                          element.direction == 'in',
+                    )
+                    .length;
+              }
             }
           });
 
