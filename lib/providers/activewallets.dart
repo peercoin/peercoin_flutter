@@ -370,6 +370,8 @@ class ActiveWallets with ChangeNotifier {
 
     openWallet.transactions
         .removeWhere((element) => element.txid == 'notification_dummy');
+    openWallet.transactions
+        .removeWhere((element) => element.broadCasted == false);
 
     await updateWalletBalance(identifier);
     await openWallet.save();
