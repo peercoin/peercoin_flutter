@@ -61,7 +61,7 @@ class _AppSettingsNotificationsScreenState
             ),
             TextButton(
               onPressed: () async {
-                _appSettings.setNotificationInterval(15);
+                _appSettings.setNotificationInterval(30);
 
                 var walletList = <String>[];
                 _availableWallets.forEach((element) {
