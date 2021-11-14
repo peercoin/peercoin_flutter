@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.coinerella.peercoin"
-        minSdkVersion 20
+        minSdkVersion 26
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
