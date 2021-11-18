@@ -360,6 +360,8 @@ class ActiveWallets with ChangeNotifier {
       broadcastHex: tx['hex'],
     ));
 
+    //TODO save op_return
+
     notifyListeners();
     await openWallet.save();
   }
