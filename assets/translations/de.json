@@ -221,7 +221,7 @@
     "setup_price_feed_description": "Du kannst hier unseren optionalen Preis-Feed aktivieren. Dies ermöglicht deinen Kontostand in Echtzeit in anderen Währungen anzuzeigen.",
     "setup_price_feed_title": "Externe APIs",
     "store_short": "Deine mobile Wallet für Peercoin und Peercoin Testnet.",
-    "store_description": "Sende und empfange Peercoin auf deinem Telefon.\n\nBeschütze deinen Wallet Seed.\nDiese App kommt frei von jedweder Garantie.\nBenutzung auf eigene Gefahr.\n\nEigenschaften:\n-Basiert auf dem Elektrum-Protokoll\n-Peercoin senden und empfangen\n-Direkt nach der Installation bereit für Transaktionen (kein warten)\n-Peercoin und Peercoin Testnet Wallets\n-Adressbuch\n-Import von Papier-Wallets \n-Server-Verwaltung\n-Mehrsprachig\n\nBekannte Einschränkungen können im Github Repository eingesehen werden.",
+    "store_description": "Sende und empfange Peercoin auf deinem Telefon.\n\nBeschütze deinen Wallet Seed.\nDiese App kommt frei von jedweder Garantie.\nBenutzung auf eigene Gefahr.\n\nEigenschaften:\n-Basiert auf dem Electrum-Protokoll\n-Peercoin senden und empfangen\n-Direkt nach der Installation bereit für Transaktionen (kein warten)\n-Peercoin und Peercoin Testnet Wallets\n-Adressbuch\n-Import von Papier-Wallets \n-Server-Verwaltung\n-Mehrsprachig\n-Hintergrundbenachrichtigungen\n\nBekannte Einschränkungen können im Github Repository eingesehen werden.",
     "about_illustrations_button": "designs.AI",
     "about_illustrations": "Einrichtungsillustrationen bereitgestellt von",
     "import_button": "Importieren",

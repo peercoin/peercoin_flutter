@@ -135,7 +135,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
         WalletBalanceHeader(widget._connectionState, _wallet),
         ListView(
           children: [
-            SizedBox(height: 110),
+            SizedBox(
+              height: _wallet.unconfirmedBalance > 0 ? 125 : 110,
+            ),
             Container(
               height: 30,
               decoration: BoxDecoration(

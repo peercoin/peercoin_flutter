@@ -187,7 +187,9 @@ class _TransactionListState extends State<TransactionList> {
                                             : FontWeight.w300,
                                     color: _filteredTx[i - 1].direction == 'out'
                                         ? Theme.of(context).errorColor
-                                        : Theme.of(context).colorScheme.primaryVariant,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .primaryVariant,
                                   ),
                                 ),
                                 _filteredTx[i - 1].direction == 'out'
@@ -213,7 +215,11 @@ class _TransactionListState extends State<TransactionList> {
                         widget._walletTransactions.isNotEmpty) {
                       return Column(
                         children: [
-                          SizedBox(height: 110),
+                          SizedBox(
+                            height: widget._wallet.unconfirmedBalance > 0
+                                ? 125
+                                : 110,
+                          ),
                           Container(
                             height: 30,
                             decoration: BoxDecoration(
@@ -223,8 +229,7 @@ class _TransactionListState extends State<TransactionList> {
                                     Theme.of(context).primaryColor,
                                   ],
                                   begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter
-                              ),
+                                  end: Alignment.bottomCenter),
                             ),
                           ),
                           Container(
@@ -237,7 +242,8 @@ class _TransactionListState extends State<TransactionList> {
                                   ChoiceChip(
                                     backgroundColor:
                                         Theme.of(context).backgroundColor,
-                                    selectedColor: Theme.of(context).shadowColor,
+                                    selectedColor:
+                                        Theme.of(context).shadowColor,
                                     visualDensity: VisualDensity(
                                         horizontal: 0.0, vertical: -4),
                                     label: Container(
@@ -245,7 +251,9 @@ class _TransactionListState extends State<TransactionList> {
                                       AppLocalizations.instance
                                           .translate('transactions_in'),
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.secondary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                       ),
                                     )),
                                     selected: _filterChoice == 'in',
@@ -254,14 +262,17 @@ class _TransactionListState extends State<TransactionList> {
                                   ChoiceChip(
                                     backgroundColor:
                                         Theme.of(context).backgroundColor,
-                                    selectedColor: Theme.of(context).shadowColor,
+                                    selectedColor:
+                                        Theme.of(context).shadowColor,
                                     visualDensity: VisualDensity(
                                         horizontal: 0.0, vertical: -4),
                                     label: Text(
                                         AppLocalizations.instance
                                             .translate('transactions_all'),
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.secondary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         )),
                                     selected: _filterChoice == 'all',
                                     onSelected: (_) => _handleSelect('all'),
@@ -269,14 +280,17 @@ class _TransactionListState extends State<TransactionList> {
                                   ChoiceChip(
                                     backgroundColor:
                                         Theme.of(context).backgroundColor,
-                                    selectedColor: Theme.of(context).shadowColor,
+                                    selectedColor:
+                                        Theme.of(context).shadowColor,
                                     visualDensity: VisualDensity(
                                         horizontal: 0.0, vertical: -4),
                                     label: Text(
                                         AppLocalizations.instance
                                             .translate('transactions_out'),
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.secondary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         )),
                                     selected: _filterChoice == 'out',
                                     onSelected: (_) => _handleSelect('out'),

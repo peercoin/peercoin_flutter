@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mailto/mailto.dart';
 
@@ -44,18 +45,19 @@ class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppLocalizations.instance.translate('about'),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.instance.translate('about'),
         ),
-        body: Column(children: [
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Column(
+        children: [
           Expanded(
             child: SingleChildScrollView(
               child: _packageInfo == null
@@ -64,116 +66,132 @@ class _AboutScreenState extends State<AboutScreen> {
                       padding: const EdgeInsets.all(20.0),
                       width: double.infinity,
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text('${_packageInfo!.appName}'),
-                            Text(
-                              'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
-                            ),
-                            Text(AppLocalizations.instance.translate(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('${_packageInfo!.appName}'),
+                          Text(
+                            'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
+                          ),
+                          Text(
+                            AppLocalizations.instance.translate(
                               'about_developers',
                               {'year': DateFormat.y().format(DateTime.now())},
-                            )),
-                            TextButton(
-                                onPressed: () => _launchURL(
-                                    'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
-                                child: Text(
-                                  AppLocalizations.instance
-                                      .translate('about_license'),
-                                  textAlign: TextAlign.center,
-                                )),
-                            Divider(),
-                            SizedBox(height: 10),
-                            Text(
-                              AppLocalizations.instance.translate('about_free'),
                             ),
-                            TextButton(
-                                onPressed: () => _launchURL(
-                                    'https://github.com/peercoin/peercoin_flutter'),
-                                child: Text(
-                                  AppLocalizations.instance
-                                      .translate('about_view_source'),
-                                  textAlign: TextAlign.center,
-                                )),
-                            Divider(),
-                            SizedBox(height: 10),
-                            Text(
+                          ),
+                          TextButton(
+                            onPressed: () => _launchURL(
+                                'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
+                            child: Text(
                               AppLocalizations.instance
-                                  .translate('about_data_protection'),
+                                  .translate('about_license'),
+                              textAlign: TextAlign.center,
                             ),
-                            TextButton(
+                          ),
+                          Divider(),
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(Routes.ChangeLog),
+                            child: Text(
+                              AppLocalizations.instance
+                                  .translate('changelog_appbar'),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Divider(),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance.translate('about_free'),
+                          ),
+                          TextButton(
                               onPressed: () => _launchURL(
-                                  'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
+                                  'https://github.com/peercoin/peercoin_flutter'),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('about_data_declaration'),
+                                    .translate('about_view_source'),
                                 textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Divider(),
-                            SizedBox(height: 10),
-                            Text(
+                              )),
+                          Divider(),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('about_data_protection'),
+                          ),
+                          TextButton(
+                            onPressed: () => _launchURL(
+                                'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
+                            child: Text(
                               AppLocalizations.instance
-                                  .translate('about_foundation'),
+                                  .translate('about_data_declaration'),
+                              textAlign: TextAlign.center,
                             ),
-                            TextButton(
-                              onPressed: () => _launchURL(
-                                  'https://www.peercoin.net/foundation'),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_foundation_button'),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Divider(),
-                            SizedBox(height: 10),
-                            Text(
+                          ),
+                          Divider(),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('about_foundation'),
+                          ),
+                          TextButton(
+                            onPressed: () => _launchURL(
+                                'https://www.peercoin.net/foundation'),
+                            child: Text(
                               AppLocalizations.instance
-                                  .translate('about_translate'),
+                                  .translate('about_foundation_button'),
+                              textAlign: TextAlign.center,
                             ),
-                            TextButton(
-                              onPressed: () async =>
-                                  _launchURL('https://weblate.ppc.lol'),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_go_weblate'),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Divider(),
-                            SizedBox(height: 10),
-                            Text(
+                          ),
+                          Divider(),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('about_translate'),
+                          ),
+                          TextButton(
+                            onPressed: () async =>
+                                _launchURL('https://weblate.ppc.lol'),
+                            child: Text(
                               AppLocalizations.instance
-                                  .translate('about_help_or_feedback'),
+                                  .translate('about_go_weblate'),
+                              textAlign: TextAlign.center,
                             ),
-                            TextButton(
-                              onPressed: () async => launchMailto(),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_send_mail'),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Divider(),
-                            SizedBox(height: 10),
-                            Text(
+                          ),
+                          Divider(),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('about_help_or_feedback'),
+                          ),
+                          TextButton(
+                            onPressed: () async => launchMailto(),
+                            child: Text(
                               AppLocalizations.instance
-                                  .translate('about_illustrations'),
+                                  .translate('about_send_mail'),
+                              textAlign: TextAlign.center,
                             ),
-                            TextButton(
-                              onPressed: () async =>
-                                  _launchURL('https://designs.ai'),
-                              child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_illustrations_button'),
-                                textAlign: TextAlign.center,
-                              ),
+                          ),
+                          Divider(),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('about_illustrations'),
+                          ),
+                          TextButton(
+                            onPressed: () async =>
+                                _launchURL('https://designs.ai'),
+                            child: Text(
+                              AppLocalizations.instance
+                                  .translate('about_illustrations_button'),
+                              textAlign: TextAlign.center,
                             ),
-                          ]),
+                          ),
+                        ],
+                      ),
                     ),
             ),
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }
 
