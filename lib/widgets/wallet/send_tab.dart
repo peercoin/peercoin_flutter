@@ -421,8 +421,18 @@ class _SendTabState extends State<SendTab> {
                         autocorrect: false,
                         maxLength: _availableCoin.networkType.opreturnSize,
                         minLines: 1,
-                        maxLines: 3,
+                        maxLines: 5,
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              onPressed: () async {
+                                var data =
+                                    await Clipboard.getData('text/plain');
+                                opreturnController.text = data!.text!;
+                              },
+                              icon: Icon(
+                                Icons.paste_rounded,
+                                color: Theme.of(context).primaryColor,
+                              )),
                           icon: Icon(
                             Icons.message,
                             color: Theme.of(context).primaryColor,
