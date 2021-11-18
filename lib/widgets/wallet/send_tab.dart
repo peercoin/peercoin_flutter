@@ -36,10 +36,12 @@ class _SendTabState extends State<SendTab> {
   final _formKey = GlobalKey<FormState>();
   final _addressKey = GlobalKey<FormFieldState>();
   final _amountKey = GlobalKey<FormFieldState>();
+  final _opReturnKey = GlobalKey<FormFieldState>();
   final _labelKey = GlobalKey<FormFieldState>();
   final addressController = TextEditingController();
   final amountController = TextEditingController();
   final labelController = TextEditingController();
+  final opreturnController = TextEditingController();
   bool _initial = true;
   late CoinWallet _wallet;
   late Coin _availableCoin;
@@ -73,6 +75,7 @@ class _SendTabState extends State<SendTab> {
       _amountKey.currentState!.value,
       fee,
       dryrun,
+      _opReturnKey.currentState!.value,
     );
   }
 
@@ -279,8 +282,9 @@ class _SendTabState extends State<SendTab> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     PeerServiceTitle(
-                        title: AppLocalizations.instance
-                            .translate('wallet_bottom_nav_send')),
+                      title: AppLocalizations.instance
+                          .translate('wallet_bottom_nav_send'),
+                    ),
                     TypeAheadFormField(
                       hideOnEmpty: true,
                       key: _addressKey,
@@ -353,63 +357,79 @@ class _SendTabState extends State<SendTab> {
                       maxLength: 32,
                     ),
                     TextFormField(
+                      textInputAction: TextInputAction.done,
+                      key: _amountKey,
+                      controller: amountController,
+                      autocorrect: false,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            getValidator(_availableCoin.fractions)),
+                      ],
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.money,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        labelText:
+                            AppLocalizations.instance.translate('send_amount'),
+                        suffix: Text(_wallet.letterCode),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return AppLocalizations.instance
+                              .translate('send_enter_amount');
+                        }
+                        final convertedValue = value.replaceAll(',', '.');
+                        amountController.text = convertedValue;
+                        var txValueInSatoshis =
+                            (double.parse(convertedValue) * 1000000).toInt();
+                        log('req value $txValueInSatoshis - ${_wallet.balance}');
+                        if (convertedValue.contains('.') &&
+                            convertedValue.split('.')[1].length >
+                                _availableCoin.fractions) {
+                          return AppLocalizations.instance
+                              .translate('send_amount_small');
+                        }
+                        if (txValueInSatoshis > _wallet.balance) {
+                          return AppLocalizations.instance
+                              .translate('send_amount_exceeds');
+                        }
+                        if (txValueInSatoshis < _availableCoin.minimumTxValue) {
+                          return AppLocalizations.instance.translate(
+                              'send_amount_below_minimum', {
+                            'amount':
+                                '${_availableCoin.minimumTxValue / 1000000}'
+                          });
+                        }
+                        if (txValueInSatoshis == _wallet.balance &&
+                            _wallet.balance == _availableCoin.minimumTxValue) {
+                          return AppLocalizations.instance.translate(
+                            'send_amount_below_minimum_unable',
+                          );
+                        }
+
+                        return null;
+                      },
+                    ),
+                    //TODO toggle
+                    TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: _amountKey,
-                        controller: amountController,
+                        key: _opReturnKey,
+                        controller: opreturnController,
                         autocorrect: false,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              getValidator(_availableCoin.fractions)),
-                        ],
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                        maxLength: _availableCoin.networkType.opreturnSize,
+                        minLines: 1,
+                        maxLines: 3,
                         decoration: InputDecoration(
                           icon: Icon(
-                            Icons.money,
+                            Icons.message,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance
-                              .translate('send_amount'),
-                          suffix: Text(_wallet.letterCode),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return AppLocalizations.instance
-                                .translate('send_enter_amount');
-                          }
-                          final convertedValue = value.replaceAll(',', '.');
-                          amountController.text = convertedValue;
-                          var txValueInSatoshis =
-                              (double.parse(convertedValue) * 1000000).toInt();
-                          log('req value $txValueInSatoshis - ${_wallet.balance}');
-                          if (convertedValue.contains('.') &&
-                              convertedValue.split('.')[1].length >
-                                  _availableCoin.fractions) {
-                            return AppLocalizations.instance
-                                .translate('send_amount_small');
-                          }
-                          if (txValueInSatoshis > _wallet.balance) {
-                            return AppLocalizations.instance
-                                .translate('send_amount_exceeds');
-                          }
-                          if (txValueInSatoshis <
-                              _availableCoin.minimumTxValue) {
-                            return AppLocalizations.instance.translate(
-                                'send_amount_below_minimum', {
-                              'amount':
-                                  '${_availableCoin.minimumTxValue / 1000000}'
-                            });
-                          }
-                          if (txValueInSatoshis == _wallet.balance &&
-                              _wallet.balance ==
-                                  _availableCoin.minimumTxValue) {
-                            return AppLocalizations.instance.translate(
-                              'send_amount_below_minimum_unable',
-                            );
-                          }
-
-                          return null;
-                        }),
+                              .translate('send_op_return'),
+                        )),
                     SizedBox(height: 30),
                     PeerButtonBorder(
                       text: AppLocalizations.instance.translate(

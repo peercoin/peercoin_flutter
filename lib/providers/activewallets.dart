@@ -437,12 +437,8 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<Map> buildTransaction(
-    String identifier,
-    String address,
-    String amount,
-    int fee, [
-    bool dryRun = false,
-  ]) async {
+      String identifier, String address, String amount, int fee,
+      [bool dryRun = false, String opReturn = '']) async {
     //convert amount
     var _txAmount = (double.parse(amount) * 1000000).toInt();
     var openWallet = getSpecificCoinWallet(identifier);
@@ -489,6 +485,11 @@ class ActiveWallets with ChangeNotifier {
           }
         } else {
           tx.addOutput(address, _txAmount - fee);
+        }
+
+        //add OP_RETURN if exists
+        if (opReturn.isNotEmpty) {
+          tx.addNullOutput(opReturn);
         }
 
         //generate keyMap
