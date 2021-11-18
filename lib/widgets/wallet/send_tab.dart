@@ -50,6 +50,7 @@ class _SendTabState extends State<SendTab> {
   int _totalValue = 0;
   WalletAddress? _transferedAddress;
   late List<WalletAddress> _availableAddresses = [];
+  bool _expertMode = false;
 
   @override
   void didChangeDependencies() async {
@@ -413,34 +414,52 @@ class _SendTabState extends State<SendTab> {
                         return null;
                       },
                     ),
-                    //TODO toggle
-                    TextFormField(
-                        textInputAction: TextInputAction.done,
-                        key: _opReturnKey,
-                        controller: opreturnController,
-                        autocorrect: false,
-                        maxLength: _availableCoin.networkType.opreturnSize,
-                        minLines: 1,
-                        maxLines: 5,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                              onPressed: () async {
-                                var data =
-                                    await Clipboard.getData('text/plain');
-                                opreturnController.text = data!.text!;
-                              },
+                    _expertMode
+                        ? TextFormField(
+                            textInputAction: TextInputAction.done,
+                            key: _opReturnKey,
+                            controller: opreturnController,
+                            autocorrect: false,
+                            maxLength: _availableCoin.networkType.opreturnSize,
+                            minLines: 1,
+                            maxLines: 5,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () async {
+                                  var data =
+                                      await Clipboard.getData('text/plain');
+                                  opreturnController.text = data!.text!.trim();
+                                },
+                                icon: Icon(
+                                  Icons.paste_rounded,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
                               icon: Icon(
-                                Icons.paste_rounded,
+                                Icons.message,
                                 color: Theme.of(context).primaryColor,
-                              )),
-                          icon: Icon(
-                            Icons.message,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          labelText: AppLocalizations.instance
-                              .translate('send_op_return'),
-                        )),
-                    SizedBox(height: 30),
+                              ),
+                              labelText: AppLocalizations.instance
+                                  .translate('send_op_return'),
+                            ),
+                          )
+                        : Container(),
+                    SwitchListTile(
+                      value: _expertMode,
+                      onChanged: (a) => setState(() {
+                        _expertMode = a;
+                      }),
+                      title: Text(
+                        AppLocalizations.instance.translate(
+                          'send_add_metadata',
+                        ),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.4,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     PeerButtonBorder(
                       text: AppLocalizations.instance.translate(
                         'send_qr',
