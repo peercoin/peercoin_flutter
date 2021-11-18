@@ -1,3 +1,7 @@
+### **0.7.2** (2021-xx-xx)
+* App can now send to P2SH (Multisig) addresses
+* Try it with the "Donation" button in the "About" tab
+
 ### **0.7.1** (2021-11-18)
 * OP_RETURN messages can now be included in the "send" tab of the wallet
 * French and Polish translation
