@@ -1,5 +1,6 @@
-### **0.7.1** (2021-xx-xx)
-* Maintenance release with minor changes under the hood
+### **0.7.1** (2021-11-18)
+* OP_RETURN messages can now be included in the "send" tab of the wallet
+* Minor changes under the hood
 ### **0.7.0** (2021-10-08)
 * Background notifications can now be enabled in app settings  
 Please perform a wallet scan to avoid unnecessary notifications. 
