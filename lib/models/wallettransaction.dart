@@ -21,6 +21,8 @@ class WalletTransaction extends HiveObject {
   bool broadCasted = true;
   @HiveField(8)
   String broadcastHex = '';
+  @HiveField(9, defaultValue: '')
+  String opReturn = '';
 
   WalletTransaction({
     required this.txid,
@@ -32,6 +34,7 @@ class WalletTransaction extends HiveObject {
     required this.broadCasted,
     required this.broadcastHex,
     required this.confirmations,
+    required this.opReturn,
   });
 
   set newTimestamp(int newTime) {

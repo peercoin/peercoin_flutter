@@ -262,16 +262,16 @@ class ActiveWallets with ChangeNotifier {
       //write phantom tx that are not displayed in tx list but known to the wallet
       //so they won't be parsed again and cause weird display behaviour
       openWallet.putTransaction(WalletTransaction(
-        txid: tx['txid'],
-        timestamp: -1, //flags phantom tx
-        value: 0,
-        fee: 0,
-        address: address,
-        direction: 'in',
-        broadCasted: true,
-        confirmations: 0,
-        broadcastHex: '',
-      ));
+          txid: tx['txid'],
+          timestamp: -1, //flags phantom tx
+          value: 0,
+          fee: 0,
+          address: address,
+          direction: 'in',
+          broadCasted: true,
+          confirmations: 0,
+          broadcastHex: '',
+          opReturn: ''));
     } else {
       //check if that tx is already in the db
       var txInWallet = openWallet.transactions;
@@ -312,16 +312,17 @@ class ActiveWallets with ChangeNotifier {
                   final txValue = (vOut['value'] * 1000000).toInt();
 
                   openWallet.putTransaction(WalletTransaction(
-                    txid: tx['txid'],
-                    timestamp: tx['blocktime'] ?? 0,
-                    value: txValue,
-                    fee: 0,
-                    address: addr,
-                    direction: direction,
-                    broadCasted: true,
-                    confirmations: tx['confirmations'] ?? 0,
-                    broadcastHex: '',
-                  ));
+                      txid: tx['txid'],
+                      timestamp: tx['blocktime'] ?? 0,
+                      value: txValue,
+                      fee: 0,
+                      address: addr,
+                      direction: direction,
+                      broadCasted: true,
+                      confirmations: tx['confirmations'] ?? 0,
+                      broadcastHex: '',
+                      opReturn: '' //TODO parse op return
+                      ));
                 }
               });
             }
@@ -350,19 +351,20 @@ class ActiveWallets with ChangeNotifier {
   Future<void> putOutgoingTx(String identifier, String address, Map tx) async {
     var openWallet = getSpecificCoinWallet(identifier);
 
-    openWallet.putTransaction(WalletTransaction(
-      txid: tx['txid'],
-      timestamp: tx['blocktime'] ?? 0,
-      value: tx['outValue'],
-      fee: tx['outFees'],
-      address: address,
-      direction: 'out',
-      broadCasted: false,
-      confirmations: 0,
-      broadcastHex: tx['hex'],
-    ));
-
-    //TODO save op_return
+    openWallet.putTransaction(
+      WalletTransaction(
+        txid: tx['txid'],
+        timestamp: tx['blocktime'] ?? 0,
+        value: tx['outValue'],
+        fee: tx['outFees'],
+        address: address,
+        direction: 'out',
+        broadCasted: false,
+        confirmations: 0,
+        broadcastHex: tx['hex'],
+        opReturn: tx['opReturn'],
+      ),
+    );
 
     notifyListeners();
     await openWallet.save();
@@ -424,13 +426,13 @@ class ActiveWallets with ChangeNotifier {
           network: network,
         );
 
-        for (var i = 0; i <= openWallet.addresses.length; i++) {
+        for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
+          //parse 5 extra WIFs, just to be sure
           final child = hdWallet.derivePath("m/0'/$i/0");
           _wifs[child.address] = child.wif;
         }
         _wifs[hdWallet.address] = hdWallet.wif;
-
-        walletAddress.newWif = _wifs[walletAddress.address]; //save
+        walletAddress.newWif = _wifs[address]; //save
         await openWallet.save();
         return _wifs[walletAddress.address];
       }
@@ -549,6 +551,7 @@ class ActiveWallets with ChangeNotifier {
               broadCasted: true,
               confirmations: 0,
               broadcastHex: '',
+              opReturn: '',
             ),
           );
           //flag addr as change addr
@@ -567,7 +570,8 @@ class ActiveWallets with ChangeNotifier {
                   10, //TODO 10 satoshis added here because tx virtualsize out of bitcoin_flutter varies by 1 byte
           'hex': _hex,
           'id': intermediate.getId(),
-          'destroyedChange': _destroyedChange
+          'destroyedChange': _destroyedChange,
+          'opReturn': opReturn
         };
       } else {
         throw ('no utxos available');

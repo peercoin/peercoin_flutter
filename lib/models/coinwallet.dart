@@ -140,6 +140,7 @@ class CoinWallet extends HiveObject {
                 broadCasted: true,
                 confirmations: 0,
                 broadcastHex: '',
+                opReturn: '',
               ),
             );
             difference--;
