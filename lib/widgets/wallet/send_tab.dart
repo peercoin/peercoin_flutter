@@ -76,7 +76,7 @@ class _SendTabState extends State<SendTab> {
       _amountKey.currentState!.value,
       fee,
       dryrun,
-      _opReturnKey.currentState!.value,
+      _opReturnKey.currentState?.value ?? '',
     );
   }
 

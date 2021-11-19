@@ -303,26 +303,28 @@ class ActiveWallets with ChangeNotifier {
           List voutList = tx['vout'].toList();
           voutList.forEach((vOut) {
             final asMap = vOut as Map;
-            asMap['scriptPubKey']['addresses'].forEach((addr) {
-              if (openWallet.addresses
-                      .firstWhereOrNull((element) => element.address == addr) !=
-                  null) {
-                //address is ours, add new tx
-                final txValue = (vOut['value'] * 1000000).toInt();
+            if (asMap['scriptPubKey']['type'] != 'nulldata') {
+              asMap['scriptPubKey']['addresses'].forEach((addr) {
+                if (openWallet.addresses.firstWhereOrNull(
+                        (element) => element.address == addr) !=
+                    null) {
+                  //address is ours, add new tx
+                  final txValue = (vOut['value'] * 1000000).toInt();
 
-                openWallet.putTransaction(WalletTransaction(
-                  txid: tx['txid'],
-                  timestamp: tx['blocktime'] ?? 0,
-                  value: txValue,
-                  fee: 0,
-                  address: addr,
-                  direction: direction,
-                  broadCasted: true,
-                  confirmations: tx['confirmations'] ?? 0,
-                  broadcastHex: '',
-                ));
-              }
-            });
+                  openWallet.putTransaction(WalletTransaction(
+                    txid: tx['txid'],
+                    timestamp: tx['blocktime'] ?? 0,
+                    value: txValue,
+                    fee: 0,
+                    address: addr,
+                    direction: direction,
+                    broadCasted: true,
+                    confirmations: tx['confirmations'] ?? 0,
+                    broadcastHex: '',
+                  ));
+                }
+              });
+            }
           });
         }
         // trigger notification
