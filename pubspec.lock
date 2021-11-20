@@ -172,12 +172,10 @@ packages:
   coinslib:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "lorenz10/main"
-      resolved-ref: eed5ee3c606bac687d8ea6e5537256421c675106
-      url: "https://github.com/Vesta-wallet/coinslib.git"
-    source: git
-    version: "3.0.2"
+      name: coinslib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.3"
   collection:
     dependency: "direct main"
     description:

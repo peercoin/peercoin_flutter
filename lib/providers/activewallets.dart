@@ -256,22 +256,23 @@ class ActiveWallets with ChangeNotifier {
   Future<void> putTx(String identifier, String address, Map tx,
       [bool scanMode = false]) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    // log("$address puttx: $tx");
+    log('$address puttx: $tx');
 
     if (scanMode == true) {
       //write phantom tx that are not displayed in tx list but known to the wallet
       //so they won't be parsed again and cause weird display behaviour
       openWallet.putTransaction(WalletTransaction(
-          txid: tx['txid'],
-          timestamp: -1, //flags phantom tx
-          value: 0,
-          fee: 0,
-          address: address,
-          direction: 'in',
-          broadCasted: true,
-          confirmations: 0,
-          broadcastHex: '',
-          opReturn: ''));
+        txid: tx['txid'],
+        timestamp: -1, //flags phantom tx
+        value: 0,
+        fee: 0,
+        address: address,
+        direction: 'in',
+        broadCasted: true,
+        confirmations: 0,
+        broadcastHex: '',
+        opReturn: '',
+      ));
     } else {
       //check if that tx is already in the db
       var txInWallet = openWallet.transactions;
@@ -311,18 +312,20 @@ class ActiveWallets with ChangeNotifier {
                   //address is ours, add new tx
                   final txValue = (vOut['value'] * 1000000).toInt();
 
-                  openWallet.putTransaction(WalletTransaction(
-                      txid: tx['txid'],
-                      timestamp: tx['blocktime'] ?? 0,
-                      value: txValue,
-                      fee: 0,
-                      address: addr,
-                      direction: direction,
-                      broadCasted: true,
-                      confirmations: tx['confirmations'] ?? 0,
-                      broadcastHex: '',
-                      opReturn: '' //TODO parse op return
-                      ));
+                  openWallet.putTransaction(
+                    WalletTransaction(
+                        txid: tx['txid'],
+                        timestamp: tx['blocktime'] ?? 0,
+                        value: txValue,
+                        fee: 0,
+                        address: addr,
+                        direction: direction,
+                        broadCasted: true,
+                        confirmations: tx['confirmations'] ?? 0,
+                        broadcastHex: '',
+                        opReturn: '' //TODO parse op return
+                        ),
+                  );
                 }
               });
             }
