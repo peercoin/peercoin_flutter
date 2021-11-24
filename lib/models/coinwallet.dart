@@ -119,32 +119,11 @@ class CoinWallet extends HiveObject {
   void clearPendingTransactionNotifications() {
     if (pendingTransactionNotifications.isNotEmpty) {
       pendingTransactionNotifications.forEach((pendingNotifcation) {
-        var nOfTxInHive = transactions
-            .where(
-              (element) =>
-                  element.address == pendingNotifcation.address &&
-                  element.direction == 'in',
-            )
-            .length;
-        if (pendingNotifcation.tx != nOfTxInHive) {
-          var difference = pendingNotifcation.tx - nOfTxInHive;
-          while (difference > 0) {
-            putTransaction(
-              WalletTransaction(
-                txid: 'notification_dummy',
-                timestamp: -1, //flags phantom tx
-                value: 0,
-                fee: 0,
-                address: pendingNotifcation.address,
-                direction: 'in',
-                broadCasted: true,
-                confirmations: 0,
-                broadcastHex: '',
-                opReturn: '',
-              ),
-            );
-            difference--;
-          }
+        var address = addresses.firstWhere(
+            (element) => element.address == pendingNotifcation.address);
+
+        if (pendingNotifcation.tx != address.notificationBackendCount) {
+          address.newNotificationBackendCount = pendingNotifcation.tx;
         }
       });
     }

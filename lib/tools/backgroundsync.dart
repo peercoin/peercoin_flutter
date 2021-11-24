@@ -135,13 +135,8 @@ class BackgroundSync {
                 adressesToQuery[walletAddress.address] = res[0].tx;
               } else {
                 //addr does not have a pending notification
-                adressesToQuery[walletAddress.address] = wallet.transactions
-                    .where(
-                      (element) =>
-                          element.address == walletAddress.address &&
-                          element.direction == 'in',
-                    )
-                    .length;
+                adressesToQuery[walletAddress.address] =
+                    walletAddress.notificationBackendCount;
               }
             }
           });
