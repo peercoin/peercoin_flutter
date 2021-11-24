@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
@@ -323,11 +324,31 @@ class ActiveWallets with ChangeNotifier {
                         broadCasted: true,
                         confirmations: tx['confirmations'] ?? 0,
                         broadcastHex: '',
-                        opReturn: '' //TODO parse op return
-                        ),
+                        opReturn: ''),
                   );
                 }
               });
+            } else if (asMap['scriptPubKey']['type'] == 'nulldata') {
+              print('op return tx');
+              print(asMap['scriptPubKey']['asm']);
+              // final pushData = decompile()![1];
+              // print(utf8.decode(pushData));
+              //TODO convert
+
+              openWallet.putTransaction(
+                WalletTransaction(
+                  txid: tx['txid'],
+                  timestamp: tx['blocktime'] ?? 0,
+                  value: 0,
+                  fee: 0,
+                  address: 'Metadata',
+                  direction: direction,
+                  broadCasted: true,
+                  confirmations: tx['confirmations'] ?? 0,
+                  broadcastHex: '',
+                  opReturn: '', //TODO take converted value
+                ),
+              );
             }
           });
         }

@@ -49,6 +49,10 @@ class WalletTransaction extends HiveObject {
     broadCasted = newBroadcasted;
   }
 
+  set newOpReturn(String newOpReturn) {
+    opReturn = newOpReturn;
+  }
+
   void resetBroadcastHex() {
     broadcastHex = '';
   }
