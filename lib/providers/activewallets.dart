@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
@@ -10,6 +11,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:coinslib/src/utils/script.dart';
+import 'package:coinslib/src/utils/constants/op.dart';
+import 'package:coinslib/src/transaction.dart';
+import 'package:hex/hex.dart';
 
 import '../models/availablecoins.dart';
 import '../models/coinwallet.dart';
@@ -327,29 +332,46 @@ class ActiveWallets with ChangeNotifier {
                   );
                 }
               });
-            } else if (asMap['scriptPubKey']['type'] == 'nulldata') {
-              print('op return tx');
-              print(asMap['scriptPubKey']['asm']);
-              // final pushData = decompile()![1];
-              // print(utf8.decode(pushData));
-              //TODO convert
-
-              openWallet.putTransaction(
-                WalletTransaction(
-                  txid: tx['txid'],
-                  timestamp: tx['blocktime'] ?? 0,
-                  value: 0,
-                  fee: 0,
-                  address: 'Metadata',
-                  direction: direction,
-                  broadCasted: true,
-                  confirmations: tx['confirmations'] ?? 0,
-                  broadcastHex: '',
-                  opReturn: '', //TODO take converted value
-                ),
-              );
             }
           });
+
+          //scan for OP_RETURN messages
+          //obtain transaction object
+          final txData = Uint8List.fromList(HEX.decode(tx['hex']));
+          final txFromBuffer = Transaction.fromBuffer(txData);
+
+          //loop through outputs to find OP_RETURN outputs
+          for (final out in txFromBuffer.outs) {
+            final script = decompile(out.script)!;
+            // Find OP_RETURN + push data
+            if (script.length == 2 &&
+                script[0] == OPS['OP_RETURN'] &&
+                script[1] is Uint8List) {
+              String? parsedMessage;
+
+              try {
+                parsedMessage = utf8.decode(script[1]);
+              } catch (e) {
+                print(e);
+              } finally {
+                openWallet.putTransaction(
+                  WalletTransaction(
+                    txid: tx['txid'],
+                    timestamp: tx['blocktime'] ?? 0,
+                    value: 0,
+                    fee: 0,
+                    address: 'Metadata',
+                    direction: direction,
+                    broadCasted: true,
+                    confirmations: tx['confirmations'] ?? 0,
+                    broadcastHex: '',
+                    opReturn: parsedMessage ??
+                        'There was an error decoding this message',
+                  ),
+                );
+              }
+            }
+          }
         }
         // trigger notification
         var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
