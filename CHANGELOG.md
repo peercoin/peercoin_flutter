@@ -1,5 +1,5 @@
-### **0.7.2** (2021-11-19)
-* Transaction Details: Metadata is now displayed
+### **0.7.2** (2021-11-25)
+* Transaction Details: incoming and outgoing Metadata is now displayed
 * Fix for sending without Metadata (OP_RETURN)
 
 ### **0.7.1** (2021-11-18)
