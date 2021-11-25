@@ -77,7 +77,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
             await Future.delayed(
               Duration(seconds: 1),
               () async {
-                await _connectionProvider!.init(_coinName);
+                await _connectionProvider!.init(_coinName, scanMode: true);
                 _connectionProvider!.subscribeToScriptHashes(
                     await _activeWallets.getWalletScriptHashes(_coinName));
               },
