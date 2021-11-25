@@ -116,6 +116,17 @@ class TransactionDetails extends StatelessWidget {
                   : _tx.confirmations.toString())
             ],
           ),
+          _tx.opReturn.isNotEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Divider(),
+                    Text(AppLocalizations.instance.translate('send_op_return'),
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SelectableText(_tx.opReturn)
+                  ],
+                )
+              : Container(),
           SizedBox(height: 20),
           Center(
             child: PeerButton(

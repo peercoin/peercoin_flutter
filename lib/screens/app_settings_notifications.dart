@@ -73,6 +73,9 @@ class _AppSettingsNotificationsScreenState
                   notificationInterval: _appSettings.notificationInterval,
                   needsStart: true,
                 );
+
+                await BackgroundSync.executeSync(fromScan: true);
+
                 Navigator.pop(context);
               },
               child: Text(

@@ -76,7 +76,7 @@ class _SendTabState extends State<SendTab> {
       _amountKey.currentState!.value,
       fee,
       dryrun,
-      _opReturnKey.currentState!.value,
+      _opReturnKey.currentState?.value ?? '',
     );
   }
 
@@ -195,7 +195,8 @@ class _SendTabState extends State<SendTab> {
                             'txid': _buildResult['id'],
                             'hex': _buildResult['hex'],
                             'outValue': _totalValue - _txFee,
-                            'outFees': _txFee + _destroyedChange
+                            'outFees': _txFee + _destroyedChange,
+                            'opReturn': _buildResult['opReturn']
                           });
                           //broadcast
                           Provider.of<ElectrumConnection>(context,

@@ -17,6 +17,8 @@ class WalletAddress extends HiveObject {
   String? wif = ''; //nullable for backward compatability
   @HiveField(6)
   bool? _isChangeAddr = false;
+  @HiveField(7, defaultValue: 0)
+  int notificationBackendCount = 0;
 
   WalletAddress({
     required this.address,
@@ -49,5 +51,9 @@ class WalletAddress extends HiveObject {
 
   set isChangeAddr(bool newChange) {
     _isChangeAddr = newChange;
+  }
+
+  set newNotificationBackendCount(int newCount) {
+    notificationBackendCount = newCount;
   }
 }
