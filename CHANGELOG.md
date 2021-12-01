@@ -1,3 +1,6 @@
+### **0.7.3** (2021-xx-xx)
+* Add PLN (Polish Zloty) to price feed
+
 ### **0.7.2** (2021-11-25)
 * Transaction Details: incoming and outgoing Metadata is now displayed
 * Fix for sending without Metadata (OP_RETURN)
