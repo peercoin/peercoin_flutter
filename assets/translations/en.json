@@ -148,6 +148,7 @@
     "send_confirm_send": "Confirm & Send",
     "send_confirm_transaction": "Please confirm transaction",
     "send_dust": "Dust: -$amount $letter_code",
+    "send_empty": "Empty wallet",
     "send_enter_address": "Please enter an address",
     "send_enter_amount": "Please enter an amount",
     "send_errors_solve": "Please resolve errors …",

@@ -463,6 +463,16 @@ class _SendTabState extends State<SendTab> {
                     SizedBox(height: 10),
                     PeerButtonBorder(
                       text: AppLocalizations.instance.translate(
+                        'send_empty',
+                      ),
+                      action: () async {
+                        amountController.text =
+                            (_wallet.balance / 1000000).toString();
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    PeerButtonBorder(
+                      text: AppLocalizations.instance.translate(
                         'send_qr',
                       ),
                       action: () async {
