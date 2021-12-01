@@ -32,7 +32,7 @@ class PriceTicker {
     'INR': '₹',
     'PLN': 'zł',
     'RON': 'L',
-    'RUB': '₽',
+    'RUB': '₽'
   };
 
   static double renderPrice(
