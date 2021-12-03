@@ -555,12 +555,9 @@ class ActiveWallets with ChangeNotifier {
           var keyMap = <int, Map>{};
           for (var inputUtxo in inputTx) {
             var inputKey = inputTx.indexOf(inputUtxo);
-            print('${inputUtxo.address} at $inputKey');
             //find key to that utxo
             for (var walletAddr in openWallet.addresses) {
-              print('${walletAddr.address} loop');
               if (walletAddr.address == inputUtxo.address) {
-                print('request wif for ${walletAddr.address}');
                 var wif = await getWif(identifier, walletAddr.address);
                 keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
                 tx.addInput(inputUtxo.hash, inputUtxo.txPos);
