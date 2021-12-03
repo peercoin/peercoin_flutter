@@ -471,8 +471,8 @@ class ActiveWallets with ChangeNotifier {
           network: network,
         );
 
-        for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
-          //parse 5 extra WIFs, just to be sure
+        for (var i = 0; i <= openWallet.addresses.length + 10; i++) {
+          //parse 10 extra WIFs, just to be sure
           final child = hdWallet.derivePath("m/0'/$i/0");
           _wifs[child.address] = child.wif;
         }
@@ -553,17 +553,17 @@ class ActiveWallets with ChangeNotifier {
         //generate keyMap
         Future<Map<int, Map>> generateKeyMap() async {
           var keyMap = <int, Map>{};
-          var _usedUtxos = [];
           for (var inputUtxo in inputTx) {
             var inputKey = inputTx.indexOf(inputUtxo);
+            print('${inputUtxo.address} at $inputKey');
             //find key to that utxo
             for (var walletAddr in openWallet.addresses) {
-              if (walletAddr.address == inputUtxo.address &&
-                  !_usedUtxos.contains(inputUtxo.hash)) {
+              print('${walletAddr.address} loop');
+              if (walletAddr.address == inputUtxo.address) {
+                print('request wif for ${walletAddr.address}');
                 var wif = await getWif(identifier, walletAddr.address);
                 keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
                 tx.addInput(inputUtxo.hash, inputUtxo.txPos);
-                _usedUtxos.add(inputUtxo.hash);
               }
             }
           }
