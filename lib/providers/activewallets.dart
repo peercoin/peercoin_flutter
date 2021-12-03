@@ -512,9 +512,11 @@ class ActiveWallets with ChangeNotifier {
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
         openWallet.utxos.forEach((utxo) {
-          if (_totalInputValue <= (_txAmount + fee)) {
-            _totalInputValue += utxo.value;
-            inputTx.add(utxo);
+          if (utxo.value > 0) {
+            if (_totalInputValue <= (_txAmount + fee)) {
+              _totalInputValue += utxo.value;
+              inputTx.add(utxo);
+            }
           }
         });
         var coinParams = AvailableCoins().getSpecificCoin(identifier);
@@ -526,10 +528,15 @@ class ActiveWallets with ChangeNotifier {
         if (_needsChange == true) {
           var changeAmount = _totalInputValue - _txAmount - fee;
           log('change amount $changeAmount');
-          if (changeAmount < coin.minimumTxValue) {
+
+          if (changeAmount <= coin.minimumTxValue) {
             //change is too small! no change output
             _destroyedChange = changeAmount;
-            tx.addOutput(address, _txAmount - fee);
+            if (_txAmount == 0) {
+              tx.addOutput(address, _txAmount);
+            } else {
+              tx.addOutput(address, _txAmount - fee);
+            }
           } else {
             tx.addOutput(address, _txAmount);
             tx.addOutput(_unusedAddress, changeAmount);
@@ -546,17 +553,14 @@ class ActiveWallets with ChangeNotifier {
         //generate keyMap
         Future<Map<int, Map>> generateKeyMap() async {
           var keyMap = <int, Map>{};
-          var _usedUtxos = [];
           for (var inputUtxo in inputTx) {
             var inputKey = inputTx.indexOf(inputUtxo);
             //find key to that utxo
             for (var walletAddr in openWallet.addresses) {
-              if (walletAddr.address == inputUtxo.address &&
-                  !_usedUtxos.contains(inputUtxo.hash)) {
+              if (walletAddr.address == inputUtxo.address) {
                 var wif = await getWif(identifier, walletAddr.address);
                 keyMap[inputKey] = ({'wif': wif, 'addr': inputUtxo.address});
                 tx.addInput(inputUtxo.hash, inputUtxo.txPos);
-                _usedUtxos.add(inputUtxo.hash);
               }
             }
           }
