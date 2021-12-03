@@ -529,7 +529,11 @@ class ActiveWallets with ChangeNotifier {
           if (changeAmount < coin.minimumTxValue) {
             //change is too small! no change output
             _destroyedChange = changeAmount;
-            tx.addOutput(address, _txAmount - fee);
+            if (_txAmount == 0) {
+              tx.addOutput(address, _txAmount);
+            } else {
+              tx.addOutput(address, _txAmount - fee);
+            }
           } else {
             tx.addOutput(address, _txAmount);
             tx.addOutput(_unusedAddress, changeAmount);
