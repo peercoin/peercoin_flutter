@@ -471,8 +471,8 @@ class ActiveWallets with ChangeNotifier {
           network: network,
         );
 
-        for (var i = 0; i <= openWallet.addresses.length + 10; i++) {
-          //parse 10 extra WIFs, just to be sure
+        for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
+          //parse 5 extra WIFs, just to be sure
           final child = hdWallet.derivePath("m/0'/$i/0");
           _wifs[child.address] = child.wif;
         }
