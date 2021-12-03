@@ -30,6 +30,7 @@ class PriceTicker {
     'GBP': '£',
     'HRK': 'kn',
     'INR': '₹',
+    'PLN': 'zł',
     'RON': 'L',
     'RUB': '₽'
   };
