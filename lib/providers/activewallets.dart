@@ -512,9 +512,11 @@ class ActiveWallets with ChangeNotifier {
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
         openWallet.utxos.forEach((utxo) {
-          if (_totalInputValue <= (_txAmount + fee)) {
-            _totalInputValue += utxo.value;
-            inputTx.add(utxo);
+          if (utxo.value > 0) {
+            if (_totalInputValue <= (_txAmount + fee)) {
+              _totalInputValue += utxo.value;
+              inputTx.add(utxo);
+            }
           }
         });
         var coinParams = AvailableCoins().getSpecificCoin(identifier);
@@ -526,7 +528,8 @@ class ActiveWallets with ChangeNotifier {
         if (_needsChange == true) {
           var changeAmount = _totalInputValue - _txAmount - fee;
           log('change amount $changeAmount');
-          if (changeAmount < coin.minimumTxValue) {
+
+          if (changeAmount <= coin.minimumTxValue) {
             //change is too small! no change output
             _destroyedChange = changeAmount;
             if (_txAmount == 0) {
