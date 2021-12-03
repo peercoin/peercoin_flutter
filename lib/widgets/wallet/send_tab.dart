@@ -41,7 +41,7 @@ class _SendTabState extends State<SendTab> {
   final addressController = TextEditingController();
   final amountController = TextEditingController();
   final labelController = TextEditingController();
-  final opreturnController = TextEditingController();
+  final opReturnController = TextEditingController();
   bool _initial = true;
   late CoinWallet _wallet;
   late Coin _availableCoin;
@@ -398,7 +398,8 @@ class _SendTabState extends State<SendTab> {
                           return AppLocalizations.instance
                               .translate('send_amount_exceeds');
                         }
-                        if (txValueInSatoshis < _availableCoin.minimumTxValue) {
+                        if (txValueInSatoshis < _availableCoin.minimumTxValue &&
+                            opReturnController.text.isEmpty) {
                           return AppLocalizations.instance.translate(
                               'send_amount_below_minimum', {
                             'amount':
@@ -419,7 +420,7 @@ class _SendTabState extends State<SendTab> {
                         ? TextFormField(
                             textInputAction: TextInputAction.done,
                             key: _opReturnKey,
-                            controller: opreturnController,
+                            controller: opReturnController,
                             autocorrect: false,
                             maxLength: _availableCoin.networkType.opreturnSize,
                             minLines: 1,
@@ -429,7 +430,7 @@ class _SendTabState extends State<SendTab> {
                                 onPressed: () async {
                                   var data =
                                       await Clipboard.getData('text/plain');
-                                  opreturnController.text = data!.text!.trim();
+                                  opReturnController.text = data!.text!.trim();
                                 },
                                 icon: Icon(
                                   Icons.paste_rounded,
@@ -449,6 +450,7 @@ class _SendTabState extends State<SendTab> {
                       value: _expertMode,
                       onChanged: (a) => setState(() {
                         _expertMode = a;
+                        opReturnController.text = '';
                       }),
                       title: Text(
                         AppLocalizations.instance.translate(
