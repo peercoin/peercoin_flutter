@@ -1,5 +1,6 @@
 ### **0.7.4** (2021-xx-xx)
 * Allow sending to P2SH (Multisig) 
+* Fix issue where inbound transactions would trigger unnecessary notifications 
 
 ### **0.7.3** (2021-12-03)
 * Add PLN (Polish Zloty) to price feed
