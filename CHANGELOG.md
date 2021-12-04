@@ -1,3 +1,6 @@
+### **0.7.4** (2021-xx-xx)
+* Allow sending to P2SH (Multisig) 
+
 ### **0.7.3** (2021-12-03)
 * Add PLN (Polish Zloty) to price feed
 * Add "Empty wallet" button to send tab
