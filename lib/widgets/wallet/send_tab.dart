@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:coinslib/coinslib.dart';
@@ -16,6 +17,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
+import 'package:peercoin/tools/utf8TextField.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
@@ -434,6 +436,29 @@ class _SendTabState extends State<SendTab> {
                             maxLength: _availableCoin.networkType.opreturnSize,
                             minLines: 1,
                             maxLines: 5,
+                            buildCounter: (
+                              context, {
+                              required currentLength,
+                              required isFocused,
+                              maxLength,
+                            }) {
+                              var utf8Length =
+                                  utf8.encode(opReturnController.text).length;
+                              return Container(
+                                child: Text(
+                                  '$utf8Length/$maxLength',
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                              );
+                            },
+                            inputFormatters: [
+                              Utf8LengthLimitingTextInputFormatter(
+                                _availableCoin.networkType.opreturnSize,
+                              ),
+                            ],
+                            validator: (value) {
+                              print(value!.length);
+                            },
                             decoration: InputDecoration(
                               suffixIcon: IconButton(
                                 onPressed: () async {
