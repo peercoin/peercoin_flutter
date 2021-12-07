@@ -317,6 +317,14 @@ class ActiveWallets with ChangeNotifier {
                   //address is ours, add new tx
                   final txValue = (vOut['value'] * 1000000).toInt();
 
+                  //increase notification value for addr
+                  final addrInWallet = openWallet.addresses
+                      .firstWhere((element) => element.address == addr);
+                  addrInWallet.newNotificationBackendCount =
+                      addrInWallet.notificationBackendCount + 1;
+                  openWallet.save();
+
+                  //write tx
                   openWallet.putTransaction(
                     WalletTransaction(
                         txid: tx['txid'],
