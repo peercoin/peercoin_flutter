@@ -13,7 +13,6 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
-import 'package:coinslib/src/transaction.dart';
 import 'package:hex/hex.dart';
 
 import '../models/availablecoins.dart';
