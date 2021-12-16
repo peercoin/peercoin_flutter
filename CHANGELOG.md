@@ -1,3 +1,6 @@
+### **0.7.5** (2021-12-16)
+* Allow sending to P2WSH (Segwit Multisig) 
+
 ### **0.7.4** (2021-12-07)
 * Allow sending to P2SH (Multisig) 
 * Fix issue where inbound transactions would trigger unnecessary notifications 
