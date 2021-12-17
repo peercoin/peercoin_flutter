@@ -1,3 +1,6 @@
+### **0.7.6** (2021-12-17)
+* fix issue with sending to P2WSH (Segwit Multisig) 
+
 ### **0.7.5** (2021-12-16)
 * Allow sending to P2WSH (Segwit Multisig) 
 
