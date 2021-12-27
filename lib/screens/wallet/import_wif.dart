@@ -64,65 +64,70 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
-          ),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
         ),
-        body: Column(
-          children: [
-            Expanded(
-                child: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      key: _wifGlobalKey,
-                      controller: _wifController,
-                      autocorrect: false,
-                      onChanged: (String newString) {
-                        print(newString);
-                      },
-                      decoration: InputDecoration(
+      ),
+      body: Column(
+        children: [
+          Expanded(
+              child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    textInputAction: TextInputAction.done,
+                    key: _wifGlobalKey,
+                    controller: _wifController,
+                    autocorrect: false,
+                    onChanged: (String newString) {
+                      print(newString);
+                    },
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.vpn_key,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      labelText:
+                          AppLocalizations.instance.translate('send_label'),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          var data = await Clipboard.getData('text/plain');
+                          _wifController.text = data!.text!;
+                        },
                         icon: Icon(
-                          Icons.vpn_key,
+                          Icons.paste_rounded,
                           color: Theme.of(context).primaryColor,
                         ),
-                        labelText:
-                            AppLocalizations.instance.translate('send_label'),
-                        suffixIcon: IconButton(
-                          onPressed: () async {
-                            var data = await Clipboard.getData('text/plain');
-                            _wifController.text = data!.text!;
-                          },
-                          icon: Icon(
-                            Icons.paste_rounded,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
                       ),
-                      maxLength: 32,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PeerButton(
-                          action: () => createQrScanner('priv'),
-                          text: AppLocalizations.instance
-                              .translate('paperwallet_step_2_text'),
-                          small: true,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                    maxLength: 32,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PeerButton(
+                        action: () => createQrScanner('priv'),
+                        text: AppLocalizations.instance
+                            .translate('paperwallet_step_2_text'),
+                        small: true,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ))
-          ],
-        ));
+            ),
+          ))
+        ],
+      ),
+    );
   }
 }
+
+//TODO add hint that key needs to be WIF format
+//TODO add hint that key has to be imported again when restoring the wallet from seed
+//TODO add validation button; validate; add2
