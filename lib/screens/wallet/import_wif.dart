@@ -1,12 +1,12 @@
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 class ImportWifScreen extends StatefulWidget {
@@ -15,12 +15,13 @@ class ImportWifScreen extends StatefulWidget {
 }
 
 class _ImportWifScreenState extends State<ImportWifScreen> {
-  int _currentStep = 1;
   String _privKey = '';
   late Coin _activeCoin;
   late String _walletName;
   bool _initial = true;
   late ActiveWallets _activeWallets;
+  final _wifGlobalKey = GlobalKey<FormState>();
+  final _wifController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -35,29 +36,6 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     super.didChangeDependencies();
   }
 
-  void handlePress(int step) {
-    if (step == _currentStep) {
-      switch (step) {
-        case 1:
-          createQrScanner('pub');
-          break;
-        case 2:
-          createQrScanner('priv');
-          break;
-        case 3:
-          break;
-        case 4:
-          break;
-      }
-    }
-  }
-
-  void moveStep(int newStep) {
-    setState(() {
-      _currentStep = newStep;
-    });
-  }
-
   void createQrScanner(String keyType) async {
     final result = await Navigator.of(context).pushNamed(
       Routes.QRScan,
@@ -69,7 +47,6 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   }
 
   void validatePrivKey(String privKey) {
-    String _newKey;
     var _error = false;
     try {
       Wallet.fromWIF(privKey, _activeCoin.networkType);
@@ -78,14 +55,10 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     }
 
     if (_error == false) {
-      _newKey = privKey;
-      moveStep(3);
+      //show check mark
     } else {
-      _newKey = 'Invalid private key';
+      //show error
     }
-    setState(() {
-      _privKey = _newKey;
-    });
   }
 
   @override
@@ -106,75 +79,45 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_1'),
-                            style: Theme.of(context).textTheme.headline6),
-                        PeerButton(
-                          action: () => handlePress(1),
-                          text: AppLocalizations.instance.translate(
-                            'paperwallet_step_1_text',
-                          ),
-                          small: true,
-                          active: _currentStep == 1,
+                    TextFormField(
+                      textInputAction: TextInputAction.done,
+                      key: _wifGlobalKey,
+                      controller: _wifController,
+                      autocorrect: false,
+                      onChanged: (String newString) {
+                        print(newString);
+                      },
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.vpn_key,
+                          color: Theme.of(context).primaryColor,
                         ),
-                      ],
+                        labelText:
+                            AppLocalizations.instance.translate('send_label'),
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            var data = await Clipboard.getData('text/plain');
+                            _wifController.text = data!.text!;
+                          },
+                          icon: Icon(
+                            Icons.paste_rounded,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
+                      maxLength: 32,
                     ),
-                    Divider(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_2'),
-                            style: Theme.of(context).textTheme.headline6),
                         PeerButton(
-                          action: () => handlePress(2),
+                          action: () => createQrScanner('priv'),
                           text: AppLocalizations.instance
                               .translate('paperwallet_step_2_text'),
                           small: true,
-                          active: _currentStep == 2,
                         ),
                       ],
                     ),
-                    Container(height: 60, child: Text(_privKey)),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_3'),
-                            style: Theme.of(context).textTheme.headline6),
-                        PeerButton(
-                          action: () => handlePress(3),
-                          text: AppLocalizations.instance
-                              .translate('paperwallet_step_3_text'),
-                          small: true,
-                          active: _currentStep == 3,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_4'),
-                            style: Theme.of(context).textTheme.headline6),
-                        PeerButton(
-                          action: () => handlePress(4),
-                          text: AppLocalizations.instance
-                              .translate('paperwallet_step_4_text'),
-                          active: _currentStep == 4,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    Divider()
                   ],
                 ),
               ),
