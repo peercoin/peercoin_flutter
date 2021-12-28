@@ -111,6 +111,22 @@ class ActiveWallets with ChangeNotifier {
     }
   }
 
+  Future<void> addAddressFromWif(
+      String identifier, String wif, String publicAddress) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+
+    openWallet.addNewAddress = WalletAddress(
+      address: publicAddress,
+      addressBookName: '',
+      used: true,
+      status: null,
+      isOurs: true,
+      wif: wif,
+    );
+
+    await openWallet.save();
+  }
+
   Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
     final network = AvailableCoins().getSpecificCoin(identifier).networkType;
