@@ -169,6 +169,9 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text(
+                      AppLocalizations.instance.translate('import_wif_intro'),
+                    ),
                     TextFormField(
                       textInputAction: TextInputAction.done,
                       key: _wifGlobalKey,
@@ -235,6 +238,15 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10),
+                    Text(
+                      AppLocalizations.instance.translate('import_wif_hint'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -245,6 +257,3 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     );
   }
 }
-
-//TODO add hint that key needs to be WIF format
-//TODO add hint that key has to be imported again when restoring the wallet from seed

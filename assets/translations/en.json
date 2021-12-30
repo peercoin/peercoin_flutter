@@ -107,6 +107,8 @@
     "import_wif_error_empty": "Please enter a private key",
     "import_wif_error_failed_parse": "Your private key is not valid. Is it in WIF format?",
     "import_wif_error_snack": "This address has already been imported",
+    "import_wif_hint": "The key has to be imported again when restoring the wallet from seed. It is not connected to the seed.",
+    "import_wif_intro": "Please enter the private key you wish to import.\nIt needs to be in WIF format.",
     "import_wif_success_snack": "Private key imported successfully", 
     "jail_countdown": "seconds",
     "jail_dialog_button": "Okay",
