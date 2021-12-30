@@ -1,5 +1,6 @@
-### **0.7.6** (2021-12-17)
+### **0.7.6** (2021-12-30)
 * allow import of WIF-format private keys
+* add Spanish translation 
 
 ### **0.7.6** (2021-12-17)
 * fix issue with sending to P2WSH (Segwit Multisig) 
