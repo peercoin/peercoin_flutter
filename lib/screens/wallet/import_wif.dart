@@ -7,6 +7,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/tools/backgroundsync.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
@@ -70,13 +71,26 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       },
     );
 
+    //sync background notification
+    await BackgroundSync.executeSync(fromScan: true);
+
+    //send snack notification for success
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('import_wif_success_snack'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 3),
+    ));
+
     //pop import wif
     Navigator.of(context).pop();
   }
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
     final publicAddress =
-        Wallet.fromWIF(privKey, _activeCoin.networkType).address ?? '';
+        Wallet.fromWIF(privKey, _activeCoin.networkType).address ??
+            ''; //TODO won't return a bech32 addr
 
     //check if that address is already in the list
     final _walletAddresses =
