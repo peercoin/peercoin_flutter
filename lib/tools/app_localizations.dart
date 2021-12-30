@@ -22,6 +22,7 @@ class AppLocalizations {
     'en': 'English',
     'hr': 'Croatian',
     'de': 'Deutsch',
+    'es': 'Español',
     'fr': 'Français',
     'it': 'Italiano',
     'nl': 'Nederlands',

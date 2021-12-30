@@ -193,35 +193,36 @@ class _ReceiveTabState extends State<ReceiveTab> {
                       maxLength: 32,
                     ),
                     TextFormField(
-                        textInputAction: TextInputAction.done,
-                        key: _amountKey,
-                        controller: amountController,
-                        onChanged: (String newString) {
-                          stringBuilder();
-                        },
-                        autocorrect: false,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              getValidator(_availableCoin.fractions)),
-                        ],
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                        decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.money,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          labelText: AppLocalizations.instance
-                              .translate('receive_requested_amount'),
-                          suffix: Text(_wallet.letterCode),
+                      textInputAction: TextInputAction.done,
+                      key: _amountKey,
+                      controller: amountController,
+                      onChanged: (String newString) {
+                        stringBuilder();
+                      },
+                      autocorrect: false,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            getValidator(_availableCoin.fractions)),
+                      ],
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.money,
+                          color: Theme.of(context).primaryColor,
                         ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return AppLocalizations.instance
-                                .translate('receive_enter_amount');
-                          }
-                          return null;
-                        }),
+                        labelText: AppLocalizations.instance
+                            .translate('receive_requested_amount'),
+                        suffix: Text(_wallet.letterCode),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return AppLocalizations.instance
+                              .translate('receive_enter_amount');
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(height: 30),
                     PeerButtonBorder(
                       text: 'Show QR-Code',
@@ -245,12 +246,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                        AppLocalizations.instance
-                            .translate('wallet_receive_label_hint'),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.secondary,
-                        )),
+                      AppLocalizations.instance
+                          .translate('wallet_receive_label_hint'),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
                   ],
                 ),
               ),

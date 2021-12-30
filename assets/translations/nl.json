@@ -143,7 +143,7 @@
     "addressbook_swipe_share": "Delen",
     "addressbook_swipe_send": "Verstuur aan",
     "addressbook_title": "$coin Adressen",
-    "app_settings_default_wallet": "Default Wallet",
+    "app_settings_default_wallet": "Standaard Wallet",
     "app_settings_language": "Taal",
     "app_settings_language_restart": "Herstarten app is vereist.",
     "buy_peercoin": "Peercoin kopen",
@@ -212,5 +212,12 @@
     "server_settings_alert_hardcoded_title": "Hard coded server",
     "server_settings_error_no_server_left": "Tenminste één aansluitbare server is vereist!",
     "send_qr": "QR-Code",
-    "send_op_return": "OP_RETURN Message"
+    "send_op_return": "OP_RETURN Message",
+    "setup_continue_alert_content": "Bewaar uw seed phrase op een veilige plek.\nJe kan het later opzoeken in de applicatiesettings.",
+    "setup_pin_no_biometrics": "Je toestel ondersteunt geen biometrische autentificatie.",
+    "setup_import_title": "Seed importeren",
+    "setup_import_note": "Voer de seed phrase in om te importeren. Let op dit is dus niet een private key.",
+    "currency_HRK": "Kroatische_kuna",
+    "setup_finish": "Setup Afronden",
+    "setup_price_feed_allow": "Prijs feed API toestaan"
 }

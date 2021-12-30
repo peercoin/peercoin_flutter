@@ -222,6 +222,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     if (value == 'import_wallet') {
       Navigator.of(context)
           .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+    } else if (value == 'import_wif') {
+      Navigator.of(context)
+          .pushNamed(Routes.ImportWif, arguments: _wallet.name);
     } else if (value == 'server_settings') {
       Navigator.of(context)
           .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
@@ -359,6 +362,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   ),
                 ),
                 PopupMenuItem(
+                  value: 'import_wif',
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.arrow_circle_down,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_wif'),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
                   value: 'server_settings',
                   child: ListTile(
                     leading: Icon(
@@ -383,7 +399,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                           .translate('wallet_pop_menu_rescan'),
                     ),
                   ),
-                )
+                ),
               ];
             },
           )

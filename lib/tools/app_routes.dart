@@ -12,6 +12,7 @@ import 'package:peercoin/screens/setup/setup_import_seed.dart';
 import 'package:peercoin/screens/setup/setup_language.dart';
 import 'package:peercoin/screens/setup/setup_pin_code.dart';
 import 'package:peercoin/screens/setup/setup_create_wallet.dart';
+import 'package:peercoin/screens/wallet/import_wif.dart';
 import 'package:peercoin/screens/wallet/transaction_details.dart';
 import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/screens/wallet/wallet_import_scan.dart';
@@ -32,6 +33,7 @@ class Routes {
   static const String WalletHome = '/wallet-home';
   static const String WalletImportScan = '/wallet-import-scan';
   static const String ImportPaperWallet = '/import-paperwallet';
+  static const String ImportWif = '/import-wif';
   static const String AuthJail = '/auth-jail';
   static const String ServerSettings = '/server-settings';
   static const String ServerAdd = '/server-add';
@@ -50,6 +52,7 @@ class Routes {
       Routes.SetupImport: (context) => SetupImportSeedScreen(),
       Routes.WalletImportScan: (context) => WalletImportScanScreen(),
       Routes.ImportPaperWallet: (context) => ImportPaperWalletScreen(),
+      Routes.ImportWif: (context) => ImportWifScreen(),
       Routes.AuthJail: (context) => AuthJailScreen(),
       Routes.ServerSettings: (context) => ServerSettingsScreen(),
       Routes.ServerAdd: (context) => ServerAddScreen(),
