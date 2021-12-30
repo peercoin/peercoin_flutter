@@ -313,7 +313,7 @@ class _SendTabState extends State<SendTab> {
                           suffixIcon: IconButton(
                             onPressed: () async {
                               var data = await Clipboard.getData('text/plain');
-                              addressController.text = data!.text!;
+                              addressController.text = data!.text!.trim();
                             },
                             icon: Icon(
                               Icons.paste_rounded,

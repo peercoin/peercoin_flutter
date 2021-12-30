@@ -202,7 +202,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         var data = await Clipboard.getData(
                                             'text/plain');
                                         if (data != null) {
-                                          _controller.text = data.text!;
+                                          _controller.text = data.text!.trim();
                                         }
                                         FocusScope.of(context)
                                             .unfocus(); //hide keyboard

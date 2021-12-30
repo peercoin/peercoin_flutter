@@ -200,7 +200,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                         suffixIcon: IconButton(
                           onPressed: () async {
                             var data = await Clipboard.getData('text/plain');
-                            _wifController.text = data!.text!;
+                            _wifController.text = data!.text!.trim();
                           },
                           icon: Icon(
                             Icons.paste_rounded,
