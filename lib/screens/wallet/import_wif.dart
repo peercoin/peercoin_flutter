@@ -46,7 +46,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       arguments: AppLocalizations.instance.translate('paperwallet_step_2_text'),
     );
     if (result != null) {
-      validatePrivKey(result as String);
+      _wifController.text = (result as String).trim();
     }
   }
 
