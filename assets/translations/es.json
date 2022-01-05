@@ -221,5 +221,7 @@
     "server_settings_alert_hardcoded_content": "Los servidores predeterminados no pueden ser eliminados, solo desactivados.",
     "app_settings_price_feed": "Fuente de precios & Monedas",
     "app_settings_price_feed_enable_button": "Activar fuente de precios API",
-    "receive_faucet": "Abrir faucet"
+    "receive_faucet": "Abrir faucet",
+    "app_settings_walletHome": "Solicitar para cartera",
+    "app_settings_price_feed_disable_button": "Desactivar fuente de precios API"
 }
