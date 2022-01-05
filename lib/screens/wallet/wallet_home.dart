@@ -154,6 +154,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
           log('requesting update for ${element.txid}');
           _connectionProvider!.requestTxUpdate(element.txid);
         });
+
+        //unconfirmed balance? update balance
+        if (_wallet.unconfirmedBalance > 0) {
+          await _activeWallets.updateWalletBalance(_wallet.name);
+        }
       }
     }
 
