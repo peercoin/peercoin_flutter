@@ -445,12 +445,13 @@ class _AddressTabState extends State<AddressTab> {
                               }
                             },
                             child: Text(
-                              'Search',
+                              AppLocalizations.instance.translate('search'),
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.4,
-                                  fontSize: 16,
-                                  color: Theme.of(context).primaryColor),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.4,
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                           ElevatedButton(
@@ -463,8 +464,9 @@ class _AddressTabState extends State<AddressTab> {
                                 //to set border radius to button
                                 borderRadius: BorderRadius.circular(10),
                                 side: BorderSide(
-                                    width: 2,
-                                    color: Theme.of(context).primaryColor),
+                                  width: 2,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                               elevation: 0,
                             ),
@@ -472,12 +474,14 @@ class _AddressTabState extends State<AddressTab> {
                               _addressAddDialog(context);
                             },
                             child: Text(
-                              'New',
+                              AppLocalizations.instance
+                                  .translate('addressbook_new_button'),
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.4,
-                                  fontSize: 16,
-                                  color: Theme.of(context).primaryColor),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.4,
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ],

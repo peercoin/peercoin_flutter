@@ -1,5 +1,5 @@
-### **0.7.8** (2022-01-05)
-* hot fix for transaction building
+### **0.7.8** (2022-01-06)
+* Translation fixes
 
 ### **0.7.7** (2021-12-30)
 * allow import of WIF-format private keys

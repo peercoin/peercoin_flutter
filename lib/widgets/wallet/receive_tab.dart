@@ -225,7 +225,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     ),
                     SizedBox(height: 30),
                     PeerButtonBorder(
-                      text: 'Show QR-Code',
+                      text: AppLocalizations.instance
+                          .translate('receive_show_qr'),
                       action: () {
                         WalletHomeQr.showQrDialog(context, _qrString!, true);
                       },
