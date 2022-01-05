@@ -1,5 +1,6 @@
 ### **0.7.8** (2022-01-06)
 * Translation fixes
+* Fix issue where wallet balance was not updated after TX confirmed
 
 ### **0.7.7** (2021-12-30)
 * allow import of WIF-format private keys
