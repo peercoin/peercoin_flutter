@@ -208,7 +208,7 @@ class ElectrumConnection with ChangeNotifier {
     var idString = id.toString();
     var result = decoded['result'];
 
-    if (decoded['id'] != null) {
+    if (decoded['id'] != null && result != null) {
       log('replyhandler $idString');
       if (idString == 'version') {
         handleVersion(result);
