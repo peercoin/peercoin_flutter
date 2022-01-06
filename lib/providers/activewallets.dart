@@ -461,12 +461,10 @@ class ActiveWallets with ChangeNotifier {
     //update status for address
     var openWallet = getSpecificCoinWallet(identifier);
     var addrInWallet = openWallet.addresses
-        .firstWhereOrNull((element) => element.address == _unusedAddress);
+        .firstWhereOrNull((element) => element.address == address);
     if (addrInWallet != null) {
       addrInWallet.newUsed = status == null ? false : true;
       addrInWallet.newStatus = status;
-
-      print(addrInWallet.wif);
 
       if (addrInWallet.wif!.isEmpty || addrInWallet.wif == null) {
         await getWif(identifier, address);
@@ -490,7 +488,6 @@ class ActiveWallets with ChangeNotifier {
     String identifier,
     String address,
   ) async {
-    print('getWif called for $address');
     var network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses
