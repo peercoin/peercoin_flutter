@@ -224,5 +224,7 @@
     "receive_faucet": "Abrir faucet",
     "app_settings_walletHome": "Solicitar para cartera",
     "app_settings_price_feed_disable_button": "Desactivar fuente de precios API",
-    "app_navigation": "Navegación"
+    "app_navigation": "Navegación",
+    "import_wif_textfield_label": "Clave Privada",
+    "import_wif_error_empty": "Por favor, introduce un clave privada"
 }
