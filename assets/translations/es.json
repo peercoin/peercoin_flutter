@@ -223,5 +223,6 @@
     "app_settings_price_feed_enable_button": "Activar fuente de precios API",
     "receive_faucet": "Abrir faucet",
     "app_settings_walletHome": "Solicitar para cartera",
-    "app_settings_price_feed_disable_button": "Desactivar fuente de precios API"
+    "app_settings_price_feed_disable_button": "Desactivar fuente de precios API",
+    "app_navigation": "Navegación"
 }
