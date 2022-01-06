@@ -282,18 +282,20 @@ class ActiveWallets with ChangeNotifier {
     if (scanMode == true) {
       //write phantom tx that are not displayed in tx list but known to the wallet
       //so they won't be parsed again and cause weird display behaviour
-      openWallet.putTransaction(WalletTransaction(
-        txid: tx['txid'],
-        timestamp: -1, //flags phantom tx
-        value: 0,
-        fee: 0,
-        address: address,
-        direction: 'in',
-        broadCasted: true,
-        confirmations: 0,
-        broadcastHex: '',
-        opReturn: '',
-      ));
+      openWallet.putTransaction(
+        WalletTransaction(
+          txid: tx['txid'],
+          timestamp: -1, //flags phantom tx
+          value: 0,
+          fee: 0,
+          address: address,
+          direction: 'in',
+          broadCasted: true,
+          confirmations: 0,
+          broadcastHex: '',
+          opReturn: '',
+        ),
+      );
     } else {
       //check if that tx is already in the db
       var txInWallet = openWallet.transactions;
@@ -458,13 +460,19 @@ class ActiveWallets with ChangeNotifier {
     //set address to used
     //update status for address
     var openWallet = getSpecificCoinWallet(identifier);
-    openWallet.addresses.forEach((walletAddr) async {
-      if (walletAddr.address == address) {
-        walletAddr.newUsed = status == null ? false : true;
-        walletAddr.newStatus = status;
+    var addrInWallet = openWallet.addresses
+        .firstWhereOrNull((element) => element.address == _unusedAddress);
+    if (addrInWallet != null) {
+      addrInWallet.newUsed = status == null ? false : true;
+      addrInWallet.newStatus = status;
+
+      print(addrInWallet.wif);
+
+      if (addrInWallet.wif!.isEmpty || addrInWallet.wif == null) {
+        await getWif(identifier, address);
       }
-      await openWallet.save();
-    });
+    }
+    await openWallet.save();
     await generateUnusedAddress(identifier);
   }
 
@@ -482,6 +490,7 @@ class ActiveWallets with ChangeNotifier {
     String identifier,
     String address,
   ) async {
+    print('getWif called for $address');
     var network = AvailableCoins().getSpecificCoin(identifier).networkType;
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses

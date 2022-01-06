@@ -263,8 +263,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 _rescanInProgress = true;
                 //init rescan
                 await Navigator.of(context).pushNamedAndRemoveUntil(
-                    Routes.WalletImportScan, (_) => false,
-                    arguments: _wallet.name);
+                  Routes.WalletImportScan,
+                  (_) => false,
+                  arguments: _wallet.name,
+                );
               },
             ),
           ],
