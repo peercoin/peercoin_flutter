@@ -5,8 +5,10 @@ import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
@@ -114,6 +116,69 @@ class _AddressTabState extends State<AddressTab> {
                 AppLocalizations.instance.translate('jail_dialog_button'),
               ),
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showAddressExportDialog(
+      BuildContext context, WalletAddress address) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance
+                .translate('addressbook_export_dialog_title'),
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppLocalizations.instance
+                    .translate('addressbook_export_dialog_description'),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).errorColor,
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                var _wif;
+                if (address.wif!.isEmpty || address.wif == null) {
+                  _wif = await context.read<ActiveWallets>().getWif(
+                        _availableCoin.name,
+                        address.address,
+                      );
+                } else {
+                  _wif = address.wif;
+                }
+                Navigator.of(context).pop();
+                WalletHomeQr.showQrDialog(context, _wif);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('addressbook_export_dialog_button'),
+              ),
+            )
           ],
         );
       },
@@ -351,6 +416,21 @@ class _AddressTabState extends State<AddressTab> {
                     onTap: () => WalletHomeQr.showQrDialog(
                       context,
                       addr.address,
+                    ),
+                  ),
+                  IconSlideAction(
+                    caption: AppLocalizations.instance
+                        .translate('addressbook_swipe_export'),
+                    color: Theme.of(context).backgroundColor,
+                    iconWidget: Icon(
+                      Icons.vpn_key,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    onTap: () => Auth.requireAuth(
+                      context: context,
+                      biometricsAllowed:
+                          context.read<AppSettings>().biometricsAllowed,
+                      callback: () => _showAddressExportDialog(context, addr),
                     ),
                   ),
                 ],
