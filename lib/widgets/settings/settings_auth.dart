@@ -24,9 +24,9 @@ class SettingsAuth extends StatelessWidget {
 
   void changePIN(BuildContext context, bool biometricsAllowed) async {
     await Auth.requireAuth(
-      context,
-      biometricsAllowed,
-      () async => await screenLock(
+      context: context,
+      biometricsAllowed: biometricsAllowed,
+      callback: () async => await screenLock(
         title: Text(
           AppLocalizations.instance.translate('authenticate_title_new'),
           style: TextStyle(

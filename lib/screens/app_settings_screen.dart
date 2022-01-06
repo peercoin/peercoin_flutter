@@ -65,9 +65,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     final seed =
         await Provider.of<ActiveWallets>(context, listen: false).seedPhrase;
     await Auth.requireAuth(
-      context,
-      biometricsAllowed,
-      () => setState(
+      context: context,
+      biometricsAllowed: biometricsAllowed,
+      callback: () => setState(
         () {
           _seedPhrase = seed;
         },
@@ -77,9 +77,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   void revealAuthOptions(bool biometricsAllowed) async {
     await Auth.requireAuth(
-      context,
-      biometricsAllowed,
-      () => setState(
+      context: context,
+      biometricsAllowed: biometricsAllowed,
+      callback: () => setState(
         () {
           _biometricsRevealed = true;
         },

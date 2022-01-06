@@ -37,6 +37,13 @@ void main() {
         'create wallet from imported seed',
         () async {
           //creates a peercoin testnet wallet from an imported seed and checks if it connects
+          await driver.tap(find.byValueKey('setupLanguageButton'));
+          await driver.tap(find.text('English'));
+          await Process.run(
+            'adb',
+            <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
+            runInShell: true,
+          );
           await driver.tap(find.text('Import Seed'));
           await driver.tap(find.byValueKey('importTextField'));
           await driver.enterText(

@@ -112,7 +112,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
       _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+        await Auth.requireAuth(
+          context: context,
+          biometricsAllowed: _appSettings.biometricsAllowed,
+          canCancel: false,
+        );
       }
 
       if (Platform.isIOS || Platform.isAndroid) {
@@ -154,6 +158,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
           log('requesting update for ${element.txid}');
           _connectionProvider!.requestTxUpdate(element.txid);
         });
+
+        //unconfirmed balance? update balance
+        if (_wallet.unconfirmedBalance > 0) {
+          await _activeWallets.updateWalletBalance(_wallet.name);
+        }
       }
     }
 

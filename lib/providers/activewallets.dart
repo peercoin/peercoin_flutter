@@ -260,11 +260,12 @@ class ActiveWallets with ChangeNotifier {
     utxos.forEach((tx) {
       openWallet.putUtxo(
         WalletUtxo(
-            hash: tx['tx_hash'],
-            txPos: tx['tx_pos'],
-            height: tx['height'],
-            value: tx['value'],
-            address: address),
+          hash: tx['tx_hash'],
+          txPos: tx['tx_pos'],
+          height: tx['height'],
+          value: tx['value'],
+          address: address,
+        ),
       );
     });
 
@@ -535,7 +536,7 @@ class ActiveWallets with ChangeNotifier {
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
         openWallet.utxos.forEach((utxo) {
-          if (utxo.value > 0) {
+          if (utxo.value > 0 && utxo.height > 0) {
             if (_totalInputValue <= (_txAmount + fee)) {
               _totalInputValue += utxo.value;
               inputTx.add(utxo);
@@ -627,7 +628,7 @@ class ActiveWallets with ChangeNotifier {
           'fee': dryRun == false
               ? requiredFeeInSatoshis
               : requiredFeeInSatoshis +
-                  10, //TODO 10 satoshis added here because tx virtualsize out of bitcoin_flutter varies by 1 byte
+                  10, //TODO 10 satoshis added here because tx virtualsize out of coinslib varies by 1 byte
           'hex': _hex,
           'id': intermediate.getId(),
           'destroyedChange': _destroyedChange,
