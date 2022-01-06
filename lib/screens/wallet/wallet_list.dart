@@ -84,7 +84,11 @@ class _WalletListScreenState extends State<WalletListScreen>
       }
       if (widget.fromColdStart == true &&
           _appSettings.authenticationOptions!['walletList']!) {
-        await Auth.requireAuth(context, _appSettings.biometricsAllowed);
+        await Auth.requireAuth(
+          context: context,
+          biometricsAllowed: _appSettings.biometricsAllowed,
+          canCancel: false,
+        );
       } else if (fromScan == false) {
         //init background tasks
         if (_appSettings.notificationInterval > 0) {

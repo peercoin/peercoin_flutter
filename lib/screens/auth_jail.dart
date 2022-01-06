@@ -44,9 +44,9 @@ class _AuthJailState extends State<AuthJailScreen> {
     final appSettings = Provider.of<AppSettings>(context, listen: false);
     await appSettings.init();
     await Auth.requireAuth(
-      context,
-      appSettings.biometricsAllowed,
-      () async {
+      context: context,
+      biometricsAllowed: appSettings.biometricsAllowed,
+      callback: () async {
         final encrytpedStorage =
             Provider.of<EncryptedBox>(context, listen: false);
         await encrytpedStorage.setFailedAuths(0);
@@ -56,8 +56,8 @@ class _AuthJailState extends State<AuthJailScreen> {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
-      false,
-      widget._jailedFromHome,
+      canCancel: false,
+      jailedFromHome: widget._jailedFromHome,
     );
   }
 

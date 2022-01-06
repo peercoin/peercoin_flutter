@@ -118,10 +118,13 @@ class Auth {
     }
   }
 
-  static Future<void> requireAuth(BuildContext context, bool biometricsAllowed,
-      [Function? callback,
-      bool canCancel = true,
-      bool jailedFromHome = false]) async {
+  static Future<void> requireAuth({
+    required BuildContext context,
+    required bool biometricsAllowed,
+    Function? callback,
+    bool canCancel = true,
+    bool jailedFromHome = false,
+  }) async {
     failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
     retriesLeft = (maxRetries - failedAuthAttempts);
     if (retriesLeft == 0) retriesLeft = 1;
