@@ -118,6 +118,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 top: 30,
                 right: 25,
                 child: IconButton(
+                  key: Key('setupLanguageButton'),
                   onPressed: () async {
                     await Navigator.of(context).pushNamed(Routes.SetupLanguage);
                     setState(() {});
