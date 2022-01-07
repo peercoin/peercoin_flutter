@@ -1,5 +1,6 @@
 ### **0.7.9** (2022-01-xx)
-* Translation fixes
+* Allow keys to be exported in address book
+* Performance improvements for transaction building for imported keys
 
 ### **0.7.8** (2022-01-06)
 * Translation fixes
