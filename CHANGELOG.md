@@ -1,7 +1,11 @@
+### **0.7.9** (2022-01-11)
+* Allow keys to be exported in address book
+* Performance improvements for transaction building for imported keys
+
 ### **0.7.8** (2022-01-06)
 * Translation fixes
 * Fix issue where wallet balance was not updated after TX confirmed
-* Fix issue with authentification
+* Fix issue with authentication 
 
 ### **0.7.7** (2021-12-30)
 * allow import of WIF-format private keys
