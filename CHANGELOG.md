@@ -1,3 +1,6 @@
+### **0.8.0** (2022-01-xx)
+* xx
+
 ### **0.7.9** (2022-01-11)
 * Allow keys to be exported in address book
 * Performance improvements for transaction building for imported keys
