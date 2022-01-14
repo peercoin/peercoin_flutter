@@ -52,7 +52,10 @@ class _AddressTabState extends State<AddressTab> {
 
     widget._walletAddresses!.forEach((e) {
       if (e.isOurs == true || e.isOurs == null) {
-        _filteredListR.add(e);
+        if (e.isChangeAddr == false) {
+          //hides change addresses
+          _filteredListR.add(e);
+        }
       } else {
         _filteredListS.add(e);
       }
@@ -590,4 +593,6 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
   //TODO allow change addresses to be hidden in the list
+  //TODO toggle switch: hide change addresses
+  //TODO toggle switch: label / balance
 }
