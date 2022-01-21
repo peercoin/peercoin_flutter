@@ -226,5 +226,8 @@
     "app_settings_price_feed_disable_button": "Desactivar fuente de precios API",
     "app_navigation": "Navegación",
     "import_wif_textfield_label": "Clave Privada",
-    "import_wif_error_empty": "Por favor, introduce un clave privada"
+    "import_wif_error_empty": "Por favor, introduce un clave privada",
+    "store_description": "Envía y recibe Peercoin en tu teléfono.\n\nMantén la semilla de tu cartera protegida. \nEsta aplicación está libre de cualquier garantía. \nUtilízala bajo tu propio riesgo.\n\nCaracterísticas:\n- Basado en el protocolo electrum.\n- Envia y recibe peercoin.\n- Listo para realizar transacciones justo después de la instalación (sin esperas).\n- Carteras Peercoin y Peercoin testnet.\n- Gestión de la libreta de direcciones.\n- Importación de carteras de papel.\n- Gestión de servidores.\n- Soporte multilingüe.\n- Notificaciones en segundo plano.\n\nLas limitaciones conocidas se pueden encontrar en el repositorio de Github.",
+    "setup_bg_sync_allow": "Permitir la API de notificación en segundo plano",
+    "setup_subtitle": "a la cartera Peercoin"
 }
