@@ -465,7 +465,8 @@ class _AddressTabState extends State<AddressTab> {
                     child: Text(
                       _showLabel
                           ? addr.addressBookName ?? '-'
-                          : _addressBalanceMap[addr.address] ?? '0.0',
+                          : _addressBalanceMap[addr.address] ??
+                              '0.0 ${_availableCoin.letterCode}',
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600,
