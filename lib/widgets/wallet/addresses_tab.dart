@@ -35,14 +35,14 @@ class _AddressTabState extends State<AddressTab> {
   bool _search = false;
   bool _showChangeAddresses = true;
   bool _showLabel = true;
-  Map _addressBalanceMap = {};
+  final Map _addressBalanceMap = {};
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
-      fillAddressBalanceMap();
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
+      await fillAddressBalanceMap();
       setState(() {
         _initial = false;
       });
@@ -50,7 +50,14 @@ class _AddressTabState extends State<AddressTab> {
     super.didChangeDependencies();
   }
 
-  void fillAddressBalanceMap() {}
+  Future<void> fillAddressBalanceMap() async {
+    final utxos =
+        await Provider.of<ActiveWallets>(context).getWalletUtxos(widget.name);
+    for (var tx in utxos) {
+      _addressBalanceMap[tx.address] =
+          '${(tx.value / 1000000)} ${_availableCoin.letterCode}';
+    }
+  }
 
   void applyFilter([String? searchedKey]) {
     var _filteredListR = <WalletAddress>[];
@@ -667,6 +674,5 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
   //TODO allow change addresses to be hidden in the list
-  //TODO toggle switch: hide change addresses
-  //TODO toggle switch: label / balance
+  //TODO import / isChangeAddress ??
 }

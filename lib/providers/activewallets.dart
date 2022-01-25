@@ -200,6 +200,11 @@ class ActiveWallets with ChangeNotifier {
     return openWallet.transactions;
   }
 
+  Future<List<WalletUtxo>> getWalletUtxos(String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    return openWallet.utxos;
+  }
+
   Future<String?> getWalletAddressStatus(
       String identifier, String address) async {
     var addresses = await getWalletAddresses(identifier);
