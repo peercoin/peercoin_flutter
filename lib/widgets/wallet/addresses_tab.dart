@@ -33,6 +33,8 @@ class _AddressTabState extends State<AddressTab> {
   final _searchKey = GlobalKey<FormFieldState>();
   final searchController = TextEditingController();
   bool _search = false;
+  bool _showChangeAddresses = true;
+  bool _showLabel = true;
 
   @override
   void didChangeDependencies() async {
@@ -600,14 +602,20 @@ class _AddressTabState extends State<AddressTab> {
                       visualDensity:
                           VisualDensity(horizontal: 0.0, vertical: -4),
                       label: Container(
-                          child: Text(
-                        AppLocalizations.instance.translate('transactions_in'),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('addressbook_hide_change'),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
-                      )),
-                      selected: true,
-                      onSelected: (_) => print(_),
+                      ),
+                      selected: _showChangeAddresses,
+                      onSelected: (_) => setState(
+                        () {
+                          _showChangeAddresses = _;
+                        },
+                      ),
                     ),
                     ChoiceChip(
                       backgroundColor: Theme.of(context).backgroundColor,
@@ -615,14 +623,23 @@ class _AddressTabState extends State<AddressTab> {
                       visualDensity:
                           VisualDensity(horizontal: 0.0, vertical: -4),
                       label: Container(
-                          child: Text(
-                        AppLocalizations.instance.translate('transactions_in'),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
+                        child: Text(
+                          _showLabel
+                              ? AppLocalizations.instance
+                                  .translate('addressbook_show_balance')
+                              : AppLocalizations.instance
+                                  .translate('addressbook_show_label'),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
-                      )),
-                      selected: true,
-                      onSelected: (_) => print(_),
+                      ),
+                      selected: _showLabel,
+                      onSelected: (_) => setState(
+                        () {
+                          _showLabel = _;
+                        },
+                      ),
                     ),
                   ],
                 ),
