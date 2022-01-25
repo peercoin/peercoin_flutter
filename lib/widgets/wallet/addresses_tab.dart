@@ -35,11 +35,13 @@ class _AddressTabState extends State<AddressTab> {
   bool _search = false;
   bool _showChangeAddresses = true;
   bool _showLabel = true;
+  Map _addressBalanceMap = {};
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
+      fillAddressBalanceMap();
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
       setState(() {
         _initial = false;
@@ -48,14 +50,19 @@ class _AddressTabState extends State<AddressTab> {
     super.didChangeDependencies();
   }
 
+  void fillAddressBalanceMap() {}
+
   void applyFilter([String? searchedKey]) {
     var _filteredListR = <WalletAddress>[];
     var _filteredListS = <WalletAddress>[];
 
     widget._walletAddresses!.forEach((e) {
       if (e.isOurs == true || e.isOurs == null) {
-        if (e.isChangeAddr == false) {
-          //hides change addresses
+        if (_showChangeAddresses == false) {
+          if (e.isChangeAddr == false) {
+            _filteredListR.add(e);
+          }
+        } else {
           _filteredListR.add(e);
         }
       } else {
@@ -449,7 +456,9 @@ class _AddressTabState extends State<AddressTab> {
                   ),
                   title: Center(
                     child: Text(
-                      addr.addressBookName ?? '-',
+                      _showLabel
+                          ? addr.addressBookName ?? '-'
+                          : _addressBalanceMap[addr.address] ?? '0.0',
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600,
@@ -597,26 +606,26 @@ class _AddressTabState extends State<AddressTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ChoiceChip(
-                      backgroundColor: Theme.of(context).backgroundColor,
-                      selectedColor: Theme.of(context).shadowColor,
-                      visualDensity:
-                          VisualDensity(horizontal: 0.0, vertical: -4),
-                      label: Container(
-                        child: Text(
-                          AppLocalizations.instance
-                              .translate('addressbook_hide_change'),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        selectedColor: Theme.of(context).shadowColor,
+                        visualDensity:
+                            VisualDensity(horizontal: 0.0, vertical: -4),
+                        label: Container(
+                          child: Text(
+                            AppLocalizations.instance
+                                .translate('addressbook_hide_change'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                         ),
-                      ),
-                      selected: _showChangeAddresses,
-                      onSelected: (_) => setState(
-                        () {
-                          _showChangeAddresses = _;
-                        },
-                      ),
-                    ),
+                        selected: _showChangeAddresses,
+                        onSelected: (_) {
+                          setState(() {
+                            _showChangeAddresses = _;
+                          });
+                          applyFilter();
+                        }),
                     ChoiceChip(
                       backgroundColor: Theme.of(context).backgroundColor,
                       selectedColor: Theme.of(context).shadowColor,
@@ -635,11 +644,12 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                       ),
                       selected: _showLabel,
-                      onSelected: (_) => setState(
-                        () {
+                      onSelected: (_) {
+                        setState(() {
                           _showLabel = _;
-                        },
-                      ),
+                        });
+                        applyFilter();
+                      },
                     ),
                   ],
                 ),
