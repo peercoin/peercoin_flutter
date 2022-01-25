@@ -573,16 +573,63 @@ class _AddressTabState extends State<AddressTab> {
             ),
             SliverAppBar(
               automaticallyImplyLeading: false,
-              title: Text(AppLocalizations.instance
-                  .translate('addressbook_bottom_bar_sending_addresses')),
+              title: Text(
+                AppLocalizations.instance
+                    .translate('addressbook_bottom_bar_sending_addresses'),
+              ),
             ),
             SliverList(
               delegate: SliverChildListDelegate(listSend),
             ),
             SliverAppBar(
               automaticallyImplyLeading: false,
-              title: Text(AppLocalizations.instance
-                  .translate('addressbook_bottom_bar_your_addresses')),
+              title: Text(
+                AppLocalizations.instance
+                    .translate('addressbook_bottom_bar_your_addresses'),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 30,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ChoiceChip(
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      selectedColor: Theme.of(context).shadowColor,
+                      visualDensity:
+                          VisualDensity(horizontal: 0.0, vertical: -4),
+                      label: Container(
+                          child: Text(
+                        AppLocalizations.instance.translate('transactions_in'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      )),
+                      selected: true,
+                      onSelected: (_) => print(_),
+                    ),
+                    ChoiceChip(
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      selectedColor: Theme.of(context).shadowColor,
+                      visualDensity:
+                          VisualDensity(horizontal: 0.0, vertical: -4),
+                      label: Container(
+                          child: Text(
+                        AppLocalizations.instance.translate('transactions_in'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      )),
+                      selected: true,
+                      onSelected: (_) => print(_),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 10),
             ),
             SliverList(
               delegate: SliverChildListDelegate(listReceive),
