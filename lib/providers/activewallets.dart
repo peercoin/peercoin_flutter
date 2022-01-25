@@ -734,12 +734,13 @@ class ActiveWallets with ChangeNotifier {
     );
     if (addr == null) {
       openWallet.addNewAddress = WalletAddress(
-          address: address,
-          addressBookName: '',
-          used: true,
-          status: null,
-          isOurs: true,
-          wif: await getWif(identifier, address));
+        address: address,
+        addressBookName: '',
+        used: true,
+        status: null,
+        isOurs: true,
+        wif: await getWif(identifier, address),
+      );
     } else {
       await updateAddressStatus(identifier, address, null);
     }

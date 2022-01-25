@@ -674,6 +674,7 @@ class _AddressTabState extends State<AddressTab> {
       ],
     );
   }
-  //TODO allow change addresses to be hidden in the list
-  //TODO import / isChangeAddress ??
+  //TODO Hide used
+  //TODO Hide empty
+  //TODO Toggle switch for choice chips
 }
