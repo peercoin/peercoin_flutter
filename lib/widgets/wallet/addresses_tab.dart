@@ -34,6 +34,7 @@ class _AddressTabState extends State<AddressTab> {
   final searchController = TextEditingController();
   bool _search = false;
   bool _showChangeAddresses = true;
+  bool _optionsExpanded = false;
   bool _showLabel = true;
   bool _showUsed = true;
   bool _showEmpty = true;
@@ -506,8 +507,14 @@ class _AddressTabState extends State<AddressTab> {
       child: Column(
         children: [
           ExpansionTile(
-            iconColor: Colors.white,
             collapsedIconColor: Colors.white,
+            onExpansionChanged: (_) => setState(() {
+              _optionsExpanded = _;
+            }),
+            trailing: Icon(
+              _optionsExpanded ? Icons.close : Icons.filter_alt,
+              color: Colors.white,
+            ),
             title: Text(
               AppLocalizations.instance
                   .translate('addressbook_bottom_bar_your_addresses'),
@@ -752,6 +759,4 @@ class _AddressTabState extends State<AddressTab> {
       ],
     );
   }
-  //TODO Hide used
-  //TODO Hide empty
 }
