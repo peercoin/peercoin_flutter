@@ -75,7 +75,10 @@ class ElectrumConnection with ChangeNotifier {
       connectionState = ElectrumConnectionState.waiting;
       _scanMode = scanMode;
       FlutterLogs.logInfo(
-          'ElectrumConnection', 'init', 'init server connection');
+        'ElectrumConnection',
+        'init',
+        'init server connection',
+      );
       await _servers.init(walletName);
       await connect();
       var stream = _connection!.stream;
@@ -88,7 +91,11 @@ class ElectrumConnection with ChangeNotifier {
         replyHandler(elem);
       }, onError: (error) {
         FlutterLogs.logErrorTrace(
-            'ElectrumConnection', 'init', 'stream error', error as Error);
+          'ElectrumConnection',
+          'init',
+          'stream error',
+          error as Error,
+        );
         _connectionAttempt++;
       }, onDone: () {
         cleanUpOnDone();
@@ -109,12 +116,18 @@ class ElectrumConnection with ChangeNotifier {
     if (_connectionAttempt > _availableServers.length - 1) {
       _connectionAttempt = 0;
     }
-    FlutterLogs.logInfo('ElectrumConnection', 'connect',
-        'connection attempt $_connectionAttempt');
+    FlutterLogs.logInfo(
+      'ElectrumConnection',
+      'connect',
+      'connection attempt $_connectionAttempt',
+    );
 
     _serverUrl = _availableServers[_connectionAttempt];
     FlutterLogs.logInfo(
-        'ElectrumConnection', 'connect', 'connecting to $_serverUrl');
+      'ElectrumConnection',
+      'connect',
+      'connecting to $_serverUrl',
+    );
 
     try {
       _connection = IOWebSocketChannel.connect(
@@ -289,7 +302,7 @@ class ElectrumConnection with ChangeNotifier {
       sendMessage('blockchain.headers.subscribe', 'blocks');
     } else {
       //wrong genesis!
-      FlutterLogs.logInfo(
+      FlutterLogs.logWarn(
         'ElectrumConnection',
         'handleFeatures',
         'wrong genesis! disconnecting.',
@@ -483,7 +496,7 @@ class ElectrumConnection with ChangeNotifier {
     if (tx != null) {
       await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     } else {
-      FlutterLogs.logInfo('ElectrumConnection', 'handleTx', 'tx not found');
+      FlutterLogs.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
       //TODO figure out what to do in that case ...
       //if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
     }
@@ -492,7 +505,7 @@ class ElectrumConnection with ChangeNotifier {
   void handleBroadcast(String id, String result) async {
     var txId = id.replaceFirst('broadcast_', '');
     if (result == '1') {
-      FlutterLogs.logInfo(
+      FlutterLogs.logWarn(
         'ElectrumConnection',
         'handleBroadcast',
         'tx rejected by server',

@@ -25,7 +25,7 @@ class BackgroundSync {
     var taskId = task.taskId;
     var isTimeout = task.timeout;
     if (isTimeout) {
-      FlutterLogs.logInfo(
+      FlutterLogs.logWarn(
         'BackgroundSync',
         'backgroundFetchHeadlessTask',
         'Headless task timed-out: $taskId',
