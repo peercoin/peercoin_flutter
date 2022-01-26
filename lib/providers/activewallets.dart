@@ -388,7 +388,12 @@ class ActiveWallets with ChangeNotifier {
               try {
                 parsedMessage = utf8.decode(script[1]);
               } catch (e) {
-                print(e);
+                FlutterLogs.logErrorTrace(
+                  'ActiveWallets',
+                  'putTx',
+                  'parse utf8',
+                  e as Error,
+                );
               } finally {
                 openWallet.putTransaction(
                   WalletTransaction(

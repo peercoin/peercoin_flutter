@@ -456,9 +456,6 @@ class _SendTabState extends State<SendTab> {
                                 _availableCoin.networkType.opreturnSize,
                               ),
                             ],
-                            validator: (value) {
-                              print(value!.length);
-                            },
                             decoration: InputDecoration(
                               suffixIcon: IconButton(
                                 onPressed: () async {
