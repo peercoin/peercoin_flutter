@@ -29,6 +29,8 @@
     "addressbook_export_dialog_button": "Show me the key",
     "addressbook_export_dialog_hint": "This key is WIF-format.",
     "addressbook_hide_change": "Hide change addresses",
+    "addressbook_hide_empty": "Hide empty",
+    "addressbook_hide_used": "Hide used",
     "addressbook_show_balance": "Show balance",
     "addressbook_show_label": "Show label",
     "addressbook_no_label": "no label",
