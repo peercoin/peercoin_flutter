@@ -1,6 +1,6 @@
 ### **0.8.0** (2022-01-xx)
-* Address book - Your Addresses: allow to filter change addresses
-* Address book - Your Addresses: switch between addresses balance or label
+* Address book - Your Addresses: allow to filter for change, empty or used addresses 
+* Address book - Your Addresses: allow to switch between addresses balance or label
 * Allow to manually share debug logs with the app developers
 
 ### **0.7.9** (2022-01-11)
