@@ -600,18 +600,21 @@ class _AddressTabState extends State<AddressTab> {
             SliverList(
               delegate: SliverChildListDelegate(listSend),
             ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              title: Text(
-                AppLocalizations.instance
-                    .translate('addressbook_bottom_bar_your_addresses'),
-              ),
-            ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                height: 150,
+                child: ExpansionTile(
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: Text(
+                    AppLocalizations.instance
+                        .translate('addressbook_bottom_bar_your_addresses'),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   children: [
                     ChoiceChip(
                         backgroundColor: Theme.of(context).backgroundColor,
@@ -677,4 +680,5 @@ class _AddressTabState extends State<AddressTab> {
   //TODO Hide used
   //TODO Hide empty
   //TODO Toggle switch for choice chips
+  //TODO options height
 }
