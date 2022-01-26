@@ -1,4 +1,11 @@
+import 'dart:io';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter_logs/flutter_logs.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/coinwallet.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -53,6 +60,42 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       if (_biometricsAvailable == false) {
         _settings.setBiometricsAllowed(false);
       }
+      FlutterLogs.channel.setMethodCallHandler((call) async {
+        if (call.method == 'logsExported') {
+          var zipName = '${call.arguments.toString()}';
+          Directory? externalDirectory;
+
+          if (Platform.isIOS) {
+            externalDirectory = await getApplicationDocumentsDirectory();
+          } else {
+            externalDirectory = await getExternalStorageDirectory();
+          }
+
+          FlutterLogs.logInfo('AppSettingsScreen', 'found',
+              'External Storage:$externalDirectory');
+
+          var file = File('${externalDirectory!.path}/$zipName');
+
+          FlutterLogs.logInfo(
+              'AppSettingsScreen', 'path', 'Path: \n${file.path.toString()}');
+
+          if (file.existsSync()) {
+            FlutterLogs.logInfo(
+              'AppSettingsScreen',
+              'existsSync',
+              'Logs found and ready to export!',
+            );
+            //TODO attach to email?
+          } else {
+            FlutterLogs.logError(
+              'AppSettingsScreen',
+              'existsSync',
+              'File not found in storage.',
+            );
+          }
+        }
+      });
+
       setState(() {
         _initial = false;
       });
@@ -303,6 +346,10 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     ),
                   )
                 ],
+              ),
+              PeerButton(
+                text: 'Export Logs', //TODO i18n
+                action: () => FlutterLogs.exportLogs(),
               )
             ],
           ),

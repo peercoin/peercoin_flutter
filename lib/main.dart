@@ -96,8 +96,6 @@ void main() async {
   }
 
   //init logger
-  var _tag = 'peercoin_flutter';
-  var _myLogFileName = 'peercoin_flutter_log';
   await FlutterLogs.initLogs(
     logLevelsEnabled: [
       LogLevel.INFO,
@@ -107,15 +105,14 @@ void main() async {
     ],
     timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
     directoryStructure: DirectoryStructure.FOR_DATE,
-    logTypesEnabled: [_myLogFileName],
     logFileExtension: LogFileExtension.LOG,
-    logsWriteDirectoryName: 'logs',
-    logsExportDirectoryName: 'logs/exported',
+    logsWriteDirectoryName: 'MyLogs',
+    logsExportDirectoryName: 'MyLogs/Exported',
     debugFileOperations: true,
     isDebuggable: true,
   );
 
-  FlutterLogs.logInfo(_tag, 'setUpLogs', 'setUpLogs: Setting up logs..');
+  FlutterLogs.logInfo('main', 'initLogs', 'Init logs..');
 
   //run
   runApp(PeercoinApp());
