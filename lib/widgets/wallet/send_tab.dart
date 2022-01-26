@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/walletaddress.dart';
 import 'package:peercoin/providers/appsettings.dart';
@@ -226,7 +226,12 @@ class _SendTabState extends State<SendTab> {
                           //navigate back to tx list
                           widget._changeIndex(Tabs.transactions);
                         } catch (e) {
-                          log('error $e');
+                          FlutterLogs.logErrorTrace(
+                            'SendTab',
+                            'showTransactionConfirmation',
+                            'error',
+                            e as Error,
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -397,7 +402,11 @@ class _SendTabState extends State<SendTab> {
                         amountController.text = convertedValue;
                         var txValueInSatoshis =
                             (double.parse(convertedValue) * 1000000).toInt();
-                        log('req value $txValueInSatoshis - ${_wallet.balance}');
+                        FlutterLogs.logInfo(
+                          'SendTab',
+                          'send_amount',
+                          'req value $txValueInSatoshis - ${_wallet.balance}',
+                        );
                         if (convertedValue.contains('.') &&
                             convertedValue.split('.')[1].length >
                                 _availableCoin.fractions) {

@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 
 class AppLocalizations {
   AppLocalizations(this.locale);
@@ -58,7 +58,12 @@ class AppLocalizations {
       jsonString = await rootBundle.loadString(
           'assets/translations/${localeToBeLoaded.languageCode}.json');
     } catch (e) {
-      log('error $e');
+      FlutterLogs.logErrorTrace(
+        'AppLocalizations',
+        '_loadLocalizedStrings',
+        'error',
+        e as Error,
+      );
       return localizedStrings;
     }
 
@@ -82,7 +87,11 @@ class AppLocalizations {
 
     arguments.forEach((argumentKey, value) {
       if (value == null) {
-        log('Value for "$argumentKey" is null in call of translate(\'$key\')');
+        FlutterLogs.logWarn(
+          'AppLocalizations',
+          'translate',
+          'Value for "$argumentKey" is null in call of translate(\'$key\')',
+        );
         value = '';
       }
       translation = translation!.replaceAll('\$$argumentKey', value);

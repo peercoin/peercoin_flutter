@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/encryptedbox.dart';
@@ -24,7 +24,7 @@ class Servers with ChangeNotifier {
   };
 
   Future<void> init(String? coinIdentifier) async {
-    log('init server provider');
+    FlutterLogs.logInfo('Servers', 'init', 'init server provider');
     _serverBox = await Hive.openBox<Server>(
       'serverBox-$coinIdentifier',
       encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>),
@@ -32,7 +32,8 @@ class Servers with ChangeNotifier {
 
     //check first run
     if (_serverBox.isEmpty) {
-      log('server storage is empty, initializing');
+      FlutterLogs.logInfo(
+          'Servers', 'init', 'server storage is empty, initializing');
 
       _seeds[coinIdentifier!]!.asMap().forEach((index, hardcodedSeedAddress) {
         var newServer = Server(
@@ -50,7 +51,11 @@ class Servers with ChangeNotifier {
           (element) => element.getAddress == hardcodedSeedAddress);
       if (res == null) {
         //hard coded server not yet in storage
-        log('$hardcodedSeedAddress not yet in storage');
+        FlutterLogs.logInfo(
+          'Servers',
+          'init',
+          '$hardcodedSeedAddress not yet in storage',
+        );
         addServer(hardcodedSeedAddress);
       }
     });
@@ -60,7 +65,11 @@ class Servers with ChangeNotifier {
           (element) => element == boxElement.address,
           orElse: () => null);
       if (res == null) {
-        log('${boxElement.address} not existant anymore');
+        FlutterLogs.logInfo(
+          'Servers',
+          'init',
+          '${boxElement.address} not existant anymore',
+        );
         removeServer(boxElement);
       }
     });
@@ -99,7 +108,11 @@ class Servers with ChangeNotifier {
 
     final _prunedList =
         _availableServers.where((element) => element.isNotEmpty).toList();
-    log('available servers $_prunedList');
+    FlutterLogs.logInfo(
+      'Servers',
+      'getServerList',
+      'available servers $_prunedList',
+    );
 
     return _prunedList;
   }

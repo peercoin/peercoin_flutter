@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -228,7 +227,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ));
                       Navigator.of(context).pop();
                     } catch (e) {
-                      log('error $e');
+                      FlutterLogs.logErrorTrace(
+                        'ImportPaperWallet',
+                        'emptyWallet',
+                        'error',
+                        e as Error,
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppLocalizations.instance.translate(
