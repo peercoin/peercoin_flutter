@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -74,7 +75,7 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     if (payload != null) {
-      log('notification payload: $payload');
+      FlutterLogs.logInfo('notification', 'payload', payload);
     }
   });
 
@@ -95,6 +96,28 @@ void main() async {
       walletToOpenDirectly: notificationAppLaunchDetails?.payload ?? '',
     );
   }
+
+  //init logger
+  var _tag = 'peercoin_flutter';
+  var _myLogFileName = 'peercoin_flutter_log';
+  await FlutterLogs.initLogs(
+    logLevelsEnabled: [
+      LogLevel.INFO,
+      LogLevel.WARNING,
+      LogLevel.ERROR,
+      LogLevel.SEVERE
+    ],
+    timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
+    directoryStructure: DirectoryStructure.FOR_DATE,
+    logTypesEnabled: [_myLogFileName],
+    logFileExtension: LogFileExtension.LOG,
+    logsWriteDirectoryName: 'logs',
+    logsExportDirectoryName: 'logs/exported',
+    debugFileOperations: true,
+    isDebuggable: true,
+  );
+
+  FlutterLogs.logInfo(_tag, 'setUpLogs', 'setUpLogs: Setting up logs..');
 
   //run
   runApp(PeercoinApp());
