@@ -173,7 +173,11 @@ class BackgroundSync {
           if (result.body.contains('foundDifference')) {
             //valid answer
             var bodyDecoded = jsonDecode(result.body);
-            FlutterLogs.logInfo('BackgroundSync', 'executeSync', bodyDecoded);
+            FlutterLogs.logInfo(
+              'BackgroundSync',
+              'executeSync',
+              bodyDecoded.toString(),
+            );
             _foundDifference = bodyDecoded['foundDifference'];
             if (_foundDifference == true) {
               //loop through addresses in result
