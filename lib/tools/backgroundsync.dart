@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
@@ -25,11 +25,19 @@ class BackgroundSync {
     var taskId = task.taskId;
     var isTimeout = task.timeout;
     if (isTimeout) {
-      print('[BackgroundFetch] Headless task timed-out: $taskId');
+      FlutterLogs.logWarn(
+        'BackgroundSync',
+        'backgroundFetchHeadlessTask',
+        'Headless task timed-out: $taskId',
+      );
       BackgroundFetch.finish(taskId);
       return;
     }
-    print('[BackgroundFetch] Headless event received.');
+    FlutterLogs.logInfo(
+      'BackgroundSync',
+      'backgroundFetchHeadlessTask',
+      'Headless event received.',
+    );
     await BackgroundSync.executeSync();
     BackgroundFetch.finish(taskId);
   }
@@ -49,14 +57,16 @@ class BackgroundSync {
             requiresDeviceIdle: false,
             requiredNetworkType: NetworkType.ANY,
           ), (String taskId) async {
-        print('[BackgroundFetch] Event received $taskId');
+        FlutterLogs.logInfo('BackgroundSync', 'init', 'Event received $taskId');
         await BackgroundSync.executeSync();
         BackgroundFetch.finish(taskId);
       }, (String taskId) async {
-        print('[BackgroundFetch] TASK TIMEOUT taskId: $taskId');
+        FlutterLogs.logInfo(
+            'BackgroundSync', 'init', 'TASK TIMEOUT taskId: $taskId');
         BackgroundFetch.finish(taskId);
       });
-      print('[BackgroundFetch] configure success: $status');
+      FlutterLogs.logInfo(
+          'BackgroundSync', 'init', 'configure success: $status');
     }
 
     await initPlatformState();
@@ -141,7 +151,11 @@ class BackgroundSync {
             }
           });
 
-          log('addressesToQuery $adressesToQuery');
+          FlutterLogs.logInfo(
+            'BackgroundSync',
+            'executeSync',
+            'addressesToQuery $adressesToQuery',
+          );
 
           var result = await http.post(
             Uri.parse('https://peercoinexplorer.net/address-status'),
@@ -159,7 +173,11 @@ class BackgroundSync {
           if (result.body.contains('foundDifference')) {
             //valid answer
             var bodyDecoded = jsonDecode(result.body);
-            print(bodyDecoded);
+            FlutterLogs.logInfo(
+              'BackgroundSync',
+              'executeSync',
+              bodyDecoded.toString(),
+            );
             _foundDifference = bodyDecoded['foundDifference'];
             if (_foundDifference == true) {
               //loop through addresses in result

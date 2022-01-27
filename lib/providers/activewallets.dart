@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:coinslib/coinslib.dart';
@@ -8,6 +7,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_localizations.dart';
@@ -105,7 +105,11 @@ class ActiveWallets with ChangeNotifier {
       return hdWallet.address;
     } else {
       var derivePath = "m/$account'/$chain/$address";
-      log(derivePath);
+      FlutterLogs.logInfo(
+        'ActiveWallets',
+        'getAddressFromDerivationPath',
+        derivePath,
+      );
 
       return hdWallet.derivePath(derivePath).address;
     }
@@ -200,6 +204,11 @@ class ActiveWallets with ChangeNotifier {
     return openWallet.transactions;
   }
 
+  Future<List<WalletUtxo>> getWalletUtxos(String identifier) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    return openWallet.utxos;
+  }
+
   Future<String?> getWalletAddressStatus(
       String identifier, String address) async {
     var addresses = await getWalletAddresses(identifier);
@@ -277,7 +286,7 @@ class ActiveWallets with ChangeNotifier {
   Future<void> putTx(String identifier, String address, Map tx,
       [bool scanMode = false]) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    log('$address puttx: $tx');
+    FlutterLogs.logInfo('ActiveWallets', 'putTx', '$address puttx: $tx');
 
     if (scanMode == true) {
       //write phantom tx that are not displayed in tx list but known to the wallet
@@ -378,7 +387,12 @@ class ActiveWallets with ChangeNotifier {
               try {
                 parsedMessage = utf8.decode(script[1]);
               } catch (e) {
-                print(e);
+                FlutterLogs.logErrorTrace(
+                  'ActiveWallets',
+                  'putTx',
+                  'parse utf8',
+                  e as Error,
+                );
               } finally {
                 openWallet.putTransaction(
                   WalletTransaction(
@@ -456,7 +470,11 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> updateAddressStatus(
       String identifier, String address, String? status) async {
-    log('updating $address to $status');
+    FlutterLogs.logInfo(
+      'ActiveWallets',
+      'updateAddressStatus',
+      'updating $address to $status',
+    );
     //set address to used
     //update status for address
     var openWallet = getSpecificCoinWallet(identifier);
@@ -530,8 +548,16 @@ class ActiveWallets with ChangeNotifier {
     var _needsChange = true;
     if (_txAmount == openWallet.balance) {
       _needsChange = false;
-      log('needschange $_needsChange, fee $fee');
-      log('change needed $_txAmount - $fee');
+      FlutterLogs.logInfo(
+        'ActiveWallets',
+        'buildTransaction',
+        'needschange $_needsChange, fee $fee',
+      );
+      FlutterLogs.logInfo(
+        'ActiveWallets',
+        'buildTransaction',
+        'change needed $_txAmount - $fee',
+      );
     }
 
     if (_txAmount <= openWallet.balance) {
@@ -557,7 +583,11 @@ class ActiveWallets with ChangeNotifier {
         tx.setVersion(coinParams.txVersion);
         if (_needsChange == true) {
           var changeAmount = _totalInputValue - _txAmount - fee;
-          log('change amount $changeAmount');
+          FlutterLogs.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            'change amount $changeAmount',
+          );
 
           if (changeAmount <= coin.minimumTxValue) {
             //change is too small! no change output
@@ -600,7 +630,11 @@ class ActiveWallets with ChangeNotifier {
         var keyMap = await generateKeyMap();
         //sign
         keyMap.forEach((key, value) {
-          log("signing - ${value["addr"]}");
+          FlutterLogs.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            "signing - ${value["addr"]}",
+          );
           tx.sign(
             vin: key,
             keyPair: ECPair.fromWIF(value['wif'], network: network),
@@ -613,9 +647,17 @@ class ActiveWallets with ChangeNotifier {
         var asDouble = double.parse(number) * 1000000;
         var requiredFeeInSatoshis = asDouble.toInt();
 
-        log('fee $requiredFeeInSatoshis, size: ${intermediate.txSize}');
+        FlutterLogs.logInfo(
+          'ActiveWallets',
+          'buildTransaction',
+          'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
+        );
         if (dryRun == false) {
-          log('intermediate size: ${intermediate.txSize}');
+          FlutterLogs.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            'intermediate size: ${intermediate.txSize}',
+          );
           _hex = intermediate.toHex();
 
           //flag addr as change addr
@@ -729,12 +771,13 @@ class ActiveWallets with ChangeNotifier {
     );
     if (addr == null) {
       openWallet.addNewAddress = WalletAddress(
-          address: address,
-          addressBookName: '',
-          used: true,
-          status: null,
-          isOurs: true,
-          wif: await getWif(identifier, address));
+        address: address,
+        addressBookName: '',
+        used: true,
+        status: null,
+        isOurs: true,
+        wif: await getWif(identifier, address),
+      );
     } else {
       await updateAddressStatus(identifier, address, null);
     }

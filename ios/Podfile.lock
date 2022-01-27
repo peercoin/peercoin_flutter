@@ -9,6 +9,9 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_logs (0.0.1):
+    - Flutter
+    - ZIPFoundation
   - flutter_secure_storage (3.3.1):
     - Flutter
   - integration_test (0.0.1):
@@ -30,6 +33,7 @@ PODS:
     - Flutter
   - url_launcher (0.0.1):
     - Flutter
+  - ZIPFoundation (0.9.13)
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
@@ -37,6 +41,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_logs (from `.symlinks/plugins/flutter_logs/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - local_auth (from `.symlinks/plugins/local_auth/ios`)
@@ -51,6 +56,7 @@ SPEC REPOS:
   trunk:
     - MTBBarcodeScanner
     - Reachability
+    - ZIPFoundation
 
 EXTERNAL SOURCES:
   background_fetch:
@@ -63,6 +69,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_logs:
+    :path: ".symlinks/plugins/flutter_logs/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   integration_test:
@@ -88,8 +96,9 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  integration_test: 7db6d89f336f671dcbc7563ee27a5b08f6f8aee1
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   local_auth: ef62030a2731330b95df7ef1331bd15f6a64b8a6
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
@@ -99,6 +108,7 @@ SPEC CHECKSUMS:
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  ZIPFoundation: ae5b4b813d216d3bf0a148773267fff14bd51d37
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
 import 'package:peercoin/screens/setup/setup.dart';
@@ -35,7 +34,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     try {
       await _activeWallets.init();
     } catch (e) {
-      log('error $e');
+      FlutterLogs.logErrorTrace(
+        'SetupImportSeed',
+        'createWallet',
+        'error',
+        e as Error,
+      );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('setup_securebox_fail'),

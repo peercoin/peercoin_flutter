@@ -33,7 +33,10 @@ class MyTheme {
       unselectedWidgetColor: LightColors.grey,
       textTheme: TextTheme(
         button: TextStyle(
-            letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
+          letterSpacing: 1.4,
+          fontSize: 16,
+          color: DarkColors.white,
+        ),
       ),
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(

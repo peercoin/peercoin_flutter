@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/models/availablecoins.dart';
 import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/electrumconnection.dart';
@@ -59,7 +59,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       ));
     } else {
       //continue: try to connect
-      log('trying to connect');
+      FlutterLogs.logInfo('ServerAdd', 'tryConnect', 'trying to connect');
 
       //close original server connection
       await Provider.of<ElectrumConnection>(context, listen: false)
@@ -72,7 +72,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           serverUrl,
         );
       } catch (e) {
-        log('connection error: $e');
+        FlutterLogs.logErrorTrace(
+          'ServerAdd',
+          'tryConnect',
+          'connection error',
+          e as Error,
+        );
       }
 
       void sendMessage(String method, String id, [List? params]) {
@@ -124,7 +129,12 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       _connection.stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        log('stream error: $error');
+        FlutterLogs.logErrorTrace(
+          'ServerAdd',
+          'tryConnect',
+          'stream error',
+          error as Error,
+        );
         setState(() {
           _loading = false;
         });

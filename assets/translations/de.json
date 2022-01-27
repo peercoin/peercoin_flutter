@@ -221,7 +221,7 @@
     "setup_price_feed_description": "Dies ermöglicht deinen Kontostand in Echtzeit in anderen Währungen anzuzeigen.",
     "setup_price_feed_title": "Externe APIs",
     "store_short": "Deine mobile Wallet für Peercoin und Peercoin Testnet.",
-    "store_description": "Sende und empfange Peercoin auf deinem Telefon.\n\nBeschütze deinen Wallet Seed.\nDiese App kommt frei von jedweder Garantie.\nBenutzung auf eigene Gefahr.\n\nEigenschaften:\n-Basiert auf dem Electrum-Protokoll\n-Peercoin senden und empfangen\n-Direkt nach der Installation bereit für Transaktionen (kein warten)\n-Peercoin und Peercoin Testnet Wallets\n-Adressbuch\n-Import von Papier-Wallets \n-Server-Verwaltung\n-Mehrsprachig\n-Hintergrundbenachrichtigungen\n\nBekannte Einschränkungen können im Github Repository eingesehen werden.",
+    "store_description": "Sende und empfange Peercoin auf deinem Telefon.\n\nBeschütze deinen Wallet Seed.\nDiese App kommt frei von jedweder Garantie.\nBenutzung auf eigene Gefahr.\n\nEigenschaften:\n-Basiert auf dem Electrum-Protokoll\n-Peercoin senden und empfangen\n-Direkt nach der Installation bereit für Transaktionen (kein warten)\n-Peercoin und Peercoin Testnet Wallets\n-Adressbuch\n-Import von Papier-Wallets \n-Import von privaten Schlüsseln (WIF).\n-Server-Verwaltung\n-Mehrsprachig\n-Hintergrundbenachrichtigungen\n\nBekannte Einschränkungen können im Github Repository eingesehen werden.",
     "about_illustrations_button": "designs.AI",
     "about_illustrations": "Einrichtungsillustrationen bereitgestellt von",
     "import_button": "Importieren",
@@ -243,6 +243,17 @@
     "app_settings_notifications_not_enabled": "Hintergrundbenachrichtigungen sind derzeit deaktiviert.",
     "app_settings_notifications_hint_sync_1": "Setzt das Intervall in dem die App im Hintergrund neue Transaktionen prüft.\nAktives Intervall: $minutes Minuten.",
     "send_add_metadata": "Metadaten hinzufügen",
-    "send_op_return": "OP_RETURN Nachricht",
-    "setup_bg_sync_allow": "Hintergrundbenachrichtigungs-API erlauben"
+    "send_op_return": "Metadaten Nachricht",
+    "setup_bg_sync_allow": "Hintergrundbenachrichtigungs-API erlauben",
+    "currency_PLN": "Polnischer Zloty",
+    "import_wif_textfield_label": "Privater Schlüssel",
+    "import_wif_alert_content": "Bestätige, dass du die nachfolgende Adresse importieren möchtest:\n\n$address",
+    "import_wif_error_empty": "Bitte einen privaten Schlüssel eingeben",
+    "import_wif_error_failed_parse": "Dein privater Schlüssel ist nicht valide. Ist er im WIF-Format?",
+    "import_wif_error_snack": "Diese Adresse wurde bereits importiert",
+    "import_wif_hint": "Der Schlüssel muss erneut importiert werden, wenn die Wallet aus dem Seed wiederhergestellt wird. Er ist nicht mit dem Seed verknüpft.",
+    "import_wif_intro": "Bitte den gewünschten privaten Schlüssel eingeben.\nEr muss im WIF-Format sein.",
+    "import_wif_success_snack": "Privater Schlüssel erfolgreich importiert",
+    "send_empty": "Wallet leeren",
+    "wallet_pop_menu_wif": "Privaten Schlüssel importieren"
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
 import 'package:peercoin/providers/appsettings.dart';
@@ -47,12 +47,16 @@ class PriceTicker {
   }
 
   static void checkUpdate(AppSettings _settings) async {
-    log('checking price update');
+    FlutterLogs.logInfo('PriceTicker', 'checkUpdate', 'checking price update');
     //check if last update was longer than an hour ago
     final oneHourAgo =
         (DateTime.now()).subtract(Duration(minutes: Duration.minutesPerHour));
     if (_settings.latestTickerUpdate.isBefore(oneHourAgo)) {
-      log('last update older than 1 hour (${_settings.latestTickerUpdate})');
+      FlutterLogs.logInfo(
+        'PriceTicker',
+        'checkUpdate',
+        'last update older than 1 hour (${_settings.latestTickerUpdate})',
+      );
       //time to update
       //get data
       final data = await getDataFromTicker();
@@ -62,7 +66,11 @@ class PriceTicker {
             data.values.every((element) => element.runtimeType == double);
         if (valuesValid) {
           //data valid
-          log('price data updated $data');
+          FlutterLogs.logInfo(
+            'PriceTicker',
+            'checkUpdate',
+            'price data updated $data',
+          );
           _settings.setExchangeRates(data);
         } else {
           throw ('parser data not valid');

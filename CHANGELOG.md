@@ -1,3 +1,8 @@
+### **0.8.0** (2022-01-27)
+* Address book - Your Addresses: allow to filter for change, empty or used addresses 
+* Address book - Your Addresses: allow to switch between addresses balance or label
+* App Settings: Allow to manually share debug logs
+
 ### **0.7.9** (2022-01-11)
 * Allow keys to be exported in address book
 * Performance improvements for transaction building for imported keys

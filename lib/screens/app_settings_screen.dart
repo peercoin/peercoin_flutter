@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter_logs/flutter_logs.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/models/coinwallet.dart';
@@ -53,12 +58,52 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       if (_biometricsAvailable == false) {
         _settings.setBiometricsAllowed(false);
       }
+      await initDebugLogHandler();
+
       setState(() {
         _initial = false;
       });
     }
 
     super.didChangeDependencies();
+  }
+
+  Future<void> initDebugLogHandler() async {
+    FlutterLogs.channel.setMethodCallHandler((call) async {
+      if (call.method == 'logsExported') {
+        var zipName = '${call.arguments.toString()}';
+        Directory? externalDirectory;
+
+        if (Platform.isIOS) {
+          externalDirectory = await getApplicationDocumentsDirectory();
+        } else {
+          externalDirectory = await getExternalStorageDirectory();
+        }
+
+        FlutterLogs.logInfo('AppSettingsScreen', 'found',
+            'External Storage:$externalDirectory');
+
+        var file = File('${externalDirectory!.path}/$zipName');
+
+        FlutterLogs.logInfo(
+            'AppSettingsScreen', 'path', 'Path: \n${file.path}');
+
+        if (file.existsSync()) {
+          FlutterLogs.logInfo(
+            'AppSettingsScreen',
+            'existsSync',
+            'Logs zip found, opening Share overlay',
+          );
+          await Share.shareFiles([file.path]);
+        } else {
+          FlutterLogs.logError(
+            'AppSettingsScreen',
+            'existsSync',
+            'File not found in storage.',
+          );
+        }
+      }
+    });
   }
 
   void revealSeedPhrase(bool biometricsAllowed) async {
@@ -303,7 +348,26 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     ),
                   )
                 ],
-              )
+              ),
+              ExpansionTile(
+                title: Text(
+                    AppLocalizations.instance.translate('app_settings_logs'),
+                    style: Theme.of(context).textTheme.headline6),
+                childrenPadding: EdgeInsets.all(10),
+                children: [
+                  Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_description'),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  PeerButton(
+                    text: AppLocalizations.instance
+                        .translate('app_settings_logs_export'),
+                    action: () => FlutterLogs.exportLogs(),
+                  )
+                ],
+              ),
             ],
           ),
         ),

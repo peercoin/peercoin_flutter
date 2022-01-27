@@ -33,12 +33,19 @@ class _AddressTabState extends State<AddressTab> {
   final _searchKey = GlobalKey<FormFieldState>();
   final searchController = TextEditingController();
   bool _search = false;
+  bool _showChangeAddresses = true;
+  bool _optionsExpanded = false;
+  bool _showLabel = true;
+  bool _showUsed = true;
+  bool _showEmpty = true;
+  final Map _addressBalanceMap = {};
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
+      await fillAddressBalanceMap();
       setState(() {
         _initial = false;
       });
@@ -46,25 +53,59 @@ class _AddressTabState extends State<AddressTab> {
     super.didChangeDependencies();
   }
 
+  Future<void> fillAddressBalanceMap() async {
+    final utxos =
+        await Provider.of<ActiveWallets>(context).getWalletUtxos(widget.name);
+    for (var tx in utxos) {
+      _addressBalanceMap[tx.address] =
+          '${(tx.value / 1000000)} ${_availableCoin.letterCode}';
+    }
+  }
+
   void applyFilter([String? searchedKey]) {
-    var _filteredListR = <WalletAddress>[];
-    var _filteredListS = <WalletAddress>[];
+    var _filteredListReceive = <WalletAddress>[];
+    var _filteredListSend = <WalletAddress>[];
 
     widget._walletAddresses!.forEach((e) {
       if (e.isOurs == true || e.isOurs == null) {
-        _filteredListR.add(e);
+        _filteredListReceive.add(e);
       } else {
-        _filteredListS.add(e);
+        _filteredListSend.add(e);
       }
     });
 
+    //apply filters to receive list
+    var _toRemove = [];
+    for (var address in _filteredListReceive) {
+      if (_showChangeAddresses == false) {
+        if (address.isChangeAddr == true) {
+          _toRemove.add(address);
+        }
+      }
+      if (_showUsed == false) {
+        if (address.used == true) {
+          _toRemove.add(address);
+        }
+      }
+      if (_showEmpty == false) {
+        if (_addressBalanceMap[address.address] == null) {
+          _toRemove.add(address);
+        }
+      }
+    }
+
+    for (var address in _toRemove) {
+      _filteredListReceive.remove(address);
+    }
+
+    //filter search keys
     if (searchedKey != null) {
-      _filteredListR = _filteredListR.where((element) {
+      _filteredListReceive = _filteredListReceive.where((element) {
         return element.address.contains(searchedKey) ||
             element.addressBookName != null &&
                 element.addressBookName!.contains(searchedKey);
       }).toList();
-      _filteredListS = _filteredListS.where((element) {
+      _filteredListSend = _filteredListSend.where((element) {
         return element.address.contains(searchedKey) ||
             element.addressBookName != null &&
                 element.addressBookName!.contains(searchedKey);
@@ -72,8 +113,8 @@ class _AddressTabState extends State<AddressTab> {
     }
 
     setState(() {
-      _filteredReceive = _filteredListR;
-      _filteredSend = _filteredListS;
+      _filteredReceive = _filteredListReceive;
+      _filteredSend = _filteredListSend;
     });
   }
 
@@ -444,7 +485,10 @@ class _AddressTabState extends State<AddressTab> {
                   ),
                   title: Center(
                     child: Text(
-                      addr.addressBookName ?? '-',
+                      _showLabel
+                          ? addr.addressBookName ?? '-'
+                          : _addressBalanceMap[addr.address] ??
+                              '0.0 ${_availableCoin.letterCode}',
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600,
@@ -459,6 +503,137 @@ class _AddressTabState extends State<AddressTab> {
       );
     }
 
+    var sliverToBoxAdapter = SliverToBoxAdapter(
+      child: Column(
+        children: [
+          ExpansionTile(
+            collapsedIconColor: Colors.white,
+            onExpansionChanged: (_) => setState(() {
+              _optionsExpanded = _;
+            }),
+            trailing: Icon(
+              _optionsExpanded ? Icons.close : Icons.filter_alt,
+              color: Colors.white,
+            ),
+            title: Text(
+              AppLocalizations.instance
+                  .translate('addressbook_bottom_bar_your_addresses'),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ChoiceChip(
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      selectedColor: Theme.of(context).shadowColor,
+                      visualDensity:
+                          VisualDensity(horizontal: 0.0, vertical: -4),
+                      label: Container(
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('addressbook_hide_change'),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                      selected: _showChangeAddresses,
+                      onSelected: (_) {
+                        setState(() {
+                          _showChangeAddresses = _;
+                        });
+                        applyFilter();
+                      }),
+                  ChoiceChip(
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    selectedColor: Theme.of(context).shadowColor,
+                    visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
+                    label: Container(
+                      width: 120,
+                      child: Text(
+                        _showLabel
+                            ? AppLocalizations.instance
+                                .translate('addressbook_show_balance')
+                            : AppLocalizations.instance
+                                .translate('addressbook_show_label'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ),
+                    selected: _showLabel,
+                    onSelected: (_) {
+                      setState(() {
+                        _showLabel = _;
+                      });
+                      applyFilter();
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ChoiceChip(
+                      backgroundColor: Theme.of(context).backgroundColor,
+                      selectedColor: Theme.of(context).shadowColor,
+                      visualDensity:
+                          VisualDensity(horizontal: 0.0, vertical: -4),
+                      label: Container(
+                        width: 120,
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('addressbook_hide_used'),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                      selected: _showUsed,
+                      onSelected: (_) {
+                        setState(() {
+                          _showUsed = _;
+                        });
+                        applyFilter();
+                      }),
+                  ChoiceChip(
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    selectedColor: Theme.of(context).shadowColor,
+                    visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
+                    label: Container(
+                      width: 120,
+                      child: Text(
+                        AppLocalizations.instance
+                            .translate('addressbook_hide_empty'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ),
+                    selected: _showEmpty,
+                    onSelected: (_) {
+                      setState(() {
+                        _showEmpty = _;
+                      });
+                      applyFilter();
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20)
+            ],
+          )
+        ],
+      ),
+    );
     return Column(
       children: [
         Expanded(
@@ -570,16 +745,17 @@ class _AddressTabState extends State<AddressTab> {
             ),
             SliverAppBar(
               automaticallyImplyLeading: false,
-              title: Text(AppLocalizations.instance
-                  .translate('addressbook_bottom_bar_sending_addresses')),
+              title: Text(
+                AppLocalizations.instance
+                    .translate('addressbook_bottom_bar_sending_addresses'),
+              ),
             ),
             SliverList(
               delegate: SliverChildListDelegate(listSend),
             ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              title: Text(AppLocalizations.instance
-                  .translate('addressbook_bottom_bar_your_addresses')),
+            sliverToBoxAdapter,
+            SliverToBoxAdapter(
+              child: SizedBox(height: 10),
             ),
             SliverList(
               delegate: SliverChildListDelegate(listReceive),
@@ -589,5 +765,4 @@ class _AddressTabState extends State<AddressTab> {
       ],
     );
   }
-  //TODO allow change addresses to be hidden in the list
 }
