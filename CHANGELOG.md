@@ -1,3 +1,6 @@
+### **0.8.1** (2022-02-xx)
+* 
+
 ### **0.8.0** (2022-01-27)
 * Address book - Your Addresses: allow to filter for change, empty or used addresses 
 * Address book - Your Addresses: allow to switch between addresses balance or label
