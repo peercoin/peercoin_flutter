@@ -230,7 +230,11 @@ class ElectrumConnection with ChangeNotifier {
     var result = decoded['result'];
 
     if (decoded['id'] != null) {
-      FlutterLogs.logInfo('ElectrumConnection', 'replyHandler', idString);
+      FlutterLogs.logInfo(
+        'ElectrumConnection',
+        'replyHandler',
+        'id: $idString',
+      );
       if (idString == 'version') {
         handleVersion(result);
       } else if (idString.startsWith('history_')) {
