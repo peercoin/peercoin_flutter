@@ -134,11 +134,10 @@ class ElectrumConnection with ChangeNotifier {
       );
     } catch (e) {
       _connectionAttempt++;
-      FlutterLogs.logErrorTrace(
+      FlutterLogs.logError(
         'ElectrumConnection',
         'connect',
-        'connection error',
-        e as Error,
+        e.toString(),
       );
     }
   }

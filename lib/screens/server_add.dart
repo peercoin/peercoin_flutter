@@ -72,11 +72,10 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           serverUrl,
         );
       } catch (e) {
-        FlutterLogs.logErrorTrace(
+        FlutterLogs.logError(
           'ServerAdd',
           'tryConnect',
-          'connection error',
-          e as Error,
+          e.toString(),
         );
       }
 
@@ -129,11 +128,10 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       _connection.stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        FlutterLogs.logErrorTrace(
+        FlutterLogs.logError(
           'ServerAdd',
           'tryConnect',
-          'stream error',
-          error as Error,
+          error.message,
         );
         setState(() {
           _loading = false;
