@@ -169,6 +169,5 @@
     "buy_peercoin_dialog_title": "Bit ćete prosljeđeni na treću stranicu.",
     "authenticate_retry_warning_text": "Aplikacije će se sada zaključati i jedino se može otključati uspješnom autentikacijom.",
     "send_amount_below_minimum": "Minimalni iznos je $amount.\nMolim izaberi iznos veći ili jednak minimalnom.",
-    "paperwallet_success": "Paper Wallet uspješno uvezen.\nTransakcije će biti vidljive uskoro.",
-    "setup_finish": ""
+    "paperwallet_success": "Paper Wallet uspješno uvezen.\nTransakcije će biti vidljive uskoro."
 }
