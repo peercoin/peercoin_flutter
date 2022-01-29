@@ -170,10 +170,7 @@
     "authenticate_retry_warning_text": "Aplikacije će se sada zaključati i jedino se može otključati uspješnom autentikacijom.",
     "send_amount_below_minimum": "Minimalni iznos je $amount.\nMolim izaberi iznos veći ili jednak minimalnom.",
     "paperwallet_success": "Paper Wallet uspješno uvezen.\nTransakcije će biti vidljive uskoro.",
-    "store_short": "",
     "about_illustrations": "",
-    "snack_copied": "",
     "setup_finish": "",
-    "setup_text2": "",
     "setup_save_text1": ""
 }
