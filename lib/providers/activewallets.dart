@@ -543,6 +543,12 @@ class ActiveWallets with ChangeNotifier {
     var _hex = '';
     var _destroyedChange = 0;
 
+    FlutterLogs.logInfo(
+      'ActiveWallets',
+      'buildTransaction',
+      'sending $amount to $address',
+    );
+
     //check if tx needs change
     var _needsChange = true;
     if (_txAmount == openWallet.balance) {
