@@ -34,11 +34,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     try {
       await _activeWallets.init();
     } catch (e) {
-      FlutterLogs.logErrorTrace(
+      FlutterLogs.logError(
         'SetupImportSeed',
         'createWallet',
-        'error',
-        e as Error,
+        e.toString(),
       );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(

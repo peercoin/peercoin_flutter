@@ -58,11 +58,10 @@ class AppLocalizations {
       jsonString = await rootBundle.loadString(
           'assets/translations/${localeToBeLoaded.languageCode}.json');
     } catch (e) {
-      FlutterLogs.logErrorTrace(
+      FlutterLogs.logError(
         'AppLocalizations',
         '_loadLocalizedStrings',
-        'error',
-        e as Error,
+        e.toString(),
       );
       return localizedStrings;
     }

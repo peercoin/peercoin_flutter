@@ -387,11 +387,10 @@ class ActiveWallets with ChangeNotifier {
               try {
                 parsedMessage = utf8.decode(script[1]);
               } catch (e) {
-                FlutterLogs.logErrorTrace(
+                FlutterLogs.logError(
                   'ActiveWallets',
                   'putTx',
-                  'parse utf8',
-                  e as Error,
+                  e.toString(),
                 );
               } finally {
                 openWallet.putTransaction(
@@ -544,6 +543,12 @@ class ActiveWallets with ChangeNotifier {
     var _hex = '';
     var _destroyedChange = 0;
 
+    FlutterLogs.logInfo(
+      'ActiveWallets',
+      'buildTransaction',
+      'sending $amount to $address',
+    );
+
     //check if tx needs change
     var _needsChange = true;
     if (_txAmount == openWallet.balance) {
@@ -572,6 +577,11 @@ class ActiveWallets with ChangeNotifier {
             if (_totalInputValue <= (_txAmount + fee)) {
               _totalInputValue += utxo.value;
               inputTx.add(utxo);
+              FlutterLogs.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
+              );
             }
           }
         });
@@ -664,7 +674,9 @@ class ActiveWallets with ChangeNotifier {
           var addrInWallet = openWallet.addresses
               .firstWhereOrNull((element) => element.address == _unusedAddress);
           if (addrInWallet != null) {
-            addrInWallet.isChangeAddr = true;
+            if (_needsChange == true) {
+              addrInWallet.isChangeAddr = true;
+            }
             //increase notification value
             addrInWallet.newNotificationBackendCount =
                 addrInWallet.notificationBackendCount + 1;

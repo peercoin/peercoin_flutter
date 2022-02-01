@@ -227,11 +227,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ));
                       Navigator.of(context).pop();
                     } catch (e) {
-                      FlutterLogs.logErrorTrace(
+                      FlutterLogs.logError(
                         'ImportPaperWallet',
                         'emptyWallet',
-                        'error',
-                        e as Error,
+                        e.toString(),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

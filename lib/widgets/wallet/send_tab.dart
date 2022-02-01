@@ -226,11 +226,10 @@ class _SendTabState extends State<SendTab> {
                           //navigate back to tx list
                           widget._changeIndex(Tabs.transactions);
                         } catch (e) {
-                          FlutterLogs.logErrorTrace(
+                          FlutterLogs.logError(
                             'SendTab',
                             'showTransactionConfirmation',
-                            'error',
-                            e as Error,
+                            e.toString(),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

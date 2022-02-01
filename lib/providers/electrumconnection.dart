@@ -90,11 +90,10 @@ class ElectrumConnection with ChangeNotifier {
       stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        FlutterLogs.logErrorTrace(
+        FlutterLogs.logError(
           'ElectrumConnection',
           'init',
-          'stream error',
-          error as Error,
+          error.message,
         );
         _connectionAttempt++;
       }, onDone: () {
@@ -135,11 +134,10 @@ class ElectrumConnection with ChangeNotifier {
       );
     } catch (e) {
       _connectionAttempt++;
-      FlutterLogs.logErrorTrace(
+      FlutterLogs.logError(
         'ElectrumConnection',
         'connect',
-        'connection error',
-        e as Error,
+        e.toString(),
       );
     }
   }

@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 0.8.0+77
+version: 0.8.1+78
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -20,7 +20,7 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   hive_generator: ^1.1.0
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^5.0.2
   shared_preferences: ^2.0.6
   provider: ^5.0.0
   share: ^2.0.4
@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^6.0.4
   flutter_local_notifications: ^6.0.0
   flutter_screen_lock: ^4.0.4+1
-  local_auth: ^1.1.8
+  local_auth: ^1.1.10
   package_info: ^2.0.2
   mailto: ^2.0.0
   flutter_slidable: ^0.6.0
