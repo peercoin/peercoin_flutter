@@ -49,6 +49,7 @@
     "app_settings_biometrics": "Allow biometric authentification",
     "app_settings_changeCode": "Change PIN",
     "app_settings_default_wallet": "Default Wallet",
+    "app_settings_default_description": "The default wallet will open automatically when starting the app.",
     "app_settings_language": "Language",
     "app_settings_language_restart": "Restarting the app is required.",
     "app_settings_logs" : "Debug Logs",

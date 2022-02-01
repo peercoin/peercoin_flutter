@@ -161,6 +161,34 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     ));
   }
 
+  List<Widget> generateDefaultWallets() {
+    final inkwells = _availableWallets.map((wallet) {
+      return InkWell(
+        onTap: () => saveDefaultWallet(wallet.letterCode),
+        child: ListTile(
+          title: Text(wallet.title),
+          leading: Radio(
+            value: wallet.letterCode,
+            groupValue: _defaultWallet,
+            onChanged: (dynamic _) => saveDefaultWallet(wallet.letterCode),
+          ),
+        ),
+      );
+    }).toList();
+
+    return [
+      ...inkwells,
+      Text(
+        AppLocalizations.instance.translate('app_settings_default_description'),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 12,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      )
+    ];
+  }
+
   void saveSnack(context) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
@@ -210,9 +238,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
             children: [
               ExpansionTile(
                 title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_language'),
-                    style: Theme.of(context).textTheme.headline6),
+                  AppLocalizations.instance.translate('app_settings_language'),
+                  style: Theme.of(context).textTheme.headline6,
+                ),
                 childrenPadding: EdgeInsets.all(10),
                 children: AppLocalizations.availableLocales.keys.map((lang) {
                   return InkWell(
@@ -231,24 +259,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               ),
               ExpansionTile(
                 title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_default_wallet'),
-                    style: Theme.of(context).textTheme.headline6),
+                  AppLocalizations.instance
+                      .translate('app_settings_default_wallet'),
+                  style: Theme.of(context).textTheme.headline6,
+                ),
                 childrenPadding: EdgeInsets.all(10),
-                children: _availableWallets.map((wallet) {
-                  return InkWell(
-                    onTap: () => saveDefaultWallet(wallet.letterCode),
-                    child: ListTile(
-                      title: Text(wallet.title),
-                      leading: Radio(
-                        value: wallet.letterCode,
-                        groupValue: _defaultWallet,
-                        onChanged: (dynamic _) =>
-                            saveDefaultWallet(wallet.letterCode),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                children: generateDefaultWallets(),
               ),
               ExpansionTile(
                   title: Text(
