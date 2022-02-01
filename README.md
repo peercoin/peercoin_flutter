@@ -40,7 +40,7 @@ You can also sign up for our open beta testing here:
 
 ## Development
 This repository currently relies on 
-[Vesta-wallet/coinslib](https://github.com/Vesta-wallet/coinslib "github.com/Vesta-wallet/coinslib ")
+[Vesta-wallet/coinslib](https://github.com/Vesta-wallet/coinslib "github.com/Vesta-wallet/coinslib")
 
 **Update icons**  
 `flutter pub run flutter_launcher_icons:main`
