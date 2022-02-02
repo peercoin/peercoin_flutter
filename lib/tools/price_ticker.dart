@@ -15,6 +15,11 @@ class PriceTicker {
       final Map<String, dynamic> data = json.decode(response);
       return data;
     } catch (err) {
+      FlutterLogs.logError(
+        'PriceTicker',
+        'getDataFromTicker',
+        err.toString(),
+      );
       rethrow;
     } finally {
       client.close();
@@ -30,6 +35,7 @@ class PriceTicker {
     'GBP': '£',
     'HRK': 'kn',
     'INR': '₹',
+    'NOK': 'kr',
     'PLN': 'zł',
     'RON': 'L',
     'RUB': '₽'
@@ -73,7 +79,11 @@ class PriceTicker {
           );
           _settings.setExchangeRates(data);
         } else {
-          throw ('parser data not valid');
+           FlutterLogs.logError(
+            'PriceTicker',
+            'checkUpdate',
+            'parser data not valid'
+          );
         }
       }
       //update lastTickerUpdate
