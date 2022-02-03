@@ -30,7 +30,7 @@ class AppLocalizations {
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
-    'ru': 'русский',
+    'ru': 'Русский',
     'zh': '中文 (Zhōngwén)'
   };
 
