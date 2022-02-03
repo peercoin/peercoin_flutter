@@ -26,6 +26,7 @@ class AppLocalizations {
     'fr': 'Français',
     'it': 'Italiano',
     'nl': 'Nederlands',
+    'nb': 'Norsk Bokmål',
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
