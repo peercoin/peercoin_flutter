@@ -1,4 +1,5 @@
 ### **0.8.2** (2022-02-xx)
+* Add Norwegian to available languages
 * Add NOK as available currency
 
 ### **0.8.1** (2022-02-01)
