@@ -246,5 +246,16 @@
     "import_wif_error_failed_parse": "Ваш приватный ключ недействителен. Он в формате WIF?",
     "import_wif_intro": "Введите приватный ключ который вы хотите импортировать.\nОн должен быть в формате WIF.",
     "import_wif_success_snack": "Приватный ключ успешно импортирован",
-    "send_empty": "Очистить кошелек"
+    "send_empty": "Очистить кошелек",
+    "addressbook_new_button": "Новый",
+    "addressbook_export_dialog_title": "Экспорт Приватного Ключа",
+    "addressbook_export_dialog_description": "Ключ дает полный доступ к монетам хранящимся в этом адресе.\nНикому не показывайте этот ключ!\nПродолжайте только в том случае, если вы абсолютно уверены в том что делаете.",
+    "addressbook_export_dialog_button": "Показать ключ",
+    "addressbook_export_dialog_hint": "Этот ключ в WIF формате.",
+    "addressbook_hide_change": "Скрыть измененные адреса",
+    "addressbook_hide_empty": "Скрыть пустые",
+    "addressbook_hide_used": "Скрыть использованные",
+    "addressbook_show_balance": "Показать баланс",
+    "addressbook_show_label": "Показать метки",
+    "addressbook_swipe_export": "Экспорт"
 }
