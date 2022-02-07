@@ -71,6 +71,12 @@ class PriceTicker {
       //time to update
       //get data
       final data = await getDataFromTicker();
+
+      //check if data still contains selectedCurrency
+      if (!data.containsKey(_settings.selectedCurrency)) {
+        _settings.setSelectedCurrency('USD'); //fallback to USD
+      }
+
       if (mapEquals(data, _settings.exchangeRates) == false) {
         //stored exchange rates need update
         final valuesValid = data.values.every(
@@ -93,8 +99,15 @@ class PriceTicker {
           );
         }
       }
+
       //update lastTickerUpdate
       _settings.setLatestTickerUpdate(DateTime.now());
+    } else {
+      FlutterLogs.logInfo(
+        'PriceTicker',
+        'checkUpdate',
+        'last update happened within the hour. ${_settings.latestTickerUpdate}',
+      );
     }
   }
 }
