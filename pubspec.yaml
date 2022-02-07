@@ -29,7 +29,7 @@ dependencies:
   step_progress_indicator: ^1.0.0
   qr_code_scanner: ^0.5.1
   url_launcher: ^6.0.4
-  flutter_local_notifications: ^6.0.0
+  flutter_local_notifications: ^9.2.0
   flutter_screen_lock: ^4.0.4+1
   local_auth: ^1.1.10
   package_info: ^2.0.2

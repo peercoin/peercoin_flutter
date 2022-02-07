@@ -8,7 +8,7 @@ class LocalNotificationSettings {
       AndroidNotificationDetails(
     'ppc',
     'Peercoin',
-    'Notification channel for Peercoin app',
+    channelDescription: 'Notification channel for Peercoin app',
     importance: Importance.max,
     priority: Priority.high,
     showWhen: true,
