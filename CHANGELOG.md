@@ -1,3 +1,7 @@
+### **0.8.3** (2022-02-07)
+* Fix Android 12 crash
+* Add currencies: BDT, IDR, IRR, KRW, TRY
+
 ### **0.8.2** (2022-02-04)
 * Add Norwegian to available languages
 * Completed Portoguese translation
