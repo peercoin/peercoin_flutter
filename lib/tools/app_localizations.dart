@@ -23,6 +23,7 @@ class AppLocalizations {
     'bn': 'Bangla (Bangladesh)',
     'de': 'Deutsch',
     'es': 'Español',
+    'fa': 'فارسی',
     'fr': 'Français',
     'hr': 'Hrvatski',
     'it': 'Italiano',
