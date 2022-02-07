@@ -189,7 +189,7 @@ class _TransactionListState extends State<TransactionList> {
                                         ? Theme.of(context).errorColor
                                         : Theme.of(context)
                                             .colorScheme
-                                            .primaryVariant,
+                                            .primaryContainer,
                                   ),
                                 ),
                                 _filteredTx[i - 1].direction == 'out'

@@ -5,9 +5,9 @@ class MyTheme {
     ThemeMode.light: ThemeData(
       colorScheme: ColorScheme(
         primary: LightColors.green,
-        primaryVariant: LightColors.darkGreen,
+        primaryContainer: LightColors.darkGreen,
         secondary: LightColors.grey,
-        secondaryVariant: LightColors.lightGrey,
+        secondaryContainer: LightColors.lightGrey,
         surface: LightColors.white,
         background: LightColors.grey,
         error: LightColors.red,
@@ -70,9 +70,9 @@ class MyTheme {
     ThemeMode.dark: ThemeData.dark().copyWith(
       colorScheme: ColorScheme(
         primary: DarkColors.green,
-        primaryVariant: DarkColors.white,
+        primaryContainer: DarkColors.white,
         secondary: DarkColors.white,
-        secondaryVariant: DarkColors.grey,
+        secondaryContainer: DarkColors.grey,
         surface: DarkColors.black,
         background: DarkColors.green,
         error: DarkColors.red,

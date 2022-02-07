@@ -142,7 +142,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .primaryVariant,
+                                              .primaryContainer,
                                           fontSize: 15),
                                       textAlign: TextAlign.left,
                                       maxLines: 5,
@@ -187,7 +187,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .primaryVariant,
+                                          .primaryContainer,
                                       fontSize: 16),
                                   decoration: InputDecoration(
                                     hintText:
@@ -213,7 +213,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                       icon: Icon(Icons.paste,
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .primaryVariant),
+                                              .primaryContainer),
                                     ),
                                     border: border,
                                     focusedBorder: border,

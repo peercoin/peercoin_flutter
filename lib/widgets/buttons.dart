@@ -88,8 +88,10 @@ class PeerButtonSetup extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize:
-            Size(MediaQuery.of(context).size.width / 1.5, 40),
+        fixedSize: Size(
+          MediaQuery.of(context).size.width / 1.5,
+          40,
+        ),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -103,7 +105,7 @@ class PeerButtonSetup extends StatelessWidget {
             letterSpacing: 1.2,
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: Theme.of(context).colorScheme.primaryVariant,
+            color: Theme.of(context).colorScheme.primaryContainer,
           ),
         ),
       ),
@@ -128,8 +130,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize:
-            Size(MediaQuery.of(context).size.width / 1.5, 40),
+        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
@@ -152,7 +153,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
                   letterSpacing: 1.2,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Theme.of(context).colorScheme.primaryVariant,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                 ),
               ),
       ),
