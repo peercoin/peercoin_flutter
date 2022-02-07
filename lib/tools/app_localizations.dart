@@ -20,12 +20,13 @@ class AppLocalizations {
 
   static const Map<String, String> availableLocales = {
     'en': 'English',
-    'bn': 'Bengali (Bangladesh)',
+    'bn': 'Bangla (Bangladesh)',
     'de': 'Deutsch',
     'es': 'Español',
     'fr': 'Français',
     'hr': 'Hrvatski',
     'it': 'Italiano',
+    'ko': '한국어',
     'nl': 'Nederlands',
     'no': 'Norsk Bokmål',
     'pl': 'Polski',
