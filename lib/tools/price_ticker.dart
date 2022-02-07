@@ -27,18 +27,23 @@ class PriceTicker {
   }
 
   static Map currencySymbols = {
-    'USD': '\$',
-    'EUR': '€',
     'ARS': '\$',
-    'BRL': 'R\$',
+    'BDT': '৳',
     'CNY': '¥',
+    'BRL': 'R\$',
+    'EUR': '€',
     'GBP': '£',
     'HRK': 'kn',
+    'IDR': 'Rp',
     'INR': '₹',
+    'IRR': '﷼',
+    'KRW': '₩',
     'NOK': 'kr',
     'PLN': 'zł',
+    'USD': '\$',
     'RON': 'L',
-    'RUB': '₽'
+    'RUB': '₽',
+    'TRY': '₺'
   };
 
   static double renderPrice(
@@ -68,8 +73,10 @@ class PriceTicker {
       final data = await getDataFromTicker();
       if (mapEquals(data, _settings.exchangeRates) == false) {
         //stored exchange rates need update
-        final valuesValid =
-            data.values.every((element) => element.runtimeType == double);
+        final valuesValid = data.values.every(
+          (element) =>
+              element.runtimeType == double || element.runtimeType == int,
+        );
         if (valuesValid) {
           //data valid
           FlutterLogs.logInfo(
@@ -79,10 +86,10 @@ class PriceTicker {
           );
           _settings.setExchangeRates(data);
         } else {
-           FlutterLogs.logError(
+          FlutterLogs.logError(
             'PriceTicker',
             'checkUpdate',
-            'parser data not valid'
+            'parser data not valid',
           );
         }
       }
