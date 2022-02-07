@@ -1,5 +1,8 @@
 ### **0.8.4** (2022-02-xx)
-* 
+* Add language: Bangla 
+* Add language: Farsi
+* Add language: Korean
+* Fix for Norwegian
 
 ### **0.8.3** (2022-02-07)
 * Fix Android 12 crash

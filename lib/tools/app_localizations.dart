@@ -54,7 +54,7 @@ class AppLocalizations {
   }
 
   Future<String> _getFilePath(Locale localeToBeLoaded) async {
-    switch (localeToBeLoaded.toString()) {
+    switch (localeToBeLoaded.languageCode) {
       case 'bn':
         return 'assets/translations/bn_BD.json';
       case 'no':
