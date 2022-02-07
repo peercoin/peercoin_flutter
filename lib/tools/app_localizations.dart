@@ -26,7 +26,7 @@ class AppLocalizations {
     'hr': 'Hrvatski',
     'it': 'Italiano',
     'nl': 'Nederlands',
-    'nb_NO': 'Norsk Bokmål',
+    'no': 'Norsk Bokmål',
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
@@ -56,8 +56,9 @@ class AppLocalizations {
     var localizedStrings = <String, String>{};
 
     try {
-      jsonString = await rootBundle.loadString(
-          'assets/translations/${localeToBeLoaded.languageCode}.json');
+      jsonString = await rootBundle.loadString(localeToBeLoaded == Locale('no')
+          ? 'assets/translations/nb_NO.json'
+          : 'assets/translations/${localeToBeLoaded.languageCode}.json');
     } catch (e) {
       FlutterLogs.logError(
         'AppLocalizations',
