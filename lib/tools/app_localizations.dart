@@ -20,6 +20,7 @@ class AppLocalizations {
 
   static const Map<String, String> availableLocales = {
     'en': 'English',
+    'bn': 'Bengali (Bangladesh)',
     'de': 'Deutsch',
     'es': 'Español',
     'fr': 'Français',
@@ -50,15 +51,25 @@ class AppLocalizations {
     }
   }
 
+  Future<String> _getFilePath(Locale localeToBeLoaded) async {
+    switch (localeToBeLoaded.toString()) {
+      case 'bn':
+        return 'assets/translations/bn_BD.json';
+      case 'no':
+        return 'assets/translations/nb_NO.json';
+      default:
+        return 'assets/translations/${localeToBeLoaded.languageCode}.json';
+    }
+  }
+
   Future<Map<String, String>> _loadLocalizedStrings(
       Locale localeToBeLoaded) async {
     String jsonString;
     var localizedStrings = <String, String>{};
 
     try {
-      jsonString = await rootBundle.loadString(localeToBeLoaded == Locale('no')
-          ? 'assets/translations/nb_NO.json'
-          : 'assets/translations/${localeToBeLoaded.languageCode}.json');
+      jsonString =
+          await rootBundle.loadString(await _getFilePath(localeToBeLoaded));
     } catch (e) {
       FlutterLogs.logError(
         'AppLocalizations',
