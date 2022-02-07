@@ -262,5 +262,6 @@
     "wallet_receive_label_hint": "Tips: Ved å trykke på denne knappen lagres etiketten til adressen",
     "wallet_rescan_content": "Skanner lommeboken på nytt. Hvis du har problemer med transaksjoner eller beløp, kan dette være nyttig.\nDette kan ta litt tid.",
     "wallet_send": "Send",
-    "store_description": "Send og motta peercoin på telefonen din.\n\nHold gjenopprettingsfrasen din beskyttet.\nDenne appen kommer med absolutt ingen garanti.\nBruk på egen risiko.\n\nFunksjoner:\n- Basert på Electrum sin protokoll.\n- Send og motta peercoin.\n- Klar til å utføre transaksjoner etter installasjon (ingen venting).\n- Peercoin-lommebøker for mainnett og testnett .\n- Organisering ved hjelp av adressebok.\n- Importer papirlommebøker.\n- Importer private nøkler (WIF).\n- Serveradministrasjon.\n- Flerspråklig støtte.\n- Bakgrunnsvarsler.\n\nKjente begrensninger kan bli funnet i GitHub-depotet."
+    "store_description": "Send og motta peercoin på telefonen din.\n\nHold gjenopprettingsfrasen din beskyttet.\nDenne appen kommer med absolutt ingen garanti.\nBruk på egen risiko.\n\nFunksjoner:\n- Basert på Electrum sin protokoll.\n- Send og motta peercoin.\n- Klar til å utføre transaksjoner etter installasjon (ingen venting).\n- Peercoin-lommebøker for mainnett og testnett .\n- Organisering ved hjelp av adressebok.\n- Importer papirlommebøker.\n- Importer & eksporter private nøkler (WIF).\n- Serveradministrasjon.\n- Flerspråklig støtte.\n- Bakgrunnsvarsler.\n\nKjente begrensninger kan bli funnet i GitHub-depotet.",
+    "currency_NOK": "Norsk krone"
 }
