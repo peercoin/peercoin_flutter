@@ -262,5 +262,6 @@
     "addressbook_swipe_export": "Exportă",
     "app_settings_logs": "Logu-uri de Depanare",
     "app_settings_description": "Aceste log-uri conțin informații senzitive.\nNu conțin chei private, dar oricum, fiți atenți cu cine le partajați.",
-    "app_settings_logs_export": "Exportați log-urile"
+    "app_settings_logs_export": "Exportați log-urile",
+    "currency_NOK": "Crona Norvegiană"
 }

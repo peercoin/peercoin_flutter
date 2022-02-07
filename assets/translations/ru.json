@@ -257,5 +257,11 @@
     "addressbook_hide_used": "Скрыть использованные",
     "addressbook_show_balance": "Показать баланс",
     "addressbook_show_label": "Показать метки",
-    "addressbook_swipe_export": "Экспорт"
+    "addressbook_swipe_export": "Экспорт",
+    "app_settings_default_description": "Кошелек по умолчанию откроется автоматически при запуске приложения.",
+    "app_settings_logs": "Логи Отладки",
+    "app_settings_description": "Эти логи содержат чувствительную информацию.\nОни не содержат приватных ключей, но будьте внимательны кому их показываете.",
+    "app_settings_logs_export": "Экспорт логов отладки",
+    "currency_NOK": "Норвежская крона",
+    "receive_show_qr": "Показать QR-код"
 }
