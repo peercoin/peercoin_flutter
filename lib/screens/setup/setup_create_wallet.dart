@@ -192,10 +192,11 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                           AppLocalizations.instance
                                               .translate('setup_save_text1'),
                                           style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryVariant,
-                                              fontSize: 15),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer,
+                                            fontSize: 15,
+                                          ),
                                           textAlign: TextAlign.left,
                                           maxLines: 5,
                                         ),
@@ -327,13 +328,13 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
             ? Text(
                 '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryVariant,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     fontSize: 16),
               )
             : Text(
                 (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryVariant,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     fontSize: 16),
               ),
       ));

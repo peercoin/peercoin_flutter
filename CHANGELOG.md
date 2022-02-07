@@ -1,3 +1,8 @@
+### **0.8.2** (2022-02-04)
+* Add Norwegian to available languages
+* Completed Portoguese translation
+* Add NOK as available currency
+
 ### **0.8.1** (2022-02-01)
 * Minor bug fixes and improvements under the hood
 

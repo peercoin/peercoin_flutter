@@ -20,16 +20,17 @@ class AppLocalizations {
 
   static const Map<String, String> availableLocales = {
     'en': 'English',
-    'hr': 'Croatian',
+    'hr': 'Hrvatski',
     'de': 'Deutsch',
     'es': 'Español',
     'fr': 'Français',
     'it': 'Italiano',
+    'nb': 'Norsk Bokmål',
     'nl': 'Nederlands',
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
-    'ru': 'русский',
+    'ru': 'Русский',
     'zh': '中文 (Zhōngwén)'
   };
 

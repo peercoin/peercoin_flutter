@@ -58,12 +58,12 @@ void main() {
         await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
         await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
         await driver.tap(find.text('Finish Setup'));
-        await Process.run(
-          'adb',
-          <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
-          runInShell: true,
-        );
         await driver.runUnsynchronized(() async {
+          await Process.run(
+            'adb',
+            <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
+            runInShell: true,
+          );
           await driver.tap(find.byValueKey('newWalletIconButton'));
           await driver.tap(find.text('Peercoin Testnet'));
           await driver.tap(find.text('Peercoin Testnet')); //tap into wallet

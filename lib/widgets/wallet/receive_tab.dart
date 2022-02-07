@@ -159,7 +159,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                     SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondaryVariant,
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
                           borderRadius: BorderRadius.all(Radius.circular(4))),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -11,7 +11,9 @@ Features:
 - Peercoin and Peercoin testnet wallets.
 - Address book management.
 - Import paper wallets.
+- Import & export private keys (WIF).
 - Server management.
 - Multi-language support.
+- Background notifications.
 
 Known limitations can be found in the Github repository.
