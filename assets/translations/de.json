@@ -261,5 +261,7 @@
     "app_settings_logs": "Debug Logs",
     "app_settings_description": "Diese Logs enthalten sensible Informationen.\nSie enthalten zwar keine privaten Schlüssel, du solltest aber trotzdem aufpassen, mit wem du diese Logs teilst.",
     "app_settings_logs_export": "Debug Logs exportieren",
-    "receive_show_qr": "QR-Code zeigen"
+    "receive_show_qr": "QR-Code zeigen",
+    "app_settings_default_description": "Die Standard Wallet wird automatisch beim Start der App geöffnet.",
+    "currency_NOK": "Norwegische Krone"
 }
