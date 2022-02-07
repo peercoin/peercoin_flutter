@@ -233,6 +233,6 @@
     "id": "Id",
     "setup_price_feed_allow": "Permitir API de precios externos",
     "send_transferring": "Transfiriendo ",
-    "paperwallet_success": "Cartera de papel importada satisfactoriamente.\nLa transacción aparecerá muy pronto.",
-    "select_coin": "Por favor, seleccione una moneda"
+    "paperwallet_success": "Cartera de papel importada con éxito.\nLa transacción aparecerá en breve.",
+    "select_coin": "Seleccionar moneda"
 }
