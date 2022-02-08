@@ -2,6 +2,7 @@
 * Add language: Bangla 
 * Add language: Farsi
 * Add language: Korean
+* Add language: Turkish
 * Fix for Norwegian
 
 ### **0.8.3** (2022-02-07)

@@ -34,6 +34,7 @@ class AppLocalizations {
     'pt': 'Português',
     'ro': 'Română',
     'ru': 'Русский',
+    'tr': 'Türkçe',
     'zh': '中文 (Zhōngwén)'
   };
 
