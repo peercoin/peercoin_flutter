@@ -36,6 +36,7 @@ class AppLocalizations {
     'ro': 'Română',
     'ru': 'Русский',
     'tr': 'Türkçe',
+    'ur': 'اردو',
     'zh': '中文 (Zhōngwén)'
   };
 
