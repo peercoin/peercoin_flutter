@@ -50,7 +50,7 @@
     "app_settings_notifications_heading_manage_wallets": "والیٹ کے لئے اطلاعات کا انتظام کریں",
     "app_settings_notifications_heading_interval": "وقفے کو ہم آہنگ کریں",
     "app_settings_notifications_hint_sync_2": "اشارہ: اطلاعات میں کافی تاخیر ہوسکتی ہے جو کہ اس پر منحصر ہے کہ آیا آپ کا آپریٹنگ سسٹم پس منظر کے کاموں کو روکتا ہے اور اگر روکتا ہے تو کس طرح۔ iOS ڈیوائسز پر طویل وقفوں کی توقع کی جا سکتی ہے۔",
-    "app_settings_revealAuthButton": "توثیق کے اختیارات ظاہر کریں",
+    "app_settings_revealAuthButton": "تصدیق کے اختیارات ظاہر کریں",
     "app_settings_revealSeedButton": "سیڈ فریز ظاہر کریں",
     "app_settings_seed": "سیڈ فریز",
     "app_settings_sendTransaction": "ٹرانزیکشن بھیجنے سے پہلے ضروری ہے",
@@ -65,7 +65,7 @@
     "app_wallets": "والیٹس",
     "authenticate_biometric_hint": "شناخت کی تصدیق کریں",
     "authenticate_biometric_reason": "براہِ کرم توثیق کریں۔",
-    "authenticate_biometric_title": "توثیق درکار ہے",
+    "authenticate_biometric_title": "تصدیق درکار ہے",
     "authenticate_change_pin_success": "پِن کامیابی کے ساتھ تبدیل ہو گیا ہے",
     "authenticate_confirm_title": "اپنا پِن دوبارہ درج کریں",
     "authenticate_confirm_title_new": "نیا پِن دوبارہ درج کریں",
@@ -79,7 +79,7 @@
     "addressbook_export_dialog_description": "یہ کی اس پتے میں ذخیرہ شدہ کوائنز تک مکمل رسائی فراہم کرتی ہے۔\nاس کی کو کسی کے ساتھ شیئر نہ کریں!\nصرف اس صورت میں آگے بڑھیں جب آپ کو یقین ہو کہ آپ کیا کرنےجا رہے ہیں۔",
     "addressbook_search": "پتے، لیبل داخل کریں",
     "addressbook_dialog_remove_title": "کیا آپ واقعی اس پتے کو ہٹانا چاہتے ہیں؟",
-    "app_settings_auth_header": "توثیق",
+    "app_settings_auth_header": "تصدیق",
     "app_settings_default_description": "ایپ چلانے پر پہلے سے طے شدہ والیٹ خودکار طور پر کُھل جائے گا۔",
     "app_settings_description": "یہ فہرستیں حساس معلومات پر مشتمل ہیں۔\nاس کے علاوہ ان میں پرائیویٹ کی نہیں ہیں، اس بارے میں ہوشیار رہیں کہ آپ کو اِن فہرستوں کو کس کے ساتھ شیئر کرنا ہے۔",
     "app_settings_notifications_alert_content": "یہ ہماری رازداری کا ساتھ دینے والی پس منظر کی اطلاعات کو فعال کرے گا۔\nانہیں کسی بھی وقت غیر فعال کیا جا سکتا ہے۔",
@@ -88,5 +88,7 @@
     "app_settings_theme": "ایپ کی وضع",
     "app_settings_walletList": "والیٹس کی فہرست کے لئے درکار ہے",
     "app_settings_price_feed_disable_button": "پرائس فیڈ کی API کو غیر فعال کریں",
-    "app_settings_price_alert_content": "یہ ہماری رازداری کا ساتھ دینے والی پرائس ڈیٹا فیڈ کو فعال کر دے گی۔\nاسے کسی بھی وقت غیر فعال کیا جا سکتا ہے۔"
+    "app_settings_price_alert_content": "یہ ہماری رازداری کا ساتھ دینے والی پرائس ڈیٹا فیڈ کو فعال کر دے گی۔\nاسے کسی بھی وقت غیر فعال کیا جا سکتا ہے۔",
+    "authenticate_retry_warning_text": "ایپ لاک ہو جائے گی اور صرف کامیاب تصدیق کے ذریعے ہی اِسے ان لاک کیا جا سکتا ہے۔",
+    "setup_pin_no_biometrics": "آپ کی ڈیوائس بائیو میٹرک تصدیق کو سپورٹ نہیں کرتی۔"
 }
