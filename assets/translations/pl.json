@@ -152,7 +152,7 @@
     "app_settings_notifications_disable_button": "Wyłącz powiadomienia",
     "app_settings_notifications_not_enabled": "Powiadomienia w tle są aktalnie wyłączone.",
     "app_settings_notifications_heading_interval": "Interwał synchronizacji",
-    "app_settings_notifications_hint_sync_1": "Ustawia interwał, w którym aplikacja będzie sprawdzać nowe transakcje w tle.\nAktywny interwał: $minuty.",
+    "app_settings_notifications_hint_sync_1": "Ustawia interwał, w którym aplikacja będzie sprawdzać nowe transakcje w tle.\nAktywny interwał: $minutes minuty.",
     "authenticate_biometric_hint": "Zweryfikuj tożsamość",
     "authenticate_biometric_reason": "Uwierzytelnij się.",
     "authenticate_biometric_title": "Wymagane uwierzytelnienie",
