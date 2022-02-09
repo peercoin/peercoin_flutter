@@ -3,6 +3,7 @@
 * Add language: Farsi
 * Add language: Korean
 * Add language: Turkish
+* Add language: Indonesian
 * Fix for Norwegian
 
 ### **0.8.3** (2022-02-07)
