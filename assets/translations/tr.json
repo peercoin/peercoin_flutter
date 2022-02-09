@@ -178,5 +178,6 @@
     "no_new_wallet": "Şu anda yeni cüzdan mevcut değil.",
     "server_settings_alert_hardcoded_content": "Sabit kodlu sunucular silinemez, sadece devre dışı bırakılabilir.",
     "tx_rejected": "İşlem ağ tarafından reddedildi. Lütfen tekrar deneyin.",
-    "about_data_protection": "Bu yazılım, verilerinizi ve gizliliğinizi elinden geldiği kadar korur.\nBu uygulama, gerekli tüm verileri yerel olarak cihazınızda depolar. \nAnaliz ya da reklam yazılımı içermez."
+    "about_data_protection": "Bu yazılım, verilerinizi ve gizliliğinizi elinden geldiği kadar korur.\nBu uygulama, gerekli tüm verileri yerel olarak cihazınızda depolar. \nAnaliz ya da reklam yazılımı içermez.",
+    "about_illustrations_button": "designs.AI"
 }
