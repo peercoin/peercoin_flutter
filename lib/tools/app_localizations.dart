@@ -135,3 +135,5 @@ class _AppLocalizationsDelegate
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
+
+//TODO go through setup and check for line breaks for all languages
