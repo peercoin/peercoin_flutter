@@ -52,7 +52,6 @@
     "jail_dialog_button": "好的",
     "jail_dialog_title": "你已经用光所用重试机会。",
     "jail_heading": "应用程序已锁定",
-    "net_display_name": "Peercoin $testormain net",
     "no_new_wallet": "目前没有可用的新钱包。",
     "paperwallet_confirm_import": "确认 & 导入",
     "paperwallet_error_1": "钱包没有余额 \nor 金额小于最低输出",

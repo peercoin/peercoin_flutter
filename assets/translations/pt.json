@@ -121,7 +121,6 @@
     "import_wif_textfield_label": "Chave Privada",
     "import_wif_success_snack": "Chave privada importada com sucesso",
     "jail_dialog_title": "Chegou ao número máximo de tentativas.",
-    "net_display_name": "Peercoin $testormain net",
     "no_new_wallet": "Nenhuma carteira nova disponível de momento.",
     "not_again": "Não mostrar novamente",
     "paperwallet_confirm_import": "Confirmar e Importar",

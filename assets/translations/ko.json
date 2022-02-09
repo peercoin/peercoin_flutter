@@ -118,7 +118,6 @@
     "jail_dialog_button": "확인",
     "jail_dialog_title": "최대 재시도 횟수에 도달하였습니다.",
     "jail_heading": "앱 잠금 상태 기간",
-    "net_display_name": "Peercoin $testormain 네트",
     "no_new_wallet": "현재 사용 가능한 새 지갑이 없습니다.",
     "not_again": "다시 보여 주지 않기",
     "notification_title": "$walletTitle - 새로운 거래가 들어왔습니다",

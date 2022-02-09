@@ -1,7 +1,6 @@
 {
     "peercoin": "Peercoin",
     "peercoinC": "Peercoin",
-    "net_display_name": "Peercoin $testormain net",
     "select_coin": "Выберите монету",
     "add_coin_failed": "Не удалось добавить кошелек!",
     "add_new_wallet": "Добавить новый кошелек",

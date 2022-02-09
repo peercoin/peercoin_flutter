@@ -230,7 +230,6 @@
     "import_wif_alert_content": "Vennligst bekreft at du ønsker å importere følgende adresse:\n\n$address",
     "import_wif_hint": "Nøkkelen må importeres på nytt når lommeboken gjenopprettes fra gjenopprettingsfrasen. Den er ikke koblet til gjenopprettingsfrasen.",
     "jail_dialog_title": "Du har nådd maksimalt antall nye forsøk.",
-    "net_display_name": "Peercoin $testormain nett",
     "paperwallet_confirm_import": "Bekreft & Importer",
     "paperwallet_error_1": "Lommeboken er tom\neller beløp under minimum for sending",
     "paperwallet_step_2_text": "Skann privat nøkkel",

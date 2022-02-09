@@ -135,7 +135,6 @@
     "jail_dialog_button": "Okay",
     "jail_dialog_title": "You have reached the maximum number of retries.",
     "jail_heading": "App locked for",
-    "net_display_name": "Peercoin $testormain net",
     "no_new_wallet": "No new wallets available at this time.",
     "not_again": "Don't show again",
     "notification_title": "$walletTitle - New transaction received",

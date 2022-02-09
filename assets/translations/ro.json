@@ -1,7 +1,6 @@
 {
     "peercoin": "Peercoin",
     "peercoinC": "Peercoin",
-    "net_display_name": "Peercoin $testormain net",
     "select_coin": "Selectați moneda",
     "add_coin_failed": "Adăugarea portofelului nu a reușit!",
     "add_new_wallet": "Adăugați un portofel nou",

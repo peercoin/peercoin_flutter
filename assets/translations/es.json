@@ -62,7 +62,6 @@
     "jail_countdown": "Segundos",
     "jail_dialog_button": "Aceptar",
     "jail_dialog_title": "Has alcanzado el número máximo de reintentos.",
-    "net_display_name": "Peercoin $testormain net",
     "paperwallet_step_4": "Paso 4",
     "scan_qr": "Escanear código QR",
     "send_amount_exceeds": "El importe es superior al saldo",

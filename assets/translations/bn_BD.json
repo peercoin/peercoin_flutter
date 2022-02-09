@@ -151,7 +151,6 @@
     "wallet__send_label_hint": "ইঙ্গিত: QR-কোড স্ক্যান করে আপনার কিছু সময় বাঁচাবে",
     "wallet_scan_appBar_title": "আপনার ইম্পোর্ট করা সীড স্ক্যান করা হচ্ছে",
     "wallet_send": "পাঠান",
-    "net_display_name": "পিয়ারকয়েন $testormain নেট",
     "notification_title": "$walletTitle - নতুন লেনদেন গৃহীত হয়েছে",
     "select_coin": "অনুগ্রহ করে একটি মুদ্রা নির্বাচন করুন",
     "send_confirm_transaction": "লেনদেন নিশ্চিত করুন",

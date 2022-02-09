@@ -1,7 +1,6 @@
 {
     "peercoin": "peercoin",
     "peercoinC": "Peercoin",
-    "net_display_name": "Peercoin $testormain net",
     "select_coin": "Selecteer een coin",
     "add_coin_failed": "Wallet toevoegen niet gelukt!",
     "add_new_wallet": "Nieuw wallet toevoegen",
