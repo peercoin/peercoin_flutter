@@ -6,6 +6,7 @@
 * Add language: Turkish
 * Add language: Indonesian
 * Add language: Urdu
+* Add language: Vietnamese
 * Fix for Norwegian
 
 ### **0.8.3** (2022-02-07)

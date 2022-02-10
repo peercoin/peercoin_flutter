@@ -38,6 +38,7 @@ class AppLocalizations {
     'ru': 'Русский',
     'tr': 'Türkçe',
     'ur': 'اردو',
+    'vi': 'Tiếng Việt',
     'zh': '中文 (Zhōngwén)'
   };
 
