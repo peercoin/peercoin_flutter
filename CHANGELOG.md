@@ -5,6 +5,7 @@
 * Add language: Hindi
 * Add language: Indonesian
 * Add language: Korean
+* Add language: Swahili
 * Add language: Ukrainian
 * Add language: Urdu
 * Add language: Turkish

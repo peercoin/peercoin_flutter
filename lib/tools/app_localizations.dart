@@ -30,6 +30,7 @@ class AppLocalizations {
     'hi': 'हिन्दी',
     'hr': 'Hrvatski',
     'it': 'Italiano',
+    'sw': 'Kiswahili',
     'ko': '한국어',
     'nl': 'Nederlands',
     'no': 'Norsk Bokmål',
