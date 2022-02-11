@@ -26,6 +26,7 @@ class AppLocalizations {
     'es': 'Español',
     'fa': 'فارسی',
     'fr': 'Français',
+    'ha': '(ḥawsa) حَوْسَ',
     'hi': 'हिन्दी',
     'hr': 'Hrvatski',
     'it': 'Italiano',
