@@ -26,6 +26,7 @@ class AppLocalizations {
     'es': 'Español',
     'fa': 'فارسی',
     'fr': 'Français',
+    'hi': 'हिन्दी',
     'hr': 'Hrvatski',
     'it': 'Italiano',
     'ko': '한국어',
@@ -37,6 +38,7 @@ class AppLocalizations {
     'ru': 'Русский',
     'tr': 'Türkçe',
     'ur': 'اردو',
+    'vi': 'Tiếng Việt',
     'zh': '中文 (Zhōngwén)'
   };
 
