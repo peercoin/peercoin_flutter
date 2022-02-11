@@ -1,11 +1,13 @@
 ### **0.8.4** (2022-02-xx)
 * Add language: Bangla 
 * Add language: Farsi
+* Add language: Haussa
 * Add language: Hindi
-* Add language: Korean
-* Add language: Turkish
 * Add language: Indonesian
+* Add language: Korean
+* Add language: Ukrainian
 * Add language: Urdu
+* Add language: Turkish
 * Add language: Vietnamese
 * Fix for Norwegian
 
