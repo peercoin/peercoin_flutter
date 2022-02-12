@@ -217,7 +217,6 @@
     "server_add_no_wss": "//:Dole ne a fara da wss\nSauran protocol basayi a halin yanzu",
     "server_settings_alert_hardcoded_content": "Ba'a  iya goge hard coded serves , saidai ka kashe su.",
     "setup_continue_alert_content": "A tabbatar an adana seed phrase.\nKuna iya samun sa daga baya a cikin saitin manhaja.",
-    "send_dust": "",
     "app_settings_notifications_heading_interval": "Daidaita Tazara",
     "import_seed_error_2": "Seed mara inganci",
     "import_wif_textfield_label": "Keɓaɓɓen key",
