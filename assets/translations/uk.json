@@ -178,7 +178,7 @@
     "send_empty": "Очистити гаманець",
     "send_enter_address": "Введіть адресу",
     "send_errors_solve": "Усуньте помилки…",
-    "send_fee": "Комісія: $amount $letter_code",
+    "send_fee": "Комісія: -$amount $letter_code",
     "send_invalid_address": "Неправильна адреса",
     "send_label": "Мітка (необов'язково)",
     "send_op_return": "Блок метаданих",
