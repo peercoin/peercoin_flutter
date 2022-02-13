@@ -618,6 +618,7 @@ class ActiveWallets with ChangeNotifier {
               tx.addOutput(address, _txAmount);
             } else {
               tx.addOutput(address, _txAmount - fee);
+              _destroyedChange = _destroyedChange + fee;
             }
           } else {
             tx.addOutput(address, _txAmount);
