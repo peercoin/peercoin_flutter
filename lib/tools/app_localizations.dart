@@ -20,18 +20,18 @@ class AppLocalizations {
 
   static const Map<String, String> availableLocales = {
     'en': 'English',
-    'bn': 'Bangla (Bangladesh)',
+    'bn': 'বাংলা (baɛṅlā)',
     'id': 'Bahasa Indonesia',
     'de': 'Deutsch',
     'es': 'Español',
-    'fa': 'فارسی',
+    'fa': '(fārsī) فارسى',
     'fr': 'Français',
     'ha': '(ḥawsa) حَوْسَ',
-    'hi': 'हिन्दी',
+    'hi': 'हिन्दी (hindī)',
     'hr': 'Hrvatski',
     'it': 'Italiano',
     'sw': 'Kiswahili',
-    'ko': '한국어',
+    'ko': '한국어 [韓國語] (han-guk-eo)',
     'nl': 'Nederlands',
     'no': 'Norsk Bokmål',
     'pl': 'Polski',
@@ -39,7 +39,8 @@ class AppLocalizations {
     'ro': 'Română',
     'ru': 'Русский',
     'tr': 'Türkçe',
-    'ur': 'اردو',
+    'uk': 'Українська (Ukrajins’ka)',
+    'ur': '(urdū) اردو',
     'vi': 'Tiếng Việt',
     'zh': '中文 (Zhōngwén)'
   };
