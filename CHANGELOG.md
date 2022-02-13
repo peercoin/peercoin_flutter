@@ -1,4 +1,4 @@
-### **0.8.4** (2022-02-xx)
+### **0.8.4** (2022-02-13)
 * Add language: Bangla 
 * Add language: Farsi
 * Add language: Hindi
