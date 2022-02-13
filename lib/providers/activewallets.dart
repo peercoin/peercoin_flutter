@@ -585,6 +585,8 @@ class ActiveWallets with ChangeNotifier {
             }
           }
         });
+        //TODO balance can be displayed >0 while change is confirming, yet unconfirmed utxo will not be selected
+
         var coinParams = AvailableCoins().getSpecificCoin(identifier);
         var network = coinParams.networkType;
 
@@ -596,7 +598,7 @@ class ActiveWallets with ChangeNotifier {
           FlutterLogs.logInfo(
             'ActiveWallets',
             'buildTransaction',
-            'change amount $changeAmount',
+            'change amount $changeAmount, $_txAmount, $fee',
           );
 
           if (changeAmount <= coin.minimumTxValue) {
