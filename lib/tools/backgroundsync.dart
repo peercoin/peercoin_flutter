@@ -175,7 +175,7 @@ class BackgroundSync {
             var bodyDecoded = jsonDecode(result.body);
             FlutterLogs.logInfo(
               'BackgroundSync',
-              'executeSync',
+              'executeSync ${wallet.name}',
               bodyDecoded.toString(),
             );
             _foundDifference = bodyDecoded['foundDifference'];
