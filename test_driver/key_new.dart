@@ -64,13 +64,22 @@ void main() {
             <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
             runInShell: true,
           );
-          await driver.tap(find.byValueKey('newWalletIconButton'));
-          await driver.tap(find.text('Peercoin Testnet'));
-          await driver.tap(find.text('Peercoin Testnet')); //tap into wallet
-          expect(await driver.getText(find.text('connected')), 'connected');
+          expect(
+            await driver.getText(find.byValueKey('noActiveWallets')),
+            'You have no active wallets',
+          );
         });
       },
       timeout: Timeout.none,
     );
+
+    test('tap into new peercoin testnet wallet', () async {
+      await driver.runUnsynchronized(() async {
+        await driver.tap(find.byValueKey('newWalletIconButton'));
+        await driver.tap(find.text('Peercoin Testnet'));
+        await driver.tap(find.text('Peercoin Testnet')); //tap into wallet
+        expect(await driver.getText(find.text('connected')), 'connected');
+      });
+    });
   });
 }

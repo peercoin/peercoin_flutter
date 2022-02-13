@@ -97,7 +97,6 @@
     "jail_dialog_button": "Okej",
     "jail_dialog_title": "Osiągnąłeś maksymalną liczbę ponowień.",
     "jail_heading": "Aplikacja zablokowana na",
-    "net_display_name": "Sieć Peercoin $testormain",
     "not_again": "Nie pokazuj ponownie",
     "paperwallet_confirm_import": "Potwierdź i importuj",
     "paperwallet_error_1": "Pusty portfel\nlub kwota poniżej minimalnego wyjścia",
@@ -152,8 +151,11 @@
     "app_settings_notifications_disable_button": "Wyłącz powiadomienia",
     "app_settings_notifications_not_enabled": "Powiadomienia w tle są aktalnie wyłączone.",
     "app_settings_notifications_heading_interval": "Interwał synchronizacji",
-    "app_settings_notifications_hint_sync_1": "Ustawia interwał, w którym aplikacja będzie sprawdzać nowe transakcje w tle.\nAktywny interwał: $minuty.",
+    "app_settings_notifications_hint_sync_1": "Ustawia interwał, w którym aplikacja będzie sprawdzać nowe transakcje w tle.\nAktywny interwał: $minutes minuty.",
     "authenticate_biometric_hint": "Zweryfikuj tożsamość",
     "authenticate_biometric_reason": "Uwierzytelnij się.",
-    "authenticate_biometric_title": "Wymagane uwierzytelnienie"
+    "authenticate_biometric_title": "Wymagane uwierzytelnienie",
+    "tx_address": "Adres",
+    "wallet_bottom_nav_send": "Wyślij",
+    "wallet_send": "Wyślij"
 }

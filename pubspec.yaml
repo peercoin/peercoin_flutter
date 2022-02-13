@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 0.8.3+80
+version: 0.8.4+81
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -44,6 +44,7 @@ dependencies:
   flutter_markdown: ^0.6.6
   background_fetch: ^1.0.1
   flutter_logs: ^2.1.5
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   integration_test:

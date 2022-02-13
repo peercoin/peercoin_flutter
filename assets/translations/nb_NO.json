@@ -79,7 +79,7 @@
     "currency_BRL": "Brasiliansk real",
     "currency_CNY": "Kinesisk yuan renminbi",
     "currency_EUR": "Euro",
-    "currency_GBP": "Pund sterling",
+    "currency_GBP": "Britisk pund sterling",
     "currency_HRK": "Kroatisk kuna",
     "currency_INR": "Indisk rupi",
     "currency_RON": "Rumensk leu",
@@ -230,7 +230,6 @@
     "import_wif_alert_content": "Vennligst bekreft at du ønsker å importere følgende adresse:\n\n$address",
     "import_wif_hint": "Nøkkelen må importeres på nytt når lommeboken gjenopprettes fra gjenopprettingsfrasen. Den er ikke koblet til gjenopprettingsfrasen.",
     "jail_dialog_title": "Du har nådd maksimalt antall nye forsøk.",
-    "net_display_name": "Peercoin $testormain nett",
     "paperwallet_confirm_import": "Bekreft & Importer",
     "paperwallet_error_1": "Lommeboken er tom\neller beløp under minimum for sending",
     "paperwallet_step_2_text": "Skann privat nøkkel",
@@ -262,5 +261,11 @@
     "wallet_receive_label_hint": "Tips: Ved å trykke på denne knappen lagres etiketten til adressen",
     "wallet_rescan_content": "Skanner lommeboken på nytt. Hvis du har problemer med transaksjoner eller beløp, kan dette være nyttig.\nDette kan ta litt tid.",
     "wallet_send": "Send",
-    "store_description": "Send og motta peercoin på telefonen din.\n\nHold gjenopprettingsfrasen din beskyttet.\nDenne appen kommer med absolutt ingen garanti.\nBruk på egen risiko.\n\nFunksjoner:\n- Basert på Electrum sin protokoll.\n- Send og motta peercoin.\n- Klar til å utføre transaksjoner etter installasjon (ingen venting).\n- Peercoin-lommebøker for mainnett og testnett .\n- Organisering ved hjelp av adressebok.\n- Importer papirlommebøker.\n- Importer private nøkler (WIF).\n- Serveradministrasjon.\n- Flerspråklig støtte.\n- Bakgrunnsvarsler.\n\nKjente begrensninger kan bli funnet i GitHub-depotet."
+    "store_description": "Send og motta peercoin på telefonen din.\n\nHold gjenopprettingsfrasen din beskyttet.\nDenne appen kommer med absolutt ingen garanti.\nBruk på egen risiko.\n\nFunksjoner:\n- Basert på Electrum sin protokoll.\n- Send og motta peercoin.\n- Klar til å utføre transaksjoner etter installasjon (ingen venting).\n- Peercoin-lommebøker for mainnett og testnett .\n- Organisering ved hjelp av adressebok.\n- Importer papirlommebøker.\n- Importer & eksporter private nøkler (WIF).\n- Serveradministrasjon.\n- Flerspråklig støtte.\n- Bakgrunnsvarsler.\n\nKjente begrensninger kan bli funnet i GitHub-depotet.",
+    "currency_NOK": "Norsk krone",
+    "currency_BDT": "Bangladeshisk taka",
+    "currency_IDR": "Indonesisk rupiah",
+    "currency_IRR": "Iransk rial",
+    "currency_KRW": "Sørkoreansk won",
+    "currency_TRY": "Tyrkisk lira"
 }

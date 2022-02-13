@@ -154,7 +154,6 @@
     "wallets_none": "Du hast keine aktiven Wallets",
     "app_navigation": "Navigation",
     "app_wallets": "Wallets",
-    "net_display_name": "Peercoin $testormain net",
     "server_add_input_label": "Server URL",
     "wallet_offline": "getrennt",
     "id": "Id",
@@ -261,5 +260,12 @@
     "app_settings_logs": "Debug Logs",
     "app_settings_description": "Diese Logs enthalten sensible Informationen.\nSie enthalten zwar keine privaten Schlüssel, du solltest aber trotzdem aufpassen, mit wem du diese Logs teilst.",
     "app_settings_logs_export": "Debug Logs exportieren",
-    "receive_show_qr": "QR-Code zeigen"
+    "receive_show_qr": "QR-Code zeigen",
+    "app_settings_default_description": "Die Standard Wallet wird automatisch beim Start der App geöffnet.",
+    "currency_NOK": "Norwegische Krone",
+    "currency_IDR": "Indonesische Rupiah",
+    "currency_IRR": "Iranischer Rial",
+    "currency_TRY": "Türkische Lira",
+    "currency_BDT": "Bangladeschischer Taka",
+    "currency_KRW": "Südkoreanischer Won"
 }

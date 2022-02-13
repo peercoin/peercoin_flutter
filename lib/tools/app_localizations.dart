@@ -20,17 +20,28 @@ class AppLocalizations {
 
   static const Map<String, String> availableLocales = {
     'en': 'English',
+    'bn': 'বাংলা (baɛṅlā)',
+    'id': 'Bahasa Indonesia',
     'de': 'Deutsch',
     'es': 'Español',
+    'fa': '(fārsī) فارسى',
     'fr': 'Français',
+    // 'ha': '(ḥawsa) حَوْسَ', presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
+    'hi': 'हिन्दी (hindī)',
     'hr': 'Hrvatski',
     'it': 'Italiano',
-    'nb': 'Norsk Bokmål',
+    'sw': 'Kiswahili',
+    'ko': '한국어 [韓國語] (han-guk-eo)',
     'nl': 'Nederlands',
+    'no': 'Norsk Bokmål',
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
     'ru': 'Русский',
+    'tr': 'Türkçe',
+    'uk': 'Українська (Ukrajins’ka)',
+    'ur': '(urdū) اردو',
+    'vi': 'Tiếng Việt',
     'zh': '中文 (Zhōngwén)'
   };
 
@@ -50,14 +61,25 @@ class AppLocalizations {
     }
   }
 
+  Future<String> _getFilePath(Locale localeToBeLoaded) async {
+    switch (localeToBeLoaded.languageCode) {
+      case 'bn':
+        return 'assets/translations/bn_BD.json';
+      case 'no':
+        return 'assets/translations/nb_NO.json';
+      default:
+        return 'assets/translations/${localeToBeLoaded.languageCode}.json';
+    }
+  }
+
   Future<Map<String, String>> _loadLocalizedStrings(
       Locale localeToBeLoaded) async {
     String jsonString;
     var localizedStrings = <String, String>{};
 
     try {
-      jsonString = await rootBundle.loadString(
-          'assets/translations/${localeToBeLoaded.languageCode}.json');
+      jsonString =
+          await rootBundle.loadString(await _getFilePath(localeToBeLoaded));
     } catch (e) {
       FlutterLogs.logError(
         'AppLocalizations',
@@ -120,3 +142,5 @@ class _AppLocalizationsDelegate
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
+
+//TODO go through setup and check for line breaks for all languages

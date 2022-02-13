@@ -37,13 +37,19 @@ class PriceTicker {
     'IDR': 'Rp',
     'INR': '₹',
     'IRR': '﷼',
+    'KES': 'KSh',
     'KRW': '₩',
     'NOK': 'kr',
+    'PKR': '₨',
     'PLN': 'zł',
     'USD': '\$',
     'RON': 'L',
     'RUB': '₽',
-    'TRY': '₺'
+    'TRY': '₺',
+    'TZS': 'TSh',
+    'UAH': '₴',
+    'UGX': 'USh',
+    'VND': '₫'
   };
 
   static double renderPrice(

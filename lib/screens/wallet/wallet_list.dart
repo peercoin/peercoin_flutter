@@ -256,10 +256,12 @@ class _WalletListScreenState extends State<WalletListScreen>
                             child: Text(
                               AppLocalizations.instance
                                   .translate('wallets_none'),
+                              key: Key('noActiveWallets'),
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                  color: Theme.of(context).backgroundColor),
+                                fontSize: 16,
+                                fontStyle: FontStyle.italic,
+                                color: Theme.of(context).backgroundColor,
+                              ),
                             ),
                           ),
                         );

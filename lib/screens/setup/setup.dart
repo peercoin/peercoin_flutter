@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/providers/activewallets.dart';
@@ -66,25 +67,33 @@ class _SetupScreenState extends State<SetupScreen> {
                           ),
                           Column(
                             children: [
-                              Text(
-                                AppLocalizations.instance
-                                    .translate('setup_title'),
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 46),
+                              FittedBox(
+                                child: Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_title'),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 46,
+                                  ),
+                                ),
                               ),
                               Text(
                                 AppLocalizations.instance
                                     .translate('setup_subtitle'),
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 24),
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                ),
                               ),
                             ],
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height / 15,
                           ),
-                          PeerExplanationText(AppLocalizations.instance
-                              .translate('setup_text1')),
+                          PeerExplanationText(
+                            AppLocalizations.instance.translate('setup_text1'),
+                            2,
+                          ),
                           PeerButtonSetup(
                             text: AppLocalizations.instance.translate(
                               'setup_import_title',
@@ -140,14 +149,19 @@ class _SetupScreenState extends State<SetupScreen> {
 
 class PeerExplanationText extends StatelessWidget {
   final String text;
-  PeerExplanationText(this.text);
+  final int maxLines;
+  PeerExplanationText(this.text, [this.maxLines = 1]);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return AutoSizeText(
       text,
+      maxLines: maxLines,
+      maxFontSize: 17,
       style: TextStyle(
-          color: Colors.white, fontStyle: FontStyle.italic, fontSize: 17),
+        color: Colors.white,
+        fontStyle: FontStyle.italic,
+      ),
       textAlign: TextAlign.center,
     );
   }

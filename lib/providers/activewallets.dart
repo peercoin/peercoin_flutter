@@ -534,14 +534,25 @@ class ActiveWallets with ChangeNotifier {
     return walletAddress.wif ?? '';
   }
 
-  Future<Map> buildTransaction(
-      String identifier, String address, String amount, int fee,
-      [bool dryRun = false, String opReturn = '']) async {
+  Future<Map> buildTransaction({
+    required String identifier,
+    required String address,
+    required String amount,
+    required int fee,
+    String opReturn = '',
+    bool firstPass = true,
+  }) async {
     //convert amount
     var _txAmount = (double.parse(amount) * 1000000).toInt();
     var openWallet = getSpecificCoinWallet(identifier);
     var _hex = '';
     var _destroyedChange = 0;
+
+    FlutterLogs.logInfo(
+      'ActiveWallets',
+      'buildTransaction',
+      'firstPass: $firstPass',
+    );
 
     FlutterLogs.logInfo(
       'ActiveWallets',
@@ -573,7 +584,7 @@ class ActiveWallets with ChangeNotifier {
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
         openWallet.utxos.forEach((utxo) {
-          if (utxo.value > 0 && utxo.height > 0) {
+          if (utxo.value > 0) {
             if (_totalInputValue <= (_txAmount + fee)) {
               _totalInputValue += utxo.value;
               inputTx.add(utxo);
@@ -585,6 +596,7 @@ class ActiveWallets with ChangeNotifier {
             }
           }
         });
+
         var coinParams = AvailableCoins().getSpecificCoin(identifier);
         var network = coinParams.networkType;
 
@@ -596,7 +608,7 @@ class ActiveWallets with ChangeNotifier {
           FlutterLogs.logInfo(
             'ActiveWallets',
             'buildTransaction',
-            'change amount $changeAmount',
+            'change amount $changeAmount, tx amount $_txAmount, fee $fee',
           );
 
           if (changeAmount <= coin.minimumTxValue) {
@@ -606,6 +618,7 @@ class ActiveWallets with ChangeNotifier {
               tx.addOutput(address, _txAmount);
             } else {
               tx.addOutput(address, _txAmount - fee);
+              _destroyedChange = _destroyedChange + fee;
             }
           } else {
             tx.addOutput(address, _txAmount);
@@ -662,13 +675,23 @@ class ActiveWallets with ChangeNotifier {
           'buildTransaction',
           'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
         );
-        if (dryRun == false) {
+
+        if (firstPass == true) {
+          return await buildTransaction(
+            identifier: identifier,
+            address: address,
+            amount: amount,
+            fee: requiredFeeInSatoshis +
+                10, //TODO 10 satoshis added here because tx virtualsize out of coinslib varies by 1 byte
+            firstPass: false,
+          );
+        } else {
+          //second pass
           FlutterLogs.logInfo(
             'ActiveWallets',
             'buildTransaction',
             'intermediate size: ${intermediate.txSize}',
           );
-          _hex = intermediate.toHex();
 
           //flag addr as change addr
           var addrInWallet = openWallet.addresses
@@ -681,19 +704,19 @@ class ActiveWallets with ChangeNotifier {
             addrInWallet.newNotificationBackendCount =
                 addrInWallet.notificationBackendCount + 1;
           }
+
+          //generate new wallet addr
+          await generateUnusedAddress(identifier);
+          _hex = intermediate.toHex();
+
+          return {
+            'fee': requiredFeeInSatoshis,
+            'hex': _hex,
+            'id': intermediate.getId(),
+            'destroyedChange': _destroyedChange,
+            'opReturn': opReturn
+          };
         }
-        //generate new wallet addr
-        await generateUnusedAddress(identifier);
-        return {
-          'fee': dryRun == false
-              ? requiredFeeInSatoshis
-              : requiredFeeInSatoshis +
-                  10, //TODO 10 satoshis added here because tx virtualsize out of coinslib varies by 1 byte
-          'hex': _hex,
-          'id': intermediate.getId(),
-          'destroyedChange': _destroyedChange,
-          'opReturn': opReturn
-        };
       } else {
         throw ('no utxos available');
       }

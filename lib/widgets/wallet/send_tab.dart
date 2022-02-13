@@ -71,14 +71,13 @@ class _SendTabState extends State<SendTab> {
     super.didChangeDependencies();
   }
 
-  Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
+  Future<Map> buildTx() async {
     return await _activeWallets.buildTransaction(
-      _wallet.name,
-      _addressKey.currentState!.value.trim(),
-      _amountKey.currentState!.value,
-      fee,
-      dryrun,
-      _opReturnKey.currentState?.value ?? '',
+      identifier: _wallet.name,
+      address: _addressKey.currentState!.value.trim(),
+      amount: _amountKey.currentState!.value,
+      fee: 0,
+      opReturn: _opReturnKey.currentState?.value ?? '',
     );
   }
 
@@ -111,9 +110,8 @@ class _SendTabState extends State<SendTab> {
   }
 
   void showTransactionConfirmation(context) async {
-    Map _buildResult;
     var _firstPress = true;
-    _buildResult = await buildTx(true);
+    var _buildResult = await buildTx();
 
     int _destroyedChange = _buildResult['destroyedChange'];
     var _correctedDust = 0;
@@ -198,7 +196,6 @@ class _SendTabState extends State<SendTab> {
                         if (_firstPress == false) return; //prevent double tap
                         try {
                           _firstPress = false;
-                          var _buildResult = await buildTx(false, _txFee);
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
                               _wallet.name, _addressKey.currentState!.value, {
@@ -212,7 +209,9 @@ class _SendTabState extends State<SendTab> {
                           Provider.of<ElectrumConnection>(context,
                                   listen: false)
                               .broadcastTransaction(
-                                  _buildResult['hex'], _buildResult['id']);
+                            _buildResult['hex'],
+                            _buildResult['id'],
+                          );
                           //store label if exists
                           if (_labelKey.currentState!.value != '') {
                             _activeWallets.updateLabel(
