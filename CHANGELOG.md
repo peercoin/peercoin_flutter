@@ -10,6 +10,7 @@
 * Add language: Turkish
 * Add language: Vietnamese
 * Fix for Norwegian
+* Better transaction building
 
 ### **0.8.3** (2022-02-07)
 * Fix Android 12 crash
