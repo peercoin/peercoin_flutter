@@ -534,9 +534,9 @@ class ActiveWallets with ChangeNotifier {
     return walletAddress.wif ?? '';
   }
 
-  Future<Map> buildTransaction(String identifier, String address, String amount,
-      int fee, List<WalletUtxo> inputTxList,
-      [String opReturn = '']) async {
+  Future<Map> buildTransaction(
+      String identifier, String address, String amount, int fee,
+      [bool dryRun = false, String opReturn = '']) async {
     //convert amount
     var _txAmount = (double.parse(amount) * 1000000).toInt();
     var openWallet = getSpecificCoinWallet(identifier);
@@ -565,7 +565,6 @@ class ActiveWallets with ChangeNotifier {
       );
     }
 
-    var _isConfirmation = true;
     if (_txAmount <= openWallet.balance) {
       if (openWallet.utxos.isNotEmpty) {
         //find eligible input utxos
@@ -573,30 +572,20 @@ class ActiveWallets with ChangeNotifier {
         var inputTx = <WalletUtxo>[];
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
-        if (inputTxList.isEmpty) {
-          _isConfirmation = false;
-
-          openWallet.utxos.forEach((utxo) {
-            if (utxo.value > 0) {
-              if (_totalInputValue <= (_txAmount + fee)) {
-                _totalInputValue += utxo.value;
-                inputTx.add(utxo);
-                FlutterLogs.logInfo(
-                  'ActiveWallets',
-                  'buildTransaction',
-                  'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
-                );
-              }
+        openWallet.utxos.forEach((utxo) {
+          if (utxo.value > 0 && utxo.height > 0) {
+            if (_totalInputValue <= (_txAmount + fee)) {
+              _totalInputValue += utxo.value;
+              inputTx.add(utxo);
+              FlutterLogs.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
+              );
             }
-          });
-        } else {
-          inputTx = inputTxList;
-          FlutterLogs.logInfo(
-            'ActiveWallets',
-            'buildTransaction',
-            'added inputTx from first pass',
-          );
-        }
+          }
+        });
+        //TODO balance can be displayed >0 while change is confirming, yet unconfirmed utxo will not be selected
 
         var coinParams = AvailableCoins().getSpecificCoin(identifier);
         var network = coinParams.networkType;
@@ -675,7 +664,7 @@ class ActiveWallets with ChangeNotifier {
           'buildTransaction',
           'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
         );
-        if (_isConfirmation == false) {
+        if (dryRun == false) {
           FlutterLogs.logInfo(
             'ActiveWallets',
             'buildTransaction',
@@ -698,11 +687,12 @@ class ActiveWallets with ChangeNotifier {
         //generate new wallet addr
         await generateUnusedAddress(identifier);
         return {
-          'fee': requiredFeeInSatoshis +
-              10, //TODO 10 satoshis added here because tx virtualsize out of coinslib varies by 1 byte
+          'fee': dryRun == false
+              ? requiredFeeInSatoshis
+              : requiredFeeInSatoshis +
+                  10, //TODO 10 satoshis added here because tx virtualsize out of coinslib varies by 1 byte
           'hex': _hex,
           'id': intermediate.getId(),
-          'inputTx': inputTx,
           'destroyedChange': _destroyedChange,
           'opReturn': opReturn
         };
