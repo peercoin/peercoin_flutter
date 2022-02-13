@@ -1,7 +1,6 @@
 ### **0.8.4** (2022-02-xx)
 * Add language: Bangla 
 * Add language: Farsi
-* Add language: Haussa
 * Add language: Hindi
 * Add language: Indonesian
 * Add language: Korean

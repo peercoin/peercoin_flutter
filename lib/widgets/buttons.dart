@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_themes.dart';
@@ -26,14 +27,13 @@ class PeerButton extends StatelessWidget {
         elevation: 0,
       ),
       onPressed: action,
-      child: FittedBox(
-        child: Text(
-          text,
-          style: TextStyle(
-            letterSpacing: 1.4,
-            fontSize: 16,
-            color: active ? LightColors.white : LightColors.grey,
-          ),
+      child: AutoSizeText(
+        text,
+        minFontSize: 10,
+        maxFontSize: 16,
+        style: TextStyle(
+          letterSpacing: 1.4,
+          color: active ? LightColors.white : LightColors.grey,
         ),
       ),
     );

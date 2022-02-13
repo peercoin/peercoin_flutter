@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -534,9 +535,10 @@ class _AddressTabState extends State<AddressTab> {
                       visualDensity:
                           VisualDensity(horizontal: 0.0, vertical: -4),
                       label: Container(
-                        child: Text(
+                        child: AutoSizeText(
                           AppLocalizations.instance
                               .translate('addressbook_hide_change'),
+                          minFontSize: 10,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                           ),
@@ -555,13 +557,14 @@ class _AddressTabState extends State<AddressTab> {
                     visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
                     label: Container(
                       width: 120,
-                      child: Text(
+                      child: AutoSizeText(
                         _showLabel
                             ? AppLocalizations.instance
                                 .translate('addressbook_show_balance')
                             : AppLocalizations.instance
                                 .translate('addressbook_show_label'),
                         textAlign: TextAlign.center,
+                        minFontSize: 10,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
@@ -587,10 +590,11 @@ class _AddressTabState extends State<AddressTab> {
                           VisualDensity(horizontal: 0.0, vertical: -4),
                       label: Container(
                         width: 120,
-                        child: Text(
+                        child: AutoSizeText(
                           AppLocalizations.instance
                               .translate('addressbook_hide_used'),
                           textAlign: TextAlign.center,
+                          minFontSize: 10,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                           ),
@@ -609,10 +613,11 @@ class _AddressTabState extends State<AddressTab> {
                     visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
                     label: Container(
                       width: 120,
-                      child: Text(
+                      child: AutoSizeText(
                         AppLocalizations.instance
                             .translate('addressbook_hide_empty'),
                         textAlign: TextAlign.center,
+                        minFontSize: 10,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
