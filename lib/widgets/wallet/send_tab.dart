@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/walletaddress.dart';
+import 'package:peercoin/models/walletutxo.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/screens/wallet/wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -71,13 +72,13 @@ class _SendTabState extends State<SendTab> {
     super.didChangeDependencies();
   }
 
-  Future<Map> buildTx(bool dryrun, [int fee = 0]) async {
+  Future<Map> buildTx(List<WalletUtxo> inputTx, [int fee = 0]) async {
     return await _activeWallets.buildTransaction(
       _wallet.name,
       _addressKey.currentState!.value.trim(),
       _amountKey.currentState!.value,
       fee,
-      dryrun,
+      inputTx,
       _opReturnKey.currentState?.value ?? '',
     );
   }
@@ -111,13 +112,13 @@ class _SendTabState extends State<SendTab> {
   }
 
   void showTransactionConfirmation(context) async {
-    Map _buildResult;
+    Map _firstPassBuildResult;
     var _firstPress = true;
-    _buildResult = await buildTx(true);
+    _firstPassBuildResult = await buildTx([]);
 
-    int _destroyedChange = _buildResult['destroyedChange'];
+    int _destroyedChange = _firstPassBuildResult['destroyedChange'];
     var _correctedDust = 0;
-    _txFee = _buildResult['fee'];
+    _txFee = _firstPassBuildResult['fee'];
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -198,21 +199,25 @@ class _SendTabState extends State<SendTab> {
                         if (_firstPress == false) return; //prevent double tap
                         try {
                           _firstPress = false;
-                          var _buildResult = await buildTx(false, _txFee);
+                          var _secondPassBuildResult = await buildTx(
+                            _firstPassBuildResult['inputTx'],
+                            _txFee,
+                          );
                           //write tx to history
                           await _activeWallets.putOutgoingTx(
                               _wallet.name, _addressKey.currentState!.value, {
-                            'txid': _buildResult['id'],
-                            'hex': _buildResult['hex'],
+                            'txid': _secondPassBuildResult['id'],
+                            'hex': _secondPassBuildResult['hex'],
                             'outValue': _totalValue - _txFee,
                             'outFees': _txFee + _destroyedChange,
-                            'opReturn': _buildResult['opReturn']
+                            'opReturn': _secondPassBuildResult['opReturn']
                           });
                           //broadcast
                           Provider.of<ElectrumConnection>(context,
                                   listen: false)
                               .broadcastTransaction(
-                                  _buildResult['hex'], _buildResult['id']);
+                                  _secondPassBuildResult['hex'],
+                                  _secondPassBuildResult['id']);
                           //store label if exists
                           if (_labelKey.currentState!.value != '') {
                             _activeWallets.updateLabel(
