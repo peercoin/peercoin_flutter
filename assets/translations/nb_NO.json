@@ -50,7 +50,7 @@
     "app_settings_notifications_hint_sync_1": "Angir intervallet der appen ser etter nye transaksjoner i bakgrunnen.\nAktivt intervall: $minutes minutter.",
     "app_settings_revealAuthButton": "Vis alternativer for autentisering",
     "app_settings_seed": "Gjenopprettingsfrase",
-    "app_settings_theme": "App-tema",
+    "app_settings_theme": "Apptema",
     "app_settings_theme_light": "Lys",
     "app_settings_theme_dark": "Mørk",
     "app_settings_theme_system": "System Standard",
@@ -131,7 +131,7 @@
     "send_confirm_send": "Bekreft & Send",
     "send_confirm_transaction": "Vennligst bekreft transaksjonen",
     "send_dust": "Lommerusk: -$amount $letter_code",
-    "send_empty": "Tom lommebok",
+    "send_empty": "Tøm lommebok",
     "send_enter_amount": "Vennligst skriv inn et beløp",
     "send_errors_solve": "Vennligst løs feil…",
     "send_fee": "Gebyr: -$amount $letter_code",
@@ -267,5 +267,11 @@
     "currency_IDR": "Indonesisk rupiah",
     "currency_IRR": "Iransk rial",
     "currency_KRW": "Sørkoreansk won",
-    "currency_TRY": "Tyrkisk lira"
+    "currency_TRY": "Tyrkisk lira",
+    "currency_TZS": "Tanzaniansk shilling",
+    "currency_UAH": "Ukrainsk hryvnja",
+    "currency_UGX": "Ugandisk shilling",
+    "currency_VND": "Vietnamesisk dong",
+    "currency_PKR": "Pakistansk rupi",
+    "currency_KES": "Kenyansk shilling"
 }
