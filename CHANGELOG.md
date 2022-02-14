@@ -1,5 +1,6 @@
 ### **0.8.5** (2022-02-xx)
 * Add language: Thai 
+* Add currencies: THB
 
 ### **0.8.4** (2022-02-13)
 * Add language: Bangla 
