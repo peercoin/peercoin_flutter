@@ -1,3 +1,6 @@
+### **0.8.5** (2022-02-xx)
+* Add language: Thai 
+
 ### **0.8.4** (2022-02-13)
 * Add language: Bangla 
 * Add language: Farsi
