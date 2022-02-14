@@ -369,6 +369,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                                 .translate('paperwallet_step_4'),
                             style: Theme.of(context).textTheme.headline6),
                         PeerButton(
+                          small: true,
                           action: () => handlePress(4),
                           text: AppLocalizations.instance
                               .translate('paperwallet_step_4_text'),
