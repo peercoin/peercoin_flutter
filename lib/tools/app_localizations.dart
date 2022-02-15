@@ -33,7 +33,7 @@ class AppLocalizations {
     'sw': 'Kiswahili',
     'ko': '한국어 [韓國語] (han-guk-eo)',
     'nl': 'Nederlands',
-    'no': 'Norsk Bokmål',
+    'nb': 'Norsk Bokmål',
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
@@ -66,7 +66,7 @@ class AppLocalizations {
     switch (localeToBeLoaded.languageCode) {
       case 'bn':
         return 'assets/translations/bn_BD.json';
-      case 'no':
+      case 'nb':
         return 'assets/translations/nb_NO.json';
       default:
         return 'assets/translations/${localeToBeLoaded.languageCode}.json';
