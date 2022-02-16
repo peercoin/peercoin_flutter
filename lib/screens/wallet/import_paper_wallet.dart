@@ -251,8 +251,14 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   Future<void> buildImportTx([int fee = 0, bool dryRun = true]) async {
+    FlutterLogs.logInfo(
+      'ImportPaperWallet',
+      'buildImportTx',
+      'fee $fee - dryRun $dryRun',
+    );
+
     final tx = TransactionBuilder(network: _activeCoin.networkType);
-    tx.setVersion(1);
+    tx.setVersion(3);
     //send everything minus fees to unusedaddr
     tx.addOutput(_activeWallets.getUnusedAddress, _balanceInt - fee);
     //add inputs
@@ -272,6 +278,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         .toStringAsFixed(_activeCoin.fractions);
     var asDouble = double.parse(number) * 1000000;
     var requiredFeeInSatoshis = asDouble.toInt();
+
+    FlutterLogs.logInfo(
+      'ImportPaperWallet',
+      'buildImportTx',
+      'size ${intermediate.txSize}',
+    );
 
     if (dryRun == false) {
       _transactionHex = intermediate.toHex();
