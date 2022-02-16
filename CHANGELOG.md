@@ -3,6 +3,7 @@
 * Add language: Thai 
 * Add currencies: THB
 * Fix for Norwegian
+* Fix for importing paper wallets
 
 ### **0.8.4** (2022-02-13)
 * Add language: Bangla 
