@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/appsettings.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
@@ -92,13 +93,17 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       height: MediaQuery.of(context).size.height / 15,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         PeerButtonSetupBack(),
-                        Text(
+                        AutoSizeText(
                           AppLocalizations.instance
                               .translate('setup_price_feed_title'),
-                          style: TextStyle(color: Colors.white, fontSize: 28),
+                          minFontSize: 24,
+                          maxFontSize: 28,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                         SizedBox(
                           width: 40,
@@ -119,7 +124,9 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_price_feed_allow'),
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 value: _dataFeedAllowed,
                                 activeColor: Colors.white,
@@ -131,6 +138,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                             PeerExplanationText(
                               AppLocalizations.instance
                                   .translate('setup_price_feed_description'),
+                              2,
                             ),
                           ],
                         ),
@@ -188,7 +196,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                 },
               ),
               SizedBox(
-                height: 32,
+                height: 25,
               ),
             ],
           ),

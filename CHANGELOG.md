@@ -1,7 +1,9 @@
 ### **0.8.5** (2022-02-xx)
+* Add language: Arabic
 * Add language: Thai 
 * Add currencies: THB
 * Fix for Norwegian
+
 ### **0.8.4** (2022-02-13)
 * Add language: Bangla 
 * Add language: Farsi
