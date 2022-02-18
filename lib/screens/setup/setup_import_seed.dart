@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_logs/flutter_logs.dart';
@@ -100,11 +101,15 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           PeerButtonSetupBack(),
-                          Text(
+                          AutoSizeText(
                             AppLocalizations.instance.translate(
                               'setup_import_title',
                             ),
-                            style: TextStyle(color: Colors.white, fontSize: 28),
+                            maxFontSize: 28,
+                            minFontSize: 25,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(
                             width: 40,

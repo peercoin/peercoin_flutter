@@ -1,3 +1,8 @@
 {
-    "about_illustrations_button": "designs.AI"
+    "about_illustrations_button": "designs.AI",
+    "about": "Tungkol sa",
+    "about_developers": "© $year Ang Developer ng peercoin_flutter",
+    "about_free": "Ang software na ito ay open source, libre at walang anumang garantiya o kung anuman.\nGamitin ng may pag-iingat.",
+    "about_license": "Lisensyado sa ilalim ng AGPL-3.0",
+    "about_view_source": "Tingnan ang Source Code"
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/providers/unencryptedOptions.dart';
@@ -149,10 +150,14 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           PeerButtonSetupBack(),
-                          Text(
+                          AutoSizeText(
                             AppLocalizations.instance
                                 .translate('setup_save_title'),
-                            style: TextStyle(color: Colors.white, fontSize: 28),
+                            maxFontSize: 28,
+                            minFontSize: 27,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(
                             width: 40,

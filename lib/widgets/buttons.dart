@@ -31,6 +31,7 @@ class PeerButton extends StatelessWidget {
         text,
         minFontSize: 10,
         maxFontSize: 16,
+        textAlign: TextAlign.center,
         style: TextStyle(
           letterSpacing: 1.4,
           color: active ? LightColors.white : LightColors.grey,

@@ -1,3 +1,11 @@
+### **0.8.5** (2022-02-18)
+* Add language: Arabic
+* Add language: Japanese
+* Add language: Thai 
+* Add currencies: THB, JPY
+* Fix for Norwegian
+* Fix for importing paper wallets
+
 ### **0.8.4** (2022-02-13)
 * Add language: Bangla 
 * Add language: Farsi

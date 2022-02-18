@@ -19,6 +19,7 @@ class AppLocalizations {
   }
 
   static const Map<String, String> availableLocales = {
+    'ar': '(al arabiya) العربية',
     'en': 'English',
     'bn': 'বাংলা (baɛṅlā)',
     'id': 'Bahasa Indonesia',
@@ -30,14 +31,16 @@ class AppLocalizations {
     'hi': 'हिन्दी (hindī)',
     'hr': 'Hrvatski',
     'it': 'Italiano',
+    'ja': '日本語 (nihongo)',
     'sw': 'Kiswahili',
     'ko': '한국어 [韓國語] (han-guk-eo)',
     'nl': 'Nederlands',
-    'no': 'Norsk Bokmål',
+    'nb': 'Norsk Bokmål',
     'pl': 'Polski',
     'pt': 'Português',
     'ro': 'Română',
     'ru': 'Русский',
+    'th': 'ภาษาไทย (paasaa-tai)',
     'tr': 'Türkçe',
     'uk': 'Українська (Ukrajins’ka)',
     'ur': '(urdū) اردو',
@@ -65,7 +68,7 @@ class AppLocalizations {
     switch (localeToBeLoaded.languageCode) {
       case 'bn':
         return 'assets/translations/bn_BD.json';
-      case 'no':
+      case 'nb':
         return 'assets/translations/nb_NO.json';
       default:
         return 'assets/translations/${localeToBeLoaded.languageCode}.json';
