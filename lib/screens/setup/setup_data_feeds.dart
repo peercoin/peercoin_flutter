@@ -170,6 +170,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                             PeerExplanationText(
                               AppLocalizations.instance
                                   .translate('setup_bg_sync_description'),
+                              2,
                             ),
                           ],
                         ),

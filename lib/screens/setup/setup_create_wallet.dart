@@ -154,7 +154,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                             AppLocalizations.instance
                                 .translate('setup_save_title'),
                             maxFontSize: 28,
-                            minFontSize: 27,
+                            minFontSize: 25,
                             style: TextStyle(
                               color: Colors.white,
                             ),
