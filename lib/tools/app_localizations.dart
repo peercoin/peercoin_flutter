@@ -31,7 +31,7 @@ class AppLocalizations {
     'hi': 'हिन्दी (hindī)',
     'hr': 'Hrvatski',
     'it': 'Italiano',
-    'jp': '日本語 (nihongo)',
+    'ja': '日本語 (nihongo)',
     'sw': 'Kiswahili',
     'ko': '한국어 [韓國語] (han-guk-eo)',
     'nl': 'Nederlands',

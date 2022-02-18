@@ -1,4 +1,4 @@
-### **0.8.5** (2022-02-xx)
+### **0.8.5** (2022-02-18)
 * Add language: Arabic
 * Add language: Japanese
 * Add language: Thai 
