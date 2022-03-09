@@ -141,7 +141,6 @@
     "jail_countdown": "секунд",
     "jail_dialog_button": "ОК",
     "jail_dialog_title": "Ви досягли максимальної кількості спроб.",
-    "net_display_name": "Peercoin $testormain net",
     "not_again": "Більше не показувати",
     "notification_title": "$walletTitle - Отримано нову транзакцію",
     "paperwallet_confirm_import": "Підтвердити та імпортувати",

@@ -240,7 +240,6 @@
     "store_short": "پیئر کوائن اور پیئر کوائن ٹیسٹ نیٹ کے لیے آپ کا موبائل والیٹ۔",
     "send_total": "مجموعی $amount $letter_code",
     "import_wif_alert_content": "براہِ کرم تصدیق کریں کہ آپ درج ذیل پتہ درآمد کرنا چاہتے ہیں:\n\n$address",
-    "net_display_name": "پیئر کوائن testormain$ نیٹ",
     "send_amount_below_minimum": "کم از کم آؤٹ پُٹ $amount ہے۔\nبراہ کرم اس سے زیادہ یا اس کے برابر رقم منتخب کریں۔",
     "currency_GBP": "برطانوی پاؤنڈ اسٹرلنگ",
     "currency_RON": "رومانوی لیو",
