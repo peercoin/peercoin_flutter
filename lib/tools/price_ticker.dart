@@ -41,6 +41,7 @@ class PriceTicker {
     'KES': 'KSh',
     'KRW': '₩',
     'NOK': 'kr',
+    'PHP': '₱',
     'PKR': '₨',
     'PLN': 'zł',
     'USD': '\$',

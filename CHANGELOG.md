@@ -1,3 +1,7 @@
+### **0.8.6** (2022-03-09)
+* Add language: Filipino
+* Add currencies: PHP
+
 ### **0.8.5** (2022-02-18)
 * Add language: Arabic
 * Add language: Japanese

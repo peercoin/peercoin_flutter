@@ -26,6 +26,7 @@ class AppLocalizations {
     'de': 'Deutsch',
     'es': 'Español',
     'fa': '(fārsī) فارسى',
+    'fil': 'Wikang Filipino',
     'fr': 'Français',
     // 'ha': '(ḥawsa) حَوْسَ', presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
     'hi': 'हिन्दी (hindī)',
