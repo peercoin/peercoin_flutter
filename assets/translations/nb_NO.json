@@ -273,5 +273,7 @@
     "currency_UGX": "Ugandisk shilling",
     "currency_VND": "Vietnamesisk dong",
     "currency_PKR": "Pakistansk rupi",
-    "currency_KES": "Kenyansk shilling"
+    "currency_KES": "Kenyansk shilling",
+    "currency_JPY": "Japansk yen",
+    "currency_THB": "Thailandsk baht"
 }
