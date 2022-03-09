@@ -513,7 +513,7 @@ class _SendTabState extends State<SendTab> {
                     SizedBox(height: 10),
                     PeerButtonBorder(
                       text: AppLocalizations.instance.translate(
-                        'send_qr',
+                        'scan_qr',
                       ),
                       action: () async {
                         final result = await Navigator.of(context).pushNamed(
