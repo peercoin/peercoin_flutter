@@ -12,6 +12,7 @@ import 'package:peercoin/providers/activewallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/tools/backgroundsync.dart';
+import 'package:peercoin/tools/periodic_reminders.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/wallet/new_wallet.dart';
@@ -59,6 +60,9 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
+      //toggle periodic reminders
+      PeriodicReminders.checkReminder(_appSettings, context);
+
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
