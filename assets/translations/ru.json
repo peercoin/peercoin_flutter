@@ -267,5 +267,13 @@
     "currency_IDR": "Индонезийская Рупия",
     "currency_IRR": "Иранский Риал",
     "currency_KRW": "Южнокорейский Вон",
-    "currency_TRY": "Турецкая Лира"
+    "currency_TRY": "Турецкая Лира",
+    "currency_KES": "Кенийский Шиллинг",
+    "currency_PKR": "Пакистанская Рупия",
+    "currency_TZS": "Танзанийский Шиллинг",
+    "currency_UAH": "Украинская Гривна",
+    "currency_UGX": "Угандийский Шиллинг",
+    "currency_VND": "Вьетнамский Донг",
+    "currency_JPY": "Японская Иена",
+    "currency_THB": "Таиландский Бат"
 }
