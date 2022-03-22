@@ -4,14 +4,15 @@ class AvailablePeriodicReminderItems {
   final Map<String, PeriodicReminderItem> availableReminderItems = {
     'donate': PeriodicReminderItem(
       id: 'donate',
-      title: 'periodic_reminder_donate_title', //TODO write text into en.json
+      title: 'periodic_reminder_donate_title',
       body: 'periodic_reminder_donate_body',
-      button: 'periodic_reminder_donate_button',
-      buttonFunction: () => print('hi'),
+      button: 'jail_dialog_button',
+      buttonFunction: () => print(
+          'hi'), //TODO no context available here, prolly scrap the function here
     ),
     'backup': PeriodicReminderItem(
       id: 'backup',
-      title: 'periodic_reminder_backup_title',
+      title: 'periodic_reminder_backup_title', //TODO write text into en.json
       body: 'periodic_reminder_backup_body',
       button: 'periodic_reminder_backup_button',
       buttonFunction: () => print('hi'),
