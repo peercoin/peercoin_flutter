@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/wallettransaction.dart';
+import 'package:peercoin/models/wallet_transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';

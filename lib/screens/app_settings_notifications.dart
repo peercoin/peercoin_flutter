@@ -1,10 +1,10 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/models/coin_wallet.dart';
+import 'package:peercoin/providers/active_wallets.dart';
+import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/backgroundsync.dart';
+import 'package:peercoin/tools/background_sync.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 

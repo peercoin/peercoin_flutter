@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-part 'walletutxo.g.dart';
+part 'wallet_utxo.g.dart';
 
 @HiveType(typeId: 4)
 class WalletUtxo extends HiveObject {

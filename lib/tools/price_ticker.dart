@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/app_settings.dart';
 
 class PriceTicker {
   static Future<Map<String, dynamic>> getDataFromTicker() async {

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'walletutxo.dart';
+part of 'wallet_utxo.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

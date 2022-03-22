@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_logs/flutter_logs.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/app_settings.dart';
 
 class PeriodicReminders {
   static void checkReminder(AppSettings _settings, BuildContext context) async {

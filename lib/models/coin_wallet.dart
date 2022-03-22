@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
-import 'package:peercoin/models/pendingNotifications.dart';
-import 'package:peercoin/models/walletaddress.dart';
-import 'package:peercoin/models/wallettransaction.dart';
-import 'package:peercoin/models/walletutxo.dart';
-part 'coinwallet.g.dart';
+import 'package:peercoin/models/pending_notifications.dart';
+import 'package:peercoin/models/wallet_address.dart';
+import 'package:peercoin/models/wallet_transaction.dart';
+import 'package:peercoin/models/wallet_utxo.dart';
+part 'coin_wallet.g.dart';
 
 @HiveType(typeId: 1)
 class CoinWallet extends HiveObject {

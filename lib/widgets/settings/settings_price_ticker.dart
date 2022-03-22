@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/buttons.dart';

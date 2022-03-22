@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pendingNotifications.dart';
+part of 'pending_notifications.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

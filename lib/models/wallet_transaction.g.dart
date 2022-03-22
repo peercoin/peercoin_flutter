@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'wallettransaction.dart';
+part of 'wallet_transaction.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

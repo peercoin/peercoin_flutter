@@ -5,7 +5,7 @@ import 'package:peercoin/screens/auth_jail.dart';
 import 'package:peercoin/screens/changelog.dart';
 import 'package:peercoin/screens/setup/setup_data_feeds.dart';
 import 'package:peercoin/screens/wallet/import_paper_wallet.dart';
-import 'package:peercoin/screens/qrcodescanner.dart';
+import 'package:peercoin/screens/qrcode_scanner.dart';
 import 'package:peercoin/screens/server_add.dart';
 import 'package:peercoin/screens/server_settings.dart';
 import 'package:peercoin/screens/setup/setup_import_seed.dart';

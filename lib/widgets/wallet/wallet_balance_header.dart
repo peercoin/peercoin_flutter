@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/providers/appsettings.dart';
-import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/models/coin_wallet.dart';
+import 'package:peercoin/providers/app_settings.dart';
+import 'package:peercoin/providers/electrum_connection.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/wallet/wallet_home_connection.dart';
 import 'package:provider/provider.dart';
