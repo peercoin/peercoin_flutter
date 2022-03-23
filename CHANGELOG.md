@@ -1,5 +1,6 @@
 ### **0.8.7** (2022-03-xx)
 * Periodic backup reminders
+* Add currency: AUD
 
 ### **0.8.6** (2022-03-09)
 * Add language: Filipino

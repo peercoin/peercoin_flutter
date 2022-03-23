@@ -28,6 +28,7 @@ class PriceTicker {
 
   static Map currencySymbols = {
     'ARS': '\$',
+    'AUD': 'A\$',
     'BDT': '৳',
     'CNY': '¥',
     'BRL': 'R\$',
