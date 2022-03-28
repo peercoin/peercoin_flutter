@@ -60,9 +60,6 @@ class _WalletListScreenState extends State<WalletListScreen>
     await _appSettings.init(); //only required in home widget
     await _activeWallets.init();
     if (_initial) {
-      //toggle periodic reminders
-      PeriodicReminders.checkReminder(_appSettings, context);
-
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
@@ -74,12 +71,16 @@ class _WalletListScreenState extends State<WalletListScreen>
           },
         );
       }
+
       //toggle check for "whats new" changelog
       var _packageInfo = await PackageInfo.fromPlatform();
       if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
         await Navigator.of(context).pushNamed(Routes.ChangeLog);
         _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
       }
+      //toggle periodic reminders
+      await PeriodicReminders.checkReminder(_appSettings, context);
+
       //check if we just finished a scan
       var fromScan = false;
       if (ModalRoute.of(context)?.settings.arguments != null) {

@@ -1,7 +1,7 @@
 import 'package:peercoin/models/periodic_reminder_item.dart';
 
 class AvailablePeriodicReminderItems {
-  final Map<String, PeriodicReminderItem> availableReminderItems = {
+  static final Map<String, PeriodicReminderItem> availableReminderItems = {
     'donate': PeriodicReminderItem(
       id: 'donate',
       title: 'periodic_reminder_donate_title',
