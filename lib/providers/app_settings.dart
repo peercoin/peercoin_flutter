@@ -117,4 +117,13 @@ class AppSettings with ChangeNotifier {
     _appOptions.notificationActiveWallets = newList;
     notifyListeners();
   }
+
+  Map<String, DateTime> get periodicReminterItemsNextView {
+    return _appOptions.periodicReminterItemsNextView;
+  }
+
+  void setPeriodicReminterItemsNextView(Map<String, DateTime> newMap) {
+    _appOptions.periodicReminterItemsNextView = newMap;
+    notifyListeners();
+  }
 }

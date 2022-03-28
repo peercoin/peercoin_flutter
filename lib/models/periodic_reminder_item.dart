@@ -4,8 +4,6 @@ class PeriodicReminderItem {
   final String body;
   final String button;
   final Function buttonFunction;
-  DateTime nextNotification = DateTime(1970);
-  DateTime lastNotification = DateTime(1970);
 
   PeriodicReminderItem({
     required this.id,
