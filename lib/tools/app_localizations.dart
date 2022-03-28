@@ -41,6 +41,7 @@ class AppLocalizations {
     'pt': 'Português',
     'ro': 'Română',
     'ru': 'Русский',
+    'sv': 'Svenska',
     'th': 'ภาษาไทย (paasaa-tai)',
     'tr': 'Türkçe',
     'uk': 'Українська (Ukrajins’ka)',

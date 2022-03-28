@@ -48,6 +48,7 @@ class PriceTicker {
     'USD': '\$',
     'RON': 'L',
     'RUB': '₽',
+    'SEK': 'kr',
     'THB': '฿',
     'TRY': '₺',
     'TZS': 'TSh',
