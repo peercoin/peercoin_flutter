@@ -24,7 +24,8 @@ class PeriodicReminders {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(
+                    context); //TODO use button function - make donate or backup hint go places?
               },
               child: Text(
                 AppLocalizations.instance
