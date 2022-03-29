@@ -5,9 +5,9 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/providers/activewallets.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/models/coin_wallet.dart';
+import 'package:peercoin/providers/active_wallets.dart';
+import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/screens/about.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';

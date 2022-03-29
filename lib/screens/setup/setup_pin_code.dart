@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/providers/encryptedbox.dart';
+import 'package:peercoin/providers/encrypted_box.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +103,8 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                           inactiveThumbColor: Colors.grey,
                           onChanged: (newState) {
                             if (_biometricsAvailable == false) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text(
                                   AppLocalizations.instance
                                       .translate('setup_pin_no_biometrics'),

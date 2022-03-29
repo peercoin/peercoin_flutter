@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-part 'pendingNotifications.g.dart';
+part 'pending_notifications.g.dart';
 
 @HiveType(typeId: 7)
 class PendingNotification extends HiveObject {

@@ -5,8 +5,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:package_info/package_info.dart';
-import 'package:peercoin/models/availablecoins.dart';
-import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/models/available_coins.dart';
+import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:web_socket_channel/io.dart';
 

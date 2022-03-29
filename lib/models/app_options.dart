@@ -36,6 +36,9 @@ class AppOptionsStore extends HiveObject {
   @HiveField(8)
   List<String>? _notificationActiveWallets = [];
 
+  @HiveField(9, defaultValue: {})
+  Map<String, DateTime> _periodicReminterItemsNextView = {};
+
   AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
@@ -116,6 +119,15 @@ class AppOptionsStore extends HiveObject {
 
   set notificationActiveWallets(List<String> newList) {
     _notificationActiveWallets = newList;
+    save();
+  }
+
+  Map<String, DateTime> get periodicReminterItemsNextView {
+    return _periodicReminterItemsNextView;
+  }
+
+  set periodicReminterItemsNextView(Map<String, DateTime> newMap) {
+    _periodicReminterItemsNextView = newMap;
     save();
   }
 }

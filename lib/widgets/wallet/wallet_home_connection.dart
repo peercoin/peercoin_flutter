@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/electrumconnection.dart';
+import 'package:peercoin/providers/electrum_connection.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 

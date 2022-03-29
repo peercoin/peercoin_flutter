@@ -1,3 +1,8 @@
+### **0.8.7** (2022-03-29)
+* Periodic backup and donation reminders
+* Add language: Swedish
+* Add currency: AUD, SEK
+
 ### **0.8.6** (2022-03-09)
 * Add language: Filipino
 * Add currencies: PHP

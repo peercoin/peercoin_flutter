@@ -15,13 +15,13 @@ import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 
-import '../models/availablecoins.dart';
-import '../models/coinwallet.dart';
+import '../models/available_coins.dart';
+import '../models/coin_wallet.dart';
 import '../tools/notification.dart';
-import '../models/walletaddress.dart';
-import '../models/wallettransaction.dart';
-import '../models/walletutxo.dart';
-import '../providers/encryptedbox.dart';
+import '../models/wallet_address.dart';
+import '../models/wallet_transaction.dart';
+import '../models/wallet_utxo.dart';
+import 'encrypted_box.dart';
 
 class ActiveWallets with ChangeNotifier {
   final EncryptedBox _encryptedBox;

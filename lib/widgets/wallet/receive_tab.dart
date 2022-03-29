@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/availablecoins.dart';
+import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/models/coinwallet.dart';
+import 'package:peercoin/models/coin_wallet.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';

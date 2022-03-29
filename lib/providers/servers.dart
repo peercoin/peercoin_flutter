@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/server.dart';
-import 'package:peercoin/providers/encryptedbox.dart';
+import 'package:peercoin/providers/encrypted_box.dart';
 
 class Servers with ChangeNotifier {
   final EncryptedBox _encryptedBox;

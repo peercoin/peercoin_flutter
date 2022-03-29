@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/app_options.dart';
-import 'package:peercoin/providers/encryptedbox.dart';
+import 'package:peercoin/providers/encrypted_box.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings with ChangeNotifier {
@@ -115,6 +115,15 @@ class AppSettings with ChangeNotifier {
 
   void setNotificationActiveWallets(List<String> newList) {
     _appOptions.notificationActiveWallets = newList;
+    notifyListeners();
+  }
+
+  Map<String, DateTime> get periodicReminterItemsNextView {
+    return _appOptions.periodicReminterItemsNextView;
+  }
+
+  void setPeriodicReminterItemsNextView(Map<String, DateTime> newMap) {
+    _appOptions.periodicReminterItemsNextView = newMap;
     notifyListeners();
   }
 }

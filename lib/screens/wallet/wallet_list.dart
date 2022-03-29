@@ -4,14 +4,15 @@ import 'dart:io';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
-import 'package:peercoin/providers/appsettings.dart';
+import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/availablecoins.dart';
-import 'package:peercoin/models/coinwallet.dart';
-import 'package:peercoin/providers/activewallets.dart';
+import 'package:peercoin/models/available_coins.dart';
+import 'package:peercoin/models/coin_wallet.dart';
+import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/tools/backgroundsync.dart';
+import 'package:peercoin/tools/background_sync.dart';
+import 'package:peercoin/tools/periodic_reminders.dart';
 import 'package:peercoin/tools/price_ticker.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/wallet/new_wallet.dart';
@@ -70,12 +71,16 @@ class _WalletListScreenState extends State<WalletListScreen>
           },
         );
       }
+
       //toggle check for "whats new" changelog
       var _packageInfo = await PackageInfo.fromPlatform();
       if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
         await Navigator.of(context).pushNamed(Routes.ChangeLog);
         _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
       }
+      //toggle periodic reminders
+      await PeriodicReminders.checkReminder(_appSettings, context);
+
       //check if we just finished a scan
       var fromScan = false;
       if (ModalRoute.of(context)?.settings.arguments != null) {

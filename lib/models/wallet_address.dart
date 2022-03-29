@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-part 'walletaddress.g.dart';
+part 'wallet_address.g.dart';
 
 @HiveType(typeId: 2)
 class WalletAddress extends HiveObject {
