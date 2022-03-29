@@ -3,13 +3,11 @@ class PeriodicReminderItem {
   final String title;
   final String body;
   final String button;
-  final Function buttonFunction;
 
   PeriodicReminderItem({
     required this.id,
     required this.title,
     required this.body,
     required this.button,
-    required this.buttonFunction,
   });
 }

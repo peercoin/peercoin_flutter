@@ -1,5 +1,5 @@
-### **0.8.7** (2022-03-xx)
-* Periodic backup reminders
+### **0.8.7** (2022-03-29)
+* Periodic backup and donation reminders
 * Add language: Swedish
 * Add currency: AUD, SEK
 

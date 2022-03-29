@@ -3,6 +3,7 @@ import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/models/available_periodic_reminder_items.dart';
 import 'package:peercoin/models/periodic_reminder_item.dart';
 import 'package:peercoin/providers/app_settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'app_localizations.dart';
 
@@ -22,22 +23,25 @@ class PeriodicReminders {
             AppLocalizations.instance.translate(reminderItem.body),
           ),
           actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(
-                    context); //TODO use button function - make donate or backup hint go places?
-              },
-              child: Text(
-                AppLocalizations.instance
-                    .translate('server_settings_alert_cancel'),
+            if (reminderItem.id == 'donate')
+              TextButton(
+                onPressed: () async {
+                  var url = 'https://ppc.lol/fndtn/';
+                  await canLaunch(url)
+                      ? await launch(url)
+                      : throw 'Could not launch $url';
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  AppLocalizations.instance.translate(reminderItem.button),
+                ),
               ),
-            ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               child: Text(
-                AppLocalizations.instance.translate('continue'),
+                AppLocalizations.instance.translate('jail_dialog_button'),
               ),
             ),
           ],
