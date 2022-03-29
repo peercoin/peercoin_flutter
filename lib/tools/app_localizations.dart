@@ -19,8 +19,8 @@ class AppLocalizations {
   }
 
   static const Map<String, String> availableLocales = {
-    'ar': '(al arabiya) العربية',
     'en': 'English',
+    'ar': '(al arabiya) العربية',
     'bn': 'বাংলা (baɛṅlā)',
     'id': 'Bahasa Indonesia',
     'de': 'Deutsch',
