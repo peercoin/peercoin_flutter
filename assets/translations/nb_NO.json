@@ -252,7 +252,7 @@
     "setup_bg_sync_description": "Dette vil aktivere bakgrunnsvarsler for lommebøkene dine.",
     "setup_securebox_fail": "Vi er veldig lei oss.\nEnheten din støtter ikke en sikker nok måte å oppbevare nøkler på.",
     "setup_text1": "Hvis du allerede har opprettet en lommebok og du fortsatt har gjenopprettingsfrasen din, velg",
-    "setup_save_text1": "Følgende liste av ord heter Gjenopprettingsfrase. Det er et komplekst passord som vil gi full tilgang til lommeboken din og alle myntene dine.",
+    "setup_save_text1": "Følgende liste av ord heter en gjenopprettingsfrase. Det er et komplekst passord som vil gi full tilgang til lommeboken din og alle myntene dine.",
     "transactions_fee": "-$amount\nGebyr",
     "tx_rejected": "Transaksjonen ble avvist av nettverket. Prøv på nytt.",
     "tx_value": "Verdi",
