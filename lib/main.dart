@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -96,24 +96,26 @@ void main() async {
     );
   }
 
-  //init logger
-  await FlutterLogs.initLogs(
-    logLevelsEnabled: [
-      LogLevel.INFO,
-      LogLevel.WARNING,
-      LogLevel.ERROR,
-      LogLevel.SEVERE
-    ],
-    timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
-    directoryStructure: DirectoryStructure.FOR_DATE,
-    logFileExtension: LogFileExtension.LOG,
-    logsWriteDirectoryName: 'MyLogs',
-    logsExportDirectoryName: 'MyLogs/Exported',
-    debugFileOperations: true,
-    isDebuggable: true,
-  );
+  if (!kIsWeb) {
+    //init logger
+    await FlutterLogs.initLogs(
+      logLevelsEnabled: [
+        LogLevel.INFO,
+        LogLevel.WARNING,
+        LogLevel.ERROR,
+        LogLevel.SEVERE
+      ],
+      timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
+      directoryStructure: DirectoryStructure.FOR_DATE,
+      logFileExtension: LogFileExtension.LOG,
+      logsWriteDirectoryName: 'MyLogs',
+      logsExportDirectoryName: 'MyLogs/Exported',
+      debugFileOperations: true,
+      isDebuggable: true,
+    );
 
-  LoggerWrapper.logInfo('main', 'initLogs', 'Init logs..');
+    LoggerWrapper.logInfo('main', 'initLogs', 'Init logs..');
+  }
 
   //run
   runApp(PeercoinApp());

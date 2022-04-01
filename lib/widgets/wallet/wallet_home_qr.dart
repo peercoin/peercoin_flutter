@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart'; //TODO build wrapper for share, share on web just opens an email program which is not good
 
 import '../../tools/app_localizations.dart';
 import '../buttons.dart';
