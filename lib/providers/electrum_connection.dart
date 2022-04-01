@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_logs/flutter_logs.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/servers.dart';

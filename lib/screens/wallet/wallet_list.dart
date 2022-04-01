@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/models/available_coins.dart';
