@@ -31,6 +31,7 @@ class PriceTicker {
     'AUD': 'A\$',
     'BDT': '৳',
     'CNY': '¥',
+    'DKK': 'Kr.',
     'BRL': 'R\$',
     'EUR': '€',
     'GBP': '£',
