@@ -4,8 +4,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:web_socket_channel/io.dart';
-
+import 'package:web_socket_channel/web_socket_channel.dart';
 import '../models/available_coins.dart';
 import '../tools/logger_wrapper.dart';
 import 'active_wallets.dart';
@@ -21,7 +20,7 @@ class ElectrumConnection with ChangeNotifier {
 
   Timer? _pingTimer;
   Timer? _reconnectTimer;
-  IOWebSocketChannel? _connection;
+  WebSocketChannel? _connection;
   final ActiveWallets _activeWallets;
   ElectrumConnectionState _connectionState = ElectrumConnectionState.waiting;
   final Servers _servers;
@@ -130,8 +129,8 @@ class ElectrumConnection with ChangeNotifier {
     );
 
     try {
-      _connection = IOWebSocketChannel.connect(
-        _serverUrl,
+      _connection = WebSocketChannel.connect(
+        Uri.parse(_serverUrl),
       );
     } catch (e) {
       _connectionAttempt++;
