@@ -275,5 +275,13 @@
     "currency_PKR": "Pakistansk rupi",
     "currency_KES": "Kenyansk shilling",
     "currency_JPY": "Japansk yen",
-    "currency_THB": "Thailandsk baht"
+    "currency_THB": "Thailandsk baht",
+    "currency_AUD": "Australsk dollar",
+    "currency_PHP": "Filippinsk peso",
+    "periodic_reminder_donate_body": "Denne appen er utviklet av Peercoin Foundation.\nVurder en donasjon for å støtte utviklingen av Peercoin og denne appen.",
+    "currency_SEK": "Svensk krone",
+    "periodic_reminder_donate_title": "Donasjonspåminnelse",
+    "periodic_reminder_backup_title": "Påminnelse om Sikkerhetskopiering",
+    "periodic_reminder_backup_body": "Oppbevar en sikkerhetskopi av gjenopprettingsfrasen din på et trygt sted for å unngå å miste tilgangen til myntene dine.",
+    "periodic_reminder_backup_button": "Åpne Stiftelsen sin Nettside"
 }
