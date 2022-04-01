@@ -1,24 +1,24 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/models/wallet_transaction.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/tools/price_ticker.dart';
-import 'package:peercoin/widgets/wallet/addresses_tab.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/wallet/receive_tab.dart';
-import 'package:peercoin/widgets/wallet/send_tab.dart';
-import 'package:peercoin/widgets/wallet/transactions_list.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/coin_wallet.dart';
+import '../../models/wallet_transaction.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../providers/electrum_connection.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
+import '../../tools/price_ticker.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/wallet/addresses_tab.dart';
+import '../../widgets/wallet/receive_tab.dart';
+import '../../widgets/wallet/send_tab.dart';
+import '../../widgets/wallet/transactions_list.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override

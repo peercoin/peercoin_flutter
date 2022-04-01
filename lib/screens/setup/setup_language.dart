@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../tools/app_localizations.dart';
 
 class SetupLanguageScreen extends StatefulWidget {
   const SetupLanguageScreen({Key? key}) : super(key: key);

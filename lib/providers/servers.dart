@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:peercoin/models/server.dart';
-import 'package:peercoin/providers/encrypted_box.dart';
 
+import '../models/server.dart';
 import '../tools/logger_wrapper.dart';
+import 'encrypted_box.dart';
 
 class Servers with ChangeNotifier {
   final EncryptedBox _encryptedBox;

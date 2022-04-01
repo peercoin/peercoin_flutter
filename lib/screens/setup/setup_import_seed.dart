@@ -1,16 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
-import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/active_wallets.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
+import '../../widgets/buttons.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
   @override

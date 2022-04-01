@@ -1,13 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
 import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../providers/app_settings.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../widgets/buttons.dart';
 
 class SetupDataFeedsScreen extends StatefulWidget {
   const SetupDataFeedsScreen({Key? key}) : super(key: key);

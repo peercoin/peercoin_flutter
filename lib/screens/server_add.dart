@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/server.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/providers/servers.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../models/available_coins.dart';
+import '../models/server.dart';
+import '../providers/electrum_connection.dart';
+import '../providers/servers.dart';
+import '../tools/app_localizations.dart';
 import '../tools/logger_wrapper.dart';
+import '../widgets/loading_indicator.dart';
 
 class ServerAddScreen extends StatefulWidget {
   @override

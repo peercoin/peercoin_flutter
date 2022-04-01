@@ -2,17 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/models/wallet_address.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/screens/wallet/wallet_home.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/auth.dart';
 import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/available_coins.dart';
+import '../../models/coin.dart';
+import '../../models/wallet_address.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../screens/wallet/wallet_home.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/auth.dart';
 import '../double_tab_to_clipboard.dart';
 
 class AddressTab extends StatefulWidget {
@@ -356,7 +356,10 @@ class _AddressTabState extends State<AddressTab> {
                       color: Theme.of(context).backgroundColor,
                     ),
                     onTap: () => widget.changeIndex(
-                        Tabs.send, addr.address, addr.addressBookName),
+                      Tabs.send,
+                      addr.address,
+                      addr.addressBookName,
+                    ),
                   ),
                   IconSlideAction(
                       caption: AppLocalizations.instance

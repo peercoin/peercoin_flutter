@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/tools/price_ticker.dart';
-import 'package:peercoin/widgets/wallet/wallet_home_connection.dart';
 import 'package:provider/provider.dart';
+
+import '/../models/coin_wallet.dart';
+import '/../providers/app_settings.dart';
+import '/../providers/electrum_connection.dart';
+import '/../tools/price_ticker.dart';
+import '/../widgets/wallet/wallet_home_connection.dart';
 
 class WalletBalanceHeader extends StatelessWidget {
   final ElectrumConnectionState _connectionState;

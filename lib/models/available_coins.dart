@@ -1,5 +1,5 @@
 import 'package:coinslib/coinslib.dart';
-import 'package:peercoin/models/coin.dart';
+import 'coin.dart';
 
 class AvailableCoins {
   final Map<String, Coin> _availableCoinList = {

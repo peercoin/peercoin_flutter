@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/tools/app_localizations.dart';
+
+import '../tools/app_localizations.dart';
 
 class DoubleTabToClipboard extends StatelessWidget {
   final Widget child;

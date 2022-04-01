@@ -5,23 +5,23 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:peercoin/models/wallet_address.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/screens/wallet/wallet_home.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/tools/utf8_text_field.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
 import 'package:provider/provider.dart';
 
+import '/../models/wallet_address.dart';
+import '/../providers/app_settings.dart';
+import '/../screens/wallet/wallet_home.dart';
+import '/../tools/app_localizations.dart';
+import '/../models/available_coins.dart';
+import '/../models/coin.dart';
+import '/../models/coin_wallet.dart';
+import '/../providers/active_wallets.dart';
+import '/../providers/electrum_connection.dart';
+import '/../tools/app_routes.dart';
+import '/../tools/auth.dart';
+import '/../tools/utf8_text_field.dart';
+import '/../widgets/buttons.dart';
+import '/../widgets/service_container.dart';
+import '/../widgets/wallet/wallet_balance_header.dart';
 import '../../tools/logger_wrapper.dart';
 
 class SendTab extends StatefulWidget {

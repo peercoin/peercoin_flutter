@@ -4,12 +4,12 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/servers.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../models/available_coins.dart';
 import '../tools/logger_wrapper.dart';
+import 'active_wallets.dart';
+import 'servers.dart';
 
 enum ElectrumConnectionState { waiting, connected, offline }
 

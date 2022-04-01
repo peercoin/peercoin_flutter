@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
-import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
-import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:share/share.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '/../providers/active_wallets.dart';
+import '/../tools/app_localizations.dart';
+import '/../models/available_coins.dart';
+import '/../models/coin.dart';
+import '/../models/coin_wallet.dart';
+import '/../widgets/buttons.dart';
+import '/../widgets/double_tab_to_clipboard.dart';
+import '/../widgets/service_container.dart';
+import '/../widgets/wallet/wallet_balance_header.dart';
+import '/../widgets/wallet/wallet_home_qr.dart';
 
 class ReceiveTab extends StatefulWidget {
   final _unusedAddress;

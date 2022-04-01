@@ -5,22 +5,22 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/screens/about.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
-import 'package:peercoin/widgets/settings/settings_auth.dart';
-import 'package:peercoin/widgets/settings/settings_price_ticker.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
+import '../models/coin_wallet.dart';
+import '../providers/active_wallets.dart';
+import '../providers/app_settings.dart';
+import '../tools/app_localizations.dart';
+import '../tools/app_routes.dart';
+import '../tools/auth.dart';
 import '../tools/logger_wrapper.dart';
+import '../widgets/buttons.dart';
+import '../widgets/double_tab_to_clipboard.dart';
+import '../widgets/settings/settings_auth.dart';
+import '../widgets/settings/settings_price_ticker.dart';
+import 'about.dart';
 
 class AppSettingsScreen extends StatefulWidget {
   @override

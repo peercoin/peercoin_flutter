@@ -9,13 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 
 import '../models/available_coins.dart';
 import '../models/coin_wallet.dart';
+import '../tools/app_localizations.dart';
 import '../tools/logger_wrapper.dart';
 import '../tools/notification.dart';
 import '../models/wallet_address.dart';

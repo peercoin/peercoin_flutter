@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/available_coins.dart';
+import '../../models/coin.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/auth.dart';
 
 class NewWalletDialog extends StatefulWidget {
   @override

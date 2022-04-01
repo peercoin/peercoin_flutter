@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:peercoin/models/available_periodic_reminder_items.dart';
-import 'package:peercoin/models/periodic_reminder_item.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../models/available_periodic_reminder_items.dart';
+import '../models/periodic_reminder_item.dart';
+import '../providers/app_settings.dart';
 import 'app_localizations.dart';
 import 'logger_wrapper.dart';
 

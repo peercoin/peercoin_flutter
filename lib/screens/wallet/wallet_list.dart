@@ -1,23 +1,24 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:collection/collection.dart' show IterableExtension;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/tools/background_sync.dart';
-import 'package:peercoin/tools/periodic_reminders.dart';
-import 'package:peercoin/tools/price_ticker.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/wallet/new_wallet.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+
+import '../../models/available_coins.dart';
+import '../../models/coin_wallet.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/auth.dart';
+import '../../tools/background_sync.dart';
+import '../../tools/periodic_reminders.dart';
+import '../../tools/price_ticker.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/wallet/new_wallet.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;

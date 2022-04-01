@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/encrypted_box.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/app_settings.dart';
+import '../providers/encrypted_box.dart';
+import '../tools/app_localizations.dart';
+import '../tools/app_routes.dart';
+import '../tools/auth.dart';
 
 class AuthJailScreen extends StatefulWidget {
   @override

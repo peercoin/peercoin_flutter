@@ -3,14 +3,15 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
 import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+
+import '../../providers/active_wallets.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../widgets/buttons.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
   @override

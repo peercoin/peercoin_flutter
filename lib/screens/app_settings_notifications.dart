@@ -1,12 +1,13 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/background_sync.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
+
+import '../models/coin_wallet.dart';
+import '../providers/active_wallets.dart';
+import '../providers/app_settings.dart';
+import '../tools/app_localizations.dart';
+import '../tools/background_sync.dart';
+import '../widgets/buttons.dart';
 
 class AppSettingsNotificationsScreen extends StatefulWidget {
   const AppSettingsNotificationsScreen({Key? key}) : super(key: key);

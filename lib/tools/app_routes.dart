@@ -1,22 +1,23 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/app_settings_notifications.dart';
-import 'package:peercoin/screens/app_settings_screen.dart';
-import 'package:peercoin/screens/auth_jail.dart';
-import 'package:peercoin/screens/changelog.dart';
-import 'package:peercoin/screens/setup/setup_data_feeds.dart';
-import 'package:peercoin/screens/wallet/import_paper_wallet.dart';
-import 'package:peercoin/screens/qrcode_scanner.dart';
-import 'package:peercoin/screens/server_add.dart';
-import 'package:peercoin/screens/server_settings.dart';
-import 'package:peercoin/screens/setup/setup_import_seed.dart';
-import 'package:peercoin/screens/setup/setup_language.dart';
-import 'package:peercoin/screens/setup/setup_pin_code.dart';
-import 'package:peercoin/screens/setup/setup_create_wallet.dart';
-import 'package:peercoin/screens/wallet/import_wif.dart';
-import 'package:peercoin/screens/wallet/transaction_details.dart';
-import 'package:peercoin/screens/wallet/wallet_home.dart';
-import 'package:peercoin/screens/wallet/wallet_import_scan.dart';
-import 'package:peercoin/screens/wallet/wallet_list.dart';
+
+import '../screens/app_settings_notifications.dart';
+import '../screens/app_settings_screen.dart';
+import '../screens/auth_jail.dart';
+import '../screens/changelog.dart';
+import '../screens/qrcode_scanner.dart';
+import '../screens/server_add.dart';
+import '../screens/server_settings.dart';
+import '../screens/setup/setup_create_wallet.dart';
+import '../screens/setup/setup_data_feeds.dart';
+import '../screens/setup/setup_import_seed.dart';
+import '../screens/setup/setup_language.dart';
+import '../screens/setup/setup_pin_code.dart';
+import '../screens/wallet/import_paper_wallet.dart';
+import '../screens/wallet/import_wif.dart';
+import '../screens/wallet/transaction_details.dart';
+import '../screens/wallet/wallet_home.dart';
+import '../screens/wallet/wallet_import_scan.dart';
+import '../screens/wallet/wallet_list.dart';
 
 class Routes {
   // Route name constants
