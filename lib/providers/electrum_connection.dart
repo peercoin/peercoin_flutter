@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:web_socket_channel/io.dart';
+
+import '../tools/logger_wrapper.dart';
 
 enum ElectrumConnectionState { waiting, connected, offline }
 
@@ -74,7 +75,7 @@ class ElectrumConnection with ChangeNotifier {
       _coinName = walletName;
       connectionState = ElectrumConnectionState.waiting;
       _scanMode = scanMode;
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ElectrumConnection',
         'init',
         'init server connection',
@@ -90,7 +91,7 @@ class ElectrumConnection with ChangeNotifier {
       stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        FlutterLogs.logError(
+        LoggerWrapper.logError(
           'ElectrumConnection',
           'init',
           error.message,
@@ -98,7 +99,7 @@ class ElectrumConnection with ChangeNotifier {
         _connectionAttempt++;
       }, onDone: () {
         cleanUpOnDone();
-        FlutterLogs.logInfo('ElectrumConnection', 'init', 'connection done');
+        LoggerWrapper.logInfo('ElectrumConnection', 'init', 'connection done');
       });
       tryHandShake();
       startPingTimer();
@@ -115,14 +116,14 @@ class ElectrumConnection with ChangeNotifier {
     if (_connectionAttempt > _availableServers.length - 1) {
       _connectionAttempt = 0;
     }
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ElectrumConnection',
       'connect',
       'connection attempt $_connectionAttempt',
     );
 
     _serverUrl = _availableServers[_connectionAttempt];
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ElectrumConnection',
       'connect',
       'connecting to $_serverUrl',
@@ -134,7 +135,7 @@ class ElectrumConnection with ChangeNotifier {
       );
     } catch (e) {
       _connectionAttempt++;
-      FlutterLogs.logError(
+      LoggerWrapper.logError(
         'ElectrumConnection',
         'connect',
         e.toString(),
@@ -221,14 +222,14 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void replyHandler(reply) {
-    FlutterLogs.logInfo('ElectrumConnection', 'replyHandler', reply);
+    LoggerWrapper.logInfo('ElectrumConnection', 'replyHandler', reply);
     var decoded = json.decode(reply);
     var id = decoded['id'];
     var idString = id.toString();
     var result = decoded['result'];
 
     if (decoded['id'] != null) {
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ElectrumConnection',
         'replyHandler',
         'id: $idString',
@@ -304,7 +305,7 @@ class ElectrumConnection with ChangeNotifier {
       sendMessage('blockchain.headers.subscribe', 'blocks');
     } else {
       //wrong genesis!
-      FlutterLogs.logWarn(
+      LoggerWrapper.logWarn(
         'ElectrumConnection',
         'handleFeatures',
         'wrong genesis! disconnecting.',
@@ -324,7 +325,7 @@ class ElectrumConnection with ChangeNotifier {
       //emulate scripthash subscribe push
       var hash = _addresses.entries
           .firstWhereOrNull((element) => element.key == address)!;
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ElectrumConnection',
         'handleAddressStatus',
         'status changed! $oldStatus, $newStatus',
@@ -344,7 +345,7 @@ class ElectrumConnection with ChangeNotifier {
           //address pointer
           _maxAddressDepth++;
         }
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
           'ElectrumConnection',
           'handleAddressStatus',
           'writing $address to wallet',
@@ -362,7 +363,7 @@ class ElectrumConnection with ChangeNotifier {
 
     if (_depthPointer == 1 && _queryDepth[currentPointer]! < _maxChainDepth ||
         _depthPointer == 2 && _queryDepth[currentPointer]! < _maxAddressDepth) {
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ElectrumConnection',
         'subscribeNextDerivedAddress',
         '$_queryDepth',
@@ -375,7 +376,7 @@ class ElectrumConnection with ChangeNotifier {
         _queryDepth['address']!,
       );
 
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ElectrumConnection',
         'subscribeNextDerivedAddress',
         '$_nextAddr',
@@ -388,7 +389,7 @@ class ElectrumConnection with ChangeNotifier {
       var _number = _queryDepth[currentPointer] as int;
       _queryDepth[currentPointer] = _number + 1;
     } else if (_depthPointer < _queryDepth.keys.length - 1) {
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ElectrumConnection',
         'subscribeNextDerivedAddress',
         'move pointer',
@@ -421,7 +422,7 @@ class ElectrumConnection with ChangeNotifier {
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
         orElse: () => null);
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ElectrumConnection',
       'handleScriptHashSubscribeNotification',
       'update for $hashId',
@@ -498,7 +499,7 @@ class ElectrumConnection with ChangeNotifier {
     if (tx != null) {
       await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
     } else {
-      FlutterLogs.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
+      LoggerWrapper.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
       //TODO figure out what to do in that case ...
       //if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
     }
@@ -507,7 +508,7 @@ class ElectrumConnection with ChangeNotifier {
   void handleBroadcast(String id, String result) async {
     var txId = id.replaceFirst('broadcast_', '');
     if (result == '1') {
-      FlutterLogs.logWarn(
+      LoggerWrapper.logWarn(
         'ElectrumConnection',
         'handleBroadcast',
         'tx rejected by server',

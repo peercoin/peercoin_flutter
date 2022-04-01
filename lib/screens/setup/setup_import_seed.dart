@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/unencrypted_options.dart';
 import 'package:peercoin/screens/setup/setup.dart';
@@ -10,6 +9,8 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
+
+import '../../tools/logger_wrapper.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     try {
       await _activeWallets.init();
     } catch (e) {
-      FlutterLogs.logError(
+      LoggerWrapper.logError(
         'SetupImportSeed',
         'createWallet',
         e.toString(),

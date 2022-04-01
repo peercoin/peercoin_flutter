@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_logs/flutter_logs.dart';
+
+import 'logger_wrapper.dart';
 
 class AppLocalizations {
   AppLocalizations(this.locale);
@@ -87,7 +88,7 @@ class AppLocalizations {
       jsonString =
           await rootBundle.loadString(await _getFilePath(localeToBeLoaded));
     } catch (e) {
-      FlutterLogs.logError(
+      LoggerWrapper.logError(
         'AppLocalizations',
         '_loadLocalizedStrings',
         e.toString(),
@@ -115,7 +116,7 @@ class AppLocalizations {
 
     arguments.forEach((argumentKey, value) {
       if (value == null) {
-        FlutterLogs.logWarn(
+        LoggerWrapper.logWarn(
           'AppLocalizations',
           'translate',
           'Value for "$argumentKey" is null in call of translate(\'$key\')',

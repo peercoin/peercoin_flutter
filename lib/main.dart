@@ -11,6 +11,7 @@ import 'package:peercoin/models/server.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/providers/servers.dart';
 import 'package:peercoin/screens/auth_jail.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/tools/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,7 +74,7 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     if (payload != null) {
-      FlutterLogs.logInfo('notification', 'payload', payload);
+      LoggerWrapper.logInfo('notification', 'payload', payload);
     }
   });
 
@@ -112,7 +113,7 @@ void main() async {
     isDebuggable: true,
   );
 
-  FlutterLogs.logInfo('main', 'initLogs', 'Init logs..');
+  LoggerWrapper.logInfo('main', 'initLogs', 'Init logs..');
 
   //run
   runApp(PeercoinApp());

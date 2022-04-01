@@ -7,7 +7,6 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/tools/app_localizations.dart';
@@ -17,6 +16,7 @@ import 'package:hex/hex.dart';
 
 import '../models/available_coins.dart';
 import '../models/coin_wallet.dart';
+import '../tools/logger_wrapper.dart';
 import '../tools/notification.dart';
 import '../models/wallet_address.dart';
 import '../models/wallet_transaction.dart';
@@ -105,7 +105,7 @@ class ActiveWallets with ChangeNotifier {
       return hdWallet.address;
     } else {
       var derivePath = "m/$account'/$chain/$address";
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ActiveWallets',
         'getAddressFromDerivationPath',
         derivePath,
@@ -286,7 +286,7 @@ class ActiveWallets with ChangeNotifier {
   Future<void> putTx(String identifier, String address, Map tx,
       [bool scanMode = false]) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    FlutterLogs.logInfo('ActiveWallets', 'putTx', '$address puttx: $tx');
+    LoggerWrapper.logInfo('ActiveWallets', 'putTx', '$address puttx: $tx');
 
     if (scanMode == true) {
       //write phantom tx that are not displayed in tx list but known to the wallet
@@ -387,7 +387,7 @@ class ActiveWallets with ChangeNotifier {
               try {
                 parsedMessage = utf8.decode(script[1]);
               } catch (e) {
-                FlutterLogs.logError(
+                LoggerWrapper.logError(
                   'ActiveWallets',
                   'putTx',
                   e.toString(),
@@ -469,7 +469,7 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> updateAddressStatus(
       String identifier, String address, String? status) async {
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ActiveWallets',
       'updateAddressStatus',
       'updating $address to $status',
@@ -548,13 +548,13 @@ class ActiveWallets with ChangeNotifier {
     var _hex = '';
     var _destroyedChange = 0;
 
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ActiveWallets',
       'buildTransaction',
       'firstPass: $firstPass',
     );
 
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ActiveWallets',
       'buildTransaction',
       'sending $amount to $address',
@@ -564,12 +564,12 @@ class ActiveWallets with ChangeNotifier {
     var _needsChange = true;
     if (_txAmount == openWallet.balance) {
       _needsChange = false;
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ActiveWallets',
         'buildTransaction',
         'needschange $_needsChange, fee $fee',
       );
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'ActiveWallets',
         'buildTransaction',
         'change needed $_txAmount - $fee',
@@ -588,7 +588,7 @@ class ActiveWallets with ChangeNotifier {
             if (_totalInputValue <= (_txAmount + fee)) {
               _totalInputValue += utxo.value;
               inputTx.add(utxo);
-              FlutterLogs.logInfo(
+              LoggerWrapper.logInfo(
                 'ActiveWallets',
                 'buildTransaction',
                 'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
@@ -605,7 +605,7 @@ class ActiveWallets with ChangeNotifier {
         tx.setVersion(coinParams.txVersion);
         if (_needsChange == true) {
           var changeAmount = _totalInputValue - _txAmount - fee;
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
             'change amount $changeAmount, tx amount $_txAmount, fee $fee',
@@ -653,7 +653,7 @@ class ActiveWallets with ChangeNotifier {
         var keyMap = await generateKeyMap();
         //sign
         keyMap.forEach((key, value) {
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
             "signing - ${value["addr"]}",
@@ -670,7 +670,7 @@ class ActiveWallets with ChangeNotifier {
         var asDouble = double.parse(number) * 1000000;
         var requiredFeeInSatoshis = asDouble.toInt();
 
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
           'ActiveWallets',
           'buildTransaction',
           'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
@@ -687,7 +687,7 @@ class ActiveWallets with ChangeNotifier {
           );
         } else {
           //second pass
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
             'intermediate size: ${intermediate.txSize}',

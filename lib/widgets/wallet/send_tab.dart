@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/wallet_address.dart';
 import 'package:peercoin/providers/app_settings.dart';
@@ -22,6 +21,8 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
 import 'package:provider/provider.dart';
+
+import '../../tools/logger_wrapper.dart';
 
 class SendTab extends StatefulWidget {
   final Function _changeIndex;
@@ -225,7 +226,7 @@ class _SendTabState extends State<SendTab> {
                           //navigate back to tx list
                           widget._changeIndex(Tabs.transactions);
                         } catch (e) {
-                          FlutterLogs.logError(
+                          LoggerWrapper.logError(
                             'SendTab',
                             'showTransactionConfirmation',
                             e.toString(),
@@ -400,7 +401,7 @@ class _SendTabState extends State<SendTab> {
                         amountController.text = convertedValue;
                         var txValueInSatoshis =
                             (double.parse(convertedValue) * 1000000).toInt();
-                        FlutterLogs.logInfo(
+                        LoggerWrapper.logInfo(
                           'SendTab',
                           'send_amount',
                           'req value $txValueInSatoshis - ${_wallet.balance}',

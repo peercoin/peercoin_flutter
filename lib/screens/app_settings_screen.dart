@@ -20,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
+import '../tools/logger_wrapper.dart';
+
 class AppSettingsScreen extends StatefulWidget {
   @override
   _AppSettingsScreenState createState() => _AppSettingsScreenState();
@@ -80,23 +82,23 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           externalDirectory = await getExternalStorageDirectory();
         }
 
-        FlutterLogs.logInfo('AppSettingsScreen', 'found',
+        LoggerWrapper.logInfo('AppSettingsScreen', 'found',
             'External Storage:$externalDirectory');
 
         var file = File('${externalDirectory!.path}/$zipName');
 
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
             'AppSettingsScreen', 'path', 'Path: \n${file.path}');
 
         if (file.existsSync()) {
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'AppSettingsScreen',
             'existsSync',
             'Logs zip found, opening Share overlay',
           );
           await Share.shareFiles([file.path]);
         } else {
-          FlutterLogs.logError(
+          LoggerWrapper.logError(
             'AppSettingsScreen',
             'existsSync',
             'File not found in storage.',

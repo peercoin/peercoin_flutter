@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:peercoin/providers/unencrypted_options.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -18,6 +17,8 @@ import 'package:peercoin/widgets/wallet/receive_tab.dart';
 import 'package:peercoin/widgets/wallet/send_tab.dart';
 import 'package:peercoin/widgets/wallet/transactions_list.dart';
 import 'package:provider/provider.dart';
+
+import '../../tools/logger_wrapper.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
@@ -146,7 +147,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
       if (_connectionProvider!.latestBlock > _latestBlock) {
         //new block
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
           'WalletHome',
           'didChangeDependencies',
           'new block ${_connectionProvider!.latestBlock}',
@@ -159,7 +160,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 element.timestamp != -1 ||
             element.timestamp == null);
         unconfirmedTx.forEach((element) {
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'WalletHome',
             'didChangeDependencies',
             'requesting update for ${element.txid}',

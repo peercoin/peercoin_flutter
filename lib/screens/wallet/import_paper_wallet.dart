@@ -1,6 +1,5 @@
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/coin.dart';
 import 'package:peercoin/providers/active_wallets.dart';
@@ -10,6 +9,8 @@ import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
+
+import '../../tools/logger_wrapper.dart';
 
 class ImportPaperWalletScreen extends StatefulWidget {
   @override
@@ -227,7 +228,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ));
                       Navigator.of(context).pop();
                     } catch (e) {
-                      FlutterLogs.logError(
+                      LoggerWrapper.logError(
                         'ImportPaperWallet',
                         'emptyWallet',
                         e.toString(),
@@ -251,7 +252,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   Future<void> buildImportTx([int fee = 0, bool dryRun = true]) async {
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ImportPaperWallet',
       'buildImportTx',
       'fee $fee - dryRun $dryRun',
@@ -279,7 +280,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     var asDouble = double.parse(number) * 1000000;
     var requiredFeeInSatoshis = asDouble.toInt();
 
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'ImportPaperWallet',
       'buildImportTx',
       'size ${intermediate.txSize}',
