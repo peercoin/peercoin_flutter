@@ -79,7 +79,11 @@ class _WalletListScreenState extends State<WalletListScreen>
         _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
       }
       //toggle periodic reminders
-      await PeriodicReminders.checkReminder(_appSettings, context);
+      var _walletValues = await _activeWallets.activeWalletsValues;
+      if (_walletValues.isNotEmpty) {
+        //don't show for users with no wallets
+        await PeriodicReminders.checkReminder(_appSettings, context);
+      }
 
       //check if we just finished a scan
       var fromScan = false;
