@@ -275,5 +275,13 @@
     "transactions_none": "Inga transaktioner ännu",
     "tx_rejected": "Transaktionen avvisades av nätverket. Försök igen.",
     "wallet_rescan_content": "Skannar om plånboken. Om du har problem med transaktioner eller belopp, kan detta vara till hjälp.\nDetta kan ta lite tid.",
-    "wallet_value_alert_content": "Att förvara mynt av så högt värde i en mobilplånbok är riskabelt.\nÖverväg att flytta dina mynt till en hårdvaruplånbok eller annan kylförvaring."
+    "wallet_value_alert_content": "Att förvara mynt av så högt värde i en mobilplånbok är riskabelt.\nÖverväg att flytta dina mynt till en hårdvaruplånbok eller annan kylförvaring.",
+    "currency_AUD": "Australiensiska dollar",
+    "currency_PHP": "Filippinska peso",
+    "currency_SEK": "Svenska kronor",
+    "periodic_reminder_donate_title": "Donationspåminnelse",
+    "periodic_reminder_donate_body": "Denna app är utvecklad av Peercoin Foundation.\nÖverväg en donation för att stödja utvecklingen av Peercoin och den här appen.",
+    "periodic_reminder_backup_title": "Påminnelse om Säkerhetskopiering",
+    "periodic_reminder_backup_body": "Förvara en säkerhetskopia av din återställningsfras på ett säkert ställe för att undvika att förlora åtkomst till dina mynt.",
+    "periodic_reminder_backup_button": "Öppna Stiftelsens Webbplats"
 }
