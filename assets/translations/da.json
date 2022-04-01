@@ -275,5 +275,13 @@
     "send_enter_address": "Indtast venligst en adresse",
     "send_total": "I alt $amount $letter_code",
     "server_add_no_wss": "Skal starte med wss://\nAndre protokoller understøttes ikke i øjeblikket",
-    "server_settings_alert_hardcoded_content": "Hardkodede servere kan ikke slettes, kun deaktiveres."
+    "server_settings_alert_hardcoded_content": "Hardkodede servere kan ikke slettes, kun deaktiveres.",
+    "currency_PHP": "Filippinsk peso",
+    "currency_SEK": "Svensk krone",
+    "periodic_reminder_donate_title": "Donationspåmindelse",
+    "periodic_reminder_backup_body": "Opbevar en sikkerhedskopi af din gendannelsessætning på et sikkert sted for at undgå at miste adgangen til dine mønter.",
+    "periodic_reminder_backup_button": "Åbn Fondens Hjemmeside",
+    "periodic_reminder_backup_title": "Backup Påmindelse",
+    "currency_AUD": "Australsk dollar",
+    "periodic_reminder_donate_body": "Denne app er udviklet af Peercoin Foundation.\nOvervej en donation for at støtte udviklingen af Peercoin og denne app."
 }
