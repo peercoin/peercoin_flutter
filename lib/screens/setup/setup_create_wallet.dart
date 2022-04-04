@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../providers/active_wallets.dart';
 import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
+import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
-    await Share.share(seed);
+    await ShareWrapper.share(seed);
     Timer(
       Duration(seconds: 1),
       () => setState(() {

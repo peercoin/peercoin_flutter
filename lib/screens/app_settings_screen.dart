@@ -16,6 +16,7 @@ import '../tools/app_localizations.dart';
 import '../tools/app_routes.dart';
 import '../tools/auth.dart';
 import '../tools/logger_wrapper.dart';
+import '../tools/share_wrapper.dart';
 import '../widgets/buttons.dart';
 import '../widgets/double_tab_to_clipboard.dart';
 import '../widgets/settings/settings_auth.dart';
@@ -314,7 +315,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             ),
                             SizedBox(height: 20),
                             PeerButton(
-                              action: () => Share.share(_seedPhrase),
+                              action: () => ShareWrapper.share(_seedPhrase),
                               text: AppLocalizations.instance
                                   .translate('app_settings_shareseed'),
                             )

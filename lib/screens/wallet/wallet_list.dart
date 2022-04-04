@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
@@ -17,6 +16,7 @@ import '../../tools/auth.dart';
 import '../../tools/background_sync.dart';
 import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
+import '../../tools/share_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/wallet/new_wallet.dart';
 
@@ -224,7 +224,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                             ),
                           ),
                           child: GestureDetector(
-                            onTap: () => Share.share(
+                            onTap: () => ShareWrapper.share(
                               Platform.isAndroid
                                   ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
                                   : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',

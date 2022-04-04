@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../tools/share_wrapper.dart';
 import '/../providers/active_wallets.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/available_coins.dart';
@@ -244,7 +244,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                               widget._unusedAddress,
                               labelController.text);
                         }
-                        await Share.share(_qrString ?? widget._unusedAddress);
+                        await ShareWrapper.share(
+                            _qrString ?? widget._unusedAddress);
                       },
                     ),
                     SizedBox(height: 10),
