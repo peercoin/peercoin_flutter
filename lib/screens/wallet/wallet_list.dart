@@ -228,11 +228,15 @@ class _WalletListScreenState extends State<WalletListScreen>
                             ),
                           ),
                           child: GestureDetector(
-                            onTap: () => ShareWrapper.share(
-                              Platform.isAndroid
-                                  ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
-                                  : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
-                            ),
+                            onTap: () {
+                              if (!kIsWeb) {
+                                ShareWrapper.share(
+                                  Platform.isAndroid
+                                      ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
+                                      : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
+                                );
+                              }
+                            },
                             child: Image.asset(
                               'assets/icon/ppc-logo.png',
                             ),

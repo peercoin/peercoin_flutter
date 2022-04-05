@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../../providers/active_wallets.dart';
 import '../../providers/app_settings.dart';
-import '../../providers/encrypted_box.dart';
 import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
