@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../providers/encrypted_box.dart';
 import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -27,9 +30,22 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
-    await ShareWrapper.share(seed);
+    if (kIsWeb) {
+      await Clipboard.setData(
+        ClipboardData(text: seed),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('snack_copied'),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 3),
+      ));
+    } else {
+      await ShareWrapper.share(seed);
+    }
     Timer(
-      Duration(seconds: 1),
+      Duration(seconds: kIsWeb ? 2 : 1),
       () => setState(() {
         _sharedYet = true;
       }),
@@ -108,7 +124,23 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                     .prefs;
                 await prefs.setBool('importedSeed', false);
                 Navigator.pop(context);
-                await Navigator.pushNamed(context, Routes.SetUpPin);
+
+                if (kIsWeb) {
+                  var settings =
+                      Provider.of<AppSettings>(context, listen: false);
+                  await settings.init(true);
+                  await settings.createInitialSettings(
+                      false, AppLocalizations.instance.locale.toString());
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.SetupDataFeeds,
+                  );
+                } else {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.SetUpPin,
+                  );
+                }
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),
@@ -163,6 +195,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(4),
+                            width: MediaQuery.of(context).size.width > 1200
+                                ? MediaQuery.of(context).size.width / 2
+                                : MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -185,8 +220,17 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                         width: 24,
                                       ),
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
+                                        width: MediaQuery.of(context)
+                                                    .size
+                                                    .width >
+                                                1200
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.5
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width /
                                                 1.9,
                                         child: Text(
                                           AppLocalizations.instance
@@ -267,22 +311,27 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                       ),
                       Column(
                         children: [
-                          Slider(
-                            activeColor: Colors.white,
-                            inactiveColor: Theme.of(context).shadowColor,
-                            value: _currentSliderValue,
-                            min: 12,
-                            max: 24,
-                            divisions: 4,
-                            label: _currentSliderValue.round().toString(),
-                            onChanged: (value) {
-                              setState(() {
-                                _currentSliderValue = value;
-                              });
-                              if (value % 3 == 0) {
-                                recreatePhrase(value);
-                              }
-                            },
+                          Container(
+                            width: MediaQuery.of(context).size.width > 1200
+                                ? MediaQuery.of(context).size.width / 2
+                                : MediaQuery.of(context).size.width,
+                            child: Slider(
+                              activeColor: Colors.white,
+                              inactiveColor: Theme.of(context).shadowColor,
+                              value: _currentSliderValue,
+                              min: 12,
+                              max: 24,
+                              divisions: 4,
+                              label: _currentSliderValue.round().toString(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _currentSliderValue = value;
+                                });
+                                if (value % 3 == 0) {
+                                  recreatePhrase(value);
+                                }
+                              },
+                            ),
                           ),
                           Text(
                             AppLocalizations.instance

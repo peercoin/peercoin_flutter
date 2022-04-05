@@ -106,7 +106,10 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       ],
                     ),
                     Expanded(
-                      child: Padding(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width > 1200
+                            ? MediaQuery.of(context).size.width / 2
+                            : MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -140,7 +143,10 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       ),
                     ),
                     Expanded(
-                      child: Padding(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width > 1200
+                            ? MediaQuery.of(context).size.width / 2
+                            : MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

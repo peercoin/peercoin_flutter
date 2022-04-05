@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -73,17 +74,20 @@ class _WalletListScreenState extends State<WalletListScreen>
         );
       }
 
-      //toggle check for "whats new" changelog
-      var _packageInfo = await PackageInfo.fromPlatform();
-      if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
-        await Navigator.of(context).pushNamed(Routes.ChangeLog);
-        _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
-      }
-      //toggle periodic reminders
-      var _walletValues = await _activeWallets.activeWalletsValues;
-      if (_walletValues.isNotEmpty) {
-        //don't show for users with no wallets
-        await PeriodicReminders.checkReminder(_appSettings, context);
+      if (!kIsWeb) {
+        //toggle check for "whats new" changelog
+        var _packageInfo = await PackageInfo.fromPlatform();
+        if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
+          await Navigator.of(context).pushNamed(Routes.ChangeLog);
+          _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
+        }
+
+        //toggle periodic reminders
+        var _walletValues = await _activeWallets.activeWalletsValues;
+        if (_walletValues.isNotEmpty) {
+          //don't show for users with no wallets
+          await PeriodicReminders.checkReminder(_appSettings, context);
+        }
       }
 
       //check if we just finished a scan

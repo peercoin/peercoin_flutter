@@ -113,6 +113,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       ),
                       Container(
                         padding: const EdgeInsets.all(4),
+                        width: MediaQuery.of(context).size.width > 1200
+                            ? MediaQuery.of(context).size.width / 2
+                            : MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: Theme.of(context).shadowColor,
@@ -134,8 +137,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     width: 24,
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.8,
+                                    width: MediaQuery.of(context).size.width >
+                                            1200
+                                        ? MediaQuery.of(context).size.width /
+                                            2.5
+                                        : MediaQuery.of(context).size.width /
+                                            1.9,
                                     child: Text(
                                       AppLocalizations.instance
                                           .translate('setup_import_note'),
