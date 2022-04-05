@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../tools/app_themes.dart';
@@ -91,7 +92,9 @@ class PeerButtonSetup extends StatelessWidget {
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
         fixedSize: Size(
-          MediaQuery.of(context).size.width / 1.5,
+          MediaQuery.of(context).size.width > 768
+              ? MediaQuery.of(context).size.width / 4
+              : MediaQuery.of(context).size.width / 1.5,
           40,
         ),
         shape: RoundedRectangleBorder(
@@ -132,7 +135,12 @@ class PeerButtonSetupLoading extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).backgroundColor,
         onPrimary: Theme.of(context).primaryColor,
-        fixedSize: Size(MediaQuery.of(context).size.width / 1.5, 40),
+        fixedSize: Size(
+          MediaQuery.of(context).size.width > 768
+              ? MediaQuery.of(context).size.width / 4
+              : MediaQuery.of(context).size.width / 1.5,
+          40,
+        ),
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(30),
