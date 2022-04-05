@@ -60,10 +60,6 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -71,9 +67,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 1.5,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

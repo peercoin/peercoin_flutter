@@ -43,10 +43,6 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -54,7 +50,7 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: correctHeight,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

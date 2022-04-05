@@ -61,10 +61,6 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
@@ -80,9 +76,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 1.5,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

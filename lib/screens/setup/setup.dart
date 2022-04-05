@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,18 @@ import '../../widgets/setup_progress.dart';
 class SetupScreen extends StatefulWidget {
   @override
   _SetupScreenState createState() => _SetupScreenState();
+
+  static double calcContainerHeight(BuildContext ctx) {
+    var height = MediaQuery.of(ctx).size.height;
+    var padding = MediaQuery.of(ctx).padding;
+    var correctedHeight = height - padding.top - padding.bottom;
+
+    if (kIsWeb) return correctedHeight;
+
+    return MediaQuery.of(ctx).orientation == Orientation.portrait
+        ? correctedHeight
+        : MediaQuery.of(ctx).size.height * 1.5;
+  }
 }
 
 class _SetupScreenState extends State<SetupScreen> {
@@ -31,10 +44,6 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -42,9 +51,7 @@ class _SetupScreenState extends State<SetupScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 1.5,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Stack(
             fit: StackFit.expand,

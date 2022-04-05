@@ -122,10 +122,6 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -133,9 +129,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 2,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
