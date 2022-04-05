@@ -233,7 +233,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 ShareWrapper.share(
                                   Platform.isAndroid
                                       ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
-                                      : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
+                                      : 'https://apps.apple.com/app/peercoin-wallet/id1571755170',
                                 );
                               }
                             },
