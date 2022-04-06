@@ -98,15 +98,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void didChangeDependencies() async {
-    if (ModalRoute.of(context)!.settings.arguments == null) {
-      _wallet = CoinWallet('do', 'not', 'load');
-      Future.delayed(
-        Duration(seconds: 0),
-        () => Navigator.of(context).pushReplacementNamed(Routes.WalletList),
-      );
-      return;
-    }
-
     if (_initial == true) {
       setState(() {
         _initial = false;

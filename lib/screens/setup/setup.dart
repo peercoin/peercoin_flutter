@@ -189,6 +189,5 @@ class PeerProgress extends StatelessWidget {
 }
 
 //TODO web: material icons are not rendered on firefox
-//TODO web: dirrect access to wallet home will fail
 //TODO web: allow logout / find session solution 
 //TODO web: layout / sizing for wallet list and wallet home

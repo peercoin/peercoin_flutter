@@ -11,6 +11,7 @@ import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
 import '../screens/setup/setup_language.dart';
+import '../screens/setup/router_master.dart';
 import '../screens/setup/setup_pin_code.dart';
 import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
@@ -42,25 +43,78 @@ class Routes {
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      Routes.SetupCreateWallet: (context) => SetupCreateWalletScreen(),
-      Routes.SetUpPin: (context) => SetupPinCodeScreen(),
-      Routes.SetupLanguage: (context) => SetupLanguageScreen(),
-      Routes.WalletList: (context) => WalletListScreen(),
-      Routes.WalletHome: (context) => WalletHomeScreen(),
-      Routes.QRScan: (context) => QRScanner(),
-      Routes.Transaction: (context) => TransactionDetails(),
-      Routes.AppSettings: (context) => AppSettingsScreen(),
-      Routes.SetupImport: (context) => SetupImportSeedScreen(),
-      Routes.WalletImportScan: (context) => WalletImportScanScreen(),
-      Routes.ImportPaperWallet: (context) => ImportPaperWalletScreen(),
-      Routes.ImportWif: (context) => ImportWifScreen(),
-      Routes.AuthJail: (context) => AuthJailScreen(),
-      Routes.ServerSettings: (context) => ServerSettingsScreen(),
-      Routes.ServerAdd: (context) => ServerAddScreen(),
-      Routes.SetupDataFeeds: (context) => SetupDataFeedsScreen(),
-      Routes.ChangeLog: (context) => ChangeLogScreen(),
-      Routes.AppSettingsNotifications: (context) =>
-          AppSettingsNotificationsScreen()
+      Routes.SetupCreateWallet: (context) => RouterMaster(
+            widget: SetupCreateWalletScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.SetUpPin: (context) => RouterMaster(
+            widget: SetupPinCodeScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.SetupLanguage: (context) => RouterMaster(
+            widget: SetupLanguageScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.WalletList: (context) => RouterMaster(
+            widget: WalletListScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.WalletHome: (context) => RouterMaster(
+            widget: WalletHomeScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.QRScan: (context) => RouterMaster(
+            widget: QRScanner(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.Transaction: (context) => RouterMaster(
+            widget: TransactionDetails(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.AppSettings: (context) => RouterMaster(
+            widget: AppSettingsScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.SetupImport: (context) => RouterMaster(
+            widget: SetupImportSeedScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.WalletImportScan: (context) => RouterMaster(
+            widget: WalletImportScanScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.ImportPaperWallet: (context) => RouterMaster(
+            widget: ImportPaperWalletScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.ImportWif: (context) => RouterMaster(
+            widget: ImportWifScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.AuthJail: (context) => RouterMaster(
+            widget: AuthJailScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.ServerSettings: (context) => RouterMaster(
+            widget: ServerSettingsScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.ServerAdd: (context) => RouterMaster(
+            widget: ServerAddScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.SetupDataFeeds: (context) => RouterMaster(
+            widget: SetupDataFeedsScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.ChangeLog: (context) => RouterMaster(
+            widget: ChangeLogScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.AppSettingsNotifications: (context) => RouterMaster(
+            widget: AppSettingsNotificationsScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
     };
   }
 }
