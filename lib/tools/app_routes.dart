@@ -61,7 +61,7 @@ class Routes {
           ),
       Routes.WalletHome: (context) => RouterMaster(
             widget: WalletHomeScreen(),
-            routeType: RouteTypes.requiresSetupFinished,
+            routeType: RouteTypes.requiresArguments,
           ),
       Routes.QRScan: (context) => RouterMaster(
             widget: QRScanner(),

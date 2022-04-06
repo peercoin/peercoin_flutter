@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
@@ -142,41 +143,42 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width > 1200
-                            ? MediaQuery.of(context).size.width / 2
-                            : MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: SwitchListTile(
-                                key: Key('setupApiBGSwitchKey'),
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('setup_bg_sync_allow'),
-                                  style: TextStyle(color: Colors.white),
+                    if (!kIsWeb)
+                      Expanded(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: SwitchListTile(
+                                  key: Key('setupApiBGSwitchKey'),
+                                  title: Text(
+                                    AppLocalizations.instance
+                                        .translate('setup_bg_sync_allow'),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  value: _bgSyncdAllowed,
+                                  activeColor: Colors.white,
+                                  inactiveThumbColor: Colors.grey,
+                                  onChanged: (newState) =>
+                                      toggleBGSyncHandler(newState),
                                 ),
-                                value: _bgSyncdAllowed,
-                                activeColor: Colors.white,
-                                inactiveThumbColor: Colors.grey,
-                                onChanged: (newState) =>
-                                    toggleBGSyncHandler(newState),
                               ),
-                            ),
-                            PeerExplanationText(
-                              AppLocalizations.instance
-                                  .translate('setup_bg_sync_description'),
-                              2,
-                            ),
-                          ],
+                              PeerExplanationText(
+                                AppLocalizations.instance
+                                    .translate('setup_bg_sync_description'),
+                                2,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     PeerButton(
                       action: () => _launchURL(
                           'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
