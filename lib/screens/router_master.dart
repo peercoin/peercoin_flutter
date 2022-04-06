@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../tools/app_routes.dart';
+import '../tools/app_routes.dart';
 
 enum RouteTypes { requiresSetupFinished, requiresArguments, setupOnly }
 

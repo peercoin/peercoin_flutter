@@ -11,7 +11,7 @@ import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
 import '../screens/setup/setup_language.dart';
-import '../screens/setup/router_master.dart';
+import '../screens/router_master.dart';
 import '../screens/setup/setup_pin_code.dart';
 import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
