@@ -235,8 +235,6 @@ class ElectrumConnection with ChangeNotifier {
       );
       if (idString == 'version') {
         handleVersion(result);
-      } else if (idString.startsWith('history_')) {
-        handleHistory(result);
       } else if (idString.startsWith('tx_')) {
         handleTx(id, result);
       } else if (idString.startsWith('utxo_')) {
@@ -457,23 +455,6 @@ class ElectrumConnection with ChangeNotifier {
       txAddr,
       utxos,
     );
-    //fire get_history
-    sendMessage(
-      'blockchain.scripthash.get_history',
-      'history_$txAddr',
-      [_addresses[txAddr]],
-    );
-  }
-
-  void handleHistory(List result) async {
-    result.forEach((historyTx) {
-      var txId = historyTx['tx_hash'];
-      sendMessage(
-        'blockchain.transaction.get',
-        'tx_$txId',
-        [txId, true],
-      );
-    });
   }
 
   void requestTxUpdate(String txId) {
