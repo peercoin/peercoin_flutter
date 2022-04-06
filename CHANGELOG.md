@@ -1,6 +1,7 @@
 ### **0.8.8** (2022-04-xx)
 * Add language: Danish
 * Add currency: DKK
+* Scanning improvements
 
 ### **0.8.7** (2022-03-29)
 * Periodic backup and donation reminders
