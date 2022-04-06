@@ -147,10 +147,11 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                       AppLocalizations.instance
                                           .translate('setup_import_note'),
                                       style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer,
-                                          fontSize: 15),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                        fontSize: 15,
+                                      ),
                                       textAlign: TextAlign.left,
                                       maxLines: 5,
                                     ),
@@ -217,10 +218,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         FocusScope.of(context)
                                             .unfocus(); //hide keyboard
                                       },
-                                      icon: Icon(Icons.paste,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer),
+                                      icon: Icon(
+                                        Icons.paste,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                      ),
                                     ),
                                     border: border,
                                     focusedBorder: border,
