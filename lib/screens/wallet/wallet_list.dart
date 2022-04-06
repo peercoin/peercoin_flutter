@@ -128,10 +128,12 @@ class _WalletListScreenState extends State<WalletListScreen>
             _isLoading = true;
             _initial = false;
           });
-          await Navigator.of(context).pushNamed(
-            Routes.WalletHome,
-            arguments: values[0],
-          );
+          if (!kIsWeb) {
+            await Navigator.of(context).pushNamed(
+              Routes.WalletHome,
+              arguments: values[0],
+            );
+          }
           setState(() {
             _isLoading = false;
           });
@@ -141,10 +143,12 @@ class _WalletListScreenState extends State<WalletListScreen>
               _isLoading = true;
               _initial = false;
             });
-            await Navigator.of(context).pushNamed(
-              Routes.WalletHome,
-              arguments: defaultWallet,
-            );
+            if (!kIsWeb) {
+              await Navigator.of(context).pushNamed(
+                Routes.WalletHome,
+                arguments: defaultWallet,
+              );
+            }
             setState(() {
               _isLoading = false;
             });
