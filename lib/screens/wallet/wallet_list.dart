@@ -59,9 +59,9 @@ class _WalletListScreenState extends State<WalletListScreen>
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
     _appSettings = Provider.of<AppSettings>(context, listen: false);
-    await _appSettings.init(); //only required in home widget
-    await _activeWallets.init();
     if (_initial) {
+      await _appSettings.init(); //only required in home widget
+      await _activeWallets.init();
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
