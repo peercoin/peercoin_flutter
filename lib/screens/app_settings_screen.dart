@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -260,67 +261,71 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   );
                 }).toList(),
               ),
-              ExpansionTile(
-                title: Text(
-                  AppLocalizations.instance
-                      .translate('app_settings_default_wallet'),
-                  style: Theme.of(context).textTheme.headline6,
+              if (!kIsWeb)
+                ExpansionTile(
+                  title: Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_default_wallet'),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: generateDefaultWallets(),
                 ),
-                childrenPadding: EdgeInsets.all(10),
-                children: generateDefaultWallets(),
-              ),
-              ExpansionTile(
-                  title: Text(
-                      AppLocalizations.instance
-                          .translate('app_settings_auth_header'),
-                      style: Theme.of(context).textTheme.headline6),
-                  childrenPadding: EdgeInsets.all(10),
-                  children: [
-                    _biometricsRevealed == false
-                        ? PeerButton(
-                            action: () =>
-                                revealAuthOptions(_settings.biometricsAllowed),
-                            text: AppLocalizations.instance
-                                .translate('app_settings_revealAuthButton'),
-                          )
-                        : SettingsAuth(
-                            _biometricsAllowed,
-                            _biometricsAvailable,
-                            _settings,
-                            saveSnack,
-                            _settings.authenticationOptions!,
-                          )
-                  ]),
-              ExpansionTile(
-                  title: Text(
-                      AppLocalizations.instance.translate('app_settings_seed'),
-                      style: Theme.of(context).textTheme.headline6),
-                  childrenPadding: EdgeInsets.all(10),
-                  children: [
-                    _seedPhrase == ''
-                        ? PeerButton(
-                            action: () =>
-                                revealSeedPhrase(_settings.biometricsAllowed),
-                            text: AppLocalizations.instance
-                                .translate('app_settings_revealSeedButton'),
-                          )
-                        : Column(children: [
-                            SizedBox(height: 20),
-                            DoubleTabToClipboard(
-                              clipBoardData: _seedPhrase,
-                              child: SelectableText(
-                                _seedPhrase,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            PeerButton(
-                              action: () => ShareWrapper.share(_seedPhrase),
+              if (!kIsWeb)
+                ExpansionTile(
+                    title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_auth_header'),
+                        style: Theme.of(context).textTheme.headline6),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: [
+                      _biometricsRevealed == false
+                          ? PeerButton(
+                              action: () => revealAuthOptions(
+                                  _settings.biometricsAllowed),
                               text: AppLocalizations.instance
-                                  .translate('app_settings_shareseed'),
+                                  .translate('app_settings_revealAuthButton'),
                             )
-                          ])
-                  ]),
+                          : SettingsAuth(
+                              _biometricsAllowed,
+                              _biometricsAvailable,
+                              _settings,
+                              saveSnack,
+                              _settings.authenticationOptions!,
+                            )
+                    ]),
+              if (!kIsWeb)
+                ExpansionTile(
+                    title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_seed'),
+                        style: Theme.of(context).textTheme.headline6),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: [
+                      _seedPhrase == ''
+                          ? PeerButton(
+                              action: () =>
+                                  revealSeedPhrase(_settings.biometricsAllowed),
+                              text: AppLocalizations.instance
+                                  .translate('app_settings_revealSeedButton'),
+                            )
+                          : Column(children: [
+                              SizedBox(height: 20),
+                              DoubleTabToClipboard(
+                                clipBoardData: _seedPhrase,
+                                child: SelectableText(
+                                  _seedPhrase,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              PeerButton(
+                                action: () => ShareWrapper.share(_seedPhrase),
+                                text: AppLocalizations.instance
+                                    .translate('app_settings_shareseed'),
+                              )
+                            ])
+                    ]),
               ExpansionTile(
                 title: Text(
                     AppLocalizations.instance.translate('app_settings_theme'),
@@ -352,41 +357,43 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 childrenPadding: EdgeInsets.all(10),
                 children: [SettingsPriceTicker(_settings, saveSnack)],
               ),
-              ExpansionTile(
-                title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_notifications'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: [
-                  PeerButton(
-                    text: AppLocalizations.instance
-                        .translate('app_settings_notifications_open_button'),
-                    action: () => Navigator.of(context).pushNamed(
-                      Routes.AppSettingsNotifications,
+              if (!kIsWeb)
+                ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance
+                          .translate('app_settings_notifications'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: [
+                    PeerButton(
+                      text: AppLocalizations.instance
+                          .translate('app_settings_notifications_open_button'),
+                      action: () => Navigator.of(context).pushNamed(
+                        Routes.AppSettingsNotifications,
+                      ),
+                    )
+                  ],
+                ),
+              if (!kIsWeb)
+                ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance.translate('app_settings_logs'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: [
+                    Text(
+                      AppLocalizations.instance
+                          .translate('app_settings_description'),
+                      textAlign: TextAlign.center,
                     ),
-                  )
-                ],
-              ),
-              ExpansionTile(
-                title: Text(
-                    AppLocalizations.instance.translate('app_settings_logs'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: [
-                  Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_description'),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 20),
-                  PeerButton(
-                    text: AppLocalizations.instance
-                        .translate('app_settings_logs_export'),
-                    action: () => FlutterLogs.exportLogs(),
-                  )
-                ],
-              ),
+                    SizedBox(height: 20),
+                    PeerButton(
+                      text: AppLocalizations.instance
+                          .translate('app_settings_logs_export'),
+                      action: () => FlutterLogs.exportLogs(),
+                    )
+                  ],
+                ),
             ],
           ),
         ),

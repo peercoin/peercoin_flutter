@@ -190,4 +190,6 @@ class PeerProgress extends StatelessWidget {
 
 //TODO web: material icons are not rendered on firefox
 //TODO web: allow logout / find session solution 
+//TODO web: Roboto arabic etc
 //TODO web: layout / sizing for wallet list and wallet home
+//TODO web: check camera available
