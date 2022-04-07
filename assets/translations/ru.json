@@ -275,5 +275,13 @@
     "currency_UGX": "Угандийский Шиллинг",
     "currency_VND": "Вьетнамский Донг",
     "currency_JPY": "Японская Иена",
-    "currency_THB": "Таиландский Бат"
+    "currency_THB": "Таиландский Бат",
+    "periodic_reminder_backup_title": "Напоминание о Бэкапе",
+    "periodic_reminder_backup_body": "Храните резервную копию сида в безопасном месте, чтобы не потерять доступ к своим монетам.",
+    "periodic_reminder_backup_button": "Открыть сайт Фонда",
+    "currency_AUD": "Австралийский Доллар",
+    "currency_PHP": "Филиппинское Песо",
+    "currency_SEK": "Шведская Крона",
+    "periodic_reminder_donate_title": "Напоминание о пожертвовании",
+    "periodic_reminder_donate_body": "Это приложение разработано Фондом Peercoin.\nПожалуйста, рассмотрите возможность пожертвования для поддержки разработки Peercoin и этого приложения."
 }
