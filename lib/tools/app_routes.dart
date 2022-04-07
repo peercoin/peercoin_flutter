@@ -72,8 +72,7 @@ class Routes {
             routeType: RouteTypes.requiresArguments,
           ),
       Routes.AppSettings: (context) => RouterMaster(
-            widget:
-                AppSettingsScreen(), //TODO needs wallet list init to be finished
+            widget: AppSettingsScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
       Routes.SetupImport: (context) => RouterMaster(

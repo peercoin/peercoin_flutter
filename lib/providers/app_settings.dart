@@ -17,7 +17,7 @@ class AppSettings with ChangeNotifier {
   Future<void> init([bool fromSetup = false]) async {
     if (fromSetup == false) {
       var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
-      _appOptions = _optionsBox!.get('appOptions');
+      _appOptions = await _optionsBox!.get('appOptions');
     }
     _sharedPrefs = await SharedPreferences.getInstance();
   }

@@ -50,11 +50,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = context.watch<AppSettings>();
-      _activeWallets = context.watch<ActiveWallets>();
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      _settings = Provider.of<AppSettings>(context);
+
+      await _settings.init(); //only required in home widget
+      await _activeWallets.init();
+
       _availableWallets = await _activeWallets.activeWalletsValues;
+
       var localAuth = LocalAuthentication();
-      _biometricsAvailable = await localAuth.canCheckBiometrics;
+      _biometricsAvailable =
+          kIsWeb ? false : await localAuth.canCheckBiometrics;
+
       _selectedTheme = ThemeModeHandler.of(context)!
           .themeMode
           .toString()
@@ -210,6 +217,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_initial) return Container();
+
     _biometricsAllowed = _settings.biometricsAllowed;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
