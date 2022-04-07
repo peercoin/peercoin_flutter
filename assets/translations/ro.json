@@ -275,5 +275,13 @@
     "currency_JPY": "Yena Japoneză",
     "currency_TZS": "Shilling Tanzanian",
     "currency_THB": "Baht Tailandez",
-    "currency_VND": "Dong Vietnamez"
+    "currency_VND": "Dong Vietnamez",
+    "currency_AUD": "Dolar Australian",
+    "currency_PHP": "Peso Filipinez",
+    "currency_SEK": "Crona Suedeză",
+    "periodic_reminder_donate_title": "Memento pentru Donație",
+    "periodic_reminder_backup_title": "Memento pentru Backup",
+    "periodic_reminder_backup_body": "Păstrați o copie de rezervă a seed-ului într-o locație sigură, pentru a evita pierderea accesului la monedele dvs.",
+    "periodic_reminder_backup_button": "Deschideți site-ul Fundației",
+    "periodic_reminder_donate_body": "Această aplicație este dezvoltată de Fundația Peercoin.\nVă rugăm să luați în considerare donarea pentru a sprijini dezvoltarea Peercoin și a acestei aplicații."
 }
