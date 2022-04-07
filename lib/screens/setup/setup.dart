@@ -193,3 +193,5 @@ class PeerProgress extends StatelessWidget {
 //TODO web: layout / sizing for wallet list and wallet home
 //TODO web: check camera available
 //TODO web: direct access to setup-create-wallet does not create a seed
+//TODO web: setup pin: don't allow direct access
+//TODO web: setup data feeds: don't allow direct access
