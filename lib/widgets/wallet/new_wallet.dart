@@ -22,7 +22,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
   bool _initial = true;
 
-  Future<void> addWallet(ctx) async {
+  Future<void> addWallet() async {
     try {
       await Provider.of<ActiveWallets>(context, listen: false).addWallet(
           _coin,
@@ -40,8 +40,10 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
       if (prefs.getBool('importedSeed') == true) {
         await Navigator.of(context).pushNamedAndRemoveUntil(
-            Routes.WalletImportScan, (_) => false,
-            arguments: _coin);
+          Routes.WalletImportScan,
+          (_) => false,
+          arguments: _coin,
+        );
       } else {
         Navigator.of(context).pop();
       }
@@ -99,7 +101,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         list.add(SimpleDialogOption(
           onPressed: () {
             _coin = wallet;
-            addWallet(context);
+            addWallet();
           },
           child: ListTile(
             leading: CircleAvatar(

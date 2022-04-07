@@ -57,66 +57,72 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
             children: [
               PeerProgress(3),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 15,
-                    ),
-                    Image.asset(
-                      'assets/img/setup-protection.png',
-                      height: MediaQuery.of(context).size.height / 5,
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        PeerButtonSetupBack(),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('app_settings_auth_header'),
-                          style: TextStyle(color: Colors.white, fontSize: 28),
-                        ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: SwitchListTile(
-                          title: Text(
+                child: Container(
+                  width: MediaQuery.of(context).size.width > 1200
+                      ? MediaQuery.of(context).size.width / 2
+                      : MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 15,
+                      ),
+                      Image.asset(
+                        'assets/img/setup-protection.png',
+                        height: MediaQuery.of(context).size.height / 5,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          PeerButtonSetupBack(),
+                          Text(
                             AppLocalizations.instance
-                                .translate('app_settings_biometrics'),
-                            style: TextStyle(color: Colors.white, fontSize: 17),
+                                .translate('app_settings_auth_header'),
+                            style: TextStyle(color: Colors.white, fontSize: 28),
                           ),
-                          value: _biometricsAllowed,
-                          activeColor: Theme.of(context).backgroundColor,
-                          inactiveThumbColor: Colors.grey,
-                          onChanged: (newState) {
-                            if (_biometricsAvailable == false) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                  AppLocalizations.instance
-                                      .translate('setup_pin_no_biometrics'),
-                                  textAlign: TextAlign.center,
-                                ),
-                                duration: Duration(seconds: 5),
-                              ));
-                            } else {
-                              setState(() {
-                                _biometricsAllowed = newState;
-                              });
-                            }
-                          }),
-                    ),
-                  ],
+                          SizedBox(
+                            width: 40,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: SwitchListTile(
+                            title: Text(
+                              AppLocalizations.instance
+                                  .translate('app_settings_biometrics'),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 17),
+                            ),
+                            value: _biometricsAllowed,
+                            activeColor: Theme.of(context).backgroundColor,
+                            inactiveThumbColor: Colors.grey,
+                            onChanged: (newState) {
+                              if (_biometricsAvailable == false) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    AppLocalizations.instance
+                                        .translate('setup_pin_no_biometrics'),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                ));
+                              } else {
+                                setState(() {
+                                  _biometricsAllowed = newState;
+                                });
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               PeerButtonSetup(

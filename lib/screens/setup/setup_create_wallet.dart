@@ -8,7 +8,6 @@ import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/active_wallets.dart';
-import '../../providers/app_settings.dart';
 import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -38,7 +37,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
           AppLocalizations.instance.translate('snack_copied'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 2),
       ));
     } else {
       await ShareWrapper.share(seed);
@@ -124,22 +123,10 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                 await prefs.setBool('importedSeed', false);
                 Navigator.pop(context);
 
-                if (kIsWeb) {
-                  var settings =
-                      Provider.of<AppSettings>(context, listen: false);
-                  await settings.init(true);
-                  await settings.createInitialSettings(
-                      false, AppLocalizations.instance.locale.toString());
-                  await Navigator.pushNamed(
-                    context,
-                    Routes.SetupDataFeeds,
-                  );
-                } else {
-                  await Navigator.pushNamed(
-                    context,
-                    Routes.SetUpPin,
-                  );
-                }
+                await Navigator.pushNamed(
+                  context,
+                  Routes.SetUpPin,
+                );
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),

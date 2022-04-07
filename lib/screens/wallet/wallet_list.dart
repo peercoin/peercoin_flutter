@@ -19,6 +19,7 @@ import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
+import '../../widgets/logout_dialog.dart';
 import '../../widgets/wallet/new_wallet.dart';
 
 class WalletListScreen extends StatefulWidget {
@@ -193,14 +194,30 @@ class _WalletListScreenState extends State<WalletListScreen>
             onPressed: () {
               if (_initial == false) {
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return NewWalletDialog();
-                    });
+                  context: context,
+                  builder: (BuildContext context) {
+                    return NewWalletDialog();
+                  },
+                );
               }
             },
             icon: Icon(Icons.add_rounded),
-          )
+          ),
+          if (kIsWeb)
+            IconButton(
+              key: Key('logoutButton'),
+              onPressed: () async {
+                if (_initial == false) {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return LogoutDialog();
+                    },
+                  );
+                }
+              },
+              icon: Icon(Icons.logout_rounded),
+            )
         ],
       ),
       body: _isLoading || _initial
@@ -289,78 +306,84 @@ class _WalletListScreenState extends State<WalletListScreen>
                         );
                       }
                       return Expanded(
-                        child: ListView.builder(
-                          itemCount: listData.length,
-                          itemBuilder: (ctx, i) {
-                            CoinWallet _wallet = listData[i];
-                            return Card(
-                              elevation: 0,
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 16),
-                              color: Theme.of(context).backgroundColor,
-                              child: Column(
-                                children: [
-                                  InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        await Navigator.of(context).pushNamed(
-                                          Routes.WalletHome,
-                                          arguments: _wallet,
-                                        );
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-                                      },
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Image.asset(
-                                              AvailableCoins()
-                                                  .getSpecificCoin(_wallet.name)
-                                                  .iconPath,
-                                              width: 20),
-                                        ),
-                                        title: Text(
-                                          _wallet.title,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1.2,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            itemCount: listData.length,
+                            itemBuilder: (ctx, i) {
+                              CoinWallet _wallet = listData[i];
+                              return Card(
+                                elevation: 0,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                color: Theme.of(context).backgroundColor,
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          await Navigator.of(context).pushNamed(
+                                            Routes.WalletHome,
+                                            arguments: _wallet,
+                                          );
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                        },
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            child: Image.asset(
+                                                AvailableCoins()
+                                                    .getSpecificCoin(
+                                                        _wallet.name)
+                                                    .iconPath,
+                                                width: 20),
                                           ),
-                                        ),
-                                        subtitle: Row(
-                                          children: [
-                                            Text(
-                                              (_wallet.balance / 1000000)
-                                                  .toString(),
-                                              style: TextStyle(
-                                                fontSize: 14,
+                                          title: Text(
+                                            _wallet.title,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.2,
+                                            ),
+                                          ),
+                                          subtitle: Row(
+                                            children: [
+                                              Text(
+                                                (_wallet.balance / 1000000)
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              _wallet.letterCode,
-                                              style: TextStyle(
-                                                fontSize: 14,
+                                              SizedBox(
+                                                width: 5,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            );
-                          },
+                                              Text(
+                                                _wallet.letterCode,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     },

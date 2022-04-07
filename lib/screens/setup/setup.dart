@@ -188,8 +188,8 @@ class PeerProgress extends StatelessWidget {
   }
 }
 
-//TODO web: material icons are not rendered on firefox
-//TODO web: allow logout / find session solution 
-//TODO web: Roboto arabic etc
+//TODO web: material icons are not rendered on firefox / also rendering issues with non latin characters (flutter render engine issue)
+//TODO web: find session solution 
 //TODO web: layout / sizing for wallet list and wallet home
 //TODO web: check camera available
+//TODO web: direct access to setup-create-wallet does not create a seed
