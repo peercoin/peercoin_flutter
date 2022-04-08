@@ -280,61 +280,59 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   childrenPadding: EdgeInsets.all(10),
                   children: generateDefaultWallets(),
                 ),
-              if (!kIsWeb)
-                ExpansionTile(
-                    title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_auth_header'),
-                        style: Theme.of(context).textTheme.headline6),
-                    childrenPadding: EdgeInsets.all(10),
-                    children: [
-                      _biometricsRevealed == false
-                          ? PeerButton(
-                              action: () => revealAuthOptions(
-                                  _settings.biometricsAllowed),
-                              text: AppLocalizations.instance
-                                  .translate('app_settings_revealAuthButton'),
-                            )
-                          : SettingsAuth(
-                              _biometricsAllowed,
-                              _biometricsAvailable,
-                              _settings,
-                              saveSnack,
-                              _settings.authenticationOptions!,
-                            )
-                    ]),
-              if (!kIsWeb)
-                ExpansionTile(
-                    title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_seed'),
-                        style: Theme.of(context).textTheme.headline6),
-                    childrenPadding: EdgeInsets.all(10),
-                    children: [
-                      _seedPhrase == ''
-                          ? PeerButton(
-                              action: () =>
-                                  revealSeedPhrase(_settings.biometricsAllowed),
-                              text: AppLocalizations.instance
-                                  .translate('app_settings_revealSeedButton'),
-                            )
-                          : Column(children: [
-                              SizedBox(height: 20),
-                              DoubleTabToClipboard(
-                                clipBoardData: _seedPhrase,
-                                child: SelectableText(
-                                  _seedPhrase,
-                                  textAlign: TextAlign.center,
-                                ),
+              ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance
+                          .translate('app_settings_auth_header'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: [
+                    _biometricsRevealed == false
+                        ? PeerButton(
+                            action: () =>
+                                revealAuthOptions(_settings.biometricsAllowed),
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealAuthButton'),
+                          )
+                        : SettingsAuth(
+                            _biometricsAllowed,
+                            _biometricsAvailable,
+                            _settings,
+                            saveSnack,
+                            _settings.authenticationOptions!,
+                          )
+                  ]),
+              ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance.translate('app_settings_seed'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: [
+                    _seedPhrase == ''
+                        ? PeerButton(
+                            action: () =>
+                                revealSeedPhrase(_settings.biometricsAllowed),
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealSeedButton'),
+                          )
+                        : Column(children: [
+                            SizedBox(height: 20),
+                            DoubleTabToClipboard(
+                              clipBoardData: _seedPhrase,
+                              child: SelectableText(
+                                _seedPhrase,
+                                textAlign: TextAlign.center,
                               ),
-                              SizedBox(height: 20),
+                            ),
+                            SizedBox(height: 20),
+                            if (!kIsWeb)
                               PeerButton(
                                 action: () => ShareWrapper.share(_seedPhrase),
                                 text: AppLocalizations.instance
                                     .translate('app_settings_shareseed'),
                               )
-                            ])
-                    ]),
+                          ])
+                  ]),
               ExpansionTile(
                 title: Text(
                     AppLocalizations.instance.translate('app_settings_theme'),
