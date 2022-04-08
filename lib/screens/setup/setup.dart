@@ -1,9 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/active_wallets.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -27,21 +25,6 @@ class SetupScreen extends StatefulWidget {
 }
 
 class _SetupScreenState extends State<SetupScreen> {
-  bool _loading = false;
-
-  void createWallet(context) async {
-    setState(() {
-      _loading = true;
-    });
-    var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
-    await _activeWallets.init();
-    await _activeWallets.createPhrase();
-    await Navigator.of(context).pushNamed(Routes.SetupCreateWallet);
-    setState(() {
-      _loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,11 +99,11 @@ class _SetupScreenState extends State<SetupScreen> {
                           ),
                           PeerExplanationText(AppLocalizations.instance
                               .translate('setup_text2')),
-                          PeerButtonSetupLoading(
+                          PeerButtonSetup(
                             text: AppLocalizations.instance
                                 .translate('setup_save_title'),
-                            action: () => {createWallet(context)},
-                            loading: _loading,
+                            action: () => Navigator.of(context)
+                                .pushNamed(Routes.SetupCreateWallet),
                           ),
                           SizedBox(
                             height: 8,
@@ -192,6 +175,6 @@ class PeerProgress extends StatelessWidget {
 //TODO web: find session solution 
 //TODO web: layout / sizing for wallet list and wallet home
 //TODO web: check camera available
-//TODO web: direct access to setup-create-wallet does not create a seed
 //TODO web: setup pin: don't allow direct access
 //TODO web: setup data feeds: don't allow direct access
+//TODO web: empty wallet list: show add wallet button

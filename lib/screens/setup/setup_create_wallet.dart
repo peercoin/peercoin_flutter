@@ -13,6 +13,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/loading_indicator.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class SetupCreateWalletScreen extends StatefulWidget {
 class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   bool _sharedYet = false;
   bool _initial = true;
+  bool _isLoading = false;
   String _seed = '';
   double _currentSliderValue = 12;
   late ActiveWallets _activeWallets;
@@ -50,12 +52,23 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
     );
   }
 
+  Future<void> createWallet(context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await _activeWallets.init();
+    await _activeWallets.createPhrase();
+    _seed = await _activeWallets.seedPhrase;
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _seed = await _activeWallets.seedPhrase;
-
+      await createWallet(context);
       setState(() {
         _initial = false;
       });
@@ -140,6 +153,12 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(
+        child: LoadingIndicator(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
