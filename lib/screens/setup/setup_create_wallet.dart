@@ -269,23 +269,32 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: getColumn(_seed, 0),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: getColumn(_seed, 1),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: getColumn(_seed, 2),
-                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width >
+                                                  1200
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  3
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7,
+                                          child: Text(
+                                            _seed,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              wordSpacing: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryContainer,
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -350,31 +359,4 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       ),
     );
   }
-
-  List<Widget> getColumn(String seed, int pos) {
-    var list = <Widget>[];
-    var se = seed.split(' ');
-    var colSize = se.length ~/ 3;
-
-    for (var i = 0; i < colSize; i++) {
-      list.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: i * 3 + pos + 1 < 10
-            ? Text(
-                '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    fontSize: 16),
-              )
-            : Text(
-                (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    fontSize: 16),
-              ),
-      ));
-    }
-    return list;
-  }
-//TODO Fix iphone6 problems (containers break)
 }
