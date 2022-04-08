@@ -267,5 +267,21 @@
     "currency_IRR": "Iranischer Rial",
     "currency_TRY": "Türkische Lira",
     "currency_BDT": "Bangladeschischer Taka",
-    "currency_KRW": "Südkoreanischer Won"
+    "currency_KRW": "Südkoreanischer Won",
+    "currency_PKR": "Pakistanische Rupie",
+    "currency_PHP": "Philippinischer Peso",
+    "currency_SEK": "Schwedische Krone",
+    "currency_TZS": "Tansania-Schilling",
+    "currency_UGX": "Uganda-Schilling",
+    "currency_VND": "Vietnamesischer Dong",
+    "periodic_reminder_donate_title": "Spendenerinnerung",
+    "periodic_reminder_backup_title": "Backup-Erinnerung",
+    "periodic_reminder_backup_body": "Behalte ein Backup deines Wallet Seeds an einem sicheren Ort um einen Verlust deiner Coins zu verhindern.",
+    "periodic_reminder_backup_button": "Foundation Website öffnen",
+    "currency_AUD": "Australischer Dollar",
+    "currency_JPY": "Japanischer Yen",
+    "currency_KES": "Kenianischer Schilling",
+    "currency_THB": "Thailändischer Baht",
+    "currency_UAH": "Ukrainischer Hrywnja",
+    "periodic_reminder_donate_body": "Diese App wird von der Peercoin Foundation entwickelt.\nZiehe eine Spende in Betracht, um die Entwicklung von Peercoin und dieser App zu unterstützen."
 }

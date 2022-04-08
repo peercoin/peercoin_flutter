@@ -252,7 +252,7 @@
     "setup_bg_sync_description": "Dette vil aktivere bakgrunnsvarsler for lommebøkene dine.",
     "setup_securebox_fail": "Vi er veldig lei oss.\nEnheten din støtter ikke en sikker nok måte å oppbevare nøkler på.",
     "setup_text1": "Hvis du allerede har opprettet en lommebok og du fortsatt har gjenopprettingsfrasen din, velg",
-    "setup_save_text1": "Følgende liste av ord heter Gjenopprettingsfrase. Det er et komplekst passord som vil gi full tilgang til lommeboken din og alle myntene dine.",
+    "setup_save_text1": "Følgende liste av ord heter en gjenopprettingsfrase. Det er et komplekst passord som vil gi full tilgang til lommeboken din og alle myntene dine.",
     "transactions_fee": "-$amount\nGebyr",
     "tx_rejected": "Transaksjonen ble avvist av nettverket. Prøv på nytt.",
     "tx_value": "Verdi",
@@ -275,5 +275,13 @@
     "currency_PKR": "Pakistansk rupi",
     "currency_KES": "Kenyansk shilling",
     "currency_JPY": "Japansk yen",
-    "currency_THB": "Thailandsk baht"
+    "currency_THB": "Thailandsk baht",
+    "currency_AUD": "Australsk dollar",
+    "currency_PHP": "Filippinsk peso",
+    "periodic_reminder_donate_body": "Denne appen er utviklet av Peercoin Foundation.\nVurder en donasjon for å støtte utviklingen av Peercoin og denne appen.",
+    "currency_SEK": "Svensk krone",
+    "periodic_reminder_donate_title": "Donasjonspåminnelse",
+    "periodic_reminder_backup_title": "Påminnelse om Sikkerhetskopiering",
+    "periodic_reminder_backup_body": "Oppbevar en sikkerhetskopi av gjenopprettingsfrasen din på et trygt sted for å unngå å miste tilgangen til myntene dine.",
+    "periodic_reminder_backup_button": "Åpne Stiftelsen sin Nettside"
 }
