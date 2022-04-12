@@ -512,9 +512,11 @@ class _AddressTabState extends State<AddressTab> {
         children: [
           ExpansionTile(
             collapsedIconColor: Colors.white,
-            onExpansionChanged: (_) => setState(() {
-              _optionsExpanded = _;
-            }),
+            onExpansionChanged: (_) => setState(
+              () {
+                _optionsExpanded = _;
+              },
+            ),
             trailing: Icon(
               _optionsExpanded ? Icons.close : Icons.filter_alt,
               color: Colors.white,
@@ -645,131 +647,140 @@ class _AddressTabState extends State<AddressTab> {
     return Column(
       children: [
         Expanded(
-            child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              floating: true,
-              backgroundColor: _search
-                  ? Theme.of(context).backgroundColor
-                  : Theme.of(context).primaryColor,
-              title: Container(
-                margin: const EdgeInsets.only(top: 8),
-                child: _search
-                    ? Form(
-                        key: _formKey,
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: TextFormField(
-                            autofocus: true,
-                            key: _searchKey,
-                            textInputAction: TextInputAction.done,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: AppLocalizations.instance
-                                  .translate('addressbook_search'),
-                              suffixIcon: IconButton(
-                                icon: Center(child: Icon(Icons.clear)),
-                                iconSize: 24,
-                                onPressed: () {
-                                  _search = false;
-                                  applyFilter();
-                                },
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                floating: true,
+                backgroundColor: _search
+                    ? Theme.of(context).backgroundColor
+                    : Theme.of(context).primaryColor,
+                title: Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  child: _search
+                      ? Form(
+                          key: _formKey,
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: TextFormField(
+                              autofocus: true,
+                              key: _searchKey,
+                              textInputAction: TextInputAction.done,
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: AppLocalizations.instance
+                                    .translate('addressbook_search'),
+                                suffixIcon: IconButton(
+                                  icon: Center(child: Icon(Icons.clear)),
+                                  iconSize: 24,
+                                  onPressed: () {
+                                    _search = false;
+                                    applyFilter();
+                                  },
+                                ),
                               ),
-                            ),
-                            onChanged: applyFilter,
-                          ),
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).backgroundColor,
-                              onPrimary: Theme.of(context).backgroundColor,
-                              fixedSize: Size(
-                                  MediaQuery.of(context).size.width / 3, 40),
-                              shape: RoundedRectangleBorder(
-                                //to set border radius to button
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    width: 2,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                              if (widget._walletAddresses!.isNotEmpty) {
-                                setState(() {
-                                  _search = true;
-                                });
-                              }
-                            },
-                            child: Text(
-                              AppLocalizations.instance.translate('search'),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.4,
-                                fontSize: 16,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                              onChanged: applyFilter,
                             ),
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).backgroundColor,
-                              onPrimary: Theme.of(context).backgroundColor,
-                              fixedSize: Size(
-                                  MediaQuery.of(context).size.width / 3, 40),
-                              shape: RoundedRectangleBorder(
-                                //to set border radius to button
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  width: 2,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).backgroundColor,
+                                onPrimary: Theme.of(context).backgroundColor,
+                                fixedSize: Size(
+                                  MediaQuery.of(context).size.width > 1200
+                                      ? MediaQuery.of(context).size.width / 5
+                                      : MediaQuery.of(context).size.width / 3,
+                                  40,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  //to set border radius to button
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                elevation: 0,
+                              ),
+                              onPressed: () {
+                                if (widget._walletAddresses!.isNotEmpty) {
+                                  setState(() {
+                                    _search = true;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                AppLocalizations.instance.translate('search'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.4,
+                                  fontSize: 16,
                                   color: Theme.of(context).primaryColor,
                                 ),
                               ),
-                              elevation: 0,
                             ),
-                            onPressed: () {
-                              _addressAddDialog(context);
-                            },
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('addressbook_new_button'),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.4,
-                                fontSize: 16,
-                                color: Theme.of(context).primaryColor,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).backgroundColor,
+                                onPrimary: Theme.of(context).backgroundColor,
+                                fixedSize: Size(
+                                  MediaQuery.of(context).size.width > 1200
+                                      ? MediaQuery.of(context).size.width / 5
+                                      : MediaQuery.of(context).size.width / 3,
+                                  40,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  //to set border radius to button
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                elevation: 0,
+                              ),
+                              onPressed: () {
+                                _addressAddDialog(context);
+                              },
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('addressbook_new_button'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.4,
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                ),
               ),
-            ),
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              title: Text(
-                AppLocalizations.instance
-                    .translate('addressbook_bottom_bar_sending_addresses'),
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                title: Text(
+                  AppLocalizations.instance
+                      .translate('addressbook_bottom_bar_sending_addresses'),
+                ),
               ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(listSend),
-            ),
-            sliverToBoxAdapter,
-            SliverToBoxAdapter(
-              child: SizedBox(height: 10),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(listReceive),
-            ),
-          ],
-        )),
+              SliverList(
+                delegate: SliverChildListDelegate(listSend),
+              ),
+              sliverToBoxAdapter,
+              SliverToBoxAdapter(
+                child: SizedBox(height: 10),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(listReceive),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
