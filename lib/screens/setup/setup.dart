@@ -177,5 +177,4 @@ class PeerProgress extends StatelessWidget {
 //TODO web: share: save to clipboard and notifiy 
 //TODO web: setup pin: don't allow direct access
 //TODO web: setup data feeds: don't allow direct access
-//TODO web: empty wallet list: show add wallet button
 //TODO web: auth jail can be circumvented
