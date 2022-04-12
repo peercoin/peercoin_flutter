@@ -1,6 +1,7 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +40,7 @@ class LogoutDialog extends StatelessWidget {
             );
 
             Navigator.of(context).pop();
-            await Navigator.of(context).pushReplacementNamed('/');
+            window.location.reload();
           },
           child: Text(
             AppLocalizations.instance.translate('logout'),
@@ -52,21 +53,24 @@ class LogoutDialog extends StatelessWidget {
   static Future<void> clearData() async {
     var preferences = await SharedPreferences.getInstance();
     await preferences.clear();
-    LoggerWrapper.logInfo('Logout', 'clear data', 'SharedPreferences cleared');
+    LoggerWrapper.logInfo('Logout', 'clearData', 'SharedPreferences cleared');
 
     var storage = FlutterSecureStorage();
     await storage.deleteAll();
     LoggerWrapper.logInfo(
       'Logout',
-      'clear data',
+      'clearData',
       'FlutterSecureStorage cleared',
     );
 
     //clear hive
-    await Hive.close();
-    await Hive.deleteBoxFromDisk('vaultbox');
-    await Hive.deleteBoxFromDisk('optionsbox');
-    await Hive.deleteBoxFromDisk('wallets');
-    LoggerWrapper.logInfo('Logout', 'clear data', 'Hive Storage cleared');
+    window.indexedDB?.deleteDatabase('vaultbox');
+    window.indexedDB?.deleteDatabase('wallets');
+    window.indexedDB?.deleteDatabase('optionsbox');
+    window.indexedDB?.deleteDatabase('serverbox-peercoin');
+    window.indexedDB?.deleteDatabase('serverbox-peercointestnet');
+    await Future.delayed(Duration(seconds: 1));
+
+    LoggerWrapper.logInfo('Logout', 'clearData', 'Hive Storage cleared');
   }
 }

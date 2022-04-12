@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/screens/setup/setup.dart';
+import 'package:peercoin/widgets/logout_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/active_wallets.dart';
@@ -56,9 +57,15 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
     setState(() {
       _isLoading = true;
     });
-    await _activeWallets.init();
-    await _activeWallets.createPhrase();
-    _seed = await _activeWallets.seedPhrase;
+    try {
+      await _activeWallets.init();
+      await _activeWallets.createPhrase();
+      _seed = await _activeWallets.seedPhrase;
+    } catch (e) {
+      print('caught');
+      await LogoutDialog.clearData();
+      await createWallet(context);
+    }
     setState(() {
       _isLoading = false;
     });
