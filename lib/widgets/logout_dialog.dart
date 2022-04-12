@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../tools/app_localizations.dart';
@@ -29,22 +30,14 @@ class LogoutDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-            var preferences = await SharedPreferences.getInstance();
-            await preferences.clear();
-            print('preferences cleared');
+            await clearData();
 
-            var storage = FlutterSecureStorage();
-            await storage.deleteAll();
-            print('secure storaged cleard');
+            LoggerWrapper.logInfo(
+              'LogoutDialog',
+              'AlertDialog',
+              'Data cleared - reloading',
+            );
 
-            //clear hive
-            await Hive.close();
-            await Hive.deleteBoxFromDisk('vaultbox');
-            await Hive.deleteBoxFromDisk('optionsbox');
-            await Hive.deleteBoxFromDisk('wallets');
-            print('hive storage cleared');
-
-            print('reload');
             Navigator.of(context).pop();
             await Navigator.of(context).pushReplacementNamed('/');
           },
@@ -54,5 +47,26 @@ class LogoutDialog extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  static Future<void> clearData() async {
+    var preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    LoggerWrapper.logInfo('Logout', 'clear data', 'SharedPreferences cleared');
+
+    var storage = FlutterSecureStorage();
+    await storage.deleteAll();
+    LoggerWrapper.logInfo(
+      'Logout',
+      'clear data',
+      'FlutterSecureStorage cleared',
+    );
+
+    //clear hive
+    await Hive.close();
+    await Hive.deleteBoxFromDisk('vaultbox');
+    await Hive.deleteBoxFromDisk('optionsbox');
+    await Hive.deleteBoxFromDisk('wallets');
+    LoggerWrapper.logInfo('Logout', 'clear data', 'Hive Storage cleared');
   }
 }
