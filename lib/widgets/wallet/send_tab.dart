@@ -54,6 +54,7 @@ class _SendTabState extends State<SendTab> {
   WalletAddress? _transferedAddress;
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
+  late AppSettings _appSettings;
 
   @override
   void didChangeDependencies() async {
@@ -61,6 +62,8 @@ class _SendTabState extends State<SendTab> {
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _appSettings = Provider.of<AppSettings>(context, listen: false);
+
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
       setState(() {
@@ -512,18 +515,19 @@ class _SendTabState extends State<SendTab> {
                       },
                     ),
                     SizedBox(height: 10),
-                    PeerButtonBorder(
-                      text: AppLocalizations.instance.translate(
-                        'scan_qr',
+                    if (_appSettings.camerasAvailble)
+                      PeerButtonBorder(
+                        text: AppLocalizations.instance.translate(
+                          'scan_qr',
+                        ),
+                        action: () async {
+                          final result = await Navigator.of(context).pushNamed(
+                              Routes.QRScan,
+                              arguments: AppLocalizations.instance
+                                  .translate('scan_qr'));
+                          if (result != null) parseQrResult(result as String);
+                        },
                       ),
-                      action: () async {
-                        final result = await Navigator.of(context).pushNamed(
-                            Routes.QRScan,
-                            arguments:
-                                AppLocalizations.instance.translate('scan_qr'));
-                        if (result != null) parseQrResult(result as String);
-                      },
-                    ),
                     SizedBox(height: 8),
                     PeerButton(
                       text: AppLocalizations.instance.translate('send'),

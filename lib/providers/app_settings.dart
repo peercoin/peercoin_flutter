@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:camera/camera.dart';
 
 import '../models/app_options.dart';
 import 'encrypted_box.dart';
@@ -12,6 +13,7 @@ class AppSettings with ChangeNotifier {
   final EncryptedBox _encryptedBox;
   late SharedPreferences _sharedPrefs;
   String? _selectedLang;
+  bool camerasAvailble = false;
   AppSettings(this._encryptedBox);
 
   Future<void> init([bool fromSetup = false]) async {
@@ -20,6 +22,13 @@ class AppSettings with ChangeNotifier {
       _appOptions = await _optionsBox!.get('appOptions');
     }
     _sharedPrefs = await SharedPreferences.getInstance();
+
+    try {
+      await availableCameras();
+      camerasAvailble = true;
+    } catch (e) {
+      camerasAvailble = false;
+    }
   }
 
   Future<void> createInitialSettings(bool allowBiometrics, String lang) async {

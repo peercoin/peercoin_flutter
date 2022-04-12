@@ -372,32 +372,34 @@ class _WalletHomeState extends State<WalletHomeScreen>
             onSelected: (dynamic value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
               return [
-                PopupMenuItem(
-                  value: 'import_wallet',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.arrow_circle_down,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_paperwallet'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'import_wif',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.arrow_circle_down,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_wif'),
+                if (_appSettings.camerasAvailble)
+                  PopupMenuItem(
+                    value: 'import_wallet',
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.arrow_circle_down,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('wallet_pop_menu_paperwallet'),
+                      ),
                     ),
                   ),
-                ),
+                if (_appSettings.camerasAvailble)
+                  PopupMenuItem(
+                    value: 'import_wif',
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.arrow_circle_down,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('wallet_pop_menu_wif'),
+                      ),
+                    ),
+                  ),
                 PopupMenuItem(
                   value: 'server_settings',
                   child: ListTile(
