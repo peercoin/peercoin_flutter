@@ -173,7 +173,6 @@ class PeerProgress extends StatelessWidget {
 
 //TODO web: material icons are not rendered on firefox / also rendering issues with non latin characters (flutter render engine issue)
 //TODO web: find session solution 
-//TODO web: layout / sizing for address book
 //TODO web: share: save to clipboard and notifiy 
 //TODO web: setup pin: don't allow direct access
 //TODO web: setup data feeds: don't allow direct access
