@@ -63,7 +63,6 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       await _activeWallets.createPhrase();
       _seed = await _activeWallets.seedPhrase;
     } catch (e) {
-      print('caught');
       await LogoutDialog.clearData();
       await createWallet(context);
     }

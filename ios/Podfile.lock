@@ -1,6 +1,8 @@
 PODS:
   - background_fetch (1.0.1):
     - Flutter
+  - camera (0.0.1):
+    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
@@ -37,6 +39,7 @@ PODS:
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
+  - camera (from `.symlinks/plugins/camera/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
@@ -61,6 +64,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   background_fetch:
     :path: ".symlinks/plugins/background_fetch/ios"
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   Flutter:
@@ -92,6 +97,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   background_fetch: 2edffc19a5a465c47f073efa35db57f7910738fa
+  camera: 9993f92f2c793e87b65e35f3a23c70582afb05b1
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
