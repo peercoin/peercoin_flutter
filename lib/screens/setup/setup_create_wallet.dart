@@ -4,8 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/widgets/logout_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/active_wallets.dart';
@@ -15,6 +13,9 @@ import '../../tools/app_routes.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
+import 'setup.dart';
+import '../../widgets/logout_dialog_dummy.dart'
+    if (dart.library.html) '../../widgets/logout_dialog.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
   @override

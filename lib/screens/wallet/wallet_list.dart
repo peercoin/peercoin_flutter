@@ -20,8 +20,9 @@ import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
-import '../../widgets/logout_dialog.dart';
 import '../../widgets/wallet/new_wallet.dart';
+import '../../widgets/logout_dialog_dummy.dart'
+    if (dart.library.html) '../../widgets/logout_dialog.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
