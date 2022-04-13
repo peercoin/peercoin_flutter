@@ -122,137 +122,151 @@ class _SendTabState extends State<SendTab> {
     var _correctedDust = 0;
     _txFee = _buildResult['fee'];
     await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String? _displayValue = _amountKey.currentState!.value;
-          var amountInPutAsDouble =
-              double.parse(_amountKey.currentState!.value);
-          _totalValue = (amountInPutAsDouble * 1000000).toInt();
-          if (_totalValue == _wallet.balance) {
-            var newValue = amountInPutAsDouble - (_txFee / 1000000);
-            _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
-          } else {
-            _totalValue = _totalValue + _txFee;
-          }
-          if (_destroyedChange > 0) {
-            var newValue = (amountInPutAsDouble - (_txFee / 1000000));
-            _displayValue = newValue.toString();
+      context: context,
+      builder: (BuildContext context) {
+        String? _displayValue = _amountKey.currentState!.value;
+        var amountInPutAsDouble = double.parse(_amountKey.currentState!.value);
+        _totalValue = (amountInPutAsDouble * 1000000).toInt();
+        if (_totalValue == _wallet.balance) {
+          var newValue = amountInPutAsDouble - (_txFee / 1000000);
+          _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
+        } else {
+          _totalValue = _totalValue + _txFee;
+        }
+        if (_destroyedChange > 0) {
+          var newValue = (amountInPutAsDouble - (_txFee / 1000000));
+          _displayValue = newValue.toString();
 
-            if (_amountKey.currentState!.value == '0') {
-              _displayValue = '0';
-              _correctedDust = _destroyedChange - _txFee;
-            } else {
-              _correctedDust = _destroyedChange;
-            }
-            _totalValue =
-                (amountInPutAsDouble * 1000000 + _destroyedChange).toInt();
+          if (_amountKey.currentState!.value == '0') {
+            _displayValue = '0';
+            _correctedDust = _destroyedChange - _txFee;
+          } else {
+            _correctedDust = _destroyedChange;
           }
-          return SimpleDialog(
-            title: Text(AppLocalizations.instance
-                .translate('send_confirm_transaction')),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                child: Column(
-                  children: [
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: AppLocalizations.instance
-                            .translate('send_transferring'),
-                        style: DefaultTextStyle.of(context).style,
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '$_displayValue ${_wallet.letterCode}',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(
-                              text: AppLocalizations.instance
-                                  .translate('send_to')),
-                          TextSpan(
-                              text: _addressKey.currentState!.value,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+          _totalValue =
+              (amountInPutAsDouble * 1000000 + _destroyedChange).toInt();
+        }
+        return SimpleDialog(
+          title: Text(
+              AppLocalizations.instance.translate('send_confirm_transaction')),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Column(
+                children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: AppLocalizations.instance
+                          .translate('send_transferring'),
+                      style: DefaultTextStyle.of(context).style,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '$_displayValue ${_wallet.letterCode}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: AppLocalizations.instance.translate('send_to'),
+                        ),
+                        TextSpan(
+                          text: _addressKey.currentState!.value,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 10),
-                    Text(AppLocalizations.instance.translate('send_fee', {
-                      'amount': '${_txFee / 1000000}',
-                      'letter_code': '${_wallet.letterCode}'
-                    })),
-                    if (_correctedDust > 0)
-                      Text(
-                        AppLocalizations.instance.translate('send_dust', {
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'send_fee',
+                      {
+                        'amount': '${_txFee / 1000000}',
+                        'letter_code': '${_wallet.letterCode}'
+                      },
+                    ),
+                  ),
+                  if (_correctedDust > 0)
+                    Text(
+                      AppLocalizations.instance.translate(
+                        'send_dust',
+                        {
                           'amount': '${_correctedDust / 1000000}',
                           'letter_code': '${_wallet.letterCode}'
-                        }),
-                        style: TextStyle(color: Theme.of(context).errorColor),
+                        },
                       ),
-                    Text(
-                        AppLocalizations.instance.translate('send_total', {
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    ),
+                  Text(
+                      AppLocalizations.instance.translate(
+                        'send_total',
+                        {
                           'amount': '${_totalValue / 1000000}',
                           'letter_code': '${_wallet.letterCode}'
-                        }),
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 20),
-                    PeerButton(
-                      text: AppLocalizations.instance
-                          .translate('send_confirm_send'),
-                      action: () async {
-                        if (_firstPress == false) return; //prevent double tap
-                        try {
-                          _firstPress = false;
-                          //write tx to history
-                          await _activeWallets.putOutgoingTx(
-                              _wallet.name, _addressKey.currentState!.value, {
-                            'txid': _buildResult['id'],
-                            'hex': _buildResult['hex'],
-                            'outValue': _totalValue - _txFee,
-                            'outFees': _txFee + _destroyedChange,
-                            'opReturn': _buildResult['opReturn']
-                          });
-                          //broadcast
-                          Provider.of<ElectrumConnection>(context,
-                                  listen: false)
-                              .broadcastTransaction(
-                            _buildResult['hex'],
-                            _buildResult['id'],
-                          );
-                          //store label if exists
-                          if (_labelKey.currentState!.value != '') {
-                            _activeWallets.updateLabel(
-                              _wallet.name,
-                              _addressKey.currentState!.value,
-                              _labelKey.currentState!.value,
-                            );
-                          }
-                          //pop message
-                          Navigator.of(context).pop();
-                          //navigate back to tx list
-                          widget._changeIndex(Tabs.transactions);
-                        } catch (e) {
-                          LoggerWrapper.logError(
-                            'SendTab',
-                            'showTransactionConfirmation',
-                            e.toString(),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppLocalizations.instance.translate(
-                                  'send_oops',
-                                ),
-                              ),
-                            ),
+                        },
+                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 20),
+                  PeerButton(
+                    text: AppLocalizations.instance
+                        .translate('send_confirm_send'),
+                    action: () async {
+                      if (_firstPress == false) return; //prevent double tap
+                      try {
+                        _firstPress = false;
+                        //write tx to history
+                        await _activeWallets.putOutgoingTx(
+                            _wallet.name, _addressKey.currentState!.value, {
+                          'txid': _buildResult['id'],
+                          'hex': _buildResult['hex'],
+                          'outValue': _totalValue - _txFee,
+                          'outFees': _txFee + _destroyedChange,
+                          'opReturn': _buildResult['opReturn']
+                        });
+                        //broadcast
+                        Provider.of<ElectrumConnection>(context, listen: false)
+                            .broadcastTransaction(
+                          _buildResult['hex'],
+                          _buildResult['id'],
+                        );
+                        //store label if exists
+                        if (_labelKey.currentState!.value != '') {
+                          _activeWallets.updateLabel(
+                            _wallet.name,
+                            _addressKey.currentState!.value,
+                            _labelKey.currentState!.value,
                           );
                         }
-                      },
-                    )
-                  ],
-                ),
+                        //pop message
+                        Navigator.of(context).pop();
+                        //navigate back to tx list
+                        widget._changeIndex(Tabs.transactions);
+                      } catch (e) {
+                        LoggerWrapper.logError(
+                          'SendTab',
+                          'showTransactionConfirmation',
+                          e.toString(),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.instance.translate(
+                                'send_oops',
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  )
+                ],
               ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<Iterable> getSuggestions(String pattern) async {
@@ -289,10 +303,14 @@ class _SendTabState extends State<SendTab> {
             Container(
               height: 30,
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Theme.of(context).bottomAppBarColor,
-                  Theme.of(context).primaryColor,
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).bottomAppBarColor,
+                    Theme.of(context).primaryColor,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
             Align(
@@ -386,7 +404,8 @@ class _SendTabState extends State<SendTab> {
                         autocorrect: false,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                              getValidator(_availableCoin.fractions)),
+                            getValidator(_availableCoin.fractions),
+                          ),
                         ],
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
@@ -559,11 +578,15 @@ class _SendTabState extends State<SendTab> {
                               showTransactionConfirmation(context);
                             }
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text(AppLocalizations.instance.translate(
-                              'send_errors_solve',
-                            ))));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  AppLocalizations.instance.translate(
+                                    'send_errors_solve',
+                                  ),
+                                ),
+                              ),
+                            );
                           }
                         },
                       ),

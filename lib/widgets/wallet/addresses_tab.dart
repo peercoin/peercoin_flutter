@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coinslib/coinslib.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
@@ -511,7 +512,7 @@ class _AddressTabState extends State<AddressTab> {
       child: Column(
         children: [
           ExpansionTile(
-            collapsedIconColor: Colors.white,
+            collapsedIconColor: Theme.of(context).colorScheme.onPrimary,
             onExpansionChanged: (_) => setState(
               () {
                 _optionsExpanded = _;
@@ -519,13 +520,13 @@ class _AddressTabState extends State<AddressTab> {
             ),
             trailing: Icon(
               _optionsExpanded ? Icons.close : Icons.filter_alt,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             title: Text(
               AppLocalizations.instance
                   .translate('addressbook_bottom_bar_your_addresses'),
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -761,13 +762,27 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                 ),
               ),
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                title: Text(
-                  AppLocalizations.instance
-                      .translate('addressbook_bottom_bar_sending_addresses'),
-                ),
-              ),
+              kIsWeb
+                  ? SliverAppBar(
+                      centerTitle: false,
+                      automaticallyImplyLeading: false,
+                      title: Text(
+                        AppLocalizations.instance.translate(
+                            'addressbook_bottom_bar_sending_addresses'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    )
+                  : SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      title: Text(
+                        AppLocalizations.instance.translate(
+                          'addressbook_bottom_bar_sending_addresses',
+                        ),
+                      ),
+                    ),
               SliverList(
                 delegate: SliverChildListDelegate(listSend),
               ),
