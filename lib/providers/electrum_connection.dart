@@ -350,7 +350,7 @@ class ElectrumConnection with ChangeNotifier {
           'writing $address to wallet',
         );
         //saving to wallet
-        _activeWallets.addAddressFromScan(_coinName, address);
+        _activeWallets.addAddressFromScan(_coinName, address, newStatus);
         //try next
         await subscribeNextDerivedAddress();
       }

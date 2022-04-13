@@ -802,7 +802,8 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAddressFromScan(String identifier, String address) async {
+  void addAddressFromScan(
+      String identifier, String address, String status) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,
@@ -812,7 +813,7 @@ class ActiveWallets with ChangeNotifier {
         address: address,
         addressBookName: '',
         used: true,
-        status: null,
+        status: status,
         isOurs: true,
         wif: await getWif(identifier, address),
       );
