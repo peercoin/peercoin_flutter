@@ -177,3 +177,5 @@ class PeerProgress extends StatelessWidget {
 //TODO web: setup pin: don't allow direct access
 //TODO web: setup data feeds: don't allow direct access
 //TODO web: auth jail can be circumvented
+//TODO web: layout/sizes for setup
+//TODO web: layout/sizes for server settings
