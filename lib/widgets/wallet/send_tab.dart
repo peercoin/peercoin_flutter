@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:coinslib/coinslib.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -566,15 +567,17 @@ class _SendTabState extends State<SendTab> {
                           }
                         },
                       ),
-                      SizedBox(height: 10),
-                      Text(
+                      if (!kIsWeb) SizedBox(height: 10),
+                      if (!kIsWeb)
+                        Text(
                           AppLocalizations.instance.translate(
                             'wallet__send_label_hint',
                           ),
                           style: TextStyle(
                             fontSize: 12,
                             color: Theme.of(context).colorScheme.secondary,
-                          )),
+                          ),
+                        ),
                     ],
                   ),
                 ),
