@@ -321,108 +321,116 @@ class _AddressTabState extends State<AddressTab> {
     var listSend = <Widget>[];
     for (var addr in _filteredSend) {
       listSend.add(
-        DoubleTabToClipboard(
-          clipBoardData: addr.address,
-          child: Card(
-            elevation: 0,
-            child: ClipRect(
-              child: Slidable(
-                key: Key(addr.address),
-                actionPane: SlidableScrollActionPane(),
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_edit'),
-                    color: Theme.of(context).primaryColor,
-                    icon: Icons.edit,
-                    onTap: () => _addressEditDialog(context, addr),
-                  ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_share'),
-                    color: Theme.of(context).backgroundColor,
-                    iconWidget: Icon(
-                      Icons.share,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    onTap: () =>
-                        WalletHomeQr.showQrDialog(context, addr.address),
-                  ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_send'),
-                    color: Theme.of(context).colorScheme.secondary,
-                    iconWidget: Icon(
-                      Icons.send,
-                      color: Theme.of(context).backgroundColor,
-                    ),
-                    onTap: () => widget.changeIndex(
-                      Tabs.send,
-                      addr.address,
-                      addr.addressBookName,
-                    ),
-                  ),
-                  IconSlideAction(
-                      caption: AppLocalizations.instance
-                          .translate('addressbook_swipe_delete'),
-                      color: Theme.of(context).errorColor,
-                      iconWidget: Icon(Icons.delete, color: Colors.white),
-                      onTap: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: Text(AppLocalizations.instance
-                                .translate('addressbook_dialog_remove_title')),
-                            content: Text(addr.address),
-                            actions: <Widget>[
-                              TextButton.icon(
+        Align(
+          child: Container(
+            width: MediaQuery.of(context).size.width > 1200
+                ? MediaQuery.of(context).size.width / 3
+                : MediaQuery.of(context).size.width,
+            child: DoubleTabToClipboard(
+              clipBoardData: addr.address,
+              child: Card(
+                elevation: 0,
+                child: ClipRect(
+                  child: Slidable(
+                    key: Key(addr.address),
+                    actionPane: SlidableScrollActionPane(),
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_edit'),
+                        color: Theme.of(context).primaryColor,
+                        icon: Icons.edit,
+                        onTap: () => _addressEditDialog(context, addr),
+                      ),
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_share'),
+                        color: Theme.of(context).backgroundColor,
+                        iconWidget: Icon(
+                          Icons.share,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onTap: () =>
+                            WalletHomeQr.showQrDialog(context, addr.address),
+                      ),
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_send'),
+                        color: Theme.of(context).colorScheme.secondary,
+                        iconWidget: Icon(
+                          Icons.send,
+                          color: Theme.of(context).backgroundColor,
+                        ),
+                        onTap: () => widget.changeIndex(
+                          Tabs.send,
+                          addr.address,
+                          addr.addressBookName,
+                        ),
+                      ),
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_delete'),
+                        color: Theme.of(context).errorColor,
+                        iconWidget: Icon(Icons.delete, color: Colors.white),
+                        onTap: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text(AppLocalizations.instance.translate(
+                                  'addressbook_dialog_remove_title')),
+                              content: Text(addr.address),
+                              actions: <Widget>[
+                                TextButton.icon(
+                                    label: Text(AppLocalizations.instance
+                                        .translate(
+                                            'server_settings_alert_cancel')),
+                                    icon: Icon(Icons.cancel),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    }),
+                                TextButton.icon(
                                   label: Text(AppLocalizations.instance
-                                      .translate(
-                                          'server_settings_alert_cancel')),
-                                  icon: Icon(Icons.cancel),
+                                      .translate('jail_dialog_button')),
+                                  icon: Icon(Icons.check),
                                   onPressed: () {
+                                    context
+                                        .read<ActiveWallets>()
+                                        .removeAddress(widget.name, addr);
+                                    applyFilter();
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                        AppLocalizations.instance.translate(
+                                            'addressbook_dialog_remove_snack'),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 5),
+                                    ));
                                     Navigator.of(context).pop();
-                                  }),
-                              TextButton.icon(
-                                label: Text(AppLocalizations.instance
-                                    .translate('jail_dialog_button')),
-                                icon: Icon(Icons.check),
-                                onPressed: () {
-                                  context
-                                      .read<ActiveWallets>()
-                                      .removeAddress(widget.name, addr);
-                                  applyFilter();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(
-                                      AppLocalizations.instance.translate(
-                                          'addressbook_dialog_remove_snack'),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    duration: Duration(seconds: 5),
-                                  ));
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                    actionExtentRatio: 0.25,
+                    child: ListTile(
+                      subtitle: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Center(
+                          child: Text(addr.address),
+                        ),
+                      ),
+                      title: Center(
+                        child: Text(
+                          addr.addressBookName ?? '-',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w600,
                           ),
-                        );
-                      })
-                ],
-                actionExtentRatio: 0.25,
-                child: ListTile(
-                  subtitle: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Center(
-                      child: Text(addr.address),
-                    ),
-                  ),
-                  title: Center(
-                    child: Text(
-                      addr.addressBookName ?? '-',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -435,68 +443,76 @@ class _AddressTabState extends State<AddressTab> {
     }
     for (var addr in _filteredReceive) {
       listReceive.add(
-        DoubleTabToClipboard(
-          clipBoardData: addr.address,
-          child: Card(
-            elevation: 0,
-            child: ClipRect(
-              child: Slidable(
-                key: Key(addr.address),
-                actionPane: SlidableScrollActionPane(),
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_edit'),
-                    color: Theme.of(context).primaryColor,
-                    icon: Icons.edit,
-                    onTap: () => _addressEditDialog(context, addr),
-                  ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_share'),
-                    color: Theme.of(context).backgroundColor,
-                    iconWidget: Icon(
-                      Icons.share,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    onTap: () => WalletHomeQr.showQrDialog(
-                      context,
-                      addr.address,
-                    ),
-                  ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_export'),
-                    color: Theme.of(context).backgroundColor,
-                    iconWidget: Icon(
-                      Icons.vpn_key,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    onTap: () => Auth.requireAuth(
-                      context: context,
-                      biometricsAllowed:
-                          context.read<AppSettings>().biometricsAllowed,
-                      callback: () => _showAddressExportDialog(context, addr),
-                    ),
-                  ),
-                ],
-                actionExtentRatio: 0.25,
-                child: ListTile(
-                  subtitle: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Center(
-                      child: Text(addr.address),
-                    ),
-                  ),
-                  title: Center(
-                    child: Text(
-                      _showLabel
-                          ? addr.addressBookName ?? '-'
-                          : _addressBalanceMap[addr.address] ??
-                              '0.0 ${_availableCoin.letterCode}',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
+        Align(
+          child: Container(
+            width: MediaQuery.of(context).size.width > 1200
+                ? MediaQuery.of(context).size.width / 3
+                : MediaQuery.of(context).size.width,
+            child: DoubleTabToClipboard(
+              clipBoardData: addr.address,
+              child: Card(
+                elevation: 0,
+                child: ClipRect(
+                  child: Slidable(
+                    key: Key(addr.address),
+                    actionPane: SlidableScrollActionPane(),
+                    secondaryActions: <Widget>[
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_edit'),
+                        color: Theme.of(context).primaryColor,
+                        icon: Icons.edit,
+                        onTap: () => _addressEditDialog(context, addr),
+                      ),
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_share'),
+                        color: Theme.of(context).backgroundColor,
+                        iconWidget: Icon(
+                          Icons.share,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onTap: () => WalletHomeQr.showQrDialog(
+                          context,
+                          addr.address,
+                        ),
+                      ),
+                      IconSlideAction(
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_export'),
+                        color: Theme.of(context).backgroundColor,
+                        iconWidget: Icon(
+                          Icons.vpn_key,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onTap: () => Auth.requireAuth(
+                          context: context,
+                          biometricsAllowed:
+                              context.read<AppSettings>().biometricsAllowed,
+                          callback: () =>
+                              _showAddressExportDialog(context, addr),
+                        ),
+                      ),
+                    ],
+                    actionExtentRatio: 0.25,
+                    child: ListTile(
+                      subtitle: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Center(
+                          child: Text(addr.address),
+                        ),
+                      ),
+                      title: Center(
+                        child: Text(
+                          _showLabel
+                              ? addr.addressBookName ?? '-'
+                              : _addressBalanceMap[addr.address] ??
+                                  '0.0 ${_availableCoin.letterCode}',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -535,107 +551,119 @@ class _AddressTabState extends State<AddressTab> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ChoiceChip(
-                      backgroundColor: Theme.of(context).backgroundColor,
-                      selectedColor: Theme.of(context).shadowColor,
-                      visualDensity:
-                          VisualDensity(horizontal: 0.0, vertical: -4),
-                      label: Container(
-                        child: AutoSizeText(
-                          AppLocalizations.instance
-                              .translate('addressbook_hide_change'),
-                          minFontSize: 10,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                  Column(
+                    children: [
+                      ChoiceChip(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        selectedColor: Theme.of(context).shadowColor,
+                        visualDensity:
+                            VisualDensity(horizontal: 0.0, vertical: -4),
+                        label: Container(
+                          child: AutoSizeText(
+                            AppLocalizations.instance
+                                .translate('addressbook_hide_change'),
+                            minFontSize: 10,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                         ),
+                        selected: _showChangeAddresses,
+                        onSelected: (_) {
+                          setState(() {
+                            _showChangeAddresses = _;
+                          });
+                          applyFilter();
+                        },
                       ),
-                      selected: _showChangeAddresses,
-                      onSelected: (_) {
-                        setState(() {
-                          _showChangeAddresses = _;
-                        });
-                        applyFilter();
-                      }),
-                  ChoiceChip(
-                    backgroundColor: Theme.of(context).backgroundColor,
-                    selectedColor: Theme.of(context).shadowColor,
-                    visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-                    label: Container(
-                      width: 120,
-                      child: AutoSizeText(
-                        _showLabel
-                            ? AppLocalizations.instance
-                                .translate('addressbook_show_balance')
-                            : AppLocalizations.instance
-                                .translate('addressbook_show_label'),
-                        textAlign: TextAlign.center,
-                        minFontSize: 10,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
+                      Padding(
+                        padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
+                        child: ChoiceChip(
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          selectedColor: Theme.of(context).shadowColor,
+                          visualDensity:
+                              VisualDensity(horizontal: 0.0, vertical: -4),
+                          label: Container(
+                            child: AutoSizeText(
+                              _showLabel
+                                  ? AppLocalizations.instance
+                                      .translate('addressbook_show_balance')
+                                  : AppLocalizations.instance
+                                      .translate('addressbook_show_label'),
+                              textAlign: TextAlign.center,
+                              minFontSize: 10,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                          selected: _showLabel,
+                          onSelected: (_) {
+                            setState(
+                              () {
+                                _showLabel = _;
+                              },
+                            );
+                            applyFilter();
+                          },
                         ),
                       ),
-                    ),
-                    selected: _showLabel,
-                    onSelected: (_) {
-                      setState(() {
-                        _showLabel = _;
-                      });
-                      applyFilter();
-                    },
+                    ],
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ChoiceChip(
-                      backgroundColor: Theme.of(context).backgroundColor,
-                      selectedColor: Theme.of(context).shadowColor,
-                      visualDensity:
-                          VisualDensity(horizontal: 0.0, vertical: -4),
-                      label: Container(
-                        width: 120,
-                        child: AutoSizeText(
-                          AppLocalizations.instance
-                              .translate('addressbook_hide_used'),
-                          textAlign: TextAlign.center,
-                          minFontSize: 10,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ChoiceChip(
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          selectedColor: Theme.of(context).shadowColor,
+                          visualDensity:
+                              VisualDensity(horizontal: 0.0, vertical: -4),
+                          label: Container(
+                            child: AutoSizeText(
+                              AppLocalizations.instance
+                                  .translate('addressbook_hide_used'),
+                              textAlign: TextAlign.center,
+                              minFontSize: 10,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
                           ),
+                          selected: _showUsed,
+                          onSelected: (_) {
+                            setState(() {
+                              _showUsed = _;
+                            });
+                            applyFilter();
+                          }),
+                      Padding(
+                        padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
+                        child: ChoiceChip(
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          selectedColor: Theme.of(context).shadowColor,
+                          visualDensity:
+                              VisualDensity(horizontal: 0.0, vertical: -4),
+                          label: Container(
+                            child: AutoSizeText(
+                              AppLocalizations.instance
+                                  .translate('addressbook_hide_empty'),
+                              textAlign: TextAlign.center,
+                              minFontSize: 10,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                          selected: _showEmpty,
+                          onSelected: (_) {
+                            setState(() {
+                              _showEmpty = _;
+                            });
+                            applyFilter();
+                          },
                         ),
                       ),
-                      selected: _showUsed,
-                      onSelected: (_) {
-                        setState(() {
-                          _showUsed = _;
-                        });
-                        applyFilter();
-                      }),
-                  ChoiceChip(
-                    backgroundColor: Theme.of(context).backgroundColor,
-                    selectedColor: Theme.of(context).shadowColor,
-                    visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-                    label: Container(
-                      width: 120,
-                      child: AutoSizeText(
-                        AppLocalizations.instance
-                            .translate('addressbook_hide_empty'),
-                        textAlign: TextAlign.center,
-                        minFontSize: 10,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                    ),
-                    selected: _showEmpty,
-                    onSelected: (_) {
-                      setState(() {
-                        _showEmpty = _;
-                      });
-                      applyFilter();
-                    },
+                    ],
                   ),
                 ],
               ),
