@@ -167,15 +167,17 @@ class ActiveWallets with ChangeNotifier {
             .length;
         var derivePath = "m/0'/$numberOfOurAddr/0";
         var newHdWallet = hdWallet.derivePath(derivePath);
-
-        final res = openWallet.addresses.firstWhereOrNull(
+        var newAddrResult = openWallet.addresses.firstWhereOrNull(
             (element) => element.address == newHdWallet.address);
 
-        if (res != null) {
-          //next addr in derivePath is already used for some reason
+        while (newAddrResult != null) {
+          //next addr in derivePath already exists for some reason, find a non-existing one
           numberOfOurAddr++;
           derivePath = "m/0'/$numberOfOurAddr/0";
           newHdWallet = hdWallet.derivePath(derivePath);
+
+          newAddrResult = openWallet.addresses.firstWhereOrNull(
+              (element) => element.address == newHdWallet.address);
         }
 
         openWallet.addNewAddress = WalletAddress(
