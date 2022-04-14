@@ -1,11 +1,12 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/server.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/providers/servers.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
 import 'package:provider/provider.dart';
+
+import '../models/server.dart';
+import '../providers/electrum_connection.dart';
+import '../providers/servers.dart';
+import '../tools/app_localizations.dart';
+import '../tools/app_routes.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
   @override

@@ -65,7 +65,6 @@ void main() {
                 <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
                 runInShell: true,
               );
-              await driver.tap(find.text('Okay'));
               expect(
                 await driver.getText(find.byValueKey('noActiveWallets')),
                 'You have no active wallets',

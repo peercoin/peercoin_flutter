@@ -1,16 +1,21 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
-import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+
+import '../../providers/active_wallets.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/share_wrapper.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/loading_indicator.dart';
+import 'setup.dart';
+import '../../widgets/logout_dialog_dummy.dart'
+    if (dart.library.html) '../../widgets/logout_dialog.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
   @override
@@ -21,26 +26,56 @@ class SetupCreateWalletScreen extends StatefulWidget {
 class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   bool _sharedYet = false;
   bool _initial = true;
+  bool _isLoading = false;
   String _seed = '';
   double _currentSliderValue = 12;
   late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
-    await Share.share(seed);
+    if (kIsWeb) {
+      await Clipboard.setData(
+        ClipboardData(text: seed),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('snack_copied'),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 2),
+      ));
+    } else {
+      await ShareWrapper.share(seed);
+    }
     Timer(
-      Duration(seconds: 1),
+      Duration(seconds: kIsWeb ? 2 : 1),
       () => setState(() {
         _sharedYet = true;
       }),
     );
   }
 
+  Future<void> createWallet(context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await _activeWallets.init();
+      await _activeWallets.createPhrase();
+      _seed = await _activeWallets.seedPhrase;
+    } catch (e) {
+      await LogoutDialog.clearData();
+      await createWallet(context);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _seed = await _activeWallets.seedPhrase;
-
+      await createWallet(context);
       setState(() {
         _initial = false;
       });
@@ -107,7 +142,11 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                     .prefs;
                 await prefs.setBool('importedSeed', false);
                 Navigator.pop(context);
-                await Navigator.pushNamed(context, Routes.SetUpPin);
+
+                await Navigator.pushNamed(
+                  context,
+                  Routes.SetUpPin,
+                );
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),
@@ -121,9 +160,11 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
+    if (_isLoading) {
+      return Center(
+        child: LoadingIndicator(),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -132,9 +173,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 2,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -168,6 +207,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(4),
+                            width: MediaQuery.of(context).size.width > 1200
+                                ? MediaQuery.of(context).size.width / 2
+                                : MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -190,8 +232,17 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                         width: 24,
                                       ),
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
+                                        width: MediaQuery.of(context)
+                                                    .size
+                                                    .width >
+                                                1200
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.5
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width /
                                                 1.9,
                                         child: Text(
                                           AppLocalizations.instance
@@ -244,23 +295,32 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: getColumn(_seed, 0),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: getColumn(_seed, 1),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: getColumn(_seed, 2),
-                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width >
+                                                  1200
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  3
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7,
+                                          child: Text(
+                                            _seed,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              wordSpacing: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryContainer,
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -272,22 +332,27 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                       ),
                       Column(
                         children: [
-                          Slider(
-                            activeColor: Colors.white,
-                            inactiveColor: Theme.of(context).shadowColor,
-                            value: _currentSliderValue,
-                            min: 12,
-                            max: 24,
-                            divisions: 4,
-                            label: _currentSliderValue.round().toString(),
-                            onChanged: (value) {
-                              setState(() {
-                                _currentSliderValue = value;
-                              });
-                              if (value % 3 == 0) {
-                                recreatePhrase(value);
-                              }
-                            },
+                          Container(
+                            width: MediaQuery.of(context).size.width > 1200
+                                ? MediaQuery.of(context).size.width / 2
+                                : MediaQuery.of(context).size.width,
+                            child: Slider(
+                              activeColor: Colors.white,
+                              inactiveColor: Theme.of(context).shadowColor,
+                              value: _currentSliderValue,
+                              min: 12,
+                              max: 24,
+                              divisions: 4,
+                              label: _currentSliderValue.round().toString(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _currentSliderValue = value;
+                                });
+                                if (value % 3 == 0) {
+                                  recreatePhrase(value);
+                                }
+                              },
+                            ),
                           ),
                           Text(
                             AppLocalizations.instance
@@ -320,31 +385,4 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       ),
     );
   }
-
-  List<Widget> getColumn(String seed, int pos) {
-    var list = <Widget>[];
-    var se = seed.split(' ');
-    var colSize = se.length ~/ 3;
-
-    for (var i = 0; i < colSize; i++) {
-      list.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: i * 3 + pos + 1 < 10
-            ? Text(
-                '  ' + (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    fontSize: 16),
-              )
-            : Text(
-                (i * 3 + pos + 1).toString() + '.  ' + se[i * 3 + pos],
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    fontSize: 16),
-              ),
-      ));
-    }
-    return list;
-  }
-//TODO Fix iphone6 problems (containers break)
 }

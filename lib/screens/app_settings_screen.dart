@@ -1,24 +1,28 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/screens/about.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
-import 'package:peercoin/widgets/settings/settings_auth.dart';
-import 'package:peercoin/widgets/settings/settings_price_ticker.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
+
+import '../models/coin_wallet.dart';
+import '../providers/active_wallets.dart';
+import '../providers/app_settings.dart';
+import '../tools/app_localizations.dart';
+import '../tools/app_routes.dart';
+import '../tools/auth.dart';
+import '../tools/logger_wrapper.dart';
+import '../tools/share_wrapper.dart';
+import '../widgets/buttons.dart';
+import '../widgets/double_tab_to_clipboard.dart';
+import '../widgets/settings/settings_auth.dart';
+import '../widgets/settings/settings_price_ticker.dart';
+import 'about.dart';
 
 class AppSettingsScreen extends StatefulWidget {
   @override
@@ -46,11 +50,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = context.watch<AppSettings>();
-      _activeWallets = context.watch<ActiveWallets>();
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      _settings = Provider.of<AppSettings>(context);
+
+      await _settings.init(); //only required in home widget
+      await _activeWallets.init();
+
       _availableWallets = await _activeWallets.activeWalletsValues;
+
       var localAuth = LocalAuthentication();
-      _biometricsAvailable = await localAuth.canCheckBiometrics;
+      _biometricsAvailable =
+          kIsWeb ? false : await localAuth.canCheckBiometrics;
+
       _selectedTheme = ThemeModeHandler.of(context)!
           .themeMode
           .toString()
@@ -80,23 +91,23 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           externalDirectory = await getExternalStorageDirectory();
         }
 
-        FlutterLogs.logInfo('AppSettingsScreen', 'found',
+        LoggerWrapper.logInfo('AppSettingsScreen', 'found',
             'External Storage:$externalDirectory');
 
         var file = File('${externalDirectory!.path}/$zipName');
 
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
             'AppSettingsScreen', 'path', 'Path: \n${file.path}');
 
         if (file.existsSync()) {
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'AppSettingsScreen',
             'existsSync',
             'Logs zip found, opening Share overlay',
           );
           await Share.shareFiles([file.path]);
         } else {
-          FlutterLogs.logError(
+          LoggerWrapper.logError(
             'AppSettingsScreen',
             'existsSync',
             'File not found in storage.',
@@ -206,6 +217,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_initial) return Container();
+
     _biometricsAllowed = _settings.biometricsAllowed;
     _lang =
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
@@ -257,15 +270,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   );
                 }).toList(),
               ),
-              ExpansionTile(
-                title: Text(
-                  AppLocalizations.instance
-                      .translate('app_settings_default_wallet'),
-                  style: Theme.of(context).textTheme.headline6,
+              if (!kIsWeb)
+                ExpansionTile(
+                  title: Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_default_wallet'),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: generateDefaultWallets(),
                 ),
-                childrenPadding: EdgeInsets.all(10),
-                children: generateDefaultWallets(),
-              ),
               ExpansionTile(
                   title: Text(
                       AppLocalizations.instance
@@ -311,11 +325,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               ),
                             ),
                             SizedBox(height: 20),
-                            PeerButton(
-                              action: () => Share.share(_seedPhrase),
-                              text: AppLocalizations.instance
-                                  .translate('app_settings_shareseed'),
-                            )
+                            if (!kIsWeb)
+                              PeerButton(
+                                action: () => ShareWrapper.share(_seedPhrase),
+                                text: AppLocalizations.instance
+                                    .translate('app_settings_shareseed'),
+                              )
                           ])
                   ]),
               ExpansionTile(
@@ -349,41 +364,43 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 childrenPadding: EdgeInsets.all(10),
                 children: [SettingsPriceTicker(_settings, saveSnack)],
               ),
-              ExpansionTile(
-                title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_notifications'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: [
-                  PeerButton(
-                    text: AppLocalizations.instance
-                        .translate('app_settings_notifications_open_button'),
-                    action: () => Navigator.of(context).pushNamed(
-                      Routes.AppSettingsNotifications,
+              if (!kIsWeb)
+                ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance
+                          .translate('app_settings_notifications'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: [
+                    PeerButton(
+                      text: AppLocalizations.instance
+                          .translate('app_settings_notifications_open_button'),
+                      action: () => Navigator.of(context).pushNamed(
+                        Routes.AppSettingsNotifications,
+                      ),
+                    )
+                  ],
+                ),
+              if (!kIsWeb)
+                ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance.translate('app_settings_logs'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: [
+                    Text(
+                      AppLocalizations.instance
+                          .translate('app_settings_description'),
+                      textAlign: TextAlign.center,
                     ),
-                  )
-                ],
-              ),
-              ExpansionTile(
-                title: Text(
-                    AppLocalizations.instance.translate('app_settings_logs'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: [
-                  Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_description'),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 20),
-                  PeerButton(
-                    text: AppLocalizations.instance
-                        .translate('app_settings_logs_export'),
-                    action: () => FlutterLogs.exportLogs(),
-                  )
-                ],
-              ),
+                    SizedBox(height: 20),
+                    PeerButton(
+                      text: AppLocalizations.instance
+                          .translate('app_settings_logs_export'),
+                      action: () => FlutterLogs.exportLogs(),
+                    )
+                  ],
+                ),
             ],
           ),
         ),

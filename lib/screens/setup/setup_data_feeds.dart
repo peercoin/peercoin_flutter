@@ -1,13 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
 import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../providers/app_settings.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../widgets/buttons.dart';
 
 class SetupDataFeedsScreen extends StatefulWidget {
   const SetupDataFeedsScreen({Key? key}) : super(key: key);
@@ -59,10 +61,6 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -70,9 +68,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 1.5,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -111,7 +107,10 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       ],
                     ),
                     Expanded(
-                      child: Padding(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width > 1200
+                            ? MediaQuery.of(context).size.width / 2
+                            : MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -144,38 +143,42 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: SwitchListTile(
-                                key: Key('setupApiBGSwitchKey'),
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('setup_bg_sync_allow'),
-                                  style: TextStyle(color: Colors.white),
+                    if (!kIsWeb)
+                      Expanded(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: SwitchListTile(
+                                  key: Key('setupApiBGSwitchKey'),
+                                  title: Text(
+                                    AppLocalizations.instance
+                                        .translate('setup_bg_sync_allow'),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  value: _bgSyncdAllowed,
+                                  activeColor: Colors.white,
+                                  inactiveThumbColor: Colors.grey,
+                                  onChanged: (newState) =>
+                                      toggleBGSyncHandler(newState),
                                 ),
-                                value: _bgSyncdAllowed,
-                                activeColor: Colors.white,
-                                inactiveThumbColor: Colors.grey,
-                                onChanged: (newState) =>
-                                    toggleBGSyncHandler(newState),
                               ),
-                            ),
-                            PeerExplanationText(
-                              AppLocalizations.instance
-                                  .translate('setup_bg_sync_description'),
-                              2,
-                            ),
-                          ],
+                              PeerExplanationText(
+                                AppLocalizations.instance
+                                    .translate('setup_bg_sync_description'),
+                                2,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     PeerButton(
                       action: () => _launchURL(
                           'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),

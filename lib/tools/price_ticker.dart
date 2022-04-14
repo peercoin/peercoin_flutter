@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
-import 'package:peercoin/providers/app_settings.dart';
+
+import '../providers/app_settings.dart';
+import 'logger_wrapper.dart';
 
 class PriceTicker {
   static Future<Map<String, dynamic>> getDataFromTicker() async {
@@ -15,7 +16,7 @@ class PriceTicker {
       final Map<String, dynamic> data = json.decode(response);
       return data;
     } catch (err) {
-      FlutterLogs.logError(
+      LoggerWrapper.logError(
         'PriceTicker',
         'getDataFromTicker',
         err.toString(),
@@ -31,6 +32,7 @@ class PriceTicker {
     'AUD': 'A\$',
     'BDT': '৳',
     'CNY': '¥',
+    'DKK': 'Kr.',
     'BRL': 'R\$',
     'EUR': '€',
     'GBP': '£',
@@ -69,12 +71,13 @@ class PriceTicker {
   }
 
   static void checkUpdate(AppSettings _settings) async {
-    FlutterLogs.logInfo('PriceTicker', 'checkUpdate', 'checking price update');
+    LoggerWrapper.logInfo(
+        'PriceTicker', 'checkUpdate', 'checking price update');
     //check if last update was longer than an hour ago
     final oneHourAgo =
         (DateTime.now()).subtract(Duration(minutes: Duration.minutesPerHour));
     if (_settings.latestTickerUpdate.isBefore(oneHourAgo)) {
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'PriceTicker',
         'checkUpdate',
         'last update older than 1 hour (${_settings.latestTickerUpdate})',
@@ -96,14 +99,14 @@ class PriceTicker {
         );
         if (valuesValid) {
           //data valid
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'PriceTicker',
             'checkUpdate',
             'price data updated $data',
           );
           _settings.setExchangeRates(data);
         } else {
-          FlutterLogs.logError(
+          LoggerWrapper.logError(
             'PriceTicker',
             'checkUpdate',
             'parser data not valid',
@@ -114,7 +117,7 @@ class PriceTicker {
       //update lastTickerUpdate
       _settings.setLatestTickerUpdate(DateTime.now());
     } else {
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'PriceTicker',
         'checkUpdate',
         'last update happened within the hour. ${_settings.latestTickerUpdate}',

@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/background_sync.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/active_wallets.dart';
+import '../../providers/electrum_connection.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/background_sync.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/loading_indicator.dart';
 
 class WalletImportScanScreen extends StatefulWidget {
   @override
@@ -24,7 +25,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
   late Timer _timer;
-  bool _reconnected = false;
 
   @override
   void didChangeDependencies() async {
@@ -68,24 +68,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           setState(() {
             _scanStarted = true;
           });
-        }
-
-        if (_connectionProvider!.openReplies.isEmpty) {
-          //no more replies left - check what is left to do
-          if (_reconnected == false) {
-            await _connectionProvider!.closeConnection();
-            await Future.delayed(
-              Duration(seconds: 1),
-              () async {
-                await _connectionProvider!.init(_coinName, scanMode: false);
-                _connectionProvider!.subscribeToScriptHashes(
-                    await _activeWallets.getWalletScriptHashes(_coinName));
-              },
-            );
-            setState(() {
-              _reconnected = true;
-            });
-          }
         }
       }
     }

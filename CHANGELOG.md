@@ -1,3 +1,10 @@
+### **0.8.8** (2022-04-13)
+* Add language: Danish
+* Add currency: DKK
+* Scanning performance improvements
+* Bug fix: Sending OP_RETURN/Metadata messages working again
+* Bug fix: Edge case for unused addresses
+
 ### **0.8.7** (2022-03-29)
 * Periodic backup and donation reminders
 * Add language: Swedish

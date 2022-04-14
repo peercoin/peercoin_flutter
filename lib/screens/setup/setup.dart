@@ -1,39 +1,32 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/setup_progress.dart';
-import 'package:provider/provider.dart';
+
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/setup_progress.dart';
 
 class SetupScreen extends StatefulWidget {
   @override
   _SetupScreenState createState() => _SetupScreenState();
+
+  static double calcContainerHeight(BuildContext ctx) {
+    var height = MediaQuery.of(ctx).size.height;
+    var padding = MediaQuery.of(ctx).padding;
+    var correctedHeight = height - padding.top - padding.bottom;
+
+    if (kIsWeb) return correctedHeight;
+
+    return MediaQuery.of(ctx).orientation == Orientation.portrait
+        ? correctedHeight
+        : MediaQuery.of(ctx).size.height * 1.5;
+  }
 }
 
 class _SetupScreenState extends State<SetupScreen> {
-  bool _loading = false;
-
-  void createWallet(context) async {
-    setState(() {
-      _loading = true;
-    });
-    var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
-    await _activeWallets.init();
-    await _activeWallets.createPhrase();
-    await Navigator.of(context).pushNamed(Routes.SetupCreateWallet);
-    setState(() {
-      _loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -41,9 +34,7 @@ class _SetupScreenState extends State<SetupScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 1.5,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Stack(
             fit: StackFit.expand,
@@ -108,11 +99,11 @@ class _SetupScreenState extends State<SetupScreen> {
                           ),
                           PeerExplanationText(AppLocalizations.instance
                               .translate('setup_text2')),
-                          PeerButtonSetupLoading(
+                          PeerButtonSetup(
                             text: AppLocalizations.instance
                                 .translate('setup_save_title'),
-                            action: () => {createWallet(context)},
-                            loading: _loading,
+                            action: () => Navigator.of(context)
+                                .pushNamed(Routes.SetupCreateWallet),
                           ),
                           SizedBox(
                             height: 8,
@@ -179,3 +170,12 @@ class PeerProgress extends StatelessWidget {
     );
   }
 }
+
+//TODO web: material icons are not rendered on firefox / also rendering issues with non latin characters (flutter render engine issue)
+//TODO web: find session solution 
+//TODO web: share: save to clipboard and notifiy 
+//TODO web: setup pin: don't allow direct access
+//TODO web: setup data feeds: don't allow direct access
+//TODO web: auth jail can be circumvented
+//TODO web: layout/sizes for setup
+//TODO web: layout/sizes for server settings

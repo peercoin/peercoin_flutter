@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/price_ticker.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/expanded_section.dart';
+
+import '../../providers/app_settings.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/price_ticker.dart';
+import '../buttons.dart';
+import '../expanded_section.dart';
 
 class SettingsPriceTicker extends StatefulWidget {
   final AppSettings _settings;

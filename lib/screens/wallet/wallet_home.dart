@@ -1,23 +1,25 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/models/wallet_transaction.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/tools/price_ticker.dart';
-import 'package:peercoin/widgets/wallet/addresses_tab.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/wallet/receive_tab.dart';
-import 'package:peercoin/widgets/wallet/send_tab.dart';
-import 'package:peercoin/widgets/wallet/transactions_list.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/coin_wallet.dart';
+import '../../models/wallet_transaction.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../providers/electrum_connection.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/auth.dart';
+import '../../tools/logger_wrapper.dart';
+import '../../tools/price_ticker.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/wallet/addresses_tab.dart';
+import '../../widgets/wallet/receive_tab.dart';
+import '../../widgets/wallet/send_tab.dart';
+import '../../widgets/wallet/transactions_list.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   @override
@@ -119,9 +121,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
         );
       }
 
-      if (Platform.isIOS || Platform.isAndroid) {
-        if (!_wallet.title.contains('Testnet')) {
-          triggerHighValueAlert();
+      if (!kIsWeb) {
+        if (Platform.isIOS || Platform.isAndroid) {
+          if (!_wallet.title.contains('Testnet')) {
+            triggerHighValueAlert();
+          }
         }
       }
 
@@ -146,7 +150,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
       if (_connectionProvider!.latestBlock > _latestBlock) {
         //new block
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
           'WalletHome',
           'didChangeDependencies',
           'new block ${_connectionProvider!.latestBlock}',
@@ -159,7 +163,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 element.timestamp != -1 ||
             element.timestamp == null);
         unconfirmedTx.forEach((element) {
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'WalletHome',
             'didChangeDependencies',
             'requesting update for ${element.txid}',
@@ -229,7 +233,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void deactivate() async {
-    if (_rescanInProgress == false) {
+    if (_rescanInProgress == false &&
+        ModalRoute.of(context)!.settings.arguments != null) {
       await _connectionProvider!.closeConnection();
     }
     super.deactivate();
@@ -367,32 +372,34 @@ class _WalletHomeState extends State<WalletHomeScreen>
             onSelected: (dynamic value) => selectPopUpMenuItem(value),
             itemBuilder: (_) {
               return [
-                PopupMenuItem(
-                  value: 'import_wallet',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.arrow_circle_down,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_paperwallet'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'import_wif',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.arrow_circle_down,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_wif'),
+                if (_appSettings.camerasAvailble)
+                  PopupMenuItem(
+                    value: 'import_wallet',
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.arrow_circle_down,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('wallet_pop_menu_paperwallet'),
+                      ),
                     ),
                   ),
-                ),
+                if (_appSettings.camerasAvailble)
+                  PopupMenuItem(
+                    value: 'import_wif',
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.arrow_circle_down,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('wallet_pop_menu_wif'),
+                      ),
+                    ),
+                  ),
                 PopupMenuItem(
                   value: 'server_settings',
                   child: ListTile(

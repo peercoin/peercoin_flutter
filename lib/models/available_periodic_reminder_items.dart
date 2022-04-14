@@ -1,4 +1,4 @@
-import 'package:peercoin/models/periodic_reminder_item.dart';
+import 'periodic_reminder_item.dart';
 
 class AvailablePeriodicReminderItems {
   static final Map<String, PeriodicReminderItem> availableReminderItems = {

@@ -1,15 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_logs/flutter_logs.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/providers/unencrypted_options.dart';
-import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/tools/app_localizations.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/active_wallets.dart';
+import '../../providers/unencrypted_options.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/logger_wrapper.dart';
+import '../../widgets/buttons.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     try {
       await _activeWallets.init();
     } catch (e) {
-      FlutterLogs.logError(
+      LoggerWrapper.logError(
         'SetupImportSeed',
         'createWallet',
         e.toString(),
@@ -60,10 +61,6 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var padding = MediaQuery.of(context).padding;
-    var correctHeight = height - padding.top - padding.bottom;
-
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
@@ -79,9 +76,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).orientation == Orientation.portrait
-              ? correctHeight
-              : MediaQuery.of(context).size.height * 1.5,
+          height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -118,6 +113,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       ),
                       Container(
                         padding: const EdgeInsets.all(4),
+                        width: MediaQuery.of(context).size.width > 1200
+                            ? MediaQuery.of(context).size.width / 2
+                            : MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: Theme.of(context).shadowColor,
@@ -139,16 +137,21 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     width: 24,
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.8,
+                                    width: MediaQuery.of(context).size.width >
+                                            1200
+                                        ? MediaQuery.of(context).size.width /
+                                            2.5
+                                        : MediaQuery.of(context).size.width /
+                                            1.9,
                                     child: Text(
                                       AppLocalizations.instance
                                           .translate('setup_import_note'),
                                       style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer,
-                                          fontSize: 15),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                        fontSize: 15,
+                                      ),
                                       textAlign: TextAlign.left,
                                       maxLines: 5,
                                     ),
@@ -215,10 +218,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         FocusScope.of(context)
                                             .unfocus(); //hide keyboard
                                       },
-                                      icon: Icon(Icons.paste,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primaryContainer),
+                                      icon: Icon(
+                                        Icons.paste,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                      ),
                                     ),
                                     border: border,
                                     focusedBorder: border,

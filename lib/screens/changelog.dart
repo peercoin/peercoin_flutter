@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:peercoin/tools/app_localizations.dart';
+
+import '../tools/app_localizations.dart';
 
 class ChangeLogScreen extends StatelessWidget {
   const ChangeLogScreen({Key? key}) : super(key: key);

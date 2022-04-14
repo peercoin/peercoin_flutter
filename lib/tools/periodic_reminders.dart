@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
-import 'package:peercoin/models/available_periodic_reminder_items.dart';
-import 'package:peercoin/models/periodic_reminder_item.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../models/available_periodic_reminder_items.dart';
+import '../models/periodic_reminder_item.dart';
+import '../providers/app_settings.dart';
 import 'app_localizations.dart';
+import 'logger_wrapper.dart';
 
 class PeriodicReminders {
   static Future<void> displayReminder(
@@ -49,7 +50,7 @@ class PeriodicReminders {
       },
     );
 
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'PriceTicker',
       'displayReminder',
       '${reminderItem.id} displayed})',
@@ -63,7 +64,7 @@ class PeriodicReminders {
       ),
     ); //next notification in 30 to 45 days
 
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'PriceTicker',
       'displayReminder',
       '$name next event scheduled for $_newDate})',
@@ -76,7 +77,7 @@ class PeriodicReminders {
 
   static Future<void> checkReminder(
       AppSettings _settings, BuildContext context) async {
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'PeriodicReminders',
       'checkReminder',
       'checking periodic reminders',
@@ -101,7 +102,7 @@ class PeriodicReminders {
           //value has been initialized
           //check if alert is due
           if (DateTime.now().isAfter(_nextReminders[name]!)) {
-            FlutterLogs.logInfo(
+            LoggerWrapper.logInfo(
               'PriceTicker',
               'checkUpdate',
               'reminder $name scheduled})',
@@ -111,7 +112,7 @@ class PeriodicReminders {
           }
         } else {
           //value has not been initialized yet - show reminder now
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'PriceTicker',
             'checkUpdate',
             'reminder $name is not initialized})',
@@ -127,7 +128,7 @@ class PeriodicReminders {
     }
     //loop over - no message fired?
     if (!_messageFired) {
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
         'PeriodicReminders',
         'checkReminder',
         'no reminder scheduled. ${_settings.latestTickerUpdate}',

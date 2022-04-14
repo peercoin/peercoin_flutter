@@ -17,13 +17,12 @@ class EncryptedBox with ChangeNotifier {
 
   Future<Uint8List?> get key async {
     if (_encryptionKey == null) {
-      var containsEncryptionKey = await _secureStorage.containsKey(key: 'key');
-      if (!containsEncryptionKey) {
+      var encryptionKeyInStorage = await _secureStorage.read(key: 'key');
+      if (encryptionKeyInStorage == null) {
         var key = Hive.generateSecureKey();
         await _secureStorage.write(key: 'key', value: base64UrlEncode(key));
       }
-      _encryptionKey =
-          base64Url.decode((await _secureStorage.read(key: 'key') as String));
+      _encryptionKey = base64Url.decode((encryptionKeyInStorage as String));
     }
     return _encryptionKey;
   }

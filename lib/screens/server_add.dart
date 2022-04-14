@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/server.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/providers/servers.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
+
+import '../models/available_coins.dart';
+import '../models/server.dart';
+import '../providers/electrum_connection.dart';
+import '../providers/servers.dart';
+import '../tools/app_localizations.dart';
+import '../tools/logger_wrapper.dart';
+import '../widgets/loading_indicator.dart';
 
 class ServerAddScreen extends StatefulWidget {
   @override
@@ -59,7 +60,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       ));
     } else {
       //continue: try to connect
-      FlutterLogs.logInfo('ServerAdd', 'tryConnect', 'trying to connect');
+      LoggerWrapper.logInfo('ServerAdd', 'tryConnect', 'trying to connect');
 
       //close original server connection
       await Provider.of<ElectrumConnection>(context, listen: false)
@@ -72,7 +73,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           serverUrl,
         );
       } catch (e) {
-        FlutterLogs.logError(
+        LoggerWrapper.logError(
           'ServerAdd',
           'tryConnect',
           e.toString(),
@@ -128,7 +129,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       _connection.stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        FlutterLogs.logError(
+        LoggerWrapper.logError(
           'ServerAdd',
           'tryConnect',
           error.message,

@@ -1,31 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
-import 'package:peercoin/models/app_options.dart';
-import 'package:peercoin/models/coin_wallet.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:peercoin/models/pending_notifications.dart';
-import 'package:peercoin/models/server.dart';
-import 'package:peercoin/models/wallet_address.dart';
-import 'package:peercoin/models/wallet_transaction.dart';
-import 'package:peercoin/models/wallet_utxo.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/app_options.dart';
+import '../models/coin_wallet.dart';
+import '../models/pending_notifications.dart';
+import '../models/server.dart';
+import '../models/wallet_address.dart';
+import '../models/wallet_transaction.dart';
+import '../models/wallet_utxo.dart';
+import 'app_localizations.dart';
+import 'logger_wrapper.dart';
+import 'notification.dart';
 
 class BackgroundSync {
   static void backgroundFetchHeadlessTask(HeadlessTask task) async {
     var taskId = task.taskId;
     var isTimeout = task.timeout;
     if (isTimeout) {
-      FlutterLogs.logWarn(
+      LoggerWrapper.logWarn(
         'BackgroundSync',
         'backgroundFetchHeadlessTask',
         'Headless task timed-out: $taskId',
@@ -33,7 +34,7 @@ class BackgroundSync {
       BackgroundFetch.finish(taskId);
       return;
     }
-    FlutterLogs.logInfo(
+    LoggerWrapper.logInfo(
       'BackgroundSync',
       'backgroundFetchHeadlessTask',
       'Headless event received.',
@@ -57,15 +58,16 @@ class BackgroundSync {
             requiresDeviceIdle: false,
             requiredNetworkType: NetworkType.ANY,
           ), (String taskId) async {
-        FlutterLogs.logInfo('BackgroundSync', 'init', 'Event received $taskId');
+        LoggerWrapper.logInfo(
+            'BackgroundSync', 'init', 'Event received $taskId');
         await BackgroundSync.executeSync();
         BackgroundFetch.finish(taskId);
       }, (String taskId) async {
-        FlutterLogs.logInfo(
+        LoggerWrapper.logInfo(
             'BackgroundSync', 'init', 'TASK TIMEOUT taskId: $taskId');
         BackgroundFetch.finish(taskId);
       });
-      FlutterLogs.logInfo(
+      LoggerWrapper.logInfo(
           'BackgroundSync', 'init', 'configure success: $status');
     }
 
@@ -151,7 +153,7 @@ class BackgroundSync {
             }
           });
 
-          FlutterLogs.logInfo(
+          LoggerWrapper.logInfo(
             'BackgroundSync',
             'executeSync',
             'addressesToQuery $adressesToQuery',
@@ -173,7 +175,7 @@ class BackgroundSync {
           if (result.body.contains('foundDifference')) {
             //valid answer
             var bodyDecoded = jsonDecode(result.body);
-            FlutterLogs.logInfo(
+            LoggerWrapper.logInfo(
               'BackgroundSync',
               'executeSync ${wallet.name}',
               bodyDecoded.toString(),

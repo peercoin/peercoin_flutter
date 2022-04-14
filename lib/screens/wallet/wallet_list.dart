@@ -1,23 +1,28 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:collection/collection.dart' show IterableExtension;
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/tools/background_sync.dart';
-import 'package:peercoin/tools/periodic_reminders.dart';
-import 'package:peercoin/tools/price_ticker.dart';
-import 'package:peercoin/widgets/loading_indicator.dart';
-import 'package:peercoin/widgets/wallet/new_wallet.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+
+import '../../models/available_coins.dart';
+import '../../models/coin_wallet.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/auth.dart';
+import '../../tools/background_sync.dart';
+import '../../tools/periodic_reminders.dart';
+import '../../tools/price_ticker.dart';
+import '../../tools/share_wrapper.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/wallet/new_wallet.dart';
+import '../../widgets/logout_dialog_dummy.dart'
+    if (dart.library.html) '../../widgets/logout_dialog.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
@@ -57,9 +62,9 @@ class _WalletListScreenState extends State<WalletListScreen>
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
     _appSettings = Provider.of<AppSettings>(context, listen: false);
-    await _appSettings.init(); //only required in home widget
-    await _activeWallets.init();
     if (_initial) {
+      await _appSettings.init(); //only required in home widget
+      await _activeWallets.init();
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
@@ -72,14 +77,21 @@ class _WalletListScreenState extends State<WalletListScreen>
         );
       }
 
-      //toggle check for "whats new" changelog
-      var _packageInfo = await PackageInfo.fromPlatform();
-      if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
-        await Navigator.of(context).pushNamed(Routes.ChangeLog);
-        _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
+      if (!kIsWeb) {
+        //toggle check for "whats new" changelog
+        var _packageInfo = await PackageInfo.fromPlatform();
+        if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
+          await Navigator.of(context).pushNamed(Routes.ChangeLog);
+          _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
+        }
+
+        //toggle periodic reminders
+        var _walletValues = await _activeWallets.activeWalletsValues;
+        if (_walletValues.isNotEmpty) {
+          //don't show for users with no wallets
+          await PeriodicReminders.checkReminder(_appSettings, context);
+        }
       }
-      //toggle periodic reminders
-      await PeriodicReminders.checkReminder(_appSettings, context);
 
       //check if we just finished a scan
       var fromScan = false;
@@ -119,10 +131,12 @@ class _WalletListScreenState extends State<WalletListScreen>
             _isLoading = true;
             _initial = false;
           });
-          await Navigator.of(context).pushNamed(
-            Routes.WalletHome,
-            arguments: values[0],
-          );
+          if (!kIsWeb) {
+            await Navigator.of(context).pushNamed(
+              Routes.WalletHome,
+              arguments: values[0],
+            );
+          }
           setState(() {
             _isLoading = false;
           });
@@ -132,10 +146,12 @@ class _WalletListScreenState extends State<WalletListScreen>
               _isLoading = true;
               _initial = false;
             });
-            await Navigator.of(context).pushNamed(
-              Routes.WalletHome,
-              arguments: defaultWallet,
-            );
+            if (!kIsWeb) {
+              await Navigator.of(context).pushNamed(
+                Routes.WalletHome,
+                arguments: defaultWallet,
+              );
+            }
             setState(() {
               _isLoading = false;
             });
@@ -178,16 +194,25 @@ class _WalletListScreenState extends State<WalletListScreen>
           IconButton(
             key: Key('newWalletIconButton'),
             onPressed: () {
-              if (_initial == false) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return NewWalletDialog();
-                    });
-              }
+              showWalletDialog(context);
             },
             icon: Icon(Icons.add_rounded),
-          )
+          ),
+          if (kIsWeb)
+            IconButton(
+              key: Key('logoutButton'),
+              onPressed: () async {
+                if (_initial == false) {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return LogoutDialog();
+                    },
+                  );
+                }
+              },
+              icon: Icon(Icons.logout_rounded),
+            )
         ],
       ),
       body: _isLoading || _initial
@@ -219,11 +244,15 @@ class _WalletListScreenState extends State<WalletListScreen>
                             ),
                           ),
                           child: GestureDetector(
-                            onTap: () => Share.share(
-                              Platform.isAndroid
-                                  ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
-                                  : 'https://apps.apple.com/us/app/peercoin-wallet/id1571755170',
-                            ),
+                            onTap: () {
+                              if (!kIsWeb) {
+                                ShareWrapper.share(
+                                  Platform.isAndroid
+                                      ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
+                                      : 'https://apps.apple.com/app/peercoin-wallet/id1571755170',
+                                );
+                              }
+                            },
                             child: Image.asset(
                               'assets/icon/ppc-logo.png',
                             ),
@@ -257,33 +286,50 @@ class _WalletListScreenState extends State<WalletListScreen>
                       var listData = snapshot.data! as List;
                       if (listData.isEmpty) {
                         return Expanded(
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('wallets_none'),
-                              key: Key('noActiveWallets'),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                                color: Theme.of(context).backgroundColor,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                AppLocalizations.instance
+                                    .translate('wallets_none'),
+                                key: Key('noActiveWallets'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                  color: Theme.of(context).backgroundColor,
+                                ),
                               ),
-                            ),
+                              if (kIsWeb)
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              if (kIsWeb)
+                                PeerButton(
+                                  text: AppLocalizations.instance
+                                      .translate('add_new_wallet'),
+                                  action: () => showWalletDialog(context),
+                                )
+                            ],
                           ),
                         );
                       }
                       return Expanded(
-                        child: ListView.builder(
-                          itemCount: listData.length,
-                          itemBuilder: (ctx, i) {
-                            CoinWallet _wallet = listData[i];
-                            return Card(
-                              elevation: 0,
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 16),
-                              color: Theme.of(context).backgroundColor,
-                              child: Column(
-                                children: [
-                                  InkWell(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            itemCount: listData.length,
+                            itemBuilder: (ctx, i) {
+                              CoinWallet _wallet = listData[i];
+                              return Card(
+                                elevation: 0,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                color: Theme.of(context).backgroundColor,
+                                child: Column(
+                                  children: [
+                                    InkWell(
                                       onTap: () async {
                                         setState(() {
                                           _isLoading = true;
@@ -339,11 +385,13 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               .colorScheme
                                               .secondary,
                                         ),
-                                      )),
-                                ],
-                              ),
-                            );
-                          },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     },
@@ -352,5 +400,16 @@ class _WalletListScreenState extends State<WalletListScreen>
               ),
             ),
     );
+  }
+
+  void showWalletDialog(BuildContext context) {
+    if (_initial == false) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return NewWalletDialog();
+        },
+      );
+    }
   }
 }

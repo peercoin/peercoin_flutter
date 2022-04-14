@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/encrypted_box.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/auth.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/app_settings.dart';
+import '../../providers/encrypted_box.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/auth.dart';
+import '../buttons.dart';
 
 class SettingsAuth extends StatelessWidget {
   final bool _biometricsAllowed;

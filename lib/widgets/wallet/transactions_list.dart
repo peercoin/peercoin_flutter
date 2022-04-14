@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/wallet_transaction.dart';
 import 'package:intl/intl.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
+
+import '/../providers/active_wallets.dart';
+import '/../tools/app_localizations.dart';
+import '/../models/wallet_transaction.dart';
+import '/../tools/app_routes.dart';
+import '/../widgets/wallet/wallet_balance_header.dart';
 
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;

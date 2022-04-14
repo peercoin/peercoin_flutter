@@ -1,21 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:peercoin/models/app_options.dart';
-import 'package:peercoin/models/pending_notifications.dart';
-import 'package:peercoin/models/server.dart';
-import 'package:peercoin/providers/app_settings.dart';
-import 'package:peercoin/providers/servers.dart';
-import 'package:peercoin/screens/auth_jail.dart';
-import 'package:peercoin/tools/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
+import 'models/app_options.dart';
+import 'models/pending_notifications.dart';
+import './models/server.dart';
+import 'providers/app_settings.dart';
+import 'providers/servers.dart';
+import 'screens/auth_jail.dart';
+import 'tools/logger_wrapper.dart';
+import 'tools/theme_manager.dart';
 import 'models/coin_wallet.dart';
 import 'models/wallet_address.dart';
 import 'models/wallet_transaction.dart';
@@ -25,10 +26,10 @@ import 'providers/electrum_connection.dart';
 import 'providers/encrypted_box.dart';
 import 'providers/unencrypted_options.dart';
 import 'screens/setup/setup.dart';
-import './screens/wallet/wallet_list.dart';
-import './tools/app_localizations.dart';
-import './tools/app_routes.dart';
-import './tools/app_themes.dart';
+import 'screens/wallet/wallet_list.dart';
+import 'tools/app_localizations.dart';
+import 'tools/app_routes.dart';
+import 'tools/app_themes.dart';
 
 late bool setupFinished;
 late Widget _homeWidget;
@@ -73,7 +74,7 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     if (payload != null) {
-      FlutterLogs.logInfo('notification', 'payload', payload);
+      LoggerWrapper.logInfo('notification', 'payload', payload);
     }
   });
 
@@ -95,24 +96,26 @@ void main() async {
     );
   }
 
-  //init logger
-  await FlutterLogs.initLogs(
-    logLevelsEnabled: [
-      LogLevel.INFO,
-      LogLevel.WARNING,
-      LogLevel.ERROR,
-      LogLevel.SEVERE
-    ],
-    timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
-    directoryStructure: DirectoryStructure.FOR_DATE,
-    logFileExtension: LogFileExtension.LOG,
-    logsWriteDirectoryName: 'MyLogs',
-    logsExportDirectoryName: 'MyLogs/Exported',
-    debugFileOperations: true,
-    isDebuggable: true,
-  );
+  if (!kIsWeb) {
+    //init logger
+    await FlutterLogs.initLogs(
+      logLevelsEnabled: [
+        LogLevel.INFO,
+        LogLevel.WARNING,
+        LogLevel.ERROR,
+        LogLevel.SEVERE
+      ],
+      timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
+      directoryStructure: DirectoryStructure.FOR_DATE,
+      logFileExtension: LogFileExtension.LOG,
+      logsWriteDirectoryName: 'MyLogs',
+      logsExportDirectoryName: 'MyLogs/Exported',
+      debugFileOperations: true,
+      isDebuggable: true,
+    );
 
-  FlutterLogs.logInfo('main', 'initLogs', 'Init logs..');
+    LoggerWrapper.logInfo('main', 'initLogs', 'Init logs..');
+  }
 
   //run
   runApp(PeercoinApp());

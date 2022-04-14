@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/providers/active_wallets.dart';
-import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/coin.dart';
-import 'package:peercoin/models/coin_wallet.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
-import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet/wallet_balance_header.dart';
-import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
-import 'package:share/share.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../tools/share_wrapper.dart';
+import '/../providers/active_wallets.dart';
+import '/../tools/app_localizations.dart';
+import '/../models/available_coins.dart';
+import '/../models/coin.dart';
+import '/../models/coin_wallet.dart';
+import '/../widgets/buttons.dart';
+import '/../widgets/double_tab_to_clipboard.dart';
+import '/../widgets/service_container.dart';
+import '/../widgets/wallet/wallet_balance_header.dart';
+import '/../widgets/wallet/wallet_home_qr.dart';
 
 class ReceiveTab extends StatefulWidget {
   final _unusedAddress;
@@ -147,172 +148,184 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               ),
             ),
-            PeerContainer(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    PeerServiceTitle(
+            Align(
+              child: PeerContainer(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      PeerServiceTitle(
                         title: AppLocalizations.instance
-                            .translate('wallet_bottom_nav_receive')),
-                    SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
+                            .translate('wallet_bottom_nav_receive'),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        decoration: BoxDecoration(
                           color:
                               Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.all(Radius.circular(4))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                          child: DoubleTabToClipboard(
-                            clipBoardData: widget._unusedAddress,
-                            child: SelectableText(
-                              widget._unusedAddress,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FittedBox(
+                            child: DoubleTabToClipboard(
+                              clipBoardData: widget._unusedAddress,
+                              child: SelectableText(
+                                widget._unusedAddress,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      key: _labelKey,
-                      controller: labelController,
-                      autocorrect: false,
-                      onChanged: (String newString) {
-                        stringBuilder();
-                      },
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.bookmark,
-                          color: Theme.of(context).primaryColor,
+                      SizedBox(height: 20),
+                      TextFormField(
+                        textInputAction: TextInputAction.done,
+                        key: _labelKey,
+                        controller: labelController,
+                        autocorrect: false,
+                        onChanged: (String newString) {
+                          stringBuilder();
+                        },
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.bookmark,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          labelText:
+                              AppLocalizations.instance.translate('send_label'),
                         ),
-                        labelText:
-                            AppLocalizations.instance.translate('send_label'),
+                        maxLength: 32,
                       ),
-                      maxLength: 32,
-                    ),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      key: _amountKey,
-                      controller: amountController,
-                      onChanged: (String newString) {
-                        stringBuilder();
-                      },
-                      autocorrect: false,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            getValidator(_availableCoin.fractions)),
-                      ],
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.money,
-                          color: Theme.of(context).primaryColor,
+                      TextFormField(
+                        textInputAction: TextInputAction.done,
+                        key: _amountKey,
+                        controller: amountController,
+                        onChanged: (String newString) {
+                          stringBuilder();
+                        },
+                        autocorrect: false,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              getValidator(_availableCoin.fractions)),
+                        ],
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.money,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          labelText: AppLocalizations.instance
+                              .translate('receive_requested_amount'),
+                          suffix: Text(_wallet.letterCode),
                         ),
-                        labelText: AppLocalizations.instance
-                            .translate('receive_requested_amount'),
-                        suffix: Text(_wallet.letterCode),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return AppLocalizations.instance
+                                .translate('receive_enter_amount');
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return AppLocalizations.instance
-                              .translate('receive_enter_amount');
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 30),
-                    PeerButtonBorder(
-                      text: AppLocalizations.instance
-                          .translate('receive_show_qr'),
-                      action: () {
-                        WalletHomeQr.showQrDialog(context, _qrString!, true);
-                      },
-                    ),
-                    SizedBox(height: 8),
-                    PeerButton(
-                      text:
-                          AppLocalizations.instance.translate('receive_share'),
-                      action: () async {
-                        if (labelController.text != '') {
-                          context.read<ActiveWallets>().updateLabel(
-                              _wallet.name,
-                              widget._unusedAddress,
-                              labelController.text);
-                        }
-                        await Share.share(_qrString ?? widget._unusedAddress);
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      AppLocalizations.instance
-                          .translate('wallet_receive_label_hint'),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.secondary,
+                      SizedBox(height: 30),
+                      PeerButtonBorder(
+                        text: AppLocalizations.instance
+                            .translate('receive_show_qr'),
+                        action: () {
+                          WalletHomeQr.showQrDialog(context, _qrString!, true);
+                        },
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 8),
+                      PeerButton(
+                        text: AppLocalizations.instance
+                            .translate('receive_share'),
+                        action: () async {
+                          if (labelController.text != '') {
+                            context.read<ActiveWallets>().updateLabel(
+                                _wallet.name,
+                                widget._unusedAddress,
+                                labelController.text);
+                          }
+                          await ShareWrapper.share(
+                              _qrString ?? widget._unusedAddress);
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        AppLocalizations.instance
+                            .translate('wallet_receive_label_hint'),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             _wallet.title.contains('Testnet')
-                ? PeerContainer(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        PeerServiceTitle(
-                            title: AppLocalizations.instance
-                                .translate('receive_obtain')),
-                        SizedBox(height: 20),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('receive_website_faucet'),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 20),
-                        PeerButton(
-                          text: AppLocalizations.instance
-                              .translate('receive_faucet'),
-                          action: () {
-                            launchURL('https://ppc.lol/faucet/');
-                          },
-                        ),
-                      ],
+                ? Align(
+                    child: PeerContainer(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          PeerServiceTitle(
+                              title: AppLocalizations.instance
+                                  .translate('receive_obtain')),
+                          SizedBox(height: 20),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('receive_website_faucet'),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20),
+                          PeerButton(
+                            text: AppLocalizations.instance
+                                .translate('receive_faucet'),
+                            action: () {
+                              launchURL('https://ppc.lol/faucet/');
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   )
-                : PeerContainer(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        PeerServiceTitle(
-                            title: AppLocalizations.instance
-                                .translate('buy_peercoin')),
-                        SizedBox(height: 20),
-                        Text(
-                          AppLocalizations.instance
-                              .translate('receive_website_description'),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 20),
-                        PeerButton(
-                          text: AppLocalizations.instance
-                              .translate('receive_website_credit'),
-                          action: () {
-                            launchURL('https://ppc.lol/buy');
-                          },
-                        ),
-                        PeerButton(
-                          text: AppLocalizations.instance
-                              .translate('receive_website_exchandes'),
-                          action: () {
-                            launchURL('https://ppc.lol/exchanges');
-                          },
-                        ),
-                      ],
+                : Align(
+                    child: PeerContainer(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          PeerServiceTitle(
+                              title: AppLocalizations.instance
+                                  .translate('buy_peercoin')),
+                          SizedBox(height: 20),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('receive_website_description'),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20),
+                          PeerButton(
+                            text: AppLocalizations.instance
+                                .translate('receive_website_credit'),
+                            action: () {
+                              launchURL('https://ppc.lol/buy');
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          PeerButton(
+                            text: AppLocalizations.instance
+                                .translate('receive_website_exchandes'),
+                            action: () {
+                              launchURL('https://ppc.lol/exchanges');
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
           ],

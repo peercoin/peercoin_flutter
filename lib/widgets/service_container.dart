@@ -24,7 +24,7 @@ class PeerServiceTitle extends StatelessWidget {
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: SizedBox(
-              width: MediaQuery.of(context).size.width/10,
+              width: MediaQuery.of(context).size.width / 10,
               child: Divider(
                 color: Theme.of(context).primaryColor,
                 thickness: 3,
@@ -44,6 +44,9 @@ class PeerContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width > 1200
+          ? MediaQuery.of(context).size.width / 2
+          : MediaQuery.of(context).size.width,
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
