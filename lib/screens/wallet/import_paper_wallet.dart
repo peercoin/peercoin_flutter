@@ -293,7 +293,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     await _activeWallets.generateUnusedAddress(_activeCoin.name);
 
     setState(() {
-      _requiredFee = requiredFeeInSatoshis + 10; //TODO remove +10 when rdy
+      _requiredFee = requiredFeeInSatoshis;
     });
   }
 

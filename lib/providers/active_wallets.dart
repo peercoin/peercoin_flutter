@@ -684,8 +684,7 @@ class ActiveWallets with ChangeNotifier {
             address: address,
             amount: amount,
             opReturn: opReturn,
-            fee: requiredFeeInSatoshis +
-                10, //TODO 10 satoshis added here because tx virtualsize out of coinslib varies by 1 byte
+            fee: requiredFeeInSatoshis,
             firstPass: false,
           );
         } else {
