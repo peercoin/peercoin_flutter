@@ -35,7 +35,6 @@ You can also sign up for our open beta testing here:
 </a>
 
 ## Known Limitations
-- adds 1 Satoshi extra fee due to sporadic internal rounding errors 
 - will not mint
 
 ## Development
