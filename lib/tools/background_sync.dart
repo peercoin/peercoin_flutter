@@ -134,26 +134,26 @@ class BackgroundSync {
         if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
           //if activated, parse all addresses to a list that will be POSTed to backend later on
           var adressesToQuery = <String, int>{};
-          wallet.addresses.forEach((walletAddress) async {
-            if (walletAddress.isOurs == true) {
-              //check if that address already has a pending notification
-              var res = wallet.pendingTransactionNotifications
-                  .where(
-                    (element) => element.address == walletAddress.address,
-                  )
-                  .toList();
-              if (res.isNotEmpty) {
-                //addr does have a pending notification
-                adressesToQuery[walletAddress.address] = res[0].tx;
-              } else {
-                //addr does not have a pending notification
-                adressesToQuery[walletAddress.address] =
-                    walletAddress.notificationBackendCount;
-                print(walletAddress.address);
-                print(walletAddress.notificationBackendCount);
+          wallet.addresses.forEach(
+            (walletAddress) async {
+              if (walletAddress.isOurs == true) {
+                //check if that address already has a pending notification
+                var res = wallet.pendingTransactionNotifications
+                    .where(
+                      (element) => element.address == walletAddress.address,
+                    )
+                    .toList();
+                if (res.isNotEmpty) {
+                  //addr does have a pending notification
+                  adressesToQuery[walletAddress.address] = res[0].tx;
+                } else {
+                  //addr does not have a pending notification
+                  adressesToQuery[walletAddress.address] =
+                      walletAddress.notificationBackendCount;
+                }
               }
-            }
-          });
+            },
+          );
 
           LoggerWrapper.logInfo(
             'BackgroundSync',

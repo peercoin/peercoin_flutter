@@ -481,6 +481,10 @@ class ActiveWallets with ChangeNotifier {
     openWallet.transactions
         .removeWhere((element) => element.broadCasted == false);
 
+    openWallet.addresses.forEach(
+      (element) => element.newNotificationBackendCount = 0,
+    );
+
     await updateWalletBalance(identifier);
     await openWallet.save();
   }
