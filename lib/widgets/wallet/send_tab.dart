@@ -217,13 +217,17 @@ class _SendTabState extends State<SendTab> {
                         _firstPress = false;
                         //write tx to history
                         await _activeWallets.putOutgoingTx(
-                            _wallet.name, _addressKey.currentState!.value, {
-                          'txid': _buildResult['id'],
-                          'hex': _buildResult['hex'],
-                          'outValue': _totalValue - _txFee,
-                          'outFees': _txFee + _destroyedChange,
-                          'opReturn': _buildResult['opReturn']
-                        });
+                          _wallet.name,
+                          _addressKey.currentState!.value,
+                          {
+                            'txid': _buildResult['id'],
+                            'hex': _buildResult['hex'],
+                            'outValue': _totalValue - _txFee,
+                            'outFees': _txFee + _destroyedChange,
+                            'opReturn': _buildResult['opReturn'],
+                          },
+                          _buildResult['neededChange'],
+                        );
                         //broadcast
                         Provider.of<ElectrumConnection>(context, listen: false)
                             .broadcastTransaction(

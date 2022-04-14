@@ -149,6 +149,8 @@ class BackgroundSync {
                 //addr does not have a pending notification
                 adressesToQuery[walletAddress.address] =
                     walletAddress.notificationBackendCount;
+                print(walletAddress.address);
+                print(walletAddress.notificationBackendCount);
               }
             }
           });

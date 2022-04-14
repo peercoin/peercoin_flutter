@@ -434,7 +434,8 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<void> putOutgoingTx(String identifier, String address, Map tx) async {
+  Future<void> putOutgoingTx(
+      String identifier, String address, Map tx, bool neededChange) async {
     var openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.putTransaction(
@@ -451,6 +452,21 @@ class ActiveWallets with ChangeNotifier {
         opReturn: tx['opReturn'],
       ),
     );
+
+    //flag _unusedAddress as change addr
+    var addrInWallet = openWallet.addresses
+        .firstWhereOrNull((element) => element.address == _unusedAddress);
+    if (addrInWallet != null) {
+      if (neededChange == true) {
+        addrInWallet.isChangeAddr = true;
+      }
+      //increase notification value
+      addrInWallet.newNotificationBackendCount =
+          addrInWallet.notificationBackendCount + 1;
+    }
+
+    //generate new wallet addr
+    await generateUnusedAddress(identifier);
 
     notifyListeners();
     await openWallet.save();
@@ -694,21 +710,6 @@ class ActiveWallets with ChangeNotifier {
             'buildTransaction',
             'intermediate size: ${intermediate.txSize}',
           );
-
-          //flag addr as change addr
-          var addrInWallet = openWallet.addresses
-              .firstWhereOrNull((element) => element.address == _unusedAddress);
-          if (addrInWallet != null) {
-            if (_needsChange == true) {
-              addrInWallet.isChangeAddr = true;
-            }
-            //increase notification value
-            addrInWallet.newNotificationBackendCount =
-                addrInWallet.notificationBackendCount + 1;
-          }
-
-          //generate new wallet addr
-          await generateUnusedAddress(identifier);
           _hex = intermediate.toHex();
 
           return {
@@ -716,7 +717,8 @@ class ActiveWallets with ChangeNotifier {
             'hex': _hex,
             'id': intermediate.getId(),
             'destroyedChange': _destroyedChange,
-            'opReturn': opReturn
+            'opReturn': opReturn,
+            'neededChange': _needsChange
           };
         }
       } else {
