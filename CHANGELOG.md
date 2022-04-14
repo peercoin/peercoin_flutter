@@ -1,4 +1,4 @@
-### **0.8.9** (2022-04-xx)
+### **0.8.9** (2022-04-14)
 * Remove +1 Satoshi extra fee
 * Better scanning and notifications 
 
