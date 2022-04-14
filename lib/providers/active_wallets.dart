@@ -482,7 +482,10 @@ class ActiveWallets with ChangeNotifier {
         .removeWhere((element) => element.broadCasted == false);
 
     openWallet.addresses.forEach(
-      (element) => element.newNotificationBackendCount = 0,
+      (element) {
+        element.newStatus = null;
+        element.newNotificationBackendCount = 0;
+      },
     );
 
     await updateWalletBalance(identifier);
@@ -823,7 +826,7 @@ class ActiveWallets with ChangeNotifier {
         wif: await getWif(identifier, address),
       );
     } else {
-      await updateAddressStatus(identifier, address, null);
+      await updateAddressStatus(identifier, address, status);
     }
 
     await openWallet.save();

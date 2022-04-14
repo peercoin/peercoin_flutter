@@ -22,7 +22,9 @@ class EncryptedBox with ChangeNotifier {
         var key = Hive.generateSecureKey();
         await _secureStorage.write(key: 'key', value: base64UrlEncode(key));
       }
-      _encryptionKey = base64Url.decode((encryptionKeyInStorage as String));
+      _encryptionKey = base64Url.decode(
+        (await _secureStorage.read(key: 'key') as String),
+      );
     }
     return _encryptionKey;
   }
