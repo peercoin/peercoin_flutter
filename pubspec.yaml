@@ -16,11 +16,7 @@ dependencies:
   web_socket_channel: ^2.1.0
   crypto: ^3.0.1
   bip39: ^1.0.6
-  # coinslib: ^3.1.1
-  coinslib: 
-   git:
-      url: https://github.com/Vesta-wallet/coinslib.git
-      ref: 28-low-r-value-sigs
+  coinslib: ^3.1.2
   hive: ^2.1.0
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.0
