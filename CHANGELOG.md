@@ -1,3 +1,7 @@
+### **0.8.9** (2022-04-xx)
+* Remove +1 Satoshi extra fee
+* Better scanning and notifications 
+
 ### **0.8.8** (2022-04-13)
 * Add language: Danish
 * Add currency: DKK

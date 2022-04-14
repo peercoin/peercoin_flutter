@@ -59,8 +59,10 @@ class _AddressTabState extends State<AddressTab> {
     final utxos =
         await Provider.of<ActiveWallets>(context).getWalletUtxos(widget.name);
     for (var tx in utxos) {
-      _addressBalanceMap[tx.address] =
-          '${(tx.value / 1000000)} ${_availableCoin.letterCode}';
+      if (tx.value > 0) {
+        _addressBalanceMap[tx.address] =
+            '${(tx.value / 1000000)} ${_availableCoin.letterCode}';
+      }
     }
   }
 

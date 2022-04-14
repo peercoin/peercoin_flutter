@@ -47,6 +47,7 @@ class ElectrumConnection with ChangeNotifier {
     bool scanMode = false,
     bool requestedFromWalletHome = false,
   }) async {
+    await _servers.init(walletName);
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.none) {
@@ -79,7 +80,6 @@ class ElectrumConnection with ChangeNotifier {
         'init',
         'init server connection',
       );
-      await _servers.init(walletName);
       await connect();
       var stream = _connection!.stream;
 

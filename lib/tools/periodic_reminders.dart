@@ -131,7 +131,7 @@ class PeriodicReminders {
       LoggerWrapper.logInfo(
         'PeriodicReminders',
         'checkReminder',
-        'no reminder scheduled. ${_settings.latestTickerUpdate}',
+        'no reminder scheduled.',
       );
     }
   }
