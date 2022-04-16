@@ -50,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  bip32:
-    dependency: transitive
-    description:
-      name: bip32
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   bip39:
     dependency: "direct main"
     description:
@@ -203,7 +196,7 @@ packages:
       name: coinslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.2"
   collection:
     dependency: "direct main"
     description:
@@ -819,7 +812,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.5.2"
   pool:
     dependency: transitive
     description:
