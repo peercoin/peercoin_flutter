@@ -180,8 +180,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Column(
                   children: [
-                    Text('Importing $_displayValue ${_activeCoin.letterCode}',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      'Importing $_displayValue ${_activeCoin.letterCode}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               ),
@@ -189,10 +191,15 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(AppLocalizations.instance.translate('send_fee', {
-                    'amount': '${_requiredFee / 1000000}',
-                    'letter_code': '${_activeCoin.letterCode}'
-                  })),
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'send_fee',
+                      {
+                        'amount': '${_requiredFee / 1000000}',
+                        'letter_code': '${_activeCoin.letterCode}'
+                      },
+                    ),
+                  ),
                   Text(
                       AppLocalizations.instance.translate('send_total', {
                         'amount': '${_balanceInt / 1000000}',
@@ -267,12 +274,14 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       tx.addInput(utxo['tx_hash'], utxo['tx_pos']);
     });
     //sign
-    _paperWalletUtxos[_pubKey]!.asMap().forEach((index, utxo) {
-      tx.sign(
-        vin: index,
-        keyPair: ECPair.fromWIF(_privKey, network: _activeCoin.networkType),
-      );
-    });
+    _paperWalletUtxos[_pubKey]!.asMap().forEach(
+      (index, utxo) {
+        tx.sign(
+          vin: index,
+          keyPair: ECPair.fromWIF(_privKey, network: _activeCoin.networkType),
+        );
+      },
+    );
     final intermediate = tx.build();
 
     var number = ((intermediate.txSize) / 1000 * _activeCoin.feePerKb)
@@ -300,15 +309,15 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
-          ),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
         ),
-        body: Column(
-          children: [
-            Expanded(
-                child: SingleChildScrollView(
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -356,9 +365,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_3'),
-                            style: Theme.of(context).textTheme.headline6),
+                          AppLocalizations.instance
+                              .translate('paperwallet_step_3'),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
                         PeerButton(
                           action: () => handlePress(3),
                           text: AppLocalizations.instance
@@ -369,10 +379,11 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ],
                     ),
                     Container(
-                        height: 30,
-                        child: _balanceLoading == true
-                            ? LoadingIndicator()
-                            : Text(_balance)),
+                      height: 30,
+                      child: _balanceLoading == true
+                          ? LoadingIndicator()
+                          : Text(_balance),
+                    ),
                     Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -395,8 +406,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                   ],
                 ),
               ),
-            ))
-          ],
-        ));
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
