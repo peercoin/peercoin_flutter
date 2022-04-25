@@ -1,5 +1,6 @@
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/wallet_utxo.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -23,9 +24,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   String _pubKey = '';
   String _privKey = '';
   String _balance = '';
-  String _transactionHex = '';
   int _balanceInt = 0;
-  int _requiredFee = 0;
   late Coin _activeCoin;
   late String _walletName;
   bool _initial = true;
@@ -156,20 +155,23 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   Future<void> emptyWallet() async {
     if (_balanceInt == 0 || _balanceInt < _activeCoin.minimumTxValue) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('paperwallet_error_1'),
-          textAlign: TextAlign.center,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('paperwallet_error_1'),
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 5),
         ),
-        duration: Duration(seconds: 5),
-      ));
+      );
     } else {
       var _firstPress = true;
-      await buildImportTx();
+      var _buildResult = await buildImportTx();
+      var _txFee = _buildResult['fee'];
+
       await showDialog(
         context: context,
         builder: (_) {
-          final _displayValue = (_balanceInt - _requiredFee) / 1000000;
           return SimpleDialog(
             title: Text(
               AppLocalizations.instance.translate('send_confirm_transaction'),
@@ -181,7 +183,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                 child: Column(
                   children: [
                     Text(
-                      'Importing $_displayValue ${_activeCoin.letterCode}',
+                      'Importing $_balance',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -195,17 +197,21 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     AppLocalizations.instance.translate(
                       'send_fee',
                       {
-                        'amount': '${_requiredFee / 1000000}',
+                        'amount': '${_txFee / 1000000}',
                         'letter_code': '${_activeCoin.letterCode}'
                       },
                     ),
                   ),
                   Text(
-                      AppLocalizations.instance.translate('send_total', {
+                    AppLocalizations.instance.translate(
+                      'send_total',
+                      {
                         'amount': '${_balanceInt / 1000000}',
                         'letter_code': '${_activeCoin.letterCode}'
-                      }),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      },
+                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
               SizedBox(height: 20),
@@ -218,10 +224,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     if (_firstPress == false) return; //prevent double tap
                     try {
                       _firstPress = false;
-                      await buildImportTx(_requiredFee, false);
                       //broadcast
                       Provider.of<ElectrumConnection>(context, listen: false)
-                          .broadcastTransaction(_transactionHex, 'import');
+                          .broadcastTransaction(
+                        _buildResult['hex'],
+                        _buildResult['id'],
+                      );
                       //pop message
                       Navigator.of(context).pop();
                       //pop again to close import screen
@@ -242,9 +250,11 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(AppLocalizations.instance.translate(
-                            'send_oops',
-                          )),
+                          content: Text(
+                            AppLocalizations.instance.translate(
+                              'send_oops',
+                            ),
+                          ),
                         ),
                       );
                     }
@@ -258,52 +268,32 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     }
   }
 
-  Future<void> buildImportTx([int fee = 0, bool dryRun = true]) async {
-    LoggerWrapper.logInfo(
-      'ImportPaperWallet',
-      'buildImportTx',
-      'fee $fee - dryRun $dryRun',
-    );
-
-    final tx = TransactionBuilder(network: _activeCoin.networkType);
-    tx.setVersion(3);
-    //send everything minus fees to unusedaddr
-    tx.addOutput(_activeWallets.getUnusedAddress, _balanceInt - fee);
-    //add inputs
-    _paperWalletUtxos[_pubKey]!.forEach((utxo) {
-      tx.addInput(utxo['tx_hash'], utxo['tx_pos']);
-    });
-    //sign
-    _paperWalletUtxos[_pubKey]!.asMap().forEach(
-      (index, utxo) {
-        tx.sign(
-          vin: index,
-          keyPair: ECPair.fromWIF(_privKey, network: _activeCoin.networkType),
+  Future<Map> buildImportTx() async {
+    //build list of paperWaleltUtxos
+    var parsedWalletUtxos = <WalletUtxo>[];
+    _paperWalletUtxos[_pubKey]!.forEach(
+      (utxo) {
+        print('utxo $utxo');
+        parsedWalletUtxos.add(
+          WalletUtxo(
+            hash: utxo['tx_hash'],
+            txPos: utxo['tx_pos'],
+            height: utxo['height'],
+            value: utxo['value'],
+            address: _activeWallets.getUnusedAddress,
+          ),
         );
       },
     );
-    final intermediate = tx.build();
 
-    var number = ((intermediate.txSize) / 1000 * _activeCoin.feePerKb)
-        .toStringAsFixed(_activeCoin.fractions);
-    var asDouble = double.parse(number) * 1000000;
-    var requiredFeeInSatoshis = asDouble.toInt();
-
-    LoggerWrapper.logInfo(
-      'ImportPaperWallet',
-      'buildImportTx',
-      'size ${intermediate.txSize}',
+    return await _activeWallets.buildTransaction(
+      identifier: _activeCoin.name,
+      address: _activeWallets.getUnusedAddress,
+      amount: (_balanceInt / 1000000).toString(),
+      fee: 0,
+      paperWalletPrivkey: _privKey,
+      paperWalletUtxos: parsedWalletUtxos,
     );
-
-    if (dryRun == false) {
-      _transactionHex = intermediate.toHex();
-    }
-    //generate new wallet addr
-    await _activeWallets.generateUnusedAddress(_activeCoin.name);
-
-    setState(() {
-      _requiredFee = requiredFeeInSatoshis;
-    });
   }
 
   @override
