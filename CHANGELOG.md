@@ -1,3 +1,6 @@
+### **0.9.0** (2022-04-xx)
+* Bug fix: Edge case for importing paper wallets
+
 ### **0.8.9** (2022-04-14)
 * Remove +1 Satoshi extra fee
 * Better scanning and notifications 

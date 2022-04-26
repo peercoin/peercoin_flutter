@@ -75,8 +75,14 @@ void main() {
             () async {
               await driver.tap(find.byValueKey('newWalletIconButton'));
               await driver.tap(find.text('Peercoin Testnet'));
-              await driver.tap(find.text('Okay'));
-              await driver.tap(find.text('Peercoin Testnet')); //tap into wallet
+              await driver.tap(
+                find.text('Okay'),
+                timeout: Duration(minutes: 15),
+              );
+              await driver.tap(
+                find.text('Peercoin Testnet'),
+                timeout: Duration(minutes: 15),
+              ); //tap into wallet
               expect(await driver.getText(find.text('connected')), 'connected');
             },
             timeout: Duration(
@@ -84,6 +90,7 @@ void main() {
             ),
           );
         },
+        retry: 2,
       );
     },
   );
