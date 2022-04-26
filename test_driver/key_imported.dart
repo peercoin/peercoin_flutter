@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -39,11 +37,7 @@ void main() {
           //creates a peercoin testnet wallet from an imported seed and checks if it connects
           await driver.tap(find.byValueKey('setupLanguageButton'));
           await driver.tap(find.text('English'));
-          await Process.run(
-            'adb',
-            <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
-            runInShell: true,
-          );
+          await driver.tap(find.pageBack());
           await driver.tap(find.text('Import Seed'));
           await driver.tap(find.byValueKey('importTextField'));
           await driver.enterText(
@@ -58,13 +52,9 @@ void main() {
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
           await driver.tap(find.text('Finish Setup'));
+          await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
-              await Process.run(
-                'adb',
-                <String>['shell', 'input', 'keyevent', 'KEYCODE_BACK'],
-                runInShell: true,
-              );
               expect(
                 await driver.getText(find.byValueKey('noActiveWallets')),
                 'You have no active wallets',

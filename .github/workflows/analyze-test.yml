@@ -41,4 +41,4 @@ jobs:
           arch: x86_64
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
-#           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
