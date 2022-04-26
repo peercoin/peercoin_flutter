@@ -1,4 +1,4 @@
-### **0.9.0** (2022-04-xx)
+### **0.9.0** (2022-04-26)
 * Bug fix: Edge case for importing paper wallets
 
 ### **0.8.9** (2022-04-14)
