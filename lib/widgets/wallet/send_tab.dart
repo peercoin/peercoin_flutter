@@ -461,6 +461,10 @@ class _SendTabState extends State<SendTab> {
                                   _availableCoin.minimumTxValue) {
                             return AppLocalizations.instance.translate(
                               'send_amount_below_minimum_unable',
+                              {
+                                'amount':
+                                    '${_availableCoin.minimumTxValue / 1000000}'
+                              },
                             );
                           }
 
