@@ -647,14 +647,14 @@ class ActiveWallets with ChangeNotifier {
             //change is too small! no change output
             _destroyedChange = changeAmount;
             if (_txAmount == 0) {
-              tx.addOutput(address, _txAmount);
+              tx.addOutput(address, BigInt.from(_txAmount));
             } else {
-              tx.addOutput(address, _txAmount - fee);
+              tx.addOutput(address, BigInt.from(_txAmount - fee));
               _destroyedChange = _destroyedChange + fee;
             }
           } else {
-            tx.addOutput(address, _txAmount);
-            tx.addOutput(_unusedAddress, changeAmount);
+            tx.addOutput(address, BigInt.from(_txAmount));
+            tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else {
           LoggerWrapper.logInfo(
@@ -662,7 +662,7 @@ class ActiveWallets with ChangeNotifier {
             'buildTransaction',
             'no change needed, tx amount $_txAmount, fee $fee, output added for $address ${_txAmount - fee}',
           );
-          tx.addOutput(address, _txAmount - fee);
+          tx.addOutput(address, BigInt.from(_txAmount - fee));
         }
 
         //add OP_RETURN if exists
