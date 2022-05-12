@@ -1,3 +1,12 @@
+### **0.9.1** (2022-05-12)
+* Improved wallet performance:  
+From now on the wallet will only watch addresses that it knows to have coins and the unusued address (the one displayed in the "Receive" tab).   
+You can manually enable watching other addresses in the address book (slide left).   
+Background notifications only work for watched addresses.  
+Rescans are not affected. 
+* Price ticker: show latest price update
+* Minor localization improvements
+
 ### **0.9.0** (2022-04-26)
 * Bug fix: Edge case for importing paper wallets
 

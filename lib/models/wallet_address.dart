@@ -19,6 +19,8 @@ class WalletAddress extends HiveObject {
   bool? _isChangeAddr = false;
   @HiveField(7, defaultValue: 0)
   int notificationBackendCount = 0;
+  @HiveField(8, defaultValue: false)
+  bool isWatched = false;
 
   WalletAddress({
     required this.address,

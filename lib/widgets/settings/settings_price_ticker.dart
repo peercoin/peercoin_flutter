@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
@@ -18,6 +19,7 @@ class SettingsPriceTicker extends StatefulWidget {
 
 class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
   late bool _listExpanded;
+  var formattedTime;
 
   @override
   void initState() {
@@ -32,6 +34,13 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
       });
     }
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(widget._settings.latestTickerUpdate);
+    super.didChangeDependencies();
   }
 
   void enableFeed(BuildContext ctx) async {
@@ -138,6 +147,18 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        widget._settings.selectedCurrency.isNotEmpty
+            ? Text(
+                AppLocalizations.instance.translate(
+                  'setup_price_feed_last_update',
+                  {'timestamp': formattedTime},
+                ),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              )
+            : Container(),
         ExpandedSection(
           expand: _listExpanded,
           child: Column(

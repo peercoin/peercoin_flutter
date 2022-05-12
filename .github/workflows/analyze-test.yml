@@ -15,9 +15,9 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-    - uses: subosito/flutter-action@v1.5.3
+    - uses: subosito/flutter-action@v2
       with:
-        channel: 'stable' 
+        flutter-version: '2.10.0'
     - run: flutter pub get
       # run static analys code
     - run: flutter analyze
@@ -31,9 +31,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: '2.10.0'
       - name: run tests
         uses: ReactiveCircus/android-emulator-runner@v2.21.0
         with:

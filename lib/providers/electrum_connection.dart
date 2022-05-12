@@ -412,6 +412,7 @@ class ElectrumConnection with ChangeNotifier {
     addresses.entries.forEach((hash) {
       _addresses[hash.key] = hash.value;
       sendMessage('blockchain.scripthash.subscribe', hash.key, [hash.value]);
+      notifyListeners();
     });
   }
 

@@ -647,14 +647,14 @@ class ActiveWallets with ChangeNotifier {
             //change is too small! no change output
             _destroyedChange = changeAmount;
             if (_txAmount == 0) {
-              tx.addOutput(address, _txAmount);
+              tx.addOutput(address, BigInt.from(_txAmount));
             } else {
-              tx.addOutput(address, _txAmount - fee);
+              tx.addOutput(address, BigInt.from(_txAmount - fee));
               _destroyedChange = _destroyedChange + fee;
             }
           } else {
-            tx.addOutput(address, _txAmount);
-            tx.addOutput(_unusedAddress, changeAmount);
+            tx.addOutput(address, BigInt.from(_txAmount));
+            tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else {
           LoggerWrapper.logInfo(
@@ -662,7 +662,7 @@ class ActiveWallets with ChangeNotifier {
             'buildTransaction',
             'no change needed, tx amount $_txAmount, fee $fee, output added for $address ${_txAmount - fee}',
           );
-          tx.addOutput(address, _txAmount - fee);
+          tx.addOutput(address, BigInt.from(_txAmount - fee));
         }
 
         //add OP_RETURN if exists
@@ -760,13 +760,22 @@ class ActiveWallets with ChangeNotifier {
     var answerMap = {};
     if (address == null) {
       //get all
+      var utxos = await getWalletUtxos(identifier);
       addresses = await getWalletAddresses(identifier);
-      addresses.forEach((addr) {
-        if (addr.isOurs == true || addr.isOurs == null) {
-          // == null for backwards compatability
-          answerMap[addr.address] = getScriptHash(identifier, addr.address);
-        }
-      });
+      addresses.forEach(
+        (addr) {
+          if (addr.isOurs == true || addr.isOurs == null) {
+            // == null for backwards compatability
+            //does addr have a balance?
+            var utxoRes = utxos
+                .firstWhereOrNull((element) => element.address == addr.address);
+
+            if (addr.isWatched || utxoRes != null && utxoRes.value > 0) {
+              answerMap[addr.address] = getScriptHash(identifier, addr.address);
+            }
+          }
+        },
+      );
     } else {
       //get just one
       answerMap[address] = getScriptHash(identifier, address);
@@ -850,6 +859,19 @@ class ActiveWallets with ChangeNotifier {
     }
 
     await openWallet.save();
+  }
+
+  Future<void> updateAddressWatched(
+      String identifier, String address, bool newValue) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    var addr = openWallet.addresses.firstWhereOrNull(
+      (element) => element.address == address,
+    );
+    if (addr != null) {
+      addr.isWatched = newValue;
+    }
+    await openWallet.save();
+    notifyListeners();
   }
 
   void removeAddress(String identifier, WalletAddress addr) {

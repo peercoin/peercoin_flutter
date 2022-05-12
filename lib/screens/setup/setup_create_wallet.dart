@@ -160,12 +160,6 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return Center(
-        child: LoadingIndicator(),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -175,212 +169,226 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
         child: Container(
           height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              PeerProgress(2),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          PeerButtonSetupBack(),
-                          AutoSizeText(
-                            AppLocalizations.instance
-                                .translate('setup_save_title'),
-                            maxFontSize: 28,
-                            minFontSize: 25,
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 40,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            width: MediaQuery.of(context).size.width > 1200
-                                ? MediaQuery.of(context).size.width / 2
-                                : MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Theme.of(context).shadowColor,
-                            ),
-                            child: Column(
+          child: _isLoading
+              ? Center(
+                  child: LoadingIndicator(),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    PeerProgress(2),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(24),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                PeerButtonSetupBack(),
+                                AutoSizeText(
+                                  AppLocalizations.instance
+                                      .translate('setup_save_title'),
+                                  maxFontSize: 28,
+                                  minFontSize: 25,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 40,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(4),
+                                  width: MediaQuery.of(context).size.width >
+                                          1200
+                                      ? MediaQuery.of(context).size.width / 2
+                                      : MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    color: Theme.of(context).shadowColor,
+                                  ),
+                                  child: Column(
                                     children: [
-                                      Icon(
-                                        Icons.vpn_key_rounded,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 40,
+                                      Padding(
+                                        padding: const EdgeInsets.all(24),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Icon(
+                                              Icons.vpn_key_rounded,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              size: 40,
+                                            ),
+                                            SizedBox(
+                                              width: 24,
+                                            ),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                          .size
+                                                          .width >
+                                                      1200
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.5
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      1.9,
+                                              child: Text(
+                                                AppLocalizations.instance
+                                                    .translate(
+                                                        'setup_save_text1'),
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer,
+                                                  fontSize: 15,
+                                                ),
+                                                textAlign: TextAlign.left,
+                                                maxLines: 5,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        width: 24,
-                                      ),
-                                      Container(
-                                        width: MediaQuery.of(context)
-                                                    .size
-                                                    .width >
-                                                1200
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                1.9,
-                                        child: Text(
-                                          AppLocalizations.instance
-                                              .translate('setup_save_text1'),
-                                          style: TextStyle(
+                                      GestureDetector(
+                                        onDoubleTap: () {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                              AppLocalizations.instance
+                                                  .translate('snack_copied'),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            duration: Duration(seconds: 1),
+                                          ));
+                                          Clipboard.setData(
+                                            ClipboardData(text: _seed),
+                                          );
+                                          setState(() {
+                                            _sharedYet = true;
+                                          });
+                                        },
+                                        child: Container(
+                                          height: 250,
+                                          padding: EdgeInsets.fromLTRB(
+                                              16, 32, 16, 24),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
                                             color: Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer,
-                                            fontSize: 15,
+                                                .backgroundColor,
+                                            border: Border.all(
+                                              width: 2,
+                                              color: _sharedYet
+                                                  ? Theme.of(context)
+                                                      .shadowColor
+                                                  : Theme.of(context)
+                                                      .primaryColor,
+                                            ),
                                           ),
-                                          textAlign: TextAlign.left,
-                                          maxLines: 5,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                            .size
+                                                            .width >
+                                                        1200
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                        3
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.7,
+                                                child: Text(
+                                                  _seed,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    wordSpacing: 16,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryContainer,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                GestureDetector(
-                                  onDoubleTap: () {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(
-                                        AppLocalizations.instance
-                                            .translate('snack_copied'),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      duration: Duration(seconds: 1),
-                                    ));
-                                    Clipboard.setData(
-                                      ClipboardData(text: _seed),
-                                    );
-                                    setState(() {
-                                      _sharedYet = true;
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 250,
-                                    padding:
-                                        EdgeInsets.fromLTRB(16, 32, 16, 24),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      color: Theme.of(context).backgroundColor,
-                                      border: Border.all(
-                                        width: 2,
-                                        color: _sharedYet
-                                            ? Theme.of(context).shadowColor
-                                            : Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: MediaQuery.of(context)
-                                                      .size
-                                                      .width >
-                                                  1200
-                                              ? MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  3
-                                              : MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.7,
-                                          child: Text(
-                                            _seed,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              wordSpacing: 16,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryContainer,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width >
+                                          1200
+                                      ? MediaQuery.of(context).size.width / 2
+                                      : MediaQuery.of(context).size.width,
+                                  child: Slider(
+                                    activeColor: Colors.white,
+                                    inactiveColor:
+                                        Theme.of(context).shadowColor,
+                                    value: _currentSliderValue,
+                                    min: 12,
+                                    max: 24,
+                                    divisions: 4,
+                                    label:
+                                        _currentSliderValue.round().toString(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _currentSliderValue = value;
+                                      });
+                                      if (value % 3 == 0) {
+                                        recreatePhrase(value);
+                                      }
+                                    },
                                   ),
+                                ),
+                                Text(
+                                  AppLocalizations.instance
+                                      .translate('setup_seed_slider_label'),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width > 1200
-                                ? MediaQuery.of(context).size.width / 2
-                                : MediaQuery.of(context).size.width,
-                            child: Slider(
-                              activeColor: Colors.white,
-                              inactiveColor: Theme.of(context).shadowColor,
-                              value: _currentSliderValue,
-                              min: 12,
-                              max: 24,
-                              divisions: 4,
-                              label: _currentSliderValue.round().toString(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _currentSliderValue = value;
-                                });
-                                if (value % 3 == 0) {
-                                  recreatePhrase(value);
-                                }
-                              },
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('setup_seed_slider_label'),
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                    ),
+                    if (_sharedYet)
+                      PeerButtonSetup(
+                        action: () async => await handleContinue(),
+                        text: AppLocalizations.instance.translate('continue'),
+                      )
+                    else
+                      PeerButtonSetup(
+                        action: () async => await shareSeed(_seed),
+                        text: AppLocalizations.instance.translate('export_now'),
                       ),
-                    ],
-                  ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                  ],
                 ),
-              ),
-              if (_sharedYet)
-                PeerButtonSetup(
-                  action: () async => await handleContinue(),
-                  text: AppLocalizations.instance.translate('continue'),
-                )
-              else
-                PeerButtonSetup(
-                  action: () async => await shareSeed(_seed),
-                  text: AppLocalizations.instance.translate('export_now'),
-                ),
-              SizedBox(
-                height: 32,
-              ),
-            ],
-          ),
         ),
       ),
     );
