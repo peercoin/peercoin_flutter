@@ -235,6 +235,7 @@
     "setup_price_feed_allow": "Allow price feed API",
     "setup_price_feed_description": "This will allow for your wallet balance to be displayed at real time exchange value.",
     "setup_price_feed_title": "External APIs",
+    "setup_price_feed_last_update": "Last update: $timestamp",
     "setup_bg_sync_description": "This will enable background notifications for your wallets.",
     "setup_bg_sync_allow": "Allow background sync API",
     "setup_securebox_fail": "We are very sorry.\nYour device does not support a secure enough way of storing keys.",
