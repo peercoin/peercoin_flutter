@@ -44,7 +44,7 @@ dependencies:
   background_fetch: ^1.0.1
   flutter_logs: ^2.1.5
   auto_size_text: ^3.0.0
-  camera: ^0.9.4+19
+  camera: ^0.9.4
 
 dev_dependencies:
   integration_test:

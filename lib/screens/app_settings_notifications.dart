@@ -234,5 +234,4 @@ class _AppSettingsNotificationsScreenState
       ),
     );
   }
-  //TODO allow to not listen to change addresses? .. would save data !! Unwatched addresses don't have to be queried
 }
