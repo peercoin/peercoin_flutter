@@ -146,7 +146,7 @@ class BackgroundSync {
                 if (walletAddress.isWatched == true ||
                     utxoRes != null && utxoRes.value > 0 ||
                     wallet.addresses.indexOf(walletAddress) ==
-                        wallet.addresses.length)
+                        wallet.addresses.length - 1)
                 //assumes that last wallet in list is always the unused/change address
                 {
                   //check if that address already has a pending notification
