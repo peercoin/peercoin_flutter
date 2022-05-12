@@ -3,6 +3,7 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:peercoin/providers/electrum_connection.dart';
 import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ import '../../providers/app_settings.dart';
 import '../../screens/wallet/wallet_home.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
+import '../../tools/logger_wrapper.dart';
 import '../double_tab_to_clipboard.dart';
 
 class AddressTab extends StatefulWidget {
@@ -44,6 +46,8 @@ class _AddressTabState extends State<AddressTab> {
   final Map _addressBalanceMap = {};
   String _currentChangeAddress = '';
   late ActiveWallets _activeWallets;
+  late ElectrumConnection _connection;
+  var _listenedAddresses;
 
   @override
   void didChangeDependencies() async {
@@ -51,8 +55,9 @@ class _AddressTabState extends State<AddressTab> {
       applyFilter();
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _connection = Provider.of<ElectrumConnection>(context);
       _currentChangeAddress = _activeWallets.getUnusedAddress;
-
+      _listenedAddresses = _connection.listenedAddresses.keys;
       await fillAddressBalanceMap();
       setState(() {
         _initial = false;
@@ -265,6 +270,18 @@ class _AddressTabState extends State<AddressTab> {
       );
 
       applyFilter();
+      if (_connection.connectionState == ElectrumConnectionState.connected) {
+        if (!_listenedAddresses.contains(addr.address) &&
+            addr.isWatched == true) {
+          //subscribe
+          LoggerWrapper.logInfo('AddressTab', '_toggleWatched',
+              'watched and subscribed ${addr.address}');
+          _connection.subscribeToScriptHashes(
+            await _activeWallets.getWalletScriptHashes(
+                widget.name, addr.address),
+          );
+        }
+      }
     }
     //fire snack
     ScaffoldMessenger.of(context).showSnackBar(
