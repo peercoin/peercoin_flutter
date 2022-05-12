@@ -40,13 +40,19 @@ class _AddressTabState extends State<AddressTab> {
   bool _showLabel = true;
   bool _showUsed = true;
   bool _showEmpty = true;
+  bool _showUnwatched = true;
   final Map _addressBalanceMap = {};
+  String _currentChangeAddress = '';
+  late ActiveWallets _activeWallets;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      _currentChangeAddress = _activeWallets.getUnusedAddress;
+
       await fillAddressBalanceMap();
       setState(() {
         _initial = false;
@@ -56,8 +62,7 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> fillAddressBalanceMap() async {
-    final utxos =
-        await Provider.of<ActiveWallets>(context).getWalletUtxos(widget.name);
+    final utxos = await _activeWallets.getWalletUtxos(widget.name);
     for (var tx in utxos) {
       if (tx.value > 0) {
         _addressBalanceMap[tx.address] =
@@ -70,13 +75,20 @@ class _AddressTabState extends State<AddressTab> {
     var _filteredListReceive = <WalletAddress>[];
     var _filteredListSend = <WalletAddress>[];
 
-    widget._walletAddresses!.forEach((e) {
-      if (e.isOurs == true || e.isOurs == null) {
-        _filteredListReceive.add(e);
-      } else {
-        _filteredListSend.add(e);
-      }
-    });
+    widget._walletAddresses!.forEach(
+      (e) {
+        if (e.isOurs == true || e.isOurs == null) {
+          _filteredListReceive.add(e);
+          //fake watch change address and addresses with balance
+          if (_addressBalanceMap[e.address] != null ||
+              e.address == _currentChangeAddress) {
+            e.isWatched = true;
+          }
+        } else {
+          _filteredListSend.add(e);
+        }
+      },
+    );
 
     //apply filters to receive list
     var _toRemove = [];
@@ -88,6 +100,11 @@ class _AddressTabState extends State<AddressTab> {
       }
       if (_showUsed == false) {
         if (address.used == true) {
+          _toRemove.add(address);
+        }
+      }
+      if (_showUnwatched == false) {
+        if (address.isWatched == false) {
           _toRemove.add(address);
         }
       }
@@ -231,20 +248,30 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> _toggleWatched(WalletAddress addr) async {
-    await Provider.of<ActiveWallets>(context, listen: false)
-        .updateAddressWatched(
-      widget.name,
-      addr.address,
-      !addr.isWatched,
-    );
+    var snackText;
+    //addresses with balance or currentChangeAddress can not be unwatched
+    if (_addressBalanceMap[addr.address] != null ||
+        addr.address == _currentChangeAddress) {
+      snackText = 'addressbook_dialog_addr_unwatch_unable';
+    } else {
+      snackText = addr.isWatched
+          ? 'addressbook_dialog_addr_unwatched'
+          : 'addressbook_dialog_addr_watched';
 
+      await _activeWallets.updateAddressWatched(
+        widget.name,
+        addr.address,
+        !addr.isWatched,
+      );
+
+      applyFilter();
+    }
+    //fire snack
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           AppLocalizations.instance.translate(
-            addr.isWatched
-                ? 'addressbook_dialog_addr_watched'
-                : 'addressbook_dialog_addr_unwatched',
+            snackText,
             {'address': addr.address},
           ),
           textAlign: TextAlign.center,
@@ -613,6 +640,29 @@ class _AddressTabState extends State<AddressTab> {
                         onSelected: (_) {
                           setState(() {
                             _showChangeAddresses = _;
+                          });
+                          applyFilter();
+                        },
+                      ),
+                      ChoiceChip(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        selectedColor: Theme.of(context).shadowColor,
+                        visualDensity:
+                            VisualDensity(horizontal: 0.0, vertical: -4),
+                        label: Container(
+                          child: AutoSizeText(
+                            AppLocalizations.instance
+                                .translate('addressbook_hide_unwatched'),
+                            minFontSize: 10,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                        ),
+                        selected: _showUnwatched,
+                        onSelected: (_) {
+                          setState(() {
+                            _showUnwatched = _;
                           });
                           applyFilter();
                         },
