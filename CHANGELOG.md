@@ -1,6 +1,7 @@
-### **0.9.1** (2022-04-xx)
-* Minor localization improvements
+### **0.9.1** (2022-05-xx)
+* Each Wallet now has performance options where you can make various settings to improve your experience
 * Price ticker: show latest price update
+* Minor localization improvements
 
 ### **0.9.0** (2022-04-26)
 * Bug fix: Edge case for importing paper wallets
