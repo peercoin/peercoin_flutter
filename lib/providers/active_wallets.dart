@@ -770,7 +770,7 @@ class ActiveWallets with ChangeNotifier {
             var utxoRes = utxos
                 .firstWhereOrNull((element) => element.address == addr.address);
 
-            if (addr.isWatched || utxoRes != null) {
+            if (addr.isWatched || utxoRes != null && utxoRes.value > 0) {
               answerMap[addr.address] = getScriptHash(identifier, addr.address);
             }
           }
