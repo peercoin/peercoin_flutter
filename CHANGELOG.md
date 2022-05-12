@@ -1,5 +1,6 @@
 ### **0.9.1** (2022-04-xx)
 * Minor localization improvements
+* Price ticker: show latest price update
 
 ### **0.9.0** (2022-04-26)
 * Bug fix: Edge case for importing paper wallets
