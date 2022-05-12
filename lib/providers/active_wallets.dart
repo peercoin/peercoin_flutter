@@ -760,13 +760,22 @@ class ActiveWallets with ChangeNotifier {
     var answerMap = {};
     if (address == null) {
       //get all
+      var utxos = await getWalletUtxos(identifier);
       addresses = await getWalletAddresses(identifier);
-      addresses.forEach((addr) {
-        if (addr.isOurs == true || addr.isOurs == null) {
-          // == null for backwards compatability
-          answerMap[addr.address] = getScriptHash(identifier, addr.address);
-        }
-      });
+      addresses.forEach(
+        (addr) {
+          if (addr.isOurs == true || addr.isOurs == null) {
+            // == null for backwards compatability
+            //does addr have a balance?
+            var utxoRes = utxos
+                .firstWhereOrNull((element) => element.address == addr.address);
+
+            if (addr.isWatched || utxoRes != null) {
+              answerMap[addr.address] = getScriptHash(identifier, addr.address);
+            }
+          }
+        },
+      );
     } else {
       //get just one
       answerMap[address] = getScriptHash(identifier, address);
