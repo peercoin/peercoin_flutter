@@ -230,6 +230,30 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
 
+  Future<void> _toggleWatched(WalletAddress addr) async {
+    await Provider.of<ActiveWallets>(context, listen: false)
+        .updateAddressWatched(
+      widget.name,
+      addr.address,
+      !addr.isWatched,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate(
+            addr.isWatched
+                ? 'addressbook_dialog_addr_watched'
+                : 'addressbook_dialog_addr_unwatched',
+            {'address': addr.address},
+          ),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+      ),
+    );
+  }
+
   Future<void> _addressAddDialog(BuildContext context) async {
     var _labelController = TextEditingController();
     var _addressController = TextEditingController();
@@ -399,15 +423,16 @@ class _AddressTabState extends State<AddressTab> {
                                         .read<ActiveWallets>()
                                         .removeAddress(widget.name, addr);
                                     applyFilter();
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(
-                                        AppLocalizations.instance.translate(
-                                            'addressbook_dialog_remove_snack'),
-                                        textAlign: TextAlign.center,
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          AppLocalizations.instance.translate(
+                                              'addressbook_dialog_remove_snack'),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        duration: Duration(seconds: 5),
                                       ),
-                                      duration: Duration(seconds: 5),
-                                    ));
+                                    );
                                     Navigator.of(context).pop();
                                   },
                                 ),
@@ -480,12 +505,26 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                       ),
                       IconSlideAction(
+                          caption: AppLocalizations.instance.translate(
+                            addr.isWatched
+                                ? 'addressbook_swipe_unwatch'
+                                : 'addressbook_swipe_watch',
+                          ),
+                          color: Theme.of(context).colorScheme.secondary,
+                          iconWidget: Icon(
+                            addr.isWatched
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Theme.of(context).backgroundColor,
+                          ),
+                          onTap: () => _toggleWatched(addr)),
+                      IconSlideAction(
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_export'),
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).errorColor,
                         iconWidget: Icon(
                           Icons.vpn_key,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Theme.of(context).backgroundColor,
                         ),
                         onTap: () => Auth.requireAuth(
                           context: context,

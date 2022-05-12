@@ -861,6 +861,19 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
+  Future<void> updateAddressWatched(
+      String identifier, String address, bool newValue) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    var addr = openWallet.addresses.firstWhereOrNull(
+      (element) => element.address == address,
+    );
+    if (addr != null) {
+      addr.isWatched = newValue;
+    }
+    await openWallet.save();
+    notifyListeners();
+  }
+
   void removeAddress(String identifier, WalletAddress addr) {
     var openWallet = getSpecificCoinWallet(identifier);
     openWallet.removeAddress(addr);
