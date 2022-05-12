@@ -435,19 +435,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     ),
                   ),
                 ),
-                PopupMenuItem(
-                  value: 'performance',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.bolt,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_performance'),
-                    ),
-                  ),
-                ),
+                // PopupMenuItem(
+                //   value: 'performance',
+                //   child: ListTile(
+                //     leading: Icon(
+                //       Icons.bolt,
+                //       color: Theme.of(context).colorScheme.secondary,
+                //     ),
+                //     title: Text(
+                //       AppLocalizations.instance
+                //           .translate('wallet_pop_menu_performance'),
+                //     ),
+                //   ),
+                // ),
               ];
             },
           )

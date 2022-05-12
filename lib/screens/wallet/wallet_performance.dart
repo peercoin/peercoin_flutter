@@ -44,4 +44,4 @@ class _WalletPerformanceScreenState extends State<WalletPerformanceScreen> {
 //TODO Hint: rescan not affected
 //TODO Hint: disabling generation of change addresses will result in lack of privacy
 //TODO Hint: Addresses can be watched manually by enabling them in the address book
-//TODO Receive tab: allow manual generation of unusudes address if change address generation is disabled 
+//TODO Receive tab: allow manual generation of unused address if change address generation is disabled 

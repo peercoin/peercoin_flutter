@@ -1,5 +1,5 @@
-### **0.9.1** (2022-05-xx)
-* Each Wallet now has performance options where you can make various settings to improve your experience
+### **0.9.1** (2022-05-12)
+* Improved wallet performance: From now on the wallet will only watch addresses that it knows to have coins. You can manually enable watching other addresses in the address book (slide left). Rescans are not affected. 
 * Price ticker: show latest price update
 * Minor localization improvements
 
