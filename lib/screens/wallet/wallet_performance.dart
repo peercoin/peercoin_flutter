@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
-import '../../providers/active_wallets.dart';
+// import '../../providers/active_wallets.dart';
 import '../../tools/app_localizations.dart';
 
 class WalletPerformanceScreen extends StatefulWidget {
@@ -13,16 +13,16 @@ class WalletPerformanceScreen extends StatefulWidget {
 }
 
 class _WalletPerformanceScreenState extends State<WalletPerformanceScreen> {
-  late String _walletName;
+  // late String _walletName;
   bool _initial = true;
-  late ActiveWallets _activeWallets;
+  // late ActiveWallets _activeWallets;
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
       setState(() {
-        _walletName = ModalRoute.of(context)!.settings.arguments as String;
-        _activeWallets = Provider.of<ActiveWallets>(context);
+        // _walletName = ModalRoute.of(context)!.settings.arguments as String;
+        // _activeWallets = Provider.of<ActiveWallets>(context);
         _initial = false;
       });
     }
