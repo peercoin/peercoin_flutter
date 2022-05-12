@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/wallet_performance.dart';
 
 import '../screens/app_settings_notifications.dart';
 import '../screens/app_settings_screen.dart';
@@ -33,6 +34,7 @@ class Routes {
   static const String SetupDataFeeds = '/setup-feeds';
   static const String Transaction = '/tx-detail';
   static const String WalletHome = '/wallet-home';
+  static const String WalletPerformance = '/wallet-performance';
   static const String WalletImportScan = '/wallet-import-scan';
   static const String ImportPaperWallet = '/import-paperwallet';
   static const String ImportWif = '/import-wif';
@@ -81,6 +83,10 @@ class Routes {
           ),
       Routes.WalletImportScan: (context) => RouterMaster(
             widget: WalletImportScanScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.WalletPerformance: (context) => RouterMaster(
+            widget: WalletPerformanceScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
       Routes.ImportPaperWallet: (context) => RouterMaster(

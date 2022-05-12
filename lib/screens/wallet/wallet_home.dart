@@ -241,50 +241,60 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   void selectPopUpMenuItem(String value) {
-    if (value == 'import_wallet') {
-      Navigator.of(context)
-          .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
-    } else if (value == 'import_wif') {
-      Navigator.of(context)
-          .pushNamed(Routes.ImportWif, arguments: _wallet.name);
-    } else if (value == 'server_settings') {
-      Navigator.of(context)
-          .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
-    } else if (value == 'rescan') {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title:
-              Text(AppLocalizations.instance.translate('wallet_rescan_title')),
-          content: Text(
-              AppLocalizations.instance.translate('wallet_rescan_content')),
-          actions: <Widget>[
-            TextButton.icon(
-                label: Text(AppLocalizations.instance
-                    .translate('server_settings_alert_cancel')),
-                icon: Icon(Icons.cancel),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }),
-            TextButton.icon(
-              label: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button')),
-              icon: Icon(Icons.check),
-              onPressed: () async {
-                //close connection
-                await _connectionProvider!.closeConnection();
-                _rescanInProgress = true;
-                //init rescan
-                await Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.WalletImportScan,
-                  (_) => false,
-                  arguments: _wallet.name,
-                );
-              },
-            ),
-          ],
-        ),
-      );
+    switch (value) {
+      case 'import_wallet':
+        Navigator.of(context)
+            .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+        break;
+      case 'import_wif':
+        Navigator.of(context)
+            .pushNamed(Routes.ImportWif, arguments: _wallet.name);
+        break;
+      case 'server_settings':
+        Navigator.of(context)
+            .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
+        break;
+      case 'performance':
+        Navigator.of(context)
+            .pushNamed(Routes.WalletPerformance, arguments: _wallet.name);
+        break;
+      case 'rescan':
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(
+                AppLocalizations.instance.translate('wallet_rescan_title')),
+            content: Text(
+                AppLocalizations.instance.translate('wallet_rescan_content')),
+            actions: <Widget>[
+              TextButton.icon(
+                  label: Text(AppLocalizations.instance
+                      .translate('server_settings_alert_cancel')),
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              TextButton.icon(
+                label: Text(
+                    AppLocalizations.instance.translate('jail_dialog_button')),
+                icon: Icon(Icons.check),
+                onPressed: () async {
+                  //close connection
+                  await _connectionProvider!.closeConnection();
+                  _rescanInProgress = true;
+                  //init rescan
+                  await Navigator.of(context).pushNamedAndRemoveUntil(
+                    Routes.WalletImportScan,
+                    (_) => false,
+                    arguments: _wallet.name,
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+        break;
+      default:
     }
   }
 
@@ -319,7 +329,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
           child: SendTab(changeIndex, _address, _label, _connectionState),
         );
         break;
-
       default:
         body = Container();
         break;
@@ -423,6 +432,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     title: Text(
                       AppLocalizations.instance
                           .translate('wallet_pop_menu_rescan'),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'performance',
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.bolt,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_performance'),
                     ),
                   ),
                 ),
