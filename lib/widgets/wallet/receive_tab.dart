@@ -262,6 +262,15 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
+                      Text(
+                        AppLocalizations.instance
+                            .translate('wallet_receive_label_hint_privacy'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
