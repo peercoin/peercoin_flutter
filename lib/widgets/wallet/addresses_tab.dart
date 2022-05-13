@@ -44,6 +44,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _showEmpty = true;
   bool _showUnwatched = true;
   final Map _addressBalanceMap = {};
+  final Map _isWatchedMap = {};
   String _currentChangeAddress = '';
   late ActiveWallets _activeWallets;
   late ElectrumConnection _connection;
@@ -86,8 +87,9 @@ class _AddressTabState extends State<AddressTab> {
           _filteredListReceive.add(e);
           //fake watch change address and addresses with balance
           if (_addressBalanceMap[e.address] != null ||
-              e.address == _currentChangeAddress) {
-            e.isWatched = true;
+              e.address == _currentChangeAddress ||
+              e.isWatched == true) {
+            _isWatchedMap[e.address] = true;
           }
         } else {
           _filteredListSend.add(e);
@@ -109,7 +111,7 @@ class _AddressTabState extends State<AddressTab> {
         }
       }
       if (_showUnwatched == false) {
-        if (address.isWatched == false) {
+        if (_isWatchedMap[address.address] == null) {
           _toRemove.add(address);
         }
       }
@@ -259,7 +261,7 @@ class _AddressTabState extends State<AddressTab> {
         addr.address == _currentChangeAddress) {
       snackText = 'addressbook_dialog_addr_unwatch_unable';
     } else {
-      snackText = addr.isWatched
+      snackText = _isWatchedMap[addr.address] != null
           ? 'addressbook_dialog_addr_unwatched'
           : 'addressbook_dialog_addr_watched';
 
@@ -550,13 +552,13 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                       IconSlideAction(
                           caption: AppLocalizations.instance.translate(
-                            addr.isWatched
+                            _isWatchedMap[addr.address] != null
                                 ? 'addressbook_swipe_unwatch'
                                 : 'addressbook_swipe_watch',
                           ),
                           color: Theme.of(context).colorScheme.secondary,
                           iconWidget: Icon(
-                            addr.isWatched
+                            _isWatchedMap[addr.address] != null
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: Theme.of(context).backgroundColor,

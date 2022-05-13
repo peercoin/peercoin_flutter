@@ -1,5 +1,5 @@
 ### **0.9.2** (2022-05-xx)
-* 
+* Even more wallet performance improvements
 
 ### **0.9.1** (2022-05-12)
 * Improved wallet performance:  
