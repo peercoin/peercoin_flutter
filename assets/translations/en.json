@@ -283,7 +283,7 @@
     "wallet_pop_menu_servers": "Adjust Servers",
     "wallet_receive": "Receive",
     "wallet_receive_label_hint": "Pressing the Share button will save the address label.",
-    "wallet_receive_label_hint_privacy": "Reusing your address is discouraged for privacy reasons.\nIf you want to reuse this address, you have to set it to \"watched\" in the address book after having used it.",
+    "wallet_receive_label_hint_privacy": "Reusing your address is discouraged for privacy reasons. If you want to reuse this address, you have to set it to \"watched\" in the address book after having used it.",
     "wallet_rescan_title": "Rescan wallet",
     "wallet_rescan_content": "Scans the wallet again. If you're having trouble with transactions or amounts, this might be helpful.\nThis might take a moment.",
     "wallet__send_label_hint": "Hint: Scanning the QR-Code will save you some time",

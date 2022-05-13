@@ -257,6 +257,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                       Text(
                         AppLocalizations.instance
                             .translate('wallet_receive_label_hint'),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.secondary,
