@@ -44,7 +44,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _showEmpty = true;
   bool _showUnwatched = true;
   final Map _addressBalanceMap = {};
-  String _currentChangeAddress = '';
+  final Map _isWatchedMap = {};
   late ActiveWallets _activeWallets;
   late ElectrumConnection _connection;
   var _listenedAddresses;
@@ -56,12 +56,12 @@ class _AddressTabState extends State<AddressTab> {
       _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _connection = Provider.of<ElectrumConnection>(context);
-      _currentChangeAddress = _activeWallets.getUnusedAddress;
       _listenedAddresses = _connection.listenedAddresses.keys;
       await fillAddressBalanceMap();
       setState(() {
         _initial = false;
       });
+      applyFilter();
     }
     super.didChangeDependencies();
   }
@@ -77,6 +77,8 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   void applyFilter([String? searchedKey]) {
+    if (_initial) return;
+
     var _filteredListReceive = <WalletAddress>[];
     var _filteredListSend = <WalletAddress>[];
 
@@ -86,8 +88,11 @@ class _AddressTabState extends State<AddressTab> {
           _filteredListReceive.add(e);
           //fake watch change address and addresses with balance
           if (_addressBalanceMap[e.address] != null ||
-              e.address == _currentChangeAddress) {
-            e.isWatched = true;
+              e.address == _activeWallets.getUnusedAddress ||
+              e.isWatched == true) {
+            _isWatchedMap[e.address] = true;
+          } else {
+            _isWatchedMap[e.address] = false;
           }
         } else {
           _filteredListSend.add(e);
@@ -109,7 +114,7 @@ class _AddressTabState extends State<AddressTab> {
         }
       }
       if (_showUnwatched == false) {
-        if (address.isWatched == false) {
+        if (_isWatchedMap[address.address] == false) {
           _toRemove.add(address);
         }
       }
@@ -256,10 +261,10 @@ class _AddressTabState extends State<AddressTab> {
     var snackText;
     //addresses with balance or currentChangeAddress can not be unwatched
     if (_addressBalanceMap[addr.address] != null ||
-        addr.address == _currentChangeAddress) {
+        addr.address == _activeWallets.getUnusedAddress) {
       snackText = 'addressbook_dialog_addr_unwatch_unable';
     } else {
-      snackText = addr.isWatched
+      snackText = _isWatchedMap[addr.address] == true
           ? 'addressbook_dialog_addr_unwatched'
           : 'addressbook_dialog_addr_watched';
 
@@ -549,19 +554,20 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                       ),
                       IconSlideAction(
-                          caption: AppLocalizations.instance.translate(
-                            addr.isWatched
-                                ? 'addressbook_swipe_unwatch'
-                                : 'addressbook_swipe_watch',
-                          ),
-                          color: Theme.of(context).colorScheme.secondary,
-                          iconWidget: Icon(
-                            addr.isWatched
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Theme.of(context).backgroundColor,
-                          ),
-                          onTap: () => _toggleWatched(addr)),
+                        caption: AppLocalizations.instance.translate(
+                          _isWatchedMap[addr.address] == true
+                              ? 'addressbook_swipe_unwatch'
+                              : 'addressbook_swipe_watch',
+                        ),
+                        color: Theme.of(context).colorScheme.secondary,
+                        iconWidget: Icon(
+                          _isWatchedMap[addr.address] == true
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Theme.of(context).backgroundColor,
+                        ),
+                        onTap: () => _toggleWatched(addr),
+                      ),
                       IconSlideAction(
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_export'),

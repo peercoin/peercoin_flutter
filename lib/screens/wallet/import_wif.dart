@@ -72,17 +72,22 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       },
     );
 
+    //set to watched
+    await _activeWallets.updateAddressWatched(_walletName, address, true);
+
     //sync background notification
     await BackgroundSync.executeSync(fromScan: true);
 
     //send snack notification for success
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('import_wif_success_snack'),
-        textAlign: TextAlign.center,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('import_wif_success_snack'),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 3),
       ),
-      duration: Duration(seconds: 3),
-    ));
+    );
 
     //pop import wif
     Navigator.of(context).pop();
@@ -161,98 +166,99 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       body: Column(
         children: [
           Expanded(
-              child: SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppLocalizations.instance.translate('import_wif_intro'),
-                    ),
-                    TextFormField(
-                      textInputAction: TextInputAction.done,
-                      key: _wifGlobalKey,
-                      controller: _wifController,
-                      autocorrect: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.instance
-                              .translate('import_wif_error_empty');
-                        }
-                        if (validatePrivKey(value)) {
-                          return AppLocalizations.instance
-                              .translate('import_wif_error_failed_parse');
-                        }
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppLocalizations.instance.translate('import_wif_intro'),
+                      ),
+                      TextFormField(
+                        textInputAction: TextInputAction.done,
+                        key: _wifGlobalKey,
+                        controller: _wifController,
+                        autocorrect: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.instance
+                                .translate('import_wif_error_empty');
+                          }
+                          if (validatePrivKey(value)) {
+                            return AppLocalizations.instance
+                                .translate('import_wif_error_failed_parse');
+                          }
 
-                        triggerConfirmMessage(context, value);
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.vpn_key,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        labelText: AppLocalizations.instance
-                            .translate('import_wif_textfield_label'),
-                        suffixIcon: IconButton(
-                          onPressed: () async {
-                            var data = await Clipboard.getData('text/plain');
-                            _wifController.text = data!.text!.trim();
-                          },
+                          triggerConfirmMessage(context, value);
+                          return null;
+                        },
+                        decoration: InputDecoration(
                           icon: Icon(
-                            Icons.paste_rounded,
+                            Icons.vpn_key,
                             color: Theme.of(context).primaryColor,
                           ),
+                          labelText: AppLocalizations.instance
+                              .translate('import_wif_textfield_label'),
+                          suffixIcon: IconButton(
+                            onPressed: () async {
+                              var data = await Clipboard.getData('text/plain');
+                              _wifController.text = data!.text!.trim();
+                            },
+                            icon: Icon(
+                              Icons.paste_rounded,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
+                        minLines: 4,
+                        maxLines: 4,
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          PeerButton(
+                            action: () => createQrScanner('priv'),
+                            text: AppLocalizations.instance
+                                .translate('paperwallet_step_2_text'),
+                            small: true,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          PeerButton(
+                            action: () {
+                              _formKey.currentState!.save();
+                              _formKey.currentState!.validate();
+                            },
+                            text: AppLocalizations.instance
+                                .translate('import_button'),
+                            small: true,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        AppLocalizations.instance.translate('import_wif_hint'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                      minLines: 4,
-                      maxLines: 4,
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PeerButton(
-                          action: () => createQrScanner('priv'),
-                          text: AppLocalizations.instance
-                              .translate('paperwallet_step_2_text'),
-                          small: true,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PeerButton(
-                          action: () {
-                            _formKey.currentState!.save();
-                            _formKey.currentState!.validate();
-                          },
-                          text: AppLocalizations.instance
-                              .translate('import_button'),
-                          small: true,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      AppLocalizations.instance.translate('import_wif_hint'),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ))
+          )
         ],
       ),
     );
