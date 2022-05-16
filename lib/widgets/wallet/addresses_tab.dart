@@ -70,8 +70,11 @@ class _AddressTabState extends State<AddressTab> {
     final utxos = await _activeWallets.getWalletUtxos(widget.name);
     for (var tx in utxos) {
       if (tx.value > 0) {
-        _addressBalanceMap[tx.address] =
-            '${(tx.value / 1000000)} ${_availableCoin.letterCode}';
+        if (_addressBalanceMap[tx.address] != null) {
+          _addressBalanceMap[tx.address] += tx.value;
+        } else {
+          _addressBalanceMap[tx.address] = tx.value;
+        }
       }
     }
   }
@@ -390,6 +393,14 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
 
+  String _renderLabel(WalletAddress addr) {
+    if (_showLabel) {
+      return addr.addressBookName ?? '-';
+    }
+    var number = _addressBalanceMap[addr.address] ?? 0;
+    return '${(number / 1000000)} ${_availableCoin.letterCode}';
+  }
+
   @override
   Widget build(BuildContext context) {
     var listReceive = <Widget>[];
@@ -595,10 +606,7 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                       title: Center(
                         child: Text(
-                          _showLabel
-                              ? addr.addressBookName ?? '-'
-                              : _addressBalanceMap[addr.address] ??
-                                  '0.0 ${_availableCoin.letterCode}',
+                          _renderLabel(addr),
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
