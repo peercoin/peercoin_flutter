@@ -390,9 +390,11 @@ packages:
   flutter_logs:
     dependency: "direct main"
     description:
-      name: flutter_logs
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: eb6e364834614241e122ce493c53e561f1503ac4
+      url: "https://github.com/ASPIRINmoe/flutter_logs.git"
+    source: git
     version: "2.1.5"
   flutter_markdown:
     dependency: "direct main"
@@ -482,7 +484,7 @@ packages:
       name: flutter_typeahead
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.3"
+    version: "3.2.5"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -858,10 +860,12 @@ packages:
   qr_code_scanner:
     dependency: "direct main"
     description:
-      name: qr_code_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.1"
+      path: "."
+      ref: fix_break_changes_platform
+      resolved-ref: "0feca6f15042c279ff575c559a3430df917b623d"
+      url: "https://github.com/xeinebiu/qr_code_scanner.git"
+    source: git
+    version: "0.7.0"
   qr_flutter:
     dependency: "direct main"
     description:
