@@ -45,10 +45,7 @@ dependencies:
   collection: ^1.15.0-nullsafety.4
   flutter_markdown: ^0.6.6
   background_fetch: ^1.0.1
-  flutter_logs:
-    git:
-      url: https://github.com/ASPIRINmoe/flutter_logs.git
-      ref: master
+  flutter_logs: ^2.1.6
   auto_size_text: ^3.0.0
   camera: ^0.9.4
 
