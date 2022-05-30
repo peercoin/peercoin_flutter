@@ -1,5 +1,5 @@
-### **0.9.3** (2022-05-xx)
-*
+### **0.9.3** (2022-06-xx)
+* Improved error handling for edge case in which secure storage is not accessible on Android phones
 
 ### **0.9.2** (2022-05-13)
 * Improved wallet performance:  

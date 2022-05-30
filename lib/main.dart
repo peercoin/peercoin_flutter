@@ -15,6 +15,7 @@ import './models/server.dart';
 import 'providers/app_settings.dart';
 import 'providers/servers.dart';
 import 'screens/auth_jail.dart';
+import 'screens/secure_storage_error_screen.dart';
 import 'tools/logger_wrapper.dart';
 import 'tools/theme_manager.dart';
 import 'models/coin_wallet.dart';
@@ -82,18 +83,30 @@ void main() async {
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
   //check if app is locked
-  final _secureStorage = const FlutterSecureStorage();
-  final failedAuths =
-      int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
-  if (setupFinished == false) {
-    _homeWidget = SetupScreen();
-  } else if (failedAuths > 0) {
-    _homeWidget = AuthJailScreen(true);
+  var secureStorageError = false;
+  var failedAuths = 0;
+  try {
+    final _secureStorage = const FlutterSecureStorage();
+    failedAuths =
+        int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
+  } catch (e) {
+    secureStorageError = true;
+    LoggerWrapper.logError('Main', 'secureStorage', e.toString());
+  }
+
+  if (secureStorageError == true) {
+    _homeWidget = SecureStorageFailedScreen();
   } else {
-    _homeWidget = WalletListScreen(
-      fromColdStart: true,
-      walletToOpenDirectly: notificationAppLaunchDetails?.payload ?? '',
-    );
+    if (setupFinished == false) {
+      _homeWidget = SetupScreen();
+    } else if (failedAuths > 0) {
+      _homeWidget = AuthJailScreen(true);
+    } else {
+      _homeWidget = WalletListScreen(
+        fromColdStart: true,
+        walletToOpenDirectly: notificationAppLaunchDetails?.payload ?? '',
+      );
+    }
   }
 
   if (!kIsWeb) {
