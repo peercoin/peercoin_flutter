@@ -254,7 +254,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         Navigator.of(context)
             .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
         break;
-      case 'performance':
+      case 'signing':
         Navigator.of(context)
             .pushNamed(Routes.WalletSigning, arguments: _wallet.name);
         break;
@@ -435,19 +435,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     ),
                   ),
                 ),
-                // PopupMenuItem(
-                //   value: 'performance',
-                //   child: ListTile(
-                //     leading: Icon(
-                //       Icons.bolt,
-                //       color: Theme.of(context).colorScheme.secondary,
-                //     ),
-                //     title: Text(
-                //       AppLocalizations.instance
-                //           .translate('wallet_pop_menu_performance'),
-                //     ),
-                //   ),
-                // ),
+                PopupMenuItem(
+                  value: 'signing',
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.key,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_signing'),
+                    ),
+                  ),
+                ),
               ];
             },
           )

@@ -33,7 +33,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.instance.translate('wallet_pop_menu_performance'),
+          AppLocalizations.instance.translate('wallet_pop_menu_signing'),
         ),
       ),
     );

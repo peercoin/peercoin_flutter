@@ -278,7 +278,7 @@
     "wallet_offline": "offline",
     "wallet_pop_menu_paperwallet": "Import Paper Wallet",
     "wallet_pop_menu_wif": "Import Private Key",
-    "wallet_pop_menu_performance": "Performance",
+    "wallet_pop_menu_signing": "Sign Messages",
     "wallet_pop_menu_rescan": "Rescan",
     "wallet_pop_menu_servers": "Adjust Servers",
     "wallet_receive": "Receive",
