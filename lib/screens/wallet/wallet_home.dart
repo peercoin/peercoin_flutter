@@ -256,7 +256,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case 'performance':
         Navigator.of(context)
-            .pushNamed(Routes.WalletPerformance, arguments: _wallet.name);
+            .pushNamed(Routes.WalletSigning, arguments: _wallet.name);
         break;
       case 'rescan':
         showDialog(

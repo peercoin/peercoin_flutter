@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 // import '../../providers/active_wallets.dart';
 import '../../tools/app_localizations.dart';
 
-class WalletPerformanceScreen extends StatefulWidget {
-  const WalletPerformanceScreen({Key? key}) : super(key: key);
+class WalletSigningScreen extends StatefulWidget {
+  const WalletSigningScreen({Key? key}) : super(key: key);
 
   @override
-  State<WalletPerformanceScreen> createState() =>
-      _WalletPerformanceScreenState();
+  State<WalletSigningScreen> createState() => _WalletSigningScreenState();
 }
 
-class _WalletPerformanceScreenState extends State<WalletPerformanceScreen> {
+class _WalletSigningScreenState extends State<WalletSigningScreen> {
   // late String _walletName;
   bool _initial = true;
   // late ActiveWallets _activeWallets;
@@ -40,8 +39,3 @@ class _WalletPerformanceScreenState extends State<WalletPerformanceScreen> {
     );
   }
 }
-
-//TODO Hint: rescan not affected
-//TODO Hint: disabling generation of change addresses will result in lack of privacy
-//TODO Hint: Addresses can be watched manually by enabling them in the address book
-//TODO Receive tab: allow manual generation of unused address if change address generation is disabled 
