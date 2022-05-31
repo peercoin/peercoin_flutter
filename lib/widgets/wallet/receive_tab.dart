@@ -142,10 +142,14 @@ class _ReceiveTabState extends State<ReceiveTab> {
             Container(
               height: 30,
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Theme.of(context).bottomAppBarColor,
-                  Theme.of(context).primaryColor,
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).bottomAppBarColor,
+                    Theme.of(context).primaryColor,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
             Align(
@@ -263,6 +267,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
+                      SizedBox(height: 10),
                       Text(
                         AppLocalizations.instance
                             .translate('wallet_receive_label_hint_privacy'),
