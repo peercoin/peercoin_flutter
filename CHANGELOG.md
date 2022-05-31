@@ -1,6 +1,7 @@
 ### **0.9.3** (2022-06-xx)
+* Signing messages is now available for each wallet
 * Improved error handling for edge case in which secure storage is not accessible on Android phones
-* Various dependency updates for Flutter 3.0.0
+* Various dependency updates under the hood
 
 ### **0.9.2** (2022-05-13)
 * Improved wallet performance:  
