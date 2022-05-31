@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../tools/share_wrapper.dart';
 import '/../providers/active_wallets.dart';
@@ -113,8 +113,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
             ),
             TextButton(
               onPressed: () async {
-                await canLaunch(url)
-                    ? await launch(url)
+                await canLaunchUrlString(url)
+                    ? await launchUrlString(url)
                     : throw 'Could not launch $url';
 
                 Navigator.of(context).pop();
