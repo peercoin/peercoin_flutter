@@ -156,3 +156,4 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
 //TODO handle address result - display selected address - change "Select" button to "Change"
 //TODO Message form
 //TODO fire sign
+//TODO snack after selected address
