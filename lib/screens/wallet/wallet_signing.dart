@@ -53,6 +53,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   }
 
   Future<void> _showAddressSelector() async {
+    final _oldAddr = _signingAddress;
     var result = await Navigator.of(context).pushNamed(
       Routes.AddressSelector,
       arguments: [
@@ -60,12 +61,12 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
         _signingAddress
       ],
     );
-    if (result != '' && result != _signingAddress) {
-      saveSnack(context);
-    }
     setState(() {
       _signingAddress = result as String;
     });
+    if (result != '' && result != _oldAddr) {
+      saveSnack(context);
+    }
   }
 
   void handlePress(int step) async {

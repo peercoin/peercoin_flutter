@@ -12,6 +12,7 @@ class AddressSelectorScreen extends StatefulWidget {
 
 class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
   bool _initial = true;
+  bool _searchActive = false;
   late List<WalletAddress> _addresses;
   List<WalletAddress> _filteredAddresses = [];
   String _selectedAddress = '';
@@ -74,6 +75,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
               alignment: Alignment.center,
               child: AutoSizeText(
                 address.address,
+                maxFontSize: 16,
               ),
             ),
             subtitle: Text(
@@ -96,28 +98,6 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
 
     return [
       SizedBox(
-        height: 20,
-      ),
-      Form(
-        key: Key('selectorSearchBar'),
-        child: Container(
-          padding: const EdgeInsets.only(left: 16),
-          child: TextFormField(
-            autofocus: true,
-            key: Key('selectorSearchKey'),
-            textInputAction: TextInputAction.done,
-            autocorrect: false,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText:
-                  AppLocalizations.instance.translate('addressbook_search'),
-              prefixIcon: Icon(Icons.search),
-            ),
-            onChanged: (searchKey) => applyFilter(searchKey),
-          ),
-        ),
-      ),
-      SizedBox(
         height: 10,
       ),
       ...inkwells,
@@ -134,13 +114,59 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
             Navigator.pop(context, _selectedAddress);
           },
         ),
-        title: Text(
-          AppLocalizations.instance.translate('address_selector_title'),
-        ),
+        title: _searchActive == false
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.instance
+                        .translate('address_selector_title'),
+                  ),
+                  IconButton(
+                    onPressed: () => setState(() {
+                      _searchActive = true;
+                    }),
+                    icon: Icon(Icons.search),
+                  )
+                ],
+              )
+            : Form(
+                key: Key('selectorSearchBar'),
+                child: Container(
+                  child: TextFormField(
+                    autofocus: true,
+                    style: TextStyle(color: Theme.of(context).backgroundColor),
+                    key: Key('selectorSearchKey'),
+                    textInputAction: TextInputAction.done,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.instance
+                          .translate('addressbook_search'),
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () => setState(() {
+                          _searchActive = false;
+                        }),
+                        icon: Icon(
+                          Icons.close,
+                          color: Theme.of(context).backgroundColor,
+                        ),
+                      ),
+                    ),
+                    onChanged: (searchKey) => applyFilter(searchKey),
+                  ),
+                ),
+              ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(children: generateAddressInkwells()),
+        child: SingleChildScrollView(
+          child: Column(
+            children: generateAddressInkwells(),
+          ),
+        ),
       ),
     );
   }
