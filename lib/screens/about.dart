@@ -50,12 +50,6 @@ class _AboutScreenState extends State<AboutScreen> {
         title: Text(
           AppLocalizations.instance.translate('about'),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Column(
         children: [

@@ -86,9 +86,11 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   void createQrScanner(String keyType) async {
     final result = await Navigator.of(context).pushNamed(
       Routes.QRScan,
-      arguments: AppLocalizations.instance.translate(keyType == 'pub'
-          ? 'paperwallet_step_1_text'
-          : 'paperwallet_step_2_text'),
+      arguments: AppLocalizations.instance.translate(
+        keyType == 'pub'
+            ? 'paperwallet_step_1_text'
+            : 'paperwallet_step_2_text',
+      ),
     );
     if (result != null) {
       keyType == 'pub'

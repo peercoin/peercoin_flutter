@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/address_selector.dart';
 import 'package:peercoin/screens/wallet/wallet_signing.dart';
 
 import '../screens/app_settings_notifications.dart';
@@ -42,6 +43,7 @@ class Routes {
   static const String ServerSettings = '/server-settings';
   static const String ServerAdd = '/server-add';
   static const String ChangeLog = '/changelog';
+  static const String AddressSelector = '/address-selector';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -87,6 +89,10 @@ class Routes {
           ),
       Routes.WalletSigning: (context) => RouterMaster(
             widget: WalletSigningScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.AddressSelector: (context) => RouterMaster(
+            widget: AddressSelectorScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
       Routes.ImportPaperWallet: (context) => RouterMaster(
