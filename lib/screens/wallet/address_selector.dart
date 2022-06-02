@@ -23,7 +23,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
       _addresses = args[0] as List<WalletAddress>;
       _selectedAddress = args[1] as String;
 
-      filterAddresses(true);
+      applyFilter();
       setState(() {
         _initial = false;
       });
@@ -31,10 +31,30 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     super.didChangeDependencies();
   }
 
-  void filterAddresses([bool _isInitial = false]) {
-    if (_isInitial) {
-      _filteredAddresses =
-          _addresses.where((element) => element.isOurs == true).toList();
+  void applyFilter([String? searchedKey]) {
+    var _filteredList;
+    if (_initial) {
+      setState(
+        () {
+          _addresses =
+              _addresses.where((element) => element.isOurs == true).toList();
+          _filteredAddresses = _addresses;
+        },
+      );
+    } else {
+      //filter search keys
+      if (searchedKey != null && searchedKey.isNotEmpty) {
+        _filteredList = _addresses.where((element) {
+          return element.address.contains(searchedKey) ||
+              element.addressBookName != null &&
+                  element.addressBookName!.contains(searchedKey);
+        }).toList();
+      } else {
+        _filteredList = _addresses;
+      }
+      setState(() {
+        _filteredAddresses = _filteredList;
+      });
     }
   }
 
@@ -78,6 +98,28 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
       SizedBox(
         height: 20,
       ),
+      Form(
+        key: Key('selectorSearchBar'),
+        child: Container(
+          padding: const EdgeInsets.only(left: 16),
+          child: TextFormField(
+            autofocus: true,
+            key: Key('selectorSearchKey'),
+            textInputAction: TextInputAction.done,
+            autocorrect: false,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText:
+                  AppLocalizations.instance.translate('addressbook_search'),
+              prefixIcon: Icon(Icons.search),
+            ),
+            onChanged: (searchKey) => applyFilter(searchKey),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 10,
+      ),
       ...inkwells,
     ];
   }
@@ -103,5 +145,3 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     );
   }
 }
-
-//TODO add search bar
