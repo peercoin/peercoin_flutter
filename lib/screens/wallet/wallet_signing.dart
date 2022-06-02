@@ -72,9 +72,6 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   void handlePress(int step) async {
     if (step == _currentStep) {
       switch (step) {
-        case 1:
-          await _showAddressSelector();
-          break;
         case 2:
           // createQrScanner('priv');
           break;
@@ -128,7 +125,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                           ),
                         ),
                         PeerButton(
-                          action: () => handlePress(1),
+                          action: () => _showAddressSelector(),
                           text: AppLocalizations.instance.translate(
                             _signingAddress == ''
                                 ? 'sign_step_1_button'
