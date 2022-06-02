@@ -19,8 +19,10 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
   @override
   void didChangeDependencies() {
     if (_initial) {
-      _addresses =
-          ModalRoute.of(context)!.settings.arguments as List<WalletAddress>;
+      final args = ModalRoute.of(context)!.settings.arguments as List;
+      _addresses = args[0] as List<WalletAddress>;
+      _selectedAddress = args[1] as String;
+
       filterAddresses(true);
       setState(() {
         _initial = false;
