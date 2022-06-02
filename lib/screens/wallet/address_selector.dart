@@ -13,6 +13,7 @@ class AddressSelectorScreen extends StatefulWidget {
 class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
   bool _initial = true;
   late List<WalletAddress> _addresses;
+  List<WalletAddress> _filteredAddresses = [];
   String _selectedAddress = '';
 
   @override
@@ -20,6 +21,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     if (_initial) {
       _addresses =
           ModalRoute.of(context)!.settings.arguments as List<WalletAddress>;
+      filterAddresses(true);
       setState(() {
         _initial = false;
       });
@@ -27,8 +29,15 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     super.didChangeDependencies();
   }
 
+  void filterAddresses([bool _isInitial = false]) {
+    if (_isInitial) {
+      _filteredAddresses =
+          _addresses.where((element) => element.isOurs == true).toList();
+    }
+  }
+
   List<Widget> generateAddressInkwells() {
-    final inkwells = _addresses.map(
+    final inkwells = _filteredAddresses.map(
       (address) {
         return InkWell(
           key: Key(address.address),
@@ -94,4 +103,3 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
 }
 
 //TODO add search bar
-//TODO does not check isOurs (will show sending addr)

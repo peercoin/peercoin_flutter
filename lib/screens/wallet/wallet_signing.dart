@@ -23,6 +23,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   int _currentStep = 1;
   bool _signingInProgress = false;
   String _signature = '';
+  String _signingAddress = '';
 
   @override
   void didChangeDependencies() {
@@ -36,15 +37,39 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     super.didChangeDependencies();
   }
 
+  void saveSnack(context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate(
+            'sign_snack_text',
+            {'address': _signingAddress},
+          ),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
+  Future<void> _showAddressSelector() async {
+    var result = await Navigator.of(context).pushNamed(
+      Routes.AddressSelector,
+      arguments: await _activeWallets.getWalletAddresses(_walletName),
+    );
+    setState(() {
+      _signingAddress = result as String;
+    });
+    if (result != '') {
+      saveSnack(context);
+    }
+  }
+
   void handlePress(int step) async {
     if (step == _currentStep) {
       switch (step) {
         case 1:
-          var result = await Navigator.of(context).pushNamed(
-            Routes.AddressSelector,
-            arguments: await _activeWallets.getWalletAddresses(_walletName),
-          );
-          print(result);
+          await _showAddressSelector();
           break;
         case 2:
           // createQrScanner('priv');
@@ -92,14 +117,19 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Text(
-                            AppLocalizations.instance
-                                .translate('sign_step_1_description'),
+                            _signingAddress == ''
+                                ? AppLocalizations.instance
+                                    .translate('sign_step_1_description')
+                                : _signingAddress,
                           ),
                         ),
                         PeerButton(
                           action: () => handlePress(1),
-                          text: AppLocalizations.instance
-                              .translate('sign_step_1_button'),
+                          text: AppLocalizations.instance.translate(
+                            _signingAddress == ''
+                                ? 'sign_step_1_button'
+                                : 'sign_step_1_button_alt',
+                          ),
                           small: true,
                           active: _currentStep == 1,
                         ),
@@ -153,7 +183,5 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   }
 }
 
-//TODO handle address result - display selected address - change "Select" button to "Change"
 //TODO Message form
 //TODO fire sign
-//TODO snack after selected address
