@@ -307,8 +307,11 @@
     "sign_step_3": "Sign message",
     "sign_step_3_description": "This is your signature. You may double tap to copy it to the clipboard.",
     "sign_step_3_button": "Sign",
-    "sign_step_3_button_alt": "Copy to clipboard",
+    "sign_step_3_button_alt": "Copy signature to clipboard",
     "sign_snack_text": "$address selected",
     "sign_input_label": "Message to sign",
+    "sign_reset_button": "Reset",
+    "sign_reset_alert_title": "Do you want to start over?",
+    "sign_reset_alert_body": "This will reset all fields and clear your signature.",
     "address_selector_title": "Select address to sign with"
 }

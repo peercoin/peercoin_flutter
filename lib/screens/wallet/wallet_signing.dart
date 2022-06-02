@@ -1,6 +1,7 @@
-import 'dart:convert';
+import 'dart:developer';
 
 import 'package:coinslib/coinslib.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -26,7 +27,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   late ActiveWallets _activeWallets;
   bool _initial = true;
   late Coin _activeCoin;
-  bool _signingInProgress = false;
+  bool _signingDone = false;
   String _signature = '';
   String _signingAddress = '';
   final TextEditingController _messageInputController = TextEditingController();
@@ -84,13 +85,56 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
               await _activeWallets.getWif(_walletName, _signingAddress),
               _activeCoin.networkType)
           .sign(_messageInputController.text);
-      print(result);
+      print(sha256.convert(result));
       setState(() {
         _signature = result.toString();
+        _signingDone = true;
       });
     } catch (e) {
       LoggerWrapper.logError('WalletSigning', 'handleSign', e.toString());
     }
+  }
+
+  Future<void> _performReset(BuildContext ctx) async {
+    return await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          AppLocalizations.instance.translate('sign_reset_alert_title'),
+        ),
+        content: Text(
+          AppLocalizations.instance.translate('sign_reset_alert_body'),
+        ),
+        actions: <Widget>[
+          TextButton.icon(
+              label: Text(AppLocalizations.instance
+                  .translate('server_settings_alert_cancel')),
+              icon: Icon(Icons.cancel),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              }),
+          TextButton.icon(
+            label:
+                Text(AppLocalizations.instance.translate('sign_reset_button')),
+            icon: Icon(Icons.check),
+            onPressed: () async {
+              LoggerWrapper.logInfo(
+                  'WalletSigning', '_performReset', 'reset performed');
+              await Navigator.of(ctx).pushNamedAndRemoveUntil(
+                Routes.WalletSigning,
+                (route) {
+                  if (route.settings.name == '/wallet-home') {
+                    return true;
+                  }
+                  return false;
+                },
+                arguments: _walletName,
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -133,13 +177,15 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                           ),
                         ),
                         PeerButton(
-                          action: () => _showAddressSelector(),
+                          action: () =>
+                              _signingDone ? null : _showAddressSelector(),
                           text: AppLocalizations.instance.translate(
                             _signingAddress == ''
                                 ? 'sign_step_1_button'
                                 : 'sign_step_1_button_alt',
                           ),
                           small: true,
+                          active: !_signingDone,
                         ),
                         SizedBox(
                           height: 20,
@@ -159,6 +205,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                       key: Key('messageInput'),
                       controller: _messageInputController,
                       autocorrect: false,
+                      readOnly: _signingDone,
                       minLines: 5,
                       maxLines: 5,
                       onChanged: (_) => setState(
@@ -241,6 +288,14 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                             active: _signingAddress.isNotEmpty &&
                                 _messageInputController.text.isNotEmpty,
                           ),
+                    _signingDone
+                        ? PeerButton(
+                            text: AppLocalizations.instance
+                                .translate('sign_reset_button'),
+                            small: true,
+                            action: () async => await _performReset(context),
+                          )
+                        : Container()
                   ],
                 ),
               ),
@@ -251,4 +306,3 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     );
   }
 }
-//TODO fire sign
