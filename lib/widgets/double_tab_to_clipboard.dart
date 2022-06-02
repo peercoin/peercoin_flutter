@@ -11,21 +11,23 @@ class DoubleTabToClipboard extends StatelessWidget {
     required this.child,
   });
 
+  static void tapEvent(BuildContext context, String clipBoardData) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        AppLocalizations.instance.translate('snack_copied'),
+        textAlign: TextAlign.center,
+      ),
+      duration: Duration(seconds: 1),
+    ));
+    Clipboard.setData(
+      ClipboardData(text: clipBoardData),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            AppLocalizations.instance.translate('snack_copied'),
-            textAlign: TextAlign.center,
-          ),
-          duration: Duration(seconds: 1),
-        ));
-        Clipboard.setData(
-          ClipboardData(text: clipBoardData),
-        );
-      },
+      onDoubleTap: () => tapEvent(context, clipBoardData),
       child: child,
     );
   }
