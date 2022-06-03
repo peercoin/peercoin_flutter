@@ -90,6 +90,9 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
         _signature = base64.encode(result);
         _signingDone = true;
       });
+
+      LoggerWrapper.logInfo(
+          'WalletSigning', 'handleSign', 'signature produced $_signature');
     } catch (e) {
       LoggerWrapper.logError('WalletSigning', 'handleSign', e.toString());
     }
