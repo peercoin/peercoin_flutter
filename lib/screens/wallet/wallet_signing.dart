@@ -1,16 +1,16 @@
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/tools/app_routes.dart';
-import 'package:peercoin/tools/logger_wrapper.dart';
-import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/active_wallets.dart';
 import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/double_tab_to_clipboard.dart';
 
 class WalletSigningScreen extends StatefulWidget {
   const WalletSigningScreen({Key? key}) : super(key: key);
@@ -32,10 +32,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   @override
   void didChangeDependencies() {
     if (_initial == true) {
+      _walletName = ModalRoute.of(context)!.settings.arguments as String;
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
       setState(() {
-        _walletName = ModalRoute.of(context)!.settings.arguments as String;
-        _activeWallets = Provider.of<ActiveWallets>(context);
-        _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
         _initial = false;
       });
     }
