@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:coinslib/coinslib.dart';
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -55,7 +52,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
           ),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 2),
       ),
     );
   }
@@ -81,11 +78,12 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     LoggerWrapper.logInfo('WalletSigning', 'handleSign',
         'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}');
     try {
+      var wif = await _activeWallets.getWif(_walletName, _signingAddress);
       var result = Wallet.fromWIF(
-              await _activeWallets.getWif(_walletName, _signingAddress),
-              _activeCoin.networkType)
-          .sign(_messageInputController.text);
-      print(sha256.convert(result));
+        wif,
+        _activeCoin.networkType,
+      ).sign(_messageInputController.text);
+
       setState(() {
         _signature = result.toString();
         _signingDone = true;
@@ -169,12 +167,13 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Text(
-                            _signingAddress == ''
-                                ? AppLocalizations.instance
-                                    .translate('sign_step_1_description')
-                                : _signingAddress,
-                          ),
+                          child: _signingAddress == ''
+                              ? Text(AppLocalizations.instance
+                                  .translate('sign_step_1_description'))
+                              : DoubleTabToClipboard(
+                                  clipBoardData: _signingAddress,
+                                  child: SelectableText(_signingAddress),
+                                ),
                         ),
                         PeerButton(
                           action: () =>
@@ -213,12 +212,15 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () async {
+                            if (_signingDone) return;
                             var data = await Clipboard.getData('text/plain');
                             _messageInputController.text = data!.text!.trim();
                           },
                           icon: Icon(
                             Icons.paste_rounded,
-                            color: Theme.of(context).primaryColor,
+                            color: _signingDone
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).primaryColor,
                           ),
                         ),
                         icon: Icon(

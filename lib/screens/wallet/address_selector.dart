@@ -75,7 +75,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
               alignment: Alignment.center,
               child: AutoSizeText(
                 address.address,
-                maxFontSize: 16,
+                maxFontSize: 14,
               ),
             ),
             subtitle: Text(
