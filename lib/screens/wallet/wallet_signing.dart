@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,7 +87,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
       ).sign(_messageInputController.text);
 
       setState(() {
-        _signature = result.toString();
+        _signature = base64.encode(result);
         _signingDone = true;
       });
     } catch (e) {
