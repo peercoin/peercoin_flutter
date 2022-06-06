@@ -77,17 +77,19 @@ class PeerButtonBorder extends StatelessWidget {
 class PeerButtonSetup extends StatelessWidget {
   final Function() action;
   final String text;
+  final bool active;
 
   PeerButtonSetup({
     required this.text,
     required this.action,
+    this.active = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).backgroundColor,
+        primary: active ? Theme.of(context).backgroundColor : Colors.grey,
         onPrimary: Theme.of(context).primaryColor,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768

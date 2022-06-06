@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
@@ -11,14 +10,14 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 
-class SetupDataFeedsScreen extends StatefulWidget {
-  const SetupDataFeedsScreen({Key? key}) : super(key: key);
+class SetupLegalScreen extends StatefulWidget {
+  const SetupLegalScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupDataFeedsScreenState createState() => _SetupDataFeedsScreenState();
+  _SetupLegalScreenState createState() => _SetupLegalScreenState();
 }
 
-class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
+class _SetupLegalScreenState extends State<SetupLegalScreen> {
   void _launchURL(String _url) async {
     await canLaunchUrlString(_url)
         ? await launchUrlString(
@@ -27,8 +26,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
         : throw 'Could not launch $_url';
   }
 
-  bool _dataFeedAllowed = false;
-  bool _bgSyncdAllowed = false;
+  bool _termsAgreed = false;
   bool _initial = true;
   late AppSettings _settings;
 
@@ -44,18 +42,11 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
     super.didChangeDependencies();
   }
 
-  void togglePriceTickerHandler(bool newState) {
+  void toggleTermsHandler(bool newState) {
     _settings.setSelectedCurrency(newState == true ? 'USD' : '');
 
     setState(() {
-      _dataFeedAllowed = newState;
-    });
-  }
-
-  void toggleBGSyncHandler(bool newState) {
-    _settings.setNotificationInterval(newState == true ? 30 : 0);
-    setState(() {
-      _bgSyncdAllowed = newState;
+      _termsAgreed = newState;
     });
   }
 
@@ -73,7 +64,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PeerProgress(4),
+              PeerProgress(5),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -82,7 +73,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                       height: MediaQuery.of(context).size.height / 15,
                     ),
                     Image.asset(
-                      'assets/img/setup-consent.png',
+                      'assets/img/setup-legal.png',
                       height: MediaQuery.of(context).size.height / 4,
                     ),
                     SizedBox(
@@ -94,7 +85,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                         PeerButtonSetupBack(),
                         AutoSizeText(
                           AppLocalizations.instance
-                              .translate('setup_price_feed_title'),
+                              .translate('setup_legal_title'),
                           minFontSize: 24,
                           maxFontSize: 28,
                           style: TextStyle(
@@ -115,6 +106,13 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            PeerButton(
+                              action: () => _launchURL(
+                                  'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
+                              text: AppLocalizations.instance.translate(
+                                'setup_legal_license',
+                              ),
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
@@ -122,76 +120,39 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                                 key: Key('setupApiTickerSwitchKey'),
                                 title: Text(
                                   AppLocalizations.instance
-                                      .translate('setup_price_feed_allow'),
+                                      .translate('setup_legal_switch_tile'),
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
-                                value: _dataFeedAllowed,
+                                value: _termsAgreed,
                                 activeColor: Colors.white,
                                 inactiveThumbColor: Colors.grey,
                                 onChanged: (newState) =>
-                                    togglePriceTickerHandler(newState),
+                                    toggleTermsHandler(newState),
                               ),
                             ),
-                            PeerExplanationText(
-                              AppLocalizations.instance
-                                  .translate('setup_price_feed_description'),
-                              2,
-                            ),
+                            SizedBox(
+                              height: 10,
+                            )
                           ],
                         ),
                       ),
-                    ),
-                    if (!kIsWeb)
-                      Expanded(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width > 1200
-                              ? MediaQuery.of(context).size.width / 2
-                              : MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: SwitchListTile(
-                                  key: Key('setupApiBGSwitchKey'),
-                                  title: Text(
-                                    AppLocalizations.instance
-                                        .translate('setup_bg_sync_allow'),
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  value: _bgSyncdAllowed,
-                                  activeColor: Colors.white,
-                                  inactiveThumbColor: Colors.grey,
-                                  onChanged: (newState) =>
-                                      toggleBGSyncHandler(newState),
-                                ),
-                              ),
-                              PeerExplanationText(
-                                AppLocalizations.instance
-                                    .translate('setup_bg_sync_description'),
-                                2,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    PeerButton(
-                      action: () => _launchURL(
-                          'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
-                      text: AppLocalizations.instance
-                          .translate('about_data_declaration'),
                     ),
                   ],
                 ),
               ),
               PeerButtonSetup(
-                text: AppLocalizations.instance.translate('continue'),
-                action: () {
-                  Navigator.of(context).pushNamed(Routes.SetupLegal);
+                text: AppLocalizations.instance.translate('setup_finish'),
+                active: _termsAgreed,
+                action: () async {
+                  if (_termsAgreed == false) return;
+                  var prefs = await Provider.of<UnencryptedOptions>(context,
+                          listen: false)
+                      .prefs;
+                  await prefs.setBool('setupFinished', true);
+                  await Navigator.of(context)
+                      .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
                 },
               ),
               SizedBox(

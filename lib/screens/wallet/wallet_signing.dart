@@ -79,6 +79,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   Future<void> _handleSign() async {
     LoggerWrapper.logInfo('WalletSigning', 'handleSign',
         'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}');
+
     try {
       var wif = await _activeWallets.getWif(_walletName, _signingAddress);
       var result = Wallet.fromWIF(

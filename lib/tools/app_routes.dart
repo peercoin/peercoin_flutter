@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/setup/setup_legal.dart';
 import 'package:peercoin/screens/wallet/address_selector.dart';
 import 'package:peercoin/screens/wallet/wallet_signing.dart';
 
@@ -44,6 +45,7 @@ class Routes {
   static const String ServerAdd = '/server-add';
   static const String ChangeLog = '/changelog';
   static const String AddressSelector = '/address-selector';
+  static const String SetupLegal = '/setup-legal';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -117,6 +119,10 @@ class Routes {
           ),
       Routes.SetupDataFeeds: (context) => RouterMaster(
             widget: SetupDataFeedsScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.SetupLegal: (context) => RouterMaster(
+            widget: SetupLegalScreen(),
             routeType: RouteTypes.setupOnly,
           ),
       Routes.ChangeLog: (context) => RouterMaster(

@@ -17,7 +17,7 @@ class SetupProgressIndicator extends StatelessWidget with PreferredSizeWidget {
       padding: MediaQuery.of(context).padding,
       color: Theme.of(context).primaryColor,
       child: StepProgressIndicator(
-        totalSteps: 4,
+        totalSteps: 5,
         currentStep: step,
         selectedColor: Theme.of(context).colorScheme.secondary,
         unselectedColor: Theme.of(context).colorScheme.secondaryContainer,
