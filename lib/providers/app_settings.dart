@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,11 +24,13 @@ class AppSettings with ChangeNotifier {
     }
     _sharedPrefs = await SharedPreferences.getInstance();
 
-    try {
-      await availableCameras();
-      camerasAvailble = true;
-    } catch (e) {
-      camerasAvailble = false;
+    if (!kIsWeb) {
+      try {
+        await availableCameras();
+        camerasAvailble = true;
+      } catch (e) {
+        camerasAvailble = false;
+      }
     }
   }
 

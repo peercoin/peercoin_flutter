@@ -3,13 +3,13 @@ import 'package:peercoin/screens/setup/setup_legal.dart';
 import 'package:peercoin/screens/wallet/address_selector.dart';
 import 'package:peercoin/screens/wallet/wallet_signing.dart';
 
-import '../screens/app_settings_notifications.dart';
-import '../screens/app_settings_screen.dart';
+import '../screens/settings/app_settings_notifications.dart';
+import '../screens/settings/app_settings_screen.dart';
 import '../screens/auth_jail.dart';
 import '../screens/changelog.dart';
 import '../screens/qrcode_scanner.dart';
-import '../screens/server_add.dart';
-import '../screens/server_settings.dart';
+import '../screens/server_settings/server_add.dart';
+import '../screens/server_settings/server_settings.dart';
 import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';

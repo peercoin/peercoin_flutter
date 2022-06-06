@@ -6,23 +6,24 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
-import '../models/coin_wallet.dart';
-import '../providers/active_wallets.dart';
-import '../providers/app_settings.dart';
-import '../tools/app_localizations.dart';
-import '../tools/app_routes.dart';
-import '../tools/auth.dart';
-import '../tools/logger_wrapper.dart';
-import '../tools/share_wrapper.dart';
-import '../widgets/buttons.dart';
-import '../widgets/double_tab_to_clipboard.dart';
-import '../widgets/settings/settings_auth.dart';
-import '../widgets/settings/settings_price_ticker.dart';
-import 'about.dart';
+import '../../models/coin_wallet.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/app_routes.dart';
+import '../../tools/auth.dart';
+import '../../tools/logger_wrapper.dart';
+import '../../tools/share_wrapper.dart';
+import '../../widgets/buttons.dart';
+import '../../widgets/double_tab_to_clipboard.dart';
+import '../../widgets/settings/settings_auth.dart';
+import '../../widgets/settings/settings_price_ticker.dart';
+import '../about.dart';
 
 class AppSettingsScreen extends StatefulWidget {
   @override
@@ -245,163 +246,167 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              ExpansionTile(
-                title: Text(
-                  AppLocalizations.instance.translate('app_settings_language'),
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                childrenPadding: EdgeInsets.all(10),
-                children: AppLocalizations.availableLocales.keys.map((lang) {
-                  return InkWell(
-                    onTap: () => saveLang(lang),
-                    child: ListTile(
-                      title: Text(AppLocalizations.availableLocales[lang]!),
-                      key: Key(lang),
-                      leading: Radio(
-                        value: lang,
-                        groupValue: _lang,
-                        onChanged: (dynamic _) => saveLang(lang),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              if (!kIsWeb)
+        child: Align(
+          child: PeerContainer(
+            child: Column(
+              children: [
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance
-                        .translate('app_settings_default_wallet'),
+                        .translate('app_settings_language'),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   childrenPadding: EdgeInsets.all(10),
-                  children: generateDefaultWallets(),
+                  children: AppLocalizations.availableLocales.keys.map((lang) {
+                    return InkWell(
+                      onTap: () => saveLang(lang),
+                      child: ListTile(
+                        title: Text(AppLocalizations.availableLocales[lang]!),
+                        key: Key(lang),
+                        leading: Radio(
+                          value: lang,
+                          groupValue: _lang,
+                          onChanged: (dynamic _) => saveLang(lang),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              ExpansionTile(
-                  title: Text(
+                if (!kIsWeb)
+                  ExpansionTile(
+                    title: Text(
                       AppLocalizations.instance
-                          .translate('app_settings_auth_header'),
-                      style: Theme.of(context).textTheme.headline6),
-                  childrenPadding: EdgeInsets.all(10),
-                  children: [
-                    _biometricsRevealed == false
-                        ? PeerButton(
-                            action: () =>
-                                revealAuthOptions(_settings.biometricsAllowed),
-                            text: AppLocalizations.instance
-                                .translate('app_settings_revealAuthButton'),
-                          )
-                        : SettingsAuth(
-                            _biometricsAllowed,
-                            _biometricsAvailable,
-                            _settings,
-                            saveSnack,
-                            _settings.authenticationOptions!,
-                          )
-                  ]),
-              ExpansionTile(
-                  title: Text(
-                      AppLocalizations.instance.translate('app_settings_seed'),
-                      style: Theme.of(context).textTheme.headline6),
-                  childrenPadding: EdgeInsets.all(10),
-                  children: [
-                    _seedPhrase == ''
-                        ? PeerButton(
-                            action: () =>
-                                revealSeedPhrase(_settings.biometricsAllowed),
-                            text: AppLocalizations.instance
-                                .translate('app_settings_revealSeedButton'),
-                          )
-                        : Column(children: [
-                            SizedBox(height: 20),
-                            DoubleTabToClipboard(
-                              clipBoardData: _seedPhrase,
-                              child: SelectableText(
-                                _seedPhrase,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            if (!kIsWeb)
-                              PeerButton(
-                                action: () => ShareWrapper.share(_seedPhrase),
-                                text: AppLocalizations.instance
-                                    .translate('app_settings_shareseed'),
-                              )
-                          ])
-                  ]),
-              ExpansionTile(
-                title: Text(
-                    AppLocalizations.instance.translate('app_settings_theme'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: _availableThemes.keys.map((theme) {
-                  return InkWell(
-                    onTap: () => saveTheme(theme, _availableThemes[theme]),
-                    child: ListTile(
-                      title: Text(
+                          .translate('app_settings_default_wallet'),
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: generateDefaultWallets(),
+                  ),
+                ExpansionTile(
+                    title: Text(
                         AppLocalizations.instance
-                            .translate('app_settings_theme_$theme'),
+                            .translate('app_settings_auth_header'),
+                        style: Theme.of(context).textTheme.headline6),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: [
+                      _biometricsRevealed == false
+                          ? PeerButton(
+                              action: () => revealAuthOptions(
+                                  _settings.biometricsAllowed),
+                              text: AppLocalizations.instance
+                                  .translate('app_settings_revealAuthButton'),
+                            )
+                          : SettingsAuth(
+                              _biometricsAllowed,
+                              _biometricsAvailable,
+                              _settings,
+                              saveSnack,
+                              _settings.authenticationOptions!,
+                            )
+                    ]),
+                ExpansionTile(
+                    title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_seed'),
+                        style: Theme.of(context).textTheme.headline6),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: [
+                      _seedPhrase == ''
+                          ? PeerButton(
+                              action: () =>
+                                  revealSeedPhrase(_settings.biometricsAllowed),
+                              text: AppLocalizations.instance
+                                  .translate('app_settings_revealSeedButton'),
+                            )
+                          : Column(children: [
+                              SizedBox(height: 20),
+                              DoubleTabToClipboard(
+                                clipBoardData: _seedPhrase,
+                                child: SelectableText(
+                                  _seedPhrase,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              if (!kIsWeb)
+                                PeerButton(
+                                  action: () => ShareWrapper.share(_seedPhrase),
+                                  text: AppLocalizations.instance
+                                      .translate('app_settings_shareseed'),
+                                )
+                            ])
+                    ]),
+                ExpansionTile(
+                  title: Text(
+                      AppLocalizations.instance.translate('app_settings_theme'),
+                      style: Theme.of(context).textTheme.headline6),
+                  childrenPadding: EdgeInsets.all(10),
+                  children: _availableThemes.keys.map((theme) {
+                    return InkWell(
+                      onTap: () => saveTheme(theme, _availableThemes[theme]),
+                      child: ListTile(
+                        title: Text(
+                          AppLocalizations.instance
+                              .translate('app_settings_theme_$theme'),
+                        ),
+                        leading: Radio(
+                          value: theme,
+                          groupValue: _selectedTheme,
+                          onChanged: (dynamic _) =>
+                              saveTheme(theme, _availableThemes[theme]),
+                        ),
                       ),
-                      leading: Radio(
-                        value: theme,
-                        groupValue: _selectedTheme,
-                        onChanged: (dynamic _) =>
-                            saveTheme(theme, _availableThemes[theme]),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              ExpansionTile(
-                title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_price_feed'),
-                    style: Theme.of(context).textTheme.headline6),
-                childrenPadding: EdgeInsets.all(10),
-                children: [SettingsPriceTicker(_settings, saveSnack)],
-              ),
-              if (!kIsWeb)
+                    );
+                  }).toList(),
+                ),
                 ExpansionTile(
                   title: Text(
                       AppLocalizations.instance
-                          .translate('app_settings_notifications'),
+                          .translate('app_settings_price_feed'),
                       style: Theme.of(context).textTheme.headline6),
                   childrenPadding: EdgeInsets.all(10),
-                  children: [
-                    PeerButton(
-                      text: AppLocalizations.instance
-                          .translate('app_settings_notifications_open_button'),
-                      action: () => Navigator.of(context).pushNamed(
-                        Routes.AppSettingsNotifications,
+                  children: [SettingsPriceTicker(_settings, saveSnack)],
+                ),
+                if (!kIsWeb)
+                  ExpansionTile(
+                    title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_notifications'),
+                        style: Theme.of(context).textTheme.headline6),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: [
+                      PeerButton(
+                        text: AppLocalizations.instance.translate(
+                            'app_settings_notifications_open_button'),
+                        action: () => Navigator.of(context).pushNamed(
+                          Routes.AppSettingsNotifications,
+                        ),
+                      )
+                    ],
+                  ),
+                if (!kIsWeb)
+                  ExpansionTile(
+                    title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_logs'),
+                        style: Theme.of(context).textTheme.headline6),
+                    childrenPadding: EdgeInsets.all(10),
+                    children: [
+                      Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_description'),
+                        textAlign: TextAlign.center,
                       ),
-                    )
-                  ],
-                ),
-              if (!kIsWeb)
-                ExpansionTile(
-                  title: Text(
-                      AppLocalizations.instance.translate('app_settings_logs'),
-                      style: Theme.of(context).textTheme.headline6),
-                  childrenPadding: EdgeInsets.all(10),
-                  children: [
-                    Text(
-                      AppLocalizations.instance
-                          .translate('app_settings_description'),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 20),
-                    PeerButton(
-                      text: AppLocalizations.instance
-                          .translate('app_settings_logs_export'),
-                      action: () => FlutterLogs.exportLogs(),
-                    )
-                  ],
-                ),
-            ],
+                      SizedBox(height: 20),
+                      PeerButton(
+                        text: AppLocalizations.instance
+                            .translate('app_settings_logs_export'),
+                        action: () => FlutterLogs.exportLogs(),
+                      )
+                    ],
+                  ),
+              ],
+            ),
           ),
         ),
       ),

@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
-import '../models/available_coins.dart';
-import '../models/server.dart';
-import '../providers/electrum_connection.dart';
-import '../providers/servers.dart';
-import '../tools/app_localizations.dart';
-import '../tools/logger_wrapper.dart';
-import '../widgets/loading_indicator.dart';
+import '../../models/available_coins.dart';
+import '../../models/server.dart';
+import '../../providers/electrum_connection.dart';
+import '../../providers/servers.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/logger_wrapper.dart';
+import '../../widgets/loading_indicator.dart';
 
 class ServerAddScreen extends StatefulWidget {
   @override
@@ -173,51 +174,53 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                    textInputAction: TextInputAction.done,
-                    key: _serverKey,
-                    autocorrect: false,
-                    controller: _serverController,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.outbond),
-                      labelText: AppLocalizations.instance
-                          .translate('server_add_input_label'),
-                    ),
-                    maxLines: null,
-                    onFieldSubmitted: (_) => _formKey.currentState!.validate(),
-                    inputFormatters: [],
-                    validator: (value) {
-                      var portRegex = RegExp(':[0-9]');
+      body: Align(
+        child: PeerContainer(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                      textInputAction: TextInputAction.done,
+                      key: _serverKey,
+                      autocorrect: false,
+                      controller: _serverController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.outbond),
+                        labelText: AppLocalizations.instance
+                            .translate('server_add_input_label'),
+                      ),
+                      maxLines: null,
+                      onFieldSubmitted: (_) =>
+                          _formKey.currentState!.validate(),
+                      inputFormatters: [],
+                      validator: (value) {
+                        var portRegex = RegExp(':[0-9]');
 
-                      if (value!.isEmpty) {
-                        return AppLocalizations.instance
-                            .translate('server_add_input_empty');
-                      } else if (!value.contains('wss://')) {
-                        return AppLocalizations.instance
-                            .translate('server_add_no_wss');
-                      } else if (!portRegex.hasMatch(value)) {
-                        return AppLocalizations.instance
-                            .translate('server_add_no_port');
-                      }
-                      //valid string, try further
+                        if (value!.isEmpty) {
+                          return AppLocalizations.instance
+                              .translate('server_add_input_empty');
+                        } else if (!value.contains('wss://')) {
+                          return AppLocalizations.instance
+                              .translate('server_add_no_wss');
+                        } else if (!portRegex.hasMatch(value)) {
+                          return AppLocalizations.instance
+                              .translate('server_add_no_port');
+                        }
+                        //valid string, try further
 
-                      tryConnect(value);
+                        tryConnect(value);
 
-                      return null;
-                    }),
-                if (_loading)
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30),
-                    child: LoadingIndicator(),
-                  )
-              ],
+                        return null;
+                      }),
+                  if (_loading)
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 30),
+                      child: LoadingIndicator(),
+                    )
+                ],
+              ),
             ),
           ),
         ),
