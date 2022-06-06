@@ -117,7 +117,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: SwitchListTile(
-                                key: Key('setupApiTickerSwitchKey'),
+                                key: Key('setupLegalConsentKey'),
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_legal_switch_tile'),

@@ -51,6 +51,8 @@ void main() {
           }
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
+          await driver.tap(find.text('Continue'));
+          await driver.tap(find.byValueKey('setupLegalConsentKey'));
           await driver.tap(find.text('Finish Setup'));
           await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
@@ -95,3 +97,4 @@ void main() {
     },
   );
 }
+//TODO: Add message signing
