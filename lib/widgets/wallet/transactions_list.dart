@@ -144,34 +144,32 @@ class _TransactionListState extends State<TransactionList> {
                               ModalRoute.of(context)!.settings.arguments
                             ]),
                             leading: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  AnimatedContainer(
-                                    duration: Duration(milliseconds: 500),
-                                    child: renderConfirmationIndicator(
-                                      _filteredTx[i - 1],
-                                    ),
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                AnimatedContainer(
+                                  duration: Duration(milliseconds: 500),
+                                  child: renderConfirmationIndicator(
+                                    _filteredTx[i - 1],
                                   ),
-                                  Text(
-                                    DateFormat('d. MMM').format(
+                                ),
+                                Text(
+                                  DateFormat('d. MMM').format(_filteredTx[i - 1]
+                                              .timestamp !=
+                                          0
+                                      ? DateTime.fromMillisecondsSinceEpoch(
+                                          _filteredTx[i - 1].timestamp! * 1000)
+                                      : DateTime.now()),
+                                  style: TextStyle(
+                                    fontWeight:
                                         _filteredTx[i - 1].timestamp != 0
-                                            ? DateTime
-                                                .fromMillisecondsSinceEpoch(
-                                                    _filteredTx[i - 1]
-                                                            .timestamp! *
-                                                        1000)
-                                            : DateTime.now()),
-                                    style: TextStyle(
-                                      fontWeight:
-                                          _filteredTx[i - 1].timestamp != 0
-                                              ? FontWeight.w500
-                                              : FontWeight.w300,
-                                    ),
-                                    textScaleFactor: 0.8,
-                                  )
-                                ]),
+                                            ? FontWeight.w500
+                                            : FontWeight.w300,
+                                  ),
+                                  textScaleFactor: 0.8,
+                                )
+                              ],
+                            ),
                             title: Center(
                               child: Text(
                                 _filteredTx[i - 1].txid,
