@@ -84,17 +84,32 @@ class _TransactionListState extends State<TransactionList> {
       children: [
         WalletBalanceHeader(widget._connectionState, widget._wallet),
         widget._walletTransactions
-                .where((element) =>
-                    element.timestamp != -1) //don't count "phantom" tx
+                .where(
+                  (element) => element.timestamp != -1,
+                ) //don't count "phantom" tx
                 .isEmpty
-            ? Center(
-                child: Text(
-                AppLocalizations.instance.translate('transactions_none'),
-                style: TextStyle(
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                    color: Theme.of(context).backgroundColor),
-              ))
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 10,
+                  ),
+                  Image.asset(
+                    'assets/img/list-empty.png',
+                    height: MediaQuery.of(context).size.height / 4,
+                  ),
+                  Center(
+                    child: Text(
+                      AppLocalizations.instance.translate('transactions_none'),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             : GestureDetector(
                 onHorizontalDragEnd: (dragEndDetails) {
                   if (dragEndDetails.primaryVelocity! < 0) {
