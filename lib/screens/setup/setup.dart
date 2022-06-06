@@ -180,3 +180,5 @@ class PeerProgress extends StatelessWidget {
 //TODO web: auth jail can be circumvented
 //TODO web: transaction list: peercontainer
 //TODO web: transaction details: peercontainer
+//TODO web: pase from clipboard doesn't really work
+//TODO web: import scan with larger wallet flaky
