@@ -40,9 +40,11 @@ class PeerServiceTitle extends StatelessWidget {
 class PeerContainer extends StatelessWidget {
   final Widget child;
   final bool isTransparent;
+  final bool noSpacers;
   PeerContainer({
     required this.child,
     this.isTransparent = false,
+    this.noSpacers = false,
   });
 
   @override
@@ -51,8 +53,8 @@ class PeerContainer extends StatelessWidget {
       width: MediaQuery.of(context).size.width > 1200
           ? MediaQuery.of(context).size.width / 2
           : MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      padding: const EdgeInsets.all(24),
+      margin: noSpacers == true ? null : EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: noSpacers == true ? null : const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: isTransparent
             ? Colors.transparent

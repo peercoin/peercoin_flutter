@@ -248,6 +248,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       body: SingleChildScrollView(
         child: Align(
           child: PeerContainer(
+            noSpacers: true,
             child: Column(
               children: [
                 ExpansionTile(

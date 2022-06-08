@@ -99,6 +99,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           ? Container()
           : Align(
               child: PeerContainer(
+                noSpacers: true,
                 child: ReorderableListView.builder(
                   onReorder: (oldIndex, newIndex) {
                     if (_servers[oldIndex].connectable == false) return;

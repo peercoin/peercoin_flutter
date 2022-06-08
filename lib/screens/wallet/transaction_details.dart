@@ -33,6 +33,7 @@ class TransactionDetails extends StatelessWidget {
       )),
       body: Align(
         child: PeerContainer(
+          noSpacers: true,
           child: ListView(
             padding: EdgeInsets.all(20),
             children: [

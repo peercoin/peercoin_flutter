@@ -504,6 +504,12 @@ class _AddressTabState extends State<AddressTab> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.swipe_left),
+                        ],
+                      ),
                       subtitle: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Center(
@@ -598,6 +604,12 @@ class _AddressTabState extends State<AddressTab> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.swipe_left),
+                        ],
+                      ),
                       subtitle: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Center(
@@ -949,4 +961,5 @@ class _AddressTabState extends State<AddressTab> {
       ],
     );
   }
+  //TODO does not re-render when new address is generated
 }

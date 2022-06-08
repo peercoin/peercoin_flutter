@@ -114,6 +114,7 @@ class _TransactionListState extends State<TransactionList> {
             : Align(
                 child: PeerContainer(
                   isTransparent: true,
+                  noSpacers: true,
                   child: GestureDetector(
                     onHorizontalDragEnd: (dragEndDetails) {
                       if (dragEndDetails.primaryVelocity! < 0) {
