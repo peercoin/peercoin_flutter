@@ -93,12 +93,11 @@ class _TransactionListState extends State<TransactionList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 8,
                   ),
                   Image.asset(
                     'assets/img/list-empty.png',
-                    height: MediaQuery.of(context).size.height /
-                        4, //TODO FIX for landscape
+                    height: MediaQuery.of(context).size.height / 4,
                   ),
                   Center(
                     child: Text(
