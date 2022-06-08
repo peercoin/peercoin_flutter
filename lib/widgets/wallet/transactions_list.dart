@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -96,7 +97,8 @@ class _TransactionListState extends State<TransactionList> {
                   ),
                   Image.asset(
                     'assets/img/list-empty.png',
-                    height: MediaQuery.of(context).size.height / 4,
+                    height: MediaQuery.of(context).size.height /
+                        4, //TODO FIX for landscape
                   ),
                   Center(
                     child: Text(
@@ -110,219 +112,230 @@ class _TransactionListState extends State<TransactionList> {
                   ),
                 ],
               )
-            : GestureDetector(
-                onHorizontalDragEnd: (dragEndDetails) {
-                  if (dragEndDetails.primaryVelocity! < 0) {
-                    //left swipe
-                    if (_filterChoice == 'in') {
-                      _handleSelect('all');
-                    } else if (_filterChoice == 'all') {
-                      _handleSelect('out');
-                    }
-                  } else if (dragEndDetails.primaryVelocity! > 0) {
-                    //right swipe
-                    if (_filterChoice == 'out') {
-                      _handleSelect('all');
-                    } else if (_filterChoice == 'all') {
-                      _handleSelect('in');
-                    }
-                  }
-                },
-                child: ListView.builder(
-                  itemCount: _filteredTx.length + 1,
-                  itemBuilder: (_, i) {
-                    if (i > 0) {
-                      return Container(
-                        color: Theme.of(context).primaryColor,
-                        child: Card(
-                          elevation: 0,
-                          child: ListTile(
-                            horizontalTitleGap: 32.0,
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(Routes.Transaction, arguments: [
-                              _filteredTx[i - 1],
-                              ModalRoute.of(context)!.settings.arguments
-                            ]),
-                            leading: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                AnimatedContainer(
-                                  duration: Duration(milliseconds: 500),
-                                  child: renderConfirmationIndicator(
-                                    _filteredTx[i - 1],
-                                  ),
-                                ),
-                                Text(
-                                  DateFormat('d. MMM').format(_filteredTx[i - 1]
-                                              .timestamp !=
-                                          0
-                                      ? DateTime.fromMillisecondsSinceEpoch(
-                                          _filteredTx[i - 1].timestamp! * 1000)
-                                      : DateTime.now()),
-                                  style: TextStyle(
-                                    fontWeight:
-                                        _filteredTx[i - 1].timestamp != 0
-                                            ? FontWeight.w500
-                                            : FontWeight.w300,
-                                  ),
-                                  textScaleFactor: 0.8,
-                                )
-                              ],
-                            ),
-                            title: Center(
-                              child: Text(
-                                _filteredTx[i - 1].txid,
-                                overflow: TextOverflow.ellipsis,
-                                textScaleFactor: 0.9,
-                              ),
-                            ),
-                            subtitle: Center(
-                              child: Text(
-                                resolveAddressDisplayName(
-                                    _filteredTx[i - 1].address),
-                                overflow: TextOverflow.ellipsis,
-                                textScaleFactor: 1,
-                              ),
-                            ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  (_filteredTx[i - 1].direction == 'in'
-                                          ? '+'
-                                          : '-') +
-                                      (_filteredTx[i - 1].value / 1000000)
-                                          .toString(),
-                                  style: TextStyle(
-                                    fontWeight:
-                                        _filteredTx[i - 1].timestamp != 0
-                                            ? FontWeight.bold
-                                            : FontWeight.w300,
-                                    color: _filteredTx[i - 1].direction == 'out'
-                                        ? Theme.of(context).errorColor
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
-                                  ),
-                                ),
-                                _filteredTx[i - 1].direction == 'out'
-                                    ? Text(
-                                        '-' +
-                                            (_filteredTx[i - 1].fee / 1000000)
-                                                .toString(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          color: Theme.of(context).errorColor,
-                                          fontSize: 12,
-                                        ),
-                                      )
-                                    : SizedBox(
-                                        height: 0,
-                                      )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    } else if (i == 0 &&
-                        widget._walletTransactions.isNotEmpty) {
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: widget._wallet.unconfirmedBalance > 0
-                                ? 125
-                                : 110,
-                          ),
-                          Container(
-                            height: 30,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    Theme.of(context).bottomAppBarColor,
-                                    Theme.of(context).primaryColor,
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter),
-                            ),
-                          ),
-                          Container(
+            : Align(
+                child: PeerContainer(
+                  isTransparent: true,
+                  child: GestureDetector(
+                    onHorizontalDragEnd: (dragEndDetails) {
+                      if (dragEndDetails.primaryVelocity! < 0) {
+                        //left swipe
+                        if (_filterChoice == 'in') {
+                          _handleSelect('all');
+                        } else if (_filterChoice == 'all') {
+                          _handleSelect('out');
+                        }
+                      } else if (dragEndDetails.primaryVelocity! > 0) {
+                        //right swipe
+                        if (_filterChoice == 'out') {
+                          _handleSelect('all');
+                        } else if (_filterChoice == 'all') {
+                          _handleSelect('in');
+                        }
+                      }
+                    },
+                    child: ListView.builder(
+                      itemCount: _filteredTx.length + 1,
+                      itemBuilder: (_, i) {
+                        if (i > 0) {
+                          return Container(
                             color: Theme.of(context).primaryColor,
-                            width: MediaQuery.of(context).size.width,
-                            child: Center(
-                              child: Wrap(
-                                spacing: 8.0,
-                                children: <Widget>[
-                                  ChoiceChip(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    selectedColor:
-                                        Theme.of(context).shadowColor,
-                                    visualDensity: VisualDensity(
-                                        horizontal: 0.0, vertical: -4),
-                                    label: Container(
-                                        child: Text(
-                                      AppLocalizations.instance
-                                          .translate('transactions_in'),
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                            child: Card(
+                              elevation: 0,
+                              child: ListTile(
+                                horizontalTitleGap: 32.0,
+                                onTap: () => Navigator.of(context)
+                                    .pushNamed(Routes.Transaction, arguments: [
+                                  _filteredTx[i - 1],
+                                  ModalRoute.of(context)!.settings.arguments
+                                ]),
+                                leading: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    AnimatedContainer(
+                                      duration: Duration(milliseconds: 500),
+                                      child: renderConfirmationIndicator(
+                                        _filteredTx[i - 1],
                                       ),
-                                    )),
-                                    selected: _filterChoice == 'in',
-                                    onSelected: (_) => _handleSelect('in'),
+                                    ),
+                                    Text(
+                                      DateFormat('d. MMM').format(
+                                          _filteredTx[i - 1].timestamp != 0
+                                              ? DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                                      _filteredTx[i - 1]
+                                                              .timestamp! *
+                                                          1000)
+                                              : DateTime.now()),
+                                      style: TextStyle(
+                                        fontWeight:
+                                            _filteredTx[i - 1].timestamp != 0
+                                                ? FontWeight.w500
+                                                : FontWeight.w300,
+                                      ),
+                                      textScaleFactor: 0.8,
+                                    )
+                                  ],
+                                ),
+                                title: Center(
+                                  child: Text(
+                                    _filteredTx[i - 1].txid,
+                                    overflow: TextOverflow.ellipsis,
+                                    textScaleFactor: 0.9,
                                   ),
-                                  ChoiceChip(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    selectedColor:
-                                        Theme.of(context).shadowColor,
-                                    visualDensity: VisualDensity(
-                                        horizontal: 0.0, vertical: -4),
-                                    label: Text(
-                                        AppLocalizations.instance
-                                            .translate('transactions_all'),
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        )),
-                                    selected: _filterChoice == 'all',
-                                    onSelected: (_) => _handleSelect('all'),
+                                ),
+                                subtitle: Center(
+                                  child: Text(
+                                    resolveAddressDisplayName(
+                                        _filteredTx[i - 1].address),
+                                    overflow: TextOverflow.ellipsis,
+                                    textScaleFactor: 1,
                                   ),
-                                  ChoiceChip(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    selectedColor:
-                                        Theme.of(context).shadowColor,
-                                    visualDensity: VisualDensity(
-                                        horizontal: 0.0, vertical: -4),
-                                    label: Text(
-                                        AppLocalizations.instance
-                                            .translate('transactions_out'),
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        )),
-                                    selected: _filterChoice == 'out',
-                                    onSelected: (_) => _handleSelect('out'),
-                                  ),
-                                ],
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      (_filteredTx[i - 1].direction == 'in'
+                                              ? '+'
+                                              : '-') +
+                                          (_filteredTx[i - 1].value / 1000000)
+                                              .toString(),
+                                      style: TextStyle(
+                                        fontWeight:
+                                            _filteredTx[i - 1].timestamp != 0
+                                                ? FontWeight.bold
+                                                : FontWeight.w300,
+                                        color: _filteredTx[i - 1].direction ==
+                                                'out'
+                                            ? Theme.of(context).errorColor
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer,
+                                      ),
+                                    ),
+                                    _filteredTx[i - 1].direction == 'out'
+                                        ? Text(
+                                            '-' +
+                                                (_filteredTx[i - 1].fee /
+                                                        1000000)
+                                                    .toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color:
+                                                  Theme.of(context).errorColor,
+                                              fontSize: 12,
+                                            ),
+                                          )
+                                        : SizedBox(
+                                            height: 0,
+                                          )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            height: 10,
-                            color: Theme.of(context).primaryColor,
-                          )
-                        ],
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
+                          );
+                        } else if (i == 0 &&
+                            widget._walletTransactions.isNotEmpty) {
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: widget._wallet.unconfirmedBalance > 0
+                                    ? 125
+                                    : 110,
+                              ),
+                              Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        Theme.of(context).bottomAppBarColor,
+                                        Theme.of(context).primaryColor,
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter),
+                                ),
+                              ),
+                              Container(
+                                color: Theme.of(context).primaryColor,
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(
+                                  child: Wrap(
+                                    spacing: 8.0,
+                                    children: <Widget>[
+                                      ChoiceChip(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        selectedColor:
+                                            Theme.of(context).shadowColor,
+                                        visualDensity: VisualDensity(
+                                            horizontal: 0.0, vertical: -4),
+                                        label: Container(
+                                            child: Text(
+                                          AppLocalizations.instance
+                                              .translate('transactions_in'),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        )),
+                                        selected: _filterChoice == 'in',
+                                        onSelected: (_) => _handleSelect('in'),
+                                      ),
+                                      ChoiceChip(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        selectedColor:
+                                            Theme.of(context).shadowColor,
+                                        visualDensity: VisualDensity(
+                                            horizontal: 0.0, vertical: -4),
+                                        label: Text(
+                                            AppLocalizations.instance
+                                                .translate('transactions_all'),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            )),
+                                        selected: _filterChoice == 'all',
+                                        onSelected: (_) => _handleSelect('all'),
+                                      ),
+                                      ChoiceChip(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        selectedColor:
+                                            Theme.of(context).shadowColor,
+                                        visualDensity: VisualDensity(
+                                            horizontal: 0.0, vertical: -4),
+                                        label: Text(
+                                            AppLocalizations.instance
+                                                .translate('transactions_out'),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            )),
+                                        selected: _filterChoice == 'out',
+                                        onSelected: (_) => _handleSelect('out'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 10,
+                                color: Theme.of(context).primaryColor,
+                              )
+                            ],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ),
       ],

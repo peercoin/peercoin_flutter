@@ -39,7 +39,11 @@ class PeerServiceTitle extends StatelessWidget {
 
 class PeerContainer extends StatelessWidget {
   final Widget child;
-  PeerContainer({required this.child});
+  final bool isTransparent;
+  PeerContainer({
+    required this.child,
+    this.isTransparent = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +54,10 @@ class PeerContainer extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
+        color: isTransparent
+            ? Colors.transparent
+            : Theme.of(context).backgroundColor,
         borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).backgroundColor,
       ),
       child: child,
     );
