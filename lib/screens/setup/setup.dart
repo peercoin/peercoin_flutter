@@ -175,7 +175,6 @@ class PeerProgress extends StatelessWidget {
 //also rendering issues with non latin characters (flutter render engine issue) 
 //-> use html renderer instead of canvas for now
 //TODO web: find session solution 
-//TODO web: change address book entry, slide doesn't work for web
 //TODO web: auth jail can be circumvented
 //TODO web: paste from clipboard does not work in firefox
 //TODO web: import scan with larger wallet flaky
