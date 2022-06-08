@@ -44,7 +44,10 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
         duration: Duration(seconds: 2),
       ));
     } else {
-      await ShareWrapper.share(seed);
+      await ShareWrapper.share(
+        context: context,
+        message: seed,
+      );
     }
     Timer(
       Duration(seconds: kIsWeb ? 2 : 1),

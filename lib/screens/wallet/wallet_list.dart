@@ -247,7 +247,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                             onTap: () {
                               if (!kIsWeb) {
                                 ShareWrapper.share(
-                                  Platform.isAndroid
+                                  context: context,
+                                  message: Platform.isAndroid
                                       ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
                                       : 'https://apps.apple.com/app/peercoin-wallet/id1571755170',
                                 );

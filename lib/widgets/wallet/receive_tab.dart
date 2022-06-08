@@ -254,7 +254,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
                                 labelController.text);
                           }
                           await ShareWrapper.share(
-                              _qrString ?? widget._unusedAddress);
+                            context: context,
+                            message: _qrString ?? widget._unusedAddress,
+                          );
                         },
                       ),
                       SizedBox(height: 10),

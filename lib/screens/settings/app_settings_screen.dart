@@ -318,23 +318,28 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                               text: AppLocalizations.instance
                                   .translate('app_settings_revealSeedButton'),
                             )
-                          : Column(children: [
-                              SizedBox(height: 20),
-                              DoubleTabToClipboard(
-                                clipBoardData: _seedPhrase,
-                                child: SelectableText(
-                                  _seedPhrase,
-                                  textAlign: TextAlign.center,
+                          : Column(
+                              children: [
+                                SizedBox(height: 20),
+                                DoubleTabToClipboard(
+                                  clipBoardData: _seedPhrase,
+                                  child: SelectableText(
+                                    _seedPhrase,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 20),
-                              if (!kIsWeb)
-                                PeerButton(
-                                  action: () => ShareWrapper.share(_seedPhrase),
-                                  text: AppLocalizations.instance
-                                      .translate('app_settings_shareseed'),
-                                )
-                            ])
+                                SizedBox(height: 20),
+                                if (!kIsWeb)
+                                  PeerButton(
+                                    action: () => ShareWrapper.share(
+                                      context: context,
+                                      message: _seedPhrase,
+                                    ),
+                                    text: AppLocalizations.instance
+                                        .translate('app_settings_shareseed'),
+                                  )
+                              ],
+                            )
                     ]),
                 ExpansionTile(
                   title: Text(
