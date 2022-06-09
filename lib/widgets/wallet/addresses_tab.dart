@@ -687,6 +687,10 @@ class _AddressTabState extends State<AddressTab> {
                           applyFilter();
                         },
                       ),
+                      if (kIsWeb)
+                        SizedBox(
+                          height: 10,
+                        ),
                       ChoiceChip(
                         backgroundColor: Theme.of(context).backgroundColor,
                         selectedColor: Theme.of(context).shadowColor,

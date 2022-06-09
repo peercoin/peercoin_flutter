@@ -176,5 +176,4 @@ class PeerProgress extends StatelessWidget {
 //-> use html renderer instead of canvas for now
 //TODO web: find session solution 
 //TODO web: auth jail can be circumvented
-//TODO web: paste from clipboard does not work in firefox
 //TODO web: import scan with larger wallet flaky
