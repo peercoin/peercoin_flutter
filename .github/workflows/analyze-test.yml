@@ -44,6 +44,7 @@ jobs:
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: screenshot
           path: shot.png
