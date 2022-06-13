@@ -395,20 +395,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                       ),
                     ),
                   ),
-                if (_appSettings.camerasAvailble)
-                  PopupMenuItem(
-                    value: 'import_wif',
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.arrow_circle_down,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      title: Text(
-                        AppLocalizations.instance
-                            .translate('wallet_pop_menu_wif'),
-                      ),
+                PopupMenuItem(
+                  value: 'import_wif',
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.arrow_circle_down,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_wif'),
                     ),
                   ),
+                ),
                 PopupMenuItem(
                   value: 'server_settings',
                   child: ListTile(
