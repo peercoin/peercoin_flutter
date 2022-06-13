@@ -43,7 +43,7 @@ jobs:
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
       - name: Upload screenshots
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: screenshot
-          path: ${{ matrix.path }}screenshots/
+          path: screenshots/shot.png
