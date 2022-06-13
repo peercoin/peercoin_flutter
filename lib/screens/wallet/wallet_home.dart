@@ -435,19 +435,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     ),
                   ),
                 ),
-                // PopupMenuItem(
-                //   value: 'signing',
-                //   child: ListTile(
-                //     leading: Icon(
-                //       Icons.key,
-                //       color: Theme.of(context).colorScheme.secondary,
-                //     ),
-                //     title: Text(
-                //       AppLocalizations.instance
-                //           .translate('wallet_pop_menu_signing'),
-                //     ),
-                //   ),
-                // ),
+                PopupMenuItem(
+                  value: 'signing',
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.key,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    title: Text(
+                      AppLocalizations.instance
+                          .translate('wallet_pop_menu_signing'),
+                    ),
+                  ),
+                ),
               ];
             },
           )
