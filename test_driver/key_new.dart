@@ -51,20 +51,28 @@ void main() {
           print('found Continue');
           await driver.tap(elevatedButtonFinder); //pin pad
           for (var i = 1; i <= 12; i++) {
+            print('tap 0');
             await driver.tap(find.text('0'));
           }
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
+          print('found setupApiTickerSwitchKey');
           await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
+          print('found setupApiBGSwitchKey');
           await driver.tap(find.text('Continue'));
+          print('found Continue');
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
+          print('found setupLegalConsentKey');
           await driver.tap(find.text('Finish Setup'));
+          print('found Finish Setup');
           await driver.tap(find.pageBack());
+          print('found pageBack');
           await driver.runUnsynchronized(
             () async {
               expect(
                 await driver.getText(find.byValueKey('noActiveWallets')),
                 'You have no active wallets',
               );
+              print('found noActiveWallets');
             },
           );
         },
