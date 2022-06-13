@@ -37,7 +37,7 @@ jobs:
       - name: run tests
         uses: ReactiveCircus/android-emulator-runner@v2.24.0
         with:
-          api-level: 30
+          api-level: 31
           arch: x86_64
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
