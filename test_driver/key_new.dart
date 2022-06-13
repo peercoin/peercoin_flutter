@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -60,6 +62,9 @@ void main() {
           print('found setupApiBGSwitchKey');
           await driver.tap(find.text('Continue'));
           print('found Continue');
+          final pixels = await driver.screenshot();
+          final file = File('screenshots/shot.png');
+          await file.writeAsBytes(pixels);
           await driver.tap(find.byType('SwitchListTile'));
           print('found SwitchListTile');
           await driver.tap(find.text('Finish Setup'));
