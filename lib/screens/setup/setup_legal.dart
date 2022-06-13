@@ -4,7 +4,6 @@ import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/app_settings.dart';
 import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -27,24 +26,8 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
   }
 
   bool _termsAgreed = false;
-  bool _initial = true;
-  late AppSettings _settings;
-
-  @override
-  void didChangeDependencies() async {
-    if (_initial) {
-      _settings = Provider.of<AppSettings>(context, listen: false);
-      await _settings.init();
-      setState(() {
-        _initial = false;
-      });
-    }
-    super.didChangeDependencies();
-  }
 
   void toggleTermsHandler(bool newState) {
-    _settings.setSelectedCurrency(newState == true ? 'USD' : '');
-
     setState(() {
       _termsAgreed = newState;
     });
