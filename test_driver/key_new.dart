@@ -63,7 +63,7 @@ void main() {
           await driver.tap(find.text('Continue'));
           print('found Continue');
           final pixels = await driver.screenshot();
-          final file = File('screenshots/shot.png');
+          final file = File('shot.png');
           await file.writeAsBytes(pixels);
           await driver.tap(find.byType('SwitchListTile'));
           print('found SwitchListTile');
