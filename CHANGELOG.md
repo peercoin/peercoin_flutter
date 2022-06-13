@@ -1,3 +1,8 @@
+### **0.9.3** (2022-06-13)
+* Improved error handling for edge case in which secure storage is not accessible on Android phones
+* Legal notices for setup
+* Various dependency updates under the hood
+
 ### **0.9.2** (2022-05-13)
 * Improved wallet performance:  
 From now on the wallet will only watch addresses that it knows to have coins and the unused address (the one displayed in the "Receive" tab).   

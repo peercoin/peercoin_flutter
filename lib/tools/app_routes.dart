@@ -1,13 +1,15 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/wallet/wallet_performance.dart';
+import 'package:peercoin/screens/setup/setup_legal.dart';
+import 'package:peercoin/screens/wallet/address_selector.dart';
+import 'package:peercoin/screens/wallet/wallet_signing.dart';
 
-import '../screens/app_settings_notifications.dart';
-import '../screens/app_settings_screen.dart';
+import '../screens/settings/app_settings_notifications.dart';
+import '../screens/settings/app_settings_screen.dart';
 import '../screens/auth_jail.dart';
 import '../screens/changelog.dart';
 import '../screens/qrcode_scanner.dart';
-import '../screens/server_add.dart';
-import '../screens/server_settings.dart';
+import '../screens/server_settings/server_add.dart';
+import '../screens/server_settings/server_settings.dart';
 import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
@@ -34,7 +36,7 @@ class Routes {
   static const String SetupDataFeeds = '/setup-feeds';
   static const String Transaction = '/tx-detail';
   static const String WalletHome = '/wallet-home';
-  static const String WalletPerformance = '/wallet-performance';
+  static const String WalletSigning = '/wallet-signing';
   static const String WalletImportScan = '/wallet-import-scan';
   static const String ImportPaperWallet = '/import-paperwallet';
   static const String ImportWif = '/import-wif';
@@ -42,6 +44,8 @@ class Routes {
   static const String ServerSettings = '/server-settings';
   static const String ServerAdd = '/server-add';
   static const String ChangeLog = '/changelog';
+  static const String AddressSelector = '/address-selector';
+  static const String SetupLegal = '/setup-legal';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -85,8 +89,12 @@ class Routes {
             widget: WalletImportScanScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.WalletPerformance: (context) => RouterMaster(
-            widget: WalletPerformanceScreen(),
+      Routes.WalletSigning: (context) => RouterMaster(
+            widget: WalletSigningScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.AddressSelector: (context) => RouterMaster(
+            widget: AddressSelectorScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
       Routes.ImportPaperWallet: (context) => RouterMaster(
@@ -111,6 +119,10 @@ class Routes {
           ),
       Routes.SetupDataFeeds: (context) => RouterMaster(
             widget: SetupDataFeedsScreen(),
+            routeType: RouteTypes.setupOnly,
+          ),
+      Routes.SetupLegal: (context) => RouterMaster(
+            widget: SetupLegalScreen(),
             routeType: RouteTypes.setupOnly,
           ),
       Routes.ChangeLog: (context) => RouterMaster(

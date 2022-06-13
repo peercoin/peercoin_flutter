@@ -2,12 +2,12 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/coin_wallet.dart';
-import '../providers/active_wallets.dart';
-import '../providers/app_settings.dart';
-import '../tools/app_localizations.dart';
-import '../tools/background_sync.dart';
-import '../widgets/buttons.dart';
+import '../../models/coin_wallet.dart';
+import '../../providers/active_wallets.dart';
+import '../../providers/app_settings.dart';
+import '../../tools/app_localizations.dart';
+import '../../tools/background_sync.dart';
+import '../../widgets/buttons.dart';
 
 class AppSettingsNotificationsScreen extends StatefulWidget {
   const AppSettingsNotificationsScreen({Key? key}) : super(key: key);
@@ -111,13 +111,15 @@ class _AppSettingsNotificationsScreenState
   }
 
   void saveSnack(context) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack'),
-        textAlign: TextAlign.center,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('app_settings_saved_snack'),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 2),
       ),
-      duration: Duration(seconds: 2),
-    ));
+    );
   }
 
   Widget manageBlock() {

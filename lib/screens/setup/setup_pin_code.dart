@@ -129,11 +129,13 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                 action: () async {
                   await screenLock(
                     title: HeadingTitle(
-                        text: AppLocalizations.instance
-                            .translate('authenticate_title')),
+                      text: AppLocalizations.instance
+                          .translate('authenticate_title'),
+                    ),
                     confirmTitle: HeadingTitle(
-                        text: AppLocalizations.instance
-                            .translate('authenticate_confirm_title')),
+                      text: AppLocalizations.instance
+                          .translate('authenticate_confirm_title'),
+                    ),
                     context: context,
                     correctString: '',
                     digits: 6,
@@ -145,8 +147,10 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                       var settings =
                           Provider.of<AppSettings>(context, listen: false);
                       await settings.init(true);
-                      await settings.createInitialSettings(_biometricsAllowed,
-                          AppLocalizations.instance.locale.toString());
+                      await settings.createInitialSettings(
+                        _biometricsAllowed,
+                        AppLocalizations.instance.locale.toString(),
+                      );
                       Navigator.pop(context);
                       await Navigator.of(context)
                           .pushNamed(Routes.SetupDataFeeds);

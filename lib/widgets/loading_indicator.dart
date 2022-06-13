@@ -8,4 +8,5 @@ class LoadingIndicator extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
     );
   }
+//TODO try to move heavy computation away from Main thread so this animation actually continues
 }

@@ -36,13 +36,15 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
     });
 
     //show notification
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack'),
-        textAlign: TextAlign.center,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('app_settings_saved_snack'),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 2),
       ),
-      duration: Duration(seconds: 2),
-    ));
+    );
   }
 
   @override

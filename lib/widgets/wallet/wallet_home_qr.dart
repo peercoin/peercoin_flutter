@@ -15,40 +15,50 @@ class WalletHomeQr extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SimpleDialog(children: [
-          Center(
-              child: Column(children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.33,
-              width: MediaQuery.of(context).size.width * 1,
-              child: Center(
-                child: QrImage(
-                  data: address,
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                ),
-              ),
-            ),
-            if (hideShareButton == false)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FittedBox(
-                  child: DoubleTabToClipboard(
-                    clipBoardData: address,
-                    child: SelectableText(
-                      address,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+        return SimpleDialog(
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.33,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: Center(
+                      child: QrImage(
+                        data: address,
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                      ),
                     ),
                   ),
-                ),
+                  if (hideShareButton == false)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FittedBox(
+                        child: DoubleTabToClipboard(
+                          clipBoardData: address,
+                          child: SelectableText(
+                            address,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (hideShareButton == false)
+                    PeerButtonBorder(
+                      action: () => ShareWrapper.share(
+                        context: context,
+                        message: address,
+                        popNavigator: true,
+                      ),
+                      text:
+                          AppLocalizations.instance.translate('receive_share'),
+                    )
+                ],
               ),
-            if (hideShareButton == false)
-              PeerButtonBorder(
-                action: () => ShareWrapper.share(address),
-                text: AppLocalizations.instance.translate('receive_share'),
-              )
-          ]))
-        ]);
+            )
+          ],
+        );
       },
     );
   }

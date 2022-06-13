@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:mailto/mailto.dart';
+import 'package:peercoin/widgets/service_container.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../tools/app_localizations.dart';
 import '../tools/app_routes.dart';
@@ -27,9 +28,9 @@ class _AboutScreenState extends State<AboutScreen> {
     super.didChangeDependencies();
   }
 
-  void _launchURL(_url) async {
-    await canLaunch(_url)
-        ? await launch(
+  void _launchURL(String _url) async {
+    await canLaunchUrlString(_url)
+        ? await launchUrlString(
             _url,
           )
         : throw 'Could not launch $_url';
@@ -40,7 +41,7 @@ class _AboutScreenState extends State<AboutScreen> {
       to: ['hello@app.peercoin.net'],
       subject: 'Peercoin Wallet',
     );
-    await launch('$mailtoLink');
+    await launchUrlString('$mailtoLink');
   }
 
   @override
@@ -50,12 +51,6 @@ class _AboutScreenState extends State<AboutScreen> {
         title: Text(
           AppLocalizations.instance.translate('about'),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Column(
         children: [
@@ -63,129 +58,129 @@ class _AboutScreenState extends State<AboutScreen> {
             child: SingleChildScrollView(
               child: _packageInfo == null
                   ? Container()
-                  : Container(
-                      padding: const EdgeInsets.all(20.0),
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text('${_packageInfo!.appName}'),
-                          Text(
-                            'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
-                          ),
-                          Text(
-                            AppLocalizations.instance.translate(
-                              'about_developers',
-                              {'year': DateFormat.y().format(DateTime.now())},
+                  : Align(
+                      child: PeerContainer(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('${_packageInfo!.appName}'),
+                            Text(
+                              'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () => _launchURL(
-                                'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('about_license'),
-                              textAlign: TextAlign.center,
+                            Text(
+                              AppLocalizations.instance.translate(
+                                'about_developers',
+                                {'year': DateFormat.y().format(DateTime.now())},
+                              ),
                             ),
-                          ),
-                          Divider(),
-                          TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(Routes.ChangeLog),
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('changelog_appbar'),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Divider(),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.instance.translate('about_free'),
-                          ),
-                          TextButton(
+                            TextButton(
                               onPressed: () => _launchURL(
-                                  'https://github.com/peercoin/peercoin_flutter'),
+                                  'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
                               child: Text(
                                 AppLocalizations.instance
-                                    .translate('about_view_source'),
+                                    .translate('about_license'),
                                 textAlign: TextAlign.center,
-                              )),
-                          Divider(),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('about_data_protection'),
-                          ),
-                          TextButton(
-                            onPressed: () => _launchURL(
-                                'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('about_data_declaration'),
-                              textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                          Divider(),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('about_foundation'),
-                          ),
-                          TextButton(
-                            onPressed: () => _launchURL(
-                                'https://www.peercoin.net/foundation'),
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('about_foundation_button'),
-                              textAlign: TextAlign.center,
+                            Divider(),
+                            TextButton(
+                              onPressed: () => Navigator.of(context)
+                                  .pushNamed(Routes.ChangeLog),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('changelog_appbar'),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                          Divider(),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('about_translate'),
-                          ),
-                          TextButton(
-                            onPressed: () async =>
-                                _launchURL('https://weblate.ppc.lol'),
-                            child: Text(
-                              AppLocalizations.instance
-                                  .translate('about_go_weblate'),
-                              textAlign: TextAlign.center,
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
+                              AppLocalizations.instance.translate('about_free'),
                             ),
-                          ),
-                          Divider(),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('about_help_or_feedback'),
-                          ),
-                          TextButton(
-                            onPressed: () async => launchMailto(),
-                            child: Text(
+                            TextButton(
+                                onPressed: () => _launchURL(
+                                    'https://github.com/peercoin/peercoin_flutter'),
+                                child: Text(
+                                  AppLocalizations.instance
+                                      .translate('about_view_source'),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
                               AppLocalizations.instance
-                                  .translate('about_send_mail'),
-                              textAlign: TextAlign.center,
+                                  .translate('about_data_protection'),
                             ),
-                          ),
-                          Divider(),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.instance
-                                .translate('about_illustrations'),
-                          ),
-                          TextButton(
-                            onPressed: () async =>
-                                _launchURL('https://designs.ai'),
-                            child: Text(
+                            TextButton(
+                              onPressed: () => _launchURL(
+                                  'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('about_data_declaration'),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
                               AppLocalizations.instance
-                                  .translate('about_illustrations_button'),
-                              textAlign: TextAlign.center,
+                                  .translate('about_foundation'),
                             ),
-                          ),
-                        ],
+                            TextButton(
+                              onPressed: () => _launchURL(
+                                  'https://www.peercoin.net/foundation'),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('about_foundation_button'),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('about_translate'),
+                            ),
+                            TextButton(
+                              onPressed: () async =>
+                                  _launchURL('https://weblate.ppc.lol'),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('about_go_weblate'),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('about_help_or_feedback'),
+                            ),
+                            TextButton(
+                              onPressed: () async => launchMailto(),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('about_send_mail'),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Divider(),
+                            SizedBox(height: 10),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('about_illustrations'),
+                            ),
+                            TextButton(
+                              onPressed: () async =>
+                                  _launchURL('https://designs.ai'),
+                              child: Text(
+                                AppLocalizations.instance
+                                    .translate('about_illustrations_button'),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
             ),

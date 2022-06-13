@@ -72,13 +72,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -254,9 +254,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
         Navigator.of(context)
             .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
         break;
-      case 'performance':
+      case 'signing':
         Navigator.of(context)
-            .pushNamed(Routes.WalletPerformance, arguments: _wallet.name);
+            .pushNamed(Routes.WalletSigning, arguments: _wallet.name);
         break;
       case 'rescan':
         showDialog(
@@ -436,15 +436,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   ),
                 ),
                 // PopupMenuItem(
-                //   value: 'performance',
+                //   value: 'signing',
                 //   child: ListTile(
                 //     leading: Icon(
-                //       Icons.bolt,
+                //       Icons.key,
                 //       color: Theme.of(context).colorScheme.secondary,
                 //     ),
                 //     title: Text(
                 //       AppLocalizations.instance
-                //           .translate('wallet_pop_menu_performance'),
+                //           .translate('wallet_pop_menu_signing'),
                 //     ),
                 //   ),
                 // ),

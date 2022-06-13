@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../tools/share_wrapper.dart';
 import '/../providers/active_wallets.dart';
@@ -113,8 +113,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
             ),
             TextButton(
               onPressed: () async {
-                await canLaunch(url)
-                    ? await launch(url)
+                await canLaunchUrlString(url)
+                    ? await launchUrlString(url)
                     : throw 'Could not launch $url';
 
                 Navigator.of(context).pop();
@@ -142,10 +142,14 @@ class _ReceiveTabState extends State<ReceiveTab> {
             Container(
               height: 30,
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Theme.of(context).bottomAppBarColor,
-                  Theme.of(context).primaryColor,
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).bottomAppBarColor,
+                    Theme.of(context).primaryColor,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
             Align(
@@ -250,18 +254,22 @@ class _ReceiveTabState extends State<ReceiveTab> {
                                 labelController.text);
                           }
                           await ShareWrapper.share(
-                              _qrString ?? widget._unusedAddress);
+                            context: context,
+                            message: _qrString ?? widget._unusedAddress,
+                          );
                         },
                       ),
                       SizedBox(height: 10),
                       Text(
                         AppLocalizations.instance
                             .translate('wallet_receive_label_hint'),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
+                      SizedBox(height: 10),
                       Text(
                         AppLocalizations.instance
                             .translate('wallet_receive_label_hint_privacy'),

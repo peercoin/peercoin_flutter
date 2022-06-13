@@ -3,10 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../providers/app_settings.dart';
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -19,9 +18,9 @@ class SetupDataFeedsScreen extends StatefulWidget {
 }
 
 class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
-  void _launchURL(_url) async {
-    await canLaunch(_url)
-        ? await launch(
+  void _launchURL(String _url) async {
+    await canLaunchUrlString(_url)
+        ? await launchUrlString(
             _url,
           )
         : throw 'Could not launch $_url';
@@ -54,6 +53,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
 
   void toggleBGSyncHandler(bool newState) {
     _settings.setNotificationInterval(newState == true ? 30 : 0);
+
     setState(() {
       _bgSyncdAllowed = newState;
     });
@@ -189,14 +189,9 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                 ),
               ),
               PeerButtonSetup(
-                text: AppLocalizations.instance.translate('setup_finish'),
-                action: () async {
-                  var prefs = await Provider.of<UnencryptedOptions>(context,
-                          listen: false)
-                      .prefs;
-                  await prefs.setBool('setupFinished', true);
-                  await Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
+                text: AppLocalizations.instance.translate('continue'),
+                action: () {
+                  Navigator.of(context).pushNamed(Routes.SetupLegal);
                 },
               ),
               SizedBox(

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../models/available_periodic_reminder_items.dart';
 import '../models/periodic_reminder_item.dart';
 import '../providers/app_settings.dart';
@@ -28,8 +28,8 @@ class PeriodicReminders {
               TextButton(
                 onPressed: () async {
                   var url = 'https://ppc.lol/fndtn/';
-                  await canLaunch(url)
-                      ? await launch(url)
+                  await canLaunchUrlString(url)
+                      ? await launchUrlString(url)
                       : throw 'Could not launch $url';
                   Navigator.of(context).pop();
                 },

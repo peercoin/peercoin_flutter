@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../tools/app_routes.dart';
+import 'auth_jail.dart';
 
 enum RouteTypes { requiresSetupFinished, requiresArguments, setupOnly }
 
@@ -45,6 +47,14 @@ class _RouterMasterState extends State<RouterMaster> {
         );
       } else {
         widgetToRender = widget.widget;
+      }
+
+      final _secureStorage = const FlutterSecureStorage();
+      var failedAuths =
+          int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
+
+      if (failedAuths > 0) {
+        widgetToRender = AuthJailScreen();
       }
 
       setState(() {
