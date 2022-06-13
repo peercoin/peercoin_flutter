@@ -81,45 +81,47 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                       ],
                     ),
                     Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width > 1200
-                            ? MediaQuery.of(context).size.width / 2
-                            : MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            PeerButton(
-                              action: () => _launchURL(
-                                'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE',
-                              ),
-                              text: AppLocalizations.instance.translate(
-                                'setup_legal_license',
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: SwitchListTile(
-                                key: Key('setupLegalConsentKey'),
-                                title: Text(
-                                  AppLocalizations.instance
-                                      .translate('setup_legal_switch_tile'),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                      child: SingleChildScrollView(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              PeerButton(
+                                action: () => _launchURL(
+                                  'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE',
                                 ),
-                                value: _termsAgreed,
-                                activeColor: Colors.white,
-                                inactiveThumbColor: Colors.grey,
-                                onChanged: (newState) =>
-                                    toggleTermsHandler(newState),
+                                text: AppLocalizations.instance.translate(
+                                  'setup_legal_license',
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            )
-                          ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: SwitchListTile(
+                                  key: Key('setupLegalConsentKey'),
+                                  title: Text(
+                                    AppLocalizations.instance
+                                        .translate('setup_legal_switch_tile'),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  value: _termsAgreed,
+                                  activeColor: Colors.white,
+                                  inactiveThumbColor: Colors.grey,
+                                  onChanged: (newState) =>
+                                      toggleTermsHandler(newState),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
