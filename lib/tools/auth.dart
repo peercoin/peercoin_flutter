@@ -128,7 +128,7 @@ class Auth {
   }) async {
     failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
     retriesLeft = (maxRetries - failedAuthAttempts);
-    if (retriesLeft == 0) retriesLeft = 1;
+    if (retriesLeft <= 0) retriesLeft = 1;
 
     await screenLock(
       context: context,
@@ -138,24 +138,26 @@ class Auth {
       maxRetries: retriesLeft,
       canCancel: canCancel,
       title: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-              text: AppLocalizations.instance.translate('authenticate_title'),
-              style: TextStyle(
-                fontSize: 24,
-              ),
-              children: [
-                TextSpan(
-                  text: '\n' +
-                      AppLocalizations.instance.translate(
-                        retriesLeft == 1
-                            ? 'authenticate_subtitle_singular'
-                            : 'authenticate_subtitle_plural',
-                        {'retriesLeft': retriesLeft.toString()},
-                      ),
-                  style: TextStyle(fontSize: 14),
-                )
-              ])),
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          text: AppLocalizations.instance.translate('authenticate_title'),
+          style: TextStyle(
+            fontSize: 24,
+          ),
+          children: [
+            TextSpan(
+              text: '\n' +
+                  AppLocalizations.instance.translate(
+                    retriesLeft == 1
+                        ? 'authenticate_subtitle_singular'
+                        : 'authenticate_subtitle_plural',
+                    {'retriesLeft': retriesLeft.toString()},
+                  ),
+              style: TextStyle(fontSize: 14),
+            )
+          ],
+        ),
+      ),
       confirmTitle: HeadingTitle(
           text: AppLocalizations.instance
               .translate('authenticate_confirm_title')),
