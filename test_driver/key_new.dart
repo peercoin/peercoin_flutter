@@ -60,14 +60,10 @@ void main() {
           print('found setupApiBGSwitchKey');
           await driver.tap(find.text('Continue'));
           print('found Continue');
-          await driver.runUnsynchronized(
-            () async {
-              await driver.tap(find.byValueKey('setupLegalConsentKey'));
-              print('found setupLegalConsentKey');
-              await driver.tap(find.text('Finish Setup'));
-              print('found Finish Setup');
-            },
-          );
+          await driver.tap(find.byType('SwitchListTile'));
+          print('found SwitchListTile');
+          await driver.tap(find.text('Finish Setup'));
+          print('found Finish Setup');
           await driver.tap(find.pageBack());
           print('found pageBack');
           await driver.runUnsynchronized(
