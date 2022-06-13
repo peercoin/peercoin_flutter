@@ -42,9 +42,9 @@ jobs:
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshot
-          path: shot.png
+      # - name: Upload screenshots
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: screenshot
+      #     path: shot.png
