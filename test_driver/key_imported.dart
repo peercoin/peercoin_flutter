@@ -38,21 +38,27 @@ void main() {
           await driver.tap(find.byValueKey('setupLanguageButton'));
           await driver.tap(find.text('English'));
           await driver.tap(find.pageBack());
+          await driver.scrollIntoView(find.text('Import Seed'));
           await driver.tap(find.text('Import Seed'));
+          await driver.scrollIntoView(find.byValueKey('importTextField'));
           await driver.tap(find.byValueKey('importTextField'));
           await driver.enterText(
             'vapor please suffer wood enrich quality position chest quantum fog rival museum',
           );
           await driver.tap(find.text('Import'));
-
+          await driver.scrollIntoView(elevatedButtonFinder);
           await driver.tap(elevatedButtonFinder); //pin pad
           for (var i = 1; i <= 12; i++) {
             await driver.tap(find.text('0'));
           }
+          await driver
+              .scrollIntoView(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
           await driver.tap(find.text('Continue'));
+          await driver.scrollIntoView(find.byValueKey('setupLegalConsentKey'));
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
+          await driver.scrollIntoView(find.text('Finish Setup'));
           await driver.tap(find.text('Finish Setup'));
           await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
