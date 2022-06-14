@@ -42,7 +42,9 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: SetupScreen.calcContainerHeight(context),
+          height: MediaQuery.of(context).size.width <= 350
+              ? 800
+              : SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
