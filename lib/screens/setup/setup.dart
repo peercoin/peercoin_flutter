@@ -16,6 +16,7 @@ class SetupScreen extends StatefulWidget {
     var padding = MediaQuery.of(ctx).padding;
     var correctedHeight = height - padding.top - padding.bottom;
 
+    if (MediaQuery.of(ctx).size.height < 600) return 700;
     if (kIsWeb) return correctedHeight;
 
     return MediaQuery.of(ctx).orientation == Orientation.portrait
