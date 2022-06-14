@@ -2,6 +2,7 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -164,104 +165,112 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
           AppLocalizations.instance.translate('wallet_pop_menu_wif'),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        AppLocalizations.instance.translate('import_wif_intro'),
-                      ),
-                      TextFormField(
-                        textInputAction: TextInputAction.done,
-                        key: _wifGlobalKey,
-                        controller: _wifController,
-                        autocorrect: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return AppLocalizations.instance
-                                .translate('import_wif_error_empty');
-                          }
-                          if (validatePrivKey(value)) {
-                            return AppLocalizations.instance
-                                .translate('import_wif_error_failed_parse');
-                          }
-
-                          triggerConfirmMessage(context, value);
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.vpn_key,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          labelText: AppLocalizations.instance
-                              .translate('import_wif_textfield_label'),
-                          suffixIcon: IconButton(
-                            onPressed: () async {
-                              var data = await Clipboard.getData('text/plain');
-                              _wifController.text = data!.text!.trim();
-                            },
-                            icon: Icon(
-                              Icons.paste_rounded,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                        minLines: 4,
-                        maxLines: 4,
-                      ),
-                      if (!kIsWeb) SizedBox(height: 10),
-                      if (!kIsWeb)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            PeerButton(
-                              action: () => createQrScanner('priv'),
-                              text: AppLocalizations.instance
-                                  .translate('paperwallet_step_2_text'),
-                              small: true,
-                            ),
-                          ],
-                        ),
-                      SizedBox(height: 10),
-                      Row(
+      body: Align(
+        child: PeerContainer(
+          noSpacers: true,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          PeerButton(
-                            action: () {
-                              _formKey.currentState!.save();
-                              _formKey.currentState!.validate();
+                          Text(
+                            AppLocalizations.instance
+                                .translate('import_wif_intro'),
+                          ),
+                          TextFormField(
+                            textInputAction: TextInputAction.done,
+                            key: _wifGlobalKey,
+                            controller: _wifController,
+                            autocorrect: false,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.instance
+                                    .translate('import_wif_error_empty');
+                              }
+                              if (validatePrivKey(value)) {
+                                return AppLocalizations.instance
+                                    .translate('import_wif_error_failed_parse');
+                              }
+
+                              triggerConfirmMessage(context, value);
+                              return null;
                             },
-                            text: AppLocalizations.instance
-                                .translate('import_button'),
-                            small: true,
+                            decoration: InputDecoration(
+                              icon: Icon(
+                                Icons.vpn_key,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              labelText: AppLocalizations.instance
+                                  .translate('import_wif_textfield_label'),
+                              suffixIcon: IconButton(
+                                onPressed: () async {
+                                  var data =
+                                      await Clipboard.getData('text/plain');
+                                  _wifController.text = data!.text!.trim();
+                                },
+                                icon: Icon(
+                                  Icons.paste_rounded,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                            minLines: 4,
+                            maxLines: 4,
+                          ),
+                          if (!kIsWeb) SizedBox(height: 10),
+                          if (!kIsWeb)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                PeerButton(
+                                  action: () => createQrScanner('priv'),
+                                  text: AppLocalizations.instance
+                                      .translate('paperwallet_step_2_text'),
+                                  small: true,
+                                ),
+                              ],
+                            ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              PeerButton(
+                                action: () {
+                                  _formKey.currentState!.save();
+                                  _formKey.currentState!.validate();
+                                },
+                                text: AppLocalizations.instance
+                                    .translate('import_button'),
+                                small: true,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance
+                                .translate('import_wif_hint'),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        AppLocalizations.instance.translate('import_wif_hint'),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          )
-        ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
