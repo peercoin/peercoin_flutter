@@ -1,3 +1,5 @@
+// import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -38,18 +40,28 @@ void main() {
           await driver.tap(find.byValueKey('setupLanguageButton'));
           await driver.tap(find.text('English'));
           await driver.tap(find.pageBack());
+          await driver.scrollIntoView(find.text('Create Wallet'));
           await driver.tap(find.text('Create Wallet'));
+          await driver.scrollIntoView(find.text('Export now'));
           await driver.tap(find.text('Export now'));
           await driver.tap(find.text('Continue'));
           await driver.tap(find.text('Continue'));
+          await driver.scrollIntoView(elevatedButtonFinder);
           await driver.tap(elevatedButtonFinder); //pin pad
           for (var i = 1; i <= 12; i++) {
             await driver.tap(find.text('0'));
           }
+          await driver
+              .scrollIntoView(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
           await driver.tap(find.text('Continue'));
+          // final pixels = await driver.screenshot();
+          // final file = File('shot.png');
+          // await file.writeAsBytes(pixels);
+          await driver.scrollIntoView(find.byValueKey('setupLegalConsentKey'));
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
+          await driver.scrollIntoView(find.text('Finish Setup'));
           await driver.tap(find.text('Finish Setup'));
           await driver.tap(find.pageBack());
           await driver.runUnsynchronized(

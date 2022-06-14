@@ -1,4 +1,5 @@
 import 'package:coinslib/coinslib.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -217,18 +218,19 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                         minLines: 4,
                         maxLines: 4,
                       ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          PeerButton(
-                            action: () => createQrScanner('priv'),
-                            text: AppLocalizations.instance
-                                .translate('paperwallet_step_2_text'),
-                            small: true,
-                          ),
-                        ],
-                      ),
+                      if (!kIsWeb) SizedBox(height: 10),
+                      if (!kIsWeb)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            PeerButton(
+                              action: () => createQrScanner('priv'),
+                              text: AppLocalizations.instance
+                                  .translate('paperwallet_step_2_text'),
+                              small: true,
+                            ),
+                          ],
+                        ),
                       SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
