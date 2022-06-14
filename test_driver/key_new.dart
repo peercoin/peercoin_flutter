@@ -1,4 +1,4 @@
-// import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
@@ -51,9 +51,9 @@ void main() {
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiBGSwitchKey'));
           await driver.tap(find.text('Continue'));
-          // final pixels = await driver.screenshot();
-          // final file = File('shot.png');
-          // await file.writeAsBytes(pixels);
+          final pixels = await driver.screenshot();
+          final file = File('shot.png');
+          await file.writeAsBytes(pixels);
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
           await driver.tap(find.text('Finish Setup'));
           await driver.tap(find.pageBack());
