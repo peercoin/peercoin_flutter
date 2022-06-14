@@ -103,5 +103,5 @@ void main() {
       );
     },
   );
-}
 //TODO: Add message signing
+}

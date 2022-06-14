@@ -322,4 +322,3 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     );
   }
 }
-//TODO don't display signature as Uint8list
