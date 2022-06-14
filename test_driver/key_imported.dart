@@ -99,6 +99,7 @@ void main() {
           );
         },
         retry: 2,
+        timeout: Timeout.factor(2),
       );
     },
   );
