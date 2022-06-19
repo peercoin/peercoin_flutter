@@ -101,7 +101,27 @@ void main() {
         retry: 2,
         timeout: Timeout.factor(2),
       );
+
+      test('tap into sign message, select address and sign message', () async {
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Sign Messages'));
+          },
+        );
+        await driver.tap(find.text('Select'));
+        await driver.tap(find.text('mfdKHgpEzyMVHugqzttiEbhNvWjSGPy5fb'));
+        await driver.tap(find.pageBack());
+        await driver.tap(find.byValueKey('signMessageInput'));
+        await driver.enterText(
+          'sign message',
+        );
+        await driver.tap(find.text('Sign'));
+        await driver.waitFor(
+          find.text(
+              'Hyd9cBXuT9CMgE8sK7YNeLQF1qaLxjQCMQv3pwKXCGdpOurIceSiuHfgXCnEtAhExq6iP/+vMn6sYC5OfpSBhRc='),
+        );
+      });
     },
   );
-//TODO: Add message signing
 }
