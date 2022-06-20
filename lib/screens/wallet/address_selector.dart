@@ -105,68 +105,77 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     ];
   }
 
+  Future<bool> _onWillPop() async {
+    Navigator.pop(context, _selectedAddress);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          tooltip: 'Back',
-          onPressed: () {
-            Navigator.pop(context, _selectedAddress);
-          },
-        ),
-        title: _searchActive == false
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppLocalizations.instance
-                        .translate('address_selector_title'),
-                  ),
-                  IconButton(
-                    onPressed: () => setState(() {
-                      _searchActive = true;
-                    }),
-                    icon: Icon(Icons.search),
-                  )
-                ],
-              )
-            : Form(
-                key: Key('selectorSearchBar'),
-                child: Container(
-                  child: TextFormField(
-                    autofocus: true,
-                    style: TextStyle(color: Theme.of(context).backgroundColor),
-                    key: Key('selectorSearchKey'),
-                    textInputAction: TextInputAction.done,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.instance
-                          .translate('addressbook_search'),
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).backgroundColor,
-                      ),
-                      suffixIcon: IconButton(
-                        onPressed: () => setState(() {
-                          _searchActive = false;
-                        }),
-                        icon: Icon(
-                          Icons.close,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            tooltip: 'Back',
+            onPressed: () {
+              Navigator.pop(context, _selectedAddress);
+            },
+          ),
+          title: _searchActive == false
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.instance
+                          .translate('address_selector_title'),
+                    ),
+                    IconButton(
+                      onPressed: () => setState(() {
+                        _searchActive = true;
+                      }),
+                      icon: Icon(Icons.search),
+                    )
+                  ],
+                )
+              : Form(
+                  key: Key('selectorSearchBar'),
+                  child: Container(
+                    child: TextFormField(
+                      autofocus: true,
+                      style:
+                          TextStyle(color: Theme.of(context).backgroundColor),
+                      key: Key('selectorSearchKey'),
+                      textInputAction: TextInputAction.done,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.instance
+                            .translate('addressbook_search'),
+                        hintStyle: TextStyle(
                           color: Theme.of(context).backgroundColor,
                         ),
+                        suffixIcon: IconButton(
+                          onPressed: () => setState(() {
+                            _searchActive = false;
+                          }),
+                          icon: Icon(
+                            Icons.close,
+                            color: Theme.of(context).backgroundColor,
+                          ),
+                        ),
                       ),
+                      onChanged: (searchKey) => applyFilter(searchKey),
                     ),
-                    onChanged: (searchKey) => applyFilter(searchKey),
                   ),
                 ),
-              ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: generateAddressInkwells(),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: generateAddressInkwells(),
+            ),
           ),
         ),
       ),
