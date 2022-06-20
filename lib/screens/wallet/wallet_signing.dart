@@ -210,7 +210,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: Key('messageInput'),
+                        key: Key('signMessageInput'),
                         controller: _messageInputController,
                         autocorrect: false,
                         readOnly: _signingDone,
@@ -258,7 +258,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                               children: [
                                 DoubleTabToClipboard(
                                   clipBoardData: _signature,
-                                  child: SelectableText(_signature),
+                                  child: SelectableText(
+                                    _signature,
+                                    key: Key('signature'),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -322,4 +325,3 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     );
   }
 }
-//TODO don't display signature as Uint8list

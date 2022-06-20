@@ -189,6 +189,5 @@ class _AboutScreenState extends State<AboutScreen> {
       ),
     );
   }
-}
-
 //TODO add URI link to donate to Foundation when P2SH / multisig is ready
+}

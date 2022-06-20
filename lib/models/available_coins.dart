@@ -11,7 +11,7 @@ class AvailableCoins {
       iconPath: 'assets/icon/ppc-icon-48.png',
       iconPathTransparent: 'assets/icon/ppc-icon-white-48.png',
       networkType: NetworkType(
-        messagePrefix: '\x18Peercoin Signed Message:\n',
+        messagePrefix: 'Peercoin Signed Message:\n',
         bech32: 'pc',
         bip32: Bip32Type(public: 0x043587cf, private: 0x04358394),
         pubKeyHash: 0x37,
@@ -35,7 +35,7 @@ class AvailableCoins {
       iconPath: 'assets/icon/ppc-icon-48.png',
       iconPathTransparent: 'assets/icon/ppc-icon-white-48.png',
       networkType: NetworkType(
-        messagePrefix: '\x18Peercoin Signed Message:\n',
+        messagePrefix: 'Peercoin Signed Message:\n',
         bech32: 'tpc',
         bip32: Bip32Type(public: 0x043587cf, private: 0x04358394),
         pubKeyHash: 0x6f,

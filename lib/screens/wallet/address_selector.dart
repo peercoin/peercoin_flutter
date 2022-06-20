@@ -111,6 +111,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
+          tooltip: 'Back',
           onPressed: () {
             Navigator.pop(context, _selectedAddress);
           },
