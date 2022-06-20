@@ -1,4 +1,4 @@
-### **0.9.4** (2022-06-xx)
+### **0.9.4** (2022-06-20)
 * Signing messages is now available for each wallet
 
 ### **0.9.3** (2022-06-14)
