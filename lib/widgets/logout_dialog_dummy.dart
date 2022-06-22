@@ -7,6 +7,10 @@ class LogoutDialog extends StatelessWidget {
     return Future.delayed(Duration(seconds: 0));
   }
 
+  static void reloadWindow() {
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container();

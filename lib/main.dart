@@ -31,8 +31,7 @@ import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
-import 'widgets/logout_dialog_dummy.dart'
-    if (dart.library.html) 'widgets/logout_dialog.dart';
+import 'tools/session_checker.dart';
 
 late bool setupFinished;
 late Widget _homeWidget;
@@ -87,7 +86,7 @@ void main() async {
   //check if app is locked
   var secureStorageError = false;
   var failedAuths = 0;
-  var sessionExpired = false;
+  var sessionExpired = await checkSessionExpired();
 
   try {
     final _secureStorage = const FlutterSecureStorage();
@@ -102,22 +101,6 @@ void main() async {
     _homeWidget = SecureStorageFailedScreen();
   } else {
     //check web session expired
-    if (kIsWeb) {
-      final _sessionExpiresAt = int.parse(
-          await FlutterSecureStorage().read(key: 'sessionExpiresAt') ?? '0');
-      if (DateTime.now()
-          .isAfter(DateTime.fromMillisecondsSinceEpoch(_sessionExpiresAt))) {
-        //session has expired
-        await LogoutDialog.clearData();
-        LoggerWrapper.logInfo(
-          'main',
-          'main',
-          'session expired, data cleared',
-        );
-        sessionExpired = true;
-      }
-      //TODO add timer that will check minutely for session timeout
-    }
 
     if (setupFinished == false || sessionExpired == true) {
       _homeWidget = SetupScreen();

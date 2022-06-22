@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -21,6 +20,8 @@ import '../../tools/price_ticker.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/wallet/new_wallet.dart';
+import '../../tools/session_checker.dart';
+import '../../widgets/buttons.dart';
 import '../../widgets/logout_dialog_dummy.dart'
     if (dart.library.html) '../../widgets/logout_dialog.dart';
 
@@ -44,6 +45,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   late Animation<double> _animation;
   late AnimationController _controller;
   late Timer _priceTimer;
+  late Timer _sessionTimer;
   late AppSettings _appSettings;
 
   @override
@@ -91,6 +93,17 @@ class _WalletListScreenState extends State<WalletListScreen>
           //don't show for users with no wallets
           await PeriodicReminders.checkReminder(_appSettings, context);
         }
+      } else {
+        //start session checker timer on web
+        _sessionTimer = Timer.periodic(
+          Duration(minutes: 10),
+          (timer) async {
+            if (await checkSessionExpired()) {
+              Navigator.of(context).pop();
+              LogoutDialog.reloadWindow();
+            }
+          },
+        );
       }
 
       //check if we just finished a scan
@@ -170,6 +183,9 @@ class _WalletListScreenState extends State<WalletListScreen>
   void dispose() {
     if (_appSettings.selectedCurrency.isNotEmpty) {
       _priceTimer.cancel();
+    }
+    if (kIsWeb) {
+      _sessionTimer.cancel();
     }
     _controller.dispose();
     super.dispose();
