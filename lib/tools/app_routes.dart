@@ -29,11 +29,12 @@ class Routes {
   static const String AppSettings = '/app-settings';
   static const String AppSettingsNotifications = '/app-settings-notifications';
   static const String QRScan = '/qr-scan';
-  static const String SetupAuth = '/setup-pin';
+  static const String SetupAuth = '/setup-auth';
   static const String SetupCreateWallet = '/setup-create-wallet';
   static const String SetupImport = '/setup-import-seed';
   static const String SetupLanguage = '/setup-language';
   static const String SetupDataFeeds = '/setup-feeds';
+  static const String SetupLegal = '/setup-legal';
   static const String Transaction = '/tx-detail';
   static const String WalletHome = '/wallet-home';
   static const String WalletSigning = '/wallet-signing';
@@ -45,7 +46,6 @@ class Routes {
   static const String ServerAdd = '/server-add';
   static const String ChangeLog = '/changelog';
   static const String AddressSelector = '/address-selector';
-  static const String SetupLegal = '/setup-legal';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
