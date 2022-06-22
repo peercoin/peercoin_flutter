@@ -5,7 +5,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:peercoin/widgets/logout_dialog_dummy.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
@@ -32,6 +31,8 @@ import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
+import 'widgets/logout_dialog_dummy.dart'
+    if (dart.library.html) 'widgets/logout_dialog.dart';
 
 late bool setupFinished;
 late Widget _homeWidget;
@@ -86,6 +87,8 @@ void main() async {
   //check if app is locked
   var secureStorageError = false;
   var failedAuths = 0;
+  var sessionExpired = false;
+
   try {
     final _secureStorage = const FlutterSecureStorage();
     failedAuths =
@@ -98,23 +101,25 @@ void main() async {
   if (secureStorageError == true) {
     _homeWidget = SecureStorageFailedScreen();
   } else {
-    //   final _sessionExpiresAt = DateTime.from(
-    //       await FlutterSecureStorage().read(key: 'sessionExpiresAt'));
-    //   if (DateTime.now().isAfter()) {}
-    // final _sessionLength =
-    //     await FlutterSecureStorage().read(key: 'sessionExpiresAt');
-    // if (int.parse(_sessionLength) == 0) {
-    //   await LogoutDialog.clearData();
-    //   LoggerWrapper.logInfo(
-    //     'main',
-    //     'main',
-    //     'session expired, data cleared',
-    //   );
-    //   main();
-    //   return;
-    // }
+    //check web session expired
+    if (kIsWeb) {
+      final _sessionExpiresAt = int.parse(
+          await FlutterSecureStorage().read(key: 'sessionExpiresAt') ?? '0');
+      if (DateTime.now()
+          .isAfter(DateTime.fromMillisecondsSinceEpoch(_sessionExpiresAt))) {
+        //session has expired
+        await LogoutDialog.clearData();
+        LoggerWrapper.logInfo(
+          'main',
+          'main',
+          'session expired, data cleared',
+        );
+        sessionExpired = true;
+      }
+      //TODO add timer that will check minutely for session timeout
+    }
 
-    if (setupFinished == false) {
+    if (setupFinished == false || sessionExpired == true) {
       _homeWidget = SetupScreen();
     } else if (failedAuths > 0) {
       _homeWidget = AuthJailScreen(true);
