@@ -53,7 +53,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     var prefs =
         await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
     await prefs.setBool('importedSeed', true);
-    await Navigator.of(context).pushNamed(Routes.SetUpPin);
+    await Navigator.of(context).pushNamed(Routes.SetupAuth);
     setState(() {
       _loading = false;
     });

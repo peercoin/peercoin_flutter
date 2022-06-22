@@ -11,12 +11,12 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 
-class SetupPinCodeScreen extends StatefulWidget {
+class SetupAuthScreen extends StatefulWidget {
   @override
-  _SetupPinCodeScreenState createState() => _SetupPinCodeScreenState();
+  _SetupAuthScreenState createState() => _SetupAuthScreenState();
 }
 
-class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
+class _SetupAuthScreenState extends State<SetupAuthScreen> {
   bool _biometricsAllowed = true;
   bool _initial = true;
   bool _biometricsAvailable = false;

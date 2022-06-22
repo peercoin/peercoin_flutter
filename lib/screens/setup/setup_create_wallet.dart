@@ -148,7 +148,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
                 await Navigator.pushNamed(
                   context,
-                  Routes.SetUpPin,
+                  Routes.SetupAuth,
                 );
               },
               child: Text(
