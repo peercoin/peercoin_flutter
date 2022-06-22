@@ -368,7 +368,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                   AppLocalizations.instance
                                       .translate('setup_seed_slider_label'),
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
