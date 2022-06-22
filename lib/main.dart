@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/widgets/logout_dialog_dummy.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
@@ -97,6 +98,22 @@ void main() async {
   if (secureStorageError == true) {
     _homeWidget = SecureStorageFailedScreen();
   } else {
+    //   final _sessionExpiresAt = DateTime.from(
+    //       await FlutterSecureStorage().read(key: 'sessionExpiresAt'));
+    //   if (DateTime.now().isAfter()) {}
+    // final _sessionLength =
+    //     await FlutterSecureStorage().read(key: 'sessionExpiresAt');
+    // if (int.parse(_sessionLength) == 0) {
+    //   await LogoutDialog.clearData();
+    //   LoggerWrapper.logInfo(
+    //     'main',
+    //     'main',
+    //     'session expired, data cleared',
+    //   );
+    //   main();
+    //   return;
+    // }
+
     if (setupFinished == false) {
       _homeWidget = SetupScreen();
     } else if (failedAuths > 0) {

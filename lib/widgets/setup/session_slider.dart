@@ -13,7 +13,7 @@ class SetupSessionSlider extends StatefulWidget {
 
 class _SetupSessionSliderState extends State<SetupSessionSlider> {
   double _currentSliderValue = 3;
-  final List<double> _availableSliderValues = [1, 7, 14, 30, 90, 180, 360];
+  final List<double> _availableSliderValues = [1, 7, 14, 30, 90, 180, 365];
 
   @override
   void initState() {
@@ -22,13 +22,24 @@ class _SetupSessionSliderState extends State<SetupSessionSlider> {
   }
 
   void _storeSelectedSessionLength() async {
-    await FlutterSecureStorage()
-        .write(key: 'sessionLength', value: _convertSlideToString());
+    final expiryDate = DateTime.now()
+        .add(
+          Duration(
+            days: int.parse(
+              _convertSlideToString(),
+            ),
+          ),
+        )
+        .millisecondsSinceEpoch;
+    await FlutterSecureStorage().write(
+      key: 'sessionExpiresAt',
+      value: expiryDate.toString(),
+    );
 
     LoggerWrapper.logInfo(
       'SetupSessionSlider',
       '_storeSelectedSessionLength',
-      '$_convertSlideToString() stored',
+      '${expiryDate.toString()} stored',
     );
   }
 
