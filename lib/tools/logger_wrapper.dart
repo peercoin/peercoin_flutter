@@ -1,4 +1,4 @@
-import 'dart:developer';
+// ignore_for_file: avoid_print
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_logs/flutter_logs.dart';
 class LoggerWrapper {
   static void logInfo(String tag, String subTag, String logMessage) {
     if (kIsWeb) {
-      log('$tag $subTag $logMessage');
+      print('$tag $subTag $logMessage');
       return;
     }
 
@@ -19,7 +19,7 @@ class LoggerWrapper {
 
   static void logError(String tag, String subTag, String logMessage) {
     if (kIsWeb) {
-      log('$tag $subTag $logMessage');
+      print('$tag $subTag $logMessage');
       return;
     }
 
@@ -32,7 +32,7 @@ class LoggerWrapper {
 
   static void logWarn(String tag, String subTag, String logMessage) {
     if (kIsWeb) {
-      log('$tag $subTag $logMessage');
+      print('$tag $subTag $logMessage');
       return;
     }
 
