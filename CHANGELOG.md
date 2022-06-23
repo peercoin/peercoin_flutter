@@ -1,5 +1,5 @@
 ### **0.9.5** (2022-xx-xx)
-* 
+* Performance upgrades under the hood
 
 ### **0.9.5** (2022-06-23)
 * Fix camera issues on some Android phones
