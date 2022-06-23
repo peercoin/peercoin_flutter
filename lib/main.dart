@@ -25,7 +25,6 @@ import 'models/wallet_utxo.dart';
 import 'providers/active_wallets.dart';
 import 'providers/electrum_connection.dart';
 import 'providers/encrypted_box.dart';
-import 'providers/unencrypted_options.dart';
 import 'screens/setup/setup.dart';
 import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
@@ -144,9 +143,6 @@ class PeercoinApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) {
-          return UnencryptedOptions();
-        }),
         ChangeNotifierProvider.value(value: EncryptedBox()),
         ChangeNotifierProvider(
           create: (context) {

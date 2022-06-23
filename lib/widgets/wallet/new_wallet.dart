@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/active_wallets.dart';
 import '../../providers/app_settings.dart';
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -35,9 +35,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       _notificationList.add(availableCoins[_coin]!.letterCode);
       _appSettings.setNotificationActiveWallets(_notificationList);
 
-      var prefs =
-          await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
-
+      var prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('importedSeed') == true) {
         await Navigator.of(context).pushNamedAndRemoveUntil(
           Routes.WalletImportScan,

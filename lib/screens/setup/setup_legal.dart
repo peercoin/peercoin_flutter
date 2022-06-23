@@ -1,10 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/setup/setup.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -135,9 +134,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                 active: _termsAgreed,
                 action: () async {
                   if (_termsAgreed == false) return;
-                  var prefs = await Provider.of<UnencryptedOptions>(context,
-                          listen: false)
-                      .prefs;
+                  var prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('setupFinished', true);
                   await Navigator.of(context)
                       .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);

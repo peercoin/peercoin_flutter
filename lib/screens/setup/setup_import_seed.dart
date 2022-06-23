@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/active_wallets.dart';
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
@@ -50,8 +50,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       ));
     }
     await _activeWallets.createPhrase(_controller.text);
-    var prefs =
-        await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
+    var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
     await Navigator.of(context).pushNamed(Routes.SetupAuth);
     setState(() {
