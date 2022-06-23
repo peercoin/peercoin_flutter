@@ -9,6 +9,8 @@ import '../tools/app_localizations.dart';
 import '../tools/app_routes.dart';
 
 class AboutScreen extends StatefulWidget {
+  const AboutScreen({Key? key}) : super(key: key);
+
   @override
   _AboutScreenState createState() => _AboutScreenState();
 }
@@ -63,7 +65,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('${_packageInfo!.appName}'),
+                            Text(_packageInfo!.appName),
                             Text(
                               'Version ${_packageInfo!.version} Build ${_packageInfo!.buildNumber}',
                             ),
@@ -82,7 +84,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Divider(),
+                            const Divider(),
                             TextButton(
                               onPressed: () => Navigator.of(context)
                                   .pushNamed(Routes.ChangeLog),
@@ -92,8 +94,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Divider(),
-                            SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance.translate('about_free'),
                             ),
@@ -105,8 +107,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                       .translate('about_view_source'),
                                   textAlign: TextAlign.center,
                                 )),
-                            Divider(),
-                            SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
                                   .translate('about_data_protection'),
@@ -120,8 +122,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Divider(),
-                            SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
                                   .translate('about_foundation'),
@@ -135,8 +137,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Divider(),
-                            SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
                                   .translate('about_translate'),
@@ -150,8 +152,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Divider(),
-                            SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
                                   .translate('about_help_or_feedback'),
@@ -164,8 +166,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            Divider(),
-                            SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
                             Text(
                               AppLocalizations.instance
                                   .translate('about_illustrations'),

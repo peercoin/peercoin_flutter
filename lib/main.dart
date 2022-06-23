@@ -67,8 +67,8 @@ void main() async {
 
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@drawable/splash');
-  final initializationSettingsIOS = IOSInitializationSettings();
-  final initializationSettings = InitializationSettings(
+  const initializationSettingsIOS = IOSInitializationSettings();
+  const initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
@@ -88,7 +88,7 @@ void main() async {
   var sessionExpired = await checkSessionExpired();
 
   try {
-    final _secureStorage = const FlutterSecureStorage();
+    const _secureStorage = FlutterSecureStorage();
     failedAuths =
         int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
   } catch (e) {
@@ -97,14 +97,16 @@ void main() async {
   }
 
   if (secureStorageError == true) {
-    _homeWidget = SecureStorageFailedScreen();
+    _homeWidget = const SecureStorageFailedScreen();
   } else {
     //check web session expired
 
     if (setupFinished == false || sessionExpired == true) {
       _homeWidget = SetupScreen();
     } else if (failedAuths > 0) {
-      _homeWidget = AuthJailScreen(true);
+      _homeWidget = const AuthJailScreen(
+        jailedFromHome: true,
+      );
     } else {
       _homeWidget = WalletListScreen(
         fromColdStart: true,
@@ -135,10 +137,12 @@ void main() async {
   }
 
   //run
-  runApp(PeercoinApp());
+  runApp(const PeercoinApp());
 }
 
 class PeercoinApp extends StatelessWidget {
+  const PeercoinApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -182,12 +186,12 @@ class PeercoinApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             supportedLocales: AppLocalizations.availableLocales.keys
                 .map((lang) => Locale(lang)),
-            localizationsDelegates: [
+            localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate
             ],
-            locale: _locale == Locale('und') ? null : _locale,
+            locale: _locale == const Locale('und') ? null : _locale,
             themeMode: themeMode,
             theme: MyTheme.getTheme(ThemeMode.light),
             darkTheme: MyTheme.getTheme(ThemeMode.dark),

@@ -119,14 +119,14 @@ class CoinWallet extends HiveObject {
 
   void clearPendingTransactionNotifications() {
     if (pendingTransactionNotifications.isNotEmpty) {
-      pendingTransactionNotifications.forEach((pendingNotifcation) {
+      for (var pendingNotifcation in pendingTransactionNotifications) {
         var address = addresses.firstWhere(
             (element) => element.address == pendingNotifcation.address);
 
         if (pendingNotifcation.tx != address.notificationBackendCount) {
           address.newNotificationBackendCount = pendingNotifcation.tx;
         }
-      });
+      }
     }
     _pendingTransactionNotifications = [];
     save();

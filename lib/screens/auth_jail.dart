@@ -13,8 +13,11 @@ class AuthJailScreen extends StatefulWidget {
   @override
   _AuthJailState createState() => _AuthJailState();
 
-  final bool _jailedFromHome;
-  AuthJailScreen([this._jailedFromHome = false]);
+  final bool jailedFromHome;
+  const AuthJailScreen({
+    Key? key,
+    this.jailedFromHome = false,
+  }) : super(key: key);
 }
 
 class _AuthJailState extends State<AuthJailScreen> {
@@ -51,14 +54,14 @@ class _AuthJailState extends State<AuthJailScreen> {
         final encrytpedStorage =
             Provider.of<EncryptedBox>(context, listen: false);
         await encrytpedStorage.setFailedAuths(0);
-        if (widget._jailedFromHome == true || _jailedFromRoute == true) {
+        if (widget.jailedFromHome == true || _jailedFromRoute == true) {
           await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
         } else {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
       canCancel: false,
-      jailedFromHome: widget._jailedFromHome,
+      jailedFromHome: widget.jailedFromHome,
     );
   }
 
@@ -75,7 +78,7 @@ class _AuthJailState extends State<AuthJailScreen> {
       await encrytpedStorage.setFailedAuths(failedAuths + 1);
 
       //check if jailedFromHome came again through route
-      if (widget._jailedFromHome == false) {
+      if (widget.jailedFromHome == false) {
         final jailedFromRoute =
             ModalRoute.of(context)!.settings.arguments as bool?;
         if (jailedFromRoute == true) _jailedFromRoute = true;
