@@ -14,6 +14,8 @@ import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 
 class SetupAuthScreen extends StatefulWidget {
+  const SetupAuthScreen({Key? key}) : super(key: key);
+
   @override
   _SetupAuthScreenState createState() => _SetupAuthScreenState();
 }
@@ -59,7 +61,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
             children: [
               PeerProgress(3),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width > 1200
                       ? MediaQuery.of(context).size.width / 2
                       : MediaQuery.of(context).size.width,

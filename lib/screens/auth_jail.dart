@@ -104,31 +104,39 @@ class _AuthJailState extends State<AuthJailScreen> {
       child: Scaffold(
         body: Container(
           color: Theme.of(context).primaryColor,
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(
-                Icons.lock,
-                color: Colors.white,
-                size: 48,
-              ),
-              SizedBox(height: 20),
-              Text(AppLocalizations.instance.translate('jail_heading'),
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-              SizedBox(height: 20),
-              Text(_lockCountdown.toString(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                  size: 48,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.instance.translate('jail_heading'),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  _lockCountdown.toString(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-              SizedBox(height: 20),
-              Text(AppLocalizations.instance.translate('jail_countdown'),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.instance.translate('jail_countdown'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-              SizedBox(height: 20),
-              LinearProgressIndicator(
-                backgroundColor: Colors.white,
-              )
-            ]),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                const LinearProgressIndicator(
+                  backgroundColor: Colors.white,
+                )
+              ],
+            ),
           ),
         ),
       ),

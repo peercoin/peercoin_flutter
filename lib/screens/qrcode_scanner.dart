@@ -43,7 +43,7 @@ class _QRScannerState extends State<QRScanner> {
                   child: FloatingActionButton(
                     backgroundColor: Theme.of(context).primaryColor,
                     onPressed: () async => await controller.toggleFlash(),
-                    child: Icon(
+                    child: const Icon(
                       Icons.lightbulb,
                       color: Colors.white,
                     ),

@@ -16,7 +16,7 @@ class ChangeLogScreen extends StatelessWidget {
       ),
       body: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: FutureBuilder(
           future: DefaultAssetBundle.of(context).loadString('CHANGELOG.md'),
           builder: (context, snapshot) {
@@ -30,14 +30,14 @@ class ChangeLogScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
                         AppLocalizations.instance
                             .translate('changelog_headline'),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     MarkdownBody(
                       data: _changeLogData,
                       styleSheet:

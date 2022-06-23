@@ -15,6 +15,8 @@ import '../../tools/logger_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
 
 class ServerAddScreen extends StatefulWidget {
+  const ServerAddScreen({Key? key}) : super(key: key);
+
   @override
   _ServerAddScreenState createState() => _ServerAddScreenState();
 }
@@ -57,7 +59,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           AppLocalizations.instance.translate('server_add_server_exists'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ));
     } else {
       //continue: try to connect
@@ -68,7 +70,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           .closeConnection();
 
       //try new connection
-      var _connection;
+      IOWebSocketChannel? _connection;
       try {
         _connection = IOWebSocketChannel.connect(
           serverUrl,
@@ -118,7 +120,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                     .translate('server_add_server_wrong_genesis'),
                 textAlign: TextAlign.center,
               ),
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
             ));
           }
         }
@@ -127,7 +129,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         });
       }
 
-      _connection.stream.listen((elem) {
+      _connection!.stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
         LoggerWrapper.logError(
@@ -144,7 +146,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                 .translate('server_add_server_no_connection'),
             textAlign: TextAlign.center,
           ),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ));
       });
 
@@ -169,7 +171,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                 _formKey.currentState!.save();
                 _formKey.currentState!.validate();
               },
-              icon: Icon(Icons.save),
+              icon: const Icon(Icons.save),
             ),
           )
         ],
@@ -187,14 +189,13 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                       autocorrect: false,
                       controller: _serverController,
                       decoration: InputDecoration(
-                        icon: Icon(Icons.outbond),
+                        icon: const Icon(Icons.outbond),
                         labelText: AppLocalizations.instance
                             .translate('server_add_input_label'),
                       ),
                       maxLines: null,
                       onFieldSubmitted: (_) =>
                           _formKey.currentState!.validate(),
-                      inputFormatters: [],
                       validator: (value) {
                         var portRegex = RegExp(':[0-9]');
 
@@ -216,7 +217,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                       }),
                   if (_loading)
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 30),
+                      padding: const EdgeInsets.symmetric(vertical: 30),
                       child: LoadingIndicator(),
                     )
                 ],
