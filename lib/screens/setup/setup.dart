@@ -189,4 +189,3 @@ class PeerProgress extends StatelessWidget {
 //TODO web: material icons are not rendered on firefox /
 //also rendering issues with non latin characters (flutter render engine issue) 
 //-> use html renderer instead of canvas for now
-//TODO web: import scan with larger wallet flaky
