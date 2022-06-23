@@ -297,13 +297,122 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    var back = Theme.of(context).primaryColor;
+  List<Widget> _calcPopupMenuItems(BuildContext context) {
+    return [
+      PopupMenuButton(
+        onSelected: (dynamic value) => selectPopUpMenuItem(value),
+        itemBuilder: (_) {
+          return [
+            if (_appSettings.camerasAvailble)
+              PopupMenuItem(
+                value: 'import_wallet',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.arrow_circle_down,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance
+                        .translate('wallet_pop_menu_paperwallet'),
+                  ),
+                ),
+              ),
+            PopupMenuItem(
+              value: 'import_wif',
+              child: ListTile(
+                leading: Icon(
+                  Icons.arrow_circle_down,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate('wallet_pop_menu_wif'),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'server_settings',
+              child: ListTile(
+                leading: Icon(
+                  Icons.sync,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance
+                      .translate('wallet_pop_menu_servers'),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'rescan',
+              child: ListTile(
+                leading: Icon(
+                  Icons.sync_problem,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate('wallet_pop_menu_rescan'),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'signing',
+              child: ListTile(
+                leading: Icon(
+                  Icons.key,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance
+                      .translate('wallet_pop_menu_signing'),
+                ),
+              ),
+            ),
+          ];
+        },
+      )
+    ];
+  }
+
+  BottomNavigationBar _calcBottomNavBar(BuildContext context) {
+    final back = Theme.of(context).primaryColor;
+    return BottomNavigationBar(
+      unselectedItemColor: Theme.of(context).disabledColor,
+      selectedItemColor: Colors.white,
+      onTap: (index) => changeIndex(index),
+      currentIndex: _pageIndex,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.download_rounded),
+          label:
+              AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
+          backgroundColor: back,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list_rounded),
+          label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
+          backgroundColor: back,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.menu_book_rounded),
+          label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
+          backgroundColor: back,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.upload_rounded),
+          label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
+          backgroundColor: back,
+        )
+      ],
+    );
+  }
+
+  Widget _calcBody() {
     var body;
     switch (_pageIndex) {
       case Tabs.receive:
-        body = Expanded(child: ReceiveTab(_unusedAddress, _connectionState));
+        body = Expanded(
+          child: ReceiveTab(_unusedAddress, _connectionState),
+        );
         break;
       case Tabs.transactions:
         body = Expanded(
@@ -316,12 +425,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case Tabs.addresses:
         body = Expanded(
-            child: AddressTab(
-          _wallet.name,
-          _wallet.title,
-          _wallet.addresses,
-          changeIndex,
-        ));
+          child: AddressTab(
+            _wallet.name,
+            _wallet.title,
+            _wallet.addresses,
+            changeIndex,
+          ),
+        );
         break;
       case Tabs.send:
         body = Expanded(
@@ -333,131 +443,29 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
     }
     ;
+    return body;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Theme.of(context).disabledColor,
-        selectedItemColor: Colors.white,
-        onTap: (index) => changeIndex(index),
-        currentIndex: _pageIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.download_rounded),
-            label: AppLocalizations.instance
-                .translate('wallet_bottom_nav_receive'),
-            backgroundColor: back,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_rounded),
-            label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-            backgroundColor: back,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_rounded),
-            label:
-                AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
-            backgroundColor: back,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.upload_rounded),
-            label:
-                AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-            backgroundColor: back,
-          ),
-        ],
-      ),
+      bottomNavigationBar: _calcBottomNavBar(context),
       appBar: AppBar(
         elevation: 1,
-        title: Center(child: Text(_wallet.title)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        title: Center(
+          child: Text(_wallet.title),
         ),
-        actions: [
-          PopupMenuButton(
-            onSelected: (dynamic value) => selectPopUpMenuItem(value),
-            itemBuilder: (_) {
-              return [
-                if (_appSettings.camerasAvailble)
-                  PopupMenuItem(
-                    value: 'import_wallet',
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.arrow_circle_down,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      title: Text(
-                        AppLocalizations.instance
-                            .translate('wallet_pop_menu_paperwallet'),
-                      ),
-                    ),
-                  ),
-                PopupMenuItem(
-                  value: 'import_wif',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.arrow_circle_down,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_wif'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'server_settings',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.sync,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_servers'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'rescan',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.sync_problem,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_rescan'),
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'signing',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.key,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('wallet_pop_menu_signing'),
-                    ),
-                  ),
-                ),
-              ];
-            },
-          )
-        ],
+        actions: _calcPopupMenuItems(context),
       ),
       body: _initial
-          ? Center(child: LoadingIndicator())
+          ? Center(
+              child: LoadingIndicator(),
+            )
           : Container(
               color: Theme.of(context).primaryColor,
               child: Column(
                 children: [
-                  body,
+                  _calcBody(),
                 ],
               ),
             ),
