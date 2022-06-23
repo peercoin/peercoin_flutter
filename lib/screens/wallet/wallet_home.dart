@@ -22,6 +22,8 @@ import '../../widgets/wallet/send_tab.dart';
 import '../../widgets/wallet/transactions_list.dart';
 
 class WalletHomeScreen extends StatefulWidget {
+  const WalletHomeScreen({Key? key}) : super(key: key);
+
   @override
   _WalletHomeState createState() => _WalletHomeState();
 }
@@ -58,7 +60,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   void checkPendingNotifications() async {
     if (_wallet.pendingTransactionNotifications.isNotEmpty) {
       await Future.delayed(
-        Duration(seconds: 2),
+        const Duration(seconds: 2),
         () {
           if (_connectionProvider!.openReplies.isEmpty) {
             _wallet.clearPendingTransactionNotifications();
@@ -162,14 +164,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 element.confirmations != -1 &&
                 element.timestamp != -1 ||
             element.timestamp == null);
-        unconfirmedTx.forEach((element) {
+        for (var element in unconfirmedTx) {
           LoggerWrapper.logInfo(
             'WalletHome',
             'didChangeDependencies',
             'requesting update for ${element.txid}',
           );
           _connectionProvider!.requestTxUpdate(element.txid);
-        });
+        }
 
         //unconfirmed balance? update balance
         if (_wallet.unconfirmedBalance > 0) {
@@ -184,12 +186,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
   void rebroadCastUnsendTx() {
     var nonBroadcastedTx = _walletTransactions.where((element) =>
         element.broadCasted == false && element.confirmations == 0);
-    nonBroadcastedTx.forEach((element) {
+    for (var element in nonBroadcastedTx) {
       _connectionProvider!.broadcastTransaction(
         element.broadcastHex,
         element.txid,
       );
-    });
+    }
   }
 
   void triggerHighValueAlert() async {
@@ -212,7 +214,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             actions: <Widget>[
               TextButton.icon(
                   label: Text(AppLocalizations.instance.translate('not_again')),
-                  icon: Icon(Icons.cancel),
+                  icon: const Icon(Icons.cancel),
                   onPressed: () async {
                     await _prefs.setBool('highValueNotice', true);
                     Navigator.of(context).pop();
@@ -220,7 +222,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               TextButton.icon(
                 label: Text(
                     AppLocalizations.instance.translate('jail_dialog_button')),
-                icon: Icon(Icons.check),
+                icon: const Icon(Icons.check),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
@@ -269,14 +271,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
               TextButton.icon(
                   label: Text(AppLocalizations.instance
                       .translate('server_settings_alert_cancel')),
-                  icon: Icon(Icons.cancel),
+                  icon: const Icon(Icons.cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   }),
               TextButton.icon(
                 label: Text(
                     AppLocalizations.instance.translate('jail_dialog_button')),
-                icon: Icon(Icons.check),
+                icon: const Icon(Icons.check),
                 onPressed: () async {
                   //close connection
                   await _connectionProvider!.closeConnection();
@@ -382,23 +384,23 @@ class _WalletHomeState extends State<WalletHomeScreen>
       currentIndex: _pageIndex,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.download_rounded),
+          icon: const Icon(Icons.download_rounded),
           label:
               AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
           backgroundColor: back,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.list_rounded),
+          icon: const Icon(Icons.list_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
           backgroundColor: back,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.menu_book_rounded),
+          icon: const Icon(Icons.menu_book_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
           backgroundColor: back,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.upload_rounded),
+          icon: const Icon(Icons.upload_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           backgroundColor: back,
         )
@@ -407,7 +409,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   Widget _calcBody() {
-    var body;
+    Widget body;
     switch (_pageIndex) {
       case Tabs.receive:
         body = Expanded(
@@ -442,7 +444,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
         body = Container();
         break;
     }
-    ;
     return body;
   }
 

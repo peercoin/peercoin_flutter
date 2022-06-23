@@ -51,7 +51,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PeerProgress(5),
+              const PeerProgress(step: 5),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -69,17 +69,17 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        PeerButtonSetupBack(),
+                        const PeerButtonSetupBack(),
                         AutoSizeText(
                           AppLocalizations.instance
                               .translate('setup_legal_title'),
                           minFontSize: 24,
                           maxFontSize: 28,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 40,
                         ),
                       ],
@@ -104,11 +104,11 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: SwitchListTile(
-                                key: Key('setupLegalConsentKey'),
+                                key: const Key('setupLegalConsentKey'),
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_legal_switch_tile'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
@@ -119,7 +119,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                     toggleTermsHandler(newState),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             )
                           ],
@@ -140,7 +140,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                       .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
             ],

@@ -15,6 +15,8 @@ import '../../tools/background_sync.dart';
 import '../../widgets/buttons.dart';
 
 class ImportWifScreen extends StatefulWidget {
+  const ImportWifScreen({Key? key}) : super(key: key);
+
   @override
   _ImportWifScreenState createState() => _ImportWifScreenState();
 }
@@ -87,7 +89,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
           AppLocalizations.instance.translate('import_wif_success_snack'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
       ),
     );
 
@@ -114,7 +116,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
           AppLocalizations.instance.translate('import_wif_error_snack'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
       ));
     } else {
       await showDialog(
@@ -224,7 +226,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                             minLines: 4,
                             maxLines: 4,
                           ),
-                          if (!kIsWeb) SizedBox(height: 10),
+                          if (!kIsWeb) const SizedBox(height: 10),
                           if (!kIsWeb)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -237,7 +239,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                                 ),
                               ],
                             ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -252,7 +254,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
                             AppLocalizations.instance
                                 .translate('import_wif_hint'),

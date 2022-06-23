@@ -102,7 +102,7 @@ void main() async {
     //check web session expired
 
     if (setupFinished == false || sessionExpired == true) {
-      _homeWidget = SetupScreen();
+      _homeWidget = const SetupScreen();
     } else if (failedAuths > 0) {
       _homeWidget = const AuthJailScreen(
         jailedFromHome: true,

@@ -14,6 +14,8 @@ import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
 
 class ImportPaperWalletScreen extends StatefulWidget {
+  const ImportPaperWalletScreen({Key? key}) : super(key: key);
+
   @override
   _ImportPaperWalletScreenState createState() =>
       _ImportPaperWalletScreenState();
@@ -143,9 +145,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void calculateBalance() {
     var _totalValue = 0;
-    _paperWalletUtxos[_pubKey]!.forEach((element) {
+    for (var element in _paperWalletUtxos[_pubKey]!) {
       _totalValue += element['value'] as int;
-    });
+    }
     setState(() {
       _balanceLoading = false;
       _balanceInt = _totalValue;
@@ -163,7 +165,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
             AppLocalizations.instance.translate('paperwallet_error_1'),
             textAlign: TextAlign.center,
           ),
-          duration: Duration(seconds: 5),
+          duration: const Duration(seconds: 5),
         ),
       );
     } else {
@@ -186,12 +188,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                   children: [
                     Text(
                       'Importing $_balance',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -200,7 +202,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       'send_fee',
                       {
                         'amount': '${_txFee / 1000000}',
-                        'letter_code': '${_activeCoin.letterCode}'
+                        'letter_code': _activeCoin.letterCode
                       },
                     ),
                   ),
@@ -209,14 +211,14 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       'send_total',
                       {
                         'amount': '${_balanceInt / 1000000}',
-                        'letter_code': '${_activeCoin.letterCode}'
+                        'letter_code': _activeCoin.letterCode
                       },
                     ),
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: PeerButton(
@@ -241,7 +243,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                               .translate('paperwallet_success'),
                           textAlign: TextAlign.center,
                         ),
-                        duration: Duration(seconds: 5),
+                        duration: const Duration(seconds: 5),
                       ));
                       Navigator.of(context).pop();
                     } catch (e) {
@@ -273,20 +275,18 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   Future<Map> buildImportTx() async {
     //build list of paperWaleltUtxos
     var parsedWalletUtxos = <WalletUtxo>[];
-    _paperWalletUtxos[_pubKey]!.forEach(
-      (utxo) {
-        print('utxo $utxo');
-        parsedWalletUtxos.add(
-          WalletUtxo(
-            hash: utxo['tx_hash'],
-            txPos: utxo['tx_pos'],
-            height: utxo['height'],
-            value: utxo['value'],
-            address: _activeWallets.getUnusedAddress,
-          ),
-        );
-      },
-    );
+    for (var utxo in _paperWalletUtxos[_pubKey]!) {
+      LoggerWrapper.logInfo('ImportPaperWallet', 'buildImportTx', 'utxo $utxo');
+      parsedWalletUtxos.add(
+        WalletUtxo(
+          hash: utxo['tx_hash'],
+          txPos: utxo['tx_pos'],
+          height: utxo['height'],
+          value: utxo['value'],
+          address: _activeWallets.getUnusedAddress,
+        ),
+      );
+    }
 
     return await _activeWallets.buildTransaction(
       identifier: _activeCoin.name,
@@ -333,8 +333,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    Container(height: 30, child: Text(_pubKey)),
-                    Divider(),
+                    SizedBox(height: 30, child: Text(_pubKey)),
+                    const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -351,8 +351,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    Container(height: 60, child: Text(_privKey)),
-                    Divider(),
+                    SizedBox(height: 60, child: Text(_privKey)),
+                    const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -370,13 +370,13 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    Container(
+                    SizedBox(
                       height: 30,
                       child: _balanceLoading == true
                           ? LoadingIndicator()
                           : Text(_balance),
                     ),
-                    Divider(),
+                    const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -393,8 +393,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
-                    Divider()
+                    const SizedBox(height: 30),
+                    const Divider()
                   ],
                 ),
               ),

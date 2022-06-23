@@ -8,6 +8,8 @@ import '../../widgets/buttons.dart';
 import '../../widgets/setup_progress.dart';
 
 class SetupScreen extends StatefulWidget {
+  const SetupScreen({Key? key}) : super(key: key);
+
   @override
   _SetupScreenState createState() => _SetupScreenState();
 
@@ -43,7 +45,7 @@ class _SetupScreenState extends State<SetupScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  PeerProgress(1),
+                  const PeerProgress(step: 1),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -63,7 +65,7 @@ class _SetupScreenState extends State<SetupScreen> {
                                 child: Text(
                                   AppLocalizations.instance
                                       .translate('setup_title'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 46,
                                   ),
@@ -72,7 +74,7 @@ class _SetupScreenState extends State<SetupScreen> {
                               Text(
                                 AppLocalizations.instance
                                     .translate('setup_subtitle'),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,
                                 ),
@@ -83,8 +85,9 @@ class _SetupScreenState extends State<SetupScreen> {
                             height: MediaQuery.of(context).size.height / 15,
                           ),
                           PeerExplanationText(
-                            AppLocalizations.instance.translate('setup_text1'),
-                            2,
+                            text: AppLocalizations.instance
+                                .translate('setup_text1'),
+                            maxLines: 2,
                           ),
                           PeerButtonSetup(
                             text: AppLocalizations.instance.translate(
@@ -95,18 +98,21 @@ class _SetupScreenState extends State<SetupScreen> {
                           ),
                           Text(
                             AppLocalizations.instance.translate('setup_text3'),
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20),
                             textAlign: TextAlign.center,
                           ),
-                          PeerExplanationText(AppLocalizations.instance
-                              .translate('setup_text2')),
+                          PeerExplanationText(
+                            text: AppLocalizations.instance
+                                .translate('setup_text2'),
+                          ),
                           PeerButtonSetup(
                             text: AppLocalizations.instance
                                 .translate('setup_save_title'),
                             action: () => Navigator.of(context)
                                 .pushNamed(Routes.SetupCreateWallet),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                         ],
@@ -119,7 +125,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 top: 30,
                 right: 25,
                 child: IconButton(
-                  key: Key('setupLanguageButton'),
+                  key: const Key('setupLanguageButton'),
                   onPressed: () async {
                     await Navigator.of(context).pushNamed(Routes.SetupLanguage);
                     setState(() {});
@@ -142,7 +148,12 @@ class _SetupScreenState extends State<SetupScreen> {
 class PeerExplanationText extends StatelessWidget {
   final String text;
   final int maxLines;
-  PeerExplanationText(this.text, [this.maxLines = 1]);
+
+  const PeerExplanationText({
+    Key? key,
+    required this.text,
+    this.maxLines = 1,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +161,7 @@ class PeerExplanationText extends StatelessWidget {
       text,
       maxLines: maxLines,
       maxFontSize: 17,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
         fontStyle: FontStyle.italic,
       ),
@@ -160,14 +171,17 @@ class PeerExplanationText extends StatelessWidget {
 }
 
 class PeerProgress extends StatelessWidget {
-  final int num;
-  PeerProgress(this.num);
+  final int step;
+  const PeerProgress({
+    Key? key,
+    required this.step,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-      child: SetupProgressIndicator(num),
+      child: SetupProgressIndicator(step),
     );
   }
 }
