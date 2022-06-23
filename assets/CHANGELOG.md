@@ -1,5 +1,6 @@
-### **0.9.5** (2022-06-xx)
-* 
+### **0.9.5** (2022-06-23)
+* Fix camera issues on some Android phones
+* Setup legal: fix container heights on smaller screens
 
 ### **0.9.4** (2022-06-20)
 * Signing messages is now available for each wallet
