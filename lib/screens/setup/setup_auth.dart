@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/screens/setup/setup.dart';
+import 'package:peercoin/widgets/setup/session_slider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/app_settings.dart';
@@ -11,12 +13,12 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 
-class SetupPinCodeScreen extends StatefulWidget {
+class SetupAuthScreen extends StatefulWidget {
   @override
-  _SetupPinCodeScreenState createState() => _SetupPinCodeScreenState();
+  _SetupAuthScreenState createState() => _SetupAuthScreenState();
 }
 
-class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
+class _SetupAuthScreenState extends State<SetupAuthScreen> {
   bool _biometricsAllowed = true;
   bool _initial = true;
   bool _biometricsAvailable = false;
@@ -93,33 +95,36 @@ class _SetupPinCodeScreenState extends State<SetupPinCodeScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: SwitchListTile(
-                            title: Text(
-                              AppLocalizations.instance
-                                  .translate('app_settings_biometrics'),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 17),
-                            ),
-                            value: _biometricsAllowed,
-                            activeColor: Theme.of(context).backgroundColor,
-                            inactiveThumbColor: Colors.grey,
-                            onChanged: (newState) {
-                              if (_biometricsAvailable == false) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                    AppLocalizations.instance
-                                        .translate('setup_pin_no_biometrics'),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                ));
-                              } else {
-                                setState(() {
-                                  _biometricsAllowed = newState;
-                                });
-                              }
-                            }),
+                        child: kIsWeb
+                            ? SetupSessionSlider()
+                            : SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.instance
+                                      .translate('app_settings_biometrics'),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 17),
+                                ),
+                                value: _biometricsAllowed,
+                                activeColor: Theme.of(context).backgroundColor,
+                                inactiveThumbColor: Colors.grey,
+                                onChanged: (newState) {
+                                  if (_biometricsAvailable == false) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                        AppLocalizations.instance.translate(
+                                            'setup_pin_no_biometrics'),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 5),
+                                    ));
+                                  } else {
+                                    setState(() {
+                                      _biometricsAllowed = newState;
+                                    });
+                                  }
+                                },
+                              ),
                       ),
                     ],
                   ),

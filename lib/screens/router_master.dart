@@ -39,6 +39,9 @@ class _RouterMasterState extends State<RouterMaster> {
           Duration(seconds: 0),
           () => Navigator.of(context).pushReplacementNamed('/'),
         );
+      } else if (!setupFinished && widget.routeType == RouteTypes.setupOnly) {
+        widgetToRender = widget.widget;
+        //TODO don't allow unordered access to setup widgets if setup is not finished
       } else if (widget.routeType == RouteTypes.requiresArguments &&
           ModalRoute.of(context)!.settings.arguments == null) {
         Future.delayed(

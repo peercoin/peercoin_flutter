@@ -367,18 +367,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 ),
                 ExpansionTile(
                   title: Text(
-                      AppLocalizations.instance
-                          .translate('app_settings_price_feed'),
-                      style: Theme.of(context).textTheme.headline6),
+                    AppLocalizations.instance
+                        .translate('app_settings_price_feed'),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                   childrenPadding: EdgeInsets.all(10),
                   children: [SettingsPriceTicker(_settings, saveSnack)],
                 ),
                 if (!kIsWeb)
                   ExpansionTile(
                     title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_notifications'),
-                        style: Theme.of(context).textTheme.headline6),
+                      AppLocalizations.instance
+                          .translate('app_settings_notifications'),
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                     childrenPadding: EdgeInsets.all(10),
                     children: [
                       PeerButton(
@@ -393,9 +395,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 if (!kIsWeb)
                   ExpansionTile(
                     title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_logs'),
-                        style: Theme.of(context).textTheme.headline6),
+                      AppLocalizations.instance.translate('app_settings_logs'),
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                     childrenPadding: EdgeInsets.all(10),
                     children: [
                       Text(

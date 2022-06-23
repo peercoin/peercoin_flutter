@@ -15,7 +15,7 @@ import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
 import '../screens/setup/setup_language.dart';
 import '../screens/router_master.dart';
-import '../screens/setup/setup_pin_code.dart';
+import '../screens/setup/setup_auth.dart';
 import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
 import '../screens/wallet/transaction_details.dart';
@@ -29,11 +29,12 @@ class Routes {
   static const String AppSettings = '/app-settings';
   static const String AppSettingsNotifications = '/app-settings-notifications';
   static const String QRScan = '/qr-scan';
-  static const String SetUpPin = '/setup-pin';
+  static const String SetupAuth = '/setup-auth';
   static const String SetupCreateWallet = '/setup-create-wallet';
   static const String SetupImport = '/setup-import-seed';
   static const String SetupLanguage = '/setup-language';
   static const String SetupDataFeeds = '/setup-feeds';
+  static const String SetupLegal = '/setup-legal';
   static const String Transaction = '/tx-detail';
   static const String WalletHome = '/wallet-home';
   static const String WalletSigning = '/wallet-signing';
@@ -45,7 +46,6 @@ class Routes {
   static const String ServerAdd = '/server-add';
   static const String ChangeLog = '/changelog';
   static const String AddressSelector = '/address-selector';
-  static const String SetupLegal = '/setup-legal';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -53,8 +53,8 @@ class Routes {
             widget: SetupCreateWalletScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.SetUpPin: (context) => RouterMaster(
-            widget: SetupPinCodeScreen(),
+      Routes.SetupAuth: (context) => RouterMaster(
+            widget: SetupAuthScreen(),
             routeType: RouteTypes.setupOnly,
           ),
       Routes.SetupLanguage: (context) => RouterMaster(

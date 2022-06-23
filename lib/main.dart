@@ -31,6 +31,7 @@ import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
+import 'tools/session_checker.dart';
 
 late bool setupFinished;
 late Widget _homeWidget;
@@ -85,6 +86,8 @@ void main() async {
   //check if app is locked
   var secureStorageError = false;
   var failedAuths = 0;
+  var sessionExpired = await checkSessionExpired();
+
   try {
     final _secureStorage = const FlutterSecureStorage();
     failedAuths =
@@ -97,7 +100,9 @@ void main() async {
   if (secureStorageError == true) {
     _homeWidget = SecureStorageFailedScreen();
   } else {
-    if (setupFinished == false) {
+    //check web session expired
+
+    if (setupFinished == false || sessionExpired == true) {
       _homeWidget = SetupScreen();
     } else if (failedAuths > 0) {
       _homeWidget = AuthJailScreen(true);

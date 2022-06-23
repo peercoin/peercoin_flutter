@@ -40,7 +40,7 @@ class LogoutDialog extends StatelessWidget {
             );
 
             Navigator.of(context).pop();
-            window.location.reload();
+            reloadWindow();
           },
           child: Text(
             AppLocalizations.instance.translate('logout'),
@@ -72,5 +72,9 @@ class LogoutDialog extends StatelessWidget {
     await Future.delayed(Duration(seconds: 1));
 
     LoggerWrapper.logInfo('Logout', 'clearData', 'Hive Storage cleared');
+  }
+
+  static void reloadWindow() {
+    window.location.reload();
   }
 }
