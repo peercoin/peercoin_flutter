@@ -48,7 +48,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           //sync notification backend
           await BackgroundSync.executeSync(fromScan: true);
           _timer.cancel();
-          await Navigator.of(context).pushReplacementNamed(Routes.WalletList,
+          await Navigator.of(context).pushReplacementNamed(Routes.walletList,
               arguments: {'fromScan': true});
         }
       });
@@ -102,7 +102,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LoadingIndicator(),
+          const LoadingIndicator(),
           const SizedBox(height: 20),
           Text(
             AppLocalizations.instance.translate('wallet_scan_notice'),
@@ -114,7 +114,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
             action: () async {
               _timer.cancel();
               await Navigator.of(context)
-                  .pushReplacementNamed(Routes.WalletList);
+                  .pushReplacementNamed(Routes.walletList);
             },
           )
         ],

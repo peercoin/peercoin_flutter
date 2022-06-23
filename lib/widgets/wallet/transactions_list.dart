@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/coin_wallet.dart';
+import '../../providers/electrum_connection.dart';
 import '/../providers/active_wallets.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/wallet_transaction.dart';
 import '/../tools/app_routes.dart';
 import '/../widgets/wallet/wallet_balance_header.dart';
+import '/../widgets/service_container.dart';
 
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
-  final _wallet;
-  final _connectionState;
-  TransactionList(
-      this._walletTransactions, this._wallet, this._connectionState);
+  final CoinWallet _wallet;
+  final ElectrumConnectionState _connectionState;
+  const TransactionList(
+      this._walletTransactions, this._wallet, this._connectionState,
+      {Key? key})
+      : super(key: key);
 
   @override
   _TransactionListState createState() => _TransactionListState();
@@ -34,13 +38,13 @@ class _TransactionListState extends State<TransactionList> {
     final result = context
         .read<ActiveWallets>()
         .getLabelForAddress(widget._wallet.name, address);
-    if (result != '') return '$result';
+    if (result != '') return result;
     return address;
   }
 
   Widget renderConfirmationIndicator(WalletTransaction tx) {
     if (tx.confirmations == -1) {
-      return Text(
+      return const Text(
         'X',
         textScaleFactor: 0.9,
         style: TextStyle(color: Colors.red),
@@ -144,7 +148,7 @@ class _TransactionListState extends State<TransactionList> {
                               child: ListTile(
                                 horizontalTitleGap: 32.0,
                                 onTap: () => Navigator.of(context)
-                                    .pushNamed(Routes.Transaction, arguments: [
+                                    .pushNamed(Routes.transaction, arguments: [
                                   _filteredTx[i - 1],
                                   ModalRoute.of(context)!.settings.arguments
                                 ]),
@@ -154,7 +158,8 @@ class _TransactionListState extends State<TransactionList> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     AnimatedContainer(
-                                      duration: Duration(milliseconds: 500),
+                                      duration:
+                                          const Duration(milliseconds: 500),
                                       child: renderConfirmationIndicator(
                                         _filteredTx[i - 1],
                                       ),
@@ -228,7 +233,7 @@ class _TransactionListState extends State<TransactionList> {
                                               fontSize: 12,
                                             ),
                                           )
-                                        : SizedBox(
+                                        : const SizedBox(
                                             height: 0,
                                           )
                                   ],
@@ -269,10 +274,9 @@ class _TransactionListState extends State<TransactionList> {
                                             Theme.of(context).backgroundColor,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
-                                        visualDensity: VisualDensity(
+                                        visualDensity: const VisualDensity(
                                             horizontal: 0.0, vertical: -4),
-                                        label: Container(
-                                            child: Text(
+                                        label: Text(
                                           AppLocalizations.instance
                                               .translate('transactions_in'),
                                           style: TextStyle(
@@ -280,7 +284,7 @@ class _TransactionListState extends State<TransactionList> {
                                                 .colorScheme
                                                 .secondary,
                                           ),
-                                        )),
+                                        ),
                                         selected: _filterChoice == 'in',
                                         onSelected: (_) => _handleSelect('in'),
                                       ),
@@ -289,7 +293,7 @@ class _TransactionListState extends State<TransactionList> {
                                             Theme.of(context).backgroundColor,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
-                                        visualDensity: VisualDensity(
+                                        visualDensity: const VisualDensity(
                                             horizontal: 0.0, vertical: -4),
                                         label: Text(
                                             AppLocalizations.instance
@@ -307,7 +311,7 @@ class _TransactionListState extends State<TransactionList> {
                                             Theme.of(context).backgroundColor,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
-                                        visualDensity: VisualDensity(
+                                        visualDensity: const VisualDensity(
                                             horizontal: 0.0, vertical: -4),
                                         label: Text(
                                             AppLocalizations.instance

@@ -11,7 +11,8 @@ class SettingsPriceTicker extends StatefulWidget {
   final AppSettings _settings;
   final Function _saveSnack;
 
-  SettingsPriceTicker(this._settings, this._saveSnack);
+  const SettingsPriceTicker(this._settings, this._saveSnack, {Key? key})
+      : super(key: key);
 
   @override
   _SettingsPriceTickerState createState() => _SettingsPriceTickerState();
@@ -19,7 +20,7 @@ class SettingsPriceTicker extends StatefulWidget {
 
 class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
   late bool _listExpanded;
-  var formattedTime;
+  late String formattedTime;
 
   @override
   void initState() {
@@ -134,7 +135,7 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
                 onChanged: (dynamic _) => saveCurrency(ctx, currency)),
             trailing: Text(
               PriceTicker.currencySymbols[currency] ?? '',
-              style: TextStyle(fontWeight: FontWeight.w500),
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
         );

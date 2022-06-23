@@ -193,7 +193,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
               PeerButtonSetup(
                 text: AppLocalizations.instance.translate('continue'),
                 action: () {
-                  Navigator.of(context).pushNamed(Routes.SetupLegal);
+                  Navigator.of(context).pushNamed(Routes.setupLegal);
                 },
               ),
               const SizedBox(

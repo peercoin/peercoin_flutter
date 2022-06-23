@@ -216,8 +216,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                         return null;
                       }),
                   if (_loading)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 30),
                       child: LoadingIndicator(),
                     )
                 ],

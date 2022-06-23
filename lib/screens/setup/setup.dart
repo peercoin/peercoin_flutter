@@ -94,7 +94,7 @@ class _SetupScreenState extends State<SetupScreen> {
                               'setup_import_title',
                             ),
                             action: () => Navigator.of(context)
-                                .pushNamed(Routes.SetupImport),
+                                .pushNamed(Routes.setupImport),
                           ),
                           Text(
                             AppLocalizations.instance.translate('setup_text3'),
@@ -110,7 +110,7 @@ class _SetupScreenState extends State<SetupScreen> {
                             text: AppLocalizations.instance
                                 .translate('setup_save_title'),
                             action: () => Navigator.of(context)
-                                .pushNamed(Routes.SetupCreateWallet),
+                                .pushNamed(Routes.setupCreateWallet),
                           ),
                           const SizedBox(
                             height: 8,
@@ -127,7 +127,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 child: IconButton(
                   key: const Key('setupLanguageButton'),
                   onPressed: () async {
-                    await Navigator.of(context).pushNamed(Routes.SetupLanguage);
+                    await Navigator.of(context).pushNamed(Routes.setupLanguage);
                     setState(() {});
                   },
                   icon: Icon(

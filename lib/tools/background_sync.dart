@@ -129,107 +129,103 @@ class BackgroundSync {
     );
 
     //loop through wallets
-    _walletBox.values.forEach(
-      (wallet) async {
-        //increment identifier for notifications
-        if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
-          //if activated, parse all addresses to a list that will be POSTed to backend later on
-          var adressesToQuery = <String, int>{};
-          var utxos = wallet.utxos;
+    for (var wallet in _walletBox.values) {
+      //increment identifier for notifications
+      if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
+        //if activated, parse all addresses to a list that will be POSTed to backend later on
+        var adressesToQuery = <String, int>{};
+        var utxos = wallet.utxos;
 
-          wallet.addresses.forEach(
-            (walletAddress) async {
-              var utxoRes = utxos.firstWhereOrNull(
-                  (element) => element.address == walletAddress.address);
+        for (var walletAddress in wallet.addresses) {
+          var utxoRes = utxos.firstWhereOrNull(
+              (element) => element.address == walletAddress.address);
 
-              if (walletAddress.isOurs == true) {
-                if (walletAddress.isWatched == true ||
-                    utxoRes != null && utxoRes.value > 0 ||
-                    wallet.addresses.indexOf(walletAddress) ==
-                        wallet.addresses.length - 1)
-                //assumes that last wallet in list is always the unused/change address
-                {
-                  //check if that address already has a pending notification
-                  var res = wallet.pendingTransactionNotifications
-                      .where(
-                        (element) => element.address == walletAddress.address,
-                      )
-                      .toList();
-                  if (res.isNotEmpty) {
-                    //addr does have a pending notification
-                    adressesToQuery[walletAddress.address] = res[0].tx;
-                  } else {
-                    //addr does not have a pending notification
-                    adressesToQuery[walletAddress.address] =
-                        walletAddress.notificationBackendCount;
-                  }
-                }
-              }
-            },
-          );
-
-          LoggerWrapper.logInfo(
-            'BackgroundSync',
-            'executeSync',
-            'addressesToQuery $adressesToQuery',
-          );
-
-          var result = await http.post(
-            Uri.parse('https://peercoinexplorer.net/address-status'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode({
-              'coin': wallet.name,
-              'addresses': [adressesToQuery]
-            }),
-          );
-
-          var _shouldNotify = false;
-          var _foundDifference;
-          if (result.body.contains('foundDifference')) {
-            //valid answer
-            var bodyDecoded = jsonDecode(result.body);
-            LoggerWrapper.logInfo(
-              'BackgroundSync',
-              'executeSync ${wallet.name}',
-              bodyDecoded.toString(),
-            );
-            _foundDifference = bodyDecoded['foundDifference'];
-            if (_foundDifference == true) {
-              //loop through addresses in result
-              var addresses = bodyDecoded['addresses'];
-              addresses.forEach((element) {
-                //write tx result from API into coinwallet
-                wallet.putPendingTransactionNotification(
-                  PendingNotification(
-                    address: element['address'],
-                    tx: element['tx'],
-                  ),
-                );
-              });
-
-              if (fromScan == true) {
-                //persist backend data
-                wallet.clearPendingTransactionNotifications();
+          if (walletAddress.isOurs == true) {
+            if (walletAddress.isWatched == true ||
+                utxoRes != null && utxoRes.value > 0 ||
+                wallet.addresses.indexOf(walletAddress) ==
+                    wallet.addresses.length - 1)
+            //assumes that last wallet in list is always the unused/change address
+            {
+              //check if that address already has a pending notification
+              var res = wallet.pendingTransactionNotifications
+                  .where(
+                    (element) => element.address == walletAddress.address,
+                  )
+                  .toList();
+              if (res.isNotEmpty) {
+                //addr does have a pending notification
+                adressesToQuery[walletAddress.address] = res[0].tx;
               } else {
-                _shouldNotify = true;
+                //addr does not have a pending notification
+                adressesToQuery[walletAddress.address] =
+                    walletAddress.notificationBackendCount;
               }
             }
           }
+        }
 
-          if (_shouldNotify == true) {
-            await flutterLocalNotificationsPlugin.show(
-              DateTime.now().millisecondsSinceEpoch ~/ 10000,
-              AppLocalizations.instance.translate(
-                  'notification_title', {'walletTitle': wallet.title}),
-              AppLocalizations.instance.translate('notification_body'),
-              LocalNotificationSettings.platformChannelSpecifics,
-              payload: wallet.name,
-            );
+        LoggerWrapper.logInfo(
+          'BackgroundSync',
+          'executeSync',
+          'addressesToQuery $adressesToQuery',
+        );
+
+        var result = await http.post(
+          Uri.parse('https://peercoinexplorer.net/address-status'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({
+            'coin': wallet.name,
+            'addresses': [adressesToQuery]
+          }),
+        );
+
+        var _shouldNotify = false;
+        bool _foundDifference;
+        if (result.body.contains('foundDifference')) {
+          //valid answer
+          var bodyDecoded = jsonDecode(result.body);
+          LoggerWrapper.logInfo(
+            'BackgroundSync',
+            'executeSync ${wallet.name}',
+            bodyDecoded.toString(),
+          );
+          _foundDifference = bodyDecoded['foundDifference'];
+          if (_foundDifference == true) {
+            //loop through addresses in result
+            var addresses = bodyDecoded['addresses'];
+            addresses.forEach((element) {
+              //write tx result from API into coinwallet
+              wallet.putPendingTransactionNotification(
+                PendingNotification(
+                  address: element['address'],
+                  tx: element['tx'],
+                ),
+              );
+            });
+
+            if (fromScan == true) {
+              //persist backend data
+              wallet.clearPendingTransactionNotifications();
+            } else {
+              _shouldNotify = true;
+            }
           }
         }
-      },
-    );
+
+        if (_shouldNotify == true) {
+          await flutterLocalNotificationsPlugin.show(
+            DateTime.now().millisecondsSinceEpoch ~/ 10000,
+            AppLocalizations.instance
+                .translate('notification_title', {'walletTitle': wallet.title}),
+            AppLocalizations.instance.translate('notification_body'),
+            LocalNotificationSettings.platformChannelSpecifics,
+            payload: wallet.name,
+          );
+        }
+      }
+    }
   }
 }

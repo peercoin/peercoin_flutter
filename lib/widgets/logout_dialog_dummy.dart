@@ -4,7 +4,7 @@ class LogoutDialog extends StatelessWidget {
   const LogoutDialog({Key? key}) : super(key: key);
 
   static Future<void> clearData() {
-    return Future.delayed(Duration(seconds: 0));
+    return Future.delayed(const Duration(seconds: 0));
   }
 
   static void reloadWindow() {

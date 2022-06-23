@@ -92,7 +92,7 @@ class Auth {
           );
         });
     await Navigator.of(context)
-        .pushReplacementNamed(Routes.AuthJail, arguments: jailedFromHome);
+        .pushReplacementNamed(Routes.authJail, arguments: jailedFromHome);
   }
 
   static Future<void> localAuth(BuildContext context,
@@ -141,7 +141,7 @@ class Auth {
         textAlign: TextAlign.center,
         text: TextSpan(
           text: AppLocalizations.instance.translate('authenticate_title'),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
           ),
           children: [
@@ -153,7 +153,7 @@ class Auth {
                         : 'authenticate_subtitle_plural',
                     {'retriesLeft': retriesLeft.toString()},
                   ),
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             )
           ],
         ),
@@ -162,7 +162,7 @@ class Auth {
           text: AppLocalizations.instance
               .translate('authenticate_confirm_title')),
       customizedButtonChild: biometricsAllowed
-          ? Icon(
+          ? const Icon(
               Icons.fingerprint,
             )
           : Container(),

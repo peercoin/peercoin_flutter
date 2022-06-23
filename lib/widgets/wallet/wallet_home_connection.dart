@@ -6,7 +6,9 @@ import '/../widgets/loading_indicator.dart';
 
 class WalletHomeConnection extends StatelessWidget {
   final ElectrumConnectionState _connectionState;
-  WalletHomeConnection(this._connectionState);
+  const WalletHomeConnection(this._connectionState, {Key? key})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Widget widget;
@@ -29,7 +31,7 @@ class WalletHomeConnection extends StatelessWidget {
         ),
       );
     } else {
-      widget = Container(width: 88, child: LoadingIndicator());
+      widget = const SizedBox(width: 88, child: LoadingIndicator());
     }
 
     return Row(
@@ -39,7 +41,7 @@ class WalletHomeConnection extends StatelessWidget {
           'assets/icon/ppc-icon-white-256.png',
           width: 20,
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         widget

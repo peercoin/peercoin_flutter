@@ -24,7 +24,7 @@ class ShareWrapper {
             AppLocalizations.instance.translate('snack_copied'),
             textAlign: TextAlign.center,
           ),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     } else {

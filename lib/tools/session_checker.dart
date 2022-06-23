@@ -7,7 +7,8 @@ import 'logger_wrapper.dart';
 Future<bool> checkSessionExpired() async {
   if (kIsWeb) {
     final _sessionExpiresAt = int.parse(
-        await FlutterSecureStorage().read(key: 'sessionExpiresAt') ?? '0');
+        await const FlutterSecureStorage().read(key: 'sessionExpiresAt') ??
+            '0');
     if (DateTime.now()
         .isAfter(DateTime.fromMillisecondsSinceEpoch(_sessionExpiresAt))) {
       //session has expired

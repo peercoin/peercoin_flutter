@@ -6,7 +6,7 @@ import 'logger_wrapper.dart';
 
 class AppLocalizations {
   AppLocalizations(this.locale);
-  final Locale fallbackLocale = Locale('en');
+  final Locale fallbackLocale = const Locale('en');
 
   static AppLocalizations? of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
@@ -14,9 +14,8 @@ class AppLocalizations {
 
   static late AppLocalizations instance;
 
-  AppLocalizations._init(Locale locale) {
+  AppLocalizations._init(this.locale) {
     instance = this;
-    this.locale = locale;
   }
 
   static const Map<String, String> availableLocales = {

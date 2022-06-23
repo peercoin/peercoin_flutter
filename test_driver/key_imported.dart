@@ -68,7 +68,7 @@ void main() {
                 'You have no active wallets',
               );
             },
-            timeout: Duration(
+            timeout: const Duration(
               minutes: 15,
             ),
           );
@@ -85,21 +85,21 @@ void main() {
               await driver.tap(find.text('Peercoin Testnet'));
               await driver.tap(
                 find.text('Okay'),
-                timeout: Duration(minutes: 15),
+                timeout: const Duration(minutes: 15),
               );
               await driver.tap(
                 find.text('Peercoin Testnet'),
-                timeout: Duration(minutes: 15),
+                timeout: const Duration(minutes: 15),
               ); //tap into wallet
               expect(await driver.getText(find.text('connected')), 'connected');
             },
-            timeout: Duration(
+            timeout: const Duration(
               minutes: 15,
             ),
           );
         },
         retry: 2,
-        timeout: Timeout.factor(2),
+        timeout: const Timeout.factor(2),
       );
 
       test('tap into sign message, select address and sign message', () async {

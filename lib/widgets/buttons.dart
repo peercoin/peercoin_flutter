@@ -8,12 +8,13 @@ class PeerButton extends StatelessWidget {
   final String text;
   final bool small;
   final bool active;
-  PeerButton({
+  const PeerButton({
+    Key? key,
     required this.text,
     required this.action,
     this.small = false,
     this.active = true,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,8 @@ class PeerButton extends StatelessWidget {
 class PeerButtonBorder extends StatelessWidget {
   final Function() action;
   final String text;
-  PeerButtonBorder({required this.text, required this.action});
+  const PeerButtonBorder({Key? key, required this.text, required this.action})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +90,12 @@ class PeerButtonSetup extends StatelessWidget {
   final String text;
   final bool active;
 
-  PeerButtonSetup({
+  const PeerButtonSetup({
+    Key? key,
     required this.text,
     required this.action,
     this.active = true,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +135,12 @@ class PeerButtonSetupLoading extends StatelessWidget {
   final String text;
   final bool loading;
 
-  PeerButtonSetupLoading({
+  const PeerButtonSetupLoading({
+    Key? key,
     required this.text,
     required this.action,
     this.loading = false,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +199,7 @@ class PeerButtonSetupBack extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_back_ios,
         color: Colors.white,
       ),

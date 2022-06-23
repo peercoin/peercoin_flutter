@@ -16,7 +16,7 @@ class LocalNotificationSettings {
   );
 
   static NotificationDetails get platformChannelSpecifics {
-    return NotificationDetails(
+    return const NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
     );

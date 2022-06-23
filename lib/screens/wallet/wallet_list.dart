@@ -31,10 +31,11 @@ class WalletListScreen extends StatefulWidget {
 
   @override
   _WalletListScreenState createState() => _WalletListScreenState();
-  WalletListScreen({
+  const WalletListScreen({
+    Key? key,
     this.fromColdStart = false,
     this.walletToOpenDirectly = '',
-  });
+  }) : super(key: key);
 }
 
 class _WalletListScreenState extends State<WalletListScreen>
@@ -52,7 +53,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   void initState() {
     //init animation controller
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
     _animation = Tween(begin: 88.0, end: 92.0).animate(_controller);
@@ -83,7 +84,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         //toggle check for "whats new" changelog
         var _packageInfo = await PackageInfo.fromPlatform();
         if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
-          await Navigator.of(context).pushNamed(Routes.ChangeLog);
+          await Navigator.of(context).pushNamed(Routes.changeLog);
           _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
         }
 
@@ -96,7 +97,7 @@ class _WalletListScreenState extends State<WalletListScreen>
       } else {
         //start session checker timer on web
         _sessionTimer = Timer.periodic(
-          Duration(minutes: 10),
+          const Duration(minutes: 10),
           (timer) async {
             if (await checkSessionExpired()) {
               Navigator.of(context).pop();
@@ -128,7 +129,8 @@ class _WalletListScreenState extends State<WalletListScreen>
         }
         final values = await _activeWallets.activeWalletsValues;
         //find default wallet
-        late var defaultWallet;
+
+        CoinWallet? defaultWallet;
         //push to wallet directly (from notification) or to default wallet
         if (widget.walletToOpenDirectly.isNotEmpty) {
           defaultWallet = values.firstWhereOrNull(
@@ -146,7 +148,7 @@ class _WalletListScreenState extends State<WalletListScreen>
           });
           if (!kIsWeb) {
             await Navigator.of(context).pushNamed(
-              Routes.WalletHome,
+              Routes.walletHome,
               arguments: values[0],
             );
           }
@@ -161,7 +163,7 @@ class _WalletListScreenState extends State<WalletListScreen>
             });
             if (!kIsWeb) {
               await Navigator.of(context).pushNamed(
-                Routes.WalletHome,
+                Routes.walletHome,
                 arguments: defaultWallet,
               );
             }
@@ -197,54 +199,54 @@ class _WalletListScreenState extends State<WalletListScreen>
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.settings_rounded),
+          icon: const Icon(Icons.settings_rounded),
           onPressed: () async {
-            await Navigator.pushNamed(context, Routes.AppSettings);
+            await Navigator.pushNamed(context, Routes.appSettings);
             setState(() {});
           },
         ),
         actions: [
           IconButton(
-            key: Key('newWalletIconButton'),
+            key: const Key('newWalletIconButton'),
             onPressed: () {
               showWalletDialog(context);
             },
-            icon: Icon(Icons.add_rounded),
+            icon: const Icon(Icons.add_rounded),
           ),
           if (kIsWeb)
             IconButton(
-              key: Key('logoutButton'),
+              key: const Key('logoutButton'),
               onPressed: () async {
                 if (_initial == false) {
                   await showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return LogoutDialog();
+                      return const LogoutDialog();
                     },
                   );
                 }
               },
-              icon: Icon(Icons.logout_rounded),
+              icon: const Icon(Icons.logout_rounded),
             )
         ],
       ),
       body: _isLoading || _initial
-          ? Center(
+          ? const Center(
               child: LoadingIndicator(),
             )
           : Container(
               width: double.infinity,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
                   AnimatedBuilder(
                     animation: _animation,
                     builder: (ctx, child) {
                       return ConstrainedBox(
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minHeight: 92,
                         ),
                         child: Container(
@@ -253,7 +255,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                           decoration: BoxDecoration(
                             color: Theme.of(context).shadowColor,
                             borderRadius:
-                                BorderRadius.all(const Radius.circular(50.0)),
+                                const BorderRadius.all(Radius.circular(50.0)),
                             border: Border.all(
                               color: Theme.of(context).backgroundColor,
                               width: 2,
@@ -289,15 +291,17 @@ class _WalletListScreenState extends State<WalletListScreen>
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   FutureBuilder(
                     future: _activeWallets.activeWalletsValues,
                     builder: (_, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Expanded(
-                          child: Center(child: LoadingIndicator()),
+                        return const Expanded(
+                          child: Center(
+                            child: LoadingIndicator(),
+                          ),
                         );
                       }
                       var listData = snapshot.data! as List;
@@ -309,7 +313,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                               Text(
                                 AppLocalizations.instance
                                     .translate('wallets_none'),
-                                key: Key('noActiveWallets'),
+                                key: const Key('noActiveWallets'),
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontStyle: FontStyle.italic,
@@ -317,7 +321,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 ),
                               ),
                               if (kIsWeb)
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                               if (kIsWeb)
@@ -331,7 +335,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                         );
                       }
                       return Expanded(
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width > 1200
                               ? MediaQuery.of(context).size.width / 2
                               : MediaQuery.of(context).size.width,
@@ -352,7 +356,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                           _isLoading = true;
                                         });
                                         await Navigator.of(context).pushNamed(
-                                          Routes.WalletHome,
+                                          Routes.walletHome,
                                           arguments: _wallet,
                                         );
                                         setState(() {
@@ -370,7 +374,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         ),
                                         title: Text(
                                           _wallet.title,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                             letterSpacing: 1.2,
@@ -381,16 +385,16 @@ class _WalletListScreenState extends State<WalletListScreen>
                                             Text(
                                               (_wallet.balance / 1000000)
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 14,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 5,
                                             ),
                                             Text(
                                               _wallet.letterCode,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -424,7 +428,7 @@ class _WalletListScreenState extends State<WalletListScreen>
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return NewWalletDialog();
+          return const NewWalletDialog();
         },
       );
     }

@@ -56,7 +56,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
           ),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -64,7 +64,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   Future<void> _showAddressSelector() async {
     final _oldAddr = _signingAddress;
     var result = await Navigator.of(context).pushNamed(
-      Routes.AddressSelector,
+      Routes.addressSelector,
       arguments: [
         await _activeWallets.getWalletAddresses(_walletName),
         _signingAddress
@@ -115,19 +115,19 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
           TextButton.icon(
               label: Text(AppLocalizations.instance
                   .translate('server_settings_alert_cancel')),
-              icon: Icon(Icons.cancel),
+              icon: const Icon(Icons.cancel),
               onPressed: () {
                 Navigator.of(context).pop(false);
               }),
           TextButton.icon(
             label:
                 Text(AppLocalizations.instance.translate('sign_reset_button')),
-            icon: Icon(Icons.check),
+            icon: const Icon(Icons.check),
             onPressed: () async {
               LoggerWrapper.logInfo(
                   'WalletSigning', '_performReset', 'reset performed');
               await Navigator.of(ctx).pushNamedAndRemoveUntil(
-                Routes.WalletSigning,
+                Routes.walletSigning,
                 (route) {
                   if (route.settings.name == '/wallet-home') {
                     return true;
@@ -173,7 +173,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
                             child: _signingAddress == ''
                                 ? Text(AppLocalizations.instance
                                     .translate('sign_step_1_description'))
@@ -193,12 +193,12 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                             small: true,
                             active: !_signingDone,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                         ],
                       ),
-                      Divider(),
+                      const Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -210,7 +210,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: Key('signMessageInput'),
+                        key: const Key('signMessageInput'),
                         controller: _messageInputController,
                         autocorrect: false,
                         readOnly: _signingDone,
@@ -240,7 +240,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                               .translate('sign_input_label'),
                         ),
                       ),
-                      Divider(),
+                      const Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -250,7 +250,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       _signature.isNotEmpty
@@ -260,10 +260,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                                   clipBoardData: _signature,
                                   child: SelectableText(
                                     _signature,
-                                    key: Key('signature'),
+                                    key: const Key('signature'),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -279,7 +279,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                               ],
                             )
                           : Container(),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       _signature.isNotEmpty
@@ -303,7 +303,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                                   _messageInputController.text.isNotEmpty,
                             ),
                       if (kIsWeb)
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                       _signingDone

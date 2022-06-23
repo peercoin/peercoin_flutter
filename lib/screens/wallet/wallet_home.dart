@@ -245,19 +245,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
     switch (value) {
       case 'import_wallet':
         Navigator.of(context)
-            .pushNamed(Routes.ImportPaperWallet, arguments: _wallet.name);
+            .pushNamed(Routes.importPaperWallet, arguments: _wallet.name);
         break;
       case 'import_wif':
         Navigator.of(context)
-            .pushNamed(Routes.ImportWif, arguments: _wallet.name);
+            .pushNamed(Routes.importWif, arguments: _wallet.name);
         break;
       case 'server_settings':
         Navigator.of(context)
-            .pushNamed(Routes.ServerSettings, arguments: _wallet.name);
+            .pushNamed(Routes.serverSettings, arguments: _wallet.name);
         break;
       case 'signing':
         Navigator.of(context)
-            .pushNamed(Routes.WalletSigning, arguments: _wallet.name);
+            .pushNamed(Routes.walletSigning, arguments: _wallet.name);
         break;
       case 'rescan':
         showDialog(
@@ -285,7 +285,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   _rescanInProgress = true;
                   //init rescan
                   await Navigator.of(context).pushNamedAndRemoveUntil(
-                    Routes.WalletImportScan,
+                    Routes.walletImportScan,
                     (_) => false,
                     arguments: _wallet.name,
                   );
@@ -459,7 +459,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         actions: _calcPopupMenuItems(context),
       ),
       body: _initial
-          ? Center(
+          ? const Center(
               child: LoadingIndicator(),
             )
           : Container(

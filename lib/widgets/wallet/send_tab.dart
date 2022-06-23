@@ -29,8 +29,11 @@ class SendTab extends StatefulWidget {
   final Function _changeIndex;
   final String? _address;
   final String? _label;
-  final _connectionState;
-  SendTab(this._changeIndex, this._address, this._label, this._connectionState);
+  final ElectrumConnectionState _connectionState;
+  const SendTab(
+      this._changeIndex, this._address, this._label, this._connectionState,
+      {Key? key})
+      : super(key: key);
 
   @override
   _SendTabState createState() => _SendTabState();
@@ -163,7 +166,7 @@ class _SendTabState extends State<SendTab> {
                       children: <TextSpan>[
                         TextSpan(
                           text: '$_displayValue ${_wallet.letterCode}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -172,18 +175,18 @@ class _SendTabState extends State<SendTab> {
                         ),
                         TextSpan(
                           text: _addressKey.currentState!.value,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     AppLocalizations.instance.translate(
                       'send_fee',
                       {
                         'amount': '${_txFee / 1000000}',
-                        'letter_code': '${_wallet.letterCode}'
+                        'letter_code': _wallet.letterCode
                       },
                     ),
                   ),
@@ -193,7 +196,7 @@ class _SendTabState extends State<SendTab> {
                         'send_dust',
                         {
                           'amount': '${_correctedDust / 1000000}',
-                          'letter_code': '${_wallet.letterCode}'
+                          'letter_code': _wallet.letterCode
                         },
                       ),
                       style: TextStyle(color: Theme.of(context).errorColor),
@@ -203,11 +206,11 @@ class _SendTabState extends State<SendTab> {
                         'send_total',
                         {
                           'amount': '${_totalValue / 1000000}',
-                          'letter_code': '${_wallet.letterCode}'
+                          'letter_code': _wallet.letterCode
                         },
                       ),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(height: 20),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 20),
                   PeerButton(
                     text: AppLocalizations.instance
                         .translate('send_confirm_send'),
@@ -411,8 +414,8 @@ class _SendTabState extends State<SendTab> {
                             getValidator(_availableCoin.fractions),
                           ),
                         ],
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.money,
@@ -489,11 +492,9 @@ class _SendTabState extends State<SendTab> {
                               }) {
                                 var utf8Length =
                                     utf8.encode(opReturnController.text).length;
-                                return Container(
-                                  child: Text(
-                                    '$utf8Length/$maxLength',
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
+                                return Text(
+                                  '$utf8Length/$maxLength',
+                                  style: Theme.of(context).textTheme.caption,
                                 );
                               },
                               inputFormatters: [
@@ -533,13 +534,13 @@ class _SendTabState extends State<SendTab> {
                           AppLocalizations.instance.translate(
                             'send_add_metadata',
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1.4,
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       PeerButtonBorder(
                         text: AppLocalizations.instance.translate(
                           'send_empty',
@@ -549,7 +550,7 @@ class _SendTabState extends State<SendTab> {
                               (_wallet.balance / 1000000).toString();
                         },
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (_appSettings.camerasAvailble)
                         PeerButtonBorder(
                           text: AppLocalizations.instance.translate(
@@ -557,13 +558,13 @@ class _SendTabState extends State<SendTab> {
                           ),
                           action: () async {
                             final result = await Navigator.of(context)
-                                .pushNamed(Routes.QRScan,
+                                .pushNamed(Routes.qrScan,
                                     arguments: AppLocalizations.instance
                                         .translate('scan_qr'));
                             if (result != null) parseQrResult(result as String);
                           },
                         ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       PeerButton(
                         text: AppLocalizations.instance.translate('send'),
                         action: () async {
@@ -598,7 +599,7 @@ class _SendTabState extends State<SendTab> {
                           }
                         },
                       ),
-                      if (!kIsWeb) SizedBox(height: 10),
+                      if (!kIsWeb) const SizedBox(height: 10),
                       if (!kIsWeb)
                         Text(
                           AppLocalizations.instance.translate(

@@ -137,7 +137,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                   var prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('setupFinished', true);
                   await Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
+                      .pushNamedAndRemoveUntil(Routes.walletList, (_) => false);
                 },
               ),
               const SizedBox(

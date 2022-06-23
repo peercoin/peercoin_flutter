@@ -87,7 +87,7 @@ class _AboutScreenState extends State<AboutScreen> {
                             const Divider(),
                             TextButton(
                               onPressed: () => Navigator.of(context)
-                                  .pushNamed(Routes.ChangeLog),
+                                  .pushNamed(Routes.changeLog),
                               child: Text(
                                 AppLocalizations.instance
                                     .translate('changelog_appbar'),

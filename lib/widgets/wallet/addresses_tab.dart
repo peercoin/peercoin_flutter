@@ -23,7 +23,10 @@ class AddressTab extends StatefulWidget {
   final String title;
   final List<WalletAddress>? _walletAddresses;
   final Function changeIndex;
-  AddressTab(this.name, this.title, this._walletAddresses, this.changeIndex);
+  const AddressTab(
+      this.name, this.title, this._walletAddresses, this.changeIndex,
+      {Key? key})
+      : super(key: key);
   @override
   _AddressTabState createState() => _AddressTabState();
 }
@@ -47,7 +50,7 @@ class _AddressTabState extends State<AddressTab> {
   final Map _isWatchedMap = {};
   late ActiveWallets _activeWallets;
   late ElectrumConnection _connection;
-  var _listenedAddresses;
+  late Iterable _listenedAddresses;
 
   @override
   void didChangeDependencies() async {
@@ -85,23 +88,21 @@ class _AddressTabState extends State<AddressTab> {
     var _filteredListReceive = <WalletAddress>[];
     var _filteredListSend = <WalletAddress>[];
 
-    widget._walletAddresses!.forEach(
-      (e) {
-        if (e.isOurs == true || e.isOurs == null) {
-          _filteredListReceive.add(e);
-          //fake watch change address and addresses with balance
-          if (_addressBalanceMap[e.address] != null ||
-              e.address == _activeWallets.getUnusedAddress ||
-              e.isWatched == true) {
-            _isWatchedMap[e.address] = true;
-          } else {
-            _isWatchedMap[e.address] = false;
-          }
+    for (var e in widget._walletAddresses!) {
+      if (e.isOurs == true || e.isOurs == null) {
+        _filteredListReceive.add(e);
+        //fake watch change address and addresses with balance
+        if (_addressBalanceMap[e.address] != null ||
+            e.address == _activeWallets.getUnusedAddress ||
+            e.isWatched == true) {
+          _isWatchedMap[e.address] = true;
         } else {
-          _filteredListSend.add(e);
+          _isWatchedMap[e.address] = false;
         }
-      },
-    );
+      } else {
+        _filteredListSend.add(e);
+      }
+    }
 
     //apply filters to receive list
     var _toRemove = [];
@@ -237,14 +238,14 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () async {
-                var _wif;
+                String _wif;
                 if (address.wif!.isEmpty || address.wif == null) {
                   _wif = await context.read<ActiveWallets>().getWif(
                         _availableCoin.name,
                         address.address,
                       );
                 } else {
-                  _wif = address.wif;
+                  _wif = address.wif!;
                 }
                 Navigator.of(context).pop();
                 WalletHomeQr.showQrDialog(context, _wif);
@@ -261,7 +262,7 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> _toggleWatched(WalletAddress addr) async {
-    var snackText;
+    String snackText;
     //addresses with balance or currentChangeAddress can not be unwatched
     if (_addressBalanceMap[addr.address] != null ||
         addr.address == _activeWallets.getUnusedAddress) {
@@ -301,7 +302,7 @@ class _AddressTabState extends State<AddressTab> {
           ),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 5),
+        duration: const Duration(seconds: 5),
       ),
     );
   }
@@ -408,7 +409,7 @@ class _AddressTabState extends State<AddressTab> {
     for (var addr in _filteredSend) {
       listSend.add(
         Align(
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width > 1200
                 ? MediaQuery.of(context).size.width / 3
                 : MediaQuery.of(context).size.width,
@@ -419,7 +420,7 @@ class _AddressTabState extends State<AddressTab> {
                 child: ClipRect(
                   child: Slidable(
                     key: Key(addr.address),
-                    actionPane: SlidableScrollActionPane(),
+                    actionPane: const SlidableScrollActionPane(),
                     secondaryActions: <Widget>[
                       IconSlideAction(
                         caption: AppLocalizations.instance
@@ -457,7 +458,8 @@ class _AddressTabState extends State<AddressTab> {
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_delete'),
                         color: Theme.of(context).errorColor,
-                        iconWidget: Icon(Icons.delete, color: Colors.white),
+                        iconWidget:
+                            const Icon(Icons.delete, color: Colors.white),
                         onTap: () async {
                           await showDialog(
                             context: context,
@@ -470,14 +472,14 @@ class _AddressTabState extends State<AddressTab> {
                                     label: Text(AppLocalizations.instance
                                         .translate(
                                             'server_settings_alert_cancel')),
-                                    icon: Icon(Icons.cancel),
+                                    icon: const Icon(Icons.cancel),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     }),
                                 TextButton.icon(
                                   label: Text(AppLocalizations.instance
                                       .translate('jail_dialog_button')),
-                                  icon: Icon(Icons.check),
+                                  icon: const Icon(Icons.check),
                                   onPressed: () {
                                     context
                                         .read<ActiveWallets>()
@@ -490,7 +492,7 @@ class _AddressTabState extends State<AddressTab> {
                                               'addressbook_dialog_remove_snack'),
                                           textAlign: TextAlign.center,
                                         ),
-                                        duration: Duration(seconds: 5),
+                                        duration: const Duration(seconds: 5),
                                       ),
                                     );
                                     Navigator.of(context).pop();
@@ -506,7 +508,7 @@ class _AddressTabState extends State<AddressTab> {
                     child: ListTile(
                       leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Icon(Icons.swipe_left),
                         ],
                       ),
@@ -519,7 +521,7 @@ class _AddressTabState extends State<AddressTab> {
                       title: Center(
                         child: Text(
                           addr.addressBookName ?? '-',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
                           ),
@@ -537,7 +539,7 @@ class _AddressTabState extends State<AddressTab> {
     for (var addr in _filteredReceive) {
       listReceive.add(
         Align(
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width > 1200
                 ? MediaQuery.of(context).size.width / 3
                 : MediaQuery.of(context).size.width,
@@ -548,7 +550,7 @@ class _AddressTabState extends State<AddressTab> {
                 child: ClipRect(
                   child: Slidable(
                     key: Key(addr.address),
-                    actionPane: SlidableScrollActionPane(),
+                    actionPane: const SlidableScrollActionPane(),
                     secondaryActions: <Widget>[
                       IconSlideAction(
                         caption: AppLocalizations.instance
@@ -606,7 +608,7 @@ class _AddressTabState extends State<AddressTab> {
                     child: ListTile(
                       leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Icon(Icons.swipe_left),
                         ],
                       ),
@@ -619,7 +621,7 @@ class _AddressTabState extends State<AddressTab> {
                       title: Center(
                         child: Text(
                           _renderLabel(addr),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
                           ),
@@ -668,15 +670,13 @@ class _AddressTabState extends State<AddressTab> {
                         backgroundColor: Theme.of(context).backgroundColor,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity:
-                            VisualDensity(horizontal: 0.0, vertical: -4),
-                        label: Container(
-                          child: AutoSizeText(
-                            AppLocalizations.instance
-                                .translate('addressbook_hide_change'),
-                            minFontSize: 10,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
+                            const VisualDensity(horizontal: 0.0, vertical: -4),
+                        label: AutoSizeText(
+                          AppLocalizations.instance
+                              .translate('addressbook_hide_change'),
+                          minFontSize: 10,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                         selected: _showChangeAddresses,
@@ -688,22 +688,20 @@ class _AddressTabState extends State<AddressTab> {
                         },
                       ),
                       if (kIsWeb)
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                       ChoiceChip(
                         backgroundColor: Theme.of(context).backgroundColor,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity:
-                            VisualDensity(horizontal: 0.0, vertical: -4),
-                        label: Container(
-                          child: AutoSizeText(
-                            AppLocalizations.instance
-                                .translate('addressbook_hide_unwatched'),
-                            minFontSize: 10,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
+                            const VisualDensity(horizontal: 0.0, vertical: -4),
+                        label: AutoSizeText(
+                          AppLocalizations.instance
+                              .translate('addressbook_hide_unwatched'),
+                          minFontSize: 10,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                         selected: _showUnwatched,
@@ -719,8 +717,9 @@ class _AddressTabState extends State<AddressTab> {
                         child: ChoiceChip(
                           backgroundColor: Theme.of(context).backgroundColor,
                           selectedColor: Theme.of(context).shadowColor,
-                          visualDensity:
-                              VisualDensity(horizontal: 0.0, vertical: -4),
+                          visualDensity: const VisualDensity(
+                              horizontal: 0.0, vertical: -4),
+                          // ignore: avoid_unnecessary_containers
                           label: Container(
                             child: AutoSizeText(
                               _showLabel
@@ -754,17 +753,15 @@ class _AddressTabState extends State<AddressTab> {
                       ChoiceChip(
                           backgroundColor: Theme.of(context).backgroundColor,
                           selectedColor: Theme.of(context).shadowColor,
-                          visualDensity:
-                              VisualDensity(horizontal: 0.0, vertical: -4),
-                          label: Container(
-                            child: AutoSizeText(
-                              AppLocalizations.instance
-                                  .translate('addressbook_hide_used'),
-                              textAlign: TextAlign.center,
-                              minFontSize: 10,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
+                          visualDensity: const VisualDensity(
+                              horizontal: 0.0, vertical: -4),
+                          label: AutoSizeText(
+                            AppLocalizations.instance
+                                .translate('addressbook_hide_used'),
+                            textAlign: TextAlign.center,
+                            minFontSize: 10,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                           selected: _showUsed,
@@ -779,17 +776,15 @@ class _AddressTabState extends State<AddressTab> {
                         child: ChoiceChip(
                           backgroundColor: Theme.of(context).backgroundColor,
                           selectedColor: Theme.of(context).shadowColor,
-                          visualDensity:
-                              VisualDensity(horizontal: 0.0, vertical: -4),
-                          label: Container(
-                            child: AutoSizeText(
-                              AppLocalizations.instance
-                                  .translate('addressbook_hide_empty'),
-                              textAlign: TextAlign.center,
-                              minFontSize: 10,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
+                          visualDensity: const VisualDensity(
+                              horizontal: 0.0, vertical: -4),
+                          label: AutoSizeText(
+                            AppLocalizations.instance
+                                .translate('addressbook_hide_empty'),
+                            textAlign: TextAlign.center,
+                            minFontSize: 10,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                           selected: _showEmpty,
@@ -805,7 +800,7 @@ class _AddressTabState extends State<AddressTab> {
                   ),
                 ],
               ),
-              SizedBox(height: 20)
+              const SizedBox(height: 20)
             ],
           )
         ],
@@ -839,7 +834,7 @@ class _AddressTabState extends State<AddressTab> {
                                 hintText: AppLocalizations.instance
                                     .translate('addressbook_search'),
                                 suffixIcon: IconButton(
-                                  icon: Center(child: Icon(Icons.clear)),
+                                  icon: const Center(child: Icon(Icons.clear)),
                                   iconSize: 24,
                                   onPressed: () {
                                     _search = false;
@@ -953,7 +948,7 @@ class _AddressTabState extends State<AddressTab> {
                 delegate: SliverChildListDelegate(listSend),
               ),
               sliverToBoxAdapter,
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(height: 10),
               ),
               SliverList(

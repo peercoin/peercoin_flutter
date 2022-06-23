@@ -55,7 +55,7 @@ class _AuthJailState extends State<AuthJailScreen> {
             Provider.of<EncryptedBox>(context, listen: false);
         await encrytpedStorage.setFailedAuths(0);
         if (widget.jailedFromHome == true || _jailedFromRoute == true) {
-          await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+          await Navigator.of(context).pushReplacementNamed(Routes.walletList);
         } else {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }

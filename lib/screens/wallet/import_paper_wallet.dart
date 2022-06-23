@@ -87,7 +87,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void createQrScanner(String keyType) async {
     final result = await Navigator.of(context).pushNamed(
-      Routes.QRScan,
+      Routes.qrScan,
       arguments: AppLocalizations.instance.translate(
         keyType == 'pub'
             ? 'paperwallet_step_1_text'
@@ -373,7 +373,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     SizedBox(
                       height: 30,
                       child: _balanceLoading == true
-                          ? LoadingIndicator()
+                          ? const LoadingIndicator()
                           : Text(_balance),
                     ),
                     const Divider(),

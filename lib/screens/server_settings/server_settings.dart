@@ -87,7 +87,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
             child: IconButton(
               onPressed: () async {
                 var result = await Navigator.of(context)
-                    .pushNamed(Routes.ServerAdd, arguments: _walletName);
+                    .pushNamed(Routes.serverAdd, arguments: _walletName);
                 if (result == true) {
                   await loadServers();
                 }

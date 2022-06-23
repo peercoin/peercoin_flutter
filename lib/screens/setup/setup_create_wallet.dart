@@ -148,7 +148,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
 
                 await Navigator.pushNamed(
                   context,
-                  Routes.SetupAuth,
+                  Routes.setupAuth,
                 );
               },
               child: Text(
@@ -173,7 +173,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
           height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: _isLoading
-              ? Center(
+              ? const Center(
                   child: LoadingIndicator(),
                 )
               : Column(

@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 
 class LoggerWrapper {
   static void logInfo(String tag, String subTag, String logMessage) {
     if (kIsWeb) {
-      print('$tag $subTag $logMessage');
+      log('$tag $subTag $logMessage');
       return;
     }
 
@@ -17,7 +19,7 @@ class LoggerWrapper {
 
   static void logError(String tag, String subTag, String logMessage) {
     if (kIsWeb) {
-      print('$tag $subTag $logMessage');
+      log('$tag $subTag $logMessage');
       return;
     }
 
@@ -30,7 +32,7 @@ class LoggerWrapper {
 
   static void logWarn(String tag, String subTag, String logMessage) {
     if (kIsWeb) {
-      print('$tag $subTag $logMessage');
+      log('$tag $subTag $logMessage');
       return;
     }
 

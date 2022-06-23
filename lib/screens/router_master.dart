@@ -32,7 +32,7 @@ class _RouterMasterState extends State<RouterMaster> {
         //setup is finished and setupOnly screen has been called
         Future.delayed(
           const Duration(seconds: 0),
-          () => Navigator.of(context).pushReplacementNamed(Routes.WalletList),
+          () => Navigator.of(context).pushReplacementNamed(Routes.walletList),
         );
       } else if (!setupFinished &&
           widget.routeType == RouteTypes.requiresSetupFinished) {

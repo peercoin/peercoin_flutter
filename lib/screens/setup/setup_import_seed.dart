@@ -54,7 +54,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     await _activeWallets.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
-    await Navigator.of(context).pushNamed(Routes.SetupAuth);
+    await Navigator.of(context).pushNamed(Routes.setupAuth);
     setState(() {
       _loading = false;
     });

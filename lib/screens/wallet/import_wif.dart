@@ -47,7 +47,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
   void createQrScanner(String keyType) async {
     final result = await Navigator.of(context).pushNamed(
-      Routes.QRScan,
+      Routes.qrScan,
       arguments: AppLocalizations.instance.translate('paperwallet_step_2_text'),
     );
     if (result != null) {

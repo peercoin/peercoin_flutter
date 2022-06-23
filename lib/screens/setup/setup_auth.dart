@@ -163,7 +163,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                       );
                       Navigator.pop(context);
                       await Navigator.of(context)
-                          .pushNamed(Routes.SetupDataFeeds);
+                          .pushNamed(Routes.setupDataFeeds);
                     },
                   );
                 },

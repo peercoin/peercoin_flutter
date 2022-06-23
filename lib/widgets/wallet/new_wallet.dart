@@ -11,6 +11,8 @@ import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
 
 class NewWalletDialog extends StatefulWidget {
+  const NewWalletDialog({Key? key}) : super(key: key);
+
   @override
   _NewWalletDialogState createState() => _NewWalletDialogState();
 }
@@ -38,7 +40,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       var prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('importedSeed') == true) {
         await Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.WalletImportScan,
+          Routes.walletImportScan,
           (_) => false,
           arguments: _coin,
         );
@@ -53,7 +55,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
               : AppLocalizations.instance.translate('add_coin_failed'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ));
     }
   }
@@ -76,13 +78,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     var activeWalletList =
         await Provider.of<ActiveWallets>(context, listen: false)
             .activeWalletsKeys;
-    activeWalletList.forEach((element) {
+    for (var element in activeWalletList) {
       if (availableCoins.keys.contains(element)) {
         setState(() {
           activeCoins.add(element);
         });
       }
-    });
+    }
 
     super.didChangeDependencies();
   }
