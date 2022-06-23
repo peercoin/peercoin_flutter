@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -82,6 +83,8 @@ class BackgroundSync {
   }
 
   static Future<void> executeSync({bool fromScan = false}) async {
+    if (kIsWeb) return;
+
     //this static method can't access the providers we already have so we have to re-invent some things here...
     Uint8List _encryptionKey;
     var _secureStorage = const FlutterSecureStorage();
