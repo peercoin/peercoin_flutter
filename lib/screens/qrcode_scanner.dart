@@ -21,8 +21,8 @@ class _QRScannerState extends State<QRScanner> {
     super.reassemble();
     if (Platform.isAndroid) {
       controller.pauseCamera();
+      controller.resumeCamera();
     }
-    controller.resumeCamera();
   }
 
   @override
@@ -77,13 +77,21 @@ class _QRScannerState extends State<QRScanner> {
 
   void _onQRViewCreated(
     QRViewController controller,
-  ) {
+  ) async {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) async {
-      controller.dispose();
-      await Navigator.maybeOf(context)!.maybePop(scanData.code);
-    });
+
+    if (Platform.isAndroid) {
+      await controller.pauseCamera();
+      await controller.resumeCamera();
+    }
+
+    controller.scannedDataStream.listen(
+      (scanData) async {
+        controller.dispose();
+        await Navigator.maybeOf(context)!.maybePop(scanData.code);
+      },
+    );
   }
 }

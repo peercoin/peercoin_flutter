@@ -33,6 +33,11 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
     });
   }
 
+  double calcHeight(BuildContext context) {
+    if (MediaQuery.of(context).size.height < 800) return 900;
+    return SetupScreen.calcContainerHeight(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,9 +47,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.width <= 350
-              ? 800
-              : SetupScreen.calcContainerHeight(context),
+          height: calcHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
