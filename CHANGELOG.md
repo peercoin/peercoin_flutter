@@ -1,3 +1,6 @@
+### **0.9.6** (2022-xx-xx)
+*
+
 ### **0.9.5** (2022-06-24)
 * Setup legal: fix container heights on smaller screens
 * Performance upgrades under the hood
