@@ -1,9 +1,6 @@
-### **0.9.5** (2022-xx-xx)
-* Performance upgrades under the hood
-
-### **0.9.5** (2022-06-23)
-* Fix camera issues on some Android phones
+### **0.9.5** (2022-06-24)
 * Setup legal: fix container heights on smaller screens
+* Performance upgrades under the hood
 
 ### **0.9.4** (2022-06-20)
 * Signing messages is now available for each wallet
