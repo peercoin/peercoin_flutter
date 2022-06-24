@@ -40,6 +40,7 @@ class WalletListScreen extends StatefulWidget {
 
 class _WalletListScreenState extends State<WalletListScreen>
     with SingleTickerProviderStateMixin {
+  bool _isLoading = false;
   bool _initial = true;
   late ActiveWallets _activeWallets;
   late Animation<double> _animation;
@@ -142,6 +143,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         if (values.length == 1) {
           //only one wallet available, pushing to that one
           setState(() {
+            _isLoading = true;
             _initial = false;
           });
           if (!kIsWeb) {
@@ -150,9 +152,13 @@ class _WalletListScreenState extends State<WalletListScreen>
               arguments: values[0],
             );
           }
+          setState(() {
+            _isLoading = false;
+          });
         } else if (values.length > 1) {
           if (defaultWallet != null) {
             setState(() {
+              _isLoading = true;
               _initial = false;
             });
             if (!kIsWeb) {
@@ -161,6 +167,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                 arguments: defaultWallet,
               );
             }
+            setState(() {
+              _isLoading = false;
+            });
           }
         }
       }
@@ -224,180 +233,185 @@ class _WalletListScreenState extends State<WalletListScreen>
             )
         ],
       ),
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (ctx, child) {
-                return ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minHeight: 92,
-                  ),
-                  child: Container(
-                    height: _animation.value,
-                    width: _animation.value,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).shadowColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(50.0)),
-                      border: Border.all(
-                        color: Theme.of(context).backgroundColor,
-                        width: 2,
-                      ),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (!kIsWeb) {
-                          ShareWrapper.share(
-                            context: context,
-                            message: Platform.isAndroid
-                                ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
-                                : 'https://apps.apple.com/app/peercoin-wallet/id1571755170',
-                          );
-                        }
-                      },
-                      child: Image.asset(
-                        'assets/icon/ppc-logo.png',
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text(
-                'Peercoin Wallet',
-                style: TextStyle(
-                  letterSpacing: 1.4,
-                  fontSize: 24,
-                  color: Theme.of(context).backgroundColor,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            FutureBuilder(
-              future: _activeWallets.activeWalletsValues,
-              builder: (_, snapshot) {
-                if (snapshot.data == null) {
-                  return const Expanded(
-                    child: Center(
-                      child: LoadingIndicator(),
-                    ),
-                  );
-                }
-                var listData = snapshot.data! as List;
-                if (listData.isEmpty) {
-                  return Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppLocalizations.instance.translate('wallets_none'),
-                          key: const Key('noActiveWallets'),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            color: Theme.of(context).backgroundColor,
+      body: _isLoading || _initial
+          ? const Center(
+              child: LoadingIndicator(),
+            )
+          : Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (ctx, child) {
+                      return ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minHeight: 92,
+                        ),
+                        child: Container(
+                          height: _animation.value,
+                          width: _animation.value,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).shadowColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(50.0)),
+                            border: Border.all(
+                              color: Theme.of(context).backgroundColor,
+                              width: 2,
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (!kIsWeb) {
+                                ShareWrapper.share(
+                                  context: context,
+                                  message: Platform.isAndroid
+                                      ? 'https://play.google.com/store/apps/details?id=com.coinerella.peercoin'
+                                      : 'https://apps.apple.com/app/peercoin-wallet/id1571755170',
+                                );
+                              }
+                            },
+                            child: Image.asset(
+                              'assets/icon/ppc-logo.png',
+                            ),
                           ),
                         ),
-                        if (kIsWeb)
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        if (kIsWeb)
-                          PeerButton(
-                            text: AppLocalizations.instance
-                                .translate('add_new_wallet'),
-                            action: () => showWalletDialog(context),
-                          )
-                      ],
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text(
+                      'Peercoin Wallet',
+                      style: TextStyle(
+                        letterSpacing: 1.4,
+                        fontSize: 24,
+                        color: Theme.of(context).backgroundColor,
+                      ),
                     ),
-                  );
-                }
-                return Expanded(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width > 1200
-                        ? MediaQuery.of(context).size.width / 2
-                        : MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      itemCount: listData.length,
-                      itemBuilder: (ctx, i) {
-                        CoinWallet _wallet = listData[i];
-                        return Card(
-                          elevation: 0,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 16),
-                          color: Theme.of(context).backgroundColor,
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  FutureBuilder(
+                    future: _activeWallets.activeWalletsValues,
+                    builder: (_, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Expanded(
+                          child: Center(child: LoadingIndicator()),
+                        );
+                      }
+                      var listData = snapshot.data! as List;
+                      if (listData.isEmpty) {
+                        return Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.of(context).pushNamed(
-                                    Routes.walletHome,
-                                    arguments: _wallet,
-                                  );
-                                },
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    child: Image.asset(
-                                        AvailableCoins()
-                                            .getSpecificCoin(_wallet.name)
-                                            .iconPath,
-                                        width: 20),
-                                  ),
-                                  title: Text(
-                                    _wallet.title,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.2,
-                                    ),
-                                  ),
-                                  subtitle: Row(
-                                    children: [
-                                      Text(
-                                        (_wallet.balance / 1000000).toString(),
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        _wallet.letterCode,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  trailing: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
+                              Text(
+                                AppLocalizations.instance
+                                    .translate('wallets_none'),
+                                key: const Key('noActiveWallets'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                  color: Theme.of(context).backgroundColor,
                                 ),
                               ),
+                              if (kIsWeb)
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              if (kIsWeb)
+                                PeerButton(
+                                  text: AppLocalizations.instance
+                                      .translate('add_new_wallet'),
+                                  action: () => showWalletDialog(context),
+                                )
                             ],
                           ),
                         );
-                      },
-                    ),
+                      }
+                      return Expanded(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 2
+                              : MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            itemCount: listData.length,
+                            itemBuilder: (ctx, i) {
+                              CoinWallet _wallet = listData[i];
+                              return Card(
+                                elevation: 0,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                color: Theme.of(context).backgroundColor,
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        await Navigator.of(context).pushNamed(
+                                          Routes.walletHome,
+                                          arguments: _wallet,
+                                        );
+                                      },
+                                      child: ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          child: Image.asset(
+                                              AvailableCoins()
+                                                  .getSpecificCoin(_wallet.name)
+                                                  .iconPath,
+                                              width: 20),
+                                        ),
+                                        title: Text(
+                                          _wallet.title,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1.2,
+                                          ),
+                                        ),
+                                        subtitle: Row(
+                                          children: [
+                                            Text(
+                                              (_wallet.balance / 1000000)
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              _wallet.letterCode,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
