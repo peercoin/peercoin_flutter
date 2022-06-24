@@ -26,6 +26,8 @@ import '../../widgets/settings/settings_price_ticker.dart';
 import '../about.dart';
 
 class AppSettingsScreen extends StatefulWidget {
+  const AppSettingsScreen({Key? key}) : super(key: key);
+
   @override
   _AppSettingsScreenState createState() => _AppSettingsScreenState();
 }
@@ -83,7 +85,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   Future<void> initDebugLogHandler() async {
     FlutterLogs.channel.setMethodCallHandler((call) async {
       if (call.method == 'logsExported') {
-        var zipName = '${call.arguments.toString()}';
+        var zipName = call.arguments.toString();
         Directory? externalDirectory;
 
         if (Platform.isIOS) {
@@ -154,7 +156,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,
       ),
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     ));
   }
 
@@ -169,7 +171,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,
       ),
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     ));
   }
 
@@ -207,7 +209,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,
       ),
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     ));
   }
 
@@ -234,11 +236,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
-              icon: Icon(Icons.info_rounded),
+              icon: const Icon(Icons.info_rounded),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AboutScreen()),
+                  MaterialPageRoute(builder: (context) => const AboutScreen()),
                 );
               },
             ),
@@ -257,7 +259,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         .translate('app_settings_language'),
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  childrenPadding: EdgeInsets.all(10),
+                  childrenPadding: const EdgeInsets.all(10),
                   children: AppLocalizations.availableLocales.keys.map((lang) {
                     return InkWell(
                       onTap: () => saveLang(lang),
@@ -280,7 +282,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           .translate('app_settings_default_wallet'),
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    childrenPadding: EdgeInsets.all(10),
+                    childrenPadding: const EdgeInsets.all(10),
                     children: generateDefaultWallets(),
                   ),
                 ExpansionTile(
@@ -288,7 +290,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         AppLocalizations.instance
                             .translate('app_settings_auth_header'),
                         style: Theme.of(context).textTheme.headline6),
-                    childrenPadding: EdgeInsets.all(10),
+                    childrenPadding: const EdgeInsets.all(10),
                     children: [
                       _biometricsRevealed == false
                           ? PeerButton(
@@ -310,7 +312,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         AppLocalizations.instance
                             .translate('app_settings_seed'),
                         style: Theme.of(context).textTheme.headline6),
-                    childrenPadding: EdgeInsets.all(10),
+                    childrenPadding: const EdgeInsets.all(10),
                     children: [
                       _seedPhrase == ''
                           ? PeerButton(
@@ -321,7 +323,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             )
                           : Column(
                               children: [
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 DoubleTabToClipboard(
                                   clipBoardData: _seedPhrase,
                                   child: SelectableText(
@@ -329,7 +331,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 if (!kIsWeb)
                                   PeerButton(
                                     action: () => ShareWrapper.share(
@@ -346,7 +348,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   title: Text(
                       AppLocalizations.instance.translate('app_settings_theme'),
                       style: Theme.of(context).textTheme.headline6),
-                  childrenPadding: EdgeInsets.all(10),
+                  childrenPadding: const EdgeInsets.all(10),
                   children: _availableThemes.keys.map((theme) {
                     return InkWell(
                       onTap: () => saveTheme(theme, _availableThemes[theme]),
@@ -371,7 +373,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         .translate('app_settings_price_feed'),
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  childrenPadding: EdgeInsets.all(10),
+                  childrenPadding: const EdgeInsets.all(10),
                   children: [SettingsPriceTicker(_settings, saveSnack)],
                 ),
                 if (!kIsWeb)
@@ -381,13 +383,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           .translate('app_settings_notifications'),
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    childrenPadding: EdgeInsets.all(10),
+                    childrenPadding: const EdgeInsets.all(10),
                     children: [
                       PeerButton(
                         text: AppLocalizations.instance.translate(
                             'app_settings_notifications_open_button'),
                         action: () => Navigator.of(context).pushNamed(
-                          Routes.AppSettingsNotifications,
+                          Routes.appSettingsNotifications,
                         ),
                       )
                     ],
@@ -398,14 +400,14 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       AppLocalizations.instance.translate('app_settings_logs'),
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    childrenPadding: EdgeInsets.all(10),
+                    childrenPadding: const EdgeInsets.all(10),
                     children: [
                       Text(
                         AppLocalizations.instance
                             .translate('app_settings_description'),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('app_settings_logs_export'),

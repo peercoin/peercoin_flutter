@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:html';
 
 import 'package:flutter/material.dart';
@@ -55,7 +57,7 @@ class LogoutDialog extends StatelessWidget {
     await preferences.clear();
     LoggerWrapper.logInfo('Logout', 'clearData', 'SharedPreferences cleared');
 
-    var storage = FlutterSecureStorage();
+    var storage = const FlutterSecureStorage();
     await storage.deleteAll();
     LoggerWrapper.logInfo(
       'Logout',
@@ -69,7 +71,7 @@ class LogoutDialog extends StatelessWidget {
     window.indexedDB?.deleteDatabase('optionsbox');
     window.indexedDB?.deleteDatabase('serverbox-peercoin');
     window.indexedDB?.deleteDatabase('serverbox-peercointestnet');
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     LoggerWrapper.logInfo('Logout', 'clearData', 'Hive Storage cleared');
   }

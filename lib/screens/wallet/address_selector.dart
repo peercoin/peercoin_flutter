@@ -34,7 +34,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
   }
 
   void applyFilter([String? searchedKey]) {
-    var _filteredList;
+    List<WalletAddress> _filteredList;
     if (_initial) {
       setState(
         () {
@@ -98,7 +98,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     ).toList();
 
     return [
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       ...inkwells,
@@ -117,7 +117,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded),
+            icon: const Icon(Icons.arrow_back_rounded),
             tooltip: 'Back',
             onPressed: () {
               Navigator.pop(context, _selectedAddress);
@@ -135,38 +135,35 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                       onPressed: () => setState(() {
                         _searchActive = true;
                       }),
-                      icon: Icon(Icons.search),
+                      icon: const Icon(Icons.search),
                     )
                   ],
                 )
               : Form(
-                  key: Key('selectorSearchBar'),
-                  child: Container(
-                    child: TextFormField(
-                      autofocus: true,
-                      style:
-                          TextStyle(color: Theme.of(context).backgroundColor),
-                      key: Key('selectorSearchKey'),
-                      textInputAction: TextInputAction.done,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.instance
-                            .translate('addressbook_search'),
-                        hintStyle: TextStyle(
+                  key: const Key('selectorSearchBar'),
+                  child: TextFormField(
+                    autofocus: true,
+                    style: TextStyle(color: Theme.of(context).backgroundColor),
+                    key: const Key('selectorSearchKey'),
+                    textInputAction: TextInputAction.done,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.instance
+                          .translate('addressbook_search'),
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () => setState(() {
+                          _searchActive = false;
+                        }),
+                        icon: Icon(
+                          Icons.close,
                           color: Theme.of(context).backgroundColor,
                         ),
-                        suffixIcon: IconButton(
-                          onPressed: () => setState(() {
-                            _searchActive = false;
-                          }),
-                          icon: Icon(
-                            Icons.close,
-                            color: Theme.of(context).backgroundColor,
-                          ),
-                        ),
                       ),
-                      onChanged: (searchKey) => applyFilter(searchKey),
                     ),
+                    onChanged: (searchKey) => applyFilter(searchKey),
                   ),
                 ),
         ),

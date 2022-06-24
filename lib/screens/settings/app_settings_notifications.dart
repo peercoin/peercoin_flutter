@@ -65,9 +65,9 @@ class _AppSettingsNotificationsScreenState
                 _appSettings.setNotificationInterval(30);
 
                 var walletList = <String>[];
-                _availableWallets.forEach((element) {
+                for (var element in _availableWallets) {
                   walletList.add(element.letterCode);
-                });
+                }
                 _appSettings.setNotificationActiveWallets(walletList);
 
                 await BackgroundSync.init(
@@ -97,8 +97,8 @@ class _AppSettingsNotificationsScreenState
               .translate('app_settings_notifications_not_enabled'),
           style: Theme.of(context).textTheme.headline6,
         ),
-        SizedBox(height: 10),
-        Divider(),
+        const SizedBox(height: 10),
+        const Divider(),
         PeerButton(
           text: AppLocalizations.instance
               .translate('app_settings_notifications_enable_button'),
@@ -117,7 +117,7 @@ class _AppSettingsNotificationsScreenState
           AppLocalizations.instance.translate('app_settings_saved_snack'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -130,7 +130,7 @@ class _AppSettingsNotificationsScreenState
               .translate('app_settings_notifications_heading_manage_wallets'),
           style: Theme.of(context).textTheme.headline6,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Column(
           children: _availableWallets.map((wallet) {
             return SwitchListTile(
@@ -151,15 +151,15 @@ class _AppSettingsNotificationsScreenState
             );
           }).toList(),
         ),
-        SizedBox(height: 10),
-        Divider(),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
+        const Divider(),
+        const SizedBox(height: 10),
         Text(
           AppLocalizations.instance
               .translate('app_settings_notifications_heading_interval'),
           style: Theme.of(context).textTheme.headline6,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           AppLocalizations.instance
               .translate('app_settings_notifications_hint_sync_1', {
@@ -191,9 +191,9 @@ class _AppSettingsNotificationsScreenState
               fontSize: 12,
               color: Theme.of(context).colorScheme.secondary,
             )),
-        SizedBox(height: 10),
-        Divider(),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
+        const Divider(),
+        const SizedBox(height: 10),
         PeerButton(
           text: AppLocalizations.instance
               .translate('app_settings_notifications_disable_button'),
@@ -217,8 +217,8 @@ class _AppSettingsNotificationsScreenState
       ),
       body: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
             child: Padding(

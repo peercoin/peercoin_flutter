@@ -10,18 +10,19 @@ import '/../widgets/wallet/wallet_home_connection.dart';
 class WalletBalanceHeader extends StatelessWidget {
   final ElectrumConnectionState _connectionState;
   final CoinWallet _wallet;
-  WalletBalanceHeader(this._connectionState, this._wallet);
+  const WalletBalanceHeader(this._connectionState, this._wallet, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var _settings = context.watch<AppSettings>();
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         WalletHomeConnection(_connectionState),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Row(
@@ -40,7 +41,7 @@ class WalletBalanceHeader extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
@@ -79,7 +80,7 @@ class WalletBalanceHeader extends StatelessWidget {
                               size: 12,
                               color: Colors.grey[300],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Text(

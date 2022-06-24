@@ -6,10 +6,12 @@ import '../tools/app_localizations.dart';
 class DoubleTabToClipboard extends StatelessWidget {
   final Widget child;
   final String clipBoardData;
-  DoubleTabToClipboard({
+
+  const DoubleTabToClipboard({
+    Key? key,
     required this.clipBoardData,
     required this.child,
-  });
+  }) : super(key: key);
 
   static void tapEvent(BuildContext context, String clipBoardData) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -17,7 +19,7 @@ class DoubleTabToClipboard extends StatelessWidget {
         AppLocalizations.instance.translate('snack_copied'),
         textAlign: TextAlign.center,
       ),
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     ));
     Clipboard.setData(
       ClipboardData(text: clipBoardData),

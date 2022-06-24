@@ -12,7 +12,7 @@
 # IntelliJ related
 *.iml
 *.ipr
-*.iws
+*.iwsx
 .idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -40,3 +40,4 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 .vscode/launch.json
+.vscode/settings.json

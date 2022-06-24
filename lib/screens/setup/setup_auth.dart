@@ -14,6 +14,8 @@ import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 
 class SetupAuthScreen extends StatefulWidget {
+  const SetupAuthScreen({Key? key}) : super(key: key);
+
   @override
   _SetupAuthScreenState createState() => _SetupAuthScreenState();
 }
@@ -57,9 +59,11 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PeerProgress(3),
+              const PeerProgress(
+                step: 3,
+              ),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width > 1200
                       ? MediaQuery.of(context).size.width / 2
                       : MediaQuery.of(context).size.width,
@@ -79,13 +83,14 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          PeerButtonSetupBack(),
+                          const PeerButtonSetupBack(),
                           Text(
                             AppLocalizations.instance
                                 .translate('app_settings_auth_header'),
-                            style: TextStyle(color: Colors.white, fontSize: 28),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 28),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 40,
                           ),
                         ],
@@ -96,12 +101,12 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: kIsWeb
-                            ? SetupSessionSlider()
+                            ? const SetupSessionSlider()
                             : SwitchListTile(
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('app_settings_biometrics'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 17),
                                 ),
                                 value: _biometricsAllowed,
@@ -116,7 +121,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                                             'setup_pin_no_biometrics'),
                                         textAlign: TextAlign.center,
                                       ),
-                                      duration: Duration(seconds: 5),
+                                      duration: const Duration(seconds: 5),
                                     ));
                                   } else {
                                     setState(() {
@@ -158,13 +163,13 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                       );
                       Navigator.pop(context);
                       await Navigator.of(context)
-                          .pushNamed(Routes.SetupDataFeeds);
+                          .pushNamed(Routes.setupDataFeeds);
                     },
                   );
                 },
                 text: AppLocalizations.instance.translate('setup_create_pin'),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
             ],

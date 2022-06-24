@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -151,12 +153,12 @@ class ActiveWallets with ChangeNotifier {
       unusedAddress = hdWallet.address!;
     } else {
       //wallet is not brand new, lets find an unused address
-      var unusedAddr;
-      openWallet.addresses.forEach((walletAddr) {
+      String? unusedAddr;
+      for (var walletAddr in openWallet.addresses) {
         if (walletAddr.used == false && walletAddr.status == null) {
           unusedAddr = walletAddr.address;
         }
-      });
+      }
       if (unusedAddr != null) {
         //unused address available
         unusedAddress = unusedAddr;
@@ -222,17 +224,17 @@ class ActiveWallets with ChangeNotifier {
   Future<List> getUnkownTxFromList(String identifier, List newTxList) async {
     var storedTransactions = await getWalletTransactions(identifier);
     var unkownTx = [];
-    newTxList.forEach((newTx) {
+    for (var newTx in newTxList) {
       var found = false;
-      storedTransactions.forEach((storedTx) {
+      for (var storedTx in storedTransactions) {
         if (storedTx.txid == newTx['tx_hash']) {
           found = true;
         }
-      });
+      }
       if (found == false) {
         unkownTx.add(newTx['tx_hash']);
       }
-    });
+    }
     return unkownTx;
   }
 
@@ -242,7 +244,7 @@ class ActiveWallets with ChangeNotifier {
     var balanceConfirmed = 0;
     var unconfirmedBalance = 0;
 
-    openWallet.utxos.forEach((walletUtxo) {
+    for (var walletUtxo in openWallet.utxos) {
       if (walletUtxo.height > 0 ||
           openWallet.transactions.firstWhereOrNull(
                 (tx) => tx.txid == walletUtxo.hash && tx.direction == 'out',
@@ -252,7 +254,7 @@ class ActiveWallets with ChangeNotifier {
       } else {
         unconfirmedBalance += walletUtxo.value;
       }
-    });
+    }
 
     openWallet.balance = balanceConfirmed;
     openWallet.unconfirmedBalance = unconfirmedBalance;
@@ -268,7 +270,7 @@ class ActiveWallets with ChangeNotifier {
     openWallet.clearUtxo(address);
 
     //put them in again
-    utxos.forEach((tx) {
+    for (var tx in utxos) {
       openWallet.putUtxo(
         WalletUtxo(
           hash: tx['tx_hash'],
@@ -278,7 +280,7 @@ class ActiveWallets with ChangeNotifier {
           address: address,
         ),
       );
-    });
+    }
 
     await updateWalletBalance(identifier);
     await openWallet.save();
@@ -311,7 +313,7 @@ class ActiveWallets with ChangeNotifier {
       //check if that tx is already in the db
       var txInWallet = openWallet.transactions;
       var isInWallet = false;
-      txInWallet.forEach((walletTx) {
+      for (var walletTx in txInWallet) {
         if (walletTx.txid == tx['txid']) {
           isInWallet = true;
           if (isInWallet == true) {
@@ -326,7 +328,7 @@ class ActiveWallets with ChangeNotifier {
             }
           }
         }
-      });
+      }
       //it's not in wallet yet
       if (!isInWallet) {
         //check if that tx addresses more than one of our addresses
@@ -336,7 +338,7 @@ class ActiveWallets with ChangeNotifier {
 
         if (direction == 'in') {
           List voutList = tx['vout'].toList();
-          voutList.forEach((vOut) {
+          for (var vOut in voutList) {
             final asMap = vOut as Map;
             if (asMap['scriptPubKey']['type'] != 'nulldata') {
               asMap['scriptPubKey']['addresses'].forEach((addr) {
@@ -370,7 +372,7 @@ class ActiveWallets with ChangeNotifier {
                 }
               });
             }
-          });
+          }
 
           //scan for OP_RETURN messages
           //obtain transaction object
@@ -481,12 +483,10 @@ class ActiveWallets with ChangeNotifier {
     openWallet.transactions
         .removeWhere((element) => element.broadCasted == false);
 
-    openWallet.addresses.forEach(
-      (element) {
-        element.newStatus = null;
-        element.newNotificationBackendCount = 0;
-      },
-    );
+    for (var element in openWallet.addresses) {
+      element.newStatus = null;
+      element.newNotificationBackendCount = 0;
+    }
 
     await updateWalletBalance(identifier);
     await openWallet.save();
@@ -613,21 +613,19 @@ class ActiveWallets with ChangeNotifier {
         var inputTx = <WalletUtxo>[];
         var coin = AvailableCoins().getSpecificCoin(identifier);
 
-        utxoPool.forEach(
-          (utxo) {
-            if (utxo.value > 0) {
-              if (_totalInputValue <= (_txAmount + fee)) {
-                _totalInputValue += utxo.value;
-                inputTx.add(utxo);
-                LoggerWrapper.logInfo(
-                  'ActiveWallets',
-                  'buildTransaction',
-                  'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
-                );
-              }
+        for (var utxo in utxoPool) {
+          if (utxo.value > 0) {
+            if (_totalInputValue <= (_txAmount + fee)) {
+              _totalInputValue += utxo.value;
+              inputTx.add(utxo);
+              LoggerWrapper.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
+              );
             }
-          },
-        );
+          }
+        }
 
         var coinParams = AvailableCoins().getSpecificCoin(identifier);
         var network = coinParams.networkType;
@@ -762,22 +760,20 @@ class ActiveWallets with ChangeNotifier {
       //get all
       var utxos = await getWalletUtxos(identifier);
       addresses = await getWalletAddresses(identifier);
-      addresses.forEach(
-        (addr) {
-          if (addr.isOurs == true || addr.isOurs == null) {
-            // == null for backwards compatability
-            //does addr have a balance?
-            var utxoRes = utxos
-                .firstWhereOrNull((element) => element.address == addr.address);
+      for (var addr in addresses) {
+        if (addr.isOurs == true || addr.isOurs == null) {
+          // == null for backwards compatability
+          //does addr have a balance?
+          var utxoRes = utxos
+              .firstWhereOrNull((element) => element.address == addr.address);
 
-            if (addr.isWatched ||
-                utxoRes != null && utxoRes.value > 0 ||
-                addr.address == _unusedAddress) {
-              answerMap[addr.address] = getScriptHash(identifier, addr.address);
-            }
+          if (addr.isWatched ||
+              utxoRes != null && utxoRes.value > 0 ||
+              addr.address == _unusedAddress) {
+            answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }
-        },
-      );
+        }
+      }
     } else {
       //get just one
       answerMap[address] = getScriptHash(identifier, address);

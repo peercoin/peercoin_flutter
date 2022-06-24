@@ -1,10 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/setup/setup.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -52,7 +51,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PeerProgress(5),
+              const PeerProgress(step: 5),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -70,17 +69,17 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        PeerButtonSetupBack(),
+                        const PeerButtonSetupBack(),
                         AutoSizeText(
                           AppLocalizations.instance
                               .translate('setup_legal_title'),
                           minFontSize: 24,
                           maxFontSize: 28,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 40,
                         ),
                       ],
@@ -105,11 +104,11 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: SwitchListTile(
-                                key: Key('setupLegalConsentKey'),
+                                key: const Key('setupLegalConsentKey'),
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_legal_switch_tile'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
@@ -120,7 +119,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                     toggleTermsHandler(newState),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             )
                           ],
@@ -135,15 +134,13 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                 active: _termsAgreed,
                 action: () async {
                   if (_termsAgreed == false) return;
-                  var prefs = await Provider.of<UnencryptedOptions>(context,
-                          listen: false)
-                      .prefs;
+                  var prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('setupFinished', true);
                   await Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.WalletList, (_) => false);
+                      .pushNamedAndRemoveUntil(Routes.walletList, (_) => false);
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
             ],

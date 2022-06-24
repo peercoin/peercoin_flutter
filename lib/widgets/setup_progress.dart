@@ -9,7 +9,7 @@ class SetupProgressIndicator extends StatelessWidget with PreferredSizeWidget {
   SetupProgressIndicator(
     this.step, {
     Key? key,
-  })  : preferredSize = Size.fromHeight(50.0),
+  })  : preferredSize = const Size.fromHeight(50.0),
         super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class SetupProgressIndicator extends StatelessWidget with PreferredSizeWidget {
         currentStep: step,
         selectedColor: Theme.of(context).colorScheme.secondary,
         unselectedColor: Theme.of(context).colorScheme.secondaryContainer,
-        roundedEdges: Radius.circular(90),
+        roundedEdges: const Radius.circular(90),
         size: 4,
       ),
     );

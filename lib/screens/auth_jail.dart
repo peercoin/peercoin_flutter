@@ -13,8 +13,11 @@ class AuthJailScreen extends StatefulWidget {
   @override
   _AuthJailState createState() => _AuthJailState();
 
-  final bool _jailedFromHome;
-  AuthJailScreen([this._jailedFromHome = false]);
+  final bool jailedFromHome;
+  const AuthJailScreen({
+    Key? key,
+    this.jailedFromHome = false,
+  }) : super(key: key);
 }
 
 class _AuthJailState extends State<AuthJailScreen> {
@@ -51,14 +54,14 @@ class _AuthJailState extends State<AuthJailScreen> {
         final encrytpedStorage =
             Provider.of<EncryptedBox>(context, listen: false);
         await encrytpedStorage.setFailedAuths(0);
-        if (widget._jailedFromHome == true || _jailedFromRoute == true) {
-          await Navigator.of(context).pushReplacementNamed(Routes.WalletList);
+        if (widget.jailedFromHome == true || _jailedFromRoute == true) {
+          await Navigator.of(context).pushReplacementNamed(Routes.walletList);
         } else {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
       canCancel: false,
-      jailedFromHome: widget._jailedFromHome,
+      jailedFromHome: widget.jailedFromHome,
     );
   }
 
@@ -75,7 +78,7 @@ class _AuthJailState extends State<AuthJailScreen> {
       await encrytpedStorage.setFailedAuths(failedAuths + 1);
 
       //check if jailedFromHome came again through route
-      if (widget._jailedFromHome == false) {
+      if (widget.jailedFromHome == false) {
         final jailedFromRoute =
             ModalRoute.of(context)!.settings.arguments as bool?;
         if (jailedFromRoute == true) _jailedFromRoute = true;
@@ -101,31 +104,39 @@ class _AuthJailState extends State<AuthJailScreen> {
       child: Scaffold(
         body: Container(
           color: Theme.of(context).primaryColor,
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(
-                Icons.lock,
-                color: Colors.white,
-                size: 48,
-              ),
-              SizedBox(height: 20),
-              Text(AppLocalizations.instance.translate('jail_heading'),
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-              SizedBox(height: 20),
-              Text(_lockCountdown.toString(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                  size: 48,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.instance.translate('jail_heading'),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  _lockCountdown.toString(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-              SizedBox(height: 20),
-              Text(AppLocalizations.instance.translate('jail_countdown'),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.instance.translate('jail_countdown'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-              SizedBox(height: 20),
-              LinearProgressIndicator(
-                backgroundColor: Colors.white,
-              )
-            ]),
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                const LinearProgressIndicator(
+                  backgroundColor: Colors.white,
+                )
+              ],
+            ),
           ),
         ),
       ),

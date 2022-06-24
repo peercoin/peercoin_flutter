@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/active_wallets.dart';
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/share_wrapper.dart';
@@ -18,6 +18,8 @@ import '../../widgets/logout_dialog_dummy.dart'
     if (dart.library.html) '../../widgets/logout_dialog.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
+  const SetupCreateWalletScreen({Key? key}) : super(key: key);
+
   @override
   _SetupCreateWalletScreenState createState() =>
       _SetupCreateWalletScreenState();
@@ -41,7 +43,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
           AppLocalizations.instance.translate('snack_copied'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ));
     } else {
       await ShareWrapper.share(
@@ -50,7 +52,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       );
     }
     Timer(
-      Duration(seconds: kIsWeb ? 2 : 1),
+      const Duration(seconds: kIsWeb ? 2 : 1),
       () => setState(() {
         _sharedYet = true;
       }),
@@ -140,15 +142,13 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
             ),
             TextButton(
               onPressed: () async {
-                var prefs = await Provider.of<UnencryptedOptions>(context,
-                        listen: false)
-                    .prefs;
+                var prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('importedSeed', false);
                 Navigator.pop(context);
 
                 await Navigator.pushNamed(
                   context,
-                  Routes.SetupAuth,
+                  Routes.setupAuth,
                 );
               },
               child: Text(
@@ -173,13 +173,13 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
           height: SetupScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: _isLoading
-              ? Center(
+              ? const Center(
                   child: LoadingIndicator(),
                 )
               : Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    PeerProgress(2),
+                    const PeerProgress(step: 2),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -189,17 +189,17 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                PeerButtonSetupBack(),
+                                const PeerButtonSetupBack(),
                                 AutoSizeText(
                                   AppLocalizations.instance
                                       .translate('setup_save_title'),
                                   maxFontSize: 28,
                                   minFontSize: 25,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 40,
                                 ),
                               ],
@@ -213,8 +213,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                       ? MediaQuery.of(context).size.width / 2
                                       : MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
                                     color: Theme.of(context).shadowColor,
                                   ),
                                   child: Column(
@@ -231,10 +232,10 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                                   .primaryColor,
                                               size: 40,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 24,
                                             ),
-                                            Container(
+                                            SizedBox(
                                               width: MediaQuery.of(context)
                                                           .size
                                                           .width >
@@ -273,7 +274,8 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                                   .translate('snack_copied'),
                                               textAlign: TextAlign.center,
                                             ),
-                                            duration: Duration(seconds: 1),
+                                            duration:
+                                                const Duration(seconds: 1),
                                           ));
                                           Clipboard.setData(
                                             ClipboardData(text: _seed),
@@ -284,11 +286,13 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                         },
                                         child: Container(
                                           height: 250,
-                                          padding: EdgeInsets.fromLTRB(
+                                          padding: const EdgeInsets.fromLTRB(
                                               16, 32, 16, 24),
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(20),
+                                            ),
                                             color: Theme.of(context)
                                                 .backgroundColor,
                                             border: Border.all(
@@ -304,7 +308,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Container(
+                                              SizedBox(
                                                 width: MediaQuery.of(context)
                                                             .size
                                                             .width >
@@ -339,7 +343,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                             ),
                             Column(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width >
                                           1200
                                       ? MediaQuery.of(context).size.width / 2
@@ -367,7 +371,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                 Text(
                                   AppLocalizations.instance
                                       .translate('setup_seed_slider_label'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
                                   ),
@@ -389,7 +393,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                         action: () async => await shareSeed(_seed),
                         text: AppLocalizations.instance.translate('export_now'),
                       ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                   ],

@@ -73,7 +73,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PeerProgress(4),
+              const PeerProgress(step: 4),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -91,17 +91,17 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        PeerButtonSetupBack(),
+                        const PeerButtonSetupBack(),
                         AutoSizeText(
                           AppLocalizations.instance
                               .translate('setup_price_feed_title'),
                           minFontSize: 24,
                           maxFontSize: 28,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 40,
                         ),
                       ],
@@ -119,11 +119,11 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: SwitchListTile(
-                                key: Key('setupApiTickerSwitchKey'),
+                                key: const Key('setupApiTickerSwitchKey'),
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('setup_price_feed_allow'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
@@ -135,9 +135,10 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                               ),
                             ),
                             PeerExplanationText(
-                              AppLocalizations.instance
-                                  .translate('setup_price_feed_description'),
-                              2,
+                              text: AppLocalizations.instance.translate(
+                                'setup_price_feed_description',
+                              ),
+                              maxLines: 2,
                             ),
                           ],
                         ),
@@ -157,11 +158,11 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                                 child: SwitchListTile(
-                                  key: Key('setupApiBGSwitchKey'),
+                                  key: const Key('setupApiBGSwitchKey'),
                                   title: Text(
                                     AppLocalizations.instance
                                         .translate('setup_bg_sync_allow'),
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                   value: _bgSyncdAllowed,
                                   activeColor: Colors.white,
@@ -171,9 +172,10 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                                 ),
                               ),
                               PeerExplanationText(
-                                AppLocalizations.instance
-                                    .translate('setup_bg_sync_description'),
-                                2,
+                                text: AppLocalizations.instance.translate(
+                                  'setup_bg_sync_description',
+                                ),
+                                maxLines: 2,
                               ),
                             ],
                           ),
@@ -191,10 +193,10 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
               PeerButtonSetup(
                 text: AppLocalizations.instance.translate('continue'),
                 action: () {
-                  Navigator.of(context).pushNamed(Routes.SetupLegal);
+                  Navigator.of(context).pushNamed(Routes.setupLegal);
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
             ],

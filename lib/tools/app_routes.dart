@@ -25,111 +25,111 @@ import '../screens/wallet/wallet_list.dart';
 
 class Routes {
   // Route name constants
-  static const String WalletList = '/wallet-list';
-  static const String AppSettings = '/app-settings';
-  static const String AppSettingsNotifications = '/app-settings-notifications';
-  static const String QRScan = '/qr-scan';
-  static const String SetupAuth = '/setup-auth';
-  static const String SetupCreateWallet = '/setup-create-wallet';
-  static const String SetupImport = '/setup-import-seed';
-  static const String SetupLanguage = '/setup-language';
-  static const String SetupDataFeeds = '/setup-feeds';
-  static const String SetupLegal = '/setup-legal';
-  static const String Transaction = '/tx-detail';
-  static const String WalletHome = '/wallet-home';
-  static const String WalletSigning = '/wallet-signing';
-  static const String WalletImportScan = '/wallet-import-scan';
-  static const String ImportPaperWallet = '/import-paperwallet';
-  static const String ImportWif = '/import-wif';
-  static const String AuthJail = '/auth-jail';
-  static const String ServerSettings = '/server-settings';
-  static const String ServerAdd = '/server-add';
-  static const String ChangeLog = '/changelog';
-  static const String AddressSelector = '/address-selector';
+  static const String walletList = '/wallet-list';
+  static const String appSettings = '/app-settings';
+  static const String appSettingsNotifications = '/app-settings-notifications';
+  static const String qrScan = '/qr-scan';
+  static const String setupAuth = '/setup-auth';
+  static const String setupCreateWallet = '/setup-create-wallet';
+  static const String setupImport = '/setup-import-seed';
+  static const String setupLanguage = '/setup-language';
+  static const String setupDataFeeds = '/setup-feeds';
+  static const String setupLegal = '/setup-legal';
+  static const String transaction = '/tx-detail';
+  static const String walletHome = '/wallet-home';
+  static const String walletSigning = '/wallet-signing';
+  static const String walletImportScan = '/wallet-import-scan';
+  static const String importPaperWallet = '/import-paperwallet';
+  static const String importWif = '/import-wif';
+  static const String authJail = '/auth-jail';
+  static const String serverSettings = '/server-settings';
+  static const String serverAdd = '/server-add';
+  static const String changeLog = '/changelog';
+  static const String addressSelector = '/address-selector';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      Routes.SetupCreateWallet: (context) => RouterMaster(
+      Routes.setupCreateWallet: (context) => const RouterMaster(
             widget: SetupCreateWalletScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.SetupAuth: (context) => RouterMaster(
+      Routes.setupAuth: (context) => const RouterMaster(
             widget: SetupAuthScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.SetupLanguage: (context) => RouterMaster(
+      Routes.setupLanguage: (context) => const RouterMaster(
             widget: SetupLanguageScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.WalletList: (context) => RouterMaster(
+      Routes.walletList: (context) => const RouterMaster(
             widget: WalletListScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
-      Routes.WalletHome: (context) => RouterMaster(
+      Routes.walletHome: (context) => const RouterMaster(
             widget: WalletHomeScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.QRScan: (context) => RouterMaster(
+      Routes.qrScan: (context) => const RouterMaster(
             widget: QRScanner(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.Transaction: (context) => RouterMaster(
+      Routes.transaction: (context) => const RouterMaster(
             widget: TransactionDetails(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.AppSettings: (context) => RouterMaster(
+      Routes.appSettings: (context) => const RouterMaster(
             widget: AppSettingsScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
-      Routes.SetupImport: (context) => RouterMaster(
+      Routes.setupImport: (context) => const RouterMaster(
             widget: SetupImportSeedScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.WalletImportScan: (context) => RouterMaster(
+      Routes.walletImportScan: (context) => const RouterMaster(
             widget: WalletImportScanScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.WalletSigning: (context) => RouterMaster(
+      Routes.walletSigning: (context) => const RouterMaster(
             widget: WalletSigningScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.AddressSelector: (context) => RouterMaster(
+      Routes.addressSelector: (context) => const RouterMaster(
             widget: AddressSelectorScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.ImportPaperWallet: (context) => RouterMaster(
+      Routes.importPaperWallet: (context) => const RouterMaster(
             widget: ImportPaperWalletScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.ImportWif: (context) => RouterMaster(
+      Routes.importWif: (context) => const RouterMaster(
             widget: ImportWifScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.AuthJail: (context) => RouterMaster(
+      Routes.authJail: (context) => const RouterMaster(
             widget: AuthJailScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.ServerSettings: (context) => RouterMaster(
+      Routes.serverSettings: (context) => const RouterMaster(
             widget: ServerSettingsScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.ServerAdd: (context) => RouterMaster(
+      Routes.serverAdd: (context) => const RouterMaster(
             widget: ServerAddScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.SetupDataFeeds: (context) => RouterMaster(
+      Routes.setupDataFeeds: (context) => const RouterMaster(
             widget: SetupDataFeedsScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.SetupLegal: (context) => RouterMaster(
+      Routes.setupLegal: (context) => const RouterMaster(
             widget: SetupLegalScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.ChangeLog: (context) => RouterMaster(
+      Routes.changeLog: (context) => const RouterMaster(
             widget: ChangeLogScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
-      Routes.AppSettingsNotifications: (context) => RouterMaster(
+      Routes.appSettingsNotifications: (context) => const RouterMaster(
             widget: AppSettingsNotificationsScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),

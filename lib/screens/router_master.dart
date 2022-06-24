@@ -11,7 +11,8 @@ class RouterMaster extends StatefulWidget {
   final Widget widget;
   final RouteTypes routeType;
 
-  const RouterMaster({required this.widget, required this.routeType});
+  const RouterMaster({Key? key, required this.widget, required this.routeType})
+      : super(key: key);
 
   @override
   State<RouterMaster> createState() => _RouterMasterState();
@@ -30,13 +31,13 @@ class _RouterMasterState extends State<RouterMaster> {
       if (widget.routeType == RouteTypes.setupOnly && setupFinished) {
         //setup is finished and setupOnly screen has been called
         Future.delayed(
-          Duration(seconds: 0),
-          () => Navigator.of(context).pushReplacementNamed(Routes.WalletList),
+          const Duration(seconds: 0),
+          () => Navigator.of(context).pushReplacementNamed(Routes.walletList),
         );
       } else if (!setupFinished &&
           widget.routeType == RouteTypes.requiresSetupFinished) {
         Future.delayed(
-          Duration(seconds: 0),
+          const Duration(seconds: 0),
           () => Navigator.of(context).pushReplacementNamed('/'),
         );
       } else if (!setupFinished && widget.routeType == RouteTypes.setupOnly) {
@@ -45,19 +46,19 @@ class _RouterMasterState extends State<RouterMaster> {
       } else if (widget.routeType == RouteTypes.requiresArguments &&
           ModalRoute.of(context)!.settings.arguments == null) {
         Future.delayed(
-          Duration(seconds: 0),
+          const Duration(seconds: 0),
           () => Navigator.of(context).pushReplacementNamed('/'),
         );
       } else {
         widgetToRender = widget.widget;
       }
 
-      final _secureStorage = const FlutterSecureStorage();
+      const _secureStorage = FlutterSecureStorage();
       var failedAuths =
           int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
 
       if (failedAuths > 0) {
-        widgetToRender = AuthJailScreen();
+        widgetToRender = const AuthJailScreen();
       }
 
       setState(() {

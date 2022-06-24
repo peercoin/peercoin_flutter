@@ -47,7 +47,7 @@ class Servers with ChangeNotifier {
     }
 
     // check if all hard coded seeds for this coin are already in db
-    _seeds[coinIdentifier!]!.forEach((hardcodedSeedAddress) {
+    for (var hardcodedSeedAddress in _seeds[coinIdentifier!]!) {
       var res = _serverBox.values.firstWhereOrNull(
           (element) => element.getAddress == hardcodedSeedAddress);
       if (res == null) {
@@ -59,9 +59,9 @@ class Servers with ChangeNotifier {
         );
         addServer(hardcodedSeedAddress);
       }
-    });
+    }
     //check if hard coded seeds have been removed
-    _serverBox.values.forEach((boxElement) {
+    for (var boxElement in _serverBox.values) {
       var res = _seeds[coinIdentifier]!.firstWhere(
           (element) => element == boxElement.address,
           orElse: () => null);
@@ -73,7 +73,7 @@ class Servers with ChangeNotifier {
         );
         removeServer(boxElement);
       }
-    });
+    }
   }
 
   void addServer(String url, [bool userGenerated = false]) {
@@ -101,11 +101,11 @@ class Servers with ChangeNotifier {
       _serverBox.values.length,
       (index) => '',
     );
-    _serverBox.values.forEach((Server server) {
+    for (var server in _serverBox.values) {
       if (server.hidden == false && server.connectable == true) {
         _availableServers.insert(server.priority, server.address);
       }
-    });
+    }
 
     final _prunedList =
         _availableServers.where((element) => element.isNotEmpty).toList();
@@ -122,9 +122,9 @@ class Servers with ChangeNotifier {
     //form list
     var _availableServersDetails = <Server>[];
 
-    _serverBox.values.forEach((Server server) {
+    for (var server in _serverBox.values) {
       _availableServersDetails.add(server);
-    });
+    }
 
     //sort by connectable
     _availableServersDetails.sort((a, b) {

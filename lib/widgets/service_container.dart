@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class PeerServiceTitle extends StatelessWidget {
   final String title;
-  PeerServiceTitle({required this.title});
+  const PeerServiceTitle({Key? key, required this.title}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,7 +14,7 @@ class PeerServiceTitle extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -41,11 +42,13 @@ class PeerContainer extends StatelessWidget {
   final Widget child;
   final bool isTransparent;
   final bool noSpacers;
-  PeerContainer({
+
+  const PeerContainer({
+    Key? key,
     required this.child,
     this.isTransparent = false,
     this.noSpacers = false,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +56,8 @@ class PeerContainer extends StatelessWidget {
       width: MediaQuery.of(context).size.width > 1200
           ? MediaQuery.of(context).size.width / 2
           : MediaQuery.of(context).size.width,
-      margin: noSpacers == true ? null : EdgeInsets.fromLTRB(16, 0, 16, 16),
+      margin:
+          noSpacers == true ? null : const EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: noSpacers == true ? null : const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: isTransparent

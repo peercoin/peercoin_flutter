@@ -10,6 +10,8 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
+  const ServerSettingsScreen({Key? key}) : super(key: key);
+
   @override
   _ServerSettingsScreenState createState() => _ServerSettingsScreenState();
 }
@@ -85,12 +87,12 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
             child: IconButton(
               onPressed: () async {
                 var result = await Navigator.of(context)
-                    .pushNamed(Routes.ServerAdd, arguments: _walletName);
+                    .pushNamed(Routes.serverAdd, arguments: _walletName);
                 if (result == true) {
                   await loadServers();
                 }
               },
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
             ),
           )
         ],
@@ -129,14 +131,14 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                     label: Text(AppLocalizations.instance
                                         .translate(
                                             'server_settings_alert_cancel')),
-                                    icon: Icon(Icons.cancel),
+                                    icon: const Icon(Icons.cancel),
                                     onPressed: () {
                                       Navigator.of(context).pop(false);
                                     }),
                                 TextButton.icon(
                                   label: Text(AppLocalizations.instance
                                       .translate('jail_dialog_button')),
-                                  icon: Icon(Icons.check),
+                                  icon: const Icon(Icons.check),
                                   onPressed: () {
                                     Navigator.of(context).pop(true);
                                   },
@@ -158,7 +160,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                     AppLocalizations.instance
                                         .translate('jail_dialog_button'),
                                   ),
-                                  icon: Icon(Icons.check),
+                                  icon: const Icon(Icons.check),
                                   onPressed: () {
                                     Navigator.of(context).pop(false);
                                   },
@@ -176,23 +178,23 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                       },
                       background: Container(
                         alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 10),
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                        padding: const EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 4),
                         color: Theme.of(context).errorColor,
-                        child:
-                            Icon(Icons.delete, color: Colors.white, size: 40),
+                        child: const Icon(Icons.delete,
+                            color: Colors.white, size: 40),
                       ),
-                      key: Key('${_servers[index].address}'),
+                      key: Key(_servers[index].address),
                       child: Card(
                         margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                         child: ListTile(
                           leading: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.toc),
+                              const Icon(Icons.toc),
                               if (!_servers[index].userGenerated)
-                                Icon(Icons.delete_forever),
+                                const Icon(Icons.delete_forever),
                             ],
                           ),
                           trailing: IconButton(
@@ -215,7 +217,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                         'server_settings_error_no_server_left'),
                                     textAlign: TextAlign.center,
                                   ),
-                                  duration: Duration(seconds: 2),
+                                  duration: const Duration(seconds: 2),
                                 ));
 
                                 //reset connectable

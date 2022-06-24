@@ -42,7 +42,7 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
           AppLocalizations.instance.translate('app_settings_saved_snack'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

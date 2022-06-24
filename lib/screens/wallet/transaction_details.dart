@@ -10,6 +10,8 @@ import '../../tools/app_localizations.dart';
 import '../../widgets/buttons.dart';
 
 class TransactionDetails extends StatelessWidget {
+  const TransactionDetails({Key? key}) : super(key: key);
+
   void _launchURL(String _url) async {
     await canLaunchUrlString(_url)
         ? await launchUrlString(
@@ -35,24 +37,24 @@ class TransactionDetails extends StatelessWidget {
         child: PeerContainer(
           noSpacers: true,
           child: ListView(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppLocalizations.instance.translate('id'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText(_tx.txid)
                 ],
               ),
-              Divider(),
+              const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(AppLocalizations.instance.translate('time'),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   SelectableText(
                     _tx.timestamp! != 0
                         ? DateFormat().format(
@@ -62,13 +64,13 @@ class TransactionDetails extends StatelessWidget {
                   )
                 ],
               ),
-              Divider(),
+              const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppLocalizations.instance.translate('tx_value'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText((_tx.value / 1000000).toString() +
                       ' ' +
@@ -79,44 +81,45 @@ class TransactionDetails extends StatelessWidget {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Divider(),
+                        const Divider(),
                         Text(AppLocalizations.instance.translate('tx_fee'),
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                         SelectableText((_tx.fee / 1000000).toString() +
                             ' ' +
                             _coinWallet.letterCode)
                       ],
                     )
                   : Container(),
-              Divider(),
+              const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppLocalizations.instance.translate('tx_address'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText(_tx.address),
                   // Text("") TODO might add address label here in the future
                 ],
               ),
-              Divider(),
+              const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppLocalizations.instance.translate('tx_direction'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText(_tx.direction)
                 ],
               ),
-              Divider(),
+              const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(AppLocalizations.instance.translate('tx_confirmations'),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   SelectableText(_tx.confirmations == -1
                       ? AppLocalizations.instance.translate('tx_rejected')
                       : _tx.confirmations.toString())
@@ -126,19 +129,20 @@ class TransactionDetails extends StatelessWidget {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Divider(),
+                        const Divider(),
                         Text(
                             AppLocalizations.instance
                                 .translate('send_op_return'),
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                         SelectableText(_tx.opReturn)
                       ],
                     )
                   : Container(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Center(
                 child: PeerButton(
-                  action: () => _launchURL(baseUrl + '${_tx.txid}'),
+                  action: () => _launchURL(baseUrl + _tx.txid),
                   text: AppLocalizations.instance
                       .translate('tx_view_in_explorer'),
                 ),

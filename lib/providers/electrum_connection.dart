@@ -209,7 +209,7 @@ class ElectrumConnection with ChangeNotifier {
     _depthPointer = 1;
 
     if (_closedIntentionally == false) {
-      _reconnectTimer = Timer(Duration(seconds: 5),
+      _reconnectTimer = Timer(const Duration(seconds: 5),
           () => init(_coinName)); //retry if not intentional
     }
   }
@@ -401,7 +401,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void startPingTimer() {
     _pingTimer ??= Timer.periodic(
-      Duration(minutes: 7),
+      const Duration(minutes: 7),
       (_) {
         sendMessage('server.ping', 'ping');
       },
@@ -409,11 +409,11 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void subscribeToScriptHashes(Map addresses) {
-    addresses.entries.forEach((hash) {
+    for (var hash in addresses.entries) {
       _addresses[hash.key] = hash.value;
       sendMessage('blockchain.scripthash.subscribe', hash.key, [hash.value]);
       notifyListeners();
-    });
+    }
   }
 
   void handleScriptHashSubscribeNotification(
@@ -469,14 +469,14 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void handleHistory(List result) async {
-    result.forEach((historyTx) {
+    for (var historyTx in result) {
       var txId = historyTx['tx_hash'];
       sendMessage(
         'blockchain.transaction.get',
         'tx_$txId',
         [txId, true],
       );
-    });
+    }
   }
 
   void requestTxUpdate(String txId) {

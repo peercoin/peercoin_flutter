@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../providers/electrum_connection.dart';
 import '../../tools/share_wrapper.dart';
 import '/../providers/active_wallets.dart';
 import '/../tools/app_localizations.dart';
@@ -16,9 +17,10 @@ import '/../widgets/wallet/wallet_balance_header.dart';
 import '/../widgets/wallet/wallet_home_qr.dart';
 
 class ReceiveTab extends StatefulWidget {
-  final _unusedAddress;
-  final _connectionState;
-  ReceiveTab(this._unusedAddress, this._connectionState);
+  final String _unusedAddress;
+  final ElectrumConnectionState _connectionState;
+  const ReceiveTab(this._unusedAddress, this._connectionState, {Key? key})
+      : super(key: key);
 
   @override
   _ReceiveTabState createState() => _ReceiveTabState();
@@ -163,12 +165,12 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         title: AppLocalizations.instance
                             .translate('wallet_bottom_nav_receive'),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
                         decoration: BoxDecoration(
                           color:
                               Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(4),
                           ),
                         ),
@@ -184,7 +186,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
                         textInputAction: TextInputAction.done,
                         key: _labelKey,
@@ -215,8 +217,8 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           FilteringTextInputFormatter.allow(
                               getValidator(_availableCoin.fractions)),
                         ],
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.money,
@@ -234,7 +236,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       PeerButtonBorder(
                         text: AppLocalizations.instance
                             .translate('receive_show_qr'),
@@ -242,7 +244,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           WalletHomeQr.showQrDialog(context, _qrString!, true);
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('receive_share'),
@@ -259,7 +261,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           );
                         },
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         AppLocalizations.instance
                             .translate('wallet_receive_label_hint'),
@@ -269,7 +271,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         AppLocalizations.instance
                             .translate('wallet_receive_label_hint_privacy'),
@@ -293,13 +295,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           PeerServiceTitle(
                               title: AppLocalizations.instance
                                   .translate('receive_obtain')),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Text(
                             AppLocalizations.instance
                                 .translate('receive_website_faucet'),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           PeerButton(
                             text: AppLocalizations.instance
                                 .translate('receive_faucet'),
@@ -319,13 +321,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           PeerServiceTitle(
                               title: AppLocalizations.instance
                                   .translate('buy_peercoin')),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Text(
                             AppLocalizations.instance
                                 .translate('receive_website_description'),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           PeerButton(
                             text: AppLocalizations.instance
                                 .translate('receive_website_credit'),
@@ -333,7 +335,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                               launchURL('https://ppc.lol/buy');
                             },
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           PeerButton(
                             text: AppLocalizations.instance
                                 .translate('receive_website_exchandes'),

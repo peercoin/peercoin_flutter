@@ -12,6 +12,8 @@ import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
 
 class WalletImportScanScreen extends StatefulWidget {
+  const WalletImportScanScreen({Key? key}) : super(key: key);
+
   @override
   _WalletImportScanScreenState createState() => _WalletImportScanScreenState();
 }
@@ -38,7 +40,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       await _activeWallets.prepareForRescan(_coinName);
       await _connectionProvider!.init(_coinName, scanMode: true);
 
-      _timer = Timer.periodic(Duration(seconds: 7), (timer) async {
+      _timer = Timer.periodic(const Duration(seconds: 7), (timer) async {
         var dueTime = _latestUpdate + 7;
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
@@ -46,7 +48,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           //sync notification backend
           await BackgroundSync.executeSync(fromScan: true);
           _timer.cancel();
-          await Navigator.of(context).pushReplacementNamed(Routes.WalletList,
+          await Navigator.of(context).pushReplacementNamed(Routes.walletList,
               arguments: {'fromScan': true});
         }
       });
@@ -100,19 +102,19 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LoadingIndicator(),
-          SizedBox(height: 20),
+          const LoadingIndicator(),
+          const SizedBox(height: 20),
           Text(
             AppLocalizations.instance.translate('wallet_scan_notice'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           PeerButton(
             text: AppLocalizations.instance
                 .translate('server_settings_alert_cancel'),
             action: () async {
               _timer.cancel();
               await Navigator.of(context)
-                  .pushReplacementNamed(Routes.WalletList);
+                  .pushReplacementNamed(Routes.walletList);
             },
           )
         ],

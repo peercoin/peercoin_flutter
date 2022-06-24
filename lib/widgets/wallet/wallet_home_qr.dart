@@ -8,7 +8,7 @@ import '../double_tab_to_clipboard.dart';
 
 class WalletHomeQr extends StatelessWidget {
   final String _unusedAddress;
-  WalletHomeQr(this._unusedAddress);
+  const WalletHomeQr(this._unusedAddress, {Key? key}) : super(key: key);
 
   static void showQrDialog(BuildContext context, String address,
       [bool hideShareButton = false]) {
@@ -39,7 +39,7 @@ class WalletHomeQr extends StatelessWidget {
                           clipBoardData: address,
                           child: SelectableText(
                             address,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -70,11 +70,13 @@ class WalletHomeQr extends StatelessWidget {
       child: QrImage(
         data: _unusedAddress,
         size: 60.0,
-        padding: EdgeInsets.all(1),
+        padding: const EdgeInsets.all(1),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
     );
-    return _unusedAddress == '' ? SizedBox(height: 60, width: 60) : inkWell;
+    return _unusedAddress == ''
+        ? const SizedBox(height: 60, width: 60)
+        : inkWell;
   }
 }

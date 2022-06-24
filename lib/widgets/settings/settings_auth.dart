@@ -15,13 +15,10 @@ class SettingsAuth extends StatelessWidget {
   final Function _saveSnack;
   final Map<String, bool> _authenticationOptions;
 
-  SettingsAuth(
-    this._biometricsAllowed,
-    this._biometricsAvailable,
-    this._settings,
-    this._saveSnack,
-    this._authenticationOptions,
-  );
+  const SettingsAuth(this._biometricsAllowed, this._biometricsAvailable,
+      this._settings, this._saveSnack, this._authenticationOptions,
+      {Key? key})
+      : super(key: key);
 
   void changePIN(BuildContext context, bool biometricsAllowed) async {
     await Auth.requireAuth(
@@ -30,13 +27,13 @@ class SettingsAuth extends StatelessWidget {
       callback: () async => await screenLock(
         title: Text(
           AppLocalizations.instance.translate('authenticate_title_new'),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
           ),
         ),
         confirmTitle: Text(
           AppLocalizations.instance.translate('authenticate_confirm_title_new'),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
           ),
         ),
@@ -53,7 +50,7 @@ class SettingsAuth extends StatelessWidget {
                   .translate('authenticate_change_pin_success'),
               textAlign: TextAlign.center,
             ),
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ));
           Navigator.of(context).pop();
         },
@@ -78,7 +75,7 @@ class SettingsAuth extends StatelessWidget {
                         .translate('setup_pin_no_biometrics'),
                     textAlign: TextAlign.center,
                   ),
-                  duration: Duration(seconds: 5),
+                  duration: const Duration(seconds: 5),
                 ));
               } else {
                 _settings.setBiometricsAllowed(newState);

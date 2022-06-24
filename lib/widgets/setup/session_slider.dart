@@ -31,7 +31,7 @@ class _SetupSessionSliderState extends State<SetupSessionSlider> {
           ),
         )
         .millisecondsSinceEpoch;
-    await FlutterSecureStorage().write(
+    await const FlutterSecureStorage().write(
       key: 'sessionExpiresAt',
       value: expiryDate.toString(),
     );
@@ -55,12 +55,12 @@ class _SetupSessionSliderState extends State<SetupSessionSlider> {
       children: [
         Text(
           AppLocalizations.instance.translate('setup_auth_title'),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Slider(
@@ -87,16 +87,16 @@ class _SetupSessionSliderState extends State<SetupSessionSlider> {
               'days': _convertSlideToString(),
             },
           ),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(
           AppLocalizations.instance.translate('setup_auth_hint'),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),

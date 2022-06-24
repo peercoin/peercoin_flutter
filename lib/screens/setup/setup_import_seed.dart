@@ -4,15 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/active_wallets.dart';
-import '../../providers/unencrypted_options.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
+  const SetupImportSeedScreen({Key? key}) : super(key: key);
+
   @override
   _SetupImportSeedState createState() => _SetupImportSeedState();
 }
@@ -46,14 +48,13 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
           AppLocalizations.instance.translate('setup_securebox_fail'),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 10),
+        duration: const Duration(seconds: 10),
       ));
     }
     await _activeWallets.createPhrase(_controller.text);
-    var prefs =
-        await Provider.of<UnencryptedOptions>(context, listen: false).prefs;
+    var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
-    await Navigator.of(context).pushNamed(Routes.SetupAuth);
+    await Navigator.of(context).pushNamed(Routes.setupAuth);
     setState(() {
       _loading = false;
     });
@@ -61,8 +62,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(20)),
+    var border = const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(20),
+      ),
       borderSide: BorderSide(
         width: 2,
         color: Colors.transparent,
@@ -81,7 +84,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PeerProgress(2),
+              const PeerProgress(step: 2),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -95,18 +98,18 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          PeerButtonSetupBack(),
+                          const PeerButtonSetupBack(),
                           AutoSizeText(
                             AppLocalizations.instance.translate(
                               'setup_import_title',
                             ),
                             maxFontSize: 28,
                             minFontSize: 25,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 40,
                           ),
                         ],
@@ -117,7 +120,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             ? MediaQuery.of(context).size.width / 2
                             : MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                           color: Theme.of(context).shadowColor,
                         ),
                         child: Column(
@@ -133,10 +138,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     color: Theme.of(context).primaryColor,
                                     size: 40,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 24,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: MediaQuery.of(context).size.width >
                                             1200
                                         ? MediaQuery.of(context).size.width /
@@ -163,7 +168,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                               padding: const EdgeInsets.only(bottom: 8),
                               decoration: BoxDecoration(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
+                                    const BorderRadius.all(Radius.circular(20)),
                                 color: Theme.of(context).backgroundColor,
                                 border: Border.all(
                                   width: 2,
@@ -174,7 +179,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                 key: _formKey,
                                 child: TextFormField(
                                   textInputAction: TextInputAction.done,
-                                  key: Key('importTextField'),
+                                  key: const Key('importTextField'),
                                   controller: _controller,
                                   validator: (value) {
                                     if (value!.split(' ').length < 12) {
@@ -259,7 +264,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                 ),
                 loading: _loading,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
             ],
