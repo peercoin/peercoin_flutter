@@ -1,15 +1,12 @@
-### **0.9.5** (2022-xx-xx)
-* Performance upgrades under the hood
-
-### **0.9.5** (2022-06-23)
-* Fix camera issues on some Android phones
+### **0.9.5** (2022-06-24)
 * Setup legal: fix container heights on smaller screens
+* Performance upgrades under the hood
 
 ### **0.9.4** (2022-06-20)
 * Signing messages is now available for each wallet
 
 ### **0.9.3** (2022-06-14)
-* Improved error handling for edge case in which secure storage is not accessible on Android phones
+* Improved error handling for edge case in which secure storage is not accessible on some phones
 * Legal notices for setup
 * Various dependency updates under the hood
 
@@ -70,7 +67,7 @@ Rescans are not affected.
 * Better transaction building
 
 ### **0.8.3** (2022-02-07)
-* Fix Android 12 crash
+* Fix native crash
 * Add currencies: BDT, KRW, TRY
 
 ### **0.8.2** (2022-02-04)
@@ -130,7 +127,7 @@ Please perform a wallet scan to avoid unnecessary notifications.
 * Transactions will now be send without timestamp (version 3, 0.11 hard fork)
 
 ### **0.6.4** (2021-10-08)
-* Fix for older Android 10 devices
+* Fix for older devices
 * Fix for price data feed
 * Peercoin v0.11 hard fork preperation (Nov 1st 2021) 
 
