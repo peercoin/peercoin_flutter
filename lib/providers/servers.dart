@@ -19,6 +19,7 @@ class Servers with ChangeNotifier {
       'wss://allingas.peercoinexplorer.net:50004',
     ],
     'peercoinTestnet': [
+      'ssl://testnet-electrum.peercoinexplorer.net:50008',
       'wss://testnet-electrum.peercoinexplorer.net:50009',
       'wss://allingas.peercoinexplorer.net:50009',
     ]
