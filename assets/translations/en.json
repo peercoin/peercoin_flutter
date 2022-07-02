@@ -220,6 +220,7 @@
     "server_add_input_label": "Server URL",
     "server_add_input_empty": "Please enter a URL",
     "server_add_no_wss": "Must start with wss://\nOther protocols are currently not supported",
+    "server_add_no_wss_or_ssl": "Must start with wss:// or ssl://\nOther protocols are currently not supported",
     "server_add_no_port": "Must contain a port, e.g. :50004",
     "server_add_server_exists": "Adding failed: Server already exists.",
     "server_add_server_no_connection": "Connection to server failed.",

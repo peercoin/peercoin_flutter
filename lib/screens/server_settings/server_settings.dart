@@ -45,6 +45,10 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   }
 
   Future<void> savePriorities(String? serverUrl, int newIndex) async {
+    if (_indexCache[serverUrl] != null) {
+      await Provider.of<ElectrumConnection>(context, listen: false)
+          .closeConnection();
+    }
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
       _servers[newIndex].setPriority = newIndex;
@@ -182,8 +186,11 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 4),
                         color: Theme.of(context).errorColor,
-                        child: const Icon(Icons.delete,
-                            color: Colors.white, size: 40),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 40,
+                        ),
                       ),
                       key: Key(_servers[index].address),
                       child: Card(
@@ -211,15 +218,16 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                       element.connectable == true) ==
                                   null) {
                                 //show snack bar
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                    AppLocalizations.instance.translate(
-                                        'server_settings_error_no_server_left'),
-                                    textAlign: TextAlign.center,
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      AppLocalizations.instance.translate(
+                                          'server_settings_error_no_server_left'),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    duration: const Duration(seconds: 2),
                                   ),
-                                  duration: const Duration(seconds: 2),
-                                ));
+                                );
 
                                 //reset connectable
                                 oldItem.setConnectable = true;
@@ -243,17 +251,21 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                 _servers[index].setPriority = 0;
                               }
                             },
-                            icon: Icon(_servers[index].connectable
-                                ? Icons.offline_bolt
-                                : Icons.offline_bolt_outlined),
+                            icon: Icon(
+                              _servers[index].connectable
+                                  ? Icons.offline_bolt
+                                  : Icons.offline_bolt_outlined,
+                            ),
                           ),
                           tileColor: calculateTileColor(
                               index, _servers[index].connectable),
                           title: Text(_servers[index].address),
                           subtitle: _servers[index].address == _connectedServer
                               ? Center(
-                                  child: Text(AppLocalizations.instance
-                                      .translate('wallet_connected')),
+                                  child: Text(
+                                    AppLocalizations.instance
+                                        .translate('wallet_connected'),
+                                  ),
                                 )
                               : Container(),
                         ),

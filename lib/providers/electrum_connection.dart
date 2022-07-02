@@ -157,11 +157,16 @@ class ElectrumConnection with ChangeNotifier {
         );
         _serverType = ElectrumServerType.wss;
       } else if (_serverUrl.contains('ssl://') && kIsWeb == false) {
+        _serverType = ElectrumServerType.ssl;
+
         final split = _serverUrl.split(':');
         final host = split[1].replaceAll('//', '');
         final port = int.parse(split[2]);
-        _connection = await SecureSocket.connect(host, port);
-        _serverType = ElectrumServerType.ssl;
+        _connection = await SecureSocket.connect(
+          host,
+          port,
+          timeout: const Duration(seconds: 10),
+        );
       } else {
         //sockets / ssl is not available on web -> try other server
         _connectionAttempt++;

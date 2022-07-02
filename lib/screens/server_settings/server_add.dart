@@ -1,10 +1,15 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/server.dart';
@@ -26,6 +31,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   final _serverKey = GlobalKey<FormFieldState>();
   final _serverController = TextEditingController();
   String _walletName = '';
+  late ElectrumServerType _serverType;
   List<Server> _currentServerList = [];
   bool _initial = true;
   bool _loading = false;
@@ -41,7 +47,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     super.didChangeDependencies();
   }
 
-  void tryConnect(String serverUrl) async {
+  void tryConnect(String _serverUrl) async {
     _currentServerList = await Provider.of<Servers>(context, listen: false)
         .getServerDetailsList(_walletName);
 
@@ -51,7 +57,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
     //check if server already exists
     if (_currentServerList
-            .firstWhereOrNull((element) => element.address == serverUrl) !=
+            .firstWhereOrNull((element) => element.address == _serverUrl) !=
         null) {
       //show notification
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -70,12 +76,27 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
           .closeConnection();
 
       //try new connection
-      IOWebSocketChannel? _connection;
+      var _connection;
       try {
-        _connection = IOWebSocketChannel.connect(
-          serverUrl,
-        );
+        if (_serverUrl.contains('wss://')) {
+          _serverType = ElectrumServerType.wss;
+          _connection = WebSocketChannel.connect(
+            Uri.parse(_serverUrl),
+          );
+        } else if (_serverUrl.contains('ssl://') && kIsWeb == false) {
+          _serverType = ElectrumServerType.ssl;
+
+          final split = _serverUrl.split(':');
+          final host = split[1].replaceAll('//', '');
+          final port = int.parse(split[2]);
+          _connection = await SecureSocket.connect(
+            host,
+            port,
+            timeout: const Duration(seconds: 10),
+          );
+        }
       } catch (e) {
+        displayError(e);
         LoggerWrapper.logError(
           'ServerAdd',
           'tryConnect',
@@ -83,22 +104,29 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         );
       }
 
-      void sendMessage(String method, String id, [List? params]) {
+      void sendMessage(String method, String? id, [List? params]) {
+        final String _encodedMessage = json.encode(
+          {'id': id, 'method': method, if (params != null) 'params': params},
+        );
         if (_connection != null) {
-          _connection.sink.add(
-            json.encode(
-              {
-                'id': id,
-                'method': method,
-                if (params != null) 'params': params
-              },
-            ),
-          );
+          if (_serverType == ElectrumServerType.ssl) {
+            _connection.add(_encodedMessage.codeUnits);
+            _connection.add('\n'.codeUnits);
+          } else if (_serverType == ElectrumServerType.wss) {
+            _connection!.sink.add(_encodedMessage);
+          }
         }
       }
 
       void replyHandler(reply) {
-        var decoded = json.decode(reply);
+        String parsedReply;
+        if (reply is Uint8List) {
+          parsedReply = String.fromCharCodes(reply);
+        } else {
+          parsedReply = reply;
+        }
+
+        var decoded = json.decode(parsedReply);
         var id = decoded['id'];
         var idString = id.toString();
         var result = decoded['result'];
@@ -108,8 +136,10 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
               AvailableCoins().getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
-            Provider.of<Servers>(context, listen: false)
-                .addServer(serverUrl, true);
+            Provider.of<Servers>(context, listen: false).addServer(
+              _serverUrl,
+              true,
+            );
             //pop screen
             Navigator.of(context).pop(true);
           } else {
@@ -129,29 +159,44 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         });
       }
 
-      _connection!.stream.listen((elem) {
+      var stream;
+      if (_serverType == ElectrumServerType.ssl) {
+        stream = _connection;
+      } else if (_serverType == ElectrumServerType.wss) {
+        stream = _connection!.stream;
+      }
+
+      if (stream == null) return;
+
+      stream.listen((elem) {
         replyHandler(elem);
       }, onError: (error) {
-        LoggerWrapper.logError(
-          'ServerAdd',
-          'tryConnect',
-          error.message,
-        );
-        setState(() {
-          _loading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            AppLocalizations.instance
-                .translate('server_add_server_no_connection'),
-            textAlign: TextAlign.center,
-          ),
-          duration: const Duration(seconds: 2),
-        ));
+        displayError(error);
       });
 
       sendMessage('server.features', 'features');
     }
+  }
+
+  void displayError(dynamic error) {
+    LoggerWrapper.logError(
+      'ServerAdd',
+      'tryConnect',
+      error.message,
+    );
+    setState(() {
+      _loading = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance
+              .translate('server_add_server_no_connection'),
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -202,9 +247,14 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                         if (value!.isEmpty) {
                           return AppLocalizations.instance
                               .translate('server_add_input_empty');
-                        } else if (!value.contains('wss://')) {
+                        } else if (kIsWeb && !value.contains('wss://')) {
                           return AppLocalizations.instance
                               .translate('server_add_no_wss');
+                        } else if (!kIsWeb &&
+                            !value.contains('wss://') &&
+                            !value.contains('ssl://')) {
+                          return AppLocalizations.instance
+                              .translate('server_add_no_wss_or_ssl');
                         } else if (!portRegex.hasMatch(value)) {
                           return AppLocalizations.instance
                               .translate('server_add_no_port');

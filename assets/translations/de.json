@@ -104,6 +104,7 @@
     "server_add_title": "Neuen Server hinzufügen",
     "server_add_input_empty": "Bitte URL eingeben",
     "server_add_no_wss": "Muss mit wss:// beginnen\nAndere Protokolle werden derzeit nicht unterstützt",
+    "server_add_no_wss_or_ssl": "Muss mit wss:// oder ssl:// beginnen\nAndere Protokolle werden derzeit nicht unterstützt",
     "server_add_no_port": "Muss Port beinhalten, z. B. :50004",
     "server_add_server_exists": "Hinzufügen fehlgeschlagen: Server bereits vorhanden.",
     "server_add_server_no_connection": "Verbindung zu Server fehlgeschlagen.",
