@@ -64,7 +64,7 @@ class _SendTabState extends State<SendTab> {
   void didChangeDependencies() async {
     if (_initial == true) {
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
-      _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
+      _availableCoin = AvailableCoins.getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _appSettings = Provider.of<AppSettings>(context, listen: false);
 

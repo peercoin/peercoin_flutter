@@ -97,7 +97,7 @@ class ActiveWallets with ChangeNotifier {
   Future<String?> getAddressFromDerivationPath(
       String identifier, int account, int chain, int address,
       [master = false]) async {
-    final network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    final network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var hdWallet = HDWallet.fromSeed(
       seedPhraseUint8List(await seedPhrase),
       network: network,
@@ -135,7 +135,7 @@ class ActiveWallets with ChangeNotifier {
 
   Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    final network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    final network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var hdWallet = HDWallet.fromSeed(
       seedPhraseUint8List(await seedPhrase),
       network: network,
@@ -341,23 +341,24 @@ class ActiveWallets with ChangeNotifier {
           for (var vOut in voutList) {
             final asMap = vOut as Map;
             if (asMap['scriptPubKey']['type'] != 'nulldata') {
-              asMap['scriptPubKey']['addresses'].forEach((addr) {
-                if (openWallet.addresses.firstWhereOrNull(
-                        (element) => element.address == addr) !=
-                    null) {
-                  //address is ours, add new tx
-                  final txValue = (vOut['value'] * 1000000).toInt();
+              asMap['scriptPubKey']['addresses'].forEach(
+                (addr) {
+                  if (openWallet.addresses.firstWhereOrNull(
+                          (element) => element.address == addr) !=
+                      null) {
+                    //address is ours, add new tx
+                    final txValue = (vOut['value'] * 1000000).toInt();
 
-                  //increase notification value for addr
-                  final addrInWallet = openWallet.addresses
-                      .firstWhere((element) => element.address == addr);
-                  addrInWallet.newNotificationBackendCount =
-                      addrInWallet.notificationBackendCount + 1;
-                  openWallet.save();
+                    //increase notification value for addr
+                    final addrInWallet = openWallet.addresses
+                        .firstWhere((element) => element.address == addr);
+                    addrInWallet.newNotificationBackendCount =
+                        addrInWallet.notificationBackendCount + 1;
+                    openWallet.save();
 
-                  //write tx
-                  openWallet.putTransaction(
-                    WalletTransaction(
+                    //write tx
+                    openWallet.putTransaction(
+                      WalletTransaction(
                         txid: tx['txid'],
                         timestamp: tx['blocktime'] ?? 0,
                         value: txValue,
@@ -367,10 +368,12 @@ class ActiveWallets with ChangeNotifier {
                         broadCasted: true,
                         confirmations: tx['confirmations'] ?? 0,
                         broadcastHex: '',
-                        opReturn: ''),
-                  );
-                }
-              });
+                        opReturn: '',
+                      ),
+                    );
+                  }
+                },
+              );
             }
           }
 
@@ -530,7 +533,7 @@ class ActiveWallets with ChangeNotifier {
     String identifier,
     String address,
   ) async {
-    var network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    var network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses
         .firstWhereOrNull((element) => element.address == address);
@@ -611,7 +614,7 @@ class ActiveWallets with ChangeNotifier {
         //find eligible input utxos
         var _totalInputValue = 0;
         var inputTx = <WalletUtxo>[];
-        var coin = AvailableCoins().getSpecificCoin(identifier);
+        var coin = AvailableCoins.getSpecificCoin(identifier);
 
         for (var utxo in utxoPool) {
           if (utxo.value > 0) {
@@ -627,7 +630,7 @@ class ActiveWallets with ChangeNotifier {
           }
         }
 
-        var coinParams = AvailableCoins().getSpecificCoin(identifier);
+        var coinParams = AvailableCoins.getSpecificCoin(identifier);
         var network = coinParams.networkType;
 
         //start building tx
@@ -782,7 +785,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   String getScriptHash(String identifier, String address) {
-    var network = AvailableCoins().getSpecificCoin(identifier).networkType;
+    var network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var script = Address.addressToOutputScript(address, network);
     var hash = sha256.convert(script).toString();
     return (reverseString(hash));

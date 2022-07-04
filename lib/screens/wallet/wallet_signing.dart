@@ -38,7 +38,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     if (_initial == true) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
+      _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
       setState(() {
         _initial = false;
       });

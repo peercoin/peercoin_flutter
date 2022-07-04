@@ -341,6 +341,11 @@ class _WalletListScreenState extends State<WalletListScreen>
                             itemCount: listData.length,
                             itemBuilder: (ctx, i) {
                               CoinWallet _wallet = listData[i];
+                              String _balance =
+                                  AvailableCoins.getDisplayValueForCoin(
+                                value: _wallet.balance,
+                                identifier: _wallet.name,
+                              );
                               return Card(
                                 elevation: 0,
                                 margin: const EdgeInsets.symmetric(
@@ -359,10 +364,11 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         leading: CircleAvatar(
                                           backgroundColor: Colors.white,
                                           child: Image.asset(
-                                              AvailableCoins()
-                                                  .getSpecificCoin(_wallet.name)
-                                                  .iconPath,
-                                              width: 20),
+                                            AvailableCoins.getSpecificCoin(
+                                                    _wallet.name)
+                                                .iconPath,
+                                            width: 20,
+                                          ),
                                         ),
                                         title: Text(
                                           _wallet.title,
@@ -375,8 +381,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         subtitle: Row(
                                           children: [
                                             Text(
-                                              (_wallet.balance / 1000000)
-                                                  .toString(),
+                                              '$_balance ${_wallet.letterCode}',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                               ),
@@ -384,12 +389,18 @@ class _WalletListScreenState extends State<WalletListScreen>
                                             const SizedBox(
                                               width: 5,
                                             ),
-                                            Text(
-                                              _wallet.letterCode,
-                                              style: const TextStyle(
-                                                fontSize: 14,
+                                            if (!_wallet.title
+                                                    .contains('Testnet') &&
+                                                _appSettings.selectedCurrency
+                                                    .isNotEmpty)
+                                              Text(
+                                                '/ ${PriceTicker.renderPrice(
+                                                  double.parse(_balance),
+                                                  _appSettings.selectedCurrency,
+                                                  _wallet.letterCode,
+                                                  _appSettings.exchangeRates,
+                                                ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
                                               ),
-                                            ),
                                           ],
                                         ),
                                         trailing: Icon(

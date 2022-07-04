@@ -133,7 +133,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
         if (idString == 'features') {
           if (result['genesis_hash'] ==
-              AvailableCoins().getSpecificCoin(_walletName).genesisHash) {
+              AvailableCoins.getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
             Provider.of<Servers>(context, listen: false).addServer(

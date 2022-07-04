@@ -351,7 +351,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleFeatures(Map result) {
     if (result['genesis_hash'] ==
-        AvailableCoins().getSpecificCoin(_coinName).genesisHash) {
+        AvailableCoins.getSpecificCoin(_coinName).genesisHash) {
       //we're connected and genesis handshake is successful
       connectionState = ElectrumConnectionState.connected;
       //subscribe to block headers

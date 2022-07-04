@@ -41,7 +41,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
   void didChangeDependencies() {
     if (_initial == true) {
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
-      _availableCoin = AvailableCoins().getSpecificCoin(_wallet.name);
+      _availableCoin = AvailableCoins.getSpecificCoin(_wallet.name);
       stringBuilder();
       setState(() {
         _initial = false;

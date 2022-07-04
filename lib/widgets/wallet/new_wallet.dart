@@ -17,7 +17,7 @@ class NewWalletDialog extends StatefulWidget {
   _NewWalletDialogState createState() => _NewWalletDialogState();
 }
 
-Map<String, Coin> availableCoins = AvailableCoins().availableCoins;
+Map<String, Coin> availableCoins = AvailableCoins.availableCoins;
 List activeCoins = [];
 
 class _NewWalletDialogState extends State<NewWalletDialog> {
@@ -107,8 +107,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             leading: CircleAvatar(
               backgroundColor: Colors.white,
               child: Image.asset(
-                  AvailableCoins()
-                      .getSpecificCoin(availableCoins[wallet]!.name)
+                  AvailableCoins.getSpecificCoin(availableCoins[wallet]!.name)
                       .iconPath,
                   width: 16),
             ),

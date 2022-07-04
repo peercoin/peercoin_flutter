@@ -56,7 +56,7 @@ class _AddressTabState extends State<AddressTab> {
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
-      _availableCoin = AvailableCoins().getSpecificCoin(widget.name);
+      _availableCoin = AvailableCoins.getSpecificCoin(widget.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _connection = Provider.of<ElectrumConnection>(context);
       _listenedAddresses = _connection.listenedAddresses.keys;

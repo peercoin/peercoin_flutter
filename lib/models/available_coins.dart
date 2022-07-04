@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:coinslib/coinslib.dart';
 import 'coin.dart';
 
 class AvailableCoins {
-  final Map<String, Coin> _availableCoinList = {
+  static final Map<String, Coin> _availableCoinList = {
     'peercoin': Coin(
       name: 'peercoin',
       displayName: 'Peercoin',
@@ -53,11 +55,21 @@ class AvailableCoins {
     ),
   };
 
-  Map<String, Coin> get availableCoins {
+  static Map<String, Coin> get availableCoins {
     return _availableCoinList;
   }
 
-  Coin getSpecificCoin(identifier) {
+  static Coin getSpecificCoin(String identifier) {
     return _availableCoinList[identifier]!;
+  }
+
+  static String getDisplayValueForCoin(
+      {required int value, required String identifier}) {
+    return (value /
+            pow(
+              10,
+              getSpecificCoin(identifier).fractions,
+            ))
+        .toString();
   }
 }

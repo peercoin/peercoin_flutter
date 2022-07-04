@@ -40,7 +40,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     if (_initial == true) {
       setState(() {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
-        _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
+        _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _connectionProvider = Provider.of<ElectrumConnection>(context);
         _activeWallets = Provider.of<ActiveWallets>(context);
         _initial = false;
