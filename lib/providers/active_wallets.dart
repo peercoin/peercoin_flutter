@@ -569,7 +569,7 @@ class ActiveWallets with ChangeNotifier {
   Future<Map> buildTransaction({
     required String identifier,
     required String address,
-    required String amount,
+    required double amount,
     required int fee,
     String opReturn = '',
     bool firstPass = true,
@@ -581,7 +581,7 @@ class ActiveWallets with ChangeNotifier {
       identifier: identifier,
     );
 
-    var _txAmount = (double.parse(amount) * decimalProduct).toInt();
+    var _txAmount = (amount * decimalProduct).toInt();
     var openWallet = getSpecificCoinWallet(identifier);
     var _hex = '';
     var _destroyedChange = 0;

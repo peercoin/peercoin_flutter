@@ -295,7 +295,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     return await _activeWallets.buildTransaction(
       identifier: _activeCoin.name,
       address: _activeWallets.getUnusedAddress,
-      amount: (_balanceInt / decimalProduct).toString(),
+      amount: (_balanceInt / decimalProduct),
       fee: 0,
       paperWalletPrivkey: _privKey,
       paperWalletUtxos: parsedWalletUtxos,

@@ -88,7 +88,7 @@ class _SendTabState extends State<SendTab> {
     return await _activeWallets.buildTransaction(
       identifier: _wallet.name,
       address: _addressKey.currentState!.value.trim(),
-      amount: _amountKey.currentState!.value,
+      amount: double.parse(_amountKey.currentState!.value),
       fee: 0,
       opReturn: _opReturnKey.currentState?.value ?? '',
     );
