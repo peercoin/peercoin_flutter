@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/available_coins.dart';
 import '/../models/coin_wallet.dart';
 import '/../providers/app_settings.dart';
 import '/../providers/electrum_connection.dart';
@@ -16,6 +17,10 @@ class WalletBalanceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _settings = context.watch<AppSettings>();
+    final decimalProduct = AvailableCoins.getDecimalProduct(
+      identifier: _wallet.name,
+    );
+
     return Column(
       children: [
         const SizedBox(
@@ -33,7 +38,7 @@ class WalletBalanceHeader extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${_wallet.balance / 1000000}',
+                      '${_wallet.balance / decimalProduct}',
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.grey[100],
@@ -57,7 +62,7 @@ class WalletBalanceHeader extends StatelessWidget {
                         !_wallet.title.contains('Testnet')
                     ? Text(
                         '${PriceTicker.renderPrice(
-                          _wallet.balance / 1000000,
+                          _wallet.balance / decimalProduct,
                           _settings.selectedCurrency,
                           _wallet.letterCode,
                           _settings.exchangeRates,
@@ -84,7 +89,7 @@ class WalletBalanceHeader extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              '${_wallet.unconfirmedBalance / 1000000} ${_wallet.letterCode}',
+                              '${_wallet.unconfirmedBalance / decimalProduct} ${_wallet.letterCode}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[300],

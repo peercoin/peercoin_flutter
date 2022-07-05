@@ -19,12 +19,12 @@ import '../../tools/logger_wrapper.dart';
 import '../double_tab_to_clipboard.dart';
 
 class AddressTab extends StatefulWidget {
-  final String name;
+  final String _walletName;
   final String title;
   final List<WalletAddress>? _walletAddresses;
   final Function changeIndex;
   const AddressTab(
-      this.name, this.title, this._walletAddresses, this.changeIndex,
+      this._walletName, this.title, this._walletAddresses, this.changeIndex,
       {Key? key})
       : super(key: key);
   @override
@@ -56,7 +56,7 @@ class _AddressTabState extends State<AddressTab> {
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
-      _availableCoin = AvailableCoins.getSpecificCoin(widget.name);
+      _availableCoin = AvailableCoins.getSpecificCoin(widget._walletName);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _connection = Provider.of<ElectrumConnection>(context);
       _listenedAddresses = _connection.listenedAddresses.keys;
@@ -70,7 +70,7 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> fillAddressBalanceMap() async {
-    final utxos = await _activeWallets.getWalletUtxos(widget.name);
+    final utxos = await _activeWallets.getWalletUtxos(widget._walletName);
     for (var tx in utxos) {
       if (tx.value > 0) {
         if (_addressBalanceMap[tx.address] != null) {
@@ -184,8 +184,8 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () {
-                context.read<ActiveWallets>().updateLabel(
-                    widget.name, address.address, _textFieldController.text);
+                context.read<ActiveWallets>().updateLabel(widget._walletName,
+                    address.address, _textFieldController.text);
                 Navigator.pop(context);
               },
               child: Text(
@@ -273,7 +273,7 @@ class _AddressTabState extends State<AddressTab> {
           : 'addressbook_dialog_addr_watched';
 
       await _activeWallets.updateAddressWatched(
-        widget.name,
+        widget._walletName,
         addr.address,
         !addr.isWatched,
       );
@@ -287,7 +287,7 @@ class _AddressTabState extends State<AddressTab> {
               'watched and subscribed ${addr.address}');
           _connection.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(
-                widget.name, addr.address),
+                widget._walletName, addr.address),
           );
         }
       }
@@ -374,7 +374,7 @@ class _AddressTabState extends State<AddressTab> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   context.read<ActiveWallets>().updateLabel(
-                        widget.name,
+                        widget._walletName,
                         _addressController.text,
                         _labelController.text == ''
                             ? ''
@@ -395,11 +395,15 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   String _renderLabel(WalletAddress addr) {
+    final decimalProduct = AvailableCoins.getDecimalProduct(
+      identifier: widget._walletName,
+    );
+
     if (_showLabel) {
       return addr.addressBookName ?? '-';
     }
     var number = _addressBalanceMap[addr.address] ?? 0;
-    return '${(number / 1000000)} ${_availableCoin.letterCode}';
+    return '${(number / decimalProduct)} ${_availableCoin.letterCode}';
   }
 
   @override
@@ -481,9 +485,8 @@ class _AddressTabState extends State<AddressTab> {
                                       .translate('jail_dialog_button')),
                                   icon: const Icon(Icons.check),
                                   onPressed: () {
-                                    context
-                                        .read<ActiveWallets>()
-                                        .removeAddress(widget.name, addr);
+                                    context.read<ActiveWallets>().removeAddress(
+                                        widget._walletName, addr);
                                     applyFilter();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(

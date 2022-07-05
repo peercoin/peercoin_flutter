@@ -341,11 +341,11 @@ class _WalletListScreenState extends State<WalletListScreen>
                             itemCount: listData.length,
                             itemBuilder: (ctx, i) {
                               CoinWallet _wallet = listData[i];
-                              String _balance =
-                                  AvailableCoins.getDisplayValueForCoin(
-                                value: _wallet.balance,
-                                identifier: _wallet.name,
-                              );
+                              String _balance = (_wallet.balance /
+                                      AvailableCoins.getDecimalProduct(
+                                        identifier: _wallet.name,
+                                      ))
+                                  .toString();
                               return Card(
                                 elevation: 0,
                                 margin: const EdgeInsets.symmetric(

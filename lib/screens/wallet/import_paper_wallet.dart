@@ -34,6 +34,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   late ElectrumConnection _connectionProvider;
   late ActiveWallets _activeWallets;
   late Map<String, List?> _paperWalletUtxos = {};
+  late int decimalProduct;
 
   @override
   void didChangeDependencies() {
@@ -43,6 +44,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _connectionProvider = Provider.of<ElectrumConnection>(context);
         _activeWallets = Provider.of<ActiveWallets>(context);
+        decimalProduct = AvailableCoins.getDecimalProduct(
+          identifier: _walletName,
+        );
         _initial = false;
       });
     }
@@ -152,7 +156,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _balanceLoading = false;
       _balanceInt = _totalValue;
       _balance =
-          '${(_totalValue / 1000000).toString()} ${_activeCoin.letterCode}';
+          '${(_totalValue / decimalProduct).toString()} ${_activeCoin.letterCode}';
     });
     moveStep(4);
   }
@@ -201,7 +205,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     AppLocalizations.instance.translate(
                       'send_fee',
                       {
-                        'amount': '${_txFee / 1000000}',
+                        'amount': '${_txFee / decimalProduct}',
                         'letter_code': _activeCoin.letterCode
                       },
                     ),
@@ -210,7 +214,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     AppLocalizations.instance.translate(
                       'send_total',
                       {
-                        'amount': '${_balanceInt / 1000000}',
+                        'amount': '${_balanceInt / decimalProduct}',
                         'letter_code': _activeCoin.letterCode
                       },
                     ),
@@ -291,7 +295,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     return await _activeWallets.buildTransaction(
       identifier: _activeCoin.name,
       address: _activeWallets.getUnusedAddress,
-      amount: (_balanceInt / 1000000).toString(),
+      amount: (_balanceInt / decimalProduct).toString(),
       fee: 0,
       paperWalletPrivkey: _privKey,
       paperWalletUtxos: parsedWalletUtxos,

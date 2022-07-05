@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
 import '../../models/wallet_transaction.dart';
 import '../../providers/active_wallets.dart';
@@ -201,7 +202,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       var discarded = _prefs.getBool('highValueNotice') ?? false;
       if (!discarded &&
           PriceTicker.renderPrice(
-                _wallet.balance / 1000000,
+                _wallet.balance /
+                    AvailableCoins.getDecimalProduct(
+                      identifier: _wallet.name,
+                    ),
                 'USD',
                 _wallet.letterCode,
                 _appSettings.exchangeRates,

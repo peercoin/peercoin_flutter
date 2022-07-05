@@ -63,13 +63,10 @@ class AvailableCoins {
     return _availableCoinList[identifier]!;
   }
 
-  static String getDisplayValueForCoin(
-      {required int value, required String identifier}) {
-    return (value /
-            pow(
-              10,
-              getSpecificCoin(identifier).fractions,
-            ))
-        .toString();
+  static int getDecimalProduct({required String identifier}) {
+    return pow(
+      10,
+      getSpecificCoin(identifier).fractions,
+    ).toInt();
   }
 }

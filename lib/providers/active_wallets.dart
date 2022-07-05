@@ -313,6 +313,10 @@ class ActiveWallets with ChangeNotifier {
       //check if that tx is already in the db
       var txInWallet = openWallet.transactions;
       var isInWallet = false;
+      final decimalProduct = AvailableCoins.getDecimalProduct(
+        identifier: identifier,
+      );
+
       for (var walletTx in txInWallet) {
         if (walletTx.txid == tx['txid']) {
           isInWallet = true;
@@ -347,7 +351,7 @@ class ActiveWallets with ChangeNotifier {
                           (element) => element.address == addr) !=
                       null) {
                     //address is ours, add new tx
-                    final txValue = (vOut['value'] * 1000000).toInt();
+                    final txValue = (vOut['value'] * decimalProduct).toInt();
 
                     //increase notification value for addr
                     final addrInWallet = openWallet.addresses
@@ -573,7 +577,11 @@ class ActiveWallets with ChangeNotifier {
     String paperWalletPrivkey = '',
   }) async {
     //convert amount
-    var _txAmount = (double.parse(amount) * 1000000).toInt();
+    final decimalProduct = AvailableCoins.getDecimalProduct(
+      identifier: identifier,
+    );
+
+    var _txAmount = (double.parse(amount) * decimalProduct).toInt();
     var openWallet = getSpecificCoinWallet(identifier);
     var _hex = '';
     var _destroyedChange = 0;
@@ -709,7 +717,7 @@ class ActiveWallets with ChangeNotifier {
         final intermediate = tx.build();
         var number = ((intermediate.txSize) / 1000 * coin.feePerKb)
             .toStringAsFixed(coin.fractions);
-        var asDouble = double.parse(number) * 1000000;
+        var asDouble = double.parse(number) * decimalProduct;
         var requiredFeeInSatoshis = asDouble.toInt();
 
         LoggerWrapper.logInfo(

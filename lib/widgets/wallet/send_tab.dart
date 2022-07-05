@@ -59,6 +59,7 @@ class _SendTabState extends State<SendTab> {
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
   late AppSettings _appSettings;
+  late int decimalProduct;
 
   @override
   void didChangeDependencies() async {
@@ -70,6 +71,10 @@ class _SendTabState extends State<SendTab> {
 
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
+
+      decimalProduct = AvailableCoins.getDecimalProduct(
+        identifier: _wallet.name,
+      );
       setState(() {
         addressController.text = widget._address ?? '';
         labelController.text = widget._label ?? '';
@@ -129,15 +134,15 @@ class _SendTabState extends State<SendTab> {
       builder: (BuildContext context) {
         String? _displayValue = _amountKey.currentState!.value;
         var amountInPutAsDouble = double.parse(_amountKey.currentState!.value);
-        _totalValue = (amountInPutAsDouble * 1000000).toInt();
+        _totalValue = (amountInPutAsDouble * decimalProduct).toInt();
         if (_totalValue == _wallet.balance) {
-          var newValue = amountInPutAsDouble - (_txFee / 1000000);
+          var newValue = amountInPutAsDouble - (_txFee / decimalProduct);
           _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
         } else {
           _totalValue = _totalValue + _txFee;
         }
         if (_destroyedChange > 0) {
-          var newValue = (amountInPutAsDouble - (_txFee / 1000000));
+          var newValue = (amountInPutAsDouble - (_txFee / decimalProduct));
           _displayValue = newValue.toString();
 
           if (_amountKey.currentState!.value == '0') {
@@ -147,7 +152,7 @@ class _SendTabState extends State<SendTab> {
             _correctedDust = _destroyedChange;
           }
           _totalValue =
-              (amountInPutAsDouble * 1000000 + _destroyedChange).toInt();
+              (amountInPutAsDouble * decimalProduct + _destroyedChange).toInt();
         }
         return SimpleDialog(
           title: Text(
@@ -185,7 +190,7 @@ class _SendTabState extends State<SendTab> {
                     AppLocalizations.instance.translate(
                       'send_fee',
                       {
-                        'amount': '${_txFee / 1000000}',
+                        'amount': '${_txFee / decimalProduct}',
                         'letter_code': _wallet.letterCode
                       },
                     ),
@@ -195,7 +200,7 @@ class _SendTabState extends State<SendTab> {
                       AppLocalizations.instance.translate(
                         'send_dust',
                         {
-                          'amount': '${_correctedDust / 1000000}',
+                          'amount': '${_correctedDust / decimalProduct}',
                           'letter_code': _wallet.letterCode
                         },
                       ),
@@ -205,7 +210,7 @@ class _SendTabState extends State<SendTab> {
                       AppLocalizations.instance.translate(
                         'send_total',
                         {
-                          'amount': '${_totalValue / 1000000}',
+                          'amount': '${_totalValue / decimalProduct}',
                           'letter_code': _wallet.letterCode
                         },
                       ),
@@ -433,7 +438,8 @@ class _SendTabState extends State<SendTab> {
                           final convertedValue = value.replaceAll(',', '.');
                           amountController.text = convertedValue;
                           var txValueInSatoshis =
-                              (double.parse(convertedValue) * 1000000).toInt();
+                              (double.parse(convertedValue) * decimalProduct)
+                                  .toInt();
                           LoggerWrapper.logInfo(
                             'SendTab',
                             'send_amount',
@@ -456,7 +462,7 @@ class _SendTabState extends State<SendTab> {
                             return AppLocalizations.instance.translate(
                                 'send_amount_below_minimum', {
                               'amount':
-                                  '${_availableCoin.minimumTxValue / 1000000}'
+                                  '${_availableCoin.minimumTxValue / decimalProduct}'
                             });
                           }
                           if (txValueInSatoshis == _wallet.balance &&
@@ -466,7 +472,7 @@ class _SendTabState extends State<SendTab> {
                               'send_amount_below_minimum_unable',
                               {
                                 'amount':
-                                    '${_availableCoin.minimumTxValue / 1000000}'
+                                    '${_availableCoin.minimumTxValue / decimalProduct}'
                               },
                             );
                           }
@@ -547,7 +553,7 @@ class _SendTabState extends State<SendTab> {
                         ),
                         action: () async {
                           amountController.text =
-                              (_wallet.balance / 1000000).toString();
+                              (_wallet.balance / decimalProduct).toString();
                         },
                       ),
                       const SizedBox(height: 10),
