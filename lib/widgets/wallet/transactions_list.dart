@@ -29,7 +29,7 @@ class TransactionList extends StatefulWidget {
 
 class _TransactionListState extends State<TransactionList> {
   String _filterChoice = 'all';
-  late int _decimalProduct;
+  late final int _decimalProduct;
 
   void _handleSelect(String newChoice) {
     setState(() {

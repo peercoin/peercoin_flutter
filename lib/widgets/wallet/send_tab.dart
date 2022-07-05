@@ -59,7 +59,7 @@ class _SendTabState extends State<SendTab> {
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
   late AppSettings _appSettings;
-  late int _decimalProduct;
+  late final int _decimalProduct;
   late bool _fiatEnabled;
 
   @override

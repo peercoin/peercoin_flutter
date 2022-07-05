@@ -34,7 +34,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   late ElectrumConnection _connectionProvider;
   late ActiveWallets _activeWallets;
   late Map<String, List?> _paperWalletUtxos = {};
-  late int _decimalProduct;
+  late final int _decimalProduct;
 
   @override
   void didChangeDependencies() {

@@ -51,7 +51,7 @@ class _AddressTabState extends State<AddressTab> {
   late ActiveWallets _activeWallets;
   late ElectrumConnection _connection;
   late Iterable _listenedAddresses;
-  late int _decimalProduct;
+  late final int _decimalProduct;
 
   @override
   void didChangeDependencies() async {
