@@ -577,12 +577,12 @@ class ActiveWallets with ChangeNotifier {
     String paperWalletPrivkey = '',
   }) async {
     //convert amount
-    final decimalProduct = AvailableCoins.getDecimalProduct(
+    final _decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: identifier,
     );
 
-    var _txAmount = (amount * decimalProduct).toInt();
-    var openWallet = getSpecificCoinWallet(identifier);
+    var _txAmount = (amount * _decimalProduct).toInt();
+    var _openWallet = getSpecificCoinWallet(identifier);
     var _hex = '';
     var _destroyedChange = 0;
 
@@ -600,7 +600,7 @@ class ActiveWallets with ChangeNotifier {
 
     //check if tx needs change
     var _needsChange = true;
-    if (_txAmount == openWallet.balance || paperWalletUtxos != null) {
+    if (_txAmount == _openWallet.balance || paperWalletUtxos != null) {
       _needsChange = false;
       LoggerWrapper.logInfo(
         'ActiveWallets',
@@ -615,9 +615,9 @@ class ActiveWallets with ChangeNotifier {
     }
 
     //define utxo pool
-    var utxoPool = paperWalletUtxos ?? openWallet.utxos;
+    var utxoPool = paperWalletUtxos ?? _openWallet.utxos;
 
-    if (_txAmount <= openWallet.balance || paperWalletUtxos != null) {
+    if (_txAmount <= _openWallet.balance || paperWalletUtxos != null) {
       if (utxoPool.isNotEmpty) {
         //find eligible input utxos
         var _totalInputValue = 0;
@@ -685,7 +685,7 @@ class ActiveWallets with ChangeNotifier {
           for (var inputUtxo in inputTx) {
             var inputKey = inputTx.indexOf(inputUtxo);
             //find key to that utxo
-            for (var walletAddr in openWallet.addresses) {
+            for (var walletAddr in _openWallet.addresses) {
               if (walletAddr.address == inputUtxo.address) {
                 var wif = paperWalletUtxos != null
                     ? paperWalletPrivkey
@@ -717,7 +717,7 @@ class ActiveWallets with ChangeNotifier {
         final intermediate = tx.build();
         var number = ((intermediate.txSize) / 1000 * coin.feePerKb)
             .toStringAsFixed(coin.fractions);
-        var asDouble = double.parse(number) * decimalProduct;
+        var asDouble = double.parse(number) * _decimalProduct;
         var requiredFeeInSatoshis = asDouble.toInt();
 
         LoggerWrapper.logInfo(

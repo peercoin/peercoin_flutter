@@ -29,7 +29,7 @@ class TransactionList extends StatefulWidget {
 
 class _TransactionListState extends State<TransactionList> {
   String _filterChoice = 'all';
-  late int decimalProduct;
+  late int _decimalProduct;
 
   void _handleSelect(String newChoice) {
     setState(() {
@@ -39,7 +39,7 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   void initState() {
-    decimalProduct = AvailableCoins.getDecimalProduct(
+    _decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: widget._wallet.name,
     );
     super.initState();
@@ -218,7 +218,7 @@ class _TransactionListState extends State<TransactionList> {
                                               ? '+'
                                               : '-') +
                                           (_filteredTx[i - 1].value /
-                                                  decimalProduct)
+                                                  _decimalProduct)
                                               .toString(),
                                       style: TextStyle(
                                         fontWeight:
@@ -237,7 +237,7 @@ class _TransactionListState extends State<TransactionList> {
                                         ? Text(
                                             '-' +
                                                 (_filteredTx[i - 1].fee /
-                                                        decimalProduct)
+                                                        _decimalProduct)
                                                     .toString(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,

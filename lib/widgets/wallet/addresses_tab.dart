@@ -51,6 +51,7 @@ class _AddressTabState extends State<AddressTab> {
   late ActiveWallets _activeWallets;
   late ElectrumConnection _connection;
   late Iterable _listenedAddresses;
+  late int _decimalProduct;
 
   @override
   void didChangeDependencies() async {
@@ -60,6 +61,9 @@ class _AddressTabState extends State<AddressTab> {
       _activeWallets = Provider.of<ActiveWallets>(context);
       _connection = Provider.of<ElectrumConnection>(context);
       _listenedAddresses = _connection.listenedAddresses.keys;
+      _decimalProduct = AvailableCoins.getDecimalProduct(
+        identifier: widget._walletName,
+      );
       await fillAddressBalanceMap();
       setState(() {
         _initial = false;
@@ -395,15 +399,11 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   String _renderLabel(WalletAddress addr) {
-    final decimalProduct = AvailableCoins.getDecimalProduct(
-      identifier: widget._walletName,
-    );
-
     if (_showLabel) {
       return addr.addressBookName ?? '-';
     }
     var number = _addressBalanceMap[addr.address] ?? 0;
-    return '${(number / decimalProduct)} ${_availableCoin.letterCode}';
+    return '${(number / _decimalProduct)} ${_availableCoin.letterCode}';
   }
 
   @override

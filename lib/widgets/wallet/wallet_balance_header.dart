@@ -17,7 +17,7 @@ class WalletBalanceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _settings = context.watch<AppSettings>();
-    final decimalProduct = AvailableCoins.getDecimalProduct(
+    final _decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: _wallet.name,
     );
 
@@ -38,7 +38,7 @@ class WalletBalanceHeader extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${_wallet.balance / decimalProduct}',
+                      '${_wallet.balance / _decimalProduct}',
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.grey[100],
@@ -62,7 +62,7 @@ class WalletBalanceHeader extends StatelessWidget {
                         !_wallet.title.contains('Testnet')
                     ? Text(
                         '${PriceTicker.renderPrice(
-                          _wallet.balance / decimalProduct,
+                          _wallet.balance / _decimalProduct,
                           _settings.selectedCurrency,
                           _wallet.letterCode,
                           _settings.exchangeRates,
@@ -89,7 +89,7 @@ class WalletBalanceHeader extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              '${_wallet.unconfirmedBalance / decimalProduct} ${_wallet.letterCode}',
+                              '${_wallet.unconfirmedBalance / _decimalProduct} ${_wallet.letterCode}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[300],
