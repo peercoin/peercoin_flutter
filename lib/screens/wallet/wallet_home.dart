@@ -142,13 +142,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider!.subscribeToScriptHashes(
-              await _activeWallets.getWalletScriptHashes(_wallet.name));
+            await _activeWallets.getWalletScriptHashes(_wallet.name),
+          );
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
-          _connectionProvider!.subscribeToScriptHashes(await _activeWallets
-              .getWalletScriptHashes(_wallet.name, _unusedAddress));
+          _connectionProvider!.subscribeToScriptHashes(
+            await _activeWallets.getWalletScriptHashes(
+                _wallet.name, _unusedAddress),
+          );
         }
       }
       if (_connectionProvider!.latestBlock > _latestBlock) {

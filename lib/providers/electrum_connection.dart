@@ -89,8 +89,6 @@ class ElectrumConnection with ChangeNotifier {
       );
       await connect();
 
-      if (_connection == null) {}
-
       var stream;
       if (_serverType == ElectrumServerType.ssl) {
         stream = _connection;
