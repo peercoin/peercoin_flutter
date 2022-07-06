@@ -71,7 +71,10 @@ class PriceTicker {
     if (currencySymbol != 'USD') {
       return prices[currencySymbol] * amount * prices[coinLetterCode];
     }
-    return amount * prices[coinLetterCode];
+    if (prices.containsKey(coinLetterCode)) {
+      return amount * prices[coinLetterCode];
+    }
+    return 0.0;
   }
 
   static void checkUpdate(AppSettings _settings) async {
