@@ -277,12 +277,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 AppLocalizations.instance.translate('wallet_rescan_content')),
             actions: <Widget>[
               TextButton.icon(
-                  label: Text(AppLocalizations.instance
-                      .translate('server_settings_alert_cancel')),
-                  icon: const Icon(Icons.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
+                label: Text(AppLocalizations.instance
+                    .translate('server_settings_alert_cancel')),
+                icon: const Icon(Icons.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
               TextButton.icon(
                 label: Text(
                     AppLocalizations.instance.translate('jail_dialog_button')),
@@ -341,6 +342,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             ),
             PopupMenuItem(
               value: 'server_settings',
+              key: const Key('walletHomeServerSettings'),
               child: ListTile(
                 leading: Icon(
                   Icons.sync,

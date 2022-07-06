@@ -89,6 +89,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
+              key: const Key('serverSettingsAddServer'),
               onPressed: () async {
                 var result = await Navigator.of(context)
                     .pushNamed(Routes.serverAdd, arguments: _walletName);

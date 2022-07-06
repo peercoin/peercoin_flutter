@@ -210,6 +210,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
         ),
         actions: [
           Padding(
+            key: const Key('saveServerButton'),
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
               onPressed: () {
