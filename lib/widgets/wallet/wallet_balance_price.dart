@@ -17,13 +17,16 @@ class WalletBalancePrice extends StatefulWidget {
 
 class _WalletBalancePriceState extends State<WalletBalancePrice> {
   late Widget _animatedWidget;
-  bool _showFiatCoinValue = false;
+  bool _showFiatCoinValue = true;
   late Timer _timer;
 
   @override
   void initState() {
-    _animatedWidget = _valueInFiatWidget();
-    Future.delayed(const Duration(seconds: 1), _widgetIntervalGiver());
+    _animatedWidget = _fiatCoinValue();
+    Future.delayed(
+      const Duration(seconds: 1),
+      _widgetIntervalGiver(),
+    );
 
     _timer = Timer.periodic(
       const Duration(seconds: 5),
@@ -40,16 +43,15 @@ class _WalletBalancePriceState extends State<WalletBalancePrice> {
     super.dispose();
   }
 
-  Widget _valueInFiatWidget() =>
+  Widget _valueInFiat() =>
       SizedBox(key: const Key('valueInFiat'), child: widget.valueInFiat);
 
-  Widget _fiatCoinValueWidget() =>
+  Widget _fiatCoinValue() =>
       SizedBox(key: const Key('fiatCoinValue'), child: widget.fiatCoinValue);
 
   _widgetIntervalGiver() {
     setState(() {
-      _animatedWidget =
-          _showFiatCoinValue ? _valueInFiatWidget() : _fiatCoinValueWidget();
+      _animatedWidget = _showFiatCoinValue ? _fiatCoinValue() : _valueInFiat();
       _showFiatCoinValue = !_showFiatCoinValue;
     });
   }
