@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/widgets/wallet/wallet_balance_price.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -60,21 +61,37 @@ class WalletBalanceHeader extends StatelessWidget {
                 ),
                 _settings.selectedCurrency.isNotEmpty &&
                         !_wallet.title.contains('Testnet')
-                    ? Text(
-                        '${PriceTicker.renderPrice(
-                          _wallet.balance / _decimalProduct,
-                          _settings.selectedCurrency,
-                          _wallet.letterCode,
-                          _settings.exchangeRates,
-                        ).toStringAsFixed(2)} ${_settings.selectedCurrency}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[200],
-                          letterSpacing: 1.2,
-                          fontWeight: FontWeight.bold,
+                    ? WalletBalancePrice(
+                        valueInFiat: Text(
+                          '${PriceTicker.renderPrice(
+                            _wallet.balance / _decimalProduct,
+                            _settings.selectedCurrency,
+                            _wallet.letterCode,
+                            _settings.exchangeRates,
+                          ).toStringAsFixed(2)} ${_settings.selectedCurrency}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[200],
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        fiatCoinValue: Text(
+                          '1 ${_wallet.letterCode} = ${(PriceTicker.renderPrice(
+                            1,
+                            _settings.selectedCurrency,
+                            _wallet.letterCode,
+                            _settings.exchangeRates,
+                          )).toStringAsFixed(2)} ${_settings.selectedCurrency}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[200],
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       )
-                    : Container(),
+                    : const SizedBox(),
                 _wallet.unconfirmedBalance > 0
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
