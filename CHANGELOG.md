@@ -1,3 +1,6 @@
+### **0.9.6** (2022-07-xx)
+* 
+
 ### **0.9.6** (2022-07-06)
 * Send tab: Allow sending in FIAT currency
 * Wallet list will now show balance in FIAT
