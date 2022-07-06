@@ -33,7 +33,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
   }
 
   double calcHeight(BuildContext context) {
-    if (MediaQuery.of(context).size.height < 800) return 900;
+    if (MediaQuery.of(context).size.height < 900) return 900;
     return SetupScreen.calcContainerHeight(context);
   }
 
