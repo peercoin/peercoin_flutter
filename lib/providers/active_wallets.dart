@@ -140,6 +140,7 @@ class ActiveWallets with ChangeNotifier {
       seedPhraseUint8List(await seedPhrase),
       network: network,
     );
+
     if (openWallet.addresses.isEmpty) {
       //generate new address
       openWallet.addNewAddress = WalletAddress(
@@ -295,6 +296,12 @@ class ActiveWallets with ChangeNotifier {
     if (scanMode == true) {
       //write phantom tx that are not displayed in tx list but known to the wallet
       //so they won't be parsed again and cause weird display behaviour
+      LoggerWrapper.logInfo(
+        'ActiveWallets',
+        'putTx',
+        'scanMode: $scanMode, writing phantom tx',
+      );
+
       openWallet.putTransaction(
         WalletTransaction(
           txid: tx['txid'],
