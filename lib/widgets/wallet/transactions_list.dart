@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
 import '../../providers/electrum_connection.dart';
 import '/../providers/active_wallets.dart';
@@ -16,6 +17,7 @@ class TransactionList extends StatefulWidget {
   final List<WalletTransaction> _walletTransactions;
   final CoinWallet _wallet;
   final ElectrumConnectionState _connectionState;
+
   const TransactionList(
       this._walletTransactions, this._wallet, this._connectionState,
       {Key? key})
@@ -27,11 +29,20 @@ class TransactionList extends StatefulWidget {
 
 class _TransactionListState extends State<TransactionList> {
   String _filterChoice = 'all';
+  late final int _decimalProduct;
 
   void _handleSelect(String newChoice) {
     setState(() {
       _filterChoice = newChoice;
     });
+  }
+
+  @override
+  void initState() {
+    _decimalProduct = AvailableCoins.getDecimalProduct(
+      identifier: widget._wallet.name,
+    );
+    super.initState();
   }
 
   String resolveAddressDisplayName(String address) {
@@ -166,13 +177,14 @@ class _TransactionListState extends State<TransactionList> {
                                     ),
                                     Text(
                                       DateFormat('d. MMM').format(
-                                          _filteredTx[i - 1].timestamp != 0
-                                              ? DateTime
-                                                  .fromMillisecondsSinceEpoch(
-                                                      _filteredTx[i - 1]
-                                                              .timestamp! *
-                                                          1000)
-                                              : DateTime.now()),
+                                        _filteredTx[i - 1].timestamp != 0
+                                            ? DateTime
+                                                .fromMillisecondsSinceEpoch(
+                                                _filteredTx[i - 1].timestamp! *
+                                                    1000,
+                                              )
+                                            : DateTime.now(),
+                                      ),
                                       style: TextStyle(
                                         fontWeight:
                                             _filteredTx[i - 1].timestamp != 0
@@ -205,7 +217,8 @@ class _TransactionListState extends State<TransactionList> {
                                       (_filteredTx[i - 1].direction == 'in'
                                               ? '+'
                                               : '-') +
-                                          (_filteredTx[i - 1].value / 1000000)
+                                          (_filteredTx[i - 1].value /
+                                                  _decimalProduct)
                                               .toString(),
                                       style: TextStyle(
                                         fontWeight:
@@ -224,7 +237,7 @@ class _TransactionListState extends State<TransactionList> {
                                         ? Text(
                                             '-' +
                                                 (_filteredTx[i - 1].fee /
-                                                        1000000)
+                                                        _decimalProduct)
                                                     .toString(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,

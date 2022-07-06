@@ -36,7 +36,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     if (_initial == true) {
       setState(() {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
-        _activeCoin = AvailableCoins().getSpecificCoin(_walletName);
+        _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _activeWallets = Provider.of<ActiveWallets>(context);
         _electrumConnection = Provider.of<ElectrumConnection>(context);
         _initial = false;

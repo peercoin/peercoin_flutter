@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
 import '../../models/wallet_transaction.dart';
 import '../../providers/active_wallets.dart';
@@ -141,13 +142,16 @@ class _WalletHomeState extends State<WalletHomeScreen>
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider!.subscribeToScriptHashes(
-              await _activeWallets.getWalletScriptHashes(_wallet.name));
+            await _activeWallets.getWalletScriptHashes(_wallet.name),
+          );
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
-          _connectionProvider!.subscribeToScriptHashes(await _activeWallets
-              .getWalletScriptHashes(_wallet.name, _unusedAddress));
+          _connectionProvider!.subscribeToScriptHashes(
+            await _activeWallets.getWalletScriptHashes(
+                _wallet.name, _unusedAddress),
+          );
         }
       }
       if (_connectionProvider!.latestBlock > _latestBlock) {
@@ -200,8 +204,15 @@ class _WalletHomeState extends State<WalletHomeScreen>
       var _prefs = await SharedPreferences.getInstance();
       var discarded = _prefs.getBool('highValueNotice') ?? false;
       if (!discarded &&
-          PriceTicker.renderPrice(_wallet.balance / 1000000, 'USD',
-                  _wallet.letterCode, _appSettings.exchangeRates) >=
+          PriceTicker.renderPrice(
+                _wallet.balance /
+                    AvailableCoins.getDecimalProduct(
+                      identifier: _wallet.name,
+                    ),
+                'USD',
+                _wallet.letterCode,
+                _appSettings.exchangeRates,
+              ) >=
               1000) {
         //Coins worth 1000 USD or more
         await showDialog(
@@ -269,12 +280,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 AppLocalizations.instance.translate('wallet_rescan_content')),
             actions: <Widget>[
               TextButton.icon(
-                  label: Text(AppLocalizations.instance
-                      .translate('server_settings_alert_cancel')),
-                  icon: const Icon(Icons.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
+                label: Text(AppLocalizations.instance
+                    .translate('server_settings_alert_cancel')),
+                icon: const Icon(Icons.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
               TextButton.icon(
                 label: Text(
                     AppLocalizations.instance.translate('jail_dialog_button')),
@@ -333,6 +345,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             ),
             PopupMenuItem(
               value: 'server_settings',
+              key: const Key('walletHomeServerSettings'),
               child: ListTile(
                 leading: Icon(
                   Icons.sync,
@@ -437,7 +450,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case Tabs.send:
         body = Expanded(
-          child: SendTab(changeIndex, _address, _label, _connectionState),
+          child: SendTab(
+            changeIndex,
+            _address,
+            _label,
+            _connectionState,
+          ),
         );
         break;
       default:

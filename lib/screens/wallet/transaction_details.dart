@@ -26,7 +26,10 @@ class TransactionDetails extends StatelessWidget {
     final WalletTransaction _tx = args[0];
     final CoinWallet _coinWallet = args[1];
     final baseUrl =
-        AvailableCoins().getSpecificCoin(_coinWallet.name).explorerUrl + '/tx/';
+        AvailableCoins.getSpecificCoin(_coinWallet.name).explorerUrl + '/tx/';
+    final decimalProduct = AvailableCoins.getDecimalProduct(
+      identifier: _coinWallet.name,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +62,9 @@ class TransactionDetails extends StatelessWidget {
                     _tx.timestamp! != 0
                         ? DateFormat().format(
                             DateTime.fromMillisecondsSinceEpoch(
-                                _tx.timestamp! * 1000))
+                              _tx.timestamp! * 1000,
+                            ),
+                          )
                         : AppLocalizations.instance.translate('unconfirmed'),
                   )
                 ],
@@ -72,9 +77,11 @@ class TransactionDetails extends StatelessWidget {
                     AppLocalizations.instance.translate('tx_value'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText((_tx.value / 1000000).toString() +
-                      ' ' +
-                      _coinWallet.letterCode)
+                  SelectableText(
+                    (_tx.value / decimalProduct).toString() +
+                        ' ' +
+                        _coinWallet.letterCode,
+                  )
                 ],
               ),
               _tx.direction == 'out'
@@ -82,12 +89,15 @@ class TransactionDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Divider(),
-                        Text(AppLocalizations.instance.translate('tx_fee'),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                        SelectableText((_tx.fee / 1000000).toString() +
-                            ' ' +
-                            _coinWallet.letterCode)
+                        Text(
+                          AppLocalizations.instance.translate('tx_fee'),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SelectableText(
+                          (_tx.fee / decimalProduct).toString() +
+                              ' ' +
+                              _coinWallet.letterCode,
+                        )
                       ],
                     )
                   : Container(),
@@ -118,11 +128,15 @@ class TransactionDetails extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.instance.translate('tx_confirmations'),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  SelectableText(_tx.confirmations == -1
-                      ? AppLocalizations.instance.translate('tx_rejected')
-                      : _tx.confirmations.toString())
+                  Text(
+                    AppLocalizations.instance.translate('tx_confirmations'),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SelectableText(
+                    _tx.confirmations == -1
+                        ? AppLocalizations.instance.translate('tx_rejected')
+                        : _tx.confirmations.toString(),
+                  )
                 ],
               ),
               _tx.opReturn.isNotEmpty
@@ -131,10 +145,9 @@ class TransactionDetails extends StatelessWidget {
                       children: [
                         const Divider(),
                         Text(
-                            AppLocalizations.instance
-                                .translate('send_op_return'),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
+                          AppLocalizations.instance.translate('send_op_return'),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         SelectableText(_tx.opReturn)
                       ],
                     )

@@ -62,16 +62,18 @@ class Servers with ChangeNotifier {
     }
     //check if hard coded seeds have been removed
     for (var boxElement in _serverBox.values) {
-      var res = _seeds[coinIdentifier]!.firstWhere(
-          (element) => element == boxElement.address,
-          orElse: () => null);
-      if (res == null) {
-        LoggerWrapper.logInfo(
-          'Servers',
-          'init',
-          '${boxElement.address} not existant anymore',
-        );
-        removeServer(boxElement);
+      if (boxElement.userGenerated == false) {
+        var res = _seeds[coinIdentifier]!.firstWhere(
+            (element) => element == boxElement.address,
+            orElse: () => null);
+        if (res == null) {
+          LoggerWrapper.logInfo(
+            'Servers',
+            'init',
+            '${boxElement.address} not existant anymore',
+          );
+          removeServer(boxElement);
+        }
       }
     }
   }

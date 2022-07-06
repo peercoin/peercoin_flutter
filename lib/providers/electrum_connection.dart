@@ -1,8 +1,12 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../models/available_coins.dart';
@@ -12,6 +16,8 @@ import 'servers.dart';
 
 enum ElectrumConnectionState { waiting, connected, offline }
 
+enum ElectrumServerType { ssl, wss }
+
 class ElectrumConnection with ChangeNotifier {
   static const Map<String, double> _requiredProtocol = {
     'peercoin': 1.4,
@@ -20,9 +26,10 @@ class ElectrumConnection with ChangeNotifier {
 
   Timer? _pingTimer;
   Timer? _reconnectTimer;
-  WebSocketChannel? _connection;
+  var _connection;
   final ActiveWallets _activeWallets;
   ElectrumConnectionState _connectionState = ElectrumConnectionState.waiting;
+  late ElectrumServerType _serverType;
   final Servers _servers;
   Map _addresses = {};
   Map<String, List?> _paperWalletUtxos = {};
@@ -81,25 +88,39 @@ class ElectrumConnection with ChangeNotifier {
         'init server connection',
       );
       await connect();
-      var stream = _connection!.stream;
+
+      var stream;
+      if (_serverType == ElectrumServerType.ssl) {
+        stream = _connection;
+      } else if (_serverType == ElectrumServerType.wss) {
+        stream = _connection!.stream;
+      }
 
       if (requestedFromWalletHome == true) {
         _closedIntentionally = false;
       }
 
-      stream.listen((elem) {
-        replyHandler(elem);
-      }, onError: (error) {
-        LoggerWrapper.logError(
-          'ElectrumConnection',
-          'init',
-          error.message,
-        );
-        _connectionAttempt++;
-      }, onDone: () {
-        cleanUpOnDone();
-        LoggerWrapper.logInfo('ElectrumConnection', 'init', 'connection done');
-      });
+      stream.listen(
+        (elem) {
+          replyHandler(elem);
+        },
+        onError: (error) {
+          LoggerWrapper.logError(
+            'ElectrumConnection',
+            'init',
+            error.message,
+          );
+          _connectionAttempt++;
+        },
+        onDone: () {
+          cleanUpOnDone();
+          LoggerWrapper.logInfo(
+            'ElectrumConnection',
+            'init',
+            'connection done',
+          );
+        },
+      );
       tryHandShake();
       startPingTimer();
 
@@ -127,11 +148,28 @@ class ElectrumConnection with ChangeNotifier {
       'connect',
       'connecting to $_serverUrl',
     );
-
     try {
-      _connection = WebSocketChannel.connect(
-        Uri.parse(_serverUrl),
-      );
+      if (_serverUrl.contains('wss://')) {
+        _connection = WebSocketChannel.connect(
+          Uri.parse(_serverUrl),
+        );
+        _serverType = ElectrumServerType.wss;
+      } else if (_serverUrl.contains('ssl://') && kIsWeb == false) {
+        _serverType = ElectrumServerType.ssl;
+
+        final split = _serverUrl.split(':');
+        final host = split[1].replaceAll('//', '');
+        final port = int.parse(split[2]);
+        _connection = await SecureSocket.connect(
+          host,
+          port,
+          timeout: const Duration(seconds: 10),
+        );
+      } else {
+        //sockets / ssl is not available on web -> try other server
+        _connectionAttempt++;
+        await connect();
+      }
     } catch (e) {
       _connectionAttempt++;
       LoggerWrapper.logError(
@@ -180,7 +218,11 @@ class ElectrumConnection with ChangeNotifier {
   Future<void> closeConnection([bool _intentional = true]) async {
     if (_connection != null) {
       _closedIntentionally = _intentional;
-      await _connection!.sink.close();
+      if (_serverType == ElectrumServerType.ssl) {
+        _connection.close();
+      } else if (_serverType == ElectrumServerType.wss) {
+        await _connection!.sink.close();
+      }
     }
     if (_intentional) {
       _closedIntentionally = true;
@@ -221,8 +263,14 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void replyHandler(reply) {
-    LoggerWrapper.logInfo('ElectrumConnection', 'replyHandler', reply);
-    var decoded = json.decode(reply);
+    String parsedReply;
+    if (reply is Uint8List) {
+      parsedReply = String.fromCharCodes(reply);
+    } else {
+      parsedReply = reply;
+    }
+    LoggerWrapper.logInfo('ElectrumConnection', 'replyHandler', parsedReply);
+    var decoded = json.decode(parsedReply);
     var id = decoded['id'];
     var idString = id.toString();
     var result = decoded['result'];
@@ -268,12 +316,16 @@ class ElectrumConnection with ChangeNotifier {
 
   void sendMessage(String method, String? id, [List? params]) {
     _openReplies.add(id);
+    final String _encodedMessage = json.encode(
+      {'id': id, 'method': method, if (params != null) 'params': params},
+    );
     if (_connection != null) {
-      _connection!.sink.add(
-        json.encode(
-          {'id': id, 'method': method, if (params != null) 'params': params},
-        ),
-      );
+      if (_serverType == ElectrumServerType.ssl) {
+        _connection.add(_encodedMessage.codeUnits);
+        _connection.add('\n'.codeUnits);
+      } else if (_serverType == ElectrumServerType.wss) {
+        _connection!.sink.add(_encodedMessage);
+      }
     }
   }
 
@@ -297,7 +349,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleFeatures(Map result) {
     if (result['genesis_hash'] ==
-        AvailableCoins().getSpecificCoin(_coinName).genesisHash) {
+        AvailableCoins.getSpecificCoin(_coinName).genesisHash) {
       //we're connected and genesis handshake is successful
       connectionState = ElectrumConnectionState.connected;
       //subscribe to block headers

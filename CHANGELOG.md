@@ -1,3 +1,8 @@
+### **0.9.6** (2022-07-06)
+* Send tab: Allow sending in FIAT currency
+* Wallet list will now show balance in FIAT
+* SSL servers are now available (not on web)
+
 ### **0.9.5** (2022-06-24)
 * Setup legal: fix container heights on smaller screens
 * Performance upgrades under the hood

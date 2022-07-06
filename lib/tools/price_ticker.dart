@@ -60,7 +60,11 @@ class PriceTicker {
   };
 
   static double renderPrice(
-      double amount, String currencySymbol, String coinLetterCode, Map prices) {
+    double amount,
+    String currencySymbol,
+    String coinLetterCode,
+    Map prices,
+  ) {
     if (prices.isEmpty) {
       return 0.0;
     }
