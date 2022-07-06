@@ -195,6 +195,7 @@
     "send": "Send",
     "send_address": "Address",
     "send_add_metadata": "Add Metadata",
+    "send_fiat_switch": "Amount in $currency",
     "send_amount": "Amount",
     "send_amount_below_minimum": "Minimum output is $amount. \nPlease chose an amount greater or equal to it.",
     "send_amount_below_minimum_unable": "Minimum output is $amount. \nYou don't have enough funds to pay for the fees.",
