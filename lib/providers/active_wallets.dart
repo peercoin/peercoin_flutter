@@ -293,156 +293,131 @@ class ActiveWallets with ChangeNotifier {
     var openWallet = getSpecificCoinWallet(identifier);
     LoggerWrapper.logInfo('ActiveWallets', 'putTx', '$address puttx: $tx');
 
-    if (scanMode == true) {
-      //write phantom tx that are not displayed in tx list but known to the wallet
-      //so they won't be parsed again and cause weird display behaviour
-      LoggerWrapper.logInfo(
-        'ActiveWallets',
-        'putTx',
-        'scanMode: $scanMode, writing phantom tx',
-      );
+    //check if that tx is already in the db
+    var txInWallet = openWallet.transactions;
+    var isInWallet = false;
+    final decimalProduct = AvailableCoins.getDecimalProduct(
+      identifier: identifier,
+    );
 
-      openWallet.putTransaction(
-        WalletTransaction(
-          txid: tx['txid'],
-          timestamp: -1, //flags phantom tx
-          value: 0,
-          fee: 0,
-          address: address,
-          direction: 'in',
-          broadCasted: true,
-          confirmations: 0,
-          broadcastHex: '',
-          opReturn: '',
-        ),
-      );
-    } else {
-      //check if that tx is already in the db
-      var txInWallet = openWallet.transactions;
-      var isInWallet = false;
-      final decimalProduct = AvailableCoins.getDecimalProduct(
-        identifier: identifier,
-      );
+    for (var walletTx in txInWallet) {
+      if (walletTx.txid == tx['txid']) {
+        isInWallet = true;
+        if (isInWallet == true) {
+          if (walletTx.timestamp == 0 || walletTx.timestamp == null) {
+            //did the tx confirm?
+            walletTx.newTimestamp = tx['blocktime'] ?? 0;
+          }
+          if (tx['confirmations'] != null &&
+              walletTx.confirmations < tx['confirmations']) {
+            //more confirmations?
+            walletTx.newConfirmations = tx['confirmations'];
+          }
+        }
+      }
+    }
+    //it's not in wallet yet
+    if (!isInWallet) {
+      //check if that tx addresses more than one of our addresses
+      var utxoInWallet =
+          openWallet.utxos.firstWhereOrNull((elem) => elem.hash == tx['txid']);
+      var direction = utxoInWallet == null ? 'out' : 'in';
 
-      for (var walletTx in txInWallet) {
-        if (walletTx.txid == tx['txid']) {
-          isInWallet = true;
-          if (isInWallet == true) {
-            if (walletTx.timestamp == 0 || walletTx.timestamp == null) {
-              //did the tx confirm?
-              walletTx.newTimestamp = tx['blocktime'] ?? 0;
-            }
-            if (tx['confirmations'] != null &&
-                walletTx.confirmations < tx['confirmations']) {
-              //more confirmations?
-              walletTx.newConfirmations = tx['confirmations'];
+      if (direction == 'in') {
+        List voutList = tx['vout'].toList();
+        for (var vOut in voutList) {
+          final asMap = vOut as Map;
+          if (asMap['scriptPubKey']['type'] != 'nulldata') {
+            asMap['scriptPubKey']['addresses'].forEach(
+              (addr) {
+                if (openWallet.addresses.firstWhereOrNull(
+                        (element) => element.address == addr) !=
+                    null) {
+                  //address is ours, add new tx
+                  final txValue = (vOut['value'] * decimalProduct).toInt();
+
+                  //increase notification value for addr
+                  final addrInWallet = openWallet.addresses
+                      .firstWhere((element) => element.address == addr);
+                  addrInWallet.newNotificationBackendCount =
+                      addrInWallet.notificationBackendCount + 1;
+                  openWallet.save();
+
+                  //write tx
+                  openWallet.putTransaction(
+                    WalletTransaction(
+                      txid: tx['txid'],
+                      timestamp: tx['blocktime'] ?? 0,
+                      value: txValue,
+                      fee: 0,
+                      address: addr,
+                      direction: direction,
+                      broadCasted: true,
+                      confirmations: tx['confirmations'] ?? 0,
+                      broadcastHex: '',
+                      opReturn: '',
+                    ),
+                  );
+                }
+              },
+            );
+          }
+        }
+
+        //scan for OP_RETURN messages
+        //obtain transaction object
+        final txData = Uint8List.fromList(HEX.decode(tx['hex']));
+        final txFromBuffer = Transaction.fromBuffer(txData);
+
+        //loop through outputs to find OP_RETURN outputs
+        for (final out in txFromBuffer.outs) {
+          final script = decompile(out.script)!;
+          // Find OP_RETURN + push data
+          if (script.length == 2 &&
+              script[0] == OPS['OP_RETURN'] &&
+              script[1] is Uint8List) {
+            String? parsedMessage;
+
+            try {
+              parsedMessage = utf8.decode(script[1]);
+            } catch (e) {
+              LoggerWrapper.logError(
+                'ActiveWallets',
+                'putTx',
+                e.toString(),
+              );
+            } finally {
+              openWallet.putTransaction(
+                WalletTransaction(
+                  txid: tx['txid'],
+                  timestamp: tx['blocktime'] ?? 0,
+                  value: 0,
+                  fee: 0,
+                  address: 'Metadata',
+                  direction: direction,
+                  broadCasted: true,
+                  confirmations: tx['confirmations'] ?? 0,
+                  broadcastHex: '',
+                  opReturn: parsedMessage ??
+                      'There was an error decoding this message',
+                ),
+              );
             }
           }
         }
       }
-      //it's not in wallet yet
-      if (!isInWallet) {
-        //check if that tx addresses more than one of our addresses
-        var utxoInWallet = openWallet.utxos
-            .firstWhereOrNull((elem) => elem.hash == tx['txid']);
-        var direction = utxoInWallet == null ? 'out' : 'in';
+      // trigger notification
+      var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-        if (direction == 'in') {
-          List voutList = tx['vout'].toList();
-          for (var vOut in voutList) {
-            final asMap = vOut as Map;
-            if (asMap['scriptPubKey']['type'] != 'nulldata') {
-              asMap['scriptPubKey']['addresses'].forEach(
-                (addr) {
-                  if (openWallet.addresses.firstWhereOrNull(
-                          (element) => element.address == addr) !=
-                      null) {
-                    //address is ours, add new tx
-                    final txValue = (vOut['value'] * decimalProduct).toInt();
-
-                    //increase notification value for addr
-                    final addrInWallet = openWallet.addresses
-                        .firstWhere((element) => element.address == addr);
-                    addrInWallet.newNotificationBackendCount =
-                        addrInWallet.notificationBackendCount + 1;
-                    openWallet.save();
-
-                    //write tx
-                    openWallet.putTransaction(
-                      WalletTransaction(
-                        txid: tx['txid'],
-                        timestamp: tx['blocktime'] ?? 0,
-                        value: txValue,
-                        fee: 0,
-                        address: addr,
-                        direction: direction,
-                        broadCasted: true,
-                        confirmations: tx['confirmations'] ?? 0,
-                        broadcastHex: '',
-                        opReturn: '',
-                      ),
-                    );
-                  }
-                },
-              );
-            }
-          }
-
-          //scan for OP_RETURN messages
-          //obtain transaction object
-          final txData = Uint8List.fromList(HEX.decode(tx['hex']));
-          final txFromBuffer = Transaction.fromBuffer(txData);
-
-          //loop through outputs to find OP_RETURN outputs
-          for (final out in txFromBuffer.outs) {
-            final script = decompile(out.script)!;
-            // Find OP_RETURN + push data
-            if (script.length == 2 &&
-                script[0] == OPS['OP_RETURN'] &&
-                script[1] is Uint8List) {
-              String? parsedMessage;
-
-              try {
-                parsedMessage = utf8.decode(script[1]);
-              } catch (e) {
-                LoggerWrapper.logError(
-                  'ActiveWallets',
-                  'putTx',
-                  e.toString(),
-                );
-              } finally {
-                openWallet.putTransaction(
-                  WalletTransaction(
-                    txid: tx['txid'],
-                    timestamp: tx['blocktime'] ?? 0,
-                    value: 0,
-                    fee: 0,
-                    address: 'Metadata',
-                    direction: direction,
-                    broadCasted: true,
-                    confirmations: tx['confirmations'] ?? 0,
-                    broadcastHex: '',
-                    opReturn: parsedMessage ??
-                        'There was an error decoding this message',
-                  ),
-                );
-              }
-            }
-          }
-        }
-        // trigger notification
-        var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-        if (direction == 'in') {
-          await flutterLocalNotificationsPlugin.show(
-            DateTime.now().millisecondsSinceEpoch ~/ 10000,
-            AppLocalizations.instance.translate(
-                'notification_title', {'walletTitle': openWallet.title}),
-            tx['txid'],
-            LocalNotificationSettings.platformChannelSpecifics,
-            payload: identifier,
-          );
-        }
+      if (direction == 'in') {
+        await flutterLocalNotificationsPlugin.show(
+          DateTime.now().millisecondsSinceEpoch ~/ 10000,
+          AppLocalizations.instance.translate(
+              'notification_title', {'walletTitle': openWallet.title}),
+          tx['txid'],
+          LocalNotificationSettings.platformChannelSpecifics,
+          payload: identifier,
+        );
       }
     }
 
