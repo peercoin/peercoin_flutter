@@ -50,7 +50,7 @@ class _AddressTabState extends State<AddressTab> {
   final Map _isWatchedMap = {};
   late ActiveWallets _activeWallets;
   late ElectrumConnection _connection;
-  late Iterable _listenedAddresses;
+  late Map _listenedAddresses;
   late final int _decimalProduct;
 
   @override
@@ -60,7 +60,7 @@ class _AddressTabState extends State<AddressTab> {
       _availableCoin = AvailableCoins.getSpecificCoin(widget._walletName);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _connection = Provider.of<ElectrumConnection>(context);
-      _listenedAddresses = _connection.listenedAddresses.keys;
+      _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget._walletName,
       );
@@ -284,14 +284,16 @@ class _AddressTabState extends State<AddressTab> {
 
       applyFilter();
       if (_connection.connectionState == ElectrumConnectionState.connected) {
-        if (!_listenedAddresses.contains(addr.address) &&
+        if (!_listenedAddresses.containsKey(addr.address) &&
             addr.isWatched == true) {
           //subscribe
           LoggerWrapper.logInfo('AddressTab', '_toggleWatched',
               'watched and subscribed ${addr.address}');
           _connection.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(
-                widget._walletName, addr.address),
+              widget._walletName,
+              addr.address,
+            ),
           );
         }
       }
