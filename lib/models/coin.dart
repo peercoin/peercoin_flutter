@@ -10,7 +10,8 @@ class Coin {
   final NetworkType networkType;
   final int fractions;
   final int minimumTxValue;
-  final double feePerKb;
+  final double fixedFeePerKb;
+  final bool fixedFee;
   final String explorerUrl;
   final String genesisHash;
   final int txVersion;
@@ -25,7 +26,8 @@ class Coin {
     required this.networkType,
     required this.fractions,
     required this.minimumTxValue,
-    required this.feePerKb,
+    required this.fixedFeePerKb,
+    required this.fixedFee,
     required this.explorerUrl,
     required this.genesisHash,
     required this.txVersion,
