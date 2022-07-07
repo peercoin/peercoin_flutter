@@ -15,6 +15,8 @@ class Coin {
   final String explorerUrl;
   final String genesisHash;
   final int txVersion;
+  final double electrumRequiredProtocol;
+  final List electrumServers;
 
   Coin({
     required this.name,
@@ -31,5 +33,7 @@ class Coin {
     required this.explorerUrl,
     required this.genesisHash,
     required this.txVersion,
+    required this.electrumRequiredProtocol,
+    required this.electrumServers,
   });
 }

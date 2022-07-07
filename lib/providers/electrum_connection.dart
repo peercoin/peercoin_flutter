@@ -19,11 +19,6 @@ enum ElectrumConnectionState { waiting, connected, offline }
 enum ElectrumServerType { ssl, wss }
 
 class ElectrumConnection with ChangeNotifier {
-  static const Map<String, double> _requiredProtocol = {
-    'peercoin': 1.4,
-    'peercoinTestnet': 1.4
-  };
-
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   var _connection;
@@ -41,6 +36,7 @@ class ElectrumConnection with ChangeNotifier {
   int _connectionAttempt = 0;
   late List _availableServers;
   late StreamSubscription _offlineSubscription;
+  late double _requiredProtocol;
   int _depthPointer = 1;
   int _maxChainDepth = 5;
   int _maxAddressDepth = 0; //no address depth scan for now
@@ -55,6 +51,9 @@ class ElectrumConnection with ChangeNotifier {
     bool requestedFromWalletHome = false,
   }) async {
     await _servers.init(walletName);
+    _requiredProtocol =
+        AvailableCoins.getSpecificCoin(walletName).electrumRequiredProtocol;
+
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.none) {
@@ -342,7 +341,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleVersion(List result) {
     var version = double.parse(result.elementAt(result.length - 1));
-    if (version < _requiredProtocol[_coinName]!) {
+    if (version < _requiredProtocol) {
       //protocol version too low!
       closeConnection(false);
     }
