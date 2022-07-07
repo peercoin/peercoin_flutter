@@ -466,9 +466,6 @@ class ActiveWallets with ChangeNotifier {
   Future<void> prepareForRescan(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
     openWallet.utxos.removeRange(0, openWallet.utxos.length);
-
-    openWallet.transactions
-        .removeWhere((element) => element.txid == 'notification_dummy');
     openWallet.transactions
         .removeWhere((element) => element.broadCasted == false);
 
