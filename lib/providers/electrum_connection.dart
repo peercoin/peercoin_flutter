@@ -323,8 +323,9 @@ class ElectrumConnection with ChangeNotifier {
       if (_serverType == ElectrumServerType.ssl) {
         _connection.add(_encodedMessage.codeUnits);
         _connection.add('\n'.codeUnits);
-      } else if (_serverType == ElectrumServerType.wss) {
-        _connection!.sink.add(_encodedMessage);
+      } else if (_serverType == ElectrumServerType.wss &&
+          _connection.sink != null) {
+        _connection.sink.add(_encodedMessage);
       }
     }
   }
