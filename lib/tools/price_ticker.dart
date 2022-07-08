@@ -65,16 +65,13 @@ class PriceTicker {
     String coinLetterCode,
     Map prices,
   ) {
-    if (prices.isEmpty) {
+    if (prices.isEmpty || prices.containsKey(coinLetterCode) == false) {
       return 0.0;
     }
     if (currencySymbol != 'USD') {
       return prices[currencySymbol] * amount * prices[coinLetterCode];
     }
-    if (prices.containsKey(coinLetterCode)) {
-      return amount * prices[coinLetterCode];
-    }
-    return 0.0;
+    return amount * prices[coinLetterCode];
   }
 
   static void checkUpdate(AppSettings _settings) async {
