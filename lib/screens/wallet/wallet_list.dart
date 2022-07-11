@@ -443,4 +443,5 @@ class _WalletListScreenState extends State<WalletListScreen>
       );
     }
   }
+  //TODO does not update with price
 }
