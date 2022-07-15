@@ -107,7 +107,7 @@ class Auth {
       biometricHint:
           AppLocalizations.instance.translate('authenticate_biometric_hint'),
     );
-    final executeCB = executeCallback(context, callback);
+    Future<void> executeCB() async => executeCallback(context, callback);
     try {
       final didAuthenticate = await localAuth.authenticate(
           androidAuthStrings: authStrings,
@@ -116,7 +116,7 @@ class Auth {
               .translate('authenticate_biometric_reason'),
           stickyAuth: true);
       if (didAuthenticate) {
-        await executeCB;
+        await executeCB();
       }
     } catch (e) {
       await localAuth.stopAuthentication();
@@ -130,7 +130,7 @@ class Auth {
     bool canCancel = true,
     bool jailedFromHome = false,
   }) async {
-    final encryptedBox = context.read<EncryptedBox>();
+    final encryptedBox = Provider.of<EncryptedBox>(context, listen: false);
     failedAuthAttempts = await encryptedBox.failedAuthAttempts;
     retriesLeft = (maxRetries - failedAuthAttempts);
     if (retriesLeft <= 0) retriesLeft = 1;
