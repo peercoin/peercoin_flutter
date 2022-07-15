@@ -66,12 +66,12 @@ class _WalletListScreenState extends State<WalletListScreen>
     _activeWallets = Provider.of<ActiveWallets>(context);
     _appSettings = Provider.of<AppSettings>(context);
     if (_initial) {
+      await _appSettings.init(); //only required in home widget
+      await _activeWallets.init();
       setState(() {
         _initial = false;
       });
 
-      await _appSettings.init(); //only required in home widget
-      await _activeWallets.init();
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
@@ -294,9 +294,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                   ),
                   FutureBuilder(
                     future: _activeWallets.activeWalletsValues,
+                    initialData: const [],
                     builder: (_, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting ||
-                          snapshot.data == null) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Expanded(
                           child: Center(
                             child: LoadingIndicator(),
