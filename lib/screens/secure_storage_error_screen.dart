@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/tools/app_localizations.dart';
+
+import '../tools/app_localizations.dart';
 
 class SecureStorageFailedScreen extends StatelessWidget {
   const SecureStorageFailedScreen({Key? key}) : super(key: key);

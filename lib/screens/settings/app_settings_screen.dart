@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
@@ -23,6 +22,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/double_tab_to_clipboard.dart';
 import '../../widgets/settings/settings_auth.dart';
 import '../../widgets/settings/settings_price_ticker.dart';
+import '../../widgets/service_container.dart';
 import '../about.dart';
 
 class AppSettingsScreen extends StatefulWidget {

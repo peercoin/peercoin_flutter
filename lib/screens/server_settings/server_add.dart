@@ -7,7 +7,6 @@ import 'dart:typed_data';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -18,6 +17,7 @@ import '../../providers/servers.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
+import '../../widgets/service_container.dart';
 
 class ServerAddScreen extends StatefulWidget {
   const ServerAddScreen({Key? key}) : super(key: key);

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:peercoin/models/available_coins.dart';
 
+import '../models/available_coins.dart';
 import '../models/server.dart';
 import '../tools/logger_wrapper.dart';
 import 'encrypted_box.dart';

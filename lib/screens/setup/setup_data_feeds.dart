@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -9,6 +8,7 @@ import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
+import 'setup.dart';
 
 class SetupDataFeedsScreen extends StatefulWidget {
   const SetupDataFeedsScreen({Key? key}) : super(key: key);

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../models/available_coins.dart';
@@ -8,6 +7,7 @@ import '../../models/coin_wallet.dart';
 import '../../models/wallet_transaction.dart';
 import '../../tools/app_localizations.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/service_container.dart';
 
 class TransactionDetails extends StatelessWidget {
   const TransactionDetails({Key? key}) : super(key: key);

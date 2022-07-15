@@ -4,7 +4,7 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:peercoin/tools/logger_wrapper.dart';
+import '../tools/logger_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../tools/app_localizations.dart';

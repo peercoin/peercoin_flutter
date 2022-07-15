@@ -2,7 +2,6 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -13,6 +12,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/service_container.dart';
 
 class ImportWifScreen extends StatefulWidget {
   const ImportWifScreen({Key? key}) : super(key: key);

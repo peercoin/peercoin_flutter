@@ -3,8 +3,6 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -12,11 +10,13 @@ import '../../models/coin.dart';
 import '../../models/wallet_address.dart';
 import '../../providers/active_wallets.dart';
 import '../../providers/app_settings.dart';
+import '../../providers/electrum_connection.dart';
 import '../../screens/wallet/wallet_home.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
 import '../double_tab_to_clipboard.dart';
+import 'wallet_home_qr.dart';
 
 class AddressTab extends StatefulWidget {
   final String _walletName;

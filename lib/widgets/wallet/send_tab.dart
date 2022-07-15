@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:peercoin/tools/price_ticker.dart';
 import 'package:provider/provider.dart';
 
+import '../../tools/price_ticker.dart';
 import '/../models/wallet_address.dart';
 import '/../providers/app_settings.dart';
 import '/../screens/wallet/wallet_home.dart';

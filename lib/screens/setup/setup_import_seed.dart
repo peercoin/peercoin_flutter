@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +10,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
+import 'setup.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
   const SetupImportSeedScreen({Key? key}) : super(key: key);

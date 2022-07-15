@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/server.dart';
 import '../../providers/electrum_connection.dart';
+import '../../widgets/service_container.dart';
 import '../../providers/servers.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';

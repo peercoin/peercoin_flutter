@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/widgets/setup/session_slider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/app_settings.dart';
@@ -12,6 +10,8 @@ import '../../providers/encrypted_box.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/setup/session_slider.dart';
+import 'setup.dart';
 
 class SetupAuthScreen extends StatefulWidget {
   const SetupAuthScreen({Key? key}) : super(key: key);
