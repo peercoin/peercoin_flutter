@@ -319,8 +319,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           PeerServiceTitle(
-                              title: AppLocalizations.instance
-                                  .translate('buy_peercoin')),
+                            title: AppLocalizations.instance
+                                .translate('buy_peercoin'),
+                          ),
                           const SizedBox(height: 20),
                           Text(
                             AppLocalizations.instance

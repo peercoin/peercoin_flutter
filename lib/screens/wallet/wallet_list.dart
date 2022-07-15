@@ -64,7 +64,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
-    _appSettings = Provider.of<AppSettings>(context, listen: false);
+    _appSettings = Provider.of<AppSettings>(context);
     if (_initial) {
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
@@ -299,7 +299,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                     builder: (_, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Expanded(
-                          child: Center(child: LoadingIndicator()),
+                          child: Center(
+                            child: LoadingIndicator(),
+                          ),
                         );
                       }
                       var listData = snapshot.data! as List;
@@ -352,7 +354,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                               return Card(
                                 elevation: 0,
                                 margin: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                  vertical: 8,
+                                  horizontal: 16,
+                                ),
                                 color: Theme.of(context).backgroundColor,
                                 child: Column(
                                   children: [
@@ -368,8 +372,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                                           backgroundColor: Colors.white,
                                           child: Image.asset(
                                             AvailableCoins.getSpecificCoin(
-                                                    _wallet.name)
-                                                .iconPath,
+                                              _wallet.name,
+                                            ).iconPath,
                                             width: 20,
                                           ),
                                         ),
@@ -443,5 +447,4 @@ class _WalletListScreenState extends State<WalletListScreen>
       );
     }
   }
-  //TODO does not update with price
 }
