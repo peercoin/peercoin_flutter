@@ -120,8 +120,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void revealSeedPhrase(bool biometricsAllowed) async {
-    final seed =
-        await Provider.of<ActiveWallets>(context, listen: false).seedPhrase;
+    final seed = await context.read<ActiveWallets>().seedPhrase;
     await Auth.requireAuth(
       context: context,
       biometricsAllowed: biometricsAllowed,

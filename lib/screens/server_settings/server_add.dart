@@ -50,8 +50,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   void tryConnect(String serverUrl) async {
     final scaffoldMessanger = ScaffoldMessenger.of(context);
     final electrumConnection = context.read<ElectrumConnection>();
-    _currentServerList = await Provider.of<Servers>(context, listen: false)
-        .getServerDetailsList(_walletName);
+    final serverProvider = context.read<Servers>();
+    _currentServerList = await serverProvider.getServerDetailsList(_walletName);
 
     setState(() {
       _loading = true;
@@ -137,7 +137,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
               AvailableCoins.getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
-            Provider.of<Servers>(context, listen: false).addServer(
+            serverProvider.addServer(
               serverUrl,
               true,
             );

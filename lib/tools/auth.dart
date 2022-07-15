@@ -130,7 +130,7 @@ class Auth {
     bool canCancel = true,
     bool jailedFromHome = false,
   }) async {
-    final encryptedBox = Provider.of<EncryptedBox>(context, listen: false);
+    final encryptedBox = context.read<EncryptedBox>();
     failedAuthAttempts = await encryptedBox.failedAuthAttempts;
     retriesLeft = (maxRetries - failedAuthAttempts);
     if (retriesLeft <= 0) retriesLeft = 1;

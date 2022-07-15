@@ -34,7 +34,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _settings = Provider.of<AppSettings>(context, listen: false);
+      _settings = context.read<AppSettings>();
       await _settings.init();
       setState(() {
         _initial = false;

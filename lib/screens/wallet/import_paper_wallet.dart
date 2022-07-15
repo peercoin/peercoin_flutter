@@ -233,8 +233,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     try {
                       firstPress = false;
                       //broadcast
-                      Provider.of<ElectrumConnection>(context, listen: false)
-                          .broadcastTransaction(
+                      _connectionProvider.broadcastTransaction(
                         buildResult['hex'],
                         buildResult['id'],
                       );

@@ -30,11 +30,12 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     super.dispose();
   }
 
-  void createWallet(context) async {
+  void createWallet(BuildContext context) async {
     setState(() {
       _loading = true;
     });
-    var activeWallets = Provider.of<ActiveWallets>(context, listen: false);
+    final activeWallets = context.read<ActiveWallets>();
+    final navigator = Navigator.of(context);
     try {
       await activeWallets.init();
     } catch (e) {
@@ -54,7 +55,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     await activeWallets.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
-    await Navigator.of(context).pushNamed(Routes.setupAuth);
+    await navigator.pushNamed(Routes.setupAuth);
     setState(() {
       _loading = false;
     });

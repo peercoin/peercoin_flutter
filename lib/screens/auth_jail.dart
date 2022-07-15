@@ -45,16 +45,15 @@ class _AuthJailState extends State<AuthJailScreen> {
   }
 
   void onTimerEnd() async {
-    final appSettings = Provider.of<AppSettings>(context, listen: false);
+    final appSettings = context.read<AppSettings>();
     await appSettings.init();
     await Auth.requireAuth(
       context: context,
       biometricsAllowed: appSettings.biometricsAllowed,
       callback: () async {
-        final encrytpedStorage =
-            Provider.of<EncryptedBox>(context, listen: false);
+        final encryptedStorage = context.read<EncryptedBox>();
         final navigator = Navigator.of(context);
-        await encrytpedStorage.setFailedAuths(0);
+        await encryptedStorage.setFailedAuths(0);
         if (widget.jailedFromHome == true || _jailedFromRoute == true) {
           await navigator.pushReplacementNamed(Routes.walletList);
         } else {
@@ -70,14 +69,13 @@ class _AuthJailState extends State<AuthJailScreen> {
   void didChangeDependencies() async {
     if (_initial == true) {
       _startTimer();
-      final encrytpedStorage =
-          Provider.of<EncryptedBox>(context, listen: false);
+      final encryptedStorage = context.read<EncryptedBox>();
       final modalRoute = ModalRoute.of(context)!;
-      final failedAuths = await encrytpedStorage.failedAuths;
+      final failedAuths = await encryptedStorage.failedAuths;
       _lockCountdown = 10 + (failedAuths * 10);
 
       //increase number of failed auths
-      await encrytpedStorage.setFailedAuths(failedAuths + 1);
+      await encryptedStorage.setFailedAuths(failedAuths + 1);
 
       //check if jailedFromHome came again through route
       if (widget.jailedFromHome == false) {

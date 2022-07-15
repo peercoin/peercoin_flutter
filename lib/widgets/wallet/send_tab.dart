@@ -73,7 +73,7 @@ class _SendTabState extends State<SendTab> {
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _availableCoin = AvailableCoins.getSpecificCoin(_wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _appSettings = Provider.of<AppSettings>(context, listen: false);
+      _appSettings = context.read<AppSettings>();
 
       _availableAddresses =
           await _activeWallets.getWalletAddresses(_wallet.name);
@@ -697,14 +697,12 @@ class _SendTabState extends State<SendTab> {
                             _formKey.currentState!.save();
                             FocusScope.of(context).unfocus(); //hide keyboard
                             //check for required auth
-                            var appSettings = Provider.of<AppSettings>(context,
-                                listen: false);
-                            if (appSettings
+                            if (_appSettings
                                 .authenticationOptions!['sendTransaction']!) {
                               await Auth.requireAuth(
                                 context: context,
                                 biometricsAllowed:
-                                    appSettings.biometricsAllowed,
+                                    _appSettings.biometricsAllowed,
                                 callback: () =>
                                     _showTransactionConfirmation(context),
                               );

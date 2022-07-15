@@ -46,8 +46,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   Future<void> savePriorities(String? serverUrl, int newIndex) async {
     if (_indexCache[serverUrl] != null) {
-      await Provider.of<ElectrumConnection>(context, listen: false)
-          .closeConnection();
+      await context.read<ElectrumConnection>().closeConnection();
     }
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
