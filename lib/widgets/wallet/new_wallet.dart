@@ -32,10 +32,10 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           availableCoins[_coin]!.letterCode);
 
       //enable notifications
-      var _appSettings = Provider.of<AppSettings>(context, listen: false);
-      var _notificationList = _appSettings.notificationActiveWallets;
-      _notificationList.add(availableCoins[_coin]!.letterCode);
-      _appSettings.setNotificationActiveWallets(_notificationList);
+      var appSettings = Provider.of<AppSettings>(context, listen: false);
+      var notificationList = appSettings.notificationActiveWallets;
+      notificationList.add(availableCoins[_coin]!.letterCode);
+      appSettings.setNotificationActiveWallets(notificationList);
 
       var prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('importedSeed') == true) {
@@ -63,11 +63,11 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      var _appSettings = Provider.of<AppSettings>(context, listen: false);
-      if (_appSettings.authenticationOptions!['newWallet']!) {
+      var appSettings = Provider.of<AppSettings>(context, listen: false);
+      if (appSettings.authenticationOptions!['newWallet']!) {
         await Auth.requireAuth(
           context: context,
-          biometricsAllowed: _appSettings.biometricsAllowed,
+          biometricsAllowed: appSettings.biometricsAllowed,
           canCancel: false,
         );
       }

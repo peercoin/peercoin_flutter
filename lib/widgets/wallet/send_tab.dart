@@ -132,35 +132,35 @@ class _SendTabState extends State<SendTab> {
   }
 
   void _showTransactionConfirmation(context) async {
-    var _firstPress = true;
-    var _buildResult = await _buildTx();
+    var firstPress = true;
+    var buildResult = await _buildTx();
 
-    int _destroyedChange = _buildResult['destroyedChange'];
-    var _correctedDust = 0;
-    _txFee = _buildResult['fee'];
+    int destroyedChange = buildResult['destroyedChange'];
+    var correctedDust = 0;
+    _txFee = buildResult['fee'];
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        String? _displayValue = _requestedAmountInCoins.toString();
+        String? displayValue = _requestedAmountInCoins.toString();
         _totalValue = (_requestedAmountInCoins * _decimalProduct).toInt();
         if (_totalValue == _wallet.balance) {
           var newValue = _requestedAmountInCoins - (_txFee / _decimalProduct);
-          _displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
+          displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
         } else {
           _totalValue = _totalValue + _txFee;
         }
-        if (_destroyedChange > 0) {
+        if (destroyedChange > 0) {
           var newValue = (_requestedAmountInCoins - (_txFee / _decimalProduct));
-          _displayValue = newValue.toString();
+          displayValue = newValue.toString();
 
           if (_amountKey.currentState!.value == '0') {
-            _displayValue = '0';
-            _correctedDust = _destroyedChange - _txFee;
+            displayValue = '0';
+            correctedDust = destroyedChange - _txFee;
           } else {
-            _correctedDust = _destroyedChange;
+            correctedDust = destroyedChange;
           }
           _totalValue =
-              (_requestedAmountInCoins * _decimalProduct + _destroyedChange)
+              (_requestedAmountInCoins * _decimalProduct + destroyedChange)
                   .toInt();
         }
         return SimpleDialog(
@@ -179,7 +179,7 @@ class _SendTabState extends State<SendTab> {
                       style: DefaultTextStyle.of(context).style,
                       children: <TextSpan>[
                         TextSpan(
-                          text: '$_displayValue ${_wallet.letterCode}',
+                          text: '$displayValue ${_wallet.letterCode}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -204,12 +204,12 @@ class _SendTabState extends State<SendTab> {
                       },
                     ),
                   ),
-                  if (_correctedDust > 0)
+                  if (correctedDust > 0)
                     Text(
                       AppLocalizations.instance.translate(
                         'send_dust',
                         {
-                          'amount': '${_correctedDust / _decimalProduct}',
+                          'amount': '${correctedDust / _decimalProduct}',
                           'letter_code': _wallet.letterCode
                         },
                       ),
@@ -248,27 +248,27 @@ class _SendTabState extends State<SendTab> {
                       'send_confirm_send',
                     ),
                     action: () async {
-                      if (_firstPress == false) return; //prevent double tap
+                      if (firstPress == false) return; //prevent double tap
                       try {
-                        _firstPress = false;
+                        firstPress = false;
                         //write tx to history
                         await _activeWallets.putOutgoingTx(
                           _wallet.name,
                           _addressKey.currentState!.value,
                           {
-                            'txid': _buildResult['id'],
-                            'hex': _buildResult['hex'],
+                            'txid': buildResult['id'],
+                            'hex': buildResult['hex'],
                             'outValue': _totalValue - _txFee,
-                            'outFees': _txFee + _destroyedChange,
-                            'opReturn': _buildResult['opReturn'],
+                            'outFees': _txFee + destroyedChange,
+                            'opReturn': buildResult['opReturn'],
                           },
-                          _buildResult['neededChange'],
+                          buildResult['neededChange'],
                         );
                         //broadcast
                         Provider.of<ElectrumConnection>(context, listen: false)
                             .broadcastTransaction(
-                          _buildResult['hex'],
-                          _buildResult['id'],
+                          buildResult['hex'],
+                          buildResult['id'],
                         );
                         //store label if exists
                         if (_labelKey.currentState!.value != '') {
@@ -365,7 +365,7 @@ class _SendTabState extends State<SendTab> {
   }
 
   void _calcAmountInputHelperText() {
-    final _inputAmount = _amountController.text == ''
+    final inputAmount = _amountController.text == ''
         ? 1.0
         : double.tryParse(
               _amountController.text.replaceAll(',', '.'),
@@ -374,35 +374,35 @@ class _SendTabState extends State<SendTab> {
 
     if (_fiatEnabled == false) {
       setState(() {
-        _requestedAmountInCoins = _inputAmount;
+        _requestedAmountInCoins = inputAmount;
       });
       return;
     }
 
-    final _fiatPrice = PriceTicker.renderPrice(
+    final fiatPrice = PriceTicker.renderPrice(
       1,
       _appSettings.selectedCurrency,
       _wallet.letterCode,
       _appSettings.exchangeRates,
     );
 
-    String _priceInCoins =
-        (_fiatInputEnabled ? _inputAmount * (1 / _coinValue) : _inputAmount)
+    String priceInCoins =
+        (_fiatInputEnabled ? inputAmount * (1 / _coinValue) : inputAmount)
             .toStringAsFixed(_availableCoin.fractions);
 
-    String _result = '';
+    String result = '';
     if (_fiatInputEnabled) {
-      _result =
-          '$_inputAmount ${_appSettings.selectedCurrency} = $_priceInCoins ${_wallet.letterCode}';
+      result =
+          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${_wallet.letterCode}';
     } else {
-      _result =
-          '$_inputAmount ${_wallet.letterCode} = ${(_inputAmount * _fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
+      result =
+          '$inputAmount ${_wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
     }
 
     setState(() {
-      _amountInputHelperText = _result;
-      _requestedAmountInCoins = double.parse(_priceInCoins);
-      _coinValue = _fiatPrice;
+      _amountInputHelperText = result;
+      _requestedAmountInCoins = double.parse(priceInCoins);
+      _coinValue = fiatPrice;
     });
   }
 
@@ -695,14 +695,14 @@ class _SendTabState extends State<SendTab> {
                             _formKey.currentState!.save();
                             FocusScope.of(context).unfocus(); //hide keyboard
                             //check for required auth
-                            var _appSettings = Provider.of<AppSettings>(context,
+                            var appSettings = Provider.of<AppSettings>(context,
                                 listen: false);
-                            if (_appSettings
+                            if (appSettings
                                 .authenticationOptions!['sendTransaction']!) {
                               await Auth.requireAuth(
                                 context: context,
                                 biometricsAllowed:
-                                    _appSettings.biometricsAllowed,
+                                    appSettings.biometricsAllowed,
                                 callback: () =>
                                     _showTransactionConfirmation(context),
                               );

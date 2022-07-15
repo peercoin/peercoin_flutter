@@ -86,15 +86,15 @@ class _WalletListScreenState extends State<WalletListScreen>
 
       if (!kIsWeb) {
         //toggle check for "whats new" changelog
-        var _packageInfo = await PackageInfo.fromPlatform();
-        if (_packageInfo.buildNumber != _appSettings.buildIdentifier) {
+        var packageInfo = await PackageInfo.fromPlatform();
+        if (packageInfo.buildNumber != _appSettings.buildIdentifier) {
           await Navigator.of(context).pushNamed(Routes.changeLog);
-          _appSettings.setBuildIdentifier(_packageInfo.buildNumber);
+          _appSettings.setBuildIdentifier(packageInfo.buildNumber);
         }
 
         //toggle periodic reminders
-        var _walletValues = await _activeWallets.activeWalletsValues;
-        if (_walletValues.isNotEmpty) {
+        var walletValues = await _activeWallets.activeWalletsValues;
+        if (walletValues.isNotEmpty) {
           //don't show for users with no wallets
           await PeriodicReminders.checkReminder(_appSettings, context);
         }
@@ -341,14 +341,14 @@ class _WalletListScreenState extends State<WalletListScreen>
                           child: ListView.builder(
                             itemCount: listData.length,
                             itemBuilder: (ctx, i) {
-                              CoinWallet _wallet = listData[i];
-                              String _balance = (_wallet.balance /
+                              CoinWallet wallet = listData[i];
+                              String balance = (wallet.balance /
                                       AvailableCoins.getDecimalProduct(
-                                        identifier: _wallet.name,
+                                        identifier: wallet.name,
                                       ))
                                   .toString();
                               bool showFiat =
-                                  !_wallet.title.contains('Testnet') &&
+                                  !wallet.title.contains('Testnet') &&
                                       _appSettings.selectedCurrency.isNotEmpty;
                               return Card(
                                 elevation: 0,
@@ -363,7 +363,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                       onTap: () async {
                                         await Navigator.of(context).pushNamed(
                                           Routes.walletHome,
-                                          arguments: _wallet,
+                                          arguments: wallet,
                                         );
                                       },
                                       child: ListTile(
@@ -371,13 +371,13 @@ class _WalletListScreenState extends State<WalletListScreen>
                                           backgroundColor: Colors.white,
                                           child: Image.asset(
                                             AvailableCoins.getSpecificCoin(
-                                              _wallet.name,
+                                              wallet.name,
                                             ).iconPath,
                                             width: 20,
                                           ),
                                         ),
                                         title: Text(
-                                          _wallet.title,
+                                          wallet.title,
                                           style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
@@ -389,7 +389,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                             Flexible(
                                               flex: 2,
                                               child: Text(
-                                                '$_balance ${_wallet.letterCode}',
+                                                '$balance ${wallet.letterCode}',
                                                 style: const TextStyle(
                                                   fontSize: 13,
                                                 ),
@@ -407,10 +407,10 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               Flexible(
                                                 child: Text(
                                                   '${PriceTicker.renderPrice(
-                                                    double.parse(_balance),
+                                                    double.parse(balance),
                                                     _appSettings
                                                         .selectedCurrency,
-                                                    _wallet.letterCode,
+                                                    wallet.letterCode,
                                                     _appSettings.exchangeRates,
                                                   ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
                                                   style: const TextStyle(

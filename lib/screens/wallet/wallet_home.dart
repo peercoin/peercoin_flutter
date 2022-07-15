@@ -201,8 +201,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   void triggerHighValueAlert() async {
     if (_appSettings.selectedCurrency.isNotEmpty) {
       //price feed enabled
-      var _prefs = await SharedPreferences.getInstance();
-      var discarded = _prefs.getBool('highValueNotice') ?? false;
+      var prefs = await SharedPreferences.getInstance();
+      var discarded = prefs.getBool('highValueNotice') ?? false;
       if (!discarded &&
           PriceTicker.renderPrice(
                 _wallet.balance /
@@ -227,7 +227,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   label: Text(AppLocalizations.instance.translate('not_again')),
                   icon: const Icon(Icons.cancel),
                   onPressed: () async {
-                    await _prefs.setBool('highValueNotice', true);
+                    await prefs.setBool('highValueNotice', true);
                     Navigator.of(context).pop();
                   }),
               TextButton.icon(

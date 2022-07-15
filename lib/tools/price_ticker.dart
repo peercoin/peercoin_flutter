@@ -74,28 +74,28 @@ class PriceTicker {
     return amount * prices[coinLetterCode];
   }
 
-  static void checkUpdate(AppSettings _settings) async {
+  static void checkUpdate(AppSettings settings) async {
     LoggerWrapper.logInfo(
         'PriceTicker', 'checkUpdate', 'checking price update');
     //check if last update was longer than an hour ago
     final oneHourAgo = (DateTime.now())
         .subtract(const Duration(minutes: Duration.minutesPerHour));
-    if (_settings.latestTickerUpdate.isBefore(oneHourAgo)) {
+    if (settings.latestTickerUpdate.isBefore(oneHourAgo)) {
       LoggerWrapper.logInfo(
         'PriceTicker',
         'checkUpdate',
-        'last update older than 1 hour (${_settings.latestTickerUpdate})',
+        'last update older than 1 hour (${settings.latestTickerUpdate})',
       );
       //time to update
       //get data
       final data = await getDataFromTicker();
 
       //check if data still contains selectedCurrency
-      if (!data.containsKey(_settings.selectedCurrency)) {
-        _settings.setSelectedCurrency('USD'); //fallback to USD
+      if (!data.containsKey(settings.selectedCurrency)) {
+        settings.setSelectedCurrency('USD'); //fallback to USD
       }
 
-      if (mapEquals(data, _settings.exchangeRates) == false) {
+      if (mapEquals(data, settings.exchangeRates) == false) {
         //stored exchange rates need update
         final valuesValid = data.values.every(
           (element) =>
@@ -108,7 +108,7 @@ class PriceTicker {
             'checkUpdate',
             'price data updated $data',
           );
-          _settings.setExchangeRates(data);
+          settings.setExchangeRates(data);
         } else {
           LoggerWrapper.logError(
             'PriceTicker',
@@ -119,12 +119,12 @@ class PriceTicker {
       }
 
       //update lastTickerUpdate
-      _settings.setLatestTickerUpdate(DateTime.now());
+      settings.setLatestTickerUpdate(DateTime.now());
     } else {
       LoggerWrapper.logInfo(
         'PriceTicker',
         'checkUpdate',
-        'last update happened within the hour. ${_settings.latestTickerUpdate}',
+        'last update happened within the hour. ${settings.latestTickerUpdate}',
       );
     }
   }

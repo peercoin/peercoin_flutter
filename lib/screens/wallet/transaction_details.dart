@@ -12,23 +12,23 @@ import '../../widgets/service_container.dart';
 class TransactionDetails extends StatelessWidget {
   const TransactionDetails({Key? key}) : super(key: key);
 
-  void _launchURL(String _url) async {
-    await canLaunchUrlString(_url)
+  void _launchURL(String url) async {
+    await canLaunchUrlString(url)
         ? await launchUrlString(
-            _url,
+            url,
           )
-        : throw 'Could not launch $_url';
+        : throw 'Could not launch $url';
   }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as List;
-    final WalletTransaction _tx = args[0];
-    final CoinWallet _coinWallet = args[1];
+    final WalletTransaction tx = args[0];
+    final CoinWallet coinWallet = args[1];
     final baseUrl =
-        AvailableCoins.getSpecificCoin(_coinWallet.name).explorerUrl + '/tx/';
+        '${AvailableCoins.getSpecificCoin(coinWallet.name).explorerUrl}/tx/';
     final decimalProduct = AvailableCoins.getDecimalProduct(
-      identifier: _coinWallet.name,
+      identifier: coinWallet.name,
     );
 
     return Scaffold(
@@ -49,7 +49,7 @@ class TransactionDetails extends StatelessWidget {
                     AppLocalizations.instance.translate('id'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(_tx.txid)
+                  SelectableText(tx.txid)
                 ],
               ),
               const Divider(),
@@ -59,10 +59,10 @@ class TransactionDetails extends StatelessWidget {
                   Text(AppLocalizations.instance.translate('time'),
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   SelectableText(
-                    _tx.timestamp! != 0
+                    tx.timestamp! != 0
                         ? DateFormat().format(
                             DateTime.fromMillisecondsSinceEpoch(
-                              _tx.timestamp! * 1000,
+                              tx.timestamp! * 1000,
                             ),
                           )
                         : AppLocalizations.instance.translate('unconfirmed'),
@@ -78,13 +78,11 @@ class TransactionDetails extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText(
-                    (_tx.value / decimalProduct).toString() +
-                        ' ' +
-                        _coinWallet.letterCode,
+                    '${tx.value / decimalProduct} ${coinWallet.letterCode}',
                   )
                 ],
               ),
-              _tx.direction == 'out'
+              tx.direction == 'out'
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -94,9 +92,7 @@ class TransactionDetails extends StatelessWidget {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         SelectableText(
-                          (_tx.fee / decimalProduct).toString() +
-                              ' ' +
-                              _coinWallet.letterCode,
+                          '${tx.fee / decimalProduct} ${coinWallet.letterCode}',
                         )
                       ],
                     )
@@ -109,7 +105,7 @@ class TransactionDetails extends StatelessWidget {
                     AppLocalizations.instance.translate('tx_address'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(_tx.address),
+                  SelectableText(tx.address),
                   // Text("") TODO might add address label here in the future
                 ],
               ),
@@ -121,7 +117,7 @@ class TransactionDetails extends StatelessWidget {
                     AppLocalizations.instance.translate('tx_direction'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(_tx.direction)
+                  SelectableText(tx.direction)
                 ],
               ),
               const Divider(),
@@ -133,13 +129,13 @@ class TransactionDetails extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText(
-                    _tx.confirmations == -1
+                    tx.confirmations == -1
                         ? AppLocalizations.instance.translate('tx_rejected')
-                        : _tx.confirmations.toString(),
+                        : tx.confirmations.toString(),
                   )
                 ],
               ),
-              _tx.opReturn.isNotEmpty
+              tx.opReturn.isNotEmpty
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -148,14 +144,14 @@ class TransactionDetails extends StatelessWidget {
                           AppLocalizations.instance.translate('send_op_return'),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SelectableText(_tx.opReturn)
+                        SelectableText(tx.opReturn)
                       ],
                     )
                   : Container(),
               const SizedBox(height: 20),
               Center(
                 child: PeerButton(
-                  action: () => _launchURL(baseUrl + _tx.txid),
+                  action: () => _launchURL(baseUrl + tx.txid),
                   text: AppLocalizations.instance
                       .translate('tx_view_in_explorer'),
                 ),

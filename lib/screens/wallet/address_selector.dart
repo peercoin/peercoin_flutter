@@ -34,7 +34,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
   }
 
   void applyFilter([String? searchedKey]) {
-    List<WalletAddress> _filteredList;
+    List<WalletAddress> filteredList;
     if (_initial) {
       setState(
         () {
@@ -46,16 +46,16 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     } else {
       //filter search keys
       if (searchedKey != null && searchedKey.isNotEmpty) {
-        _filteredList = _addresses.where((element) {
+        filteredList = _addresses.where((element) {
           return element.address.contains(searchedKey) ||
               element.addressBookName != null &&
                   element.addressBookName!.contains(searchedKey);
         }).toList();
       } else {
-        _filteredList = _addresses;
+        filteredList = _addresses;
       }
       setState(() {
-        _filteredAddresses = _filteredList;
+        _filteredAddresses = filteredList;
       });
     }
   }

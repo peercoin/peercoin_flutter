@@ -84,14 +84,14 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
-    var _reversedTx = widget._walletTransactions
+    var reversedTx = widget._walletTransactions
         .where((element) => element.timestamp != -1) //filter "phantom" tx
         .toList()
         .reversed
         .toList();
-    var _filteredTx = _reversedTx;
+    var filteredTx = reversedTx;
     if (_filterChoice != 'all') {
-      _filteredTx = _reversedTx
+      filteredTx = reversedTx
           .where((element) => element.direction == _filterChoice)
           .toList();
     }
@@ -149,7 +149,7 @@ class _TransactionListState extends State<TransactionList> {
                       }
                     },
                     child: ListView.builder(
-                      itemCount: _filteredTx.length + 1,
+                      itemCount: filteredTx.length + 1,
                       itemBuilder: (_, i) {
                         if (i > 0) {
                           return Container(
@@ -160,7 +160,7 @@ class _TransactionListState extends State<TransactionList> {
                                 horizontalTitleGap: 32.0,
                                 onTap: () => Navigator.of(context)
                                     .pushNamed(Routes.transaction, arguments: [
-                                  _filteredTx[i - 1],
+                                  filteredTx[i - 1],
                                   ModalRoute.of(context)!.settings.arguments
                                 ]),
                                 leading: Column(
@@ -172,22 +172,22 @@ class _TransactionListState extends State<TransactionList> {
                                       duration:
                                           const Duration(milliseconds: 500),
                                       child: renderConfirmationIndicator(
-                                        _filteredTx[i - 1],
+                                        filteredTx[i - 1],
                                       ),
                                     ),
                                     Text(
                                       DateFormat('d. MMM').format(
-                                        _filteredTx[i - 1].timestamp != 0
+                                        filteredTx[i - 1].timestamp != 0
                                             ? DateTime
                                                 .fromMillisecondsSinceEpoch(
-                                                _filteredTx[i - 1].timestamp! *
+                                                filteredTx[i - 1].timestamp! *
                                                     1000,
                                               )
                                             : DateTime.now(),
                                       ),
                                       style: TextStyle(
                                         fontWeight:
-                                            _filteredTx[i - 1].timestamp != 0
+                                            filteredTx[i - 1].timestamp != 0
                                                 ? FontWeight.w500
                                                 : FontWeight.w300,
                                       ),
@@ -197,7 +197,7 @@ class _TransactionListState extends State<TransactionList> {
                                 ),
                                 title: Center(
                                   child: Text(
-                                    _filteredTx[i - 1].txid,
+                                    filteredTx[i - 1].txid,
                                     overflow: TextOverflow.ellipsis,
                                     textScaleFactor: 0.9,
                                   ),
@@ -205,7 +205,7 @@ class _TransactionListState extends State<TransactionList> {
                                 subtitle: Center(
                                   child: Text(
                                     resolveAddressDisplayName(
-                                        _filteredTx[i - 1].address),
+                                        filteredTx[i - 1].address),
                                     overflow: TextOverflow.ellipsis,
                                     textScaleFactor: 1,
                                   ),
@@ -214,31 +214,28 @@ class _TransactionListState extends State<TransactionList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      (_filteredTx[i - 1].direction == 'in'
+                                      (filteredTx[i - 1].direction == 'in'
                                               ? '+'
                                               : '-') +
-                                          (_filteredTx[i - 1].value /
+                                          (filteredTx[i - 1].value /
                                                   _decimalProduct)
                                               .toString(),
                                       style: TextStyle(
                                         fontWeight:
-                                            _filteredTx[i - 1].timestamp != 0
+                                            filteredTx[i - 1].timestamp != 0
                                                 ? FontWeight.bold
                                                 : FontWeight.w300,
-                                        color: _filteredTx[i - 1].direction ==
-                                                'out'
-                                            ? Theme.of(context).errorColor
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer,
+                                        color:
+                                            filteredTx[i - 1].direction == 'out'
+                                                ? Theme.of(context).errorColor
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryContainer,
                                       ),
                                     ),
-                                    _filteredTx[i - 1].direction == 'out'
+                                    filteredTx[i - 1].direction == 'out'
                                         ? Text(
-                                            '-' +
-                                                (_filteredTx[i - 1].fee /
-                                                        _decimalProduct)
-                                                    .toString(),
+                                            '-${filteredTx[i - 1].fee / _decimalProduct}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,
                                               color:

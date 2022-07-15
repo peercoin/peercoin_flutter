@@ -55,24 +55,24 @@ class _ReceiveTabState extends State<ReceiveTab> {
         ? 0
         : double.parse(amountController.text.replaceAll(',', '.'));
     final label = labelController.text;
-    var _builtString = '';
+    var builtString = '';
 
     if (convertedValue == 0) {
-      _builtString = '${_availableCoin.uriCode}:${widget._unusedAddress}';
+      builtString = '${_availableCoin.uriCode}:${widget._unusedAddress}';
       if (label != '') {
-        _builtString =
+        builtString =
             '${_availableCoin.uriCode}:${widget._unusedAddress}?label=$label';
       }
     } else {
-      _builtString =
+      builtString =
           '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue';
       if (label != '') {
-        _builtString =
+        builtString =
             '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue&label=$label';
       }
     }
     setState(() {
-      _qrString = _builtString;
+      _qrString = builtString;
     });
   }
 

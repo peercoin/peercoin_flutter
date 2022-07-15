@@ -16,12 +16,12 @@ class SetupLegalScreen extends StatefulWidget {
 }
 
 class _SetupLegalScreenState extends State<SetupLegalScreen> {
-  void _launchURL(String _url) async {
-    await canLaunchUrlString(_url)
+  void _launchURL(String url) async {
+    await canLaunchUrlString(url)
         ? await launchUrlString(
-            _url,
+            url,
           )
-        : throw 'Could not launch $_url';
+        : throw 'Could not launch $url';
   }
 
   bool _termsAgreed = false;

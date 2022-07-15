@@ -30,12 +30,12 @@ class _AboutScreenState extends State<AboutScreen> {
     super.didChangeDependencies();
   }
 
-  void _launchURL(String _url) async {
-    await canLaunchUrlString(_url)
+  void _launchURL(String url) async {
+    await canLaunchUrlString(url)
         ? await launchUrlString(
-            _url,
+            url,
           )
-        : throw 'Could not launch $_url';
+        : throw 'Could not launch $url';
   }
 
   Future<void> launchMailto() async {

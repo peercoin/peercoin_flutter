@@ -90,27 +90,27 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   }
 
   void recreatePhrase(double sliderValue) async {
-    var _entropy = 128;
-    var _intValue = sliderValue.toInt();
+    var entropy = 128;
+    var intValue = sliderValue.toInt();
 
-    switch (_intValue) {
+    switch (intValue) {
       case 15:
-        _entropy = 160;
+        entropy = 160;
         break;
       case 18:
-        _entropy = 192;
+        entropy = 192;
         break;
       case 21:
-        _entropy = 224;
+        entropy = 224;
         break;
       case 24:
-        _entropy = 256;
+        entropy = 256;
         break;
       default:
-        _entropy = 128;
+        entropy = 128;
     }
 
-    await _activeWallets.createPhrase(null, _entropy);
+    await _activeWallets.createPhrase(null, entropy);
     _seed = await _activeWallets.seedPhrase;
 
     setState(() {

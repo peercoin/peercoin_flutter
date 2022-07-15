@@ -106,36 +106,36 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   void validatePubKey(String pubKey) {
-    String _newKey;
+    String newKey;
     if (Address.validateAddress(pubKey, _activeCoin.networkType)) {
-      _newKey = pubKey;
+      newKey = pubKey;
       moveStep(2);
     } else {
-      _newKey = 'Invalid address';
+      newKey = 'Invalid address';
     }
     setState(() {
-      _pubKey = _newKey;
+      _pubKey = newKey;
     });
   }
 
   void validatePrivKey(String privKey) {
-    String _newKey;
-    late Wallet _wallet;
-    var _error = false;
+    String newKey;
+    late Wallet wallet;
+    var error = false;
     try {
-      _wallet = Wallet.fromWIF(privKey, _activeCoin.networkType);
+      wallet = Wallet.fromWIF(privKey, _activeCoin.networkType);
     } catch (e) {
-      _error = true;
+      error = true;
     }
 
-    if (_error == false && _wallet.address == _pubKey) {
-      _newKey = privKey;
+    if (error == false && wallet.address == _pubKey) {
+      newKey = privKey;
       moveStep(3);
     } else {
-      _newKey = 'Invalid private key';
+      newKey = 'Invalid private key';
     }
     setState(() {
-      _privKey = _newKey;
+      _privKey = newKey;
     });
   }
 
@@ -148,15 +148,15 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   }
 
   void calculateBalance() {
-    var _totalValue = 0;
+    var totalValue = 0;
     for (var element in _paperWalletUtxos[_pubKey]!) {
-      _totalValue += element['value'] as int;
+      totalValue += element['value'] as int;
     }
     setState(() {
       _balanceLoading = false;
-      _balanceInt = _totalValue;
+      _balanceInt = totalValue;
       _balance =
-          '${(_totalValue / _decimalProduct).toString()} ${_activeCoin.letterCode}';
+          '${(totalValue / _decimalProduct).toString()} ${_activeCoin.letterCode}';
     });
     moveStep(4);
   }
@@ -173,9 +173,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         ),
       );
     } else {
-      var _firstPress = true;
-      var _buildResult = await buildImportTx();
-      var _txFee = _buildResult['fee'];
+      var firstPress = true;
+      var buildResult = await buildImportTx();
+      var txFee = buildResult['fee'];
 
       await showDialog(
         context: context,
@@ -205,7 +205,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                     AppLocalizations.instance.translate(
                       'send_fee',
                       {
-                        'amount': '${_txFee / _decimalProduct}',
+                        'amount': '${txFee / _decimalProduct}',
                         'letter_code': _activeCoin.letterCode
                       },
                     ),
@@ -229,14 +229,14 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                   text: AppLocalizations.instance
                       .translate('paperwallet_confirm_import'),
                   action: () async {
-                    if (_firstPress == false) return; //prevent double tap
+                    if (firstPress == false) return; //prevent double tap
                     try {
-                      _firstPress = false;
+                      firstPress = false;
                       //broadcast
                       Provider.of<ElectrumConnection>(context, listen: false)
                           .broadcastTransaction(
-                        _buildResult['hex'],
-                        _buildResult['id'],
+                        buildResult['hex'],
+                        buildResult['id'],
                       );
                       //pop message
                       Navigator.of(context).pop();

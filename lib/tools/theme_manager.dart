@@ -11,8 +11,8 @@ class ThemeManager implements IThemeModeManager {
     var prefs = await SharedPreferences.getInstance();
 
     //compute theme setting
-    var _themeString = prefs.getString('theme_mode') ?? 'ThemeMode.system';
-    return _themeString;
+    var themeString = prefs.getString('theme_mode') ?? 'ThemeMode.system';
+    return themeString;
   }
 
   @override

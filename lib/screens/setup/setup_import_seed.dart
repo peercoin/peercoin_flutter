@@ -34,9 +34,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     setState(() {
       _loading = true;
     });
-    var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
+    var activeWallets = Provider.of<ActiveWallets>(context, listen: false);
     try {
-      await _activeWallets.init();
+      await activeWallets.init();
     } catch (e) {
       LoggerWrapper.logError(
         'SetupImportSeed',
@@ -51,7 +51,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
         duration: const Duration(seconds: 10),
       ));
     }
-    await _activeWallets.createPhrase(_controller.text);
+    await activeWallets.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
     await Navigator.of(context).pushNamed(Routes.setupAuth);

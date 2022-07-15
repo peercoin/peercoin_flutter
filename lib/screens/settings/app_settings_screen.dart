@@ -55,6 +55,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     if (_initial == true) {
       _activeWallets = Provider.of<ActiveWallets>(context);
       _settings = Provider.of<AppSettings>(context);
+      final themeModeHandler = ThemeModeHandler.of(context)!;
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
@@ -65,10 +66,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       _biometricsAvailable =
           kIsWeb ? false : await localAuth.canCheckBiometrics;
 
-      _selectedTheme = ThemeModeHandler.of(context)!
-          .themeMode
-          .toString()
-          .replaceFirst('ThemeMode.', '');
+      _selectedTheme =
+          themeModeHandler.themeMode.toString().replaceFirst('ThemeMode.', '');
       if (_biometricsAvailable == false) {
         _settings.setBiometricsAllowed(false);
       }
@@ -147,11 +146,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveLang(String lang) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     await _settings.setSelectedLang(lang);
     await AppLocalizations.delegate.load(Locale(lang));
 
     //show notification
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    scaffoldMessenger.showSnackBar(SnackBar(
       content: Text(
         AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,
@@ -161,12 +161,13 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveTheme(String label, ThemeMode theme) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     await ThemeModeHandler.of(context)!.saveThemeMode(theme);
     setState(() {
       _selectedTheme = label;
     });
     //show notification
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    scaffoldMessenger.showSnackBar(SnackBar(
       content: Text(
         AppLocalizations.instance.translate('app_settings_saved_snack'),
         textAlign: TextAlign.center,

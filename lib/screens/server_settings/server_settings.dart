@@ -76,7 +76,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _connectedServer =
+    final connectedServer =
         context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
@@ -236,7 +236,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                               //connectable now false ? move to bottom of list
                               if (!_servers[index].connectable) {
                                 if (_servers[index].address ==
-                                    _connectedServer) {
+                                    connectedServer) {
                                   //were we connected to this server? close connection
                                   await context
                                       .read<ElectrumConnection>()
@@ -261,7 +261,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           tileColor: calculateTileColor(
                               index, _servers[index].connectable),
                           title: Text(_servers[index].address),
-                          subtitle: _servers[index].address == _connectedServer
+                          subtitle: _servers[index].address == connectedServer
                               ? Center(
                                   child: Text(
                                     AppLocalizations.instance

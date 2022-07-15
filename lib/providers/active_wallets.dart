@@ -523,7 +523,7 @@ class ActiveWallets with ChangeNotifier {
 
     if (walletAddress != null) {
       if (walletAddress.wif == null || walletAddress.wif == '') {
-        var _wifs = {};
+        var wifs = {};
         var hdWallet = HDWallet.fromSeed(
           seedPhraseUint8List(await seedPhrase),
           network: network,
@@ -532,12 +532,12 @@ class ActiveWallets with ChangeNotifier {
         for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
           //parse 5 extra WIFs, just to be sure
           final child = hdWallet.derivePath("m/0'/$i/0");
-          _wifs[child.address] = child.wif;
+          wifs[child.address] = child.wif;
         }
-        _wifs[hdWallet.address] = hdWallet.wif;
-        walletAddress.newWif = _wifs[address]; //save
+        wifs[hdWallet.address] = hdWallet.wif;
+        walletAddress.newWif = wifs[address]; //save
         await openWallet.save();
-        return _wifs[walletAddress.address];
+        return wifs[walletAddress.address];
       }
     } else if (walletAddress == null) {
       return '';
@@ -556,14 +556,14 @@ class ActiveWallets with ChangeNotifier {
     String paperWalletPrivkey = '',
   }) async {
     //convert amount
-    final _decimalProduct = AvailableCoins.getDecimalProduct(
+    final decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: identifier,
     );
 
-    var _txAmount = (amount * _decimalProduct).toInt();
-    var _openWallet = getSpecificCoinWallet(identifier);
-    var _hex = '';
-    var _destroyedChange = 0;
+    var txAmount = (amount * decimalProduct).toInt();
+    var openWallet = getSpecificCoinWallet(identifier);
+    var hex = '';
+    var destroyedChange = 0;
 
     LoggerWrapper.logInfo(
       'ActiveWallets',
@@ -578,40 +578,40 @@ class ActiveWallets with ChangeNotifier {
     );
 
     //check if tx needs change
-    var _needsChange = true;
-    if (_txAmount == _openWallet.balance || paperWalletUtxos != null) {
-      _needsChange = false;
+    var needsChange = true;
+    if (txAmount == openWallet.balance || paperWalletUtxos != null) {
+      needsChange = false;
       LoggerWrapper.logInfo(
         'ActiveWallets',
         'buildTransaction',
-        'needschange $_needsChange, fee $fee',
+        'needschange $needsChange, fee $fee',
       );
       LoggerWrapper.logInfo(
         'ActiveWallets',
         'buildTransaction',
-        'change needed $_txAmount - $fee',
+        'change needed $txAmount - $fee',
       );
     }
 
     //define utxo pool
-    var utxoPool = paperWalletUtxos ?? _openWallet.utxos;
+    var utxoPool = paperWalletUtxos ?? openWallet.utxos;
 
-    if (_txAmount <= _openWallet.balance || paperWalletUtxos != null) {
+    if (txAmount <= openWallet.balance || paperWalletUtxos != null) {
       if (utxoPool.isNotEmpty) {
         //find eligible input utxos
-        var _totalInputValue = 0;
+        var totalInputValue = 0;
         var inputTx = <WalletUtxo>[];
         var coin = AvailableCoins.getSpecificCoin(identifier);
 
         for (var utxo in utxoPool) {
           if (utxo.value > 0) {
-            if (_totalInputValue <= (_txAmount + fee)) {
-              _totalInputValue += utxo.value;
+            if (totalInputValue <= (txAmount + fee)) {
+              totalInputValue += utxo.value;
               inputTx.add(utxo);
               LoggerWrapper.logInfo(
                 'ActiveWallets',
                 'buildTransaction',
-                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $_totalInputValue',
+                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $totalInputValue',
               );
             }
           }
@@ -623,34 +623,34 @@ class ActiveWallets with ChangeNotifier {
         //start building tx
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
-        if (_needsChange == true) {
-          var changeAmount = _totalInputValue - _txAmount - fee;
+        if (needsChange == true) {
+          var changeAmount = totalInputValue - txAmount - fee;
           LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
-            'change amount $changeAmount, tx amount $_txAmount, fee $fee',
+            'change amount $changeAmount, tx amount $txAmount, fee $fee',
           );
 
           if (changeAmount <= coin.minimumTxValue) {
             //change is too small! no change output
-            _destroyedChange = changeAmount;
-            if (_txAmount == 0) {
-              tx.addOutput(address, BigInt.from(_txAmount));
+            destroyedChange = changeAmount;
+            if (txAmount == 0) {
+              tx.addOutput(address, BigInt.from(txAmount));
             } else {
-              tx.addOutput(address, BigInt.from(_txAmount - fee));
-              _destroyedChange = _destroyedChange + fee;
+              tx.addOutput(address, BigInt.from(txAmount - fee));
+              destroyedChange = destroyedChange + fee;
             }
           } else {
-            tx.addOutput(address, BigInt.from(_txAmount));
+            tx.addOutput(address, BigInt.from(txAmount));
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else {
           LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
-            'no change needed, tx amount $_txAmount, fee $fee, output added for $address ${_txAmount - fee}',
+            'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
           );
-          tx.addOutput(address, BigInt.from(_txAmount - fee));
+          tx.addOutput(address, BigInt.from(txAmount - fee));
         }
 
         //add OP_RETURN if exists
@@ -664,7 +664,7 @@ class ActiveWallets with ChangeNotifier {
           for (var inputUtxo in inputTx) {
             var inputKey = inputTx.indexOf(inputUtxo);
             //find key to that utxo
-            for (var walletAddr in _openWallet.addresses) {
+            for (var walletAddr in openWallet.addresses) {
               if (walletAddr.address == inputUtxo.address) {
                 var wif = paperWalletUtxos != null
                     ? paperWalletPrivkey
@@ -696,7 +696,7 @@ class ActiveWallets with ChangeNotifier {
         final intermediate = tx.build();
         var number = ((intermediate.txSize) / 1000 * coin.fixedFeePerKb)
             .toStringAsFixed(coin.fractions);
-        var asDouble = double.parse(number) * _decimalProduct;
+        var asDouble = double.parse(number) * decimalProduct;
         var requiredFeeInSatoshis = asDouble.toInt();
 
         LoggerWrapper.logInfo(
@@ -723,15 +723,15 @@ class ActiveWallets with ChangeNotifier {
             'buildTransaction',
             'intermediate size: ${intermediate.txSize}',
           );
-          _hex = intermediate.toHex();
+          hex = intermediate.toHex();
 
           return {
             'fee': requiredFeeInSatoshis,
-            'hex': _hex,
+            'hex': hex,
             'id': intermediate.getId(),
-            'destroyedChange': _destroyedChange,
+            'destroyedChange': destroyedChange,
             'opReturn': opReturn,
-            'neededChange': _needsChange
+            'neededChange': needsChange
           };
         }
       } else {

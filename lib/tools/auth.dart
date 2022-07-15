@@ -146,13 +146,12 @@ class Auth {
           ),
           children: [
             TextSpan(
-              text: '\n' +
-                  AppLocalizations.instance.translate(
-                    retriesLeft == 1
-                        ? 'authenticate_subtitle_singular'
-                        : 'authenticate_subtitle_plural',
-                    {'retriesLeft': retriesLeft.toString()},
-                  ),
+              text: '\n${AppLocalizations.instance.translate(
+                retriesLeft == 1
+                    ? 'authenticate_subtitle_singular'
+                    : 'authenticate_subtitle_plural',
+                {'retriesLeft': retriesLeft.toString()},
+              )}',
               style: const TextStyle(fontSize: 14),
             )
           ],

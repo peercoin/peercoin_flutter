@@ -62,12 +62,12 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
 
         if (_scanStarted == false) {
           //returns master address for hd wallet
-          var _masterAddr = await _activeWallets.getAddressFromDerivationPath(
+          var masterAddr = await _activeWallets.getAddressFromDerivationPath(
               _coinName, 0, 0, 0, true);
 
           //subscribe to hd master
           _connectionProvider!.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(_coinName, _masterAddr),
+            await _activeWallets.getWalletScriptHashes(_coinName, masterAddr),
           );
 
           setState(() {

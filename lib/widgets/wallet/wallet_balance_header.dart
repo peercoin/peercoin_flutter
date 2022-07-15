@@ -17,8 +17,8 @@ class WalletBalanceHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _settings = context.watch<AppSettings>();
-    final _decimalProduct = AvailableCoins.getDecimalProduct(
+    var settings = context.watch<AppSettings>();
+    final decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: _wallet.name,
     );
 
@@ -39,7 +39,7 @@ class WalletBalanceHeader extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${_wallet.balance / _decimalProduct}',
+                      '${_wallet.balance / decimalProduct}',
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.grey[100],
@@ -59,16 +59,16 @@ class WalletBalanceHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                _settings.selectedCurrency.isNotEmpty &&
+                settings.selectedCurrency.isNotEmpty &&
                         !_wallet.title.contains('Testnet')
                     ? WalletBalancePrice(
                         valueInFiat: Text(
                           '${PriceTicker.renderPrice(
-                            _wallet.balance / _decimalProduct,
-                            _settings.selectedCurrency,
+                            _wallet.balance / decimalProduct,
+                            settings.selectedCurrency,
                             _wallet.letterCode,
-                            _settings.exchangeRates,
-                          ).toStringAsFixed(2)} ${_settings.selectedCurrency}',
+                            settings.exchangeRates,
+                          ).toStringAsFixed(2)} ${settings.selectedCurrency}',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[200],
@@ -79,10 +79,10 @@ class WalletBalanceHeader extends StatelessWidget {
                         fiatCoinValue: Text(
                           '1 ${_wallet.letterCode} = ${(PriceTicker.renderPrice(
                             1,
-                            _settings.selectedCurrency,
+                            settings.selectedCurrency,
                             _wallet.letterCode,
-                            _settings.exchangeRates,
-                          )).toStringAsFixed(2)} ${_settings.selectedCurrency}',
+                            settings.exchangeRates,
+                          )).toStringAsFixed(2)} ${settings.selectedCurrency}',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[200],
@@ -106,7 +106,7 @@ class WalletBalanceHeader extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              '${_wallet.unconfirmedBalance / _decimalProduct} ${_wallet.letterCode}',
+                              '${_wallet.unconfirmedBalance / decimalProduct} ${_wallet.letterCode}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[300],

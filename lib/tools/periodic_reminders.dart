@@ -57,8 +57,8 @@ class PeriodicReminders {
     );
   }
 
-  static void scheduleNextEvent(String name, AppSettings _settings) {
-    final _newDate = (DateTime.now()).add(
+  static void scheduleNextEvent(String name, AppSettings settings) {
+    final newDate = (DateTime.now()).add(
       Duration(
         days: 30 + Random().nextInt(45 - 30),
       ),
@@ -67,16 +67,16 @@ class PeriodicReminders {
     LoggerWrapper.logInfo(
       'PriceTicker',
       'displayReminder',
-      '$name next event scheduled for $_newDate})',
+      '$name next event scheduled for $newDate})',
     );
 
-    final _timeMap = _settings.periodicReminterItemsNextView;
-    _timeMap[name] = _newDate;
-    _settings.setPeriodicReminterItemsNextView(_timeMap);
+    final timeMap = settings.periodicReminterItemsNextView;
+    timeMap[name] = newDate;
+    settings.setPeriodicReminterItemsNextView(timeMap);
   }
 
   static Future<void> checkReminder(
-      AppSettings _settings, BuildContext context) async {
+      AppSettings settings, BuildContext context) async {
     LoggerWrapper.logInfo(
       'PeriodicReminders',
       'checkReminder',
@@ -84,9 +84,9 @@ class PeriodicReminders {
     );
 
     //get map of next reminders
-    final _nextReminders = _settings.periodicReminterItemsNextView;
+    final nextReminders = settings.periodicReminterItemsNextView;
 
-    var _messageFired =
+    var messageFired =
         false; //only fire one reminder per startup - prevent double notification
 
     //loop through available reminders
@@ -95,20 +95,20 @@ class PeriodicReminders {
         in AvailablePeriodicReminderItems.availableReminderItems.entries) {
       final name = entry.key;
       final item = entry.value;
-      var _displayReminder = false;
+      var shouldDisplayReminder = false;
 
-      if (!_messageFired) {
-        if (_nextReminders.containsKey(name)) {
+      if (!messageFired) {
+        if (nextReminders.containsKey(name)) {
           //value has been initialized
           //check if alert is due
-          if (DateTime.now().isAfter(_nextReminders[name]!)) {
+          if (DateTime.now().isAfter(nextReminders[name]!)) {
             LoggerWrapper.logInfo(
               'PriceTicker',
               'checkUpdate',
               'reminder $name scheduled})',
             );
 
-            _displayReminder = true;
+            shouldDisplayReminder = true;
           }
         } else {
           //value has not been initialized yet - show reminder now
@@ -117,17 +117,17 @@ class PeriodicReminders {
             'checkUpdate',
             'reminder $name is not initialized})',
           );
-          _displayReminder = true;
+          shouldDisplayReminder = true;
         }
-        if (_displayReminder) {
+        if (shouldDisplayReminder) {
           await displayReminder(context, item);
-          scheduleNextEvent(item.id, _settings);
-          _messageFired = true;
+          scheduleNextEvent(item.id, settings);
+          messageFired = true;
         }
       }
     }
     //loop over - no message fired?
-    if (!_messageFired) {
+    if (!messageFired) {
       LoggerWrapper.logInfo(
         'PeriodicReminders',
         'checkReminder',
