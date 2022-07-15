@@ -1,3 +1,6 @@
+### **0.9.8** (2022-07-xx)
+* Price animation for wallet home
+
 ### **0.9.7** (2022-07-15)
 * Price animation for wallet home
 * Various stability improvements under the hood
