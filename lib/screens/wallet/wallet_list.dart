@@ -66,6 +66,10 @@ class _WalletListScreenState extends State<WalletListScreen>
     _activeWallets = Provider.of<ActiveWallets>(context);
     _appSettings = Provider.of<AppSettings>(context);
     if (_initial) {
+      setState(() {
+        _initial = false;
+      });
+
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
       //toggle price ticker update if enabled in settings
@@ -144,7 +148,6 @@ class _WalletListScreenState extends State<WalletListScreen>
           //only one wallet available, pushing to that one
           setState(() {
             _isLoading = true;
-            _initial = false;
           });
           if (!kIsWeb) {
             await Navigator.of(context).pushNamed(
@@ -159,7 +162,6 @@ class _WalletListScreenState extends State<WalletListScreen>
           if (defaultWallet != null) {
             setState(() {
               _isLoading = true;
-              _initial = false;
             });
             if (!kIsWeb) {
               await Navigator.of(context).pushNamed(
@@ -173,10 +175,6 @@ class _WalletListScreenState extends State<WalletListScreen>
           }
         }
       }
-
-      setState(() {
-        _initial = false;
-      });
     }
     super.didChangeDependencies();
   }
@@ -297,14 +295,15 @@ class _WalletListScreenState extends State<WalletListScreen>
                   FutureBuilder(
                     future: _activeWallets.activeWalletsValues,
                     builder: (_, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          snapshot.data == null) {
                         return const Expanded(
                           child: Center(
                             child: LoadingIndicator(),
                           ),
                         );
                       }
-                      var listData = snapshot.data! as List;
+                      var listData = snapshot.data as List;
                       if (listData.isEmpty) {
                         return Expanded(
                           child: Column(
