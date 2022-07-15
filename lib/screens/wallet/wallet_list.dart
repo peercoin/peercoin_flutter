@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -347,6 +348,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         identifier: _wallet.name,
                                       ))
                                   .toString();
+                              _wallet.balance = 21928599715;
                               bool showFiat =
                                   !_wallet.title.contains('Testnet') &&
                                       _appSettings.selectedCurrency.isNotEmpty;
@@ -386,10 +388,14 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         ),
                                         subtitle: Row(
                                           children: [
-                                            Text(
-                                              '$_balance ${_wallet.letterCode}',
-                                              style: const TextStyle(
-                                                fontSize: 14,
+                                            Flexible(
+                                              flex: 2,
+                                              child: Text(
+                                                '$_balance ${_wallet.letterCode}',
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                ),
+                                                overflow: TextOverflow.visible,
                                               ),
                                             ),
                                             const SizedBox(
@@ -400,15 +406,20 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               width: 4,
                                             ),
                                             if (showFiat)
-                                              Text(
-                                                '${PriceTicker.renderPrice(
-                                                  double.parse(_balance),
-                                                  _appSettings.selectedCurrency,
-                                                  _wallet.letterCode,
-                                                  _appSettings.exchangeRates,
-                                                ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
-                                                style: const TextStyle(
-                                                  fontSize: 14,
+                                              Flexible(
+                                                child: Text(
+                                                  '${PriceTicker.renderPrice(
+                                                    double.parse(_balance),
+                                                    _appSettings
+                                                        .selectedCurrency,
+                                                    _wallet.letterCode,
+                                                    _appSettings.exchangeRates,
+                                                  ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                           ],
