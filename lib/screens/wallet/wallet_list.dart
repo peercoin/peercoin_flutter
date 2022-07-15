@@ -347,7 +347,6 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         identifier: _wallet.name,
                                       ))
                                   .toString();
-                              _wallet.balance = 21928599715;
                               bool showFiat =
                                   !_wallet.title.contains('Testnet') &&
                                       _appSettings.selectedCurrency.isNotEmpty;
