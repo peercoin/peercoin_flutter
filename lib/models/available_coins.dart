@@ -23,11 +23,17 @@ class AvailableCoins {
       ),
       fractions: 6,
       minimumTxValue: 10000,
-      feePerKb: 0.01,
+      fixedFee: true,
+      fixedFeePerKb: 0.01,
       explorerUrl: 'https://blockbook.peercoin.net',
       genesisHash:
           '0000000032fe677166d54963b62a4677d8957e87c508eaa4fd7eb1c880cd27e3',
       txVersion: 3,
+      electrumRequiredProtocol: 1.4,
+      electrumServers: [
+        'wss://electrum.peercoinexplorer.net:50004',
+        'wss://allingas.peercoinexplorer.net:50004',
+      ],
     ),
     'peercoinTestnet': Coin(
       name: 'peercoinTestnet',
@@ -45,13 +51,19 @@ class AvailableCoins {
         wif: 0xef,
         opreturnSize: 256,
       ),
+      fixedFee: true,
       fractions: 6,
       minimumTxValue: 10000,
-      feePerKb: 0.01,
+      fixedFeePerKb: 0.01,
       explorerUrl: 'https://tblockbook.peercoin.net',
       genesisHash:
           '00000001f757bb737f6596503e17cd17b0658ce630cc727c0cca81aec47c9f06',
       txVersion: 3,
+      electrumRequiredProtocol: 1.4,
+      electrumServers: [
+        'wss://testnet-electrum.peercoinexplorer.net:50009',
+        'wss://allingas.peercoinexplorer.net:50009',
+      ],
     ),
   };
 

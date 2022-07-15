@@ -1,3 +1,7 @@
+### **0.9.7** (2022-07-15)
+* Price animation for wallet home
+* Various stability improvements under the hood
+
 ### **0.9.6** (2022-07-06)
 * Send tab: Allow sending in FIAT currency
 * Wallet list will now show balance in FIAT

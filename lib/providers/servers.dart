@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:peercoin/models/available_coins.dart';
 
 import '../models/server.dart';
 import '../tools/logger_wrapper.dart';
@@ -13,30 +14,22 @@ class Servers with ChangeNotifier {
   late Box<Server> _serverBox;
   Servers(this._encryptedBox);
 
-  static const Map<String, List> _seeds = {
-    'peercoin': [
-      'wss://electrum.peercoinexplorer.net:50004',
-      'wss://allingas.peercoinexplorer.net:50004',
-    ],
-    'peercoinTestnet': [
-      'wss://testnet-electrum.peercoinexplorer.net:50009',
-      'wss://allingas.peercoinexplorer.net:50009',
-    ]
-  };
-
-  Future<void> init(String? coinIdentifier) async {
+  Future<void> init(String identifier) async {
     LoggerWrapper.logInfo('Servers', 'init', 'init server provider');
     _serverBox = await Hive.openBox<Server>(
-      'serverBox-$coinIdentifier',
+      'serverBox-$identifier',
       encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>),
     );
+
+    final _seedServers =
+        AvailableCoins.getSpecificCoin(identifier).electrumServers;
 
     //check first run
     if (_serverBox.isEmpty) {
       LoggerWrapper.logInfo(
           'Servers', 'init', 'server storage is empty, initializing');
 
-      _seeds[coinIdentifier!]!.asMap().forEach((index, hardcodedSeedAddress) {
+      _seedServers.asMap().forEach((index, hardcodedSeedAddress) {
         var newServer = Server(
           address: hardcodedSeedAddress,
           priority: index,
@@ -47,7 +40,7 @@ class Servers with ChangeNotifier {
     }
 
     // check if all hard coded seeds for this coin are already in db
-    for (var hardcodedSeedAddress in _seeds[coinIdentifier!]!) {
+    for (var hardcodedSeedAddress in _seedServers) {
       var res = _serverBox.values.firstWhereOrNull(
           (element) => element.getAddress == hardcodedSeedAddress);
       if (res == null) {
@@ -63,7 +56,7 @@ class Servers with ChangeNotifier {
     //check if hard coded seeds have been removed
     for (var boxElement in _serverBox.values) {
       if (boxElement.userGenerated == false) {
-        var res = _seeds[coinIdentifier]!.firstWhere(
+        var res = _seedServers.firstWhere(
             (element) => element == boxElement.address,
             orElse: () => null);
         if (res == null) {

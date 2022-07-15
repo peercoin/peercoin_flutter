@@ -52,7 +52,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   }
 
   void toggleBGSyncHandler(bool newState) {
-    _settings.setNotificationInterval(newState == true ? 30 : 0);
+    _settings.setNotificationInterval(newState == true ? 60 : 0);
 
     setState(() {
       _bgSyncdAllowed = newState;

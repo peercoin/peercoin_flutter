@@ -48,8 +48,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           //sync notification backend
           await BackgroundSync.executeSync(fromScan: true);
           _timer.cancel();
-          await Navigator.of(context).pushReplacementNamed(Routes.walletList,
-              arguments: {'fromScan': true});
+          await Navigator.of(context).pushReplacementNamed(
+            Routes.walletList,
+            arguments: {'fromScan': true},
+          );
         }
       });
     } else if (_connectionProvider != null) {
@@ -114,8 +116,9 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
                 .translate('server_settings_alert_cancel'),
             action: () async {
               _timer.cancel();
-              await Navigator.of(context)
-                  .pushReplacementNamed(Routes.walletList);
+              await Navigator.of(context).pushReplacementNamed(
+                Routes.walletList,
+              );
             },
           )
         ],

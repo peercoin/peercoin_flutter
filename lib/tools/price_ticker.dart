@@ -65,7 +65,7 @@ class PriceTicker {
     String coinLetterCode,
     Map prices,
   ) {
-    if (prices.isEmpty) {
+    if (prices.isEmpty || prices.containsKey(coinLetterCode) == false) {
       return 0.0;
     }
     if (currencySymbol != 'USD') {

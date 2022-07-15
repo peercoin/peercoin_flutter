@@ -64,7 +64,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   @override
   void didChangeDependencies() async {
     _activeWallets = Provider.of<ActiveWallets>(context);
-    _appSettings = Provider.of<AppSettings>(context, listen: false);
+    _appSettings = Provider.of<AppSettings>(context);
     if (_initial) {
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
@@ -299,7 +299,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                     builder: (_, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Expanded(
-                          child: Center(child: LoadingIndicator()),
+                          child: Center(
+                            child: LoadingIndicator(),
+                          ),
                         );
                       }
                       var listData = snapshot.data! as List;
@@ -346,10 +348,15 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         identifier: _wallet.name,
                                       ))
                                   .toString();
+                              bool showFiat =
+                                  !_wallet.title.contains('Testnet') &&
+                                      _appSettings.selectedCurrency.isNotEmpty;
                               return Card(
                                 elevation: 0,
                                 margin: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                  vertical: 8,
+                                  horizontal: 16,
+                                ),
                                 color: Theme.of(context).backgroundColor,
                                 child: Column(
                                   children: [
@@ -365,8 +372,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                                           backgroundColor: Colors.white,
                                           child: Image.asset(
                                             AvailableCoins.getSpecificCoin(
-                                                    _wallet.name)
-                                                .iconPath,
+                                              _wallet.name,
+                                            ).iconPath,
                                             width: 20,
                                           ),
                                         ),
@@ -387,19 +394,23 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               ),
                                             ),
                                             const SizedBox(
-                                              width: 5,
+                                              width: 4,
                                             ),
-                                            if (!_wallet.title
-                                                    .contains('Testnet') &&
-                                                _appSettings.selectedCurrency
-                                                    .isNotEmpty)
+                                            if (showFiat) const Text('|'),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            if (showFiat)
                                               Text(
-                                                '/ ${PriceTicker.renderPrice(
+                                                '${PriceTicker.renderPrice(
                                                   double.parse(_balance),
                                                   _appSettings.selectedCurrency,
                                                   _wallet.letterCode,
                                                   _appSettings.exchangeRates,
                                                 ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                ),
                                               ),
                                           ],
                                         ),
