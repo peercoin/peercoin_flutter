@@ -11,7 +11,7 @@ import '../tools/auth.dart';
 
 class AuthJailScreen extends StatefulWidget {
   @override
-  _AuthJailState createState() => _AuthJailState();
+  State<AuthJailScreen> createState() => _AuthJailState();
 
   final bool jailedFromHome;
   const AuthJailScreen({

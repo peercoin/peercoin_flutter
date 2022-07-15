@@ -15,7 +15,7 @@ class SettingsPriceTicker extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SettingsPriceTickerState createState() => _SettingsPriceTickerState();
+  State<SettingsPriceTicker> createState() => _SettingsPriceTickerState();
 }
 
 class _SettingsPriceTickerState extends State<SettingsPriceTicker> {

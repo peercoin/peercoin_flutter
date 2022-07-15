@@ -23,7 +23,7 @@ class ServerAddScreen extends StatefulWidget {
   const ServerAddScreen({Key? key}) : super(key: key);
 
   @override
-  _ServerAddScreenState createState() => _ServerAddScreenState();
+  State<ServerAddScreen> createState() => _ServerAddScreenState();
 }
 
 class _ServerAddScreenState extends State<ServerAddScreen> {

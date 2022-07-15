@@ -37,7 +37,7 @@ class SendTab extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SendTabState createState() => _SendTabState();
+  State<SendTab> createState() => _SendTabState();
 }
 
 class _SendTabState extends State<SendTab> {

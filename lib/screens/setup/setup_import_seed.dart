@@ -16,7 +16,7 @@ class SetupImportSeedScreen extends StatefulWidget {
   const SetupImportSeedScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupImportSeedState createState() => _SetupImportSeedState();
+  State<SetupImportSeedScreen> createState() => _SetupImportSeedState();
 }
 
 class _SetupImportSeedState extends State<SetupImportSeedScreen> {

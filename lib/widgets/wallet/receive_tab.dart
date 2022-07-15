@@ -23,7 +23,7 @@ class ReceiveTab extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ReceiveTabState createState() => _ReceiveTabState();
+  State<ReceiveTab> createState() => _ReceiveTabState();
 }
 
 class _ReceiveTabState extends State<ReceiveTab> {

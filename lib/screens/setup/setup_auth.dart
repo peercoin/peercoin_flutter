@@ -17,7 +17,7 @@ class SetupAuthScreen extends StatefulWidget {
   const SetupAuthScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupAuthScreenState createState() => _SetupAuthScreenState();
+  State<SetupAuthScreen> createState() => _SetupAuthScreenState();
 }
 
 class _SetupAuthScreenState extends State<SetupAuthScreen> {

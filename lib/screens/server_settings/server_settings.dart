@@ -13,7 +13,7 @@ class ServerSettingsScreen extends StatefulWidget {
   const ServerSettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _ServerSettingsScreenState createState() => _ServerSettingsScreenState();
+  State<ServerSettingsScreen> createState() => _ServerSettingsScreenState();
 }
 
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {

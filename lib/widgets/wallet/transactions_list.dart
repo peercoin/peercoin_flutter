@@ -24,7 +24,7 @@ class TransactionList extends StatefulWidget {
       : super(key: key);
 
   @override
-  _TransactionListState createState() => _TransactionListState();
+  State<TransactionList> createState() => _TransactionListState();
 }
 
 class _TransactionListState extends State<TransactionList> {

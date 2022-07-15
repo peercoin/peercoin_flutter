@@ -29,7 +29,7 @@ class AppSettingsScreen extends StatefulWidget {
   const AppSettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _AppSettingsScreenState createState() => _AppSettingsScreenState();
+  State<AppSettingsScreen> createState() => _AppSettingsScreenState();
 }
 
 class _AppSettingsScreenState extends State<AppSettingsScreen> {

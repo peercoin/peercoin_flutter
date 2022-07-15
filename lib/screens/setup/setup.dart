@@ -11,7 +11,7 @@ class SetupScreen extends StatefulWidget {
   const SetupScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupScreenState createState() => _SetupScreenState();
+  State<SetupScreen> createState() => _SetupScreenState();
 
   static double calcContainerHeight(BuildContext ctx) {
     var height = MediaQuery.of(ctx).size.height;

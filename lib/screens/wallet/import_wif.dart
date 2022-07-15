@@ -18,7 +18,7 @@ class ImportWifScreen extends StatefulWidget {
   const ImportWifScreen({Key? key}) : super(key: key);
 
   @override
-  _ImportWifScreenState createState() => _ImportWifScreenState();
+  State<ImportWifScreen> createState() => _ImportWifScreenState();
 }
 
 class _ImportWifScreenState extends State<ImportWifScreen> {

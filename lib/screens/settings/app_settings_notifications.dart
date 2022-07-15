@@ -13,7 +13,7 @@ class AppSettingsNotificationsScreen extends StatefulWidget {
   const AppSettingsNotificationsScreen({Key? key}) : super(key: key);
 
   @override
-  _AppSettingsNotificationsScreenState createState() =>
+  State<AppSettingsNotificationsScreen> createState() =>
       _AppSettingsNotificationsScreenState();
 }
 

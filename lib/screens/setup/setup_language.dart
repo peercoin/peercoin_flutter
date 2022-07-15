@@ -7,7 +7,7 @@ class SetupLanguageScreen extends StatefulWidget {
   const SetupLanguageScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupLanguageScreenState createState() => _SetupLanguageScreenState();
+  State<SetupLanguageScreen> createState() => _SetupLanguageScreenState();
 }
 
 class _SetupLanguageScreenState extends State<SetupLanguageScreen> {

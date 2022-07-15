@@ -14,7 +14,7 @@ class SetupDataFeedsScreen extends StatefulWidget {
   const SetupDataFeedsScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupDataFeedsScreenState createState() => _SetupDataFeedsScreenState();
+  State<SetupDataFeedsScreen> createState() => _SetupDataFeedsScreenState();
 }
 
 class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {

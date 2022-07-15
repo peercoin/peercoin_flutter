@@ -14,7 +14,7 @@ class NewWalletDialog extends StatefulWidget {
   const NewWalletDialog({Key? key}) : super(key: key);
 
   @override
-  _NewWalletDialogState createState() => _NewWalletDialogState();
+  State<NewWalletDialog> createState() => _NewWalletDialogState();
 }
 
 Map<String, Coin> availableCoins = AvailableCoins.availableCoins;

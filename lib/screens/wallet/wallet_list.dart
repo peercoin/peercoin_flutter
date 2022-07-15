@@ -30,7 +30,8 @@ class WalletListScreen extends StatefulWidget {
   final String walletToOpenDirectly;
 
   @override
-  _WalletListScreenState createState() => _WalletListScreenState();
+  State<WalletListScreen> createState() => _WalletListScreenState();
+
   const WalletListScreen({
     Key? key,
     this.fromColdStart = false,

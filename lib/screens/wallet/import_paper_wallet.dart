@@ -17,7 +17,7 @@ class ImportPaperWalletScreen extends StatefulWidget {
   const ImportPaperWalletScreen({Key? key}) : super(key: key);
 
   @override
-  _ImportPaperWalletScreenState createState() =>
+  State<ImportPaperWalletScreen> createState() =>
       _ImportPaperWalletScreenState();
 }
 

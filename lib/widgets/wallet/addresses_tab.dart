@@ -27,8 +27,9 @@ class AddressTab extends StatefulWidget {
       this._walletName, this.title, this._walletAddresses, this.changeIndex,
       {Key? key})
       : super(key: key);
+
   @override
-  _AddressTabState createState() => _AddressTabState();
+  State<AddressTab> createState() => _AddressTabState();
 }
 
 class _AddressTabState extends State<AddressTab> {

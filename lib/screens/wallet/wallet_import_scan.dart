@@ -15,7 +15,7 @@ class WalletImportScanScreen extends StatefulWidget {
   const WalletImportScanScreen({Key? key}) : super(key: key);
 
   @override
-  _WalletImportScanScreenState createState() => _WalletImportScanScreenState();
+  State<WalletImportScanScreen> createState() => _WalletImportScanScreenState();
 }
 
 class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
