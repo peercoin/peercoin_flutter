@@ -21,7 +21,7 @@ class SetupCreateWalletScreen extends StatefulWidget {
   const SetupCreateWalletScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupCreateWalletScreenState createState() =>
+  State<SetupCreateWalletScreen> createState() =>
       _SetupCreateWalletScreenState();
 }
 
@@ -34,11 +34,12 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     if (kIsWeb) {
       await Clipboard.setData(
         ClipboardData(text: seed),
       );
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('snack_copied'),
           textAlign: TextAlign.center,
@@ -142,12 +143,12 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
             ),
             TextButton(
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 var prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('importedSeed', false);
-                Navigator.pop(context);
+                navigator.pop();
 
-                await Navigator.pushNamed(
-                  context,
+                await navigator.pushNamed(
                   Routes.setupAuth,
                 );
               },

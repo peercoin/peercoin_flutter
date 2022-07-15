@@ -45,10 +45,11 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+          final navigator = Navigator.of(context);
           //sync notification backend
           await BackgroundSync.executeSync(fromScan: true);
           _timer.cancel();
-          await Navigator.of(context).pushReplacementNamed(
+          await navigator.pushReplacementNamed(
             Routes.walletList,
             arguments: {'fromScan': true},
           );

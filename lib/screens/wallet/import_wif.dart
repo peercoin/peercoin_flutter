@@ -66,6 +66,8 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   }
 
   Future<void> performImport(String wif, String address) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     //write to wallet
     await _activeWallets.addAddressFromWif(_walletName, wif, address);
 
@@ -83,7 +85,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     await BackgroundSync.executeSync(fromScan: true);
 
     //send snack notification for success
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(
           AppLocalizations.instance.translate('import_wif_success_snack'),
@@ -94,10 +96,11 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     );
 
     //pop import wif
-    Navigator.of(context).pop();
+    navigator.pop();
   }
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(ctx);
     final publicAddress =
         Wallet.fromWIF(privKey, _activeCoin.networkType).address ??
             ''; //TODO won't return a bech32 addr
@@ -111,7 +114,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
     if (specificAddressResult.isNotEmpty) {
       //we have that address already
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('import_wif_error_snack'),
           textAlign: TextAlign.center,

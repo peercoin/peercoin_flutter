@@ -27,11 +27,12 @@ class PeriodicReminders {
             if (reminderItem.id == 'donate')
               TextButton(
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   var url = 'https://ppc.lol/fndtn/';
                   await canLaunchUrlString(url)
                       ? await launchUrlString(url)
                       : throw 'Could not launch $url';
-                  Navigator.of(context).pop();
+                  navigator.pop();
                 },
                 child: Text(
                   AppLocalizations.instance.translate(reminderItem.button),

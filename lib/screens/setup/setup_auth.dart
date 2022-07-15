@@ -137,6 +137,9 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
               ),
               PeerButtonSetup(
                 action: () async {
+                  final encryptedBox = context.read<EncryptedBox>();
+                  final settings = context.read<AppSettings>();
+                  final navigator = Navigator.of(context);
                   await screenLock(
                     title: HeadingTitle(
                       text: AppLocalizations.instance
@@ -151,19 +154,14 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                     digits: 6,
                     confirmation: true,
                     didConfirmed: (matchedText) async {
-                      await Provider.of<EncryptedBox>(context, listen: false)
-                          .setPassCode(matchedText);
-
-                      var settings =
-                          Provider.of<AppSettings>(context, listen: false);
+                      await encryptedBox.setPassCode(matchedText);
                       await settings.init(true);
                       await settings.createInitialSettings(
                         _biometricsAllowed,
                         AppLocalizations.instance.locale.toString(),
                       );
-                      Navigator.pop(context);
-                      await Navigator.of(context)
-                          .pushNamed(Routes.setupDataFeeds);
+                      navigator.pop();
+                      await navigator.pushNamed(Routes.setupDataFeeds);
                     },
                   );
                 },

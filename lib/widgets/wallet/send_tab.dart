@@ -249,6 +249,9 @@ class _SendTabState extends State<SendTab> {
                     ),
                     action: () async {
                       if (firstPress == false) return; //prevent double tap
+                      final electrumConnection =
+                          context.read<ElectrumConnection>();
+                      final navigator = Navigator.of(context);
                       try {
                         firstPress = false;
                         //write tx to history
@@ -265,8 +268,7 @@ class _SendTabState extends State<SendTab> {
                           buildResult['neededChange'],
                         );
                         //broadcast
-                        Provider.of<ElectrumConnection>(context, listen: false)
-                            .broadcastTransaction(
+                        electrumConnection.broadcastTransaction(
                           buildResult['hex'],
                           buildResult['id'],
                         );
@@ -279,7 +281,7 @@ class _SendTabState extends State<SendTab> {
                           );
                         }
                         //pop message
-                        Navigator.of(context).pop();
+                        navigator.pop();
                         //navigate back to tx list
                         widget._changeIndex(Tabs.transactions);
                       } catch (e) {

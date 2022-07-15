@@ -46,7 +46,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     super.didChangeDependencies();
   }
 
-  void _saveSnack(context) {
+  void _saveSnack() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -74,7 +74,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
       _signingAddress = result as String;
     });
     if (result != '' && result != oldAddr) {
-      _saveSnack(context);
+      _saveSnack();
     }
   }
 

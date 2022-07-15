@@ -133,11 +133,12 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                 text: AppLocalizations.instance.translate('setup_finish'),
                 active: _termsAgreed,
                 action: () async {
+                  final navigator = Navigator.of(context);
                   if (_termsAgreed == false) return;
                   var prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('setupFinished', true);
-                  await Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.walletList, (_) => false);
+                  await navigator.pushNamedAndRemoveUntil(
+                      Routes.walletList, (_) => false);
                 },
               ),
               const SizedBox(

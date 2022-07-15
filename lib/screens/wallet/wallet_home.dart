@@ -109,13 +109,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _appSettings = context.read<AppSettings>();
+
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
       await _connectionProvider!
           .init(_wallet.name, requestedFromWalletHome: true);
 
-      _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
         await Auth.requireAuth(
           context: context,
@@ -227,8 +228,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   label: Text(AppLocalizations.instance.translate('not_again')),
                   icon: const Icon(Icons.cancel),
                   onPressed: () async {
+                    final navigator = Navigator.of(context);
                     await prefs.setBool('highValueNotice', true);
-                    Navigator.of(context).pop();
+                    navigator.pop();
                   }),
               TextButton.icon(
                 label: Text(
@@ -292,11 +294,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     AppLocalizations.instance.translate('jail_dialog_button')),
                 icon: const Icon(Icons.check),
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   //close connection
                   await _connectionProvider!.closeConnection();
                   _rescanInProgress = true;
                   //init rescan
-                  await Navigator.of(context).pushNamedAndRemoveUntil(
+                  await navigator.pushNamedAndRemoveUntil(
                     Routes.walletImportScan,
                     (_) => false,
                     arguments: _wallet.name,

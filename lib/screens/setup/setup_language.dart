@@ -29,6 +29,7 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
   }
 
   void saveLang(String lang) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     await AppLocalizations.delegate.load(Locale(lang));
     await prefs.setString('language_code', lang);
     setState(() {
@@ -36,7 +37,7 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
     });
 
     //show notification
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(
           AppLocalizations.instance.translate('app_settings_saved_snack'),

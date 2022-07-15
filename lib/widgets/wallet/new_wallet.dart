@@ -26,26 +26,28 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
   Future<void> addWallet() async {
     try {
-      await Provider.of<ActiveWallets>(context, listen: false).addWallet(
-          _coin,
-          availableCoins[_coin]!.displayName,
-          availableCoins[_coin]!.letterCode);
+      var appSettings = context.read<AppSettings>();
+      final navigator = Navigator.of(context);
+      await context.read<ActiveWallets>().addWallet(
+            _coin,
+            availableCoins[_coin]!.displayName,
+            availableCoins[_coin]!.letterCode,
+          );
 
       //enable notifications
-      var appSettings = Provider.of<AppSettings>(context, listen: false);
       var notificationList = appSettings.notificationActiveWallets;
       notificationList.add(availableCoins[_coin]!.letterCode);
       appSettings.setNotificationActiveWallets(notificationList);
 
       var prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('importedSeed') == true) {
-        await Navigator.of(context).pushNamedAndRemoveUntil(
+        await navigator.pushNamedAndRemoveUntil(
           Routes.walletImportScan,
           (_) => false,
           arguments: _coin,
         );
       } else {
-        Navigator.of(context).pop();
+        navigator.pop();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -63,7 +65,8 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      var appSettings = Provider.of<AppSettings>(context, listen: false);
+      var appSettings = context.read<AppSettings>();
+      var activeWallets = context.read<ActiveWallets>();
       if (appSettings.authenticationOptions!['newWallet']!) {
         await Auth.requireAuth(
           context: context,
@@ -71,19 +74,17 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           canCancel: false,
         );
       }
+      var activeWalletList = await activeWallets.activeWalletsKeys;
+      for (var element in activeWalletList) {
+        if (availableCoins.keys.contains(element)) {
+          setState(() {
+            activeCoins.add(element);
+          });
+        }
+      }
       setState(() {
         _initial = false;
       });
-    }
-    var activeWalletList =
-        await Provider.of<ActiveWallets>(context, listen: false)
-            .activeWalletsKeys;
-    for (var element in activeWalletList) {
-      if (availableCoins.keys.contains(element)) {
-        setState(() {
-          activeCoins.add(element);
-        });
-      }
     }
 
     super.didChangeDependencies();

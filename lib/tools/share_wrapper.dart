@@ -12,13 +12,15 @@ class ShareWrapper {
     bool popNavigator = false,
   }) async {
     if (kIsWeb) {
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
       await Clipboard.setData(
         ClipboardData(text: message),
       );
 
-      if (popNavigator == true) Navigator.of(context).pop();
+      if (popNavigator == true) navigator.pop();
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Text(
             AppLocalizations.instance.translate('snack_copied'),

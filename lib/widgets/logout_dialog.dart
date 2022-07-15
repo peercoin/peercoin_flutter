@@ -33,6 +33,7 @@ class LogoutDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
+            final navigator = Navigator.of(context);
             await clearData();
 
             LoggerWrapper.logInfo(
@@ -41,7 +42,7 @@ class LogoutDialog extends StatelessWidget {
               'Data cleared - reloading',
             );
 
-            Navigator.of(context).pop();
+            navigator.pop();
             reloadWindow();
           },
           child: Text(

@@ -242,6 +242,11 @@ class _AddressTabState extends State<AddressTab> {
             TextButton(
               onPressed: () async {
                 String wif;
+                final navigator = Navigator.of(context);
+                showQrDialog(wif) {
+                  WalletHomeQr.showQrDialog(context, wif);
+                }
+
                 if (address.wif!.isEmpty || address.wif == null) {
                   wif = await context.read<ActiveWallets>().getWif(
                         _availableCoin.name,
@@ -250,8 +255,8 @@ class _AddressTabState extends State<AddressTab> {
                 } else {
                   wif = address.wif!;
                 }
-                Navigator.of(context).pop();
-                WalletHomeQr.showQrDialog(context, wif);
+                navigator.pop();
+                showQrDialog(wif);
               },
               child: Text(
                 AppLocalizations.instance
@@ -266,6 +271,7 @@ class _AddressTabState extends State<AddressTab> {
 
   Future<void> _toggleWatched(WalletAddress addr) async {
     String snackText;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     //addresses with balance or currentChangeAddress can not be unwatched
     if (_addressBalanceMap[addr.address] != null ||
         addr.address == _activeWallets.getUnusedAddress) {
@@ -298,7 +304,7 @@ class _AddressTabState extends State<AddressTab> {
       }
     }
     //fire snack
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(
           AppLocalizations.instance.translate(

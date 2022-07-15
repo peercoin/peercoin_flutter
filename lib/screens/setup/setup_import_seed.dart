@@ -216,13 +216,14 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         Theme.of(context).backgroundColor,
                                     suffixIcon: IconButton(
                                       onPressed: () async {
+                                        final focusScope =
+                                            FocusScope.of(context);
                                         var data = await Clipboard.getData(
                                             'text/plain');
                                         if (data != null) {
                                           _controller.text = data.text!.trim();
                                         }
-                                        FocusScope.of(context)
-                                            .unfocus(); //hide keyboard
+                                        focusScope.unfocus(); //hide keyboard
                                       },
                                       icon: Icon(
                                         Icons.paste,

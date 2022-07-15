@@ -42,9 +42,10 @@ class SettingsAuth extends StatelessWidget {
         digits: 6,
         confirmation: true,
         didConfirmed: (matchedText) async {
-          await Provider.of<EncryptedBox>(context, listen: false)
-              .setPassCode(matchedText);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          final scaffoldMessenger = ScaffoldMessenger.of(context);
+          final navigator = Navigator.of(context);
+          await context.read<EncryptedBox>().setPassCode(matchedText);
+          scaffoldMessenger.showSnackBar(SnackBar(
             content: Text(
               AppLocalizations.instance
                   .translate('authenticate_change_pin_success'),
@@ -52,7 +53,7 @@ class SettingsAuth extends StatelessWidget {
             ),
             duration: const Duration(seconds: 2),
           ));
-          Navigator.of(context).pop();
+          navigator.pop();
         },
       ),
     );

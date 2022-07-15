@@ -64,9 +64,13 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   void didChangeDependencies() async {
-    _activeWallets = Provider.of<ActiveWallets>(context);
-    _appSettings = Provider.of<AppSettings>(context);
     if (_initial) {
+      _appSettings = Provider.of<AppSettings>(context);
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      final navigator = Navigator.of(context);
+      final priceChecker =
+          PeriodicReminders.checkReminder(_appSettings, context);
+      final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
       setState(() {
@@ -89,7 +93,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         //toggle check for "whats new" changelog
         var packageInfo = await PackageInfo.fromPlatform();
         if (packageInfo.buildNumber != _appSettings.buildIdentifier) {
-          await Navigator.of(context).pushNamed(Routes.changeLog);
+          await navigator.pushNamed(Routes.changeLog);
           _appSettings.setBuildIdentifier(packageInfo.buildNumber);
         }
 
@@ -97,7 +101,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         var walletValues = await _activeWallets.activeWalletsValues;
         if (walletValues.isNotEmpty) {
           //don't show for users with no wallets
-          await PeriodicReminders.checkReminder(_appSettings, context);
+          await priceChecker;
         }
       } else {
         //start session checker timer on web
@@ -114,8 +118,8 @@ class _WalletListScreenState extends State<WalletListScreen>
 
       //check if we just finished a scan
       var fromScan = false;
-      if (ModalRoute.of(context)?.settings.arguments != null) {
-        var map = ModalRoute.of(context)!.settings.arguments as Map;
+      if (modalRoute?.settings.arguments != null) {
+        var map = modalRoute!.settings.arguments as Map;
         fromScan = map['fromScan'] ?? false;
       }
       if (widget.fromColdStart == true &&
@@ -151,7 +155,7 @@ class _WalletListScreenState extends State<WalletListScreen>
             _isLoading = true;
           });
           if (!kIsWeb) {
-            await Navigator.of(context).pushNamed(
+            await navigator.pushNamed(
               Routes.walletHome,
               arguments: values[0],
             );
@@ -165,7 +169,7 @@ class _WalletListScreenState extends State<WalletListScreen>
               _isLoading = true;
             });
             if (!kIsWeb) {
-              await Navigator.of(context).pushNamed(
+              await navigator.pushNamed(
                 Routes.walletHome,
                 arguments: defaultWallet,
               );
