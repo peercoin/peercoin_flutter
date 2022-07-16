@@ -68,7 +68,8 @@ class _WalletListScreenState extends State<WalletListScreen>
       _appSettings = Provider.of<AppSettings>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       final navigator = Navigator.of(context);
-      checkReminder() => PeriodicReminders.checkReminder(_appSettings, context);
+      Future<void> checkReminder() =>
+          PeriodicReminders.checkReminder(_appSettings, context);
       final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
