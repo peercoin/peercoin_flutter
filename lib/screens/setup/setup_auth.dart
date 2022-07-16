@@ -106,8 +106,11 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('app_settings_biometrics'),
+                                  key: const Key('setupAllowBiometrics'),
                                   style: const TextStyle(
-                                      color: Colors.white, fontSize: 17),
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                  ),
                                 ),
                                 value: _biometricsAllowed,
                                 activeColor: Theme.of(context).backgroundColor,

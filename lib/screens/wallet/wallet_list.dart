@@ -204,10 +204,10 @@ class _WalletListScreenState extends State<WalletListScreen>
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         leading: IconButton(
+          key: const Key('appSettingsButton'),
           icon: const Icon(Icons.settings_rounded),
           onPressed: () async {
             await Navigator.pushNamed(context, Routes.appSettings);
-            setState(() {});
           },
         ),
         actions: [

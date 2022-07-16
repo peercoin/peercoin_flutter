@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   group(
-    'Setup',
+    'Setup, Signing and Settings',
     () {
       final elevatedButtonFinder = find.byType('ElevatedButton');
       late FlutterDriver driver;
@@ -32,7 +32,7 @@ void main() {
       });
 
       test(
-        'create wallet from imported seed',
+        'Setup, create wallet from imported seed',
         () async {
           //creates a peercoin testnet wallet from an imported seed and checks if it connects
           await driver.tap(find.byValueKey('setupLanguageButton'));
@@ -47,6 +47,7 @@ void main() {
           );
           await driver.tap(find.text('Import'));
           await driver.scrollIntoView(elevatedButtonFinder);
+          await driver.tap(find.byValueKey('setupAllowBiometrics'));
           await driver.tap(elevatedButtonFinder); //pin pad
           for (var i = 1; i <= 12; i++) {
             await driver.tap(find.text('0'));
@@ -77,7 +78,7 @@ void main() {
       );
 
       test(
-        'tap into imported peercoin testnet wallet',
+        'Setup, tap into imported peercoin testnet wallet',
         () async {
           await driver.runUnsynchronized(
             () async {
@@ -102,7 +103,8 @@ void main() {
         timeout: const Timeout.factor(2),
       );
 
-      test('tap into sign message, select address and sign message', () async {
+      test('Signing, tap into sign message, select address and sign message',
+          () async {
         await driver.tap(find.byTooltip('Show menu'));
         await driver.runUnsynchronized(
           () async {
@@ -120,6 +122,57 @@ void main() {
         await driver.waitFor(
           find.text(
               'Hyd9cBXuT9CMgE8sK7YNeLQF1qaLxjQCMQv3pwKXCGdpOurIceSiuHfgXCnEtAhExq6iP/+vMn6sYC5OfpSBhRc='),
+        );
+      });
+
+      test('Settings, test lock into auth jail', () async {
+        await driver.tap(find.pageBack());
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.pageBack());
+            await driver.tap(find.byValueKey('appSettingsButton'));
+          },
+        );
+        await driver.tap(find.text('Seed phrase'));
+        await driver.tap(find.text('Reveal seed phrase'));
+        //tap wrong code two times
+        for (var i = 1; i <= 12; i++) {
+          await driver.tap(find.text('1'));
+        }
+        //tap okay for warning to go away
+        await driver.tap(find.text('Okay'));
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('1'));
+        }
+        await driver.tap(find.text('Okay'));
+        //auth jail open now
+        await driver.runUnsynchronized(
+          () async {
+            await driver.waitFor(
+              find.text('App locked for'),
+            );
+          },
+        );
+      });
+
+      test('Settings, test unlock and show seed phrase', () async {
+        await Future.delayed(const Duration(seconds: 12));
+        await driver.runUnsynchronized(
+          () async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('0'));
+            }
+            await driver.tap(find.byValueKey('appSettingsButton'));
+          },
+        );
+        await driver.tap(find.text('Seed phrase'));
+        await driver.tap(find.text('Reveal seed phrase'));
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('0'));
+        }
+        await driver.waitFor(
+          find.text(
+              'vapor please suffer wood enrich quality position chest quantum fog rival museum'),
         );
       });
     },
