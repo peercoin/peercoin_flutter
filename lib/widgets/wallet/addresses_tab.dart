@@ -243,9 +243,8 @@ class _AddressTabState extends State<AddressTab> {
               onPressed: () async {
                 String wif;
                 final navigator = Navigator.of(context);
-                showQrDialog(wif) {
-                  WalletHomeQr.showQrDialog(context, wif);
-                }
+                void showQrDialog(wif) =>
+                    WalletHomeQr.showQrDialog(context, wif);
 
                 if (address.wif!.isEmpty || address.wif == null) {
                   wif = await context.read<ActiveWallets>().getWif(
