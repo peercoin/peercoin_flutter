@@ -22,9 +22,9 @@ class TransactionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as List;
-    final WalletTransaction tx = args[0];
-    final CoinWallet coinWallet = args[1];
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final WalletTransaction tx = args['tx'];
+    final CoinWallet coinWallet = args['wallet'];
     final baseUrl =
         '${AvailableCoins.getSpecificCoin(coinWallet.name).explorerUrl}/tx/';
     final decimalProduct = AvailableCoins.getDecimalProduct(

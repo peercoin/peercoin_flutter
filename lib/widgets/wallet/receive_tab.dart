@@ -17,10 +17,15 @@ import '/../widgets/wallet/wallet_balance_header.dart';
 import '/../widgets/wallet/wallet_home_qr.dart';
 
 class ReceiveTab extends StatefulWidget {
-  final String _unusedAddress;
-  final ElectrumConnectionState _connectionState;
-  const ReceiveTab(this._unusedAddress, this._connectionState, {Key? key})
-      : super(key: key);
+  final String unusedAddress;
+  final ElectrumConnectionState connectionState;
+  final CoinWallet wallet;
+  const ReceiveTab({
+    required this.unusedAddress,
+    required this.connectionState,
+    required this.wallet,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ReceiveTab> createState() => _ReceiveTabState();
@@ -33,15 +38,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
   final _formKey = GlobalKey<FormState>();
   final _amountKey = GlobalKey<FormFieldState>();
   final _labelKey = GlobalKey<FormFieldState>();
-  late CoinWallet _wallet;
   late Coin _availableCoin;
   String? _qrString;
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
-      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
-      _availableCoin = AvailableCoins.getSpecificCoin(_wallet.name);
+      _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
       stringBuilder();
       setState(() {
         _initial = false;
@@ -58,17 +61,17 @@ class _ReceiveTabState extends State<ReceiveTab> {
     var builtString = '';
 
     if (convertedValue == 0) {
-      builtString = '${_availableCoin.uriCode}:${widget._unusedAddress}';
+      builtString = '${_availableCoin.uriCode}:${widget.unusedAddress}';
       if (label != '') {
         builtString =
-            '${_availableCoin.uriCode}:${widget._unusedAddress}?label=$label';
+            '${_availableCoin.uriCode}:${widget.unusedAddress}?label=$label';
       }
     } else {
       builtString =
-          '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue';
+          '${_availableCoin.uriCode}:${widget.unusedAddress}?amount=$convertedValue';
       if (label != '') {
         builtString =
-            '${_availableCoin.uriCode}:${widget._unusedAddress}?amount=$convertedValue&label=$label';
+            '${_availableCoin.uriCode}:${widget.unusedAddress}?amount=$convertedValue&label=$label';
       }
     }
     setState(() {
@@ -136,11 +139,11 @@ class _ReceiveTabState extends State<ReceiveTab> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        WalletBalanceHeader(widget._connectionState, _wallet),
+        WalletBalanceHeader(widget.connectionState, widget.wallet),
         ListView(
           children: [
             SizedBox(
-              height: _wallet.unconfirmedBalance > 0 ? 125 : 110,
+              height: widget.wallet.unconfirmedBalance > 0 ? 125 : 110,
             ),
             Container(
               height: 30,
@@ -179,9 +182,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           padding: const EdgeInsets.all(8.0),
                           child: FittedBox(
                             child: DoubleTabToClipboard(
-                              clipBoardData: widget._unusedAddress,
+                              clipBoardData: widget.unusedAddress,
                               child: SelectableText(
-                                widget._unusedAddress,
+                                widget.unusedAddress,
                               ),
                             ),
                           ),
@@ -227,7 +230,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           ),
                           labelText: AppLocalizations.instance
                               .translate('receive_requested_amount'),
-                          suffix: Text(_wallet.letterCode),
+                          suffix: Text(widget.wallet.letterCode),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -252,13 +255,13 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         action: () async {
                           if (labelController.text != '') {
                             context.read<ActiveWallets>().updateLabel(
-                                _wallet.name,
-                                widget._unusedAddress,
+                                widget.wallet.name,
+                                widget.unusedAddress,
                                 labelController.text);
                           }
                           await ShareWrapper.share(
                             context: context,
-                            message: _qrString ?? widget._unusedAddress,
+                            message: _qrString ?? widget.unusedAddress,
                           );
                         },
                       ),
@@ -287,7 +290,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 ),
               ),
             ),
-            _wallet.title.contains('Testnet')
+            widget.wallet.title.contains('Testnet')
                 ? Align(
                     child: PeerContainer(
                       child: Column(

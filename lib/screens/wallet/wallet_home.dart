@@ -48,13 +48,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
   String? _label;
 
   void changeIndex(int i, [String? addr, String? lab]) {
-    if (i == Tabs.send) {
-      //Passes address from addresses_tab to send_tab (send to)
-      _address = addr;
-      _label = lab;
-    }
     setState(() {
       _pageIndex = i;
+      if (i == Tabs.send) {
+        //Passes address from addresses_tab to send_tab (send to)
+        _address = addr;
+        _label = lab;
+      }
     });
   }
 
@@ -106,7 +106,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
+      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      _wallet = arguments['wallet'];
+
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _appSettings = context.read<AppSettings>();
@@ -134,6 +136,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
 
       checkPendingNotifications();
+
+      if (arguments.containsKey('pushedAddress')) {
+        changeIndex(Tabs.send, arguments['pushedAddress']);
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
@@ -429,40 +435,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
     switch (_pageIndex) {
       case Tabs.receive:
         body = Expanded(
-          child: ReceiveTab(_unusedAddress, _connectionState),
+          child: ReceiveTab(
+            connectionState: _connectionState,
+            wallet: _wallet,
+            unusedAddress: _unusedAddress,
+          ),
         );
         break;
       case Tabs.transactions:
         body = Expanded(
           child: TransactionList(
-            _walletTransactions,
-            _wallet,
-            _connectionState,
+            walletTransactions: _walletTransactions,
+            wallet: _wallet,
+            connectionState: _connectionState,
           ),
         );
         break;
       case Tabs.addresses:
         body = Expanded(
           child: AddressTab(
-            _wallet.name,
-            _wallet.title,
-            _wallet.addresses,
-            changeIndex,
+            walletName: _wallet.name,
+            title: _wallet.title,
+            walletAddresses: _wallet.addresses,
+            changeIndex: changeIndex,
           ),
         );
         break;
       case Tabs.send:
         body = Expanded(
           child: SendTab(
-            changeIndex,
-            _address,
-            _label,
-            _connectionState,
+            address: _address,
+            label: _label,
+            wallet: _wallet,
+            connectionState: _connectionState,
+            changeIndex: changeIndex,
           ),
         );
         break;
       default:
-        body = Container();
+        body = const SizedBox();
         break;
     }
     return body;

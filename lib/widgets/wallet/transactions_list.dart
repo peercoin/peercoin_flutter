@@ -14,14 +14,16 @@ import '/../widgets/wallet/wallet_balance_header.dart';
 import '/../widgets/service_container.dart';
 
 class TransactionList extends StatefulWidget {
-  final List<WalletTransaction> _walletTransactions;
-  final CoinWallet _wallet;
-  final ElectrumConnectionState _connectionState;
+  final List<WalletTransaction> walletTransactions;
+  final CoinWallet wallet;
+  final ElectrumConnectionState connectionState;
 
-  const TransactionList(
-      this._walletTransactions, this._wallet, this._connectionState,
-      {Key? key})
-      : super(key: key);
+  const TransactionList({
+    required this.walletTransactions,
+    required this.wallet,
+    required this.connectionState,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TransactionList> createState() => _TransactionListState();
@@ -40,7 +42,7 @@ class _TransactionListState extends State<TransactionList> {
   @override
   void initState() {
     _decimalProduct = AvailableCoins.getDecimalProduct(
-      identifier: widget._wallet.name,
+      identifier: widget.wallet.name,
     );
     super.initState();
   }
@@ -48,7 +50,7 @@ class _TransactionListState extends State<TransactionList> {
   String resolveAddressDisplayName(String address) {
     final result = context
         .read<ActiveWallets>()
-        .getLabelForAddress(widget._wallet.name, address);
+        .getLabelForAddress(widget.wallet.name, address);
     if (result != '') return result;
     return address;
   }
@@ -84,7 +86,7 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
-    var reversedTx = widget._walletTransactions
+    var reversedTx = widget.walletTransactions
         .where((element) => element.timestamp != -1) //filter "phantom" tx
         .toList()
         .reversed
@@ -98,8 +100,8 @@ class _TransactionListState extends State<TransactionList> {
 
     return Stack(
       children: [
-        WalletBalanceHeader(widget._connectionState, widget._wallet),
-        widget._walletTransactions
+        WalletBalanceHeader(widget.connectionState, widget.wallet),
+        widget.walletTransactions
                 .where(
                   (element) => element.timestamp != -1,
                 ) //don't count "phantom" tx
@@ -159,10 +161,10 @@ class _TransactionListState extends State<TransactionList> {
                               child: ListTile(
                                 horizontalTitleGap: 32.0,
                                 onTap: () => Navigator.of(context)
-                                    .pushNamed(Routes.transaction, arguments: [
-                                  filteredTx[i - 1],
-                                  ModalRoute.of(context)!.settings.arguments
-                                ]),
+                                    .pushNamed(Routes.transaction, arguments: {
+                                  'tx': filteredTx[i - 1],
+                                  'wallet': widget.wallet
+                                }),
                                 leading: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -252,11 +254,11 @@ class _TransactionListState extends State<TransactionList> {
                             ),
                           );
                         } else if (i == 0 &&
-                            widget._walletTransactions.isNotEmpty) {
+                            widget.walletTransactions.isNotEmpty) {
                           return Column(
                             children: [
                               SizedBox(
-                                height: widget._wallet.unconfirmedBalance > 0
+                                height: widget.wallet.unconfirmedBalance > 0
                                     ? 125
                                     : 110,
                               ),

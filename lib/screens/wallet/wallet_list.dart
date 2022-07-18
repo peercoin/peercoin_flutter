@@ -157,7 +157,9 @@ class _WalletListScreenState extends State<WalletListScreen>
           if (!kIsWeb) {
             await navigator.pushNamed(
               Routes.walletHome,
-              arguments: values[0],
+              arguments: {
+                'wallet': values[0],
+              },
             );
           }
           setState(() {
@@ -171,7 +173,7 @@ class _WalletListScreenState extends State<WalletListScreen>
             if (!kIsWeb) {
               await navigator.pushNamed(
                 Routes.walletHome,
-                arguments: defaultWallet,
+                arguments: {'wallet': defaultWallet},
               );
             }
             setState(() {
@@ -368,7 +370,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                                       onTap: () async {
                                         await Navigator.of(context).pushNamed(
                                           Routes.walletHome,
-                                          arguments: wallet,
+                                          arguments: {
+                                            'wallet': wallet,
+                                          },
                                         );
                                       },
                                       child: ListTile(

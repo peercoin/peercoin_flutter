@@ -27,14 +27,19 @@ import '/../widgets/wallet/wallet_balance_header.dart';
 import '../../tools/logger_wrapper.dart';
 
 class SendTab extends StatefulWidget {
-  final Function _changeIndex;
-  final String? _address;
-  final String? _label;
-  final ElectrumConnectionState _connectionState;
-  const SendTab(
-      this._changeIndex, this._address, this._label, this._connectionState,
-      {Key? key})
-      : super(key: key);
+  final Function changeIndex;
+  final String? address;
+  final String? label;
+  final ElectrumConnectionState connectionState;
+  final CoinWallet wallet;
+  const SendTab({
+    required this.changeIndex,
+    this.address,
+    this.label,
+    required this.wallet,
+    required this.connectionState,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SendTab> createState() => _SendTabState();
@@ -51,7 +56,6 @@ class _SendTabState extends State<SendTab> {
   final _labelController = TextEditingController();
   final _opReturnController = TextEditingController();
   bool _initial = true;
-  late CoinWallet _wallet;
   late Coin _availableCoin;
   late ActiveWallets _activeWallets;
   int _txFee = 0;
@@ -69,23 +73,22 @@ class _SendTabState extends State<SendTab> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
-      _availableCoin = AvailableCoins.getSpecificCoin(_wallet.name);
+      _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _appSettings = context.read<AppSettings>();
 
       _availableAddresses =
-          await _activeWallets.getWalletAddresses(_wallet.name);
+          await _activeWallets.getWalletAddresses(widget.wallet.name);
       _decimalProduct = AvailableCoins.getDecimalProduct(
-        identifier: _wallet.name,
+        identifier: widget.wallet.name,
       );
       _fiatEnabled = _appSettings.selectedCurrency.isNotEmpty &&
-          !_wallet.name.contains('Testnet');
+          !widget.wallet.name.contains('Testnet');
       _calcAmountInputHelperText();
 
       setState(() {
-        _addressController.text = widget._address ?? '';
-        _labelController.text = widget._label ?? '';
+        _addressController.text = widget.address ?? '';
+        _labelController.text = widget.label ?? '';
         _initial = false;
       });
     }
@@ -94,7 +97,7 @@ class _SendTabState extends State<SendTab> {
 
   Future<Map> _buildTx() async {
     return await _activeWallets.buildTransaction(
-      identifier: _wallet.name,
+      identifier: widget.wallet.name,
       address: _addressKey.currentState!.value.trim(),
       amount: _requestedAmountInCoins,
       fee: 0,
@@ -142,7 +145,7 @@ class _SendTabState extends State<SendTab> {
       builder: (BuildContext context) {
         String? displayValue = _requestedAmountInCoins.toString();
         _totalValue = (_requestedAmountInCoins * _decimalProduct).toInt();
-        if (_totalValue == _wallet.balance) {
+        if (_totalValue == widget.wallet.balance) {
           var newValue = _requestedAmountInCoins - (_txFee / _decimalProduct);
           displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
         } else {
@@ -178,7 +181,7 @@ class _SendTabState extends State<SendTab> {
                       style: DefaultTextStyle.of(context).style,
                       children: <TextSpan>[
                         TextSpan(
-                          text: '$displayValue ${_wallet.letterCode}',
+                          text: '$displayValue ${widget.wallet.letterCode}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -199,7 +202,7 @@ class _SendTabState extends State<SendTab> {
                       'send_fee',
                       {
                         'amount': '${_txFee / _decimalProduct}',
-                        'letter_code': _wallet.letterCode
+                        'letter_code': widget.wallet.letterCode
                       },
                     ),
                   ),
@@ -209,7 +212,7 @@ class _SendTabState extends State<SendTab> {
                         'send_dust',
                         {
                           'amount': '${correctedDust / _decimalProduct}',
-                          'letter_code': _wallet.letterCode
+                          'letter_code': widget.wallet.letterCode
                         },
                       ),
                       style: TextStyle(color: Theme.of(context).errorColor),
@@ -219,7 +222,7 @@ class _SendTabState extends State<SendTab> {
                       'send_total',
                       {
                         'amount': '${_totalValue / _decimalProduct}',
-                        'letter_code': _wallet.letterCode
+                        'letter_code': widget.wallet.letterCode
                       },
                     ),
                     style: _fiatInputEnabled
@@ -255,7 +258,7 @@ class _SendTabState extends State<SendTab> {
                         firstPress = false;
                         //write tx to history
                         await _activeWallets.putOutgoingTx(
-                          _wallet.name,
+                          widget.wallet.name,
                           _addressKey.currentState!.value,
                           {
                             'txid': buildResult['id'],
@@ -274,7 +277,7 @@ class _SendTabState extends State<SendTab> {
                         //store label if exists
                         if (_labelKey.currentState!.value != '') {
                           _activeWallets.updateLabel(
-                            _wallet.name,
+                            widget.wallet.name,
                             _addressKey.currentState!.value,
                             _labelKey.currentState!.value,
                           );
@@ -282,7 +285,7 @@ class _SendTabState extends State<SendTab> {
                         //pop message
                         navigator.pop();
                         //navigate back to tx list
-                        widget._changeIndex(Tabs.transactions);
+                        widget.changeIndex(Tabs.transactions);
                       } catch (e) {
                         LoggerWrapper.logError(
                           'SendTab',
@@ -340,14 +343,14 @@ class _SendTabState extends State<SendTab> {
     LoggerWrapper.logInfo(
       'SendTab',
       'send_amount',
-      'req value $txValueInSatoshis - ${_wallet.balance}',
+      'req value $txValueInSatoshis - ${widget.wallet.balance}',
     );
     if (convertedValue.contains('.') &&
         convertedValue.split('.')[1].length > _availableCoin.fractions) {
       return AppLocalizations.instance.translate('send_amount_small');
     }
-    if (txValueInSatoshis > _wallet.balance ||
-        txValueInSatoshis == 0 && _wallet.balance == 0) {
+    if (txValueInSatoshis > widget.wallet.balance ||
+        txValueInSatoshis == 0 && widget.wallet.balance == 0) {
       return AppLocalizations.instance.translate('send_amount_exceeds');
     }
     if (txValueInSatoshis < _availableCoin.minimumTxValue &&
@@ -355,8 +358,8 @@ class _SendTabState extends State<SendTab> {
       return AppLocalizations.instance.translate('send_amount_below_minimum',
           {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'});
     }
-    if (txValueInSatoshis == _wallet.balance &&
-        _wallet.balance == _availableCoin.minimumTxValue) {
+    if (txValueInSatoshis == widget.wallet.balance &&
+        widget.wallet.balance == _availableCoin.minimumTxValue) {
       return AppLocalizations.instance.translate(
         'send_amount_below_minimum_unable',
         {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'},
@@ -383,7 +386,7 @@ class _SendTabState extends State<SendTab> {
     final fiatPrice = PriceTicker.renderPrice(
       1,
       _appSettings.selectedCurrency,
-      _wallet.letterCode,
+      widget.wallet.letterCode,
       _appSettings.exchangeRates,
     );
 
@@ -394,10 +397,10 @@ class _SendTabState extends State<SendTab> {
     String result = '';
     if (_fiatInputEnabled) {
       result =
-          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${_wallet.letterCode}';
+          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${widget.wallet.letterCode}';
     } else {
       result =
-          '$inputAmount ${_wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
+          '$inputAmount ${widget.wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
     }
 
     setState(() {
@@ -411,11 +414,11 @@ class _SendTabState extends State<SendTab> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        WalletBalanceHeader(widget._connectionState, _wallet),
+        WalletBalanceHeader(widget.connectionState, widget.wallet),
         ListView(
           children: [
             SizedBox(
-              height: _wallet.unconfirmedBalance > 0 ? 125 : 110,
+              height: widget.wallet.unconfirmedBalance > 0 ? 125 : 110,
             ),
             Container(
               height: 30,
@@ -537,7 +540,7 @@ class _SendTabState extends State<SendTab> {
                           suffix: Text(
                             _fiatInputEnabled
                                 ? _appSettings.selectedCurrency
-                                : _wallet.letterCode,
+                                : widget.wallet.letterCode,
                           ),
                           helperText: _amountInputHelperText,
                         ),
@@ -658,7 +661,8 @@ class _SendTabState extends State<SendTab> {
                             _fiatInputEnabled = false;
                           });
                           _amountController.text =
-                              (_wallet.balance / _decimalProduct).toString();
+                              (widget.wallet.balance / _decimalProduct)
+                                  .toString();
                           _calcAmountInputHelperText();
                         },
                       ),
