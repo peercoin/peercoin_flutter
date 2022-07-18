@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:mailto/mailto.dart';
-import 'package:peercoin/models/coin_wallet.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -29,7 +28,6 @@ class _AboutScreenState extends State<AboutScreen> {
     if (_initial) {
       _activeWallets = context.read<ActiveWallets>();
       _listOfActiveWallets = await _activeWallets.activeWalletsKeys;
-      print(_listOfActiveWallets);
       _packageInfo = await PackageInfo.fromPlatform();
       setState(() {
         _initial = false;

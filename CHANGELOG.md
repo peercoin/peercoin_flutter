@@ -1,5 +1,5 @@
 ### **0.9.8** (2022-07-xx)
-* 
+* About screen: Add donation button with direct link to send tab
 
 ### **0.9.7** (2022-07-15)
 * Price animation for wallet home
