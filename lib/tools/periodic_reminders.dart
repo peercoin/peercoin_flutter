@@ -26,6 +26,7 @@ class PeriodicReminders {
           actions: <Widget>[
             if (reminderItem.id == 'donate')
               TextButton(
+                //TODO add donate now deep link
                 onPressed: () async {
                   final navigator = Navigator.of(context);
                   var url = 'https://ppc.lol/fndtn/';
