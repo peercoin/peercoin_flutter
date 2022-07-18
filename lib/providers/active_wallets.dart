@@ -288,8 +288,11 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> putTx(String identifier, String address, Map tx,
-      [bool scanMode = false]) async {
+  Future<void> putTx(
+    String identifier,
+    String address,
+    Map tx,
+  ) async {
     var openWallet = getSpecificCoinWallet(identifier);
     LoggerWrapper.logInfo('ActiveWallets', 'putTx', '$address puttx: $tx');
 

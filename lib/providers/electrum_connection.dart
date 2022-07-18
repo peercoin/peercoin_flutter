@@ -551,7 +551,7 @@ class ElectrumConnection with ChangeNotifier {
     var txId = id.replaceFirst('tx_', '');
     var addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
+      await _activeWallets.putTx(_coinName, addr, tx);
     } else {
       LoggerWrapper.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
       //TODO figure out what to do in that case ...
