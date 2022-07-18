@@ -56,7 +56,6 @@ class _SendTabState extends State<SendTab> {
   late ActiveWallets _activeWallets;
   int _txFee = 0;
   int _totalValue = 0;
-  WalletAddress? _transferedAddress;
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
   late AppSettings _appSettings;
@@ -410,14 +409,6 @@ class _SendTabState extends State<SendTab> {
 
   @override
   Widget build(BuildContext context) {
-    _transferedAddress = _activeWallets.transferedAddress;
-    if (_transferedAddress != null &&
-        _transferedAddress!.address != _addressController.text) {
-      _addressController.text = _transferedAddress!.address;
-      _labelController.text = _transferedAddress!.addressBookName ?? '';
-      _activeWallets.transferedAddress = null; //reset transfer
-    }
-
     return Stack(
       children: [
         WalletBalanceHeader(widget._connectionState, _wallet),

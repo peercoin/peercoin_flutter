@@ -34,7 +34,6 @@ class ActiveWallets with ChangeNotifier {
   Box? _vaultBox;
   // ignore: prefer_final_fields
   Map<String?, CoinWallet?> _specificWallet = {};
-  WalletAddress? _transferedAddress;
 
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
@@ -878,14 +877,6 @@ class ActiveWallets with ChangeNotifier {
     );
     if (addr == null) return '';
     return addr.addressBookName ?? '';
-  }
-
-  set transferedAddress(newAddress) {
-    _transferedAddress = newAddress;
-  }
-
-  WalletAddress? get transferedAddress {
-    return _transferedAddress;
   }
 
   String reverseString(String input) {

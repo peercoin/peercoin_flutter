@@ -77,10 +77,12 @@ class _AboutScreenState extends State<AboutScreen> {
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
-                                  'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
+                                'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE',
+                              ),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_license'),
+                                AppLocalizations.instance.translate(
+                                  'about_license',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -89,95 +91,114 @@ class _AboutScreenState extends State<AboutScreen> {
                               onPressed: () => Navigator.of(context)
                                   .pushNamed(Routes.changeLog),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('changelog_appbar'),
+                                AppLocalizations.instance.translate(
+                                  'changelog_appbar',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             const Divider(),
                             const SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance.translate('about_free'),
+                              AppLocalizations.instance.translate(
+                                'about_free',
+                              ),
                             ),
                             TextButton(
                                 onPressed: () => _launchURL(
-                                    'https://github.com/peercoin/peercoin_flutter'),
+                                      'https://github.com/peercoin/peercoin_flutter',
+                                    ),
                                 child: Text(
-                                  AppLocalizations.instance
-                                      .translate('about_view_source'),
+                                  AppLocalizations.instance.translate(
+                                    'about_view_source',
+                                  ),
                                   textAlign: TextAlign.center,
                                 )),
                             const Divider(),
                             const SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance
-                                  .translate('about_data_protection'),
+                              AppLocalizations.instance.translate(
+                                'about_data_protection',
+                              ),
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
-                                  'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md'),
+                                'https://github.com/peercoin/peercoin_flutter/blob/main/data_protection.md',
+                              ),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_data_declaration'),
+                                AppLocalizations.instance.translate(
+                                  'about_data_declaration',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             const Divider(),
                             const SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance
-                                  .translate('about_foundation'),
+                              AppLocalizations.instance.translate(
+                                'about_foundation',
+                              ),
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
-                                  'https://www.peercoin.net/foundation'),
+                                'https://www.peercoin.net/foundation',
+                              ),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_foundation_button'),
+                                AppLocalizations.instance.translate(
+                                  'about_foundation_button',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             const Divider(),
                             const SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance
-                                  .translate('about_translate'),
+                              AppLocalizations.instance.translate(
+                                'about_translate',
+                              ),
                             ),
                             TextButton(
-                              onPressed: () async =>
-                                  _launchURL('https://weblate.ppc.lol'),
+                              onPressed: () async => _launchURL(
+                                'https://weblate.ppc.lol',
+                              ),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_go_weblate'),
+                                AppLocalizations.instance.translate(
+                                  'about_go_weblate',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             const Divider(),
                             const SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance
-                                  .translate('about_help_or_feedback'),
+                              AppLocalizations.instance.translate(
+                                'about_help_or_feedback',
+                              ),
                             ),
                             TextButton(
                               onPressed: () async => launchMailto(),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_send_mail'),
+                                AppLocalizations.instance.translate(
+                                  'about_send_mail',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             const Divider(),
                             const SizedBox(height: 10),
                             Text(
-                              AppLocalizations.instance
-                                  .translate('about_illustrations'),
+                              AppLocalizations.instance.translate(
+                                'about_illustrations',
+                              ),
                             ),
                             TextButton(
-                              onPressed: () async =>
-                                  _launchURL('https://designs.ai'),
+                              onPressed: () async => _launchURL(
+                                'https://designs.ai',
+                              ),
                               child: Text(
-                                AppLocalizations.instance
-                                    .translate('about_illustrations_button'),
+                                AppLocalizations.instance.translate(
+                                  'about_illustrations_button',
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
