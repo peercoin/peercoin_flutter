@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:mailto/mailto.dart';
+import 'package:peercoin/models/coin_wallet.dart';
 import 'package:peercoin/widgets/service_container.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../providers/active_wallets.dart';
 import '../tools/app_localizations.dart';
 import '../tools/app_routes.dart';
 
@@ -18,10 +21,15 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   bool _initial = true;
   PackageInfo? _packageInfo;
+  late ActiveWallets _activeWallets;
+  late List _listOfActiveWallets;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
+      _activeWallets = context.read<ActiveWallets>();
+      _listOfActiveWallets = await _activeWallets.activeWalletsKeys;
+      print(_listOfActiveWallets);
       _packageInfo = await PackageInfo.fromPlatform();
       setState(() {
         _initial = false;
@@ -139,6 +147,32 @@ class _AboutScreenState extends State<AboutScreen> {
                                 'about_foundation',
                               ),
                             ),
+                            _listOfActiveWallets.contains('peercoin')
+                                ? TextButton(
+                                    onPressed: () async {
+                                      final navigator = Navigator.of(context);
+                                      final values = await _activeWallets
+                                          .activeWalletsValues;
+                                      final ppcWallet = values.firstWhere(
+                                        (element) => element.name == 'peercoin',
+                                      );
+
+                                      navigator.pushNamed(
+                                        Routes.walletHome,
+                                        arguments: {
+                                          'wallet': ppcWallet,
+                                          'pushedAddress':
+                                              'p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK',
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      AppLocalizations.instance.translate(
+                                        'about_donate_button',
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
                             TextButton(
                               onPressed: () => _launchURL(
                                 'https://www.peercoin.net/foundation',
@@ -212,5 +246,4 @@ class _AboutScreenState extends State<AboutScreen> {
       ),
     );
   }
-//TODO add URI link to donate to Foundation when P2SH / multisig is ready
 }

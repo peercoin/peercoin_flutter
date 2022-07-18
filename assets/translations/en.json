@@ -322,5 +322,6 @@
     "setup_auth_title": "Select when your web session should expire:",
     "setup_auth_subtitle_plural": "Your session will expire after $days days.",
     "setup_auth_subtitle_singular": "Your session will expire after $days day.",
-    "setup_auth_hint": "You have to enter your seed again after the session has expired."
+    "setup_auth_hint": "You have to enter your seed again after the session has expired.",
+    "about_donate_button": "Donate PPC now"
 }

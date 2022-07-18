@@ -65,10 +65,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     final oldAddr = _signingAddress;
     var result = await Navigator.of(context).pushNamed(
       Routes.addressSelector,
-      arguments: [
-        await _activeWallets.getWalletAddresses(_walletName),
-        _signingAddress
-      ],
+      arguments: {
+        'addresses': await _activeWallets.getWalletAddresses(_walletName),
+        'selectedAddress': _signingAddress
+      },
     );
     setState(() {
       _signingAddress = result as String;
