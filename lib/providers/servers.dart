@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:peercoin/models/available_coins.dart';
 
+import '../models/available_coins.dart';
 import '../models/server.dart';
 import '../tools/logger_wrapper.dart';
 import 'encrypted_box.dart';
@@ -21,7 +21,7 @@ class Servers with ChangeNotifier {
       encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>),
     );
 
-    final _seedServers =
+    final seedServers =
         AvailableCoins.getSpecificCoin(identifier).electrumServers;
 
     //check first run
@@ -29,7 +29,7 @@ class Servers with ChangeNotifier {
       LoggerWrapper.logInfo(
           'Servers', 'init', 'server storage is empty, initializing');
 
-      _seedServers.asMap().forEach((index, hardcodedSeedAddress) {
+      seedServers.asMap().forEach((index, hardcodedSeedAddress) {
         var newServer = Server(
           address: hardcodedSeedAddress,
           priority: index,
@@ -40,7 +40,7 @@ class Servers with ChangeNotifier {
     }
 
     // check if all hard coded seeds for this coin are already in db
-    for (var hardcodedSeedAddress in _seedServers) {
+    for (var hardcodedSeedAddress in seedServers) {
       var res = _serverBox.values.firstWhereOrNull(
           (element) => element.getAddress == hardcodedSeedAddress);
       if (res == null) {
@@ -56,7 +56,7 @@ class Servers with ChangeNotifier {
     //check if hard coded seeds have been removed
     for (var boxElement in _serverBox.values) {
       if (boxElement.userGenerated == false) {
-        var res = _seedServers.firstWhere(
+        var res = seedServers.firstWhere(
             (element) => element == boxElement.address,
             orElse: () => null);
         if (res == null) {
@@ -92,45 +92,45 @@ class Servers with ChangeNotifier {
 
   Future<List> getServerList(String coinIdentifier) async {
     //form list
-    var _availableServers = List.generate(
+    var availableServers = List.generate(
       _serverBox.values.length,
       (index) => '',
     );
     for (var server in _serverBox.values) {
       if (server.hidden == false && server.connectable == true) {
-        _availableServers.insert(server.priority, server.address);
+        availableServers.insert(server.priority, server.address);
       }
     }
 
-    final _prunedList =
-        _availableServers.where((element) => element.isNotEmpty).toList();
+    final prunedList =
+        availableServers.where((element) => element.isNotEmpty).toList();
     LoggerWrapper.logInfo(
       'Servers',
       'getServerList',
-      'available servers $_prunedList',
+      'available servers $prunedList',
     );
 
-    return _prunedList;
+    return prunedList;
   }
 
   Future<List<Server>> getServerDetailsList(String coinIdentifier) async {
     //form list
-    var _availableServersDetails = <Server>[];
+    var availableServersDetails = <Server>[];
 
     for (var server in _serverBox.values) {
-      _availableServersDetails.add(server);
+      availableServersDetails.add(server);
     }
 
     //sort by connectable
-    _availableServersDetails.sort((a, b) {
+    availableServersDetails.sort((a, b) {
       if (b.connectable) {
         return 1;
       }
       return -1;
     });
     //sort by priority
-    _availableServersDetails.sort((a, b) => a.priority.compareTo(b.priority));
+    availableServersDetails.sort((a, b) => a.priority.compareTo(b.priority));
 
-    return _availableServersDetails;
+    return availableServersDetails;
   }
 }

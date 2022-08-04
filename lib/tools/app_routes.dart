@@ -1,7 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/setup/setup_legal.dart';
-import 'package:peercoin/screens/wallet/address_selector.dart';
-import 'package:peercoin/screens/wallet/wallet_signing.dart';
 
 import '../screens/settings/app_settings_notifications.dart';
 import '../screens/settings/app_settings_screen.dart';
@@ -16,12 +13,15 @@ import '../screens/setup/setup_import_seed.dart';
 import '../screens/setup/setup_language.dart';
 import '../screens/router_master.dart';
 import '../screens/setup/setup_auth.dart';
+import '../screens/setup/setup_legal.dart';
+import '../screens/wallet/address_selector.dart';
 import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
 import '../screens/wallet/transaction_details.dart';
 import '../screens/wallet/wallet_home.dart';
 import '../screens/wallet/wallet_import_scan.dart';
 import '../screens/wallet/wallet_list.dart';
+import '../screens/wallet/wallet_signing.dart';
 
 class Routes {
   // Route name constants

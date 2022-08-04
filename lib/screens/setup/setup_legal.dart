@@ -1,27 +1,27 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/screens/setup/setup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
+import 'setup.dart';
 
 class SetupLegalScreen extends StatefulWidget {
   const SetupLegalScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupLegalScreenState createState() => _SetupLegalScreenState();
+  State<SetupLegalScreen> createState() => _SetupLegalScreenState();
 }
 
 class _SetupLegalScreenState extends State<SetupLegalScreen> {
-  void _launchURL(String _url) async {
-    await canLaunchUrlString(_url)
+  void _launchURL(String url) async {
+    await canLaunchUrlString(url)
         ? await launchUrlString(
-            _url,
+            url,
           )
-        : throw 'Could not launch $_url';
+        : throw 'Could not launch $url';
   }
 
   bool _termsAgreed = false;
@@ -133,11 +133,12 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                 text: AppLocalizations.instance.translate('setup_finish'),
                 active: _termsAgreed,
                 action: () async {
+                  final navigator = Navigator.of(context);
                   if (_termsAgreed == false) return;
                   var prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('setupFinished', true);
-                  await Navigator.of(context)
-                      .pushNamedAndRemoveUntil(Routes.walletList, (_) => false);
+                  await navigator.pushNamedAndRemoveUntil(
+                      Routes.walletList, (_) => false);
                 },
               ),
               const SizedBox(

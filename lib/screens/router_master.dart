@@ -25,6 +25,7 @@ class _RouterMasterState extends State<RouterMaster> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
+      final modalRoute = ModalRoute.of(context)!;
       var prefs = await SharedPreferences.getInstance();
       var setupFinished = prefs.getBool('setupFinished') ?? false;
 
@@ -44,7 +45,7 @@ class _RouterMasterState extends State<RouterMaster> {
         widgetToRender = widget.widget;
         //TODO don't allow unordered access to setup widgets if setup is not finished
       } else if (widget.routeType == RouteTypes.requiresArguments &&
-          ModalRoute.of(context)!.settings.arguments == null) {
+          modalRoute.settings.arguments == null) {
         Future.delayed(
           const Duration(seconds: 0),
           () => Navigator.of(context).pushReplacementNamed('/'),
@@ -53,9 +54,9 @@ class _RouterMasterState extends State<RouterMaster> {
         widgetToRender = widget.widget;
       }
 
-      const _secureStorage = FlutterSecureStorage();
+      const secureStorage = FlutterSecureStorage();
       var failedAuths =
-          int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
+          int.parse(await secureStorage.read(key: 'failedAuths') ?? '0');
 
       if (failedAuths > 0) {
         widgetToRender = const AuthJailScreen();

@@ -17,7 +17,7 @@
     "wallet_receive_label_hint": "Pahiwatig: Sa pagpindot ng button na ito mase-save ang label ng address",
     "wallet_rescan_title": "I-scan muli ang wallet",
     "wallet_rescan_content": "Ini-scan muli ang wallet. Kung nagkakaproblema ka sa mga transaksyon o halaga, maaari itong makatulong.\nMaaari itong tumagal ng ilang sandali.",
-    "wallet__send_label_hint": "Pahiwatig: Makakatipid ka ng oras sa pag-scan ng QR-Code",
+    "wallet_send_label_hint_scan": "Pahiwatig: Makakatipid ka ng oras sa pag-scan ng QR-Code",
     "wallet_scan_appBar_title": "Ini-scan ang iyong in-import na seed",
     "wallet_scan_notice": "Maaari itong matagalan. Huwag isara ang screen!",
     "wallet_send": "Magpadala",

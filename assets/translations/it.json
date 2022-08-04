@@ -176,7 +176,7 @@
     "receive_website": "Apri il sito",
     "send_qr": "QR-Code",
     "wallet_bottom_nav_addr": "Indirizzi",
-    "wallet__send_label_hint": "Suggerimento: usando i QR-Code sarà tutto più semplice",
+    "wallet_send_label_hint_scan": "Suggerimento: usando i QR-Code sarà tutto più semplice",
     "setup_continue_alert_title": "Prima di continuare",
     "setup_continue_alert_content": "Assicurati di aver salvato il tuo Seed.\nPotrai visualizzarlo più tardi nelle impostazioni.",
     "tx_rejected": "Transazione rifiutata dal network. Per favore, ritenta.",

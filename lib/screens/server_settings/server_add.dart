@@ -7,7 +7,6 @@ import 'dart:typed_data';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -18,12 +17,13 @@ import '../../providers/servers.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/loading_indicator.dart';
+import '../../widgets/service_container.dart';
 
 class ServerAddScreen extends StatefulWidget {
   const ServerAddScreen({Key? key}) : super(key: key);
 
   @override
-  _ServerAddScreenState createState() => _ServerAddScreenState();
+  State<ServerAddScreen> createState() => _ServerAddScreenState();
 }
 
 class _ServerAddScreenState extends State<ServerAddScreen> {
@@ -47,9 +47,11 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
     super.didChangeDependencies();
   }
 
-  void tryConnect(String _serverUrl) async {
-    _currentServerList = await Provider.of<Servers>(context, listen: false)
-        .getServerDetailsList(_walletName);
+  void tryConnect(String serverUrl) async {
+    final scaffoldMessanger = ScaffoldMessenger.of(context);
+    final electrumConnection = context.read<ElectrumConnection>();
+    final serverProvider = context.read<Servers>();
+    _currentServerList = await serverProvider.getServerDetailsList(_walletName);
 
     setState(() {
       _loading = true;
@@ -57,10 +59,10 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
     //check if server already exists
     if (_currentServerList
-            .firstWhereOrNull((element) => element.address == _serverUrl) !=
+            .firstWhereOrNull((element) => element.address == serverUrl) !=
         null) {
       //show notification
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessanger.showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('server_add_server_exists'),
           textAlign: TextAlign.center,
@@ -72,24 +74,23 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       LoggerWrapper.logInfo('ServerAdd', 'tryConnect', 'trying to connect');
 
       //close original server connection
-      await Provider.of<ElectrumConnection>(context, listen: false)
-          .closeConnection();
+      await electrumConnection.closeConnection();
 
       //try new connection
-      var _connection;
+      var connection;
       try {
-        if (_serverUrl.contains('wss://')) {
+        if (serverUrl.contains('wss://')) {
           _serverType = ElectrumServerType.wss;
-          _connection = WebSocketChannel.connect(
-            Uri.parse(_serverUrl),
+          connection = WebSocketChannel.connect(
+            Uri.parse(serverUrl),
           );
-        } else if (_serverUrl.contains('ssl://') && kIsWeb == false) {
+        } else if (serverUrl.contains('ssl://') && kIsWeb == false) {
           _serverType = ElectrumServerType.ssl;
 
-          final split = _serverUrl.split(':');
+          final split = serverUrl.split(':');
           final host = split[1].replaceAll('//', '');
           final port = int.parse(split[2]);
-          _connection = await SecureSocket.connect(
+          connection = await SecureSocket.connect(
             host,
             port,
             timeout: const Duration(seconds: 10),
@@ -105,15 +106,15 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
       }
 
       void sendMessage(String method, String? id, [List? params]) {
-        final String _encodedMessage = json.encode(
+        final String encodedMessage = json.encode(
           {'id': id, 'method': method, if (params != null) 'params': params},
         );
-        if (_connection != null) {
+        if (connection != null) {
           if (_serverType == ElectrumServerType.ssl) {
-            _connection.add(_encodedMessage.codeUnits);
-            _connection.add('\n'.codeUnits);
+            connection.add(encodedMessage.codeUnits);
+            connection.add('\n'.codeUnits);
           } else if (_serverType == ElectrumServerType.wss) {
-            _connection!.sink.add(_encodedMessage);
+            connection!.sink.add(encodedMessage);
           }
         }
       }
@@ -136,8 +137,8 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
               AvailableCoins.getSpecificCoin(_walletName).genesisHash) {
             //gensis hash matches
             //add server to db
-            Provider.of<Servers>(context, listen: false).addServer(
-              _serverUrl,
+            serverProvider.addServer(
+              serverUrl,
               true,
             );
             //pop screen
@@ -161,9 +162,9 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
       var stream;
       if (_serverType == ElectrumServerType.ssl) {
-        stream = _connection;
+        stream = connection;
       } else if (_serverType == ElectrumServerType.wss) {
-        stream = _connection!.stream;
+        stream = connection!.stream;
       }
 
       if (stream == null) return;

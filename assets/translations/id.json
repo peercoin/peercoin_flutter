@@ -118,7 +118,7 @@
     "wallet_pop_menu_servers": "Sesuaikan Server",
     "wallet_receive": "Terima",
     "wallet_rescan_title": "Pindai ulang dompet",
-    "wallet__send_label_hint": "Petunjuk: Memindai Kode QR akan menghemat waktu Anda",
+    "wallet_send_label_hint_scan": "Petunjuk: Memindai Kode QR akan menghemat waktu Anda",
     "wallet_scan_appBar_title": "Memindai benih impor Anda",
     "wallet_scan_notice": "Ini mungkin memakan waktu cukup lama. Jangan tutup layar ini!",
     "wallet_send": "Kirim",

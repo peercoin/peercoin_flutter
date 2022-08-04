@@ -88,9 +88,9 @@ void main() async {
   var sessionExpired = await checkSessionExpired();
 
   try {
-    const _secureStorage = FlutterSecureStorage();
+    const secureStorage = FlutterSecureStorage();
     failedAuths =
-        int.parse(await _secureStorage.read(key: 'failedAuths') ?? '0');
+        int.parse(await secureStorage.read(key: 'failedAuths') ?? '0');
   } catch (e) {
     secureStorageError = true;
     LoggerWrapper.logError('Main', 'secureStorage', e.toString());

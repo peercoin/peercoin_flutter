@@ -19,22 +19,26 @@ class Auth {
   static Future<void> executeCallback(
       BuildContext context, Function? callback) async {
     //reset unsuccesful login and attempt counter
-    await Provider.of<EncryptedBox>(context, listen: false).setFailedAuths(0);
-    await Provider.of<EncryptedBox>(context, listen: false)
-        .setFailedAuthAttempts(0);
+    final encryptedBox = context.read<EncryptedBox>();
+    final navigator = Navigator.of(context);
+
+    await encryptedBox.setFailedAuths(0);
+    await encryptedBox.setFailedAuthAttempts(0);
     retriesLeft = maxRetries;
     failedAuthAttempts = 0;
 
     if (callback != null) {
-      Navigator.pop(context);
+      navigator.pop();
       await callback();
       //TODO having a loading animation here would be nicer
     } else {
-      Navigator.pop(context);
+      navigator.pop();
     }
   }
 
   static void errorHandler(BuildContext context, int retries) async {
+    final encryptedBox = context.read<EncryptedBox>();
+
     if (retries == retriesLeft - 1) {
       await showDialog(
         context: context,
@@ -63,14 +67,13 @@ class Auth {
         },
       );
     }
-    failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
-    await context
-        .read<EncryptedBox>()
-        .setFailedAuthAttempts(failedAuthAttempts + 1);
+    failedAuthAttempts = await encryptedBox.failedAuthAttempts;
+    await encryptedBox.setFailedAuthAttempts(failedAuthAttempts + 1);
   }
 
   static Future<void> spawnJail(
       BuildContext context, bool jailedFromHome) async {
+    final navigator = Navigator.of(context);
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -91,8 +94,8 @@ class Auth {
             ],
           );
         });
-    await Navigator.of(context)
-        .pushReplacementNamed(Routes.authJail, arguments: jailedFromHome);
+    await navigator.pushReplacementNamed(Routes.authJail,
+        arguments: jailedFromHome);
   }
 
   static Future<void> localAuth(BuildContext context,
@@ -104,6 +107,7 @@ class Auth {
       biometricHint:
           AppLocalizations.instance.translate('authenticate_biometric_hint'),
     );
+    Future<void> executeCB() async => executeCallback(context, callback);
     try {
       final didAuthenticate = await localAuth.authenticate(
           androidAuthStrings: authStrings,
@@ -112,7 +116,7 @@ class Auth {
               .translate('authenticate_biometric_reason'),
           stickyAuth: true);
       if (didAuthenticate) {
-        await executeCallback(context, callback);
+        await executeCB();
       }
     } catch (e) {
       await localAuth.stopAuthentication();
@@ -126,14 +130,14 @@ class Auth {
     bool canCancel = true,
     bool jailedFromHome = false,
   }) async {
-    failedAuthAttempts = await context.read<EncryptedBox>().failedAuthAttempts;
+    final encryptedBox = context.read<EncryptedBox>();
+    failedAuthAttempts = await encryptedBox.failedAuthAttempts;
     retriesLeft = (maxRetries - failedAuthAttempts);
     if (retriesLeft <= 0) retriesLeft = 1;
 
     await screenLock(
       context: context,
-      correctString: await Provider.of<EncryptedBox>(context, listen: false)
-          .passCode as String,
+      correctString: await encryptedBox.passCode as String,
       digits: 6,
       maxRetries: retriesLeft,
       canCancel: canCancel,
@@ -146,13 +150,12 @@ class Auth {
           ),
           children: [
             TextSpan(
-              text: '\n' +
-                  AppLocalizations.instance.translate(
-                    retriesLeft == 1
-                        ? 'authenticate_subtitle_singular'
-                        : 'authenticate_subtitle_plural',
-                    {'retriesLeft': retriesLeft.toString()},
-                  ),
+              text: '\n${AppLocalizations.instance.translate(
+                retriesLeft == 1
+                    ? 'authenticate_subtitle_singular'
+                    : 'authenticate_subtitle_plural',
+                {'retriesLeft': retriesLeft.toString()},
+              )}',
               style: const TextStyle(fontSize: 14),
             )
           ],

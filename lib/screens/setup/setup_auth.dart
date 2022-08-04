@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:peercoin/screens/setup/setup.dart';
-import 'package:peercoin/widgets/setup/session_slider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/app_settings.dart';
@@ -12,12 +10,14 @@ import '../../providers/encrypted_box.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/setup/session_slider.dart';
+import 'setup.dart';
 
 class SetupAuthScreen extends StatefulWidget {
   const SetupAuthScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupAuthScreenState createState() => _SetupAuthScreenState();
+  State<SetupAuthScreen> createState() => _SetupAuthScreenState();
 }
 
 class _SetupAuthScreenState extends State<SetupAuthScreen> {
@@ -106,8 +106,11 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                                 title: Text(
                                   AppLocalizations.instance
                                       .translate('app_settings_biometrics'),
+                                  key: const Key('setupAllowBiometrics'),
                                   style: const TextStyle(
-                                      color: Colors.white, fontSize: 17),
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                  ),
                                 ),
                                 value: _biometricsAllowed,
                                 activeColor: Theme.of(context).backgroundColor,
@@ -137,6 +140,9 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
               ),
               PeerButtonSetup(
                 action: () async {
+                  final encryptedBox = context.read<EncryptedBox>();
+                  final settings = context.read<AppSettings>();
+                  final navigator = Navigator.of(context);
                   await screenLock(
                     title: HeadingTitle(
                       text: AppLocalizations.instance
@@ -151,19 +157,14 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                     digits: 6,
                     confirmation: true,
                     didConfirmed: (matchedText) async {
-                      await Provider.of<EncryptedBox>(context, listen: false)
-                          .setPassCode(matchedText);
-
-                      var settings =
-                          Provider.of<AppSettings>(context, listen: false);
+                      await encryptedBox.setPassCode(matchedText);
                       await settings.init(true);
                       await settings.createInitialSettings(
                         _biometricsAllowed,
                         AppLocalizations.instance.locale.toString(),
                       );
-                      Navigator.pop(context);
-                      await Navigator.of(context)
-                          .pushNamed(Routes.setupDataFeeds);
+                      navigator.pop();
+                      await navigator.pushNamed(Routes.setupDataFeeds);
                     },
                   );
                 },

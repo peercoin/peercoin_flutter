@@ -288,7 +288,8 @@
     "wallet_receive_label_hint_privacy": "Reusing your address is discouraged for privacy reasons. If you want to reuse this address, you have to set it to \"watched\" in the address book after having used it.",
     "wallet_rescan_title": "Rescan wallet",
     "wallet_rescan_content": "Scans the wallet again. If you're having trouble with transactions or amounts, this might be helpful.\nThis might take a moment.",
-    "wallet__send_label_hint": "Scanning the QR-Code will save you some time",
+    "wallet_send_label_hint_scan": "Scanning the QR-Code will save you some time",
+    "wallet_send_label_hint_metadata": "Metadata is unencrypted and will be publicly visible on the blockchain.",
     "wallet_scan_appBar_title": "Scanning your imported seed",
     "wallet_scan_notice": "This might take a while. Don't close this screen!",
     "wallet_send": "Send",
@@ -322,5 +323,6 @@
     "setup_auth_title": "Select when your web session should expire:",
     "setup_auth_subtitle_plural": "Your session will expire after $days days.",
     "setup_auth_subtitle_singular": "Your session will expire after $days day.",
-    "setup_auth_hint": "You have to enter your seed again after the session has expired."
+    "setup_auth_hint": "You have to enter your seed again after the session has expired.",
+    "about_donate_button": "Donate PPC now"
 }

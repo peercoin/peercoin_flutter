@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:peercoin/screens/setup/setup.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,12 +10,13 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
+import 'setup.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
   const SetupImportSeedScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupImportSeedState createState() => _SetupImportSeedState();
+  State<SetupImportSeedScreen> createState() => _SetupImportSeedState();
 }
 
 class _SetupImportSeedState extends State<SetupImportSeedScreen> {
@@ -30,13 +30,14 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     super.dispose();
   }
 
-  void createWallet(context) async {
+  void createWallet(BuildContext context) async {
     setState(() {
       _loading = true;
     });
-    var _activeWallets = Provider.of<ActiveWallets>(context, listen: false);
+    final activeWallets = context.read<ActiveWallets>();
+    final navigator = Navigator.of(context);
     try {
-      await _activeWallets.init();
+      await activeWallets.init();
     } catch (e) {
       LoggerWrapper.logError(
         'SetupImportSeed',
@@ -51,10 +52,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
         duration: const Duration(seconds: 10),
       ));
     }
-    await _activeWallets.createPhrase(_controller.text);
+    await activeWallets.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
-    await Navigator.of(context).pushNamed(Routes.setupAuth);
+    await navigator.pushNamed(Routes.setupAuth);
     setState(() {
       _loading = false;
     });
@@ -216,13 +217,14 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         Theme.of(context).backgroundColor,
                                     suffixIcon: IconButton(
                                       onPressed: () async {
+                                        final focusScope =
+                                            FocusScope.of(context);
                                         var data = await Clipboard.getData(
                                             'text/plain');
                                         if (data != null) {
                                           _controller.text = data.text!.trim();
                                         }
-                                        FocusScope.of(context)
-                                            .unfocus(); //hide keyboard
+                                        focusScope.unfocus(); //hide keyboard
                                       },
                                       icon: Icon(
                                         Icons.paste,

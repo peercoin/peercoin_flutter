@@ -3,8 +3,6 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:peercoin/providers/electrum_connection.dart';
-import 'package:peercoin/widgets/wallet/wallet_home_qr.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -12,23 +10,30 @@ import '../../models/coin.dart';
 import '../../models/wallet_address.dart';
 import '../../providers/active_wallets.dart';
 import '../../providers/app_settings.dart';
+import '../../providers/electrum_connection.dart';
 import '../../screens/wallet/wallet_home.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
 import '../double_tab_to_clipboard.dart';
+import 'wallet_home_qr.dart';
 
 class AddressTab extends StatefulWidget {
-  final String _walletName;
+  final String walletName;
   final String title;
-  final List<WalletAddress>? _walletAddresses;
+  final List<WalletAddress> walletAddresses;
   final Function changeIndex;
-  const AddressTab(
-      this._walletName, this.title, this._walletAddresses, this.changeIndex,
-      {Key? key})
-      : super(key: key);
+
+  const AddressTab({
+    required this.walletName,
+    required this.title,
+    required this.walletAddresses,
+    required this.changeIndex,
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _AddressTabState createState() => _AddressTabState();
+  State<AddressTab> createState() => _AddressTabState();
 }
 
 class _AddressTabState extends State<AddressTab> {
@@ -57,12 +62,12 @@ class _AddressTabState extends State<AddressTab> {
   void didChangeDependencies() async {
     if (_initial) {
       applyFilter();
-      _availableCoin = AvailableCoins.getSpecificCoin(widget._walletName);
+      _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
       _activeWallets = Provider.of<ActiveWallets>(context);
       _connection = Provider.of<ElectrumConnection>(context);
       _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
-        identifier: widget._walletName,
+        identifier: widget.walletName,
       );
       await fillAddressBalanceMap();
       setState(() {
@@ -74,7 +79,7 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> fillAddressBalanceMap() async {
-    final utxos = await _activeWallets.getWalletUtxos(widget._walletName);
+    final utxos = await _activeWallets.getWalletUtxos(widget.walletName);
     for (var tx in utxos) {
       if (tx.value > 0) {
         if (_addressBalanceMap[tx.address] != null) {
@@ -89,12 +94,12 @@ class _AddressTabState extends State<AddressTab> {
   void applyFilter([String? searchedKey]) {
     if (_initial) return;
 
-    var _filteredListReceive = <WalletAddress>[];
-    var _filteredListSend = <WalletAddress>[];
+    var filteredListReceive = <WalletAddress>[];
+    var filteredListSend = <WalletAddress>[];
 
-    for (var e in widget._walletAddresses!) {
+    for (var e in widget.walletAddresses) {
       if (e.isOurs == true || e.isOurs == null) {
-        _filteredListReceive.add(e);
+        filteredListReceive.add(e);
         //fake watch change address and addresses with balance
         if (_addressBalanceMap[e.address] != null ||
             e.address == _activeWallets.getUnusedAddress ||
@@ -104,47 +109,47 @@ class _AddressTabState extends State<AddressTab> {
           _isWatchedMap[e.address] = false;
         }
       } else {
-        _filteredListSend.add(e);
+        filteredListSend.add(e);
       }
     }
 
     //apply filters to receive list
-    var _toRemove = [];
-    for (var address in _filteredListReceive) {
+    var toRemove = [];
+    for (var address in filteredListReceive) {
       if (_showChangeAddresses == false) {
         if (address.isChangeAddr == true) {
-          _toRemove.add(address);
+          toRemove.add(address);
         }
       }
       if (_showUsed == false) {
         if (address.used == true) {
-          _toRemove.add(address);
+          toRemove.add(address);
         }
       }
       if (_showUnwatched == false) {
         if (_isWatchedMap[address.address] == false) {
-          _toRemove.add(address);
+          toRemove.add(address);
         }
       }
       if (_showEmpty == false) {
         if (_addressBalanceMap[address.address] == null) {
-          _toRemove.add(address);
+          toRemove.add(address);
         }
       }
     }
 
-    for (var address in _toRemove) {
-      _filteredListReceive.remove(address);
+    for (var address in toRemove) {
+      filteredListReceive.remove(address);
     }
 
     //filter search keys
     if (searchedKey != null) {
-      _filteredListReceive = _filteredListReceive.where((element) {
+      filteredListReceive = filteredListReceive.where((element) {
         return element.address.contains(searchedKey) ||
             element.addressBookName != null &&
                 element.addressBookName!.contains(searchedKey);
       }).toList();
-      _filteredListSend = _filteredListSend.where((element) {
+      filteredListSend = filteredListSend.where((element) {
         return element.address.contains(searchedKey) ||
             element.addressBookName != null &&
                 element.addressBookName!.contains(searchedKey);
@@ -152,27 +157,25 @@ class _AddressTabState extends State<AddressTab> {
     }
 
     setState(() {
-      _filteredReceive = _filteredListReceive;
-      _filteredSend = _filteredListSend;
+      _filteredReceive = filteredListReceive;
+      _filteredSend = filteredListSend;
     });
   }
 
   Future<void> _addressEditDialog(
       BuildContext context, WalletAddress address) async {
-    var _textFieldController = TextEditingController();
-    _textFieldController.text = address.addressBookName ?? '';
+    var textFieldController = TextEditingController();
+    textFieldController.text = address.addressBookName ?? '';
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text(
-            AppLocalizations.instance
-                    .translate('addressbook_edit_dialog_title') +
-                ' ${address.address}',
+            '${AppLocalizations.instance.translate('addressbook_edit_dialog_title')} ${address.address}',
             textAlign: TextAlign.center,
           ),
           content: TextField(
-            controller: _textFieldController,
+            controller: textFieldController,
             maxLength: 32,
             decoration: InputDecoration(
                 hintText: AppLocalizations.instance
@@ -188,8 +191,8 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () {
-                context.read<ActiveWallets>().updateLabel(widget._walletName,
-                    address.address, _textFieldController.text);
+                context.read<ActiveWallets>().updateLabel(widget.walletName,
+                    address.address, textFieldController.text);
                 Navigator.pop(context);
               },
               child: Text(
@@ -242,17 +245,21 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () async {
-                String _wif;
+                String wif;
+                final navigator = Navigator.of(context);
+                void showQrDialog(wif) =>
+                    WalletHomeQr.showQrDialog(context, wif);
+
                 if (address.wif!.isEmpty || address.wif == null) {
-                  _wif = await context.read<ActiveWallets>().getWif(
+                  wif = await context.read<ActiveWallets>().getWif(
                         _availableCoin.name,
                         address.address,
                       );
                 } else {
-                  _wif = address.wif!;
+                  wif = address.wif!;
                 }
-                Navigator.of(context).pop();
-                WalletHomeQr.showQrDialog(context, _wif);
+                navigator.pop();
+                showQrDialog(wif);
               },
               child: Text(
                 AppLocalizations.instance
@@ -267,6 +274,7 @@ class _AddressTabState extends State<AddressTab> {
 
   Future<void> _toggleWatched(WalletAddress addr) async {
     String snackText;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     //addresses with balance or currentChangeAddress can not be unwatched
     if (_addressBalanceMap[addr.address] != null ||
         addr.address == _activeWallets.getUnusedAddress) {
@@ -277,7 +285,7 @@ class _AddressTabState extends State<AddressTab> {
           : 'addressbook_dialog_addr_watched';
 
       await _activeWallets.updateAddressWatched(
-        widget._walletName,
+        widget.walletName,
         addr.address,
         !addr.isWatched,
       );
@@ -291,7 +299,7 @@ class _AddressTabState extends State<AddressTab> {
               'watched and subscribed ${addr.address}');
           _connection.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(
-              widget._walletName,
+              widget.walletName,
               addr.address,
             ),
           );
@@ -299,7 +307,7 @@ class _AddressTabState extends State<AddressTab> {
       }
     }
     //fire snack
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(
           AppLocalizations.instance.translate(
@@ -314,9 +322,9 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> _addressAddDialog(BuildContext context) async {
-    var _labelController = TextEditingController();
-    var _addressController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    var labelController = TextEditingController();
+    var addressController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     return showDialog(
       context: context,
@@ -327,12 +335,12 @@ class _AddressTabState extends State<AddressTab> {
             textAlign: TextAlign.center,
           ),
           content: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  controller: _addressController,
+                  controller: addressController,
                   decoration: InputDecoration(
                     hintText:
                         AppLocalizations.instance.translate('send_address'),
@@ -350,7 +358,7 @@ class _AddressTabState extends State<AddressTab> {
                           .translate('send_invalid_address');
                     }
                     //check if already exists
-                    if (widget._walletAddresses!
+                    if (widget.walletAddresses
                         .any((element) => element.address == value)) {
                       return 'Address already exists';
                     }
@@ -358,7 +366,7 @@ class _AddressTabState extends State<AddressTab> {
                   },
                 ),
                 TextFormField(
-                  controller: _labelController,
+                  controller: labelController,
                   maxLength: 32,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.instance.translate('send_label'),
@@ -377,14 +385,12 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
+                if (formKey.currentState!.validate()) {
+                  formKey.currentState!.save();
                   context.read<ActiveWallets>().updateLabel(
-                        widget._walletName,
-                        _addressController.text,
-                        _labelController.text == ''
-                            ? ''
-                            : _labelController.text,
+                        widget.walletName,
+                        addressController.text,
+                        labelController.text == '' ? '' : labelController.text,
                       );
                   applyFilter();
                   Navigator.pop(context);
@@ -487,8 +493,9 @@ class _AddressTabState extends State<AddressTab> {
                                       .translate('jail_dialog_button')),
                                   icon: const Icon(Icons.check),
                                   onPressed: () {
-                                    context.read<ActiveWallets>().removeAddress(
-                                        widget._walletName, addr);
+                                    context
+                                        .read<ActiveWallets>()
+                                        .removeAddress(widget.walletName, addr);
                                     applyFilter();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -874,7 +881,7 @@ class _AddressTabState extends State<AddressTab> {
                                 elevation: 0,
                               ),
                               onPressed: () {
-                                if (widget._walletAddresses!.isNotEmpty) {
+                                if (widget.walletAddresses.isNotEmpty) {
                                   setState(() {
                                     _search = true;
                                   });

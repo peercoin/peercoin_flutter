@@ -214,16 +214,16 @@ class ElectrumConnection with ChangeNotifier {
     return _paperWalletUtxos;
   }
 
-  Future<void> closeConnection([bool _intentional = true]) async {
+  Future<void> closeConnection([bool intentional = true]) async {
     if (_connection != null) {
-      _closedIntentionally = _intentional;
+      _closedIntentionally = intentional;
       if (_serverType == ElectrumServerType.ssl) {
         _connection.close();
       } else if (_serverType == ElectrumServerType.wss) {
         await _connection!.sink.close();
       }
     }
-    if (_intentional) {
+    if (intentional) {
       _closedIntentionally = true;
       _connectionAttempt = 0;
       if (_reconnectTimer != null) _reconnectTimer!.cancel();
@@ -315,16 +315,16 @@ class ElectrumConnection with ChangeNotifier {
 
   void sendMessage(String method, String? id, [List? params]) {
     _openReplies.add(id);
-    final String _encodedMessage = json.encode(
+    final String encodedMessage = json.encode(
       {'id': id, 'method': method, if (params != null) 'params': params},
     );
     if (_connection != null) {
       if (_serverType == ElectrumServerType.ssl) {
-        _connection.add(_encodedMessage.codeUnits);
+        _connection.add(encodedMessage.codeUnits);
         _connection.add('\n'.codeUnits);
       } else if (_serverType == ElectrumServerType.wss &&
           _connection.sink != null) {
-        _connection.sink.add(_encodedMessage);
+        _connection.sink.add(encodedMessage);
       }
     }
   }
@@ -420,7 +420,7 @@ class ElectrumConnection with ChangeNotifier {
         '$_queryDepth',
       );
 
-      var _nextAddr = await _activeWallets.getAddressFromDerivationPath(
+      var nextAddr = await _activeWallets.getAddressFromDerivationPath(
         _coinName,
         _queryDepth['account']!,
         _queryDepth['chain']!,
@@ -430,15 +430,15 @@ class ElectrumConnection with ChangeNotifier {
       LoggerWrapper.logInfo(
         'ElectrumConnection',
         'subscribeNextDerivedAddress',
-        '$_nextAddr',
+        '$nextAddr',
       );
 
       subscribeToScriptHashes(
-        await _activeWallets.getWalletScriptHashes(_coinName, _nextAddr),
+        await _activeWallets.getWalletScriptHashes(_coinName, nextAddr),
       );
 
-      var _number = _queryDepth[currentPointer] as int;
-      _queryDepth[currentPointer] = _number + 1;
+      var number = _queryDepth[currentPointer] as int;
+      _queryDepth[currentPointer] = number + 1;
     } else if (_depthPointer < _queryDepth.keys.length - 1) {
       LoggerWrapper.logInfo(
         'ElectrumConnection',
@@ -551,7 +551,7 @@ class ElectrumConnection with ChangeNotifier {
     var txId = id.replaceFirst('tx_', '');
     var addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(_coinName, addr, tx, _scanMode);
+      await _activeWallets.putTx(_coinName, addr, tx);
     } else {
       LoggerWrapper.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
       //TODO figure out what to do in that case ...

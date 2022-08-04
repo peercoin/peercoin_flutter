@@ -1,16 +1,25 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:peercoin/providers/active_wallets.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import '../models/available_periodic_reminder_items.dart';
 import '../models/periodic_reminder_item.dart';
 import '../providers/app_settings.dart';
 import 'app_localizations.dart';
+import 'app_routes.dart';
 import 'logger_wrapper.dart';
 
 class PeriodicReminders {
   static Future<void> displayReminder(
-      BuildContext ctx, PeriodicReminderItem reminderItem) async {
+    BuildContext ctx,
+    PeriodicReminderItem reminderItem,
+  ) async {
+    final activeWallets = ctx.read<ActiveWallets>();
+    final listOfActiveWallets = await activeWallets.activeWalletsKeys;
+
     //show alert
     await showDialog(
       context: ctx,
@@ -27,16 +36,43 @@ class PeriodicReminders {
             if (reminderItem.id == 'donate')
               TextButton(
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   var url = 'https://ppc.lol/fndtn/';
                   await canLaunchUrlString(url)
                       ? await launchUrlString(url)
                       : throw 'Could not launch $url';
-                  Navigator.of(context).pop();
+                  navigator.pop();
                 },
                 child: Text(
                   AppLocalizations.instance.translate(reminderItem.button),
                 ),
               ),
+            if (reminderItem.id == 'donate')
+              listOfActiveWallets.contains('peercoin')
+                  ? TextButton(
+                      onPressed: () async {
+                        final navigator = Navigator.of(context);
+                        final values = await activeWallets.activeWalletsValues;
+                        final ppcWallet = values.firstWhere(
+                          (element) => element.name == 'peercoin',
+                        );
+
+                        await navigator.popAndPushNamed(
+                          Routes.walletHome,
+                          arguments: {
+                            'wallet': ppcWallet,
+                            'pushedAddress':
+                                'p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK',
+                          },
+                        );
+                      },
+                      child: Text(
+                        AppLocalizations.instance.translate(
+                          'about_donate_button',
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -57,8 +93,8 @@ class PeriodicReminders {
     );
   }
 
-  static void scheduleNextEvent(String name, AppSettings _settings) {
-    final _newDate = (DateTime.now()).add(
+  static void scheduleNextEvent(String name, AppSettings settings) {
+    final newDate = (DateTime.now()).add(
       Duration(
         days: 30 + Random().nextInt(45 - 30),
       ),
@@ -67,16 +103,18 @@ class PeriodicReminders {
     LoggerWrapper.logInfo(
       'PriceTicker',
       'displayReminder',
-      '$name next event scheduled for $_newDate})',
+      '$name next event scheduled for $newDate})',
     );
 
-    final _timeMap = _settings.periodicReminterItemsNextView;
-    _timeMap[name] = _newDate;
-    _settings.setPeriodicReminterItemsNextView(_timeMap);
+    final timeMap = settings.periodicReminterItemsNextView;
+    timeMap[name] = newDate;
+    settings.setPeriodicReminterItemsNextView(timeMap);
   }
 
-  static Future<void> checkReminder(
-      AppSettings _settings, BuildContext context) async {
+  static Future<bool> checkReminder(
+    AppSettings settings,
+    BuildContext context,
+  ) async {
     LoggerWrapper.logInfo(
       'PeriodicReminders',
       'checkReminder',
@@ -84,9 +122,9 @@ class PeriodicReminders {
     );
 
     //get map of next reminders
-    final _nextReminders = _settings.periodicReminterItemsNextView;
+    final nextReminders = settings.periodicReminterItemsNextView;
 
-    var _messageFired =
+    var messageFired =
         false; //only fire one reminder per startup - prevent double notification
 
     //loop through available reminders
@@ -95,20 +133,20 @@ class PeriodicReminders {
         in AvailablePeriodicReminderItems.availableReminderItems.entries) {
       final name = entry.key;
       final item = entry.value;
-      var _displayReminder = false;
+      var shouldDisplayReminder = false;
 
-      if (!_messageFired) {
-        if (_nextReminders.containsKey(name)) {
+      if (!messageFired) {
+        if (nextReminders.containsKey(name)) {
           //value has been initialized
           //check if alert is due
-          if (DateTime.now().isAfter(_nextReminders[name]!)) {
+          if (DateTime.now().isAfter(nextReminders[name]!)) {
             LoggerWrapper.logInfo(
               'PriceTicker',
               'checkUpdate',
               'reminder $name scheduled})',
             );
 
-            _displayReminder = true;
+            shouldDisplayReminder = true;
           }
         } else {
           //value has not been initialized yet - show reminder now
@@ -117,22 +155,24 @@ class PeriodicReminders {
             'checkUpdate',
             'reminder $name is not initialized})',
           );
-          _displayReminder = true;
+          shouldDisplayReminder = true;
         }
-        if (_displayReminder) {
+        if (shouldDisplayReminder) {
           await displayReminder(context, item);
-          scheduleNextEvent(item.id, _settings);
-          _messageFired = true;
+          scheduleNextEvent(item.id, settings);
+          messageFired = true;
         }
       }
     }
     //loop over - no message fired?
-    if (!_messageFired) {
+    if (!messageFired) {
       LoggerWrapper.logInfo(
         'PeriodicReminders',
         'checkReminder',
         'no reminder scheduled.',
       );
+      return false;
     }
+    return true;
   }
 }

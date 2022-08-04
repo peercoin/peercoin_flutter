@@ -15,7 +15,7 @@ class WalletImportScanScreen extends StatefulWidget {
   const WalletImportScanScreen({Key? key}) : super(key: key);
 
   @override
-  _WalletImportScanScreenState createState() => _WalletImportScanScreenState();
+  State<WalletImportScanScreen> createState() => _WalletImportScanScreenState();
 }
 
 class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
@@ -45,10 +45,11 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+          final navigator = Navigator.of(context);
           //sync notification backend
           await BackgroundSync.executeSync(fromScan: true);
           _timer.cancel();
-          await Navigator.of(context).pushReplacementNamed(
+          await navigator.pushReplacementNamed(
             Routes.walletList,
             arguments: {'fromScan': true},
           );
@@ -62,12 +63,12 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
 
         if (_scanStarted == false) {
           //returns master address for hd wallet
-          var _masterAddr = await _activeWallets.getAddressFromDerivationPath(
+          var masterAddr = await _activeWallets.getAddressFromDerivationPath(
               _coinName, 0, 0, 0, true);
 
           //subscribe to hd master
           _connectionProvider!.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(_coinName, _masterAddr),
+            await _activeWallets.getWalletScriptHashes(_coinName, masterAddr),
           );
 
           setState(() {

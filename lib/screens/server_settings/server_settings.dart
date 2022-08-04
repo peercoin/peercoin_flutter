@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/server.dart';
 import '../../providers/electrum_connection.dart';
+import '../../widgets/service_container.dart';
 import '../../providers/servers.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -13,7 +13,7 @@ class ServerSettingsScreen extends StatefulWidget {
   const ServerSettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _ServerSettingsScreenState createState() => _ServerSettingsScreenState();
+  State<ServerSettingsScreen> createState() => _ServerSettingsScreenState();
 }
 
 class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
@@ -46,8 +46,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   Future<void> savePriorities(String? serverUrl, int newIndex) async {
     if (_indexCache[serverUrl] != null) {
-      await Provider.of<ElectrumConnection>(context, listen: false)
-          .closeConnection();
+      await context.read<ElectrumConnection>().closeConnection();
     }
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
@@ -76,7 +75,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _connectedServer =
+    final connectedServer =
         context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
@@ -236,7 +235,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                               //connectable now false ? move to bottom of list
                               if (!_servers[index].connectable) {
                                 if (_servers[index].address ==
-                                    _connectedServer) {
+                                    connectedServer) {
                                   //were we connected to this server? close connection
                                   await context
                                       .read<ElectrumConnection>()
@@ -261,7 +260,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           tileColor: calculateTileColor(
                               index, _servers[index].connectable),
                           title: Text(_servers[index].address),
-                          subtitle: _servers[index].address == _connectedServer
+                          subtitle: _servers[index].address == connectedServer
                               ? Center(
                                   child: Text(
                                     AppLocalizations.instance

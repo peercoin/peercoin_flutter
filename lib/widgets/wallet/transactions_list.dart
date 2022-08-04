@@ -14,17 +14,19 @@ import '/../widgets/wallet/wallet_balance_header.dart';
 import '/../widgets/service_container.dart';
 
 class TransactionList extends StatefulWidget {
-  final List<WalletTransaction> _walletTransactions;
-  final CoinWallet _wallet;
-  final ElectrumConnectionState _connectionState;
+  final List<WalletTransaction> walletTransactions;
+  final CoinWallet wallet;
+  final ElectrumConnectionState connectionState;
 
-  const TransactionList(
-      this._walletTransactions, this._wallet, this._connectionState,
-      {Key? key})
-      : super(key: key);
+  const TransactionList({
+    required this.walletTransactions,
+    required this.wallet,
+    required this.connectionState,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _TransactionListState createState() => _TransactionListState();
+  State<TransactionList> createState() => _TransactionListState();
 }
 
 class _TransactionListState extends State<TransactionList> {
@@ -40,7 +42,7 @@ class _TransactionListState extends State<TransactionList> {
   @override
   void initState() {
     _decimalProduct = AvailableCoins.getDecimalProduct(
-      identifier: widget._wallet.name,
+      identifier: widget.wallet.name,
     );
     super.initState();
   }
@@ -48,7 +50,7 @@ class _TransactionListState extends State<TransactionList> {
   String resolveAddressDisplayName(String address) {
     final result = context
         .read<ActiveWallets>()
-        .getLabelForAddress(widget._wallet.name, address);
+        .getLabelForAddress(widget.wallet.name, address);
     if (result != '') return result;
     return address;
   }
@@ -84,22 +86,22 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
-    var _reversedTx = widget._walletTransactions
+    var reversedTx = widget.walletTransactions
         .where((element) => element.timestamp != -1) //filter "phantom" tx
         .toList()
         .reversed
         .toList();
-    var _filteredTx = _reversedTx;
+    var filteredTx = reversedTx;
     if (_filterChoice != 'all') {
-      _filteredTx = _reversedTx
+      filteredTx = reversedTx
           .where((element) => element.direction == _filterChoice)
           .toList();
     }
 
     return Stack(
       children: [
-        WalletBalanceHeader(widget._connectionState, widget._wallet),
-        widget._walletTransactions
+        WalletBalanceHeader(widget.connectionState, widget.wallet),
+        widget.walletTransactions
                 .where(
                   (element) => element.timestamp != -1,
                 ) //don't count "phantom" tx
@@ -149,7 +151,7 @@ class _TransactionListState extends State<TransactionList> {
                       }
                     },
                     child: ListView.builder(
-                      itemCount: _filteredTx.length + 1,
+                      itemCount: filteredTx.length + 1,
                       itemBuilder: (_, i) {
                         if (i > 0) {
                           return Container(
@@ -159,10 +161,10 @@ class _TransactionListState extends State<TransactionList> {
                               child: ListTile(
                                 horizontalTitleGap: 32.0,
                                 onTap: () => Navigator.of(context)
-                                    .pushNamed(Routes.transaction, arguments: [
-                                  _filteredTx[i - 1],
-                                  ModalRoute.of(context)!.settings.arguments
-                                ]),
+                                    .pushNamed(Routes.transaction, arguments: {
+                                  'tx': filteredTx[i - 1],
+                                  'wallet': widget.wallet
+                                }),
                                 leading: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -172,22 +174,22 @@ class _TransactionListState extends State<TransactionList> {
                                       duration:
                                           const Duration(milliseconds: 500),
                                       child: renderConfirmationIndicator(
-                                        _filteredTx[i - 1],
+                                        filteredTx[i - 1],
                                       ),
                                     ),
                                     Text(
                                       DateFormat('d. MMM').format(
-                                        _filteredTx[i - 1].timestamp != 0
+                                        filteredTx[i - 1].timestamp != 0
                                             ? DateTime
                                                 .fromMillisecondsSinceEpoch(
-                                                _filteredTx[i - 1].timestamp! *
+                                                filteredTx[i - 1].timestamp! *
                                                     1000,
                                               )
                                             : DateTime.now(),
                                       ),
                                       style: TextStyle(
                                         fontWeight:
-                                            _filteredTx[i - 1].timestamp != 0
+                                            filteredTx[i - 1].timestamp != 0
                                                 ? FontWeight.w500
                                                 : FontWeight.w300,
                                       ),
@@ -197,7 +199,7 @@ class _TransactionListState extends State<TransactionList> {
                                 ),
                                 title: Center(
                                   child: Text(
-                                    _filteredTx[i - 1].txid,
+                                    filteredTx[i - 1].txid,
                                     overflow: TextOverflow.ellipsis,
                                     textScaleFactor: 0.9,
                                   ),
@@ -205,7 +207,7 @@ class _TransactionListState extends State<TransactionList> {
                                 subtitle: Center(
                                   child: Text(
                                     resolveAddressDisplayName(
-                                        _filteredTx[i - 1].address),
+                                        filteredTx[i - 1].address),
                                     overflow: TextOverflow.ellipsis,
                                     textScaleFactor: 1,
                                   ),
@@ -214,31 +216,28 @@ class _TransactionListState extends State<TransactionList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      (_filteredTx[i - 1].direction == 'in'
+                                      (filteredTx[i - 1].direction == 'in'
                                               ? '+'
                                               : '-') +
-                                          (_filteredTx[i - 1].value /
+                                          (filteredTx[i - 1].value /
                                                   _decimalProduct)
                                               .toString(),
                                       style: TextStyle(
                                         fontWeight:
-                                            _filteredTx[i - 1].timestamp != 0
+                                            filteredTx[i - 1].timestamp != 0
                                                 ? FontWeight.bold
                                                 : FontWeight.w300,
-                                        color: _filteredTx[i - 1].direction ==
-                                                'out'
-                                            ? Theme.of(context).errorColor
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer,
+                                        color:
+                                            filteredTx[i - 1].direction == 'out'
+                                                ? Theme.of(context).errorColor
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryContainer,
                                       ),
                                     ),
-                                    _filteredTx[i - 1].direction == 'out'
+                                    filteredTx[i - 1].direction == 'out'
                                         ? Text(
-                                            '-' +
-                                                (_filteredTx[i - 1].fee /
-                                                        _decimalProduct)
-                                                    .toString(),
+                                            '-${filteredTx[i - 1].fee / _decimalProduct}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,
                                               color:
@@ -255,11 +254,11 @@ class _TransactionListState extends State<TransactionList> {
                             ),
                           );
                         } else if (i == 0 &&
-                            widget._walletTransactions.isNotEmpty) {
+                            widget.walletTransactions.isNotEmpty) {
                           return Column(
                             children: [
                               SizedBox(
-                                height: widget._wallet.unconfirmedBalance > 0
+                                height: widget.wallet.unconfirmedBalance > 0
                                     ? 125
                                     : 110,
                               ),

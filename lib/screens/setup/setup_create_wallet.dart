@@ -21,7 +21,7 @@ class SetupCreateWalletScreen extends StatefulWidget {
   const SetupCreateWalletScreen({Key? key}) : super(key: key);
 
   @override
-  _SetupCreateWalletScreenState createState() =>
+  State<SetupCreateWalletScreen> createState() =>
       _SetupCreateWalletScreenState();
 }
 
@@ -34,11 +34,12 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   late ActiveWallets _activeWallets;
 
   Future<void> shareSeed(seed) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     if (kIsWeb) {
       await Clipboard.setData(
         ClipboardData(text: seed),
       );
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('snack_copied'),
           textAlign: TextAlign.center,
@@ -90,27 +91,27 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   }
 
   void recreatePhrase(double sliderValue) async {
-    var _entropy = 128;
-    var _intValue = sliderValue.toInt();
+    var entropy = 128;
+    var intValue = sliderValue.toInt();
 
-    switch (_intValue) {
+    switch (intValue) {
       case 15:
-        _entropy = 160;
+        entropy = 160;
         break;
       case 18:
-        _entropy = 192;
+        entropy = 192;
         break;
       case 21:
-        _entropy = 224;
+        entropy = 224;
         break;
       case 24:
-        _entropy = 256;
+        entropy = 256;
         break;
       default:
-        _entropy = 128;
+        entropy = 128;
     }
 
-    await _activeWallets.createPhrase(null, _entropy);
+    await _activeWallets.createPhrase(null, entropy);
     _seed = await _activeWallets.seedPhrase;
 
     setState(() {
@@ -142,12 +143,12 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
             ),
             TextButton(
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 var prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('importedSeed', false);
-                Navigator.pop(context);
+                navigator.pop();
 
-                await Navigator.pushNamed(
-                  context,
+                await navigator.pushNamed(
                   Routes.setupAuth,
                 );
               },

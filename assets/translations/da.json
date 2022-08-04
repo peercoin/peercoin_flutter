@@ -228,7 +228,7 @@
     "wallet_receive": "Modtage",
     "wallet_receive_label_hint": "Et tryk på Del-knappen gemmer etiketten til adressen",
     "wallet_rescan_title": "Genscan tegnebogen",
-    "wallet__send_label_hint": "Hvis du scanner din QR-kode, sparer du noget tid",
+    "wallet_send_label_hint_scan": "Hvis du scanner din QR-kode, sparer du noget tid",
     "wallet_scan_appBar_title": "Scanner din importerede gendannelsessætning",
     "wallet_send": "Send",
     "wallet_transactions": "Transaktioner",

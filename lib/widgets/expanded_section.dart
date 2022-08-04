@@ -7,7 +7,7 @@ class ExpandedSection extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ExpandedSectionState createState() => _ExpandedSectionState();
+  State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
 class _ExpandedSectionState extends State<ExpandedSection>

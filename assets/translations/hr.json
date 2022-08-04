@@ -150,7 +150,7 @@
     "wallet_pop_menu_servers": "Podesi servere",
     "unconfirmed": "nije potvrđeno",
     "wallet_scan_notice": "Ovo možda potraje. Ne gasite ekran!",
-    "wallet__send_label_hint": "Savjet: Skeniranje QR koda će vam uštedjeti vrijeme",
+    "wallet_send_label_hint_scan": "Savjet: Skeniranje QR koda će vam uštedjeti vrijeme",
     "wallet_connected": "spojeno",
     "wallet_offline": "odspojeno",
     "wallet_pop_menu_paperwallet": "Uvezi Paper Wallet",

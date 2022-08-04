@@ -258,7 +258,7 @@
     "wallet_receive_label_hint": "Gợi Ý: Ấn nút này sẽ lưu lại nhãn địa chỉ",
     "wallet_rescan_title": "Quét lại ví",
     "wallet_rescan_content": "Quét lại ví lần nữa. Nếu bạn đang gặp sự cố với các giao dịch hoặc số tiền, điều này sẽ hữu ích.\nQuá trình này có thể mất đôi chút thời gian.",
-    "wallet__send_label_hint": "Gợi Ý: Quét Mã QR sẽ tiết kiệm thời gian cho bạn",
+    "wallet_send_label_hint_scan": "Gợi Ý: Quét Mã QR sẽ tiết kiệm thời gian cho bạn",
     "wallet_scan_appBar_title": "Quét seed đã nhập của bạn",
     "wallet_scan_notice": "Quá trình này có thể cần một chút thời gian. Đừng đóng màn hình này!",
     "wallet_send": "Gửi",

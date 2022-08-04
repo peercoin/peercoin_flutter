@@ -2,7 +2,6 @@ import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -13,12 +12,13 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/service_container.dart';
 
 class ImportWifScreen extends StatefulWidget {
   const ImportWifScreen({Key? key}) : super(key: key);
 
   @override
-  _ImportWifScreenState createState() => _ImportWifScreenState();
+  State<ImportWifScreen> createState() => _ImportWifScreenState();
 }
 
 class _ImportWifScreenState extends State<ImportWifScreen> {
@@ -56,16 +56,18 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   }
 
   bool validatePrivKey(String privKey) {
-    var _error = false;
+    var error = false;
     try {
       Wallet.fromWIF(privKey, _activeCoin.networkType);
     } catch (e) {
-      _error = true;
+      error = true;
     }
-    return _error;
+    return error;
   }
 
   Future<void> performImport(String wif, String address) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     //write to wallet
     await _activeWallets.addAddressFromWif(_walletName, wif, address);
 
@@ -83,7 +85,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     await BackgroundSync.executeSync(fromScan: true);
 
     //send snack notification for success
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(
           AppLocalizations.instance.translate('import_wif_success_snack'),
@@ -94,24 +96,25 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     );
 
     //pop import wif
-    Navigator.of(context).pop();
+    navigator.pop();
   }
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(ctx);
     final publicAddress =
         Wallet.fromWIF(privKey, _activeCoin.networkType).address ??
             ''; //TODO won't return a bech32 addr
 
     //check if that address is already in the list
-    final _walletAddresses =
+    final walletAddresses =
         await _activeWallets.getWalletAddresses(_walletName);
-    final _specificAddressResult = _walletAddresses.where(
+    final specificAddressResult = walletAddresses.where(
       (element) => element.address == publicAddress,
     );
 
-    if (_specificAddressResult.isNotEmpty) {
+    if (specificAddressResult.isNotEmpty) {
       //we have that address already
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text(
           AppLocalizations.instance.translate('import_wif_error_snack'),
           textAlign: TextAlign.center,

@@ -86,14 +86,14 @@ class BackgroundSync {
     if (kIsWeb) return;
 
     //this static method can't access the providers we already have so we have to re-invent some things here...
-    Uint8List _encryptionKey;
-    var _secureStorage = const FlutterSecureStorage();
+    Uint8List encryptionKey;
+    var secureStorage = const FlutterSecureStorage();
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     //check if key exists or return
-    if (await _secureStorage.containsKey(key: 'key')) {
-      _encryptionKey =
-          base64Url.decode((await _secureStorage.read(key: 'key') as String));
+    if (await secureStorage.containsKey(key: 'key')) {
+      encryptionKey =
+          base64Url.decode((await secureStorage.read(key: 'key') as String));
     } else {
       return;
     }
@@ -111,30 +111,30 @@ class BackgroundSync {
     }
 
     //open wallet box
-    var _walletBox = await Hive.openBox<CoinWallet>(
+    var walletBox = await Hive.openBox<CoinWallet>(
       'wallets',
-      encryptionCipher: HiveAesCipher(_encryptionKey),
+      encryptionCipher: HiveAesCipher(encryptionKey),
     );
 
     //open settings box
-    var _optionsBox = await Hive.openBox(
+    var optionsBox = await Hive.openBox(
       'optionsBox',
-      encryptionCipher: HiveAesCipher(_encryptionKey),
+      encryptionCipher: HiveAesCipher(encryptionKey),
     );
-    AppOptionsStore _appOptions = _optionsBox.get('appOptions');
+    AppOptionsStore appOptions = optionsBox.get('appOptions');
 
     //check pending notifications
-    var _sharedPrefs = await SharedPreferences.getInstance();
+    var sharedPrefs = await SharedPreferences.getInstance();
 
     //init app delegate
     await AppLocalizations.delegate.load(
-      Locale(_sharedPrefs.getString('language_code') ?? 'und'),
+      Locale(sharedPrefs.getString('language_code') ?? 'und'),
     );
 
     //loop through wallets
-    for (var wallet in _walletBox.values) {
+    for (var wallet in walletBox.values) {
       //increment identifier for notifications
-      if (_appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
+      if (appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
         //if activated, parse all addresses to a list that will be POSTed to backend later on
         var adressesToQuery = <String, int>{};
         var utxos = wallet.utxos;
@@ -185,8 +185,8 @@ class BackgroundSync {
           }),
         );
 
-        var _shouldNotify = false;
-        bool _foundDifference;
+        var shouldNotify = false;
+        bool foundDifference;
         if (result.body.contains('foundDifference')) {
           //valid answer
           var bodyDecoded = jsonDecode(result.body);
@@ -195,8 +195,8 @@ class BackgroundSync {
             'executeSync ${wallet.name}',
             bodyDecoded.toString(),
           );
-          _foundDifference = bodyDecoded['foundDifference'];
-          if (_foundDifference == true) {
+          foundDifference = bodyDecoded['foundDifference'];
+          if (foundDifference == true) {
             //loop through addresses in result
             var addresses = bodyDecoded['addresses'];
             addresses.forEach((element) {
@@ -213,12 +213,12 @@ class BackgroundSync {
               //persist backend data
               wallet.clearPendingTransactionNotifications();
             } else {
-              _shouldNotify = true;
+              shouldNotify = true;
             }
           }
         }
 
-        if (_shouldNotify == true) {
+        if (shouldNotify == true) {
           await flutterLocalNotificationsPlugin.show(
             DateTime.now().millisecondsSinceEpoch ~/ 10000,
             AppLocalizations.instance

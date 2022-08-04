@@ -11,7 +11,7 @@ import '../tools/auth.dart';
 
 class AuthJailScreen extends StatefulWidget {
   @override
-  _AuthJailState createState() => _AuthJailState();
+  State<AuthJailScreen> createState() => _AuthJailState();
 
   final bool jailedFromHome;
   const AuthJailScreen({
@@ -45,19 +45,19 @@ class _AuthJailState extends State<AuthJailScreen> {
   }
 
   void onTimerEnd() async {
-    final appSettings = Provider.of<AppSettings>(context, listen: false);
+    final appSettings = context.read<AppSettings>();
     await appSettings.init();
     await Auth.requireAuth(
       context: context,
       biometricsAllowed: appSettings.biometricsAllowed,
       callback: () async {
-        final encrytpedStorage =
-            Provider.of<EncryptedBox>(context, listen: false);
-        await encrytpedStorage.setFailedAuths(0);
+        final encryptedStorage = context.read<EncryptedBox>();
+        final navigator = Navigator.of(context);
+        await encryptedStorage.setFailedAuths(0);
         if (widget.jailedFromHome == true || _jailedFromRoute == true) {
-          await Navigator.of(context).pushReplacementNamed(Routes.walletList);
+          await navigator.pushReplacementNamed(Routes.walletList);
         } else {
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          navigator.popUntil((route) => route.isFirst);
         }
       },
       canCancel: false,
@@ -69,18 +69,17 @@ class _AuthJailState extends State<AuthJailScreen> {
   void didChangeDependencies() async {
     if (_initial == true) {
       _startTimer();
-      final encrytpedStorage =
-          Provider.of<EncryptedBox>(context, listen: false);
-      final failedAuths = await encrytpedStorage.failedAuths;
+      final encryptedStorage = context.read<EncryptedBox>();
+      final modalRoute = ModalRoute.of(context)!;
+      final failedAuths = await encryptedStorage.failedAuths;
       _lockCountdown = 10 + (failedAuths * 10);
 
       //increase number of failed auths
-      await encrytpedStorage.setFailedAuths(failedAuths + 1);
+      await encryptedStorage.setFailedAuths(failedAuths + 1);
 
       //check if jailedFromHome came again through route
       if (widget.jailedFromHome == false) {
-        final jailedFromRoute =
-            ModalRoute.of(context)!.settings.arguments as bool?;
+        final jailedFromRoute = modalRoute.settings.arguments as bool?;
         if (jailedFromRoute == true) _jailedFromRoute = true;
       }
 

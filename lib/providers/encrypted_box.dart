@@ -5,7 +5,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:peercoin/models/coin_wallet.dart';
+
+import '../models/coin_wallet.dart';
 
 class EncryptedBox with ChangeNotifier {
   final Map<String, Box> _cryptoBox = {};

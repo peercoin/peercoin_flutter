@@ -264,7 +264,7 @@
     "setup_bg_sync_description": "这将为您的钱包启用后台通知。",
     "wallet_pop_menu_wif": "导入私钥",
     "wallet_receive_label_hint": "提示：按下此按钮将保存地址标签",
-    "wallet__send_label_hint": "提示:扫描二维码可节省您的一些时间",
+    "wallet_send_label_hint_scan": "提示:扫描二维码可节省您的一些时间",
     "wallet_value_alert_title": "高价值的硬币",
     "wallet_value_alert_content": "将这种价值的硬币储存在手机钱包中是有风险的。\n考虑把您的硬币转移至Stakebox，Ledger硬件钱包或冷钱包。",
     "store_description": "在手机上发送和接收Peercoin。\n\n保护好您的seed钱包。\n该app无保修。\n使用风险自负。\n\n特征：\n-基于electrum协议。\n-发送和接收peercoin。\n-安装后即可进行交易（无需等待）。\n-Peercoin和Peercoin testnet钱包。\n-通讯录管理。\n-导入纸质钱包。\n-导入和导出私钥（WIF）。\n-服务器管理。\n-多语言支持。\n-后台通知。\n\n可在Github存储库中找到已知的限制。"

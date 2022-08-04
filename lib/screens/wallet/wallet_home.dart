@@ -26,7 +26,7 @@ class WalletHomeScreen extends StatefulWidget {
   const WalletHomeScreen({Key? key}) : super(key: key);
 
   @override
-  _WalletHomeState createState() => _WalletHomeState();
+  State<WalletHomeScreen> createState() => _WalletHomeState();
 }
 
 class _WalletHomeState extends State<WalletHomeScreen>
@@ -48,13 +48,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
   String? _label;
 
   void changeIndex(int i, [String? addr, String? lab]) {
-    if (i == Tabs.send) {
-      //Passes address from addresses_tab to send_tab (send to)
-      _address = addr;
-      _label = lab;
-    }
     setState(() {
       _pageIndex = i;
+      if (i == Tabs.send) {
+        //Passes address from addresses_tab to send_tab (send to)
+        _address = addr;
+        _label = lab;
+      }
     });
   }
 
@@ -106,16 +106,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      _wallet = ModalRoute.of(context)!.settings.arguments as CoinWallet;
+      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      _wallet = arguments['wallet'];
+
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _appSettings = context.read<AppSettings>();
+
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
       await _connectionProvider!
           .init(_wallet.name, requestedFromWalletHome: true);
 
-      _appSettings = Provider.of<AppSettings>(context, listen: false);
       if (_appSettings.authenticationOptions!['walletHome']!) {
         await Auth.requireAuth(
           context: context,
@@ -133,6 +136,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
 
       checkPendingNotifications();
+
+      if (arguments.containsKey('pushedAddress')) {
+        changeIndex(Tabs.send, arguments['pushedAddress']);
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       _unusedAddress = _activeWallets.getUnusedAddress;
@@ -201,8 +208,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   void triggerHighValueAlert() async {
     if (_appSettings.selectedCurrency.isNotEmpty) {
       //price feed enabled
-      var _prefs = await SharedPreferences.getInstance();
-      var discarded = _prefs.getBool('highValueNotice') ?? false;
+      var prefs = await SharedPreferences.getInstance();
+      var discarded = prefs.getBool('highValueNotice') ?? false;
       if (!discarded &&
           PriceTicker.renderPrice(
                 _wallet.balance /
@@ -227,8 +234,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   label: Text(AppLocalizations.instance.translate('not_again')),
                   icon: const Icon(Icons.cancel),
                   onPressed: () async {
-                    await _prefs.setBool('highValueNotice', true);
-                    Navigator.of(context).pop();
+                    final navigator = Navigator.of(context);
+                    await prefs.setBool('highValueNotice', true);
+                    navigator.pop();
                   }),
               TextButton.icon(
                 label: Text(
@@ -292,11 +300,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     AppLocalizations.instance.translate('jail_dialog_button')),
                 icon: const Icon(Icons.check),
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   //close connection
                   await _connectionProvider!.closeConnection();
                   _rescanInProgress = true;
                   //init rescan
-                  await Navigator.of(context).pushNamedAndRemoveUntil(
+                  await navigator.pushNamedAndRemoveUntil(
                     Routes.walletImportScan,
                     (_) => false,
                     arguments: _wallet.name,
@@ -426,40 +435,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
     switch (_pageIndex) {
       case Tabs.receive:
         body = Expanded(
-          child: ReceiveTab(_unusedAddress, _connectionState),
+          child: ReceiveTab(
+            connectionState: _connectionState,
+            wallet: _wallet,
+            unusedAddress: _unusedAddress,
+          ),
         );
         break;
       case Tabs.transactions:
         body = Expanded(
           child: TransactionList(
-            _walletTransactions,
-            _wallet,
-            _connectionState,
+            walletTransactions: _walletTransactions,
+            wallet: _wallet,
+            connectionState: _connectionState,
           ),
         );
         break;
       case Tabs.addresses:
         body = Expanded(
           child: AddressTab(
-            _wallet.name,
-            _wallet.title,
-            _wallet.addresses,
-            changeIndex,
+            walletName: _wallet.name,
+            title: _wallet.title,
+            walletAddresses: _wallet.addresses,
+            changeIndex: changeIndex,
           ),
         );
         break;
       case Tabs.send:
         body = Expanded(
           child: SendTab(
-            changeIndex,
-            _address,
-            _label,
-            _connectionState,
+            address: _address,
+            label: _label,
+            wallet: _wallet,
+            connectionState: _connectionState,
+            changeIndex: changeIndex,
           ),
         );
         break;
       default:
-        body = Container();
+        body = const SizedBox();
         break;
     }
     return body;

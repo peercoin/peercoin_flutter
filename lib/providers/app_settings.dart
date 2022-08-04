@@ -18,8 +18,8 @@ class AppSettings with ChangeNotifier {
 
   Future<void> init([bool fromSetup = false]) async {
     if (fromSetup == false) {
-      var _optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
-      _appOptions = await _optionsBox!.get('appOptions');
+      var optionsBox = await (_encryptedBox.getGenericBox('optionsBox'));
+      _appOptions = await optionsBox!.get('appOptions');
     }
     _sharedPrefs = await SharedPreferences.getInstance();
 
@@ -34,9 +34,9 @@ class AppSettings with ChangeNotifier {
   }
 
   Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
-    var _optionsBox =
+    var optionsBox =
         await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
-    await _optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
+    await optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
     await _sharedPrefs.setString('language_code', lang);
   }
 

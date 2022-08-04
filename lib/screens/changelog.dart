@@ -20,7 +20,7 @@ class ChangeLogScreen extends StatelessWidget {
         child: FutureBuilder(
           future: DefaultAssetBundle.of(context).loadString('CHANGELOG.md'),
           builder: (context, snapshot) {
-            var _changeLogData =
+            var changeLogData =
                 snapshot.hasData ? snapshot.data.toString() : '';
 
             return SingleChildScrollView(
@@ -39,7 +39,7 @@ class ChangeLogScreen extends StatelessWidget {
                     ),
                     const Divider(),
                     MarkdownBody(
-                      data: _changeLogData,
+                      data: changeLogData,
                       styleSheet:
                           MarkdownStyleSheet.fromTheme(Theme.of(context))
                               .copyWith(

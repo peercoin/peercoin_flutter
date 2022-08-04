@@ -13,7 +13,7 @@ class AppSettingsNotificationsScreen extends StatefulWidget {
   const AppSettingsNotificationsScreen({Key? key}) : super(key: key);
 
   @override
-  _AppSettingsNotificationsScreenState createState() =>
+  State<AppSettingsNotificationsScreen> createState() =>
       _AppSettingsNotificationsScreenState();
 }
 
@@ -63,6 +63,7 @@ class _AppSettingsNotificationsScreenState
             TextButton(
               onPressed: () async {
                 _appSettings.setNotificationInterval(30);
+                final navigator = Navigator.of(context);
 
                 var walletList = <String>[];
                 for (var element in _availableWallets) {
@@ -76,8 +77,7 @@ class _AppSettingsNotificationsScreenState
                 );
 
                 await BackgroundSync.executeSync(fromScan: true);
-
-                Navigator.pop(context);
+                navigator.pop();
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),
@@ -139,13 +139,13 @@ class _AppSettingsNotificationsScreenState
               value: _appSettings.notificationActiveWallets
                   .contains(wallet.letterCode),
               onChanged: (newState) {
-                var _newList = _appSettings.notificationActiveWallets;
+                var newList = _appSettings.notificationActiveWallets;
                 if (newState == true) {
-                  _newList.add(wallet.letterCode);
+                  newList.add(wallet.letterCode);
                 } else {
-                  _newList.remove(wallet.letterCode);
+                  newList.remove(wallet.letterCode);
                 }
-                _appSettings.setNotificationActiveWallets(_newList);
+                _appSettings.setNotificationActiveWallets(newList);
                 saveSnack(context);
               },
             );

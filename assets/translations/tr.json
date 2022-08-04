@@ -158,7 +158,7 @@
     "wallet_pop_menu_servers": "Sunucuları Ayarla",
     "server_settings_error_no_server_left": "En az bir bağlanılabilir sunucu gerekli!",
     "wallet_receive_label_hint": "İpucu: Bu butona bastığınızda adres etiketi kaydedilir",
-    "wallet__send_label_hint": "İpucu: QR-Kodunu taratmak size zaman kazandırır",
+    "wallet_send_label_hint_scan": "İpucu: QR-Kodunu taratmak size zaman kazandırır",
     "currency_IDR": "Endonezya Rupisi",
     "currency_KRW": "Kuzey Kore Wonu",
     "currency_RON": "Romanya Leyi",

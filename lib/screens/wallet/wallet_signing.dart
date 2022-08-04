@@ -46,7 +46,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
     super.didChangeDependencies();
   }
 
-  void _saveSnack(context) {
+  void _saveSnack() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -62,19 +62,19 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   }
 
   Future<void> _showAddressSelector() async {
-    final _oldAddr = _signingAddress;
+    final oldAddr = _signingAddress;
     var result = await Navigator.of(context).pushNamed(
       Routes.addressSelector,
-      arguments: [
-        await _activeWallets.getWalletAddresses(_walletName),
-        _signingAddress
-      ],
+      arguments: {
+        'addresses': await _activeWallets.getWalletAddresses(_walletName),
+        'selectedAddress': _signingAddress
+      },
     );
     setState(() {
       _signingAddress = result as String;
     });
-    if (result != '' && result != _oldAddr) {
-      _saveSnack(context);
+    if (result != '' && result != oldAddr) {
+      _saveSnack();
     }
   }
 
