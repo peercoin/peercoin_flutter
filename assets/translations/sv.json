@@ -316,5 +316,11 @@
     "sign_reset_alert_title": "Vill du börja om?",
     "address_selector_title": "Välj adress att signera med",
     "setup_legal_title": "Rättsligt Meddelande",
-    "setup_legal_license": "Visa Licens"
+    "setup_legal_license": "Visa Licens",
+    "send_fiat_switch": "Belopp i $currency",
+    "server_add_no_wss_or_ssl": "Måste börja med wss:// eller ssl://\nAndra protokoll stöds inte för närvarande",
+    "setup_auth_title": "Välj när din nätsession ska löpa ut:",
+    "setup_auth_subtitle_plural": "Din session löper ut efter $days dagar.",
+    "setup_auth_subtitle_singular": "Din session löper ut efter $days dag.",
+    "setup_auth_hint": "Du måste ange din återställningsfras igen efter att sessionen har löpt ut."
 }
