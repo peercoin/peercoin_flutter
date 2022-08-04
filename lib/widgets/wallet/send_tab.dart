@@ -721,7 +721,7 @@ class _SendTabState extends State<SendTab> {
                       if (!kIsWeb)
                         Text(
                           AppLocalizations.instance.translate(
-                            'wallet__send_label_hint',
+                            'wallet_send_label_hint_scan',
                           ),
                           style: TextStyle(
                             fontSize: 12,

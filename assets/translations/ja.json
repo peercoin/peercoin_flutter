@@ -265,7 +265,7 @@
     "wallet_pop_menu_wif": "プライベートキーのインポートする",
     "wallet_receive": "受け取る",
     "wallet_rescan_title": "ウォレットを再スキャンする",
-    "wallet__send_label_hint": "ヒント：QRコードをスキャンすると時間が短縮されます",
+    "wallet_send_label_hint_scan": "ヒント：QRコードをスキャンすると時間が短縮されます",
     "wallet_scan_appBar_title": "インポートしたシードのスキャン",
     "wallet_scan_notice": "少し時間がかかるかもしれません。この画面を閉じないでください！",
     "wallet_send": "送信",

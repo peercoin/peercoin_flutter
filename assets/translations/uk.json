@@ -233,7 +233,7 @@
     "wallet_pop_menu_wif": "Імпорт персонального ключа",
     "wallet_pop_menu_rescan": "Повторне сканування",
     "wallet_rescan_title": "Перескануйте гаманець",
-    "wallet__send_label_hint": "Підказка: Сканування QR-коду заощадить ваш час",
+    "wallet_send_label_hint_scan": "Підказка: Сканування QR-коду заощадить ваш час",
     "wallet_scan_notice": "Це може зайняти деякий час. Не закривайте цей екран!",
     "wallet_send": "Надіслати",
     "wallet_transactions": "Транзакції",

@@ -259,7 +259,7 @@
     "wallet_pop_menu_servers": "ปรับเซิร์ฟเวอร์",
     "wallet_receive": "รับ",
     "wallet_rescan_title": "สแกนกระเป๋าเงินซ้ำ",
-    "wallet__send_label_hint": "คำแนะนำ: การสแกนคิวอาร์โค้ดจะช่วยคุณประหยัดเวลา",
+    "wallet_send_label_hint_scan": "คำแนะนำ: การสแกนคิวอาร์โค้ดจะช่วยคุณประหยัดเวลา",
     "wallet_scan_appBar_title": "กำลังสแกนชุดคำศัพท์ที่นำเข้าของคุณ",
     "wallet_scan_notice": "นี่อาจใช้เวลาสักครู่ อย่าปิดหน้าจอนี้!",
     "wallet_send": "ส่ง",

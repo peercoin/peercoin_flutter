@@ -201,7 +201,7 @@
     "setup_continue_alert_title": "Avant de continuer",
     "setup_continue_alert_content": "Vérifiez que vous avez sauvé votre phrase graine.\nVous pouvez la consulter plus tard dans les préférences de l'app.",
     "wallet_rescan_content": "Scanne le portefeuille à nouveau. Si vous avez des problèmes avec les transactions ou les montants, cela peut être utile.\nCela pourrait prendre un moment.",
-    "wallet__send_label_hint": "Conseil : Scanner le code QR vous fera gagner du temps",
+    "wallet_send_label_hint_scan": "Conseil : Scanner le code QR vous fera gagner du temps",
     "wallet_scan_notice": "Cela pourrait prendre un moment. Ne fermez pas cet écran !",
     "wallet_send": "Envoyer",
     "wallet_transactions": "Transactions",

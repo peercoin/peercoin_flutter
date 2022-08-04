@@ -174,7 +174,7 @@
     "setup_continue_alert_title": "Înainte de a continua",
     "setup_continue_alert_content": "Asigurați-vă că ați salvat fraza seed.\nO puteți accesa mai târziu în setările aplicației.",
     "tx_rejected": "Tranzacție respinsă de rețea. Vă rugăm să reîncercați.",
-    "wallet__send_label_hint": "Scanarea codului QR vă va economisi timp",
+    "wallet_send_label_hint_scan": "Scanarea codului QR vă va economisi timp",
     "addressbook_search": "Introduceți adrese, etichete",
     "receive_faucet": "Deschideți robinetul",
     "receive_obtain": "Obțineți tPPC",

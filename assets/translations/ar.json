@@ -174,7 +174,7 @@
     "wallet_connected": "متصل",
     "wallet_offline": "غير متصل بالانترنت",
     "wallet_rescan_title": "إعادة مسح المحفظة ضوئياً",
-    "wallet__send_label_hint": "تلميح: مسح رمز الاستجابة السريعة سيوفر لك بعض الوقت",
+    "wallet_send_label_hint_scan": "تلميح: مسح رمز الاستجابة السريعة سيوفر لك بعض الوقت",
     "wallet_scan_notice": "وهذا قد يستغرق بعض الوقت. لا تغلق هذه الشاشة!",
     "wallet_send": "إرسال",
     "wallet_transactions": "المعاملات",

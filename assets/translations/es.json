@@ -115,7 +115,7 @@
     "unconfirmed": "sin confirmar",
     "wallet_rescan_title": "Volver a escanear cartera",
     "wallet_rescan_content": "Este proceso vuelve a sincronizar la cartera. Si tienes problemas con las transacciones o el saldo, esto puede ayudarte.\nEl proceso puede tardar un momento.",
-    "wallet__send_label_hint": "Nota: Escanear el código QR te ahorrará tiempo",
+    "wallet_send_label_hint_scan": "Nota: Escanear el código QR te ahorrará tiempo",
     "wallet_scan_appBar_title": "Las semillas importadas se están escaneando",
     "wallet_scan_notice": "Esto puede llevar un tiempo. No cierres esta página!",
     "wallet_transactions": "Transacciones",

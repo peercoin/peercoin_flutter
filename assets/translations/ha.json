@@ -183,7 +183,7 @@
     "wallet_pop_menu_servers": "Daidaita Servers",
     "wallet_receive": "Karbi",
     "wallet_rescan_content": "A sake scan din walet. Idan kuna fuskantar matsala tare da cinikin ko adadin kuɗi, wannan zai iya taimaka muku.\nZai iya ɗaukar lokaci.",
-    "wallet__send_label_hint": "Alama: Scanning din QR-Code zai rage muku bata lokaci",
+    "wallet_send_label_hint_scan": "Alama: Scanning din QR-Code zai rage muku bata lokaci",
     "wallet_transactions": "Ciniki",
     "wallets_list": "Walets dinka",
     "wallets_none": "Baka da walets masu aiki",

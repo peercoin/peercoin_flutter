@@ -189,7 +189,7 @@
     "wallet_pop_menu_rescan": "Skann På Nytt",
     "wallet_receive": "Motta",
     "wallet_rescan_title": "Skann lommeboken på nytt",
-    "wallet__send_label_hint": "Skanning av QR-koden vil spare deg for litt tid",
+    "wallet_send_label_hint_scan": "Skanning av QR-koden vil spare deg for litt tid",
     "wallet_scan_appBar_title": "Skanner din importerte gjenopprettingsfrase",
     "wallet_scan_notice": "Dette kan ta litt tid. Ikke lukk denne skjermen!",
     "wallet_transactions": "Transaksjoner",

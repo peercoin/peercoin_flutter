@@ -174,7 +174,7 @@
     "setup_continue_alert_title": "Прежде чем продолжить",
     "setup_continue_alert_content": "Убедитесь что вы сохранили пир фразу.\nВы можете получить доступ позже, в настройках приложения.",
     "wallet_bottom_nav_addr": "Адреса",
-    "wallet__send_label_hint": "Сканирование QR-кода сэкономит вам время",
+    "wallet_send_label_hint_scan": "Сканирование QR-кода сэкономит вам время",
     "addressbook_search": "Вставить адреса, метки",
     "receive_faucet": "Открыть кран",
     "receive_obtain": "Получить tPPC",
