@@ -148,7 +148,7 @@
     "wallet_bottom_nav_receive": "গ্রহণ",
     "wallet_bottom_nav_send": "পাঠান",
     "wallet_connected": "সংযুক্ত",
-    "wallet__send_label_hint": "ইঙ্গিত: QR-কোড স্ক্যান করে আপনার কিছু সময় বাঁচাবে",
+    "wallet_send_label_hint_scan": "ইঙ্গিত: QR-কোড স্ক্যান করে আপনার কিছু সময় বাঁচাবে",
     "wallet_scan_appBar_title": "আপনার ইম্পোর্ট করা সীড স্ক্যান করা হচ্ছে",
     "wallet_send": "পাঠান",
     "notification_title": "$walletTitle - নতুন লেনদেন গৃহীত হয়েছে",

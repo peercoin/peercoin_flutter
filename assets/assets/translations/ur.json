@@ -227,7 +227,7 @@
     "wallet_pop_menu_rescan": "دوبارہ اسکین کریں",
     "wallet_receive": "وصول کریں",
     "wallet_rescan_title": "والیٹ کو دوبارہ اسکین کریں",
-    "wallet__send_label_hint": "اشارہ: QR کوڈ اسکین کرنے سے آپ کا کچھ وقت بچ جائے گا",
+    "wallet_send_label_hint_scan": "اشارہ: QR کوڈ اسکین کرنے سے آپ کا کچھ وقت بچ جائے گا",
     "wallet_scan_appBar_title": "آپ کے درآمد کردہ سیڈ اسکین ہو رہے ہیں",
     "wallet_scan_notice": "اس میں کچھ وقت لگ سکتا ہے۔ اسکرین بند نہ کریں!",
     "wallet_send": "بھیجیں",

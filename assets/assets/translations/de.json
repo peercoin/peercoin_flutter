@@ -179,7 +179,7 @@
     "receive_website": "Website öffnen",
     "send_qr": "QR-Code",
     "wallet_bottom_nav_addr": "Adressen",
-    "wallet__send_label_hint": "Den QR-Code scannen wird etwas Zeit sparen",
+    "wallet_send_label_hint_scan": "Den QR-Code scannen wird etwas Zeit sparen",
     "tx_rejected": "Transaktion vom Netzwerk abgelehnt. Bitte erneut versuchen.",
     "setup_continue_alert_title": "Bevor du fortfährst",
     "setup_continue_alert_content": "Stelle sicher, dass du deinen Seed gesichert hast.\nDu kannst später in den App Einstellungen auf ihn zugreifen.",

@@ -260,7 +260,7 @@
     "wallet_receive_label_hint": "Kidokezo: Ukibonyeza kitufe hiki utahifadhi lebo ya anuani",
     "wallet_rescan_title": "Scan upya wallet",
     "wallet_rescan_content": "Itascan wallet tena. Kama unakutana na tatizo na miamala au kiasi, hii inaweza kukusaidia.\nInaweza kuchukua muda kidogo.",
-    "wallet__send_label_hint": "Kidokezo: Kuscan Msimbo-wa-QR kutakusaidia kuokoa muda",
+    "wallet_send_label_hint_scan": "Kidokezo: Kuscan Msimbo-wa-QR kutakusaidia kuokoa muda",
     "wallet_scan_notice": "Hii inaweza kuchukua muda kidogo. Usifunge skrini hii!",
     "wallet_send": "Tuma",
     "wallet_transactions": "Miamala",
