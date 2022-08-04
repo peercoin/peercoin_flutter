@@ -68,8 +68,13 @@ class _WalletListScreenState extends State<WalletListScreen>
       _appSettings = Provider.of<AppSettings>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
       final navigator = Navigator.of(context);
-      Future<void> checkReminder() =>
-          PeriodicReminders.checkReminder(_appSettings, context);
+      Future<bool> checkReminder() async {
+        return await PeriodicReminders.checkReminder(
+          _appSettings,
+          context,
+        );
+      }
+
       final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
@@ -101,7 +106,9 @@ class _WalletListScreenState extends State<WalletListScreen>
         var walletValues = await _activeWallets.activeWalletsValues;
         if (walletValues.isNotEmpty) {
           //don't show for users with no wallets
-          await checkReminder();
+          if (await checkReminder() == true) {
+            return; //don't execute code below this line if checkReminder returned true
+          }
         }
       } else {
         //start session checker timer on web

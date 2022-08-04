@@ -1,16 +1,25 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:peercoin/providers/active_wallets.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import '../models/available_periodic_reminder_items.dart';
 import '../models/periodic_reminder_item.dart';
 import '../providers/app_settings.dart';
 import 'app_localizations.dart';
+import 'app_routes.dart';
 import 'logger_wrapper.dart';
 
 class PeriodicReminders {
   static Future<void> displayReminder(
-      BuildContext ctx, PeriodicReminderItem reminderItem) async {
+    BuildContext ctx,
+    PeriodicReminderItem reminderItem,
+  ) async {
+    final activeWallets = ctx.read<ActiveWallets>();
+    final listOfActiveWallets = await activeWallets.activeWalletsKeys;
+
     //show alert
     await showDialog(
       context: ctx,
@@ -26,7 +35,6 @@ class PeriodicReminders {
           actions: <Widget>[
             if (reminderItem.id == 'donate')
               TextButton(
-                //TODO add donate now deep link
                 onPressed: () async {
                   final navigator = Navigator.of(context);
                   var url = 'https://ppc.lol/fndtn/';
@@ -39,6 +47,32 @@ class PeriodicReminders {
                   AppLocalizations.instance.translate(reminderItem.button),
                 ),
               ),
+            if (reminderItem.id == 'donate')
+              listOfActiveWallets.contains('peercoin')
+                  ? TextButton(
+                      onPressed: () async {
+                        final navigator = Navigator.of(context);
+                        final values = await activeWallets.activeWalletsValues;
+                        final ppcWallet = values.firstWhere(
+                          (element) => element.name == 'peercoin',
+                        );
+
+                        await navigator.popAndPushNamed(
+                          Routes.walletHome,
+                          arguments: {
+                            'wallet': ppcWallet,
+                            'pushedAddress':
+                                'p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK',
+                          },
+                        );
+                      },
+                      child: Text(
+                        AppLocalizations.instance.translate(
+                          'about_donate_button',
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -77,8 +111,10 @@ class PeriodicReminders {
     settings.setPeriodicReminterItemsNextView(timeMap);
   }
 
-  static Future<void> checkReminder(
-      AppSettings settings, BuildContext context) async {
+  static Future<bool> checkReminder(
+    AppSettings settings,
+    BuildContext context,
+  ) async {
     LoggerWrapper.logInfo(
       'PeriodicReminders',
       'checkReminder',
@@ -135,6 +171,8 @@ class PeriodicReminders {
         'checkReminder',
         'no reminder scheduled.',
       );
+      return false;
     }
+    return true;
   }
 }
