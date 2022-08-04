@@ -322,5 +322,7 @@
     "setup_auth_title": "Wähle, wann deine Web Session ablaufen soll:",
     "setup_auth_subtitle_plural": "Deine Session wird nach $days Tagen ablaufen.",
     "setup_auth_subtitle_singular": "Deine Session wird nach $days Tag ablaufen.",
-    "setup_auth_hint": "Du musst deinen Seed erneut eingeben, nachdem deine Session abgelaufen ist."
+    "setup_auth_hint": "Du musst deinen Seed erneut eingeben, nachdem deine Session abgelaufen ist.",
+    "wallet_send_label_hint_metadata": "Metadaten sind unverschlüsselt und werden öffentlich auf der Blockchain sichtbar sein.",
+    "about_donate_button": "Jetzt PPC spenden"
 }
