@@ -608,6 +608,20 @@ class _SendTabState extends State<SendTab> {
                                 .translate('send_op_return'),
                           ),
                         ),
+                      if (_expertMode)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            AppLocalizations.instance.translate(
+                              'wallet_send_label_hint_metadata',
+                            ),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                        ),
                       if (_fiatEnabled)
                         SwitchListTile(
                           value: _fiatInputEnabled,
