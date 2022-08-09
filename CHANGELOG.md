@@ -1,5 +1,5 @@
 ### **0.9.9** (2022-08-xx)
-* 
+* About screen: Show licenes used in this app
 
 ### **0.9.8** (2022-08-04)
 * About screen: Add donation button with direct link to send tab
