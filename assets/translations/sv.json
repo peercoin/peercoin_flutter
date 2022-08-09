@@ -322,5 +322,7 @@
     "setup_auth_title": "Välj när din nätsession ska löpa ut:",
     "setup_auth_subtitle_plural": "Din session löper ut efter $days dagar.",
     "setup_auth_subtitle_singular": "Din session löper ut efter $days dag.",
-    "setup_auth_hint": "Du måste ange din återställningsfras igen efter att sessionen har löpt ut."
+    "setup_auth_hint": "Du måste ange din återställningsfras igen efter att sessionen har löpt ut.",
+    "wallet_send_label_hint_metadata": "Metadata är okrypterad och kommer att vara offentligt synlig i blockkedjan.",
+    "about_donate_button": "Donera PPC nu"
 }
