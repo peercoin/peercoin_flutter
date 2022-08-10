@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/active_wallets.dart';
@@ -21,11 +22,14 @@ class WalletImportScanScreen extends StatefulWidget {
 class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _initial = true;
   bool _scanStarted = false;
+  bool _addressesFetchedFromBackend = false;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
+  late AppSettings _settings;
   late String _coinName = '';
   late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
+  int _addressScanPointer = 5;
   late Timer _timer;
 
   @override
@@ -37,6 +41,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _coinName = ModalRoute.of(context)!.settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
+      _settings = Provider.of<AppSettings>(context, listen: false);
       await _activeWallets.prepareForRescan(_coinName);
       await _connectionProvider!.init(_coinName, scanMode: true);
 
@@ -44,7 +49,9 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         var dueTime = _latestUpdate + 7;
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
-        } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+        } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
+            _addressesFetchedFromBackend == true) {
+          //tasks to finish after timeout
           final navigator = Navigator.of(context);
           //sync notification backend
           await BackgroundSync.executeSync(fromScan: true);
@@ -55,20 +62,38 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           );
         }
       });
+
+      if (_settings.notificationInterval == 0) {
+        //don't do anything if background notification services are disabled
+        setState(() {
+          _addressesFetchedFromBackend = true;
+        });
+      } else {
+        fetchAddressesFromBackend();
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
 
-      if (_connectionState == ElectrumConnectionState.connected) {
+      if (_connectionState == ElectrumConnectionState.connected &&
+          _addressesFetchedFromBackend == true) {
         _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
         if (_scanStarted == false) {
           //returns master address for hd wallet
           var masterAddr = await _activeWallets.getAddressFromDerivationPath(
-              _coinName, 0, 0, 0, true);
+            _coinName,
+            0,
+            0,
+            0,
+            true,
+          );
 
           //subscribe to hd master
           _connectionProvider!.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(_coinName, masterAddr),
+            await _activeWallets.getWalletScriptHashes(
+              _coinName,
+              masterAddr,
+            ),
           );
 
           setState(() {
@@ -79,6 +104,19 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     }
 
     super.didChangeDependencies();
+  }
+
+  void fetchAddressesFromBackend() async {
+    for (int i = _addressScanPointer; i <= _addressScanPointer + 5; i++) {
+      var res = await _activeWallets.getAddressFromDerivationPath(
+        _coinName,
+        0,
+        i,
+        0,
+      );
+      print(i);
+      print(res);
+    }
   }
 
   @override
@@ -99,9 +137,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-            child: Text(
-          AppLocalizations.instance.translate('wallet_scan_appBar_title'),
-        )),
+          child: Text(
+            AppLocalizations.instance.translate('wallet_scan_appBar_title'),
+          ),
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

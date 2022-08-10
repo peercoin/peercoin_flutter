@@ -34,6 +34,7 @@ class ActiveWallets with ChangeNotifier {
   Box? _vaultBox;
   // ignore: prefer_final_fields
   Map<String?, CoinWallet?> _specificWallet = {};
+  final Map<String, HDWallet> _hdWalletCache = {};
 
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
@@ -96,11 +97,7 @@ class ActiveWallets with ChangeNotifier {
   Future<String?> getAddressFromDerivationPath(
       String identifier, int account, int chain, int address,
       [master = false]) async {
-    final network = AvailableCoins.getSpecificCoin(identifier).networkType;
-    var hdWallet = HDWallet.fromSeed(
-      seedPhraseUint8List(await seedPhrase),
-      network: network,
-    );
+    var hdWallet = await getHdWallet(identifier);
 
     if (master == true) {
       return hdWallet.address;
@@ -132,13 +129,23 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
+  Future<HDWallet> getHdWallet(String identifier) async {
+    if (_hdWalletCache.containsKey(identifier)) {
+      return _hdWalletCache[identifier]!;
+    } else {
+      final network = AvailableCoins.getSpecificCoin(identifier).networkType;
+      var res = HDWallet.fromSeed(
+        seedPhraseUint8List(await seedPhrase),
+        network: network,
+      );
+      _hdWalletCache[identifier] = res;
+      return res;
+    }
+  }
+
   Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    final network = AvailableCoins.getSpecificCoin(identifier).networkType;
-    var hdWallet = HDWallet.fromSeed(
-      seedPhraseUint8List(await seedPhrase),
-      network: network,
-    );
+    var hdWallet = await getHdWallet(identifier);
 
     if (openWallet.addresses.isEmpty) {
       //generate new address
@@ -518,7 +525,6 @@ class ActiveWallets with ChangeNotifier {
     String identifier,
     String address,
   ) async {
-    var network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses
         .firstWhereOrNull((element) => element.address == address);
@@ -526,10 +532,7 @@ class ActiveWallets with ChangeNotifier {
     if (walletAddress != null) {
       if (walletAddress.wif == null || walletAddress.wif == '') {
         var wifs = {};
-        var hdWallet = HDWallet.fromSeed(
-          seedPhraseUint8List(await seedPhrase),
-          network: network,
-        );
+        var hdWallet = await getHdWallet(identifier);
 
         for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
           //parse 5 extra WIFs, just to be sure
