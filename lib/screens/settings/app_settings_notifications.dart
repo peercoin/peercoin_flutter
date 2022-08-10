@@ -62,7 +62,7 @@ class _AppSettingsNotificationsScreenState
             ),
             TextButton(
               onPressed: () async {
-                _appSettings.setNotificationInterval(30);
+                _appSettings.setNotificationInterval(60);
                 final navigator = Navigator.of(context);
 
                 var walletList = <String>[];

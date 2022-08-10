@@ -92,6 +92,16 @@ class _AboutScreenState extends State<AboutScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            TextButton(
+                              onPressed: () =>
+                                  showLicensePage(context: context),
+                              child: Text(
+                                AppLocalizations.instance.translate(
+                                  'about_show_license',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                             const Divider(),
                             TextButton(
                               onPressed: () => Navigator.of(context)

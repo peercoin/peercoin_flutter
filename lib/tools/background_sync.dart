@@ -174,16 +174,8 @@ class BackgroundSync {
           'addressesToQuery $adressesToQuery',
         );
 
-        var result = await http.post(
-          Uri.parse('https://peercoinexplorer.net/address-status'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode({
-            'coin': wallet.name,
-            'addresses': [adressesToQuery]
-          }),
-        );
+        http.Response result =
+            await getDataFromAddressBackend(wallet.name, adressesToQuery);
 
         var shouldNotify = false;
         bool foundDifference;
@@ -230,5 +222,20 @@ class BackgroundSync {
         }
       }
     }
+  }
+
+  static Future<http.Response> getDataFromAddressBackend(
+      String walletName, Map<String, int> adressesToQuery) async {
+    var result = await http.post(
+      Uri.parse('https://peercoinexplorer.net/address-status'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'coin': walletName,
+        'addresses': [adressesToQuery]
+      }),
+    );
+    return result;
   }
 }
