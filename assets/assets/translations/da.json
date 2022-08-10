@@ -316,5 +316,13 @@
     "sign_reset_alert_body": "Dette vil nulstille alle felter og rydde din signatur.",
     "address_selector_title": "Vælg adresse at underskrive med",
     "setup_legal_title": "Juridisk Meddelelse",
-    "setup_legal_license": "Se Licens"
+    "setup_legal_license": "Se Licens",
+    "server_add_no_wss_or_ssl": "Skal starte med wss:// eller ssl://\nAndre protokoller understøttes ikke i øjeblikket",
+    "send_fiat_switch": "Beløb i $currency",
+    "setup_auth_title": "Vælg hvornår din netsession udløber:",
+    "setup_auth_subtitle_plural": "Din session udløber efter $days dage.",
+    "setup_auth_subtitle_singular": "Din session udløber efter $days dag.",
+    "setup_auth_hint": "Du bliver nødt til at indtaste din gendannelsessætning igen, efter sessionen er udløbet.",
+    "wallet_send_label_hint_metadata": "Metadata er ukrypteret og vil være offentligt synlige på blockchain.",
+    "about_donate_button": "Doner PPC nu"
 }

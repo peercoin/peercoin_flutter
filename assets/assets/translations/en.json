@@ -2,6 +2,7 @@
     "about": "About",
     "about_developers": "© $year The peercoin_flutter Developers",
     "about_license": "Licensed under AGPL-3.0",
+    "about_show_license": "Show licenses",
     "about_free": "This software is open source, free and does not come with any warranty whatsoever.\nUse at own risk.",
     "about_view_source": "View Source Code",
     "about_data_protection": "This software protects your data and privacy to the best of its abilities.\nThis app stores all necessary data locally on your device.\nThere is no analytics or advertising software inside.",

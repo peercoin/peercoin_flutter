@@ -1,4 +1,8 @@
-### **0.9.8** (2022-07-xx)
+### **0.9.9** (2022-08-10)
+* Dramatically improve import / rescan performance
+* About screen: Show licenes used in this app
+
+### **0.9.8** (2022-08-04)
 * About screen: Add donation button with direct link to send tab
 
 ### **0.9.7** (2022-07-15)

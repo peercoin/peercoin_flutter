@@ -316,5 +316,13 @@
     "sign_reset_alert_body": "Dette vil nullstille alle felt og fjerne signaturen din.",
     "address_selector_title": "Velg adresse å signere med",
     "setup_legal_title": "Juridisk Varsel",
-    "setup_legal_license": "Se Lisens"
+    "setup_legal_license": "Se Lisens",
+    "send_fiat_switch": "Beløp i $currency",
+    "server_add_no_wss_or_ssl": "Må starte med wss:// eller ssl://\nAndre protokoller støttes foreløpig ikke",
+    "setup_auth_title": "Velg når nettøkten din skal utløpe:",
+    "setup_auth_subtitle_singular": "Økten din utløper etter $days dag.",
+    "setup_auth_subtitle_plural": "Økten din utløper etter $days dager.",
+    "setup_auth_hint": "Du må legge inn gjenopprettingsfrasen din igjen etter at økten er utløpt.",
+    "wallet_send_label_hint_metadata": "Metadata er ukryptert og vil være offentlig synlig på blokkjeden.",
+    "about_donate_button": "Doner PPC nå"
 }
