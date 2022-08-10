@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +11,7 @@ import '../../providers/electrum_connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
+import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
 
@@ -22,14 +25,15 @@ class WalletImportScanScreen extends StatefulWidget {
 class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _initial = true;
   bool _scanStarted = false;
-  bool _addressesFetchedFromBackend = false;
+  bool backgroundNotificationsAvailable = false;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
   late AppSettings _settings;
   late String _coinName = '';
   late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
-  int _addressScanPointer = 5;
+  int _addressScanPointer = 0;
+  final int _addressChunkSize = 10;
   late Timer _timer;
 
   @override
@@ -50,7 +54,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         if (_connectionState == ElectrumConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
-            _addressesFetchedFromBackend == true) {
+            _scanStarted == true) {
           //tasks to finish after timeout
           final navigator = Navigator.of(context);
           //sync notification backend
@@ -63,42 +67,18 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         }
       });
 
-      if (_settings.notificationInterval == 0) {
-        //don't do anything if background notification services are disabled
+      if (_settings.notificationInterval > 0) {
         setState(() {
-          _addressesFetchedFromBackend = true;
+          backgroundNotificationsAvailable = true;
         });
-      } else {
-        fetchAddressesFromBackend();
+        await fetchAddressesFromBackend();
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
-
-      if (_connectionState == ElectrumConnectionState.connected &&
-          _addressesFetchedFromBackend == true) {
+      if (_connectionState == ElectrumConnectionState.connected) {
         _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-
-        if (_scanStarted == false) {
-          //returns master address for hd wallet
-          var masterAddr = await _activeWallets.getAddressFromDerivationPath(
-            _coinName,
-            0,
-            0,
-            0,
-            true,
-          );
-
-          //subscribe to hd master
-          _connectionProvider!.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(
-              _coinName,
-              masterAddr,
-            ),
-          );
-
-          setState(() {
-            _scanStarted = true;
-          });
+        if (backgroundNotificationsAvailable == false) {
+          startScan();
         }
       }
     }
@@ -106,16 +86,83 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     super.didChangeDependencies();
   }
 
-  void fetchAddressesFromBackend() async {
-    for (int i = _addressScanPointer; i <= _addressScanPointer + 5; i++) {
+  void startScan() async {
+    if (_scanStarted == false) {
+      LoggerWrapper.logInfo('WalletImportScan', 'startScan', 'Scan started');
+      //returns master address for hd wallet
+      var masterAddr = await _activeWallets.getAddressFromDerivationPath(
+        _coinName,
+        0,
+        0,
+        0,
+        true,
+      );
+
+      //subscribe to hd master
+      _connectionProvider!.subscribeToScriptHashes(
+        await _activeWallets.getWalletScriptHashes(
+          _coinName,
+          masterAddr,
+        ),
+      );
+
+      setState(() {
+        _scanStarted = true;
+      });
+    }
+  }
+
+  Future<void> fetchAddressesFromBackend() async {
+    var adressesToQuery = <String, int>{};
+    for (int i = _addressScanPointer;
+        i < _addressScanPointer + _addressChunkSize;
+        i++) {
       var res = await _activeWallets.getAddressFromDerivationPath(
         _coinName,
         0,
         i,
         0,
       );
-      print(i);
-      print(res);
+      adressesToQuery[res!] = 0;
+    }
+
+    await parseBackendResult(
+      await BackgroundSync.getDataFromAddressBackend(
+        _coinName,
+        adressesToQuery,
+      ),
+    );
+  }
+
+  Future<void> parseBackendResult(Response response) async {
+    bool foundDifference;
+    if (response.body.contains('foundDifference')) {
+      //valid answer
+      var bodyDecoded = jsonDecode(response.body);
+      LoggerWrapper.logInfo(
+        'WalletImportScan',
+        'parseBackendResult',
+        bodyDecoded.toString(),
+      );
+      foundDifference = bodyDecoded['foundDifference'];
+      if (foundDifference == true) {
+        //loop through addresses in result
+        var addresses = bodyDecoded['addresses'];
+        addresses.forEach((element) {
+          var elementAddr = element['address'];
+          //backend knows this addr
+          _activeWallets.addAddressFromScan(_coinName, elementAddr, 'null');
+        });
+
+        //keep searching in next chunk
+        setState(() {
+          _addressScanPointer += _addressChunkSize;
+        });
+        fetchAddressesFromBackend();
+      } else {
+        //no more differences found
+        startScan();
+      }
     }
   }
 

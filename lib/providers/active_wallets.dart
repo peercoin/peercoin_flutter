@@ -33,7 +33,7 @@ class ActiveWallets with ChangeNotifier {
   late Box _walletBox;
   Box? _vaultBox;
   // ignore: prefer_final_fields
-  Map<String?, CoinWallet?> _specificWallet = {};
+  Map<String?, CoinWallet?> _specificWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
 
   Future<void> init() async {
@@ -80,11 +80,11 @@ class ActiveWallets with ChangeNotifier {
   }
 
   CoinWallet getSpecificCoinWallet(String identifier) {
-    if (_specificWallet[identifier] == null) {
+    if (_specificWalletCache[identifier] == null) {
       //cache wallet
-      _specificWallet[identifier] = _walletBox.get(identifier);
+      _specificWalletCache[identifier] = _walletBox.get(identifier);
     }
-    return _specificWallet[identifier]!;
+    return _specificWalletCache[identifier]!;
   }
 
   Future<void> addWallet(String name, String title, String letterCode) async {
@@ -134,12 +134,11 @@ class ActiveWallets with ChangeNotifier {
       return _hdWalletCache[identifier]!;
     } else {
       final network = AvailableCoins.getSpecificCoin(identifier).networkType;
-      var res = HDWallet.fromSeed(
+      _hdWalletCache[identifier] = HDWallet.fromSeed(
         seedPhraseUint8List(await seedPhrase),
         network: network,
       );
-      _hdWalletCache[identifier] = res;
-      return res;
+      return _hdWalletCache[identifier]!;
     }
   }
 
@@ -223,8 +222,9 @@ class ActiveWallets with ChangeNotifier {
   Future<String?> getWalletAddressStatus(
       String identifier, String address) async {
     var addresses = await getWalletAddresses(identifier);
-    var targetWallet =
-        addresses.firstWhereOrNull((element) => element.address == address);
+    var targetWallet = addresses.firstWhereOrNull(
+      (element) => element.address == address,
+    );
     return targetWallet?.status;
   }
 
