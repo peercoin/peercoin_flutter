@@ -119,6 +119,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               AppLocalizations.instance.translate(
                                 'about_free',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             TextButton(
                                 onPressed: () => _launchURL(
@@ -136,6 +137,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               AppLocalizations.instance.translate(
                                 'about_data_protection',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             TextButton(
                               onPressed: () => _launchURL(
@@ -154,6 +156,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               AppLocalizations.instance.translate(
                                 'about_foundation',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             _listOfActiveWallets.contains('peercoin')
                                 ? TextButton(
@@ -178,6 +181,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                       AppLocalizations.instance.translate(
                                         'about_donate_button',
                                       ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   )
                                 : const SizedBox(),
@@ -198,6 +202,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               AppLocalizations.instance.translate(
                                 'about_translate',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             TextButton(
                               onPressed: () async => _launchURL(
@@ -216,6 +221,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               AppLocalizations.instance.translate(
                                 'about_help_or_feedback',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             TextButton(
                               onPressed: () async => launchMailto(),
@@ -232,6 +238,7 @@ class _AboutScreenState extends State<AboutScreen> {
                               AppLocalizations.instance.translate(
                                 'about_illustrations',
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             TextButton(
                               onPressed: () async => _launchURL(
