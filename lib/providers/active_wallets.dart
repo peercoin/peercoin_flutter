@@ -39,6 +39,11 @@ class ActiveWallets with ChangeNotifier {
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
     _walletBox = await _encryptedBox.getWalletBox();
+
+    //load wallets into cache
+    for (var element in activeWalletsValues) {
+      getHdWallet(element.name);
+    }
   }
 
   Future<String> get seedPhrase async {
@@ -71,11 +76,11 @@ class ActiveWallets with ChangeNotifier {
     }
   }
 
-  Future<List<CoinWallet>> get activeWalletsValues async {
-    return _walletBox.values.toList() as FutureOr<List<CoinWallet>>;
+  List<CoinWallet> get activeWalletsValues {
+    return _walletBox.values.toList() as List<CoinWallet>;
   }
 
-  Future<List> get activeWalletsKeys async {
+  List get activeWalletsKeys {
     return _walletBox.keys.toList();
   }
 

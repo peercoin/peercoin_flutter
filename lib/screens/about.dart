@@ -27,7 +27,7 @@ class _AboutScreenState extends State<AboutScreen> {
   void didChangeDependencies() async {
     if (_initial) {
       _activeWallets = context.read<ActiveWallets>();
-      _listOfActiveWallets = await _activeWallets.activeWalletsKeys;
+      _listOfActiveWallets = _activeWallets.activeWalletsKeys;
       _packageInfo = await PackageInfo.fromPlatform();
       setState(() {
         _initial = false;
@@ -159,8 +159,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 ? TextButton(
                                     onPressed: () async {
                                       final navigator = Navigator.of(context);
-                                      final values = await _activeWallets
-                                          .activeWalletsValues;
+                                      final values =
+                                          _activeWallets.activeWalletsValues;
                                       final ppcWallet = values.firstWhere(
                                         (element) => element.name == 'peercoin',
                                       );

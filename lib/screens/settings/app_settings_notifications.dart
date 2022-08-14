@@ -29,7 +29,7 @@ class _AppSettingsNotificationsScreenState
     if (_initial == true) {
       _appSettings = Provider.of<AppSettings>(context);
       _activeWallets = context.watch<ActiveWallets>();
-      _availableWallets = await _activeWallets.activeWalletsValues;
+      _availableWallets = _activeWallets.activeWalletsValues;
       setState(() {
         _initial = false;
       });

@@ -18,7 +18,7 @@ class PeriodicReminders {
     PeriodicReminderItem reminderItem,
   ) async {
     final activeWallets = ctx.read<ActiveWallets>();
-    final listOfActiveWallets = await activeWallets.activeWalletsKeys;
+    final listOfActiveWallets = activeWallets.activeWalletsKeys;
 
     //show alert
     await showDialog(
@@ -52,7 +52,7 @@ class PeriodicReminders {
                   ? TextButton(
                       onPressed: () async {
                         final navigator = Navigator.of(context);
-                        final values = await activeWallets.activeWalletsValues;
+                        final values = activeWallets.activeWalletsValues;
                         final ppcWallet = values.firstWhere(
                           (element) => element.name == 'peercoin',
                         );

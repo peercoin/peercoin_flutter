@@ -74,7 +74,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           canCancel: false,
         );
       }
-      var activeWalletList = await activeWallets.activeWalletsKeys;
+      var activeWalletList = activeWallets.activeWalletsKeys;
       for (var element in activeWalletList) {
         if (availableCoins.keys.contains(element)) {
           setState(() {
