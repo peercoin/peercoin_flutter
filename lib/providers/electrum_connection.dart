@@ -124,6 +124,19 @@ class ElectrumConnection with ChangeNotifier {
       startPingTimer();
 
       return true;
+    } else {
+      //init has been called but connection is not null yet? try again
+      LoggerWrapper.logInfo(
+        'ElectrumConnection',
+        'init',
+        'connection was not reset (yet), will try again in 1 second',
+      );
+      await Future.delayed(const Duration(seconds: 1));
+      await init(
+        walletName,
+        scanMode: scanMode,
+        requestedFromWalletHome: requestedFromWalletHome,
+      );
     }
     return false;
   }

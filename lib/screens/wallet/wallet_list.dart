@@ -150,10 +150,12 @@ class _WalletListScreenState extends State<WalletListScreen>
         //push to wallet directly (from notification) or to default wallet
         if (widget.walletToOpenDirectly.isNotEmpty) {
           defaultWallet = _activeWalletValues.firstWhereOrNull(
-              (elem) => elem.name == widget.walletToOpenDirectly);
+            (elem) => elem.name == widget.walletToOpenDirectly,
+          );
         } else {
           defaultWallet = _activeWalletValues.firstWhereOrNull(
-              (elem) => elem.letterCode == _appSettings.defaultWallet);
+            (elem) => elem.letterCode == _appSettings.defaultWallet,
+          );
         }
         //push to default wallet
         if (_activeWalletValues.length == 1) {
