@@ -647,38 +647,44 @@ class ActiveWallets with ChangeNotifier {
         tx.setVersion(coinParams.txVersion);
         var changeAmount = totalInputValue - txAmount - fee;
 
-        recipients.forEach(
-          (address, amount) {
-            if (needsChange == true) {
-              LoggerWrapper.logInfo(
-                'ActiveWallets',
-                'buildTransaction',
-                'change amount $changeAmount, tx amount $txAmount, fee $fee',
-              );
+        if (needsChange == true) {
+          LoggerWrapper.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            'change amount $changeAmount, tx amount $txAmount, fee $fee',
+          );
 
-              if (changeAmount <= coin.minimumTxValue) {
-                //change is too small! no change output
-                destroyedChange = changeAmount;
-                if (txAmount == 0) {
-                  tx.addOutput(address, BigInt.from(txAmount));
-                } else {
-                  tx.addOutput(address, BigInt.from(txAmount - fee));
-                  destroyedChange = destroyedChange + fee;
-                }
-              } else {
-                tx.addOutput(address, BigInt.from(txAmount));
-                tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
-              }
+          if (changeAmount <= coin.minimumTxValue) {
+            //change is too small! no change output
+            destroyedChange = changeAmount;
+            if (txAmount == 0) {
+              // tx.addOutput(address, BigInt.from(txAmount));
             } else {
-              LoggerWrapper.logInfo(
-                'ActiveWallets',
-                'buildTransaction',
-                'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
-              );
-              tx.addOutput(address, BigInt.from(txAmount - fee));
+              // tx.addOutput(address, BigInt.from(txAmount - fee)); TODO ???
+              destroyedChange = destroyedChange + fee;
             }
-          },
-        );
+          } else {
+            tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
+          }
+        } else {
+          // LoggerWrapper.logInfo(
+          //   'ActiveWallets',
+          //   'buildTransaction',
+          //   'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
+          // );
+          // tx.addOutput(address, BigInt.from(txAmount - fee));
+          // TODO ???
+        }
+
+        recipients.forEach((address, amount) {
+          LoggerWrapper.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            'adding output $amount for $address',
+          );
+
+          tx.addOutput(address, BigInt.from(amount * decimalProduct));
+        });
 
         //add OP_RETURN if exists
         if (opReturn.isNotEmpty) {
