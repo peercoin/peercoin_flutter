@@ -1,7 +1,7 @@
 class BuildResult {
   final int fee;
   final String hex;
-  final Map<String, double> recipients;
+  final Map<String, int> recipients;
   final int totalAmount;
   final String id;
   final int destroyedChange;

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
@@ -125,20 +126,24 @@ class _SendTabState extends State<SendTab> {
 
   Future<BuildResult> _buildTx() async {
     //build recipient map
-    Map<String, double> recipients = {};
+    Map<String, int> recipients = {};
     double totalCoins = 0;
     _amountControllerList.asMap().forEach((key, value) {
       var coins = double.tryParse(
             _amountControllerList[key].text.replaceAll(',', '.'),
           ) ??
           0;
-      recipients[_addressControllerList[key].text.trim()] = coins;
+      print('coins $coins');
+      recipients[_addressControllerList[key].text.trim()] =
+          (coins * _decimalProduct).toInt();
       totalCoins += coins;
     });
 
     setState(() {
       _requestedAmountInCoins = totalCoins;
     });
+
+    print(recipients);
 
     return await _activeWallets.buildTransaction(
       identifier: widget.wallet.name,

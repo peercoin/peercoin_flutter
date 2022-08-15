@@ -24,7 +24,7 @@ class WalletTransaction extends HiveObject {
   @HiveField(9, defaultValue: '')
   String opReturn = '';
   @HiveField(10, defaultValue: {})
-  Map<String, double> recipients = {};
+  Map<String, int> recipients = {};
 
   WalletTransaction({
     required this.txid,

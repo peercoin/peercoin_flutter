@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:coinslib/coinslib.dart';
@@ -349,7 +350,7 @@ class ActiveWallets with ChangeNotifier {
                         (element) => element.address == addr) !=
                     null) {
                   //address is ours, add new tx
-                  final txValue = (vOut['value'] * decimalProduct).toInt();
+                  final int txValue = (vOut['value'] * decimalProduct).toInt();
 
                   //increase notification value for addr
                   final addrInWallet = openWallet.addresses
@@ -566,7 +567,7 @@ class ActiveWallets with ChangeNotifier {
   Future<BuildResult> buildTransaction({
     required String identifier,
     required int fee,
-    required Map<String, double> recipients,
+    required Map<String, int> recipients,
     String opReturn = '',
     bool firstPass = true,
     List<WalletUtxo>? paperWalletUtxos,
@@ -577,10 +578,12 @@ class ActiveWallets with ChangeNotifier {
       identifier: identifier,
     );
 
+    inspect(recipients);
+
     var txAmount = 0;
     recipients.forEach(
       (address, amount) {
-        txAmount += (amount * decimalProduct).toInt();
+        txAmount += amount;
         LoggerWrapper.logInfo(
           'ActiveWallets',
           'buildTransaction',
@@ -683,7 +686,7 @@ class ActiveWallets with ChangeNotifier {
             'adding output $amount for $address',
           );
 
-          tx.addOutput(address, BigInt.from(amount * decimalProduct));
+          tx.addOutput(address, BigInt.from(amount));
         });
 
         //add OP_RETURN if exists

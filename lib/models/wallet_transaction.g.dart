@@ -23,7 +23,7 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
       fee: fields[3] as int,
       address: fields[4] as String,
       recipients:
-          fields[10] == null ? {} : (fields[10] as Map).cast<String, double>(),
+          fields[10] == null ? {} : (fields[10] as Map).cast<String, int>(),
       direction: fields[5] as String,
       broadCasted: fields[7] as bool,
       broadcastHex: fields[8] as String,

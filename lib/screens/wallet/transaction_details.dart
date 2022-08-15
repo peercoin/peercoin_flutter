@@ -56,7 +56,7 @@ class TransactionDetails extends StatelessWidget {
     }
     tx.recipients.forEach(
       (addr, value) => list.add(
-        renderRow(addr, value),
+        renderRow(addr, value / decimalProduct),
       ),
     );
     return list;
