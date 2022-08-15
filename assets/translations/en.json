@@ -270,6 +270,7 @@
     "tx_direction": "Direction",
     "tx_fee": "Fee",
     "tx_rejected": "Transaction rejected by network. Please try again.",
+    "tx_recipients": "Recipients",
     "tx_value": "Value",
     "tx_view_in_explorer": "View in explorer",
     "unconfirmed": "unconfirmed",

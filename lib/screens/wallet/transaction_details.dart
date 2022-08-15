@@ -20,6 +20,42 @@ class TransactionDetails extends StatelessWidget {
         : throw 'Could not launch $url';
   }
 
+  List<Widget> renderRecipients({
+    required WalletTransaction tx,
+    required String letterCode,
+    required int decimalProduct,
+  }) {
+    List<Widget> list = [];
+
+    Widget renderRow(String addr, double value) {
+      return Row(
+        key: Key(addr),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 2,
+            child: Text(
+              addr,
+              style: const TextStyle(
+                fontSize: 13,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Flexible(child: Text('$value $letterCode')),
+        ],
+      );
+    }
+
+    if (tx.recipients.isEmpty) {
+      list.add(renderRow(tx.address, tx.value / decimalProduct));
+    }
+    tx.recipients.forEach(
+      (addr, value) => list.add(renderRow(addr, value)),
+    );
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -56,8 +92,10 @@ class TransactionDetails extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.instance.translate('time'),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    AppLocalizations.instance.translate('time'),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   SelectableText(
                     tx.timestamp! != 0
                         ? DateFormat().format(
@@ -102,11 +140,14 @@ class TransactionDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AppLocalizations.instance.translate('tx_address'),
+                    AppLocalizations.instance.translate('tx_recipients'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(tx.address),
-                  // Text("") TODO might add address label here in the future
+                  ...renderRecipients(
+                    tx: tx,
+                    letterCode: coinWallet.letterCode,
+                    decimalProduct: decimalProduct,
+                  )
                 ],
               ),
               const Divider(),
