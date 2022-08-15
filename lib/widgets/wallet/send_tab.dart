@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
 import 'package:provider/provider.dart';
 
 import '../../tools/price_ticker.dart';
@@ -70,6 +71,8 @@ class _SendTabState extends State<SendTab> {
   String _amountInputHelperText = '';
   double _requestedAmountInCoins = 0.0;
   double _coinValue = 0.0;
+  int _numberOfRecipients = 1;
+  int _currentAddressIndex = 1;
 
   @override
   void didChangeDependencies() async {
@@ -437,9 +440,21 @@ class _SendTabState extends State<SendTab> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       PeerServiceTitle(
-                        title: AppLocalizations.instance
-                            .translate('wallet_bottom_nav_send'),
+                        title: AppLocalizations.instance.translate(
+                          'wallet_bottom_nav_send',
+                        ),
                       ),
+                      _numberOfRecipients > 1
+                          ? SendTabNavigator(
+                              currentIndex: _currentAddressIndex,
+                              numberOfRecipients: _numberOfRecipients,
+                              raiseNewindex: (int newIndex) => setState(
+                                () => {
+                                  _currentAddressIndex = newIndex,
+                                },
+                              ),
+                            )
+                          : const SizedBox(),
                       TypeAheadFormField(
                         hideOnEmpty: true,
                         key: _addressKey,
@@ -645,23 +660,37 @@ class _SendTabState extends State<SendTab> {
                             ),
                           ),
                         ),
-                      SwitchListTile(
-                        value: _expertMode,
-                        onChanged: (_) => setState(() {
-                          _expertMode = _;
-                          _opReturnController.text = '';
-                        }),
-                        title: Text(
-                          AppLocalizations.instance.translate(
-                            'send_add_metadata',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () => setState(() {
+                              _numberOfRecipients++;
+                            }),
+                            label: Text('Add address'),
+                            icon: const Icon(Icons.add),
                           ),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.4,
-                          ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
+                      _currentAddressIndex == 1
+                          ? SwitchListTile(
+                              value: _expertMode,
+                              onChanged: (_) => setState(() {
+                                _expertMode = _;
+                                _opReturnController.text = '';
+                              }),
+                              title: Text(
+                                AppLocalizations.instance.translate(
+                                  'send_add_metadata',
+                                ),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.4,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      SizedBox(height: _currentAddressIndex == 1 ? 10 : 0),
                       PeerButtonBorder(
                         text: AppLocalizations.instance.translate(
                           'send_empty',

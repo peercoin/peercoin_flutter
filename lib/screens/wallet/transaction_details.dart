@@ -42,16 +42,22 @@ class TransactionDetails extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Flexible(child: Text('$value $letterCode')),
+          Flexible(
+            child: Text('$value $letterCode'),
+          ),
         ],
       );
     }
 
     if (tx.recipients.isEmpty) {
-      list.add(renderRow(tx.address, tx.value / decimalProduct));
+      list.add(
+        renderRow(tx.address, tx.value / decimalProduct),
+      );
     }
     tx.recipients.forEach(
-      (addr, value) => list.add(renderRow(addr, value)),
+      (addr, value) => list.add(
+        renderRow(addr, value),
+      ),
     );
     return list;
   }
