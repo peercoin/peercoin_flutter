@@ -660,25 +660,23 @@ class ActiveWallets with ChangeNotifier {
           if (changeAmount <= coin.minimumTxValue) {
             //change is too small! no change output
             destroyedChange = changeAmount;
-            if (txAmount == 0) {
-              // tx.addOutput(address, BigInt.from(txAmount));
-            } else {
-              // tx.addOutput(address, BigInt.from(txAmount - fee)); TODO ???
+            if (txAmount > 0) {
+              recipients.update(recipients.keys.last, (value) => value - fee);
               destroyedChange = destroyedChange + fee;
             }
           } else {
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else {
-          // LoggerWrapper.logInfo(
-          //   'ActiveWallets',
-          //   'buildTransaction',
-          //   'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
-          // );
-          // tx.addOutput(address, BigInt.from(txAmount - fee));
-          // TODO ???
+          LoggerWrapper.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            'no change needed, tx amount $txAmount, fee $fee, output added for ${recipients.keys.last} ${txAmount - fee}',
+          );
+          recipients.update(recipients.keys.last, (value) => value - fee);
         }
 
+        //add recipient outputs
         recipients.forEach((address, amount) {
           LoggerWrapper.logInfo(
             'ActiveWallets',
