@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/widgets/wallet/send_tab_management.dart';
 import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
 import 'package:provider/provider.dart';
 
@@ -108,6 +109,20 @@ class _SendTabState extends State<SendTab> {
     });
   }
 
+  _removeAddress(int index) {
+    _labelControllerList.removeAt(index);
+    _addressControllerList.removeAt(index);
+    _amountControllerList.removeAt(index);
+    setState(() {
+      _numberOfRecipients--;
+      if (_currentAddressIndex - 1 > 0) {
+        _currentAddressIndex--;
+      } else {
+        _currentAddressIndex = 0;
+      }
+    });
+  }
+
   Future<BuildResult> _buildTx() async {
     //build recipient map
     Map<String, double> recipients = {};
@@ -120,8 +135,6 @@ class _SendTabState extends State<SendTab> {
       recipients[_addressControllerList[key].text.trim()] = coins;
       totalCoins += coins;
     });
-    print('recipients');
-    print(recipients);
 
     setState(() {
       _requestedAmountInCoins = totalCoins;
@@ -698,21 +711,17 @@ class _SendTabState extends State<SendTab> {
                             ),
                           ),
                         ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () => setState(() {
-                              _addNewAddress();
-                              _numberOfRecipients++;
-                            }),
-                            label: Text(
-                              AppLocalizations.instance
-                                  .translate('send_add_address'),
-                            ),
-                            icon: const Icon(Icons.add),
-                          ),
-                        ],
+                      SendTabAddressManagement(
+                        onAdd: () {
+                          _addNewAddress();
+                          setState(() {
+                            _numberOfRecipients++;
+                          });
+                        },
+                        onDelete: () {
+                          _removeAddress(_currentAddressIndex);
+                        },
+                        numberOfRecipients: _numberOfRecipients,
                       ),
                       _currentAddressIndex == 0
                           ? SwitchListTile(
