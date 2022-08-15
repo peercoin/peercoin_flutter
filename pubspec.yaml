@@ -44,7 +44,7 @@ dependencies:
   background_fetch: ^1.0.1
   flutter_logs: ^2.1.6
   auto_size_text: ^3.0.0
-  camera: ^0.9.4
+  camera: ^0.10.0+1
   hex: ^0.2.0
   path_provider: ^2.0.11
   characters: ^1.2.0
@@ -58,8 +58,8 @@ dev_dependencies:
     sdk: flutter
   test: any
   build_runner: ^2.0.4
-  flutter_launcher_icons: ^0.9.1
-  flutter_native_splash: ^1.2.4
+  flutter_launcher_icons: ^0.10.0
+  flutter_native_splash: ^2.2.7
   flutter_lints: ^2.0.1
   
 flutter_icons:
