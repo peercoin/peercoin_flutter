@@ -557,9 +557,8 @@ class ActiveWallets with ChangeNotifier {
 
   Future<Map> buildTransaction({
     required String identifier,
-    required String address,
-    required double amount,
     required int fee,
+    required Map<String, double> recipients,
     String opReturn = '',
     bool firstPass = true,
     List<WalletUtxo>? paperWalletUtxos,
@@ -570,7 +569,18 @@ class ActiveWallets with ChangeNotifier {
       identifier: identifier,
     );
 
-    var txAmount = (amount * decimalProduct).toInt();
+    var txAmount = 0;
+    recipients.forEach(
+      (address, amount) {
+        txAmount += (amount * decimalProduct).toInt();
+        LoggerWrapper.logInfo(
+          'ActiveWallets',
+          'buildTransaction',
+          'sending $amount to $address',
+        );
+      },
+    );
+
     var openWallet = getSpecificCoinWallet(identifier);
     var hex = '';
     var destroyedChange = 0;
@@ -579,12 +589,6 @@ class ActiveWallets with ChangeNotifier {
       'ActiveWallets',
       'buildTransaction',
       'firstPass: $firstPass',
-    );
-
-    LoggerWrapper.logInfo(
-      'ActiveWallets',
-      'buildTransaction',
-      'sending $amount to $address',
     );
 
     //check if tx needs change
@@ -633,35 +637,40 @@ class ActiveWallets with ChangeNotifier {
         //start building tx
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
-        if (needsChange == true) {
-          var changeAmount = totalInputValue - txAmount - fee;
-          LoggerWrapper.logInfo(
-            'ActiveWallets',
-            'buildTransaction',
-            'change amount $changeAmount, tx amount $txAmount, fee $fee',
-          );
+        var changeAmount = totalInputValue - txAmount - fee;
 
-          if (changeAmount <= coin.minimumTxValue) {
-            //change is too small! no change output
-            destroyedChange = changeAmount;
-            if (txAmount == 0) {
-              tx.addOutput(address, BigInt.from(txAmount));
+        recipients.forEach(
+          (address, amount) {
+            if (needsChange == true) {
+              LoggerWrapper.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'change amount $changeAmount, tx amount $txAmount, fee $fee',
+              );
+
+              if (changeAmount <= coin.minimumTxValue) {
+                //change is too small! no change output
+                destroyedChange = changeAmount;
+                if (txAmount == 0) {
+                  tx.addOutput(address, BigInt.from(txAmount));
+                } else {
+                  tx.addOutput(address, BigInt.from(txAmount - fee));
+                  destroyedChange = destroyedChange + fee;
+                }
+              } else {
+                tx.addOutput(address, BigInt.from(txAmount));
+                tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
+              }
             } else {
+              LoggerWrapper.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
+              );
               tx.addOutput(address, BigInt.from(txAmount - fee));
-              destroyedChange = destroyedChange + fee;
             }
-          } else {
-            tx.addOutput(address, BigInt.from(txAmount));
-            tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
-          }
-        } else {
-          LoggerWrapper.logInfo(
-            'ActiveWallets',
-            'buildTransaction',
-            'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
-          );
-          tx.addOutput(address, BigInt.from(txAmount - fee));
-        }
+          },
+        );
 
         //add OP_RETURN if exists
         if (opReturn.isNotEmpty) {
@@ -718,8 +727,7 @@ class ActiveWallets with ChangeNotifier {
         if (firstPass == true) {
           return await buildTransaction(
             identifier: identifier,
-            address: address,
-            amount: amount,
+            recipients: recipients,
             opReturn: opReturn,
             fee: requiredFeeInSatoshis,
             firstPass: false,

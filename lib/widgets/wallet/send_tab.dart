@@ -98,8 +98,9 @@ class _SendTabState extends State<SendTab> {
   Future<Map> _buildTx() async {
     return await _activeWallets.buildTransaction(
       identifier: widget.wallet.name,
-      address: _addressKey.currentState!.value.trim(),
-      amount: _requestedAmountInCoins,
+      recipients: {
+        _addressKey.currentState!.value.trim(): _requestedAmountInCoins
+      },
       fee: 0,
       opReturn: _opReturnKey.currentState?.value ?? '',
     );
