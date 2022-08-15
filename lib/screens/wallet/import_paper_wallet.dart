@@ -1,5 +1,6 @@
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/buildresult.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -175,7 +176,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     } else {
       var firstPress = true;
       var buildResult = await buildImportTx();
-      var txFee = buildResult['fee'];
+      var txFee = buildResult.fee;
 
       await showDialog(
         context: context,
@@ -234,8 +235,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       firstPress = false;
                       //broadcast
                       _connectionProvider.broadcastTransaction(
-                        buildResult['hex'],
-                        buildResult['id'],
+                        buildResult.hex,
+                        buildResult.id,
                       );
                       //pop message
                       Navigator.of(context).pop();
@@ -275,7 +276,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     }
   }
 
-  Future<Map> buildImportTx() async {
+  Future<BuildResult> buildImportTx() async {
     //build list of paperWaleltUtxos
     var parsedWalletUtxos = <WalletUtxo>[];
     for (var utxo in _paperWalletUtxos[_pubKey]!) {

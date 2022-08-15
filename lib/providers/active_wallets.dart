@@ -14,6 +14,7 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
+import 'package:peercoin/models/buildresult.dart';
 
 import '../models/available_coins.dart';
 import '../models/coin_wallet.dart';
@@ -365,6 +366,7 @@ class ActiveWallets with ChangeNotifier {
                       value: txValue,
                       fee: 0,
                       address: addr,
+                      recipients: {addr: txValue},
                       direction: direction,
                       broadCasted: true,
                       confirmations: tx['confirmations'] ?? 0,
@@ -408,6 +410,7 @@ class ActiveWallets with ChangeNotifier {
                   value: 0,
                   fee: 0,
                   address: 'Metadata',
+                  recipients: {'Metadata': 0},
                   direction: direction,
                   broadCasted: true,
                   confirmations: tx['confirmations'] ?? 0,
@@ -439,22 +442,27 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<void> putOutgoingTx(
-      String identifier, String address, Map tx, bool neededChange) async {
+  Future<void> putOutgoingTx({
+    required String identifier,
+    required BuildResult buildResult,
+    required int totalValue,
+    required int totalFees,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.putTransaction(
       WalletTransaction(
-        txid: tx['txid'],
-        timestamp: tx['blocktime'] ?? 0,
-        value: tx['outValue'],
-        fee: tx['outFees'],
-        address: address,
+        txid: buildResult.id,
+        timestamp: 0,
+        value: totalValue,
+        fee: totalFees,
+        recipients: buildResult.recipients,
+        address: buildResult.recipients.keys.first,
         direction: 'out',
         broadCasted: false,
         confirmations: 0,
-        broadcastHex: tx['hex'],
-        opReturn: tx['opReturn'],
+        broadcastHex: buildResult.hex,
+        opReturn: buildResult.opReturn,
       ),
     );
 
@@ -462,7 +470,7 @@ class ActiveWallets with ChangeNotifier {
     var addrInWallet = openWallet.addresses
         .firstWhereOrNull((element) => element.address == _unusedAddress);
     if (addrInWallet != null) {
-      if (neededChange == true) {
+      if (buildResult.neededChange == true) {
         addrInWallet.isChangeAddr = true;
       }
       //increase notification value
@@ -555,7 +563,7 @@ class ActiveWallets with ChangeNotifier {
     return walletAddress.wif ?? '';
   }
 
-  Future<Map> buildTransaction({
+  Future<BuildResult> buildTransaction({
     required String identifier,
     required int fee,
     required Map<String, double> recipients,
@@ -743,14 +751,16 @@ class ActiveWallets with ChangeNotifier {
           );
           hex = intermediate.toHex();
 
-          return {
-            'fee': requiredFeeInSatoshis,
-            'hex': hex,
-            'id': intermediate.getId(),
-            'destroyedChange': destroyedChange,
-            'opReturn': opReturn,
-            'neededChange': needsChange
-          };
+          return BuildResult(
+            fee: requiredFeeInSatoshis,
+            hex: hex,
+            recipients: recipients,
+            totalAmount: txAmount,
+            id: intermediate.getId(),
+            destroyedChange: destroyedChange,
+            opReturn: opReturn,
+            neededChange: needsChange,
+          );
         }
       } else {
         throw ('no utxos available');

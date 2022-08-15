@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:peercoin/models/buildresult.dart';
 import 'package:provider/provider.dart';
 
 import '../../tools/price_ticker.dart';
@@ -95,7 +96,7 @@ class _SendTabState extends State<SendTab> {
     super.didChangeDependencies();
   }
 
-  Future<Map> _buildTx() async {
+  Future<BuildResult> _buildTx() async {
     return await _activeWallets.buildTransaction(
       identifier: widget.wallet.name,
       recipients: {
@@ -138,9 +139,9 @@ class _SendTabState extends State<SendTab> {
     var firstPress = true;
     var buildResult = await _buildTx();
 
-    int destroyedChange = buildResult['destroyedChange'];
+    int destroyedChange = buildResult.destroyedChange;
     var correctedDust = 0;
-    _txFee = buildResult['fee'];
+    _txFee = buildResult.fee;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -259,21 +260,15 @@ class _SendTabState extends State<SendTab> {
                         firstPress = false;
                         //write tx to history
                         await _activeWallets.putOutgoingTx(
-                          widget.wallet.name,
-                          _addressKey.currentState!.value,
-                          {
-                            'txid': buildResult['id'],
-                            'hex': buildResult['hex'],
-                            'outValue': _totalValue - _txFee,
-                            'outFees': _txFee + destroyedChange,
-                            'opReturn': buildResult['opReturn'],
-                          },
-                          buildResult['neededChange'],
+                          identifier: widget.wallet.name,
+                          buildResult: buildResult,
+                          totalFees: _txFee + destroyedChange,
+                          totalValue: _totalValue - _txFee,
                         );
                         //broadcast
                         electrumConnection.broadcastTransaction(
-                          buildResult['hex'],
-                          buildResult['id'],
+                          buildResult.hex,
+                          buildResult.id,
                         );
                         //store label if exists
                         if (_labelKey.currentState!.value != '') {

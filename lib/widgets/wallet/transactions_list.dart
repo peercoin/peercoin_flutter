@@ -207,7 +207,8 @@ class _TransactionListState extends State<TransactionList> {
                                 subtitle: Center(
                                   child: Text(
                                     resolveAddressDisplayName(
-                                        filteredTx[i - 1].address),
+                                      filteredTx[i - 1].address,
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                     textScaleFactor: 1,
                                   ),
