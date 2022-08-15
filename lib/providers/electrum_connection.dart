@@ -49,6 +49,7 @@ class ElectrumConnection with ChangeNotifier {
     walletName, {
     bool scanMode = false,
     bool requestedFromWalletHome = false,
+    bool fromConnectivityChangeOrLifeCycle = false,
   }) async {
     await _servers.init(walletName);
     _requiredProtocol =
@@ -70,6 +71,7 @@ class ElectrumConnection with ChangeNotifier {
             walletName,
             scanMode: scanMode,
             requestedFromWalletHome: requestedFromWalletHome,
+            fromConnectivityChangeOrLifeCycle: true,
           );
         } else if (result == ConnectivityResult.none) {
           connectionState = ElectrumConnectionState.offline;
@@ -124,7 +126,7 @@ class ElectrumConnection with ChangeNotifier {
       startPingTimer();
 
       return true;
-    } else {
+    } else if (fromConnectivityChangeOrLifeCycle == false) {
       //init has been called but connection is not null yet? try again
       LoggerWrapper.logInfo(
         'ElectrumConnection',

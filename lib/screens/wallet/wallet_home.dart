@@ -91,6 +91,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await _connectionProvider!.init(
         _wallet.name,
         requestedFromWalletHome: true,
+        fromConnectivityChangeOrLifeCycle: true,
       );
       if (_appSettings.selectedCurrency.isNotEmpty) {
         PriceTicker.checkUpdate(_appSettings);
