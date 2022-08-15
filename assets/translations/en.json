@@ -218,6 +218,7 @@
     "send_to": " to ",
     "send_total": "Total $amount $letter_code",
     "send_transferring": "Transferring ",
+    "send_add_address": "Add address",
     "send_navigator": "Address $index of $maximum",
     "server_add_title": "Add new server",
     "server_add_input_label": "Server URL",

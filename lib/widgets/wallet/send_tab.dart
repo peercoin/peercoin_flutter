@@ -53,9 +53,9 @@ class _SendTabState extends State<SendTab> {
   final _amountKey = GlobalKey<FormFieldState>();
   final _opReturnKey = GlobalKey<FormFieldState>();
   final _labelKey = GlobalKey<FormFieldState>();
-  final _addressController = TextEditingController();
-  final _amountController = TextEditingController();
-  final _labelController = TextEditingController();
+  final _addressControllerList = [TextEditingController()];
+  final _amountControllerList = [TextEditingController()];
+  final _labelControllerList = [TextEditingController()];
   final _opReturnController = TextEditingController();
   bool _initial = true;
   late Coin _availableCoin;
@@ -72,7 +72,7 @@ class _SendTabState extends State<SendTab> {
   double _requestedAmountInCoins = 0.0;
   double _coinValue = 0.0;
   int _numberOfRecipients = 1;
-  int _currentAddressIndex = 1;
+  int _currentAddressIndex = 0;
 
   @override
   void didChangeDependencies() async {
@@ -91,20 +91,45 @@ class _SendTabState extends State<SendTab> {
       _calcAmountInputHelperText();
 
       setState(() {
-        _addressController.text = widget.address ?? '';
-        _labelController.text = widget.label ?? '';
+        _addressControllerList[0].text = widget.address ?? '';
+        _labelControllerList[0].text = widget.label ?? '';
         _initial = false;
       });
     }
     super.didChangeDependencies();
   }
 
+  _addNewAddress() {
+    _labelControllerList.add(TextEditingController());
+    _addressControllerList.add(TextEditingController());
+    _amountControllerList.add(TextEditingController());
+    setState(() {
+      _currentAddressIndex = _numberOfRecipients;
+    });
+  }
+
   Future<BuildResult> _buildTx() async {
+    //build recipient map
+    Map<String, double> recipients = {};
+    double totalCoins = 0;
+    _amountControllerList.asMap().forEach((key, value) {
+      var coins = double.tryParse(
+            _amountControllerList[key].text.replaceAll(',', '.'),
+          ) ??
+          0;
+      recipients[_addressControllerList[key].text.trim()] = coins;
+      totalCoins += coins;
+    });
+    print('recipients');
+    print(recipients);
+
+    setState(() {
+      _requestedAmountInCoins = totalCoins;
+    });
+
     return await _activeWallets.buildTransaction(
       identifier: widget.wallet.name,
-      recipients: {
-        _addressKey.currentState!.value.trim(): _requestedAmountInCoins
-      },
+      recipients: recipients,
       fee: 0,
       opReturn: _opReturnKey.currentState?.value ?? '',
     );
@@ -114,12 +139,12 @@ class _SendTabState extends State<SendTab> {
     var parsed = Uri.parse(code);
     parsed.queryParameters.forEach((key, value) {
       if (key == 'amount') {
-        _amountController.text = value;
+        _amountControllerList[_currentAddressIndex].text = value;
       } else if (key == 'label') {
-        _labelController.text = value;
+        _labelControllerList[_currentAddressIndex].text = value;
       }
     });
-    _addressController.text = parsed.path;
+    _addressControllerList[_currentAddressIndex].text = parsed.path;
   }
 
   RegExp _getValidator(int fractions) {
@@ -334,7 +359,7 @@ class _SendTabState extends State<SendTab> {
         : value.replaceAll(',', '.');
 
     if (_fiatInputEnabled == false) {
-      _amountController.text = convertedValue;
+      _amountControllerList[_currentAddressIndex].text = convertedValue;
     }
 
     var txValueInSatoshis =
@@ -368,10 +393,12 @@ class _SendTabState extends State<SendTab> {
   }
 
   void _calcAmountInputHelperText() {
-    final inputAmount = _amountController.text == ''
+    final inputAmount = _amountControllerList[_currentAddressIndex].text == ''
         ? 1.0
         : double.tryParse(
-              _amountController.text.replaceAll(',', '.'),
+              _amountControllerList[_currentAddressIndex]
+                  .text
+                  .replaceAll(',', '.'),
             ) ??
             0;
 
@@ -446,11 +473,11 @@ class _SendTabState extends State<SendTab> {
                       ),
                       _numberOfRecipients > 1
                           ? SendTabNavigator(
-                              currentIndex: _currentAddressIndex,
+                              currentIndex: _currentAddressIndex + 1,
                               numberOfRecipients: _numberOfRecipients,
                               raiseNewindex: (int newIndex) => setState(
                                 () => {
-                                  _currentAddressIndex = newIndex,
+                                  _currentAddressIndex = newIndex - 1,
                                 },
                               ),
                             )
@@ -459,7 +486,8 @@ class _SendTabState extends State<SendTab> {
                         hideOnEmpty: true,
                         key: _addressKey,
                         textFieldConfiguration: TextFieldConfiguration(
-                          controller: _addressController,
+                          controller:
+                              _addressControllerList[_currentAddressIndex],
                           autocorrect: false,
                           decoration: InputDecoration(
                             icon: Icon(
@@ -472,7 +500,8 @@ class _SendTabState extends State<SendTab> {
                               onPressed: () async {
                                 var data =
                                     await Clipboard.getData('text/plain');
-                                _addressController.text = data!.text!.trim();
+                                _addressControllerList[_currentAddressIndex]
+                                    .text = data!.text!.trim();
                               },
                               icon: Icon(
                                 Icons.paste_rounded,
@@ -495,8 +524,10 @@ class _SendTabState extends State<SendTab> {
                           return suggestionsBox;
                         },
                         onSuggestionSelected: (dynamic suggestion) {
-                          _addressController.text = suggestion.address;
-                          _labelController.text = suggestion.addressBookName;
+                          _addressControllerList[_currentAddressIndex].text =
+                              suggestion.address;
+                          _labelControllerList[_currentAddressIndex].text =
+                              suggestion.addressBookName;
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -516,7 +547,7 @@ class _SendTabState extends State<SendTab> {
                       TextFormField(
                         textInputAction: TextInputAction.done,
                         key: _labelKey,
-                        controller: _labelController,
+                        controller: _labelControllerList[_currentAddressIndex],
                         autocorrect: false,
                         decoration: InputDecoration(
                           icon: Icon(
@@ -531,7 +562,7 @@ class _SendTabState extends State<SendTab> {
                       TextFormField(
                         textInputAction: TextInputAction.done,
                         key: _amountKey,
-                        controller: _amountController,
+                        controller: _amountControllerList[_currentAddressIndex],
                         autocorrect: false,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
@@ -560,10 +591,13 @@ class _SendTabState extends State<SendTab> {
                           if (_amountKey.currentState!.hasError) {
                             _amountKey.currentState!.validate();
                             //position cursor correctly
-                            _amountController.selection =
-                                TextSelection.fromPosition(
+                            _amountControllerList[_currentAddressIndex]
+                                .selection = TextSelection.fromPosition(
                               TextPosition(
-                                offset: _amountController.text.length,
+                                offset:
+                                    _amountControllerList[_currentAddressIndex]
+                                        .text
+                                        .length,
                               ),
                             );
                           }
@@ -638,11 +672,15 @@ class _SendTabState extends State<SendTab> {
                           value: _fiatInputEnabled,
                           onChanged: (_) => setState(() {
                             _fiatInputEnabled = _;
-                            _amountController.text = '';
-                            _amountController.selection =
-                                TextSelection.fromPosition(
+                            _amountControllerList[_currentAddressIndex].text =
+                                '';
+                            _amountControllerList[_currentAddressIndex]
+                                .selection = TextSelection.fromPosition(
                               TextPosition(
-                                offset: _amountController.text.length,
+                                offset:
+                                    _amountControllerList[_currentAddressIndex]
+                                        .text
+                                        .length,
                               ),
                             );
                             _calcAmountInputHelperText();
@@ -665,14 +703,18 @@ class _SendTabState extends State<SendTab> {
                         children: [
                           TextButton.icon(
                             onPressed: () => setState(() {
+                              _addNewAddress();
                               _numberOfRecipients++;
                             }),
-                            label: Text('Add address'),
+                            label: Text(
+                              AppLocalizations.instance
+                                  .translate('send_add_address'),
+                            ),
                             icon: const Icon(Icons.add),
                           ),
                         ],
                       ),
-                      _currentAddressIndex == 1
+                      _currentAddressIndex == 0
                           ? SwitchListTile(
                               value: _expertMode,
                               onChanged: (_) => setState(() {
@@ -690,7 +732,7 @@ class _SendTabState extends State<SendTab> {
                               ),
                             )
                           : const SizedBox(),
-                      SizedBox(height: _currentAddressIndex == 1 ? 10 : 0),
+                      const SizedBox(height: 10),
                       PeerButtonBorder(
                         text: AppLocalizations.instance.translate(
                           'send_empty',
@@ -699,7 +741,7 @@ class _SendTabState extends State<SendTab> {
                           setState(() {
                             _fiatInputEnabled = false;
                           });
-                          _amountController.text =
+                          _amountControllerList[_currentAddressIndex].text =
                               (widget.wallet.balance / _decimalProduct)
                                   .toString();
                           _calcAmountInputHelperText();
