@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
@@ -133,7 +132,6 @@ class _SendTabState extends State<SendTab> {
             _amountControllerList[key].text.replaceAll(',', '.'),
           ) ??
           0;
-      print('coins $coins');
       recipients[_addressControllerList[key].text.trim()] =
           (coins * _decimalProduct).toInt();
       totalCoins += coins;
@@ -142,8 +140,6 @@ class _SendTabState extends State<SendTab> {
     setState(() {
       _requestedAmountInCoins = totalCoins;
     });
-
-    print(recipients);
 
     return await _activeWallets.buildTransaction(
       identifier: widget.wallet.name,
