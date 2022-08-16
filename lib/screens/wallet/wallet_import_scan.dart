@@ -37,6 +37,47 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   late Timer _timer;
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            AppLocalizations.instance.translate('wallet_scan_appBar_title'),
+          ),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const LoadingIndicator(),
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.instance.translate('wallet_scan_notice'),
+          ),
+          const SizedBox(height: 20),
+          PeerButton(
+            text: AppLocalizations.instance
+                .translate('server_settings_alert_cancel'),
+            action: () async {
+              _timer.cancel();
+              await Navigator.of(context).pushReplacementNamed(
+                Routes.walletList,
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void deactivate() async {
+    await _connectionProvider!.closeConnection();
+    _timer.cancel();
+    super.deactivate();
+  }
+
+  @override
   void didChangeDependencies() async {
     if (_initial == true) {
       setState(() {
@@ -86,30 +127,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     super.didChangeDependencies();
   }
 
-  void startScan() async {
-    if (_scanStarted == false) {
-      LoggerWrapper.logInfo('WalletImportScan', 'startScan', 'Scan started');
-      //returns master address for hd wallet
-      var masterAddr = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        0,
-        0,
-        0,
-        true,
-      );
-
-      //subscribe to hd master
-      _connectionProvider!.subscribeToScriptHashes(
-        await _activeWallets.getWalletScriptHashes(
-          _coinName,
-          masterAddr,
-        ),
-      );
-
-      setState(() {
-        _scanStarted = true;
-      });
-    }
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   Future<void> fetchAddressesFromBackend() async {
@@ -167,50 +188,29 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+  void startScan() async {
+    if (_scanStarted == false) {
+      LoggerWrapper.logInfo('WalletImportScan', 'startScan', 'Scan started');
+      //returns master address for hd wallet
+      var masterAddr = await _activeWallets.getAddressFromDerivationPath(
+        _coinName,
+        0,
+        0,
+        0,
+        true,
+      );
 
-  @override
-  void deactivate() async {
-    await _connectionProvider!.closeConnection();
-    _timer.cancel();
-    super.deactivate();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            AppLocalizations.instance.translate('wallet_scan_appBar_title'),
-          ),
+      //subscribe to hd master
+      _connectionProvider!.subscribeToScriptHashes(
+        await _activeWallets.getWalletScriptHashes(
+          _coinName,
+          masterAddr,
         ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const LoadingIndicator(),
-          const SizedBox(height: 20),
-          Text(
-            AppLocalizations.instance.translate('wallet_scan_notice'),
-          ),
-          const SizedBox(height: 20),
-          PeerButton(
-            text: AppLocalizations.instance
-                .translate('server_settings_alert_cancel'),
-            action: () async {
-              _timer.cancel();
-              await Navigator.of(context).pushReplacementNamed(
-                Routes.walletList,
-              );
-            },
-          )
-        ],
-      ),
-    );
+      );
+
+      setState(() {
+        _scanStarted = true;
+      });
+    }
   }
 }

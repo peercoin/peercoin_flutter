@@ -65,12 +65,13 @@ class TransactionConfirmationScreen extends StatelessWidget {
     final int decimalProduct = arguments.decimalProduct;
     int totalAmountWithFeesAndDust =
         buildResult.fee + buildResult.totalAmount + buildResult.destroyedChange;
-    bool feesHaveBeenDeductedFromRecipient = false;
 
-    if (totalAmountWithFeesAndDust > buildResult.totalAmount) {
+    if (buildResult.feesHaveBeenDeductedFromRecipient) {
       //recipient output was cut to pay for fees!
-      totalAmountWithFeesAndDust = buildResult.totalAmount;
-      feesHaveBeenDeductedFromRecipient = true;
+      totalAmountWithFeesAndDust = buildResult.totalAmount + buildResult.fee;
+    }
+    if (buildResult.allRecipientOutPutsAreZero) {
+      totalAmountWithFeesAndDust -= buildResult.fee;
     }
 
     return Scaffold(
@@ -226,7 +227,7 @@ class TransactionConfirmationScreen extends StatelessWidget {
                             )
                           : const SizedBox(),
                       const Divider(),
-                      feesHaveBeenDeductedFromRecipient
+                      buildResult.feesHaveBeenDeductedFromRecipient
                           ? Text(
                               AppLocalizations.instance
                                   .translate('send_fees_deducted'),
@@ -258,10 +259,7 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                   buildResult: buildResult,
                                   totalFees: buildResult.fee +
                                       buildResult.destroyedChange,
-                                  totalValue: feesHaveBeenDeductedFromRecipient
-                                      ? buildResult.totalAmount -
-                                          buildResult.fee
-                                      : buildResult.totalAmount,
+                                  totalValue: buildResult.totalAmount,
                                 );
                                 //broadcast
                                 electrumConnection.broadcastTransaction(

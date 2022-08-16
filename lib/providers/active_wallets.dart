@@ -627,7 +627,13 @@ class ActiveWallets with ChangeNotifier {
 
         for (var utxo in utxoPool) {
           if (utxo.value > 0) {
-            if (totalInputValue <= (txAmount + fee)) {
+            if (needsChange == false && utxo.height == 0) {
+              LoggerWrapper.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'discarded inputTx: ${utxo.hash} (${utxo.value}) because unconfirmed',
+              );
+            } else if (totalInputValue <= (txAmount + fee)) {
               totalInputValue += utxo.value;
               inputTx.add(utxo);
               LoggerWrapper.logInfo(
@@ -646,6 +652,7 @@ class ActiveWallets with ChangeNotifier {
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
         var changeAmount = totalInputValue - txAmount - fee;
+        bool feesHaveBeenDeductedFromRecipient = false;
 
         if (needsChange == true) {
           LoggerWrapper.logInfo(
@@ -654,7 +661,7 @@ class ActiveWallets with ChangeNotifier {
             'change amount $changeAmount, tx amount $txAmount, fee $fee',
           );
 
-          if (changeAmount <= coin.minimumTxValue) {
+          if (changeAmount < coin.minimumTxValue) {
             //change is too small! no change output
             destroyedChange = changeAmount;
             // if (txAmount > 0) {
@@ -673,6 +680,8 @@ class ActiveWallets with ChangeNotifier {
             'no change needed, tx amount $txAmount, fee $fee, output added for ${recipients.keys.last} ${txAmount - fee}',
           );
           recipients.update(recipients.keys.last, (value) => value - fee);
+          feesHaveBeenDeductedFromRecipient = true;
+          txAmount -= fee;
         }
 
         //add recipient outputs
@@ -685,6 +694,13 @@ class ActiveWallets with ChangeNotifier {
 
           tx.addOutput(address, BigInt.from(amount));
         });
+
+        //correct txAmount for fees if txAmount is 0
+        bool allRecipientOutPutsAreZero = false;
+        if (txAmount == 0) {
+          txAmount += fee;
+          allRecipientOutPutsAreZero = true;
+        }
 
         //add OP_RETURN if exists
         if (opReturn.isNotEmpty) {
@@ -766,6 +782,9 @@ class ActiveWallets with ChangeNotifier {
             destroyedChange: destroyedChange,
             opReturn: opReturn,
             neededChange: needsChange,
+            allRecipientOutPutsAreZero: allRecipientOutPutsAreZero,
+            feesHaveBeenDeductedFromRecipient:
+                feesHaveBeenDeductedFromRecipient,
           );
         }
       } else {

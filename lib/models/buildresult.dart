@@ -7,6 +7,8 @@ class BuildResult {
   final int destroyedChange;
   final String opReturn;
   final bool neededChange;
+  final bool allRecipientOutPutsAreZero;
+  final bool feesHaveBeenDeductedFromRecipient;
 
   BuildResult({
     required this.fee,
@@ -17,5 +19,7 @@ class BuildResult {
     required this.destroyedChange,
     required this.opReturn,
     required this.neededChange,
+    required this.allRecipientOutPutsAreZero,
+    required this.feesHaveBeenDeductedFromRecipient,
   });
 }
