@@ -220,6 +220,7 @@
     "send_transferring": "Transferring ",
     "send_add_address": "Add address",
     "send_navigator": "Address $index of $maximum",
+    "send_address_already_exists": "Address already exists",
     "server_add_title": "Add new server",
     "server_add_input_label": "Server URL",
     "server_add_input_empty": "Please enter a URL",

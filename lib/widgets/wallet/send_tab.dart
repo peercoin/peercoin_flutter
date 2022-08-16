@@ -176,6 +176,13 @@ class _SendTabState extends State<SendTab> {
                             return AppLocalizations.instance
                                 .translate('send_enter_address');
                           }
+                          if (_addressControllerList
+                                  .where((element) => element.text == value)
+                                  .length >
+                              1) {
+                            return AppLocalizations.instance
+                                .translate('send_address_already_exists');
+                          }
                           var sanitized = value.trim();
                           if (Address.validateAddress(
                                   sanitized, _availableCoin.networkType) ==
@@ -397,7 +404,6 @@ class _SendTabState extends State<SendTab> {
                                 _calcAmountInputHelperText(index);
                               },
                             );
-                            //TODO does not validate hidden formfields
                             //check for required auth
                             if (_appSettings
                                 .authenticationOptions!['sendTransaction']!) {
@@ -839,5 +845,4 @@ class _SendTabState extends State<SendTab> {
     //                       totalValue: _totalValue - _txFee,
     //                     );
   }
-  //TODO can't send twice to the same address! include validator
 }
