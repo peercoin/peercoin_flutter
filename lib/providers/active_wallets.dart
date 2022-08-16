@@ -666,7 +666,7 @@ class ActiveWallets with ChangeNotifier {
 
           if (changeAmount < coin.minimumTxValue) {
             //change is too small! no change output
-            destroyedChange = changeAmount;
+            destroyedChange = totalInputValue - txAmount;
             // if (txAmount > 0) {
             //   // recipients.update(recipients.keys.last, (value) => value - fee);
             // } used to look like this: https://github.com/peercoin/peercoin_flutter/blob/ab62d3c78ed88dd08dbb51f4a5c5515839d677c8/lib/providers/active_wallets.dart#L642

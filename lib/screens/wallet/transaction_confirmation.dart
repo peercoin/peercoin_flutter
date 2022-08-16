@@ -69,9 +69,11 @@ class TransactionConfirmationScreen extends StatelessWidget {
     if (buildResult.feesHaveBeenDeductedFromRecipient) {
       //recipient output was cut to pay for fees!
       totalAmountWithFeesAndDust = buildResult.totalAmount + buildResult.fee;
-    }
-    if (buildResult.allRecipientOutPutsAreZero) {
+    } else if (buildResult.allRecipientOutPutsAreZero) {
       totalAmountWithFeesAndDust -= buildResult.fee;
+    } else if (buildResult.destroyedChange > 0) {
+      totalAmountWithFeesAndDust =
+          buildResult.totalAmount + buildResult.destroyedChange;
     }
 
     return Scaffold(
@@ -257,8 +259,7 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                 await activeWallets.putOutgoingTx(
                                   identifier: arguments.coinIdentifier,
                                   buildResult: buildResult,
-                                  totalFees: buildResult.fee +
-                                      buildResult.destroyedChange,
+                                  totalFees: buildResult.fee,
                                   totalValue:
                                       buildResult.allRecipientOutPutsAreZero
                                           ? 0
