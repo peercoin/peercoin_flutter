@@ -608,11 +608,6 @@ class ActiveWallets with ChangeNotifier {
         'buildTransaction',
         'needschange $needsChange, fee $fee',
       );
-      LoggerWrapper.logInfo(
-        'ActiveWallets',
-        'buildTransaction',
-        'change needed $txAmount - $fee',
-      );
     }
 
     //define utxo pool
@@ -627,19 +622,27 @@ class ActiveWallets with ChangeNotifier {
 
         for (var utxo in utxoPool) {
           if (utxo.value > 0) {
-            if (needsChange == false && utxo.height == 0) {
+            if (utxo.height > 0 ||
+                openWallet.transactions.firstWhereOrNull(
+                      (tx) => tx.txid == utxo.hash && tx.direction == 'out',
+                    ) !=
+                    null) {
+              if ((needsChange && totalInputValue <= (txAmount + fee)) ||
+                  (needsChange == false &&
+                      totalInputValue < (txAmount + fee))) {
+                totalInputValue += utxo.value;
+                inputTx.add(utxo);
+                LoggerWrapper.logInfo(
+                  'ActiveWallets',
+                  'buildTransaction',
+                  'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $totalInputValue',
+                );
+              }
+            } else {
               LoggerWrapper.logInfo(
                 'ActiveWallets',
                 'buildTransaction',
                 'discarded inputTx: ${utxo.hash} (${utxo.value}) because unconfirmed',
-              );
-            } else if (totalInputValue <= (txAmount + fee)) {
-              totalInputValue += utxo.value;
-              inputTx.add(utxo);
-              LoggerWrapper.logInfo(
-                'ActiveWallets',
-                'buildTransaction',
-                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $totalInputValue',
               );
             }
           }
@@ -651,7 +654,7 @@ class ActiveWallets with ChangeNotifier {
         //start building tx
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
-        var changeAmount = totalInputValue - txAmount - fee;
+        var changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
         bool feesHaveBeenDeductedFromRecipient = false;
 
         if (needsChange == true) {
@@ -694,6 +697,12 @@ class ActiveWallets with ChangeNotifier {
 
           tx.addOutput(address, BigInt.from(amount));
         });
+
+        //safety check of totalInputValue
+        if (totalInputValue >
+            (txAmount + destroyedChange + fee + changeAmount)) {
+          throw ('totalInputValue safety mechanism triggered');
+        }
 
         //correct txAmount for fees if txAmount is 0
         bool allRecipientOutPutsAreZero = false;
