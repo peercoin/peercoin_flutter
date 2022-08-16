@@ -50,10 +50,10 @@ class SendTab extends StatefulWidget {
 
 class _SendTabState extends State<SendTab> {
   final _formKey = GlobalKey<FormState>();
-  final _addressKey = GlobalKey<FormFieldState>();
-  final _amountKey = GlobalKey<FormFieldState>();
+  final _addressKeyList = [GlobalKey<FormFieldState>()];
+  final _amountKeyList = [GlobalKey<FormFieldState>()];
+  final _labelKeyList = [GlobalKey<FormFieldState>()];
   final _opReturnKey = GlobalKey<FormFieldState>();
-  final _labelKey = GlobalKey<FormFieldState>();
   final _addressControllerList = [TextEditingController()];
   final _amountControllerList = [TextEditingController()];
   final _labelControllerList = [TextEditingController()];
@@ -199,12 +199,12 @@ class _SendTabState extends State<SendTab> {
           var newValue = (_requestedAmountInCoins - (_txFee / _decimalProduct));
           displayValue = newValue.toString();
 
-          if (_amountKey.currentState!.value == '0') {
-            displayValue = '0';
-            correctedDust = destroyedChange - _txFee;
-          } else {
-            correctedDust = destroyedChange;
-          }
+          // if (_amountKey.currentState!.value == '0') {
+          //   displayValue = '0';
+          //   correctedDust = destroyedChange - _txFee;
+          // } else {
+          //   correctedDust = destroyedChange;
+          // }
           _totalValue =
               (_requestedAmountInCoins * _decimalProduct + destroyedChange)
                   .toInt();
@@ -234,7 +234,9 @@ class _SendTabState extends State<SendTab> {
                           text: AppLocalizations.instance.translate('send_to'),
                         ),
                         TextSpan(
-                          text: _addressKey.currentState!.value,
+                          text: _addressKeyList[_currentAddressIndex]
+                              .currentState!
+                              .value,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -313,12 +315,19 @@ class _SendTabState extends State<SendTab> {
                           buildResult.hex,
                           buildResult.id,
                         );
-                        //store label if exists
-                        if (_labelKey.currentState!.value != '') {
+                        //store label if exists TODO loop
+                        if (_labelKeyList[_currentAddressIndex]
+                                .currentState!
+                                .value !=
+                            '') {
                           _activeWallets.updateLabel(
                             widget.wallet.name,
-                            _addressKey.currentState!.value,
-                            _labelKey.currentState!.value,
+                            _addressKeyList[_currentAddressIndex]
+                                .currentState!
+                                .value,
+                            _labelKeyList[_currentAddressIndex]
+                                .currentState!
+                                .value,
                           );
                         }
                         //pop message
@@ -499,7 +508,7 @@ class _SendTabState extends State<SendTab> {
                           : const SizedBox(),
                       TypeAheadFormField(
                         hideOnEmpty: true,
-                        key: _addressKey,
+                        key: _addressKeyList[_currentAddressIndex],
                         textFieldConfiguration: TextFieldConfiguration(
                           controller:
                               _addressControllerList[_currentAddressIndex],
@@ -561,7 +570,7 @@ class _SendTabState extends State<SendTab> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: _labelKey,
+                        key: _labelKeyList[_currentAddressIndex],
                         controller: _labelControllerList[_currentAddressIndex],
                         autocorrect: false,
                         decoration: InputDecoration(
@@ -576,7 +585,7 @@ class _SendTabState extends State<SendTab> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: _amountKey,
+                        key: _amountKeyList[_currentAddressIndex],
                         controller: _amountControllerList[_currentAddressIndex],
                         autocorrect: false,
                         inputFormatters: [
@@ -603,8 +612,12 @@ class _SendTabState extends State<SendTab> {
                         ),
                         onChanged: (value) {
                           _calcAmountInputHelperText();
-                          if (_amountKey.currentState!.hasError) {
-                            _amountKey.currentState!.validate();
+                          if (_amountKeyList[_currentAddressIndex]
+                              .currentState!
+                              .hasError) {
+                            _amountKeyList[_currentAddressIndex]
+                                .currentState!
+                                .validate();
                             //position cursor correctly
                             _amountControllerList[_currentAddressIndex]
                                 .selection = TextSelection.fromPosition(
