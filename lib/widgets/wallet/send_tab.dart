@@ -744,6 +744,39 @@ class _SendTabState extends State<SendTab> {
                             )
                           : const SizedBox(),
                       const SizedBox(height: 10),
+                      PeerButton(
+                        text: AppLocalizations.instance.translate('send'),
+                        action: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            FocusScope.of(context).unfocus(); //hide keyboard
+                            //check for required auth
+                            if (_appSettings
+                                .authenticationOptions!['sendTransaction']!) {
+                              await Auth.requireAuth(
+                                context: context,
+                                biometricsAllowed:
+                                    _appSettings.biometricsAllowed,
+                                callback: () =>
+                                    _showTransactionConfirmation(context),
+                              );
+                            } else {
+                              _showTransactionConfirmation(context);
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  AppLocalizations.instance.translate(
+                                    'send_errors_solve',
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 10),
                       PeerButtonBorder(
                         text: AppLocalizations.instance.translate(
                           'send_empty',
@@ -777,38 +810,6 @@ class _SendTabState extends State<SendTab> {
                           },
                         ),
                       const SizedBox(height: 8),
-                      PeerButton(
-                        text: AppLocalizations.instance.translate('send'),
-                        action: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            FocusScope.of(context).unfocus(); //hide keyboard
-                            //check for required auth
-                            if (_appSettings
-                                .authenticationOptions!['sendTransaction']!) {
-                              await Auth.requireAuth(
-                                context: context,
-                                biometricsAllowed:
-                                    _appSettings.biometricsAllowed,
-                                callback: () =>
-                                    _showTransactionConfirmation(context),
-                              );
-                            } else {
-                              _showTransactionConfirmation(context);
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.instance.translate(
-                                    'send_errors_solve',
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
                       if (!kIsWeb) const SizedBox(height: 10),
                       if (!kIsWeb)
                         Text(
