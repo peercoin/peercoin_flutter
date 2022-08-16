@@ -104,6 +104,9 @@ class _SendTabState extends State<SendTab> {
     _labelControllerList.add(TextEditingController());
     _addressControllerList.add(TextEditingController());
     _amountControllerList.add(TextEditingController());
+    _labelKeyList.add(GlobalKey<FormFieldState>());
+    _addressKeyList.add(GlobalKey<FormFieldState>());
+    _amountKeyList.add(GlobalKey<FormFieldState>());
     setState(() {
       _currentAddressIndex = _numberOfRecipients;
     });
@@ -113,6 +116,10 @@ class _SendTabState extends State<SendTab> {
     _labelControllerList.removeAt(index);
     _addressControllerList.removeAt(index);
     _amountControllerList.removeAt(index);
+    _labelKeyList.removeAt(index);
+    _addressKeyList.removeAt(index);
+    _amountKeyList.removeAt(index);
+
     setState(() {
       _numberOfRecipients--;
       if (_currentAddressIndex - 1 > 0) {
@@ -178,6 +185,9 @@ class _SendTabState extends State<SendTab> {
   }
 
   void _showTransactionConfirmation(context) async {
+    Navigator.of(context).pushNamed(Routes.transactionConfirmation);
+
+    return;
     var firstPress = true;
     var buildResult = await _buildTx();
 

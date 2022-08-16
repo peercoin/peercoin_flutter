@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 
 import '../screens/settings/app_settings_notifications.dart';
 import '../screens/settings/app_settings_screen.dart';
@@ -46,6 +47,7 @@ class Routes {
   static const String serverAdd = '/server-add';
   static const String changeLog = '/changelog';
   static const String addressSelector = '/address-selector';
+  static const String transactionConfirmation = '/transaction-confirmation';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -131,6 +133,10 @@ class Routes {
           ),
       Routes.appSettingsNotifications: (context) => const RouterMaster(
             widget: AppSettingsNotificationsScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.transactionConfirmation: (context) => const RouterMaster(
+            widget: TransactionConfirmationScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
     };
