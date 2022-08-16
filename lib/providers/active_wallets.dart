@@ -657,14 +657,16 @@ class ActiveWallets with ChangeNotifier {
           if (changeAmount <= coin.minimumTxValue) {
             //change is too small! no change output
             destroyedChange = changeAmount;
-            if (txAmount > 0) {
-              recipients.update(recipients.keys.last, (value) => value - fee);
-              destroyedChange = destroyedChange + fee;
-            }
+            // if (txAmount > 0) {
+            //   // recipients.update(recipients.keys.last, (value) => value - fee);
+            // } used to look like this: https://github.com/peercoin/peercoin_flutter/blob/ab62d3c78ed88dd08dbb51f4a5c5515839d677c8/lib/providers/active_wallets.dart#L642
+            // I can not remember what this case was fore and why the recipient was canabalized to pay for fees
           } else {
+            //add change output to unused address
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else {
+          //empty wallet case - full wallet balance has been requested but fees have to be paid
           LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',

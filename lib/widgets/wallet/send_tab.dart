@@ -834,15 +834,5 @@ class _SendTabState extends State<SendTab> {
     //                       ? const TextStyle(fontWeight: FontWeight.bold)
     //                       : const TextStyle(),
     //                 ),
-    //                   try {
-    //                     firstPress = false;
-    //                     //write tx to history
-    //                     await _activeWallets.putOutgoingTx(
-    //                       identifier: widget.wallet.name,
-    //                       buildResult: buildResult,
-    //                       totalFees: _txFee +
-    //                           destroyedChange, //TODO wrong ... a85ecc8980b91a6a604444980cca0dc4f3b9fcf5e75c1c7c79c0d8969f0b156d
-    //                       totalValue: _totalValue - _txFee,
-    //                     );
   }
 }

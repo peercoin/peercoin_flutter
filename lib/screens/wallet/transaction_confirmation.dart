@@ -63,6 +63,15 @@ class TransactionConfirmationScreen extends StatelessWidget {
     final BuildResult buildResult = arguments.buildResult;
     final String coinLetterCode = arguments.coinLetterCode;
     final int decimalProduct = arguments.decimalProduct;
+    int totalAmountWithFeesAndDust =
+        buildResult.fee + buildResult.totalAmount + buildResult.destroyedChange;
+    bool feesHaveBeenDeductedFromRecipient = false;
+
+    if (totalAmountWithFeesAndDust > buildResult.totalAmount) {
+      //recipient output was cut to pay for fees!
+      totalAmountWithFeesAndDust = buildResult.totalAmount;
+      feesHaveBeenDeductedFromRecipient = true;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +105,7 @@ class TransactionConfirmationScreen extends StatelessWidget {
                               ),
                               if (!arguments.coinIdentifier.contains('Testnet'))
                                 Text(
-                                  '${((buildResult.totalAmount / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(2)} ${arguments.fiatCode}',
+                                  '${((buildResult.totalAmount / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
                             ],
                           ),
@@ -114,11 +123,72 @@ class TransactionConfirmationScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SelectableText(
-                                '${arguments.buildResult.fee / decimalProduct} $coinLetterCode',
+                                '${buildResult.fee / decimalProduct} $coinLetterCode',
                               ),
                               if (!arguments.coinIdentifier.contains('Testnet'))
                                 Text(
                                   '${((buildResult.fee / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
+                                ),
+                            ],
+                          )
+                        ],
+                      ),
+                      if (buildResult.destroyedChange > 0) const Divider(),
+                      if (buildResult.destroyedChange > 0)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('send_dust_title'),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SelectableText(
+                                  '${buildResult.destroyedChange / decimalProduct} $coinLetterCode',
+                                ),
+                                if (!arguments.coinIdentifier
+                                    .contains('Testnet'))
+                                  Text(
+                                    '${((buildResult.destroyedChange / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('send_dust_hint'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      const Divider(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.instance
+                                .translate('send_total_amount'),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SelectableText(
+                                '${totalAmountWithFeesAndDust / decimalProduct} $coinLetterCode',
+                              ),
+                              if (!arguments.coinIdentifier.contains('Testnet'))
+                                Text(
+                                  '${((totalAmountWithFeesAndDust / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
                             ],
                           )
@@ -156,6 +226,18 @@ class TransactionConfirmationScreen extends StatelessWidget {
                             )
                           : const SizedBox(),
                       const Divider(),
+                      feesHaveBeenDeductedFromRecipient
+                          ? Text(
+                              AppLocalizations.instance
+                                  .translate('send_fees_deducted'),
+                              style: TextStyle(
+                                color: Theme.of(context).errorColor,
+                              ),
+                            )
+                          : const SizedBox(),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -174,8 +256,12 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                 await activeWallets.putOutgoingTx(
                                   identifier: arguments.coinIdentifier,
                                   buildResult: buildResult,
-                                  totalFees: buildResult.fee,
-                                  totalValue: buildResult.totalAmount,
+                                  totalFees: buildResult.fee +
+                                      buildResult.destroyedChange,
+                                  totalValue: feesHaveBeenDeductedFromRecipient
+                                      ? buildResult.totalAmount -
+                                          buildResult.fee
+                                      : buildResult.totalAmount,
                                 );
                                 //broadcast
                                 electrumConnection.broadcastTransaction(
@@ -216,6 +302,4 @@ class TransactionConfirmationScreen extends StatelessWidget {
       ),
     );
   }
-  //TODO destroyedChange: buildResult,
-  //TODO neededChange: buildResult,
 }
