@@ -68,8 +68,9 @@ class _SendTabState extends State<SendTab> {
   late final int _decimalProduct;
   bool _fiatEnabled = false;
   bool _fiatInputEnabled = false;
-  String _amountInputHelperText = '';
-  double _requestedAmountInCoins = 0.0;
+  final List<String> _amountInputHelperTextList = [''];
+  final List<double> _requestedAmountInCoinsList = [0.0];
+  double _totalAmountRequestedInCoins = 0.0;
   double _coinValue = 0.0;
   int _numberOfRecipients = 1;
   int _currentAddressIndex = 0;
@@ -88,7 +89,7 @@ class _SendTabState extends State<SendTab> {
       );
       _fiatEnabled = _appSettings.selectedCurrency.isNotEmpty &&
           !widget.wallet.name.contains('Testnet');
-      _calcAmountInputHelperText();
+      _calcAmountInputHelperText(_currentAddressIndex);
 
       setState(() {
         _addressControllerList[0].text = widget.address ?? '';
@@ -106,6 +107,8 @@ class _SendTabState extends State<SendTab> {
     _labelKeyList.add(GlobalKey<FormFieldState>());
     _addressKeyList.add(GlobalKey<FormFieldState>());
     _amountKeyList.add(GlobalKey<FormFieldState>());
+    _amountInputHelperTextList.add('');
+    _requestedAmountInCoinsList.add(0.0);
 
     setState(() {
       _currentAddressIndex = _numberOfRecipients;
@@ -119,6 +122,8 @@ class _SendTabState extends State<SendTab> {
     _labelKeyList.removeAt(index);
     _addressKeyList.removeAt(index);
     _amountKeyList.removeAt(index);
+    _amountInputHelperTextList.removeAt(index);
+    _requestedAmountInCoinsList.removeAt(index);
 
     setState(() {
       _numberOfRecipients--;
@@ -131,21 +136,17 @@ class _SendTabState extends State<SendTab> {
   }
 
   Map<String, int> _buildRecipientMap() {
-    //TODO does not build FIAT
     Map<String, int> recipients = {};
     double totalCoins = 0;
     _amountControllerList.asMap().forEach((key, value) {
-      var coins = double.tryParse(
-            _amountControllerList[key].text.replaceAll(',', '.'),
-          ) ??
-          0;
+      var coins = _requestedAmountInCoinsList[key];
       recipients[_addressControllerList[key].text.trim()] =
           (coins * _decimalProduct).toInt();
       totalCoins += coins;
     });
 
     setState(() {
-      _requestedAmountInCoins = totalCoins;
+      _totalAmountRequestedInCoins = totalCoins;
     });
     return recipients;
   }
@@ -343,7 +344,7 @@ class _SendTabState extends State<SendTab> {
       return AppLocalizations.instance.translate('send_enter_amount');
     }
     String sanitizedValue = _fiatInputEnabled
-        ? _requestedAmountInCoins.toString()
+        ? _requestedAmountInCoinsList[_currentAddressIndex].toString()
         : value.replaceAll(',', '.');
 
     if (_fiatInputEnabled == false) {
@@ -351,7 +352,7 @@ class _SendTabState extends State<SendTab> {
     }
     _buildRecipientMap();
 
-    var txValueInSatoshis = _requestedAmountInCoins * _decimalProduct;
+    var txValueInSatoshis = _totalAmountRequestedInCoins * _decimalProduct;
     LoggerWrapper.logInfo(
       'SendTab',
       'send_amount',
@@ -380,19 +381,17 @@ class _SendTabState extends State<SendTab> {
     return null;
   }
 
-  void _calcAmountInputHelperText() {
-    final inputAmount = _amountControllerList[_currentAddressIndex].text == ''
+  void _calcAmountInputHelperText(int index) {
+    final inputAmount = _amountControllerList[index].text == ''
         ? 1.0
         : double.tryParse(
-              _amountControllerList[_currentAddressIndex]
-                  .text
-                  .replaceAll(',', '.'),
+              _amountControllerList[index].text.replaceAll(',', '.'),
             ) ??
             0;
 
     if (_fiatEnabled == false) {
       setState(() {
-        _requestedAmountInCoins = inputAmount;
+        _totalAmountRequestedInCoins = inputAmount;
       });
       return;
     }
@@ -416,10 +415,9 @@ class _SendTabState extends State<SendTab> {
       result =
           '$inputAmount ${widget.wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
     }
-
     setState(() {
-      _amountInputHelperText = result;
-      _requestedAmountInCoins = double.parse(priceInCoins);
+      _amountInputHelperTextList[index] = result;
+      _requestedAmountInCoinsList[index] = double.parse(priceInCoins);
       _coinValue = fiatPrice;
     });
   }
@@ -572,10 +570,11 @@ class _SendTabState extends State<SendTab> {
                                 ? _appSettings.selectedCurrency
                                 : widget.wallet.letterCode,
                           ),
-                          helperText: _amountInputHelperText,
+                          helperText:
+                              _amountInputHelperTextList[_currentAddressIndex],
                         ),
                         onChanged: (value) {
-                          _calcAmountInputHelperText();
+                          _calcAmountInputHelperText(_currentAddressIndex);
                           if (_amountKeyList[_currentAddressIndex]
                               .currentState!
                               .hasError) {
@@ -674,21 +673,28 @@ class _SendTabState extends State<SendTab> {
                       if (_fiatEnabled && _currentAddressIndex == 0)
                         SwitchListTile(
                           value: _fiatInputEnabled,
-                          onChanged: (_) => setState(() {
-                            _fiatInputEnabled = _;
-                            _amountControllerList[_currentAddressIndex].text =
-                                '';
-                            _amountControllerList[_currentAddressIndex]
-                                .selection = TextSelection.fromPosition(
-                              TextPosition(
-                                offset:
-                                    _amountControllerList[_currentAddressIndex]
-                                        .text
-                                        .length,
-                              ),
-                            );
-                            _calcAmountInputHelperText();
-                          }),
+                          onChanged: (_) => setState(
+                            () {
+                              _fiatInputEnabled = _;
+                              _amountControllerList[_currentAddressIndex].text =
+                                  '';
+                              _amountControllerList[_currentAddressIndex]
+                                  .selection = TextSelection.fromPosition(
+                                TextPosition(
+                                  offset: _amountControllerList[
+                                          _currentAddressIndex]
+                                      .text
+                                      .length,
+                                ),
+                              );
+                              _amountControllerList.asMap().forEach(
+                                (index, _) {
+                                  _amountControllerList[index].text = '';
+                                  _calcAmountInputHelperText(index);
+                                },
+                              );
+                            },
+                          ),
                           title: Text(
                             AppLocalizations.instance.translate(
                               'send_fiat_switch',
@@ -765,7 +771,7 @@ class _SendTabState extends State<SendTab> {
                           _amountControllerList[_currentAddressIndex].text =
                               (widget.wallet.balance / _decimalProduct)
                                   .toString();
-                          _calcAmountInputHelperText();
+                          _calcAmountInputHelperText(_currentAddressIndex);
                         },
                       ),
                       const SizedBox(height: 10),
