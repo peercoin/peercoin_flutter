@@ -33,7 +33,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   late ElectrumConnectionState _connectionState;
   int _latestUpdate = 0;
   int _addressScanPointer = 0;
-  final int _addressChunkSize = 10;
+  int _addressChunkSize = 10;
   late Timer _timer;
 
   @override
@@ -157,6 +157,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         //keep searching in next chunk
         setState(() {
           _addressScanPointer += _addressChunkSize;
+          _addressChunkSize += 5;
         });
         fetchAddressesFromBackend();
       } else {
