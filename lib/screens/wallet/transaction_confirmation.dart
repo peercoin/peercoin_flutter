@@ -259,7 +259,10 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                   buildResult: buildResult,
                                   totalFees: buildResult.fee +
                                       buildResult.destroyedChange,
-                                  totalValue: buildResult.totalAmount,
+                                  totalValue:
+                                      buildResult.allRecipientOutPutsAreZero
+                                          ? 0
+                                          : buildResult.totalAmount,
                                 );
                                 //broadcast
                                 electrumConnection.broadcastTransaction(
