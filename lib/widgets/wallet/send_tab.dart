@@ -425,21 +425,6 @@ class _SendTabState extends State<SendTab> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      PeerButtonBorder(
-                        text: AppLocalizations.instance.translate(
-                          'send_empty',
-                        ),
-                        action: () async {
-                          setState(() {
-                            _fiatInputEnabled = false;
-                          });
-                          _amountControllerList[_currentAddressIndex].text =
-                              (widget.wallet.balance / _decimalProduct)
-                                  .toString();
-                          _calcAmountInputHelperText(_currentAddressIndex);
-                        },
-                      ),
-                      const SizedBox(height: 10),
                       if (_appSettings.camerasAvailble)
                         PeerButtonBorder(
                           text: AppLocalizations.instance.translate(
@@ -457,6 +442,21 @@ class _SendTabState extends State<SendTab> {
                             }
                           },
                         ),
+                      const SizedBox(height: 10),
+                      PeerButtonBorder(
+                        text: AppLocalizations.instance.translate(
+                          'send_empty',
+                        ),
+                        action: () async {
+                          setState(() {
+                            _fiatInputEnabled = false;
+                          });
+                          _amountControllerList[_currentAddressIndex].text =
+                              (widget.wallet.balance / _decimalProduct)
+                                  .toString();
+                          _calcAmountInputHelperText(_currentAddressIndex);
+                        },
+                      ),
                       const SizedBox(height: 8),
                       if (!kIsWeb) const SizedBox(height: 10),
                       if (!kIsWeb)
