@@ -693,6 +693,8 @@ class _SendTabState extends State<SendTab> {
         coinLetterCode: widget.wallet.letterCode,
         coinIdentifier: widget.wallet.name,
         callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
+        fiatPricePerCoin: _coinValue,
+        fiatCode: _appSettings.selectedCurrency,
       ),
     );
     //persist labels

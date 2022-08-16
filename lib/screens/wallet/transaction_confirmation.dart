@@ -35,6 +35,8 @@ class TransactionConfirmationArguments {
   String coinLetterCode;
   String coinIdentifier;
   Function callBackAfterSend;
+  double fiatPricePerCoin;
+  String fiatCode;
 
   TransactionConfirmationArguments({
     required this.buildResult,
@@ -42,6 +44,8 @@ class TransactionConfirmationArguments {
     required this.coinLetterCode,
     required this.coinIdentifier,
     required this.callBackAfterSend,
+    required this.fiatPricePerCoin,
+    required this.fiatCode,
   });
 }
 
@@ -80,11 +84,22 @@ class TransactionConfirmationScreen extends StatelessWidget {
                         children: [
                           Text(
                             AppLocalizations.instance.translate('tx_value'),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          SelectableText(
-                            '${buildResult.totalAmount / decimalProduct} $coinLetterCode',
-                          )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SelectableText(
+                                '${buildResult.totalAmount / decimalProduct} $coinLetterCode',
+                              ),
+                              if (!arguments.coinIdentifier.contains('Testnet'))
+                                Text(
+                                  '${((buildResult.totalAmount / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(2)} ${arguments.fiatCode}',
+                                ),
+                            ],
+                          ),
                         ],
                       ),
                       const Divider(),
@@ -95,8 +110,17 @@ class TransactionConfirmationScreen extends StatelessWidget {
                             AppLocalizations.instance.translate('tx_fee'),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          SelectableText(
-                            '${arguments.buildResult.fee / decimalProduct} $coinLetterCode',
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SelectableText(
+                                '${arguments.buildResult.fee / decimalProduct} $coinLetterCode',
+                              ),
+                              if (!arguments.coinIdentifier.contains('Testnet'))
+                                Text(
+                                  '${((buildResult.fee / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
+                                ),
+                            ],
                           )
                         ],
                       ),
@@ -192,8 +216,6 @@ class TransactionConfirmationScreen extends StatelessWidget {
       ),
     );
   }
-  //TODO show FIAT values if coming from FIAT
-  //TODO test scrollview with xyz recipients
-  //TODO destroyedChange: destroyedChange,
-  //TODO neededChange: needsChange,
+  //TODO destroyedChange: buildResult,
+  //TODO neededChange: buildResult,
 }
