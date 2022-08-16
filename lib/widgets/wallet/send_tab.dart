@@ -685,7 +685,7 @@ class _SendTabState extends State<SendTab> {
 
   void _showTransactionConfirmation(context) async {
     var buildResult = await _buildTx();
-    var res = await Navigator.of(context).pushNamed(
+    await Navigator.of(context).pushNamed(
       Routes.transactionConfirmation,
       arguments: TransactionConfirmationArguments(
         buildResult: buildResult,
@@ -695,20 +695,19 @@ class _SendTabState extends State<SendTab> {
         callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
       ),
     );
-    if (res == true) {
-      //transaction was sent, persist labels
-      _labelControllerList.asMap().forEach(
-        (index, controller) {
-          if (controller.text != '') {
-            _activeWallets.updateLabel(
-              widget.wallet.name,
-              _addressControllerList[index].text,
-              controller.text,
-            );
-          }
-        },
-      );
-    }
+    //persist labels
+    _labelControllerList.asMap().forEach(
+      (index, controller) {
+        if (controller.text != '') {
+          _activeWallets.updateLabel(
+            widget.wallet.name,
+            _addressControllerList[index].text,
+            controller.text,
+          );
+        }
+      },
+    );
+
     // int destroyedChange = buildResult.destroyedChange;
     // var correctedDust = 0;
     // _txFee = buildResult.fee;

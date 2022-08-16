@@ -159,7 +159,7 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                   buildResult.id,
                                 );
                                 //pop message
-                                navigator.pop(true);
+                                navigator.pop();
                                 //navigate back to tx list
                                 arguments.callBackAfterSend();
                               } catch (e) {
