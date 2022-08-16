@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class PeriodicReminders {
                 ),
               ),
             if (reminderItem.id == 'donate')
-              listOfActiveWallets.contains('peercoin')
+              listOfActiveWallets.contains('peercoin') && !Platform.isIOS
                   ? TextButton(
                       onPressed: () async {
                         final navigator = Navigator.of(context);

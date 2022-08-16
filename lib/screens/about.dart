@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -155,7 +157,8 @@ class _AboutScreenState extends State<AboutScreen> {
                                 'about_foundation',
                               ),
                             ),
-                            _listOfActiveWallets.contains('peercoin')
+                            _listOfActiveWallets.contains('peercoin') &&
+                                    !Platform.isIOS
                                 ? TextButton(
                                     onPressed: () async {
                                       final navigator = Navigator.of(context);
