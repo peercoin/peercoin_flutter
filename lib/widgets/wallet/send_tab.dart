@@ -116,7 +116,10 @@ class _SendTabState extends State<SendTab> {
                               numberOfRecipients: _numberOfRecipients,
                               raiseNewindex: (int newIndex) => setState(
                                 () => {
-                                  _currentAddressIndex = newIndex - 1,
+                                  if (triggerFormValidation())
+                                    {
+                                      _currentAddressIndex = newIndex - 1,
+                                    }
                                 },
                               ),
                             )
@@ -313,10 +316,13 @@ class _SendTabState extends State<SendTab> {
                         ),
                       SendTabAddressManagement(
                         onAdd: () {
-                          _addNewAddress();
-                          setState(() {
-                            _numberOfRecipients++;
-                          });
+                          if (_addNewAddress()) {
+                            setState(
+                              () {
+                                _numberOfRecipients++;
+                              },
+                            );
+                          }
                         },
                         onDelete: () {
                           _removeAddress(_currentAddressIndex);
@@ -383,7 +389,7 @@ class _SendTabState extends State<SendTab> {
                       PeerButton(
                         text: AppLocalizations.instance.translate('send'),
                         action: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (triggerFormValidation()) {
                             _formKey.currentState!.save();
                             FocusScope.of(context).unfocus(); //hide keyboard
                             _amountControllerList.asMap().forEach(
@@ -391,6 +397,7 @@ class _SendTabState extends State<SendTab> {
                                 _calcAmountInputHelperText(index);
                               },
                             );
+                            //TODO does not validate hidden formfields
                             //check for required auth
                             if (_appSettings
                                 .authenticationOptions!['sendTransaction']!) {
@@ -495,22 +502,33 @@ class _SendTabState extends State<SendTab> {
         _initial = false;
       });
     }
+
     super.didChangeDependencies();
   }
 
-  _addNewAddress() {
-    _labelControllerList.add(TextEditingController());
-    _addressControllerList.add(TextEditingController());
-    _amountControllerList.add(TextEditingController());
-    _labelKeyList.add(GlobalKey<FormFieldState>());
-    _addressKeyList.add(GlobalKey<FormFieldState>());
-    _amountKeyList.add(GlobalKey<FormFieldState>());
-    _amountInputHelperTextList.add('');
-    _requestedAmountInCoinsList.add(0.0);
+  bool triggerFormValidation() {
+    return _formKey.currentState!.validate();
+  }
 
-    setState(() {
-      _currentAddressIndex = _numberOfRecipients;
-    });
+  bool _addNewAddress() {
+    if (triggerFormValidation()) {
+      _formKey.currentState!.save();
+
+      _labelControllerList.add(TextEditingController());
+      _addressControllerList.add(TextEditingController());
+      _amountControllerList.add(TextEditingController());
+      _labelKeyList.add(GlobalKey<FormFieldState>());
+      _addressKeyList.add(GlobalKey<FormFieldState>());
+      _amountKeyList.add(GlobalKey<FormFieldState>());
+      _amountInputHelperTextList.add('');
+      _requestedAmountInCoinsList.add(0.0);
+
+      setState(() {
+        _currentAddressIndex = _numberOfRecipients;
+      });
+      return true;
+    }
+    return false;
   }
 
   String? _amountValidator(String value) {
@@ -821,5 +839,5 @@ class _SendTabState extends State<SendTab> {
     //                       totalValue: _totalValue - _txFee,
     //                     );
   }
-  //TODO send error: jump to address index with error
+  //TODO can't send twice to the same address! include validator
 }
