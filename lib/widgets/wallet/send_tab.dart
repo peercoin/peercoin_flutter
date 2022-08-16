@@ -211,7 +211,9 @@ class _SendTabState extends State<SendTab> {
         }
         return SimpleDialog(
           title: Text(
-              AppLocalizations.instance.translate('send_confirm_transaction')),
+            AppLocalizations.instance.translate('send_confirm_transaction'),
+            textAlign: TextAlign.center,
+          ),
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),

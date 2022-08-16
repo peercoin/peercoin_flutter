@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:coinslib/coinslib.dart';
@@ -577,8 +576,6 @@ class ActiveWallets with ChangeNotifier {
     final decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: identifier,
     );
-
-    inspect(recipients);
 
     var txAmount = 0;
     recipients.forEach(
