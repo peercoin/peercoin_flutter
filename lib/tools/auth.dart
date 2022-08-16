@@ -94,8 +94,10 @@ class Auth {
             ],
           );
         });
-    await navigator.pushReplacementNamed(Routes.authJail,
-        arguments: jailedFromHome);
+    await navigator.pushReplacementNamed(
+      Routes.authJail,
+      arguments: jailedFromHome,
+    );
   }
 
   static Future<void> localAuth(BuildContext context,
