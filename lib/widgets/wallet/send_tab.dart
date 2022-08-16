@@ -11,24 +11,24 @@ import 'package:peercoin/widgets/wallet/send_tab_management.dart';
 import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/wallet/transaction_confirmation.dart';
-import '../../tools/price_ticker.dart';
-import '/../models/wallet_address.dart';
-import '/../providers/app_settings.dart';
-import '/../screens/wallet/wallet_home.dart';
-import '/../tools/app_localizations.dart';
 import '/../models/available_coins.dart';
 import '/../models/coin.dart';
 import '/../models/coin_wallet.dart';
+import '/../models/wallet_address.dart';
 import '/../providers/active_wallets.dart';
+import '/../providers/app_settings.dart';
 import '/../providers/electrum_connection.dart';
+import '/../screens/wallet/wallet_home.dart';
+import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
 import '/../tools/auth.dart';
 import '/../tools/utf8_text_field.dart';
 import '/../widgets/buttons.dart';
 import '/../widgets/service_container.dart';
 import '/../widgets/wallet/wallet_balance_header.dart';
+import '../../screens/wallet/transaction_confirmation.dart';
 import '../../tools/logger_wrapper.dart';
+import '../../tools/price_ticker.dart';
 
 class SendTab extends StatefulWidget {
   final Function changeIndex;
@@ -74,353 +74,6 @@ class _SendTabState extends State<SendTab> {
   double _coinValue = 0.0;
   int _numberOfRecipients = 1;
   int _currentAddressIndex = 0;
-
-  @override
-  void didChangeDependencies() async {
-    if (_initial == true) {
-      _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
-      _activeWallets = Provider.of<ActiveWallets>(context);
-      _appSettings = context.read<AppSettings>();
-
-      _availableAddresses =
-          await _activeWallets.getWalletAddresses(widget.wallet.name);
-      _decimalProduct = AvailableCoins.getDecimalProduct(
-        identifier: widget.wallet.name,
-      );
-      _fiatEnabled = _appSettings.selectedCurrency.isNotEmpty &&
-          !widget.wallet.name.contains('Testnet');
-      _calcAmountInputHelperText(_currentAddressIndex);
-
-      setState(() {
-        _addressControllerList[0].text = widget.address ?? '';
-        _labelControllerList[0].text = widget.label ?? '';
-        _initial = false;
-      });
-    }
-    super.didChangeDependencies();
-  }
-
-  _addNewAddress() {
-    _labelControllerList.add(TextEditingController());
-    _addressControllerList.add(TextEditingController());
-    _amountControllerList.add(TextEditingController());
-    _labelKeyList.add(GlobalKey<FormFieldState>());
-    _addressKeyList.add(GlobalKey<FormFieldState>());
-    _amountKeyList.add(GlobalKey<FormFieldState>());
-    _amountInputHelperTextList.add('');
-    _requestedAmountInCoinsList.add(0.0);
-
-    setState(() {
-      _currentAddressIndex = _numberOfRecipients;
-    });
-  }
-
-  _removeAddress(int index) {
-    _labelControllerList.removeAt(index);
-    _addressControllerList.removeAt(index);
-    _amountControllerList.removeAt(index);
-    _labelKeyList.removeAt(index);
-    _addressKeyList.removeAt(index);
-    _amountKeyList.removeAt(index);
-    _amountInputHelperTextList.removeAt(index);
-    _requestedAmountInCoinsList.removeAt(index);
-
-    setState(() {
-      _numberOfRecipients--;
-      if (_currentAddressIndex - 1 > 0) {
-        _currentAddressIndex--;
-      } else {
-        _currentAddressIndex = 0;
-      }
-    });
-  }
-
-  Map<String, int> _buildRecipientMap() {
-    Map<String, int> recipients = {};
-    double totalCoins = 0;
-    _amountControllerList.asMap().forEach((key, value) {
-      var coins = _requestedAmountInCoinsList[key];
-      recipients[_addressControllerList[key].text.trim()] =
-          (coins * _decimalProduct).toInt();
-      totalCoins += coins;
-    });
-
-    setState(() {
-      _totalAmountRequestedInCoins = totalCoins;
-    });
-    return recipients;
-  }
-
-  Future<BuildResult> _buildTx() async {
-    return await _activeWallets.buildTransaction(
-      identifier: widget.wallet.name,
-      recipients: _buildRecipientMap(),
-      fee: 0,
-      opReturn: _opReturnKey.currentState?.value ?? '',
-    );
-  }
-
-  void _parseQrResult(String code) {
-    var parsed = Uri.parse(code);
-    parsed.queryParameters.forEach((key, value) {
-      if (key == 'amount') {
-        _amountControllerList[_currentAddressIndex].text = value;
-      } else if (key == 'label') {
-        _labelControllerList[_currentAddressIndex].text = value;
-      }
-    });
-    _addressControllerList[_currentAddressIndex].text = parsed.path;
-  }
-
-  RegExp _getValidator(int fractions) {
-    var expression = r'^([1-9]{1}[0-9]{0,' +
-        fractions.toString() +
-        r'}(,[0-9]{3})*(.[0-9]{0,' +
-        fractions.toString() +
-        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,' +
-        fractions.toString() +
-        r'})?|0(.[0-9]{0,' +
-        fractions.toString() +
-        r'})?|(.[0-9]{1,' +
-        fractions.toString() +
-        r'})?)$';
-
-    return RegExp(expression);
-  }
-
-  void _showTransactionConfirmation(context) async {
-    var buildResult = await _buildTx();
-    var res = await Navigator.of(context).pushNamed(
-      Routes.transactionConfirmation,
-      arguments: TransactionConfirmationArguments(
-        buildResult: buildResult,
-        decimalProduct: _decimalProduct,
-        coinLetterCode: widget.wallet.letterCode,
-        coinIdentifier: widget.wallet.name,
-        callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
-      ),
-    );
-    if (res == true) {
-      //transaction was sent, persist labels
-      _labelControllerList.asMap().forEach(
-        (index, controller) {
-          if (controller.text != '') {
-            _activeWallets.updateLabel(
-              widget.wallet.name,
-              _addressControllerList[index].text,
-              controller.text,
-            );
-          }
-        },
-      );
-    }
-    // int destroyedChange = buildResult.destroyedChange;
-    // var correctedDust = 0;
-    // _txFee = buildResult.fee;
-    // await showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     String? displayValue = _requestedAmountInCoins.toString();
-    //     _totalValue = (_requestedAmountInCoins * _decimalProduct).toInt();
-    //     if (_totalValue == widget.wallet.balance) {
-    //       var newValue = _requestedAmountInCoins - (_txFee / _decimalProduct);
-    //       displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
-    //     } else {
-    //       _totalValue = _totalValue + _txFee;
-    //     }
-    //     if (destroyedChange > 0) {
-    //       var newValue = (_requestedAmountInCoins - (_txFee / _decimalProduct));
-    //       displayValue = newValue.toString();
-
-    //       // if (_amountKey.currentState!.value == '0') {
-    //       //   displayValue = '0';
-    //       //   correctedDust = destroyedChange - _txFee;
-    //       // } else {
-    //       //   correctedDust = destroyedChange;
-    //       // }
-    //       _totalValue =
-    //           (_requestedAmountInCoins * _decimalProduct + destroyedChange)
-    //               .toInt();
-    //               RichText(
-    //                 textAlign: TextAlign.center,
-    //                 text: TextSpan(
-    //                   text: AppLocalizations.instance
-    //                       .translate('send_transferring'),
-    //                   style: DefaultTextStyle.of(context).style,
-    //                   children: <TextSpan>[
-    //                     TextSpan(
-    //                       text: '$displayValue ${widget.wallet.letterCode}',
-    //                       style: const TextStyle(
-    //                         fontWeight: FontWeight.bold,
-    //                       ),
-    //                     ),
-    //                     TextSpan(
-    //                       text: AppLocalizations.instance.translate('send_to'),
-    //                     ),
-    //                     TextSpan(
-    //                       text: _addressKeyList[_currentAddressIndex]
-    //                           .currentState!
-    //                           .value,
-    //                       style: const TextStyle(fontWeight: FontWeight.bold),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 10),
-    //               Text(
-    //                 AppLocalizations.instance.translate(
-    //                   'send_fee',
-    //                   {
-    //                     'amount': '${_txFee / _decimalProduct}',
-    //                     'letter_code': widget.wallet.letterCode
-    //                   },
-    //                 ),
-    //               ),
-    //               if (correctedDust > 0)
-    //                 Text(
-    //                   AppLocalizations.instance.translate(
-    //                     'send_dust',
-    //                     {
-    //                       'amount': '${correctedDust / _decimalProduct}',
-    //                       'letter_code': widget.wallet.letterCode
-    //                     },
-    //                   ),
-    //                   style: TextStyle(color: Theme.of(context).errorColor),
-    //                 ),
-    //               Text(
-    //                 AppLocalizations.instance.translate(
-    //                   'send_total',
-    //                   {
-    //                     'amount': '${_totalValue / _decimalProduct}',
-    //                     'letter_code': widget.wallet.letterCode
-    //                   },
-    //                 ),
-    //                 style: _fiatInputEnabled
-    //                     ? const TextStyle()
-    //                     : const TextStyle(fontWeight: FontWeight.bold),
-    //               ),
-    //               if (_fiatInputEnabled)
-    //                 Text(
-    //                   AppLocalizations.instance.translate(
-    //                     'send_total',
-    //                     {
-    //                       'amount':
-    //                           ((_totalValue / _decimalProduct) * _coinValue)
-    //                               .toStringAsFixed(4),
-    //                       'letter_code': _appSettings.selectedCurrency
-    //                     },
-    //                   ),
-    //                   style: _fiatInputEnabled
-    //                       ? const TextStyle(fontWeight: FontWeight.bold)
-    //                       : const TextStyle(),
-    //                 ),
-    //                   try {
-    //                     firstPress = false;
-    //                     //write tx to history
-    //                     await _activeWallets.putOutgoingTx(
-    //                       identifier: widget.wallet.name,
-    //                       buildResult: buildResult,
-    //                       totalFees: _txFee +
-    //                           destroyedChange, //TODO wrong ... a85ecc8980b91a6a604444980cca0dc4f3b9fcf5e75c1c7c79c0d8969f0b156d
-    //                       totalValue: _totalValue - _txFee,
-    //                     );
-  }
-
-  Future<Iterable> _getSuggestions(String pattern) async {
-    return _availableAddresses.where((element) {
-      if (element.isOurs == false && element.address.contains(pattern)) {
-        return true;
-      } else if (element.isOurs == false &&
-          element.addressBookName != null &&
-          element.addressBookName!.contains(pattern)) {
-        return true;
-      }
-      return false;
-    });
-  }
-
-  String? _amountValidator(String value) {
-    if (value.isEmpty) {
-      return AppLocalizations.instance.translate('send_enter_amount');
-    }
-    String sanitizedValue = _fiatInputEnabled
-        ? _requestedAmountInCoinsList[_currentAddressIndex].toString()
-        : value.replaceAll(',', '.');
-
-    if (_fiatInputEnabled == false) {
-      _amountControllerList[_currentAddressIndex].text = sanitizedValue;
-    }
-    _buildRecipientMap();
-
-    var txValueInSatoshis = _totalAmountRequestedInCoins * _decimalProduct;
-    LoggerWrapper.logInfo(
-      'SendTab',
-      'send_amount',
-      'req value $txValueInSatoshis - ${widget.wallet.balance}',
-    );
-    if (sanitizedValue.contains('.') &&
-        sanitizedValue.split('.')[1].length > _availableCoin.fractions) {
-      return AppLocalizations.instance.translate('send_amount_small');
-    }
-    if (txValueInSatoshis > widget.wallet.balance ||
-        txValueInSatoshis == 0 && widget.wallet.balance == 0) {
-      return AppLocalizations.instance.translate('send_amount_exceeds');
-    }
-    if (txValueInSatoshis < _availableCoin.minimumTxValue &&
-        _opReturnController.text.isEmpty) {
-      return AppLocalizations.instance.translate('send_amount_below_minimum',
-          {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'});
-    }
-    if (txValueInSatoshis == widget.wallet.balance &&
-        widget.wallet.balance == _availableCoin.minimumTxValue) {
-      return AppLocalizations.instance.translate(
-        'send_amount_below_minimum_unable',
-        {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'},
-      );
-    }
-    return null;
-  }
-
-  void _calcAmountInputHelperText(int index) {
-    final inputAmount = _amountControllerList[index].text == ''
-        ? 1.0
-        : double.tryParse(
-              _amountControllerList[index].text.replaceAll(',', '.'),
-            ) ??
-            0;
-
-    if (_fiatEnabled == false) {
-      setState(() {
-        _totalAmountRequestedInCoins = inputAmount;
-      });
-      return;
-    }
-
-    final fiatPrice = PriceTicker.renderPrice(
-      1,
-      _appSettings.selectedCurrency,
-      widget.wallet.letterCode,
-      _appSettings.exchangeRates,
-    );
-
-    String priceInCoins =
-        (_fiatInputEnabled ? inputAmount * (1 / _coinValue) : inputAmount)
-            .toStringAsFixed(_availableCoin.fractions);
-
-    String result = '';
-    if (_fiatInputEnabled) {
-      result =
-          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${widget.wallet.letterCode}';
-    } else {
-      result =
-          '$inputAmount ${widget.wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
-    }
-    setState(() {
-      _amountInputHelperTextList[index] = result;
-      _requestedAmountInCoinsList[index] = double.parse(priceInCoins);
-      _coinValue = fiatPrice;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -733,6 +386,11 @@ class _SendTabState extends State<SendTab> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             FocusScope.of(context).unfocus(); //hide keyboard
+                            _amountControllerList.asMap().forEach(
+                              (index, _) {
+                                _calcAmountInputHelperText(index);
+                              },
+                            );
                             //check for required auth
                             if (_appSettings
                                 .authenticationOptions!['sendTransaction']!) {
@@ -814,4 +472,353 @@ class _SendTabState extends State<SendTab> {
       ],
     );
   }
+
+  @override
+  void didChangeDependencies() async {
+    if (_initial == true) {
+      _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      _appSettings = context.read<AppSettings>();
+
+      _availableAddresses =
+          await _activeWallets.getWalletAddresses(widget.wallet.name);
+      _decimalProduct = AvailableCoins.getDecimalProduct(
+        identifier: widget.wallet.name,
+      );
+      _fiatEnabled = _appSettings.selectedCurrency.isNotEmpty &&
+          !widget.wallet.name.contains('Testnet');
+      _calcAmountInputHelperText(_currentAddressIndex);
+
+      setState(() {
+        _addressControllerList[0].text = widget.address ?? '';
+        _labelControllerList[0].text = widget.label ?? '';
+        _initial = false;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
+  _addNewAddress() {
+    _labelControllerList.add(TextEditingController());
+    _addressControllerList.add(TextEditingController());
+    _amountControllerList.add(TextEditingController());
+    _labelKeyList.add(GlobalKey<FormFieldState>());
+    _addressKeyList.add(GlobalKey<FormFieldState>());
+    _amountKeyList.add(GlobalKey<FormFieldState>());
+    _amountInputHelperTextList.add('');
+    _requestedAmountInCoinsList.add(0.0);
+
+    setState(() {
+      _currentAddressIndex = _numberOfRecipients;
+    });
+  }
+
+  String? _amountValidator(String value) {
+    if (value.isEmpty) {
+      return AppLocalizations.instance.translate('send_enter_amount');
+    }
+    String sanitizedValue = _fiatInputEnabled
+        ? _requestedAmountInCoinsList[_currentAddressIndex].toString()
+        : value.replaceAll(',', '.');
+
+    if (_fiatInputEnabled == false) {
+      _amountControllerList[_currentAddressIndex].text = sanitizedValue;
+    }
+    _buildRecipientMap();
+
+    var txValueInSatoshis = _totalAmountRequestedInCoins * _decimalProduct;
+    LoggerWrapper.logInfo(
+      'SendTab',
+      'send_amount',
+      'req value $txValueInSatoshis - ${widget.wallet.balance}',
+    );
+    if (sanitizedValue.contains('.') &&
+        sanitizedValue.split('.')[1].length > _availableCoin.fractions) {
+      return AppLocalizations.instance.translate('send_amount_small');
+    }
+    if (txValueInSatoshis > widget.wallet.balance ||
+        txValueInSatoshis == 0 && widget.wallet.balance == 0) {
+      return AppLocalizations.instance.translate('send_amount_exceeds');
+    }
+    if (txValueInSatoshis < _availableCoin.minimumTxValue &&
+        _opReturnController.text.isEmpty) {
+      return AppLocalizations.instance.translate('send_amount_below_minimum',
+          {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'});
+    }
+    if (txValueInSatoshis == widget.wallet.balance &&
+        widget.wallet.balance == _availableCoin.minimumTxValue) {
+      return AppLocalizations.instance.translate(
+        'send_amount_below_minimum_unable',
+        {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'},
+      );
+    }
+    return null;
+  }
+
+  Map<String, int> _buildRecipientMap() {
+    Map<String, int> recipients = {};
+    double totalCoins = 0;
+    _amountControllerList.asMap().forEach((key, value) {
+      var coins = _requestedAmountInCoinsList[key];
+      recipients[_addressControllerList[key].text.trim()] =
+          (coins * _decimalProduct).toInt();
+      totalCoins += coins;
+    });
+
+    setState(() {
+      _totalAmountRequestedInCoins = totalCoins;
+    });
+    return recipients;
+  }
+
+  Future<BuildResult> _buildTx() async {
+    return await _activeWallets.buildTransaction(
+      identifier: widget.wallet.name,
+      recipients: _buildRecipientMap(),
+      fee: 0,
+      opReturn: _opReturnKey.currentState?.value ?? '',
+    );
+  }
+
+  void _calcAmountInputHelperText(int index) {
+    final inputAmount = _amountControllerList[index].text == ''
+        ? 1.0
+        : double.tryParse(
+              _amountControllerList[index].text.replaceAll(',', '.'),
+            ) ??
+            0;
+
+    if (_fiatEnabled == false) {
+      setState(() {
+        _totalAmountRequestedInCoins = inputAmount;
+        _requestedAmountInCoinsList[index] = inputAmount;
+      });
+      return;
+    }
+
+    final fiatPrice = PriceTicker.renderPrice(
+      1,
+      _appSettings.selectedCurrency,
+      widget.wallet.letterCode,
+      _appSettings.exchangeRates,
+    );
+
+    String priceInCoins =
+        (_fiatInputEnabled ? inputAmount * (1 / _coinValue) : inputAmount)
+            .toStringAsFixed(_availableCoin.fractions);
+
+    String result = '';
+    if (_fiatInputEnabled) {
+      result =
+          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${widget.wallet.letterCode}';
+    } else {
+      result =
+          '$inputAmount ${widget.wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
+    }
+    setState(() {
+      _amountInputHelperTextList[index] = result;
+      _requestedAmountInCoinsList[index] = double.parse(priceInCoins);
+      _coinValue = fiatPrice;
+    });
+  }
+
+  Future<Iterable> _getSuggestions(String pattern) async {
+    return _availableAddresses.where((element) {
+      if (element.isOurs == false && element.address.contains(pattern)) {
+        return true;
+      } else if (element.isOurs == false &&
+          element.addressBookName != null &&
+          element.addressBookName!.contains(pattern)) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  RegExp _getValidator(int fractions) {
+    var expression = r'^([1-9]{1}[0-9]{0,' +
+        fractions.toString() +
+        r'}(,[0-9]{3})*(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|0(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|(.[0-9]{1,' +
+        fractions.toString() +
+        r'})?)$';
+
+    return RegExp(expression);
+  }
+
+  void _parseQrResult(String code) {
+    var parsed = Uri.parse(code);
+    parsed.queryParameters.forEach((key, value) {
+      if (key == 'amount') {
+        _amountControllerList[_currentAddressIndex].text = value;
+      } else if (key == 'label') {
+        _labelControllerList[_currentAddressIndex].text = value;
+      }
+    });
+    _addressControllerList[_currentAddressIndex].text = parsed.path;
+  }
+
+  _removeAddress(int index) {
+    _labelControllerList.removeAt(index);
+    _addressControllerList.removeAt(index);
+    _amountControllerList.removeAt(index);
+    _labelKeyList.removeAt(index);
+    _addressKeyList.removeAt(index);
+    _amountKeyList.removeAt(index);
+    _amountInputHelperTextList.removeAt(index);
+    _requestedAmountInCoinsList.removeAt(index);
+
+    setState(() {
+      _numberOfRecipients--;
+      if (_currentAddressIndex - 1 > 0) {
+        _currentAddressIndex--;
+      } else {
+        _currentAddressIndex = 0;
+      }
+    });
+  }
+
+  void _showTransactionConfirmation(context) async {
+    var buildResult = await _buildTx();
+    var res = await Navigator.of(context).pushNamed(
+      Routes.transactionConfirmation,
+      arguments: TransactionConfirmationArguments(
+        buildResult: buildResult,
+        decimalProduct: _decimalProduct,
+        coinLetterCode: widget.wallet.letterCode,
+        coinIdentifier: widget.wallet.name,
+        callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
+      ),
+    );
+    if (res == true) {
+      //transaction was sent, persist labels
+      _labelControllerList.asMap().forEach(
+        (index, controller) {
+          if (controller.text != '') {
+            _activeWallets.updateLabel(
+              widget.wallet.name,
+              _addressControllerList[index].text,
+              controller.text,
+            );
+          }
+        },
+      );
+    }
+    // int destroyedChange = buildResult.destroyedChange;
+    // var correctedDust = 0;
+    // _txFee = buildResult.fee;
+    // await showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     String? displayValue = _requestedAmountInCoins.toString();
+    //     _totalValue = (_requestedAmountInCoins * _decimalProduct).toInt();
+    //     if (_totalValue == widget.wallet.balance) {
+    //       var newValue = _requestedAmountInCoins - (_txFee / _decimalProduct);
+    //       displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
+    //     } else {
+    //       _totalValue = _totalValue + _txFee;
+    //     }
+    //     if (destroyedChange > 0) {
+    //       var newValue = (_requestedAmountInCoins - (_txFee / _decimalProduct));
+    //       displayValue = newValue.toString();
+
+    //       // if (_amountKey.currentState!.value == '0') {
+    //       //   displayValue = '0';
+    //       //   correctedDust = destroyedChange - _txFee;
+    //       // } else {
+    //       //   correctedDust = destroyedChange;
+    //       // }
+    //       _totalValue =
+    //           (_requestedAmountInCoins * _decimalProduct + destroyedChange)
+    //               .toInt();
+    //               RichText(
+    //                 textAlign: TextAlign.center,
+    //                 text: TextSpan(
+    //                   text: AppLocalizations.instance
+    //                       .translate('send_transferring'),
+    //                   style: DefaultTextStyle.of(context).style,
+    //                   children: <TextSpan>[
+    //                     TextSpan(
+    //                       text: '$displayValue ${widget.wallet.letterCode}',
+    //                       style: const TextStyle(
+    //                         fontWeight: FontWeight.bold,
+    //                       ),
+    //                     ),
+    //                     TextSpan(
+    //                       text: AppLocalizations.instance.translate('send_to'),
+    //                     ),
+    //                     TextSpan(
+    //                       text: _addressKeyList[_currentAddressIndex]
+    //                           .currentState!
+    //                           .value,
+    //                       style: const TextStyle(fontWeight: FontWeight.bold),
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //               const SizedBox(height: 10),
+    //               Text(
+    //                 AppLocalizations.instance.translate(
+    //                   'send_fee',
+    //                   {
+    //                     'amount': '${_txFee / _decimalProduct}',
+    //                     'letter_code': widget.wallet.letterCode
+    //                   },
+    //                 ),
+    //               ),
+    //               if (correctedDust > 0)
+    //                 Text(
+    //                   AppLocalizations.instance.translate(
+    //                     'send_dust',
+    //                     {
+    //                       'amount': '${correctedDust / _decimalProduct}',
+    //                       'letter_code': widget.wallet.letterCode
+    //                     },
+    //                   ),
+    //                   style: TextStyle(color: Theme.of(context).errorColor),
+    //                 ),
+    //               Text(
+    //                 AppLocalizations.instance.translate(
+    //                   'send_total',
+    //                   {
+    //                     'amount': '${_totalValue / _decimalProduct}',
+    //                     'letter_code': widget.wallet.letterCode
+    //                   },
+    //                 ),
+    //                 style: _fiatInputEnabled
+    //                     ? const TextStyle()
+    //                     : const TextStyle(fontWeight: FontWeight.bold),
+    //               ),
+    //               if (_fiatInputEnabled)
+    //                 Text(
+    //                   AppLocalizations.instance.translate(
+    //                     'send_total',
+    //                     {
+    //                       'amount':
+    //                           ((_totalValue / _decimalProduct) * _coinValue)
+    //                               .toStringAsFixed(4),
+    //                       'letter_code': _appSettings.selectedCurrency
+    //                     },
+    //                   ),
+    //                   style: _fiatInputEnabled
+    //                       ? const TextStyle(fontWeight: FontWeight.bold)
+    //                       : const TextStyle(),
+    //                 ),
+    //                   try {
+    //                     firstPress = false;
+    //                     //write tx to history
+    //                     await _activeWallets.putOutgoingTx(
+    //                       identifier: widget.wallet.name,
+    //                       buildResult: buildResult,
+    //                       totalFees: _txFee +
+    //                           destroyedChange, //TODO wrong ... a85ecc8980b91a6a604444980cca0dc4f3b9fcf5e75c1c7c79c0d8969f0b156d
+    //                       totalValue: _totalValue - _txFee,
+    //                     );
+  }
+  //TODO send error: jump to address index with error
 }

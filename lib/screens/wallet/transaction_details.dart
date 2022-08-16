@@ -145,7 +145,7 @@ class TransactionDetails extends StatelessWidget {
                         SelectableText(tx.opReturn)
                       ],
                     )
-                  : Container(),
+                  : const SizedBox(),
               const SizedBox(height: 20),
               Center(
                 child: PeerButton(

@@ -116,6 +116,21 @@ class TransactionConfirmationScreen extends StatelessWidget {
                           )
                         ],
                       ),
+                      buildResult.opReturn.isNotEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Divider(),
+                                Text(
+                                  AppLocalizations.instance
+                                      .translate('send_op_return'),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SelectableText(buildResult.opReturn)
+                              ],
+                            )
+                          : const SizedBox(),
                       const Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -166,7 +181,7 @@ class TransactionConfirmationScreen extends StatelessWidget {
                             },
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -180,6 +195,5 @@ class TransactionConfirmationScreen extends StatelessWidget {
   //TODO show FIAT values if coming from FIAT
   //TODO test scrollview with xyz recipients
   //TODO destroyedChange: destroyedChange,
-  //TODO opReturn: opReturn,
   //TODO neededChange: needsChange,
 }
