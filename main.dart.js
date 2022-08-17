@@ -99099,7 +99099,7 @@ q=A.nd(d,d,d,new A.aJ_(e),A.D($.u.t().u(0,"send_add_metadata"),d,d,d,d,d,d,d,B.F
 l.push(q)
 l.push(B.aa)
 l.push(new A.cP(new A.aJ0(e,a3),$.u.t().u(0,"send"),!0,d))
-l.push(B.aa)
+if(A.b(e.CW,b).e)l.push(B.aa)
 if(A.b(e.CW,b).e)l.push(new A.pP(new A.aJ1(e,a3),$.u.t().u(0,"scan_qr"),d))
 l.push(B.aa)
 l.push(new A.pP(new A.aJ2(e),$.u.t().u(0,"send_empty"),d))
