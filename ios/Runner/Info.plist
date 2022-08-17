@@ -28,6 +28,8 @@
 		<string>Can we access your camera in order to scan barcodes?</string>
 		<key>NSFaceIDUsageDescription</key>
 		<string>FaceID protects your wallet from unauthorized use.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We would like to access your filesystem to import the CSV file.</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
