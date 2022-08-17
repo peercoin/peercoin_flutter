@@ -316,5 +316,13 @@
     "sign_reset_alert_body": "Se vor reseta toate câmpurile și va șterge semnătura.",
     "address_selector_title": "Selectați adresa cu care veți semna",
     "setup_legal_title": "Aviz Legal",
-    "setup_legal_license": "Vedeți licența"
+    "setup_legal_license": "Vedeți licența",
+    "setup_auth_subtitle_plural": "Sesiunea dvs. va expira peste $days zile.",
+    "setup_auth_subtitle_singular": "Sesiunea dvs. va expira peste $days zi.",
+    "setup_auth_hint": "După ce sesiunea expiră va trebui să introduceți seed-ul.",
+    "about_donate_button": "Donează PPC acum",
+    "send_fiat_switch": "Suma în $currency",
+    "server_add_no_wss_or_ssl": "Trebuie să înceapă cu wss:// sau ssl://\nÎn prezent alte protocoale nu sunt acceptate",
+    "wallet_send_label_hint_metadata": "Meta datele sunt necriptate și vor fi vizibile public în blockchain.",
+    "setup_auth_title": "Selectați când ar trebui să expire sesiunea dvs. web:"
 }

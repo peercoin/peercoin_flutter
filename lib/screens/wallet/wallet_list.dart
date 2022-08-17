@@ -49,6 +49,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   late Timer _priceTimer;
   late Timer _sessionTimer;
   late AppSettings _appSettings;
+  late List _activeWalletValues;
 
   @override
   void initState() {
@@ -78,6 +79,7 @@ class _WalletListScreenState extends State<WalletListScreen>
       final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
       await _activeWallets.init();
+      _activeWalletValues = _activeWallets.activeWalletsValues;
       setState(() {
         _initial = false;
       });
@@ -103,8 +105,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         }
 
         //toggle periodic reminders
-        var walletValues = await _activeWallets.activeWalletsValues;
-        if (walletValues.isNotEmpty) {
+        if (_activeWalletValues.isNotEmpty) {
           //don't show for users with no wallets
           if (await checkReminder() == true) {
             return; //don't execute code below this line if checkReminder returned true
@@ -143,20 +144,21 @@ class _WalletListScreenState extends State<WalletListScreen>
             notificationInterval: _appSettings.notificationInterval,
           );
         }
-        final values = await _activeWallets.activeWalletsValues;
         //find default wallet
 
         CoinWallet? defaultWallet;
         //push to wallet directly (from notification) or to default wallet
         if (widget.walletToOpenDirectly.isNotEmpty) {
-          defaultWallet = values.firstWhereOrNull(
-              (elem) => elem.name == widget.walletToOpenDirectly);
+          defaultWallet = _activeWalletValues.firstWhereOrNull(
+            (elem) => elem.name == widget.walletToOpenDirectly,
+          );
         } else {
-          defaultWallet = values.firstWhereOrNull(
-              (elem) => elem.letterCode == _appSettings.defaultWallet);
+          defaultWallet = _activeWalletValues.firstWhereOrNull(
+            (elem) => elem.letterCode == _appSettings.defaultWallet,
+          );
         }
         //push to default wallet
-        if (values.length == 1) {
+        if (_activeWalletValues.length == 1) {
           //only one wallet available, pushing to that one
           setState(() {
             _isLoading = true;
@@ -165,14 +167,14 @@ class _WalletListScreenState extends State<WalletListScreen>
             await navigator.pushNamed(
               Routes.walletHome,
               arguments: {
-                'wallet': values[0],
+                'wallet': _activeWalletValues[0],
               },
             );
           }
           setState(() {
             _isLoading = false;
           });
-        } else if (values.length > 1) {
+        } else if (_activeWalletValues.length > 1) {
           if (defaultWallet != null) {
             setState(() {
               _isLoading = true;
@@ -207,6 +209,10 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (_initial == false) {
+      _activeWalletValues = _activeWallets.activeWalletsValues;
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -306,20 +312,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                   const SizedBox(
                     height: 40,
                   ),
-                  FutureBuilder(
-                    future: _activeWallets.activeWalletsValues,
-                    initialData: const [],
-                    builder: (_, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Expanded(
-                          child: Center(
-                            child: LoadingIndicator(),
-                          ),
-                        );
-                      }
-                      var listData = snapshot.data as List;
-                      if (listData.isEmpty) {
-                        return Expanded(
+                  _activeWalletValues.isEmpty
+                      ? Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -345,116 +339,115 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 )
                             ],
                           ),
-                        );
-                      }
-                      return Expanded(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width > 1200
-                              ? MediaQuery.of(context).size.width / 2
-                              : MediaQuery.of(context).size.width,
-                          child: ListView.builder(
-                            itemCount: listData.length,
-                            itemBuilder: (ctx, i) {
-                              CoinWallet wallet = listData[i];
-                              String balance = (wallet.balance /
-                                      AvailableCoins.getDecimalProduct(
-                                        identifier: wallet.name,
-                                      ))
-                                  .toString();
-                              bool showFiat =
-                                  !wallet.title.contains('Testnet') &&
-                                      _appSettings.selectedCurrency.isNotEmpty;
-                              return Card(
-                                elevation: 0,
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 16,
-                                ),
-                                color: Theme.of(context).backgroundColor,
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        await Navigator.of(context).pushNamed(
-                                          Routes.walletHome,
-                                          arguments: {
-                                            'wallet': wallet,
-                                          },
-                                        );
-                                      },
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Image.asset(
-                                            AvailableCoins.getSpecificCoin(
-                                              wallet.name,
-                                            ).iconPath,
-                                            width: 20,
+                        )
+                      : Expanded(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width > 1200
+                                ? MediaQuery.of(context).size.width / 2
+                                : MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                              itemCount: _activeWalletValues.length,
+                              itemBuilder: (ctx, i) {
+                                CoinWallet wallet = _activeWalletValues[i];
+                                String balance = (wallet.balance /
+                                        AvailableCoins.getDecimalProduct(
+                                          identifier: wallet.name,
+                                        ))
+                                    .toString();
+                                bool showFiat = !wallet.title
+                                        .contains('Testnet') &&
+                                    _appSettings.selectedCurrency.isNotEmpty;
+                                return Card(
+                                  elevation: 0,
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 16,
+                                  ),
+                                  color: Theme.of(context).backgroundColor,
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          await Navigator.of(context).pushNamed(
+                                            Routes.walletHome,
+                                            arguments: {
+                                              'wallet': wallet,
+                                            },
+                                          );
+                                        },
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            child: Image.asset(
+                                              AvailableCoins.getSpecificCoin(
+                                                wallet.name,
+                                              ).iconPath,
+                                              width: 20,
+                                            ),
                                           ),
-                                        ),
-                                        title: Text(
-                                          wallet.title,
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1.2,
+                                          title: Text(
+                                            wallet.title,
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.2,
+                                            ),
                                           ),
-                                        ),
-                                        subtitle: Row(
-                                          children: [
-                                            Flexible(
-                                              flex: 2,
-                                              child: Text(
-                                                '$balance ${wallet.letterCode}',
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                ),
-                                                overflow: TextOverflow.visible,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 4,
-                                            ),
-                                            if (showFiat) const Text('|'),
-                                            const SizedBox(
-                                              width: 4,
-                                            ),
-                                            if (showFiat)
+                                          subtitle: Row(
+                                            children: [
                                               Flexible(
+                                                flex: 2,
                                                 child: Text(
-                                                  '${PriceTicker.renderPrice(
-                                                    double.parse(balance),
-                                                    _appSettings
-                                                        .selectedCurrency,
-                                                    wallet.letterCode,
-                                                    _appSettings.exchangeRates,
-                                                  ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
+                                                  '$balance ${wallet.letterCode}',
                                                   style: const TextStyle(
                                                     fontSize: 13,
                                                   ),
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                      TextOverflow.visible,
                                                 ),
                                               ),
-                                          ],
-                                        ),
-                                        trailing: Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              if (showFiat) const Text('|'),
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              if (showFiat)
+                                                Flexible(
+                                                  child: Text(
+                                                    '${PriceTicker.renderPrice(
+                                                      double.parse(balance),
+                                                      _appSettings
+                                                          .selectedCurrency,
+                                                      wallet.letterCode,
+                                                      _appSettings
+                                                          .exchangeRates,
+                                                    ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
+                                                    style: const TextStyle(
+                                                      fontSize: 13,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                          trailing: Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        )
                 ],
               ),
             ),

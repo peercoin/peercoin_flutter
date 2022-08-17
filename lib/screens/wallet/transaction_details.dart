@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../models/available_coins.dart';
@@ -11,14 +12,6 @@ import '../../widgets/service_container.dart';
 
 class TransactionDetails extends StatelessWidget {
   const TransactionDetails({Key? key}) : super(key: key);
-
-  void _launchURL(String url) async {
-    await canLaunchUrlString(url)
-        ? await launchUrlString(
-            url,
-          )
-        : throw 'Could not launch $url';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +49,10 @@ class TransactionDetails extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.instance.translate('time'),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    AppLocalizations.instance.translate('time'),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   SelectableText(
                     tx.timestamp! != 0
                         ? DateFormat().format(
@@ -102,11 +97,14 @@ class TransactionDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AppLocalizations.instance.translate('tx_address'),
+                    AppLocalizations.instance.translate('tx_recipients'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(tx.address),
-                  // Text("") TODO might add address label here in the future
+                  ...renderRecipients(
+                    tx: tx,
+                    letterCode: coinWallet.letterCode,
+                    decimalProduct: decimalProduct,
+                  )
                 ],
               ),
               const Divider(),
@@ -147,7 +145,7 @@ class TransactionDetails extends StatelessWidget {
                         SelectableText(tx.opReturn)
                       ],
                     )
-                  : Container(),
+                  : const SizedBox(),
               const SizedBox(height: 20),
               Center(
                 child: PeerButton(
@@ -161,5 +159,58 @@ class TransactionDetails extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> renderRecipients({
+    required WalletTransaction tx,
+    required String letterCode,
+    required int decimalProduct,
+  }) {
+    List<Widget> list = [];
+
+    if (tx.recipients.isEmpty) {
+      list.add(
+        renderRow(tx.address, tx.value / decimalProduct, letterCode),
+      );
+    }
+    tx.recipients.forEach(
+      (addr, value) => list.add(
+        renderRow(addr, value / decimalProduct, letterCode),
+      ),
+    );
+    return list;
+  }
+
+  Widget renderRow(String addr, double value, String letterCode) {
+    return Row(
+      key: Key(addr),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 2,
+          child: DoubleTabToClipboard(
+            clipBoardData: addr,
+            child: Text(
+              addr,
+              style: const TextStyle(
+                fontSize: 13,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        Flexible(
+          child: Text('$value $letterCode'),
+        ),
+      ],
+    );
+  }
+
+  void _launchURL(String url) async {
+    await canLaunchUrlString(url)
+        ? await launchUrlString(
+            url,
+          )
+        : throw 'Could not launch $url';
   }
 }

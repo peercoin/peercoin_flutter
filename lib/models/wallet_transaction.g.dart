@@ -22,6 +22,8 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
       value: fields[2] as int,
       fee: fields[3] as int,
       address: fields[4] as String,
+      recipients:
+          fields[10] == null ? {} : (fields[10] as Map).cast<String, int>(),
       direction: fields[5] as String,
       broadCasted: fields[7] as bool,
       broadcastHex: fields[8] as String,
@@ -33,7 +35,7 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
   @override
   void write(BinaryWriter writer, WalletTransaction obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.txid)
       ..writeByte(1)
@@ -53,7 +55,9 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
       ..writeByte(8)
       ..write(obj.broadcastHex)
       ..writeByte(9)
-      ..write(obj.opReturn);
+      ..write(obj.opReturn)
+      ..writeByte(10)
+      ..write(obj.recipients);
   }
 
   @override

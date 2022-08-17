@@ -14,6 +14,7 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
+import 'package:peercoin/models/buildresult.dart';
 
 import '../models/available_coins.dart';
 import '../models/coin_wallet.dart';
@@ -39,6 +40,11 @@ class ActiveWallets with ChangeNotifier {
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
     _walletBox = await _encryptedBox.getWalletBox();
+
+    //load wallets into cache
+    for (var element in activeWalletsValues) {
+      getHdWallet(element.name);
+    }
   }
 
   Future<String> get seedPhrase async {
@@ -71,11 +77,11 @@ class ActiveWallets with ChangeNotifier {
     }
   }
 
-  Future<List<CoinWallet>> get activeWalletsValues async {
-    return _walletBox.values.toList() as FutureOr<List<CoinWallet>>;
+  List<CoinWallet> get activeWalletsValues {
+    return _walletBox.values.toList() as List<CoinWallet>;
   }
 
-  Future<List> get activeWalletsKeys async {
+  List get activeWalletsKeys {
     return _walletBox.keys.toList();
   }
 
@@ -343,7 +349,7 @@ class ActiveWallets with ChangeNotifier {
                         (element) => element.address == addr) !=
                     null) {
                   //address is ours, add new tx
-                  final txValue = (vOut['value'] * decimalProduct).toInt();
+                  final int txValue = (vOut['value'] * decimalProduct).toInt();
 
                   //increase notification value for addr
                   final addrInWallet = openWallet.addresses
@@ -360,6 +366,7 @@ class ActiveWallets with ChangeNotifier {
                       value: txValue,
                       fee: 0,
                       address: addr,
+                      recipients: {addr: txValue},
                       direction: direction,
                       broadCasted: true,
                       confirmations: tx['confirmations'] ?? 0,
@@ -403,6 +410,7 @@ class ActiveWallets with ChangeNotifier {
                   value: 0,
                   fee: 0,
                   address: 'Metadata',
+                  recipients: {'Metadata': 0},
                   direction: direction,
                   broadCasted: true,
                   confirmations: tx['confirmations'] ?? 0,
@@ -434,22 +442,27 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<void> putOutgoingTx(
-      String identifier, String address, Map tx, bool neededChange) async {
+  Future<void> putOutgoingTx({
+    required String identifier,
+    required BuildResult buildResult,
+    required int totalValue,
+    required int totalFees,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.putTransaction(
       WalletTransaction(
-        txid: tx['txid'],
-        timestamp: tx['blocktime'] ?? 0,
-        value: tx['outValue'],
-        fee: tx['outFees'],
-        address: address,
+        txid: buildResult.id,
+        timestamp: 0,
+        value: totalValue,
+        fee: totalFees,
+        recipients: buildResult.recipients,
+        address: buildResult.recipients.keys.first,
         direction: 'out',
         broadCasted: false,
         confirmations: 0,
-        broadcastHex: tx['hex'],
-        opReturn: tx['opReturn'],
+        broadcastHex: buildResult.hex,
+        opReturn: buildResult.opReturn,
       ),
     );
 
@@ -457,7 +470,7 @@ class ActiveWallets with ChangeNotifier {
     var addrInWallet = openWallet.addresses
         .firstWhereOrNull((element) => element.address == _unusedAddress);
     if (addrInWallet != null) {
-      if (neededChange == true) {
+      if (buildResult.neededChange == true) {
         addrInWallet.isChangeAddr = true;
       }
       //increase notification value
@@ -550,11 +563,10 @@ class ActiveWallets with ChangeNotifier {
     return walletAddress.wif ?? '';
   }
 
-  Future<Map> buildTransaction({
+  Future<BuildResult> buildTransaction({
     required String identifier,
-    required String address,
-    required double amount,
     required int fee,
+    required Map<String, int> recipients,
     String opReturn = '',
     bool firstPass = true,
     List<WalletUtxo>? paperWalletUtxos,
@@ -565,7 +577,18 @@ class ActiveWallets with ChangeNotifier {
       identifier: identifier,
     );
 
-    var txAmount = (amount * decimalProduct).toInt();
+    var txAmount = 0;
+    recipients.forEach(
+      (address, amount) {
+        txAmount += amount;
+        LoggerWrapper.logInfo(
+          'ActiveWallets',
+          'buildTransaction',
+          'sending $amount to $address',
+        );
+      },
+    );
+
     var openWallet = getSpecificCoinWallet(identifier);
     var hex = '';
     var destroyedChange = 0;
@@ -576,12 +599,6 @@ class ActiveWallets with ChangeNotifier {
       'firstPass: $firstPass',
     );
 
-    LoggerWrapper.logInfo(
-      'ActiveWallets',
-      'buildTransaction',
-      'sending $amount to $address',
-    );
-
     //check if tx needs change
     var needsChange = true;
     if (txAmount == openWallet.balance || paperWalletUtxos != null) {
@@ -590,11 +607,6 @@ class ActiveWallets with ChangeNotifier {
         'ActiveWallets',
         'buildTransaction',
         'needschange $needsChange, fee $fee',
-      );
-      LoggerWrapper.logInfo(
-        'ActiveWallets',
-        'buildTransaction',
-        'change needed $txAmount - $fee',
       );
     }
 
@@ -610,13 +622,27 @@ class ActiveWallets with ChangeNotifier {
 
         for (var utxo in utxoPool) {
           if (utxo.value > 0) {
-            if (totalInputValue <= (txAmount + fee)) {
-              totalInputValue += utxo.value;
-              inputTx.add(utxo);
+            if (utxo.height > 0 ||
+                openWallet.transactions.firstWhereOrNull(
+                      (tx) => tx.txid == utxo.hash && tx.direction == 'out',
+                    ) !=
+                    null) {
+              if ((needsChange && totalInputValue <= (txAmount + fee)) ||
+                  (needsChange == false &&
+                      totalInputValue < (txAmount + fee))) {
+                totalInputValue += utxo.value;
+                inputTx.add(utxo);
+                LoggerWrapper.logInfo(
+                  'ActiveWallets',
+                  'buildTransaction',
+                  'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $totalInputValue',
+                );
+              }
+            } else {
               LoggerWrapper.logInfo(
                 'ActiveWallets',
                 'buildTransaction',
-                'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $totalInputValue',
+                'discarded inputTx: ${utxo.hash} (${utxo.value}) because unconfirmed',
               );
             }
           }
@@ -628,34 +654,60 @@ class ActiveWallets with ChangeNotifier {
         //start building tx
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
+        var changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
+        bool feesHaveBeenDeductedFromRecipient = false;
+
         if (needsChange == true) {
-          var changeAmount = totalInputValue - txAmount - fee;
           LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
             'change amount $changeAmount, tx amount $txAmount, fee $fee',
           );
 
-          if (changeAmount <= coin.minimumTxValue) {
+          if (changeAmount < coin.minimumTxValue) {
             //change is too small! no change output
-            destroyedChange = changeAmount;
-            if (txAmount == 0) {
-              tx.addOutput(address, BigInt.from(txAmount));
-            } else {
-              tx.addOutput(address, BigInt.from(txAmount - fee));
-              destroyedChange = destroyedChange + fee;
-            }
+            destroyedChange = totalInputValue - txAmount;
+            // if (txAmount > 0) {
+            //   // recipients.update(recipients.keys.last, (value) => value - fee);
+            // } used to look like this: https://github.com/peercoin/peercoin_flutter/blob/ab62d3c78ed88dd08dbb51f4a5c5515839d677c8/lib/providers/active_wallets.dart#L642
+            // I can not remember what this case was fore and why the recipient was canabalized to pay for fees
           } else {
-            tx.addOutput(address, BigInt.from(txAmount));
+            //add change output to unused address
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else {
+          //empty wallet case - full wallet balance has been requested but fees have to be paid
           LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
-            'no change needed, tx amount $txAmount, fee $fee, output added for $address ${txAmount - fee}',
+            'no change needed, tx amount $txAmount, fee $fee, output added for ${recipients.keys.last} ${txAmount - fee}',
           );
-          tx.addOutput(address, BigInt.from(txAmount - fee));
+          recipients.update(recipients.keys.last, (value) => value - fee);
+          feesHaveBeenDeductedFromRecipient = true;
+          txAmount -= fee;
+        }
+
+        //add recipient outputs
+        recipients.forEach((address, amount) {
+          LoggerWrapper.logInfo(
+            'ActiveWallets',
+            'buildTransaction',
+            'adding output $amount for $address',
+          );
+          tx.addOutput(address, BigInt.from(amount));
+        });
+
+        //safety check of totalInputValue
+        if (totalInputValue >
+            (txAmount + destroyedChange + fee + changeAmount)) {
+          throw ('totalInputValue safety mechanism triggered');
+        }
+
+        //correct txAmount for fees if txAmount is 0
+        bool allRecipientOutPutsAreZero = false;
+        if (txAmount == 0) {
+          txAmount += fee;
+          allRecipientOutPutsAreZero = true;
         }
 
         //add OP_RETURN if exists
@@ -713,8 +765,7 @@ class ActiveWallets with ChangeNotifier {
         if (firstPass == true) {
           return await buildTransaction(
             identifier: identifier,
-            address: address,
-            amount: amount,
+            recipients: recipients,
             opReturn: opReturn,
             fee: requiredFeeInSatoshis,
             firstPass: false,
@@ -730,14 +781,20 @@ class ActiveWallets with ChangeNotifier {
           );
           hex = intermediate.toHex();
 
-          return {
-            'fee': requiredFeeInSatoshis,
-            'hex': hex,
-            'id': intermediate.getId(),
-            'destroyedChange': destroyedChange,
-            'opReturn': opReturn,
-            'neededChange': needsChange
-          };
+          return BuildResult(
+            fee: requiredFeeInSatoshis,
+            hex: hex,
+            recipients: recipients,
+            totalAmount: txAmount,
+            id: intermediate.getId(),
+            destroyedChange: destroyedChange,
+            opReturn: opReturn,
+            neededChange: needsChange,
+            allRecipientOutPutsAreZero: allRecipientOutPutsAreZero,
+            feesHaveBeenDeductedFromRecipient:
+                feesHaveBeenDeductedFromRecipient,
+            inputTx: inputTx,
+          );
         }
       } else {
         throw ('no utxos available');

@@ -1,30 +1,36 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:coinslib/coinslib.dart';
-import 'package:flutter/foundation.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:fast_csv/fast_csv.dart' as fast_csv;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/widgets/wallet/send_tab_management.dart';
+import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
 import 'package:provider/provider.dart';
 
-import '../../tools/price_ticker.dart';
-import '/../models/wallet_address.dart';
-import '/../providers/app_settings.dart';
-import '/../screens/wallet/wallet_home.dart';
-import '/../tools/app_localizations.dart';
 import '/../models/available_coins.dart';
 import '/../models/coin.dart';
 import '/../models/coin_wallet.dart';
+import '/../models/wallet_address.dart';
 import '/../providers/active_wallets.dart';
+import '/../providers/app_settings.dart';
 import '/../providers/electrum_connection.dart';
+import '/../screens/wallet/wallet_home.dart';
+import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
 import '/../tools/auth.dart';
 import '/../tools/utf8_text_field.dart';
 import '/../widgets/buttons.dart';
 import '/../widgets/service_container.dart';
 import '/../widgets/wallet/wallet_balance_header.dart';
+import '../../screens/wallet/transaction_confirmation.dart';
 import '../../tools/logger_wrapper.dart';
+import '../../tools/price_ticker.dart';
 
 class SendTab extends StatefulWidget {
   final Function changeIndex;
@@ -47,368 +53,29 @@ class SendTab extends StatefulWidget {
 
 class _SendTabState extends State<SendTab> {
   final _formKey = GlobalKey<FormState>();
-  final _addressKey = GlobalKey<FormFieldState>();
-  final _amountKey = GlobalKey<FormFieldState>();
+  final _addressKeyList = [GlobalKey<FormFieldState>()];
+  final _amountKeyList = [GlobalKey<FormFieldState>()];
+  final _labelKeyList = [GlobalKey<FormFieldState>()];
   final _opReturnKey = GlobalKey<FormFieldState>();
-  final _labelKey = GlobalKey<FormFieldState>();
-  final _addressController = TextEditingController();
-  final _amountController = TextEditingController();
-  final _labelController = TextEditingController();
+  final _addressControllerList = [TextEditingController()];
+  final _amountControllerList = [TextEditingController()];
+  final _labelControllerList = [TextEditingController()];
   final _opReturnController = TextEditingController();
   bool _initial = true;
   late Coin _availableCoin;
   late ActiveWallets _activeWallets;
-  int _txFee = 0;
-  int _totalValue = 0;
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
   late AppSettings _appSettings;
   late final int _decimalProduct;
   bool _fiatEnabled = false;
   bool _fiatInputEnabled = false;
-  String _amountInputHelperText = '';
-  double _requestedAmountInCoins = 0.0;
+  final List<String> _amountInputHelperTextList = [''];
+  final List<double> _requestedAmountInCoinsList = [0.0];
+  double _totalAmountRequestedInCoins = 0.0;
   double _coinValue = 0.0;
-
-  @override
-  void didChangeDependencies() async {
-    if (_initial == true) {
-      _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
-      _activeWallets = Provider.of<ActiveWallets>(context);
-      _appSettings = context.read<AppSettings>();
-
-      _availableAddresses =
-          await _activeWallets.getWalletAddresses(widget.wallet.name);
-      _decimalProduct = AvailableCoins.getDecimalProduct(
-        identifier: widget.wallet.name,
-      );
-      _fiatEnabled = _appSettings.selectedCurrency.isNotEmpty &&
-          !widget.wallet.name.contains('Testnet');
-      _calcAmountInputHelperText();
-
-      setState(() {
-        _addressController.text = widget.address ?? '';
-        _labelController.text = widget.label ?? '';
-        _initial = false;
-      });
-    }
-    super.didChangeDependencies();
-  }
-
-  Future<Map> _buildTx() async {
-    return await _activeWallets.buildTransaction(
-      identifier: widget.wallet.name,
-      address: _addressKey.currentState!.value.trim(),
-      amount: _requestedAmountInCoins,
-      fee: 0,
-      opReturn: _opReturnKey.currentState?.value ?? '',
-    );
-  }
-
-  void _parseQrResult(String code) {
-    var parsed = Uri.parse(code);
-    parsed.queryParameters.forEach((key, value) {
-      if (key == 'amount') {
-        _amountController.text = value;
-      } else if (key == 'label') {
-        _labelController.text = value;
-      }
-    });
-    _addressController.text = parsed.path;
-  }
-
-  RegExp _getValidator(int fractions) {
-    var expression = r'^([1-9]{1}[0-9]{0,' +
-        fractions.toString() +
-        r'}(,[0-9]{3})*(.[0-9]{0,' +
-        fractions.toString() +
-        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,' +
-        fractions.toString() +
-        r'})?|0(.[0-9]{0,' +
-        fractions.toString() +
-        r'})?|(.[0-9]{1,' +
-        fractions.toString() +
-        r'})?)$';
-
-    return RegExp(expression);
-  }
-
-  void _showTransactionConfirmation(context) async {
-    var firstPress = true;
-    var buildResult = await _buildTx();
-
-    int destroyedChange = buildResult['destroyedChange'];
-    var correctedDust = 0;
-    _txFee = buildResult['fee'];
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String? displayValue = _requestedAmountInCoins.toString();
-        _totalValue = (_requestedAmountInCoins * _decimalProduct).toInt();
-        if (_totalValue == widget.wallet.balance) {
-          var newValue = _requestedAmountInCoins - (_txFee / _decimalProduct);
-          displayValue = newValue.toStringAsFixed(_availableCoin.fractions);
-        } else {
-          _totalValue = _totalValue + _txFee;
-        }
-        if (destroyedChange > 0) {
-          var newValue = (_requestedAmountInCoins - (_txFee / _decimalProduct));
-          displayValue = newValue.toString();
-
-          if (_amountKey.currentState!.value == '0') {
-            displayValue = '0';
-            correctedDust = destroyedChange - _txFee;
-          } else {
-            correctedDust = destroyedChange;
-          }
-          _totalValue =
-              (_requestedAmountInCoins * _decimalProduct + destroyedChange)
-                  .toInt();
-        }
-        return SimpleDialog(
-          title: Text(
-              AppLocalizations.instance.translate('send_confirm_transaction')),
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
-              child: Column(
-                children: [
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: AppLocalizations.instance
-                          .translate('send_transferring'),
-                      style: DefaultTextStyle.of(context).style,
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: '$displayValue ${widget.wallet.letterCode}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(
-                          text: AppLocalizations.instance.translate('send_to'),
-                        ),
-                        TextSpan(
-                          text: _addressKey.currentState!.value,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    AppLocalizations.instance.translate(
-                      'send_fee',
-                      {
-                        'amount': '${_txFee / _decimalProduct}',
-                        'letter_code': widget.wallet.letterCode
-                      },
-                    ),
-                  ),
-                  if (correctedDust > 0)
-                    Text(
-                      AppLocalizations.instance.translate(
-                        'send_dust',
-                        {
-                          'amount': '${correctedDust / _decimalProduct}',
-                          'letter_code': widget.wallet.letterCode
-                        },
-                      ),
-                      style: TextStyle(color: Theme.of(context).errorColor),
-                    ),
-                  Text(
-                    AppLocalizations.instance.translate(
-                      'send_total',
-                      {
-                        'amount': '${_totalValue / _decimalProduct}',
-                        'letter_code': widget.wallet.letterCode
-                      },
-                    ),
-                    style: _fiatInputEnabled
-                        ? const TextStyle()
-                        : const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  if (_fiatInputEnabled)
-                    Text(
-                      AppLocalizations.instance.translate(
-                        'send_total',
-                        {
-                          'amount':
-                              ((_totalValue / _decimalProduct) * _coinValue)
-                                  .toStringAsFixed(4),
-                          'letter_code': _appSettings.selectedCurrency
-                        },
-                      ),
-                      style: _fiatInputEnabled
-                          ? const TextStyle(fontWeight: FontWeight.bold)
-                          : const TextStyle(),
-                    ),
-                  const SizedBox(height: 20),
-                  PeerButton(
-                    text: AppLocalizations.instance.translate(
-                      'send_confirm_send',
-                    ),
-                    action: () async {
-                      if (firstPress == false) return; //prevent double tap
-                      final electrumConnection =
-                          context.read<ElectrumConnection>();
-                      final navigator = Navigator.of(context);
-                      try {
-                        firstPress = false;
-                        //write tx to history
-                        await _activeWallets.putOutgoingTx(
-                          widget.wallet.name,
-                          _addressKey.currentState!.value,
-                          {
-                            'txid': buildResult['id'],
-                            'hex': buildResult['hex'],
-                            'outValue': _totalValue - _txFee,
-                            'outFees': _txFee + destroyedChange,
-                            'opReturn': buildResult['opReturn'],
-                          },
-                          buildResult['neededChange'],
-                        );
-                        //broadcast
-                        electrumConnection.broadcastTransaction(
-                          buildResult['hex'],
-                          buildResult['id'],
-                        );
-                        //store label if exists
-                        if (_labelKey.currentState!.value != '') {
-                          _activeWallets.updateLabel(
-                            widget.wallet.name,
-                            _addressKey.currentState!.value,
-                            _labelKey.currentState!.value,
-                          );
-                        }
-                        //pop message
-                        navigator.pop();
-                        //navigate back to tx list
-                        widget.changeIndex(Tabs.transactions);
-                      } catch (e) {
-                        LoggerWrapper.logError(
-                          'SendTab',
-                          'showTransactionConfirmation',
-                          e.toString(),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              AppLocalizations.instance.translate(
-                                'send_oops',
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<Iterable> _getSuggestions(String pattern) async {
-    return _availableAddresses.where((element) {
-      if (element.isOurs == false && element.address.contains(pattern)) {
-        return true;
-      } else if (element.isOurs == false &&
-          element.addressBookName != null &&
-          element.addressBookName!.contains(pattern)) {
-        return true;
-      }
-      return false;
-    });
-  }
-
-  String? _amountValidator(String value) {
-    if (value.isEmpty) {
-      return AppLocalizations.instance.translate('send_enter_amount');
-    }
-    String convertedValue = _fiatInputEnabled
-        ? _requestedAmountInCoins.toString()
-        : value.replaceAll(',', '.');
-
-    if (_fiatInputEnabled == false) {
-      _amountController.text = convertedValue;
-    }
-
-    var txValueInSatoshis =
-        (double.parse(convertedValue) * _decimalProduct).toInt();
-    LoggerWrapper.logInfo(
-      'SendTab',
-      'send_amount',
-      'req value $txValueInSatoshis - ${widget.wallet.balance}',
-    );
-    if (convertedValue.contains('.') &&
-        convertedValue.split('.')[1].length > _availableCoin.fractions) {
-      return AppLocalizations.instance.translate('send_amount_small');
-    }
-    if (txValueInSatoshis > widget.wallet.balance ||
-        txValueInSatoshis == 0 && widget.wallet.balance == 0) {
-      return AppLocalizations.instance.translate('send_amount_exceeds');
-    }
-    if (txValueInSatoshis < _availableCoin.minimumTxValue &&
-        _opReturnController.text.isEmpty) {
-      return AppLocalizations.instance.translate('send_amount_below_minimum',
-          {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'});
-    }
-    if (txValueInSatoshis == widget.wallet.balance &&
-        widget.wallet.balance == _availableCoin.minimumTxValue) {
-      return AppLocalizations.instance.translate(
-        'send_amount_below_minimum_unable',
-        {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'},
-      );
-    }
-    return null;
-  }
-
-  void _calcAmountInputHelperText() {
-    final inputAmount = _amountController.text == ''
-        ? 1.0
-        : double.tryParse(
-              _amountController.text.replaceAll(',', '.'),
-            ) ??
-            0;
-
-    if (_fiatEnabled == false) {
-      setState(() {
-        _requestedAmountInCoins = inputAmount;
-      });
-      return;
-    }
-
-    final fiatPrice = PriceTicker.renderPrice(
-      1,
-      _appSettings.selectedCurrency,
-      widget.wallet.letterCode,
-      _appSettings.exchangeRates,
-    );
-
-    String priceInCoins =
-        (_fiatInputEnabled ? inputAmount * (1 / _coinValue) : inputAmount)
-            .toStringAsFixed(_availableCoin.fractions);
-
-    String result = '';
-    if (_fiatInputEnabled) {
-      result =
-          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${widget.wallet.letterCode}';
-    } else {
-      result =
-          '$inputAmount ${widget.wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
-    }
-
-    setState(() {
-      _amountInputHelperText = result;
-      _requestedAmountInCoins = double.parse(priceInCoins);
-      _coinValue = fiatPrice;
-    });
-  }
+  int _numberOfRecipients = 1;
+  int _currentAddressIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -441,14 +108,30 @@ class _SendTabState extends State<SendTab> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       PeerServiceTitle(
-                        title: AppLocalizations.instance
-                            .translate('wallet_bottom_nav_send'),
+                        title: AppLocalizations.instance.translate(
+                          'wallet_bottom_nav_send',
+                        ),
                       ),
+                      _numberOfRecipients > 1
+                          ? SendTabNavigator(
+                              currentIndex: _currentAddressIndex + 1,
+                              numberOfRecipients: _numberOfRecipients,
+                              raiseNewindex: (int newIndex) => setState(
+                                () => {
+                                  if (triggerFormValidation())
+                                    {
+                                      _currentAddressIndex = newIndex - 1,
+                                    }
+                                },
+                              ),
+                            )
+                          : const SizedBox(),
                       TypeAheadFormField(
                         hideOnEmpty: true,
-                        key: _addressKey,
+                        key: _addressKeyList[_currentAddressIndex],
                         textFieldConfiguration: TextFieldConfiguration(
-                          controller: _addressController,
+                          controller:
+                              _addressControllerList[_currentAddressIndex],
                           autocorrect: false,
                           decoration: InputDecoration(
                             icon: Icon(
@@ -461,7 +144,8 @@ class _SendTabState extends State<SendTab> {
                               onPressed: () async {
                                 var data =
                                     await Clipboard.getData('text/plain');
-                                _addressController.text = data!.text!.trim();
+                                _addressControllerList[_currentAddressIndex]
+                                    .text = data!.text!.trim();
                               },
                               icon: Icon(
                                 Icons.paste_rounded,
@@ -484,13 +168,22 @@ class _SendTabState extends State<SendTab> {
                           return suggestionsBox;
                         },
                         onSuggestionSelected: (dynamic suggestion) {
-                          _addressController.text = suggestion.address;
-                          _labelController.text = suggestion.addressBookName;
+                          _addressControllerList[_currentAddressIndex].text =
+                              suggestion.address;
+                          _labelControllerList[_currentAddressIndex].text =
+                              suggestion.addressBookName;
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
                             return AppLocalizations.instance
                                 .translate('send_enter_address');
+                          }
+                          if (_addressControllerList
+                                  .where((element) => element.text == value)
+                                  .length >
+                              1) {
+                            return AppLocalizations.instance
+                                .translate('send_address_already_exists');
                           }
                           var sanitized = value.trim();
                           if (Address.validateAddress(
@@ -504,8 +197,8 @@ class _SendTabState extends State<SendTab> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: _labelKey,
-                        controller: _labelController,
+                        key: _labelKeyList[_currentAddressIndex],
+                        controller: _labelControllerList[_currentAddressIndex],
                         autocorrect: false,
                         decoration: InputDecoration(
                           icon: Icon(
@@ -519,8 +212,8 @@ class _SendTabState extends State<SendTab> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: _amountKey,
-                        controller: _amountController,
+                        key: _amountKeyList[_currentAddressIndex],
+                        controller: _amountControllerList[_currentAddressIndex],
                         autocorrect: false,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
@@ -542,17 +235,25 @@ class _SendTabState extends State<SendTab> {
                                 ? _appSettings.selectedCurrency
                                 : widget.wallet.letterCode,
                           ),
-                          helperText: _amountInputHelperText,
+                          helperText:
+                              _amountInputHelperTextList[_currentAddressIndex],
                         ),
                         onChanged: (value) {
-                          _calcAmountInputHelperText();
-                          if (_amountKey.currentState!.hasError) {
-                            _amountKey.currentState!.validate();
+                          _calcAmountInputHelperText(_currentAddressIndex);
+                          if (_amountKeyList[_currentAddressIndex]
+                              .currentState!
+                              .hasError) {
+                            _amountKeyList[_currentAddressIndex]
+                                .currentState!
+                                .validate();
                             //position cursor correctly
-                            _amountController.selection =
-                                TextSelection.fromPosition(
+                            _amountControllerList[_currentAddressIndex]
+                                .selection = TextSelection.fromPosition(
                               TextPosition(
-                                offset: _amountController.text.length,
+                                offset:
+                                    _amountControllerList[_currentAddressIndex]
+                                        .text
+                                        .length,
                               ),
                             );
                           }
@@ -622,20 +323,46 @@ class _SendTabState extends State<SendTab> {
                             ),
                           ),
                         ),
-                      if (_fiatEnabled)
+                      SendTabAddressManagement(
+                        onAdd: () {
+                          if (_addNewAddress()) {
+                            setState(
+                              () {
+                                _numberOfRecipients++;
+                              },
+                            );
+                          }
+                        },
+                        onDelete: () {
+                          _removeAddress(_currentAddressIndex);
+                        },
+                        numberOfRecipients: _numberOfRecipients,
+                      ),
+                      if (_fiatEnabled && _currentAddressIndex == 0)
                         SwitchListTile(
                           value: _fiatInputEnabled,
-                          onChanged: (_) => setState(() {
-                            _fiatInputEnabled = _;
-                            _amountController.text = '';
-                            _amountController.selection =
-                                TextSelection.fromPosition(
-                              TextPosition(
-                                offset: _amountController.text.length,
-                              ),
-                            );
-                            _calcAmountInputHelperText();
-                          }),
+                          onChanged: (_) => setState(
+                            () {
+                              _fiatInputEnabled = _;
+                              _amountControllerList[_currentAddressIndex].text =
+                                  '';
+                              _amountControllerList[_currentAddressIndex]
+                                  .selection = TextSelection.fromPosition(
+                                TextPosition(
+                                  offset: _amountControllerList[
+                                          _currentAddressIndex]
+                                      .text
+                                      .length,
+                                ),
+                              );
+                              _amountControllerList.asMap().forEach(
+                                (index, _) {
+                                  _amountControllerList[index].text = '';
+                                  _calcAmountInputHelperText(index);
+                                },
+                              );
+                            },
+                          ),
                           title: Text(
                             AppLocalizations.instance.translate(
                               'send_fiat_switch',
@@ -649,62 +376,36 @@ class _SendTabState extends State<SendTab> {
                             ),
                           ),
                         ),
-                      SwitchListTile(
-                        value: _expertMode,
-                        onChanged: (_) => setState(() {
-                          _expertMode = _;
-                          _opReturnController.text = '';
-                        }),
-                        title: Text(
-                          AppLocalizations.instance.translate(
-                            'send_add_metadata',
-                          ),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.4,
-                          ),
-                        ),
-                      ),
+                      _currentAddressIndex == 0
+                          ? SwitchListTile(
+                              value: _expertMode,
+                              onChanged: (_) => setState(() {
+                                _expertMode = _;
+                                _opReturnController.text = '';
+                              }),
+                              title: Text(
+                                AppLocalizations.instance.translate(
+                                  'send_add_metadata',
+                                ),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.4,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
                       const SizedBox(height: 10),
-                      PeerButtonBorder(
-                        text: AppLocalizations.instance.translate(
-                          'send_empty',
-                        ),
-                        action: () async {
-                          setState(() {
-                            _fiatInputEnabled = false;
-                          });
-                          _amountController.text =
-                              (widget.wallet.balance / _decimalProduct)
-                                  .toString();
-                          _calcAmountInputHelperText();
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      if (_appSettings.camerasAvailble)
-                        PeerButtonBorder(
-                          text: AppLocalizations.instance.translate(
-                            'scan_qr',
-                          ),
-                          action: () async {
-                            final result =
-                                await Navigator.of(context).pushNamed(
-                              Routes.qrScan,
-                              arguments: AppLocalizations.instance
-                                  .translate('scan_qr'),
-                            );
-                            if (result != null) {
-                              _parseQrResult(result as String);
-                            }
-                          },
-                        ),
-                      const SizedBox(height: 8),
                       PeerButton(
                         text: AppLocalizations.instance.translate('send'),
                         action: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (triggerFormValidation()) {
                             _formKey.currentState!.save();
                             FocusScope.of(context).unfocus(); //hide keyboard
+                            _amountControllerList.asMap().forEach(
+                              (index, _) {
+                                _calcAmountInputHelperText(index);
+                              },
+                            );
                             //check for required auth
                             if (_appSettings
                                 .authenticationOptions!['sendTransaction']!) {
@@ -731,17 +432,80 @@ class _SendTabState extends State<SendTab> {
                           }
                         },
                       ),
-                      if (!kIsWeb) const SizedBox(height: 10),
-                      if (!kIsWeb)
-                        Text(
-                          AppLocalizations.instance.translate(
-                            'wallet_send_label_hint_scan',
+                      const SizedBox(height: 10),
+                      if (_appSettings.camerasAvailble)
+                        PeerButtonBorder(
+                          text: AppLocalizations.instance.translate(
+                            'scan_qr',
                           ),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
+                          action: () async {
+                            final result =
+                                await Navigator.of(context).pushNamed(
+                              Routes.qrScan,
+                              arguments: AppLocalizations.instance
+                                  .translate('scan_qr'),
+                            );
+                            if (result != null) {
+                              _parseQrResult(result as String);
+                            }
+                          },
                         ),
+                      const SizedBox(height: 10),
+                      PeerButtonBorder(
+                        text: AppLocalizations.instance.translate(
+                          'send_empty',
+                        ),
+                        action: () async {
+                          setState(() {
+                            _fiatInputEnabled = false;
+                          });
+                          _amountControllerList[_currentAddressIndex].text =
+                              (widget.wallet.balance / _decimalProduct)
+                                  .toString();
+                          _calcAmountInputHelperText(_currentAddressIndex);
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      PeerButtonBorder(
+                        text: AppLocalizations.instance.translate(
+                          'send_import_csv',
+                        ),
+                        action: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['csv'],
+                          );
+
+                          if (result != null) {
+                            File file = File(result.files.single.path!);
+                            var csv = await file.readAsString();
+                            final parsed = fast_csv.parse(csv);
+                            var i = 0;
+                            for (final row in parsed) {
+                              final address = row[0];
+                              final amount =
+                                  double.parse(row[1].replaceAll(',', '.'));
+                              if (i == 0) {
+                                _addressControllerList[0].text = address;
+                                _amountControllerList[0].text =
+                                    amount.toString();
+                                setState(() {});
+                              } else {
+                                _addNewAddress(
+                                  address: address,
+                                  amount: amount,
+                                  fromImport: true,
+                                );
+                                setState(() {
+                                  _numberOfRecipients++;
+                                });
+                              }
+                              i++;
+                            }
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -750,6 +514,262 @@ class _SendTabState extends State<SendTab> {
           ],
         ),
       ],
+    );
+  }
+
+  @override
+  void didChangeDependencies() async {
+    if (_initial == true) {
+      _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
+      _activeWallets = Provider.of<ActiveWallets>(context);
+      _appSettings = context.read<AppSettings>();
+
+      _availableAddresses =
+          await _activeWallets.getWalletAddresses(widget.wallet.name);
+      _decimalProduct = AvailableCoins.getDecimalProduct(
+        identifier: widget.wallet.name,
+      );
+      _fiatEnabled = _appSettings.selectedCurrency.isNotEmpty &&
+          !widget.wallet.name.contains('Testnet');
+      _calcAmountInputHelperText(_currentAddressIndex);
+
+      setState(() {
+        _addressControllerList[0].text = widget.address ?? '';
+        _labelControllerList[0].text = widget.label ?? '';
+        _initial = false;
+      });
+    }
+
+    super.didChangeDependencies();
+  }
+
+  bool triggerFormValidation() {
+    return _formKey.currentState!.validate();
+  }
+
+  bool _addNewAddress(
+      {String address = '', double amount = 0.0, bool fromImport = false}) {
+    if (triggerFormValidation() || fromImport == true) {
+      if (fromImport == false) {
+        _formKey.currentState!.save();
+      }
+      _labelControllerList.add(TextEditingController());
+      _addressControllerList.add(TextEditingController());
+      _addressControllerList.last.text = address;
+      _amountControllerList.add(TextEditingController());
+      _amountControllerList.last.text = amount.toString();
+      _labelKeyList.add(GlobalKey<FormFieldState>());
+      _addressKeyList.add(GlobalKey<FormFieldState>());
+      _amountKeyList.add(GlobalKey<FormFieldState>());
+      _amountInputHelperTextList.add('');
+      _requestedAmountInCoinsList.add(amount);
+
+      setState(() {
+        _currentAddressIndex = _numberOfRecipients;
+      });
+      return true;
+    }
+    return false;
+  }
+
+  String? _amountValidator(String value) {
+    if (value.isEmpty) {
+      return AppLocalizations.instance.translate('send_enter_amount');
+    }
+    String sanitizedValue = _fiatInputEnabled
+        ? _requestedAmountInCoinsList[_currentAddressIndex].toString()
+        : value.replaceAll(',', '.');
+
+    if (_fiatInputEnabled == false) {
+      _amountControllerList[_currentAddressIndex].text = sanitizedValue;
+    }
+    _buildRecipientMap();
+
+    var txValueInSatoshis = double.parse(
+      (_totalAmountRequestedInCoins * _decimalProduct)
+          .toStringAsFixed(_availableCoin.fractions),
+    );
+    LoggerWrapper.logInfo(
+      'SendTab',
+      'send_amount',
+      'req value $txValueInSatoshis - ${widget.wallet.balance}',
+    );
+    if (sanitizedValue.contains('.') &&
+        sanitizedValue.split('.')[1].length > _availableCoin.fractions) {
+      return AppLocalizations.instance.translate('send_amount_small');
+    }
+    if (txValueInSatoshis > widget.wallet.balance ||
+        txValueInSatoshis == 0 && widget.wallet.balance == 0) {
+      return AppLocalizations.instance.translate('send_amount_exceeds');
+    }
+    if (txValueInSatoshis < _availableCoin.minimumTxValue &&
+        _opReturnController.text.isEmpty) {
+      return AppLocalizations.instance.translate('send_amount_below_minimum',
+          {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'});
+    }
+    if (txValueInSatoshis == widget.wallet.balance &&
+        widget.wallet.balance == _availableCoin.minimumTxValue) {
+      return AppLocalizations.instance.translate(
+        'send_amount_below_minimum_unable',
+        {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'},
+      );
+    }
+    return null;
+  }
+
+  Map<String, int> _buildRecipientMap() {
+    Map<String, int> recipients = {};
+    double totalCoins = 0;
+    _amountControllerList.asMap().forEach((key, value) {
+      var coins = _requestedAmountInCoinsList[key];
+      recipients[_addressControllerList[key].text.trim()] =
+          (coins * _decimalProduct).toInt();
+      totalCoins += coins;
+    });
+
+    setState(() {
+      _totalAmountRequestedInCoins = totalCoins;
+    });
+    return recipients;
+  }
+
+  Future<BuildResult> _buildTx() async {
+    return await _activeWallets.buildTransaction(
+      identifier: widget.wallet.name,
+      recipients: _buildRecipientMap(),
+      fee: 0,
+      opReturn: _opReturnKey.currentState?.value ?? '',
+    );
+  }
+
+  void _calcAmountInputHelperText(int index) {
+    final inputAmount = _amountControllerList[index].text == ''
+        ? 1.0
+        : double.tryParse(
+              _amountControllerList[index].text.replaceAll(',', '.'),
+            ) ??
+            0;
+
+    if (_fiatEnabled == false) {
+      setState(() {
+        _totalAmountRequestedInCoins = inputAmount;
+        _requestedAmountInCoinsList[index] = inputAmount;
+      });
+      return;
+    }
+
+    final fiatPrice = PriceTicker.renderPrice(
+      1,
+      _appSettings.selectedCurrency,
+      widget.wallet.letterCode,
+      _appSettings.exchangeRates,
+    );
+
+    String priceInCoins =
+        (_fiatInputEnabled ? inputAmount * (1 / _coinValue) : inputAmount)
+            .toStringAsFixed(_availableCoin.fractions);
+
+    String result = '';
+    if (_fiatInputEnabled) {
+      result =
+          '$inputAmount ${_appSettings.selectedCurrency} = $priceInCoins ${widget.wallet.letterCode}';
+    } else {
+      result =
+          '$inputAmount ${widget.wallet.letterCode} = ${(inputAmount * fiatPrice).toStringAsFixed(2)} ${_appSettings.selectedCurrency}';
+    }
+    setState(() {
+      _amountInputHelperTextList[index] = result;
+      _requestedAmountInCoinsList[index] = double.parse(priceInCoins);
+      _coinValue = fiatPrice;
+    });
+  }
+
+  Future<Iterable> _getSuggestions(String pattern) async {
+    return _availableAddresses.where((element) {
+      if (element.isOurs == false && element.address.contains(pattern)) {
+        return true;
+      } else if (element.isOurs == false &&
+          element.addressBookName != null &&
+          element.addressBookName!.contains(pattern)) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  RegExp _getValidator(int fractions) {
+    var expression = r'^([1-9]{1}[0-9]{0,' +
+        fractions.toString() +
+        r'}(,[0-9]{3})*(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|[1-9]{1}[0-9]{0,}(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|0(.[0-9]{0,' +
+        fractions.toString() +
+        r'})?|(.[0-9]{1,' +
+        fractions.toString() +
+        r'})?)$';
+
+    return RegExp(expression);
+  }
+
+  void _parseQrResult(String code) {
+    var parsed = Uri.parse(code);
+    parsed.queryParameters.forEach((key, value) {
+      if (key == 'amount') {
+        _amountControllerList[_currentAddressIndex].text = value;
+      } else if (key == 'label') {
+        _labelControllerList[_currentAddressIndex].text = value;
+      }
+    });
+    _addressControllerList[_currentAddressIndex].text = parsed.path;
+  }
+
+  _removeAddress(int index) {
+    _labelControllerList.removeAt(index);
+    _addressControllerList.removeAt(index);
+    _amountControllerList.removeAt(index);
+    _labelKeyList.removeAt(index);
+    _addressKeyList.removeAt(index);
+    _amountKeyList.removeAt(index);
+    _amountInputHelperTextList.removeAt(index);
+    _requestedAmountInCoinsList.removeAt(index);
+
+    setState(() {
+      _numberOfRecipients--;
+      if (_currentAddressIndex - 1 > 0) {
+        _currentAddressIndex--;
+      } else {
+        _currentAddressIndex = 0;
+      }
+    });
+  }
+
+  void _showTransactionConfirmation(context) async {
+    var buildResult = await _buildTx();
+    await Navigator.of(context).pushNamed(
+      Routes.transactionConfirmation,
+      arguments: TransactionConfirmationArguments(
+        buildResult: buildResult,
+        decimalProduct: _decimalProduct,
+        coinLetterCode: widget.wallet.letterCode,
+        coinIdentifier: widget.wallet.name,
+        callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
+        fiatPricePerCoin: _coinValue,
+        fiatCode: _appSettings.selectedCurrency,
+      ),
+    );
+    //persist labels
+    _labelControllerList.asMap().forEach(
+      (index, controller) {
+        if (controller.text != '') {
+          _activeWallets.updateLabel(
+            widget.wallet.name,
+            _addressControllerList[index].text,
+            controller.text,
+          );
+        }
+      },
     );
   }
 }

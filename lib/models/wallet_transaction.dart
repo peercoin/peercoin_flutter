@@ -23,6 +23,8 @@ class WalletTransaction extends HiveObject {
   String broadcastHex = '';
   @HiveField(9, defaultValue: '')
   String opReturn = '';
+  @HiveField(10, defaultValue: {})
+  Map<String, int> recipients = {};
 
   WalletTransaction({
     required this.txid,
@@ -30,6 +32,7 @@ class WalletTransaction extends HiveObject {
     required this.value,
     required this.fee,
     required this.address,
+    required this.recipients,
     required this.direction,
     required this.broadCasted,
     required this.broadcastHex,

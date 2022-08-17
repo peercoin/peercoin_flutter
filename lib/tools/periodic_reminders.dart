@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class PeriodicReminders {
     PeriodicReminderItem reminderItem,
   ) async {
     final activeWallets = ctx.read<ActiveWallets>();
-    final listOfActiveWallets = await activeWallets.activeWalletsKeys;
+    final listOfActiveWallets = activeWallets.activeWalletsKeys;
 
     //show alert
     await showDialog(
@@ -48,11 +49,11 @@ class PeriodicReminders {
                 ),
               ),
             if (reminderItem.id == 'donate')
-              listOfActiveWallets.contains('peercoin')
+              listOfActiveWallets.contains('peercoin') && !Platform.isIOS
                   ? TextButton(
                       onPressed: () async {
                         final navigator = Navigator.of(context);
-                        final values = await activeWallets.activeWalletsValues;
+                        final values = activeWallets.activeWalletsValues;
                         final ppcWallet = values.firstWhere(
                           (element) => element.name == 'peercoin',
                         );

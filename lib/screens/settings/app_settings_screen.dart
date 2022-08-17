@@ -60,7 +60,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
 
-      _availableWallets = await _activeWallets.activeWalletsValues;
+      _availableWallets = _activeWallets.activeWalletsValues;
 
       var localAuth = LocalAuthentication();
       _biometricsAvailable =
