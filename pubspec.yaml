@@ -48,6 +48,8 @@ dependencies:
   hex: ^0.2.0
   path_provider: ^2.0.11
   characters: ^1.2.0
+  file_picker: ^5.0.1
+  fast_csv: ^0.1.44
 
 dev_dependencies:
   integration_test:

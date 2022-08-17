@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:coinslib/coinslib.dart';
-import 'package:flutter/foundation.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:fast_csv/fast_csv.dart' as fast_csv;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -463,18 +465,48 @@ class _SendTabState extends State<SendTab> {
                           _calcAmountInputHelperText(_currentAddressIndex);
                         },
                       ),
-                      const SizedBox(height: 8),
-                      if (!kIsWeb) const SizedBox(height: 10),
-                      if (!kIsWeb)
-                        Text(
-                          AppLocalizations.instance.translate(
-                            'wallet_send_label_hint_scan',
-                          ),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
+                      const SizedBox(height: 10),
+                      PeerButtonBorder(
+                        text: AppLocalizations.instance.translate(
+                          'send_import_csv',
                         ),
+                        action: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['csv'],
+                          );
+
+                          if (result != null) {
+                            File file = File(result.files.single.path!);
+                            var csv = await file.readAsString();
+                            final parsed = fast_csv.parse(csv);
+                            var i = 0;
+                            for (final row in parsed) {
+                              final address = row[0];
+                              final amount =
+                                  double.parse(row[1].replaceAll(',', '.'));
+                              print(_currentAddressIndex);
+                              if (i == 0) {
+                                _addressControllerList[0].text = address;
+                                _amountControllerList[0].text =
+                                    amount.toString();
+                                setState(() {});
+                              } else {
+                                _addNewAddress(
+                                  address: address,
+                                  amount: amount,
+                                  fromImport: true,
+                                );
+                                setState(() {
+                                  _numberOfRecipients++;
+                                });
+                              }
+                              i++;
+                            }
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -516,18 +548,22 @@ class _SendTabState extends State<SendTab> {
     return _formKey.currentState!.validate();
   }
 
-  bool _addNewAddress() {
-    if (triggerFormValidation()) {
-      _formKey.currentState!.save();
-
+  bool _addNewAddress(
+      {String address = '', double amount = 0.0, bool fromImport = false}) {
+    if (triggerFormValidation() || fromImport == true) {
+      if (fromImport == false) {
+        _formKey.currentState!.save();
+      }
       _labelControllerList.add(TextEditingController());
       _addressControllerList.add(TextEditingController());
+      _addressControllerList.last.text = address;
       _amountControllerList.add(TextEditingController());
+      _amountControllerList.last.text = amount.toString();
       _labelKeyList.add(GlobalKey<FormFieldState>());
       _addressKeyList.add(GlobalKey<FormFieldState>());
       _amountKeyList.add(GlobalKey<FormFieldState>());
       _amountInputHelperTextList.add('');
-      _requestedAmountInCoinsList.add(0.0);
+      _requestedAmountInCoinsList.add(amount);
 
       setState(() {
         _currentAddressIndex = _numberOfRecipients;
@@ -550,7 +586,10 @@ class _SendTabState extends State<SendTab> {
     }
     _buildRecipientMap();
 
-    var txValueInSatoshis = _totalAmountRequestedInCoins * _decimalProduct;
+    var txValueInSatoshis = double.parse(
+      (_totalAmountRequestedInCoins * _decimalProduct)
+          .toStringAsFixed(_availableCoin.fractions),
+    );
     LoggerWrapper.logInfo(
       'SendTab',
       'send_amount',

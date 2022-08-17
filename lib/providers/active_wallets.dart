@@ -694,7 +694,6 @@ class ActiveWallets with ChangeNotifier {
             'buildTransaction',
             'adding output $amount for $address',
           );
-
           tx.addOutput(address, BigInt.from(amount));
         });
 
