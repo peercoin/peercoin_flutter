@@ -432,7 +432,8 @@ class _SendTabState extends State<SendTab> {
                           }
                         },
                       ),
-                      const SizedBox(height: 10),
+                      if (_appSettings.camerasAvailble)
+                        const SizedBox(height: 10),
                       if (_appSettings.camerasAvailble)
                         PeerButtonBorder(
                           text: AppLocalizations.instance.translate(
