@@ -793,6 +793,7 @@ class ActiveWallets with ChangeNotifier {
             allRecipientOutPutsAreZero: allRecipientOutPutsAreZero,
             feesHaveBeenDeductedFromRecipient:
                 feesHaveBeenDeductedFromRecipient,
+            inputTx: inputTx,
           );
         }
       } else {

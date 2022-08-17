@@ -270,6 +270,13 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                   buildResult.hex,
                                   buildResult.id,
                                 );
+                                //set inputTx value to zero
+                                for (var element in buildResult.inputTx) {
+                                  element.newValue = 0;
+                                }
+                                //update balance
+                                await activeWallets.updateWalletBalance(
+                                    arguments.coinIdentifier);
                                 //pop message
                                 navigator.pop();
                                 //navigate back to tx list

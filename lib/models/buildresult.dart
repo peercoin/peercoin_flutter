@@ -1,3 +1,5 @@
+import 'package:peercoin/models/wallet_utxo.dart';
+
 class BuildResult {
   final int fee;
   final String hex;
@@ -9,6 +11,7 @@ class BuildResult {
   final bool neededChange;
   final bool allRecipientOutPutsAreZero;
   final bool feesHaveBeenDeductedFromRecipient;
+  final List<WalletUtxo> inputTx;
 
   BuildResult({
     required this.fee,
@@ -21,5 +24,6 @@ class BuildResult {
     required this.neededChange,
     required this.allRecipientOutPutsAreZero,
     required this.feesHaveBeenDeductedFromRecipient,
+    required this.inputTx,
   });
 }

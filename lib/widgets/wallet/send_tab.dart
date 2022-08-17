@@ -486,7 +486,6 @@ class _SendTabState extends State<SendTab> {
                               final address = row[0];
                               final amount =
                                   double.parse(row[1].replaceAll(',', '.'));
-                              print(_currentAddressIndex);
                               if (i == 0) {
                                 _addressControllerList[0].text = address;
                                 _amountControllerList[0].text =
