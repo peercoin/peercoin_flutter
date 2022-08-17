@@ -316,5 +316,13 @@
     "sign_reset_alert_body": "Это сбросит все поля и очистит вашу подпись.",
     "address_selector_title": "Выберите адрес для подписи",
     "setup_legal_title": "Правовая информация",
-    "setup_legal_license": "Посмотреть лицензию"
+    "setup_legal_license": "Посмотреть лицензию",
+    "wallet_send_label_hint_metadata": "Метаданные не зашифрованы и будут общедоступны в блокчейне.",
+    "setup_auth_title": "Выберите когда истечет срок действия вашей веб-сессии:",
+    "setup_auth_subtitle_singular": "Ваша сессия истечет через $days день.",
+    "setup_auth_hint": "После истечения сессии вам нужно будет ввести сид.",
+    "about_donate_button": "Пожертвовать PPC сейчас",
+    "send_fiat_switch": "Сумма в $currency",
+    "server_add_no_wss_or_ssl": "Должен начинаться с wss:// или ssl://\nДругие протоколы в настоящее время не поддерживаются",
+    "setup_auth_subtitle_plural": "Ваша сессия истечет через $days дней."
 }
