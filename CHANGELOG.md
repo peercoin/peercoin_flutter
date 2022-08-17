@@ -1,5 +1,8 @@
-### **1.0.0** (2022-08-xx)
-* Dramatically improve import / rescan performance
+### **1.0.0** (2022-08-17)
+* Allow to send to multiple addresses in one transaction
+* Allow import of CSV to import addresses for sending
+* Stability & performance improvements
+* Direct link to foundation donations disabled again for iOS
 
 ### **0.9.9** (2022-08-10)
 * Dramatically improve import / rescan performance
