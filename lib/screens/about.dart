@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -157,33 +158,35 @@ class _AboutScreenState extends State<AboutScreen> {
                                 'about_foundation',
                               ),
                             ),
-                            _listOfActiveWallets.contains('peercoin') &&
-                                    !Platform.isIOS
-                                ? TextButton(
-                                    onPressed: () async {
-                                      final navigator = Navigator.of(context);
-                                      final values =
-                                          _activeWallets.activeWalletsValues;
-                                      final ppcWallet = values.firstWhere(
-                                        (element) => element.name == 'peercoin',
-                                      );
+                            if (!kIsWeb)
+                              _listOfActiveWallets.contains('peercoin') &&
+                                      !Platform.isIOS
+                                  ? TextButton(
+                                      onPressed: () async {
+                                        final navigator = Navigator.of(context);
+                                        final values =
+                                            _activeWallets.activeWalletsValues;
+                                        final ppcWallet = values.firstWhere(
+                                          (element) =>
+                                              element.name == 'peercoin',
+                                        );
 
-                                      navigator.pushNamed(
-                                        Routes.walletHome,
-                                        arguments: {
-                                          'wallet': ppcWallet,
-                                          'pushedAddress':
-                                              'p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK',
-                                        },
-                                      );
-                                    },
-                                    child: Text(
-                                      AppLocalizations.instance.translate(
-                                        'about_donate_button',
+                                        navigator.pushNamed(
+                                          Routes.walletHome,
+                                          arguments: {
+                                            'wallet': ppcWallet,
+                                            'pushedAddress':
+                                                'p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK',
+                                          },
+                                        );
+                                      },
+                                      child: Text(
+                                        AppLocalizations.instance.translate(
+                                          'about_donate_button',
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : const SizedBox(),
+                                    )
+                                  : const SizedBox(),
                             TextButton(
                               onPressed: () => _launchURL(
                                 'https://www.peercoin.net/foundation',

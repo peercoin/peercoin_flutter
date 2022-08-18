@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/active_wallets.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class PeriodicReminders {
                   AppLocalizations.instance.translate(reminderItem.button),
                 ),
               ),
-            if (reminderItem.id == 'donate')
+            if (reminderItem.id == 'donate' && !kIsWeb)
               listOfActiveWallets.contains('peercoin') && !Platform.isIOS
                   ? TextButton(
                       onPressed: () async {
@@ -144,7 +145,7 @@ class PeriodicReminders {
             LoggerWrapper.logInfo(
               'PriceTicker',
               'checkUpdate',
-              'reminder $name scheduled})',
+              'reminder $name scheduled',
             );
 
             shouldDisplayReminder = true;

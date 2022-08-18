@@ -328,6 +328,9 @@ class ActiveWallets with ChangeNotifier {
             //more confirmations?
             walletTx.newConfirmations = tx['confirmations'];
           }
+          if (walletTx.broadCasted == false) {
+            walletTx.newBroadcasted = true;
+          }
         }
       }
     }
@@ -626,7 +629,8 @@ class ActiveWallets with ChangeNotifier {
                 openWallet.transactions.firstWhereOrNull(
                       (tx) => tx.txid == utxo.hash && tx.direction == 'out',
                     ) !=
-                    null) {
+                    null ||
+                paperWalletUtxos != null) {
               if ((needsChange && totalInputValue <= (txAmount + fee)) ||
                   (needsChange == false &&
                       totalInputValue < (txAmount + fee))) {
@@ -699,7 +703,8 @@ class ActiveWallets with ChangeNotifier {
 
         //safety check of totalInputValue
         if (totalInputValue >
-            (txAmount + destroyedChange + fee + changeAmount)) {
+                (txAmount + destroyedChange + fee + changeAmount) &&
+            paperWalletUtxos == null) {
           throw ('totalInputValue safety mechanism triggered');
         }
 
@@ -859,6 +864,15 @@ class ActiveWallets with ChangeNotifier {
         (element) => element.txid == txId && element.confirmations != -1);
     if (rejected) {
       tx.newConfirmations = -1;
+
+      var lockedUtxos =
+          openWallet.utxos.where((element) => element.height == -1);
+      for (var element in lockedUtxos) {
+        //unlock ALL utxos after reject
+        element.newHeight = 1;
+        await openWallet.save();
+      }
+      await updateWalletBalance(identifier);
     } else {
       tx.newConfirmations = 0;
     }
