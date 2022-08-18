@@ -654,6 +654,7 @@ class ActiveWallets with ChangeNotifier {
         //start building tx
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
+        // tx.setVersion(1); //TODO REMOVE
         var changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
         bool feesHaveBeenDeductedFromRecipient = false;
 
@@ -859,6 +860,15 @@ class ActiveWallets with ChangeNotifier {
         (element) => element.txid == txId && element.confirmations != -1);
     if (rejected) {
       tx.newConfirmations = -1;
+
+      var lockedUtxos =
+          openWallet.utxos.where((element) => element.height == -1);
+      for (var element in lockedUtxos) {
+        //unlock ALL utxos after reject
+        element.newHeight = 1;
+        await openWallet.save();
+      }
+      await updateWalletBalance(identifier);
     } else {
       tx.newConfirmations = 0;
     }

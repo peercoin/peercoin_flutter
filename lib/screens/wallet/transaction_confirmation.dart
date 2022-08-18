@@ -272,8 +272,8 @@ class TransactionConfirmationScreen extends StatelessWidget {
                                 );
                                 //set inputTx value to zero
                                 for (var element in buildResult.inputTx) {
-                                  element.newValue =
-                                      0; //TODO headache: utxos will not appear again until rescan when rejected
+                                  element.newHeight =
+                                      -1; //TODO headache: utxos will not appear again until rescan when rejected
                                 }
                                 //update balance
                                 await activeWallets.updateWalletBalance(
