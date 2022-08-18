@@ -626,7 +626,8 @@ class ActiveWallets with ChangeNotifier {
                 openWallet.transactions.firstWhereOrNull(
                       (tx) => tx.txid == utxo.hash && tx.direction == 'out',
                     ) !=
-                    null) {
+                    null ||
+                paperWalletUtxos != null) {
               if ((needsChange && totalInputValue <= (txAmount + fee)) ||
                   (needsChange == false &&
                       totalInputValue < (txAmount + fee))) {
@@ -700,7 +701,8 @@ class ActiveWallets with ChangeNotifier {
 
         //safety check of totalInputValue
         if (totalInputValue >
-            (txAmount + destroyedChange + fee + changeAmount)) {
+                (txAmount + destroyedChange + fee + changeAmount) &&
+            paperWalletUtxos == null) {
           throw ('totalInputValue safety mechanism triggered');
         }
 
