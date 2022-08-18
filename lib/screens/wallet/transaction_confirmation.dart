@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/buildresult.dart';
@@ -49,10 +50,19 @@ class TransactionConfirmationArguments {
   });
 }
 
-class TransactionConfirmationScreen extends StatelessWidget {
+class TransactionConfirmationScreen extends StatefulWidget {
   const TransactionConfirmationScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<TransactionConfirmationScreen> createState() =>
+      _TransactionConfirmationScreenState();
+}
+
+class _TransactionConfirmationScreenState
+    extends State<TransactionConfirmationScreen> {
+  bool _firstPress = true;
 
   @override
   Widget build(BuildContext context) {
@@ -244,62 +254,71 @@ class TransactionConfirmationScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          PeerButton(
-                            text: AppLocalizations.instance.translate(
-                              'send_confirm_send',
-                            ),
-                            action: () async {
-                              final electrumConnection =
-                                  context.read<ElectrumConnection>();
-                              final activeWallets =
-                                  context.read<ActiveWallets>();
-                              final navigator = Navigator.of(context);
-                              try {
-                                //write tx to history
-                                await activeWallets.putOutgoingTx(
-                                  identifier: arguments.coinIdentifier,
-                                  buildResult: buildResult,
-                                  totalFees: buildResult.fee,
-                                  totalValue:
-                                      buildResult.allRecipientOutPutsAreZero
-                                          ? 0
-                                          : buildResult.totalAmount,
-                                );
-                                //broadcast
-                                electrumConnection.broadcastTransaction(
-                                  buildResult.hex,
-                                  buildResult.id,
-                                );
-                                //set inputTx value to zero
-                                for (var element in buildResult.inputTx) {
-                                  element.newHeight =
-                                      -1; //TODO headache: utxos will not appear again until rescan when rejected
-                                }
-                                //update balance
-                                await activeWallets.updateWalletBalance(
-                                    arguments.coinIdentifier);
-                                //pop message
-                                navigator.pop();
-                                //navigate back to tx list
-                                arguments.callBackAfterSend();
-                              } catch (e) {
-                                LoggerWrapper.logError(
-                                  'SendTab',
-                                  'showTransactionConfirmation',
-                                  e.toString(),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      AppLocalizations.instance.translate(
-                                        'send_oops',
-                                      ),
-                                    ),
+                          _firstPress == false
+                              ? SizedBox(
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  child: const LoadingIndicator(),
+                                )
+                              : PeerButton(
+                                  text: AppLocalizations.instance.translate(
+                                    'send_confirm_send',
                                   ),
-                                );
-                              }
-                            },
-                          ),
+                                  action: () async {
+                                    if (_firstPress == false) return;
+                                    setState(() {
+                                      _firstPress = false;
+                                    });
+                                    final electrumConnection =
+                                        context.read<ElectrumConnection>();
+                                    final activeWallets =
+                                        context.read<ActiveWallets>();
+                                    final navigator = Navigator.of(context);
+                                    try {
+                                      //write tx to history
+                                      await activeWallets.putOutgoingTx(
+                                        identifier: arguments.coinIdentifier,
+                                        buildResult: buildResult,
+                                        totalFees: buildResult.fee,
+                                        totalValue: buildResult
+                                                .allRecipientOutPutsAreZero
+                                            ? 0
+                                            : buildResult.totalAmount,
+                                      );
+                                      //broadcast
+                                      electrumConnection.broadcastTransaction(
+                                        buildResult.hex,
+                                        buildResult.id,
+                                      );
+                                      //flag inputUtxos as locked
+                                      for (var element in buildResult.inputTx) {
+                                        element.newHeight = -1;
+                                      }
+                                      //update balance
+                                      await activeWallets.updateWalletBalance(
+                                          arguments.coinIdentifier);
+                                      //pop message
+                                      navigator.pop();
+                                      //navigate back to tx list
+                                      arguments.callBackAfterSend();
+                                    } catch (e) {
+                                      LoggerWrapper.logError(
+                                        'SendTab',
+                                        'showTransactionConfirmation',
+                                        e.toString(),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            AppLocalizations.instance.translate(
+                                              'send_oops',
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                         ],
                       ),
                     ],

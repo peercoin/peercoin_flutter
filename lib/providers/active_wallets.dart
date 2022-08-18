@@ -328,6 +328,9 @@ class ActiveWallets with ChangeNotifier {
             //more confirmations?
             walletTx.newConfirmations = tx['confirmations'];
           }
+          if (walletTx.broadCasted == false) {
+            walletTx.newBroadcasted = true;
+          }
         }
       }
     }
@@ -655,7 +658,6 @@ class ActiveWallets with ChangeNotifier {
         //start building tx
         final tx = TransactionBuilder(network: network);
         tx.setVersion(coinParams.txVersion);
-        // tx.setVersion(1); //TODO REMOVE
         var changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
         bool feesHaveBeenDeductedFromRecipient = false;
 
