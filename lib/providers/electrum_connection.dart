@@ -42,6 +42,7 @@ class ElectrumConnection with ChangeNotifier {
   int _maxAddressDepth = 0; //no address depth scan for now
   Map<String, int> _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
   List _openReplies = [];
+  int _resetAttempt = 1;
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -126,14 +127,20 @@ class ElectrumConnection with ChangeNotifier {
       startPingTimer();
 
       return true;
-    } else if (fromConnectivityChangeOrLifeCycle == false) {
+    } else if (fromConnectivityChangeOrLifeCycle == false &&
+        _closedIntentionally == false) {
       //init has been called but connection is not null yet? try again
       LoggerWrapper.logInfo(
         'ElectrumConnection',
         'init',
-        'connection was not reset (yet), will try again in 1 second',
+        'connection was not reset (yet), will try again in 1 second, reset attempt $_resetAttempt',
       );
       await Future.delayed(const Duration(seconds: 1));
+      if (_resetAttempt > 3) {
+        _connection.sink.close();
+        cleanUpOnDone();
+      }
+      _resetAttempt++;
       await init(
         walletName,
         scanMode: scanMode,
@@ -263,10 +270,13 @@ class ElectrumConnection with ChangeNotifier {
     _maxChainDepth = 5;
     _maxAddressDepth = 0; //no address depth scan for now
     _depthPointer = 1;
+    _resetAttempt = 1;
 
     if (_closedIntentionally == false) {
-      _reconnectTimer = Timer(const Duration(seconds: 5),
-          () => init(_coinName)); //retry if not intentional
+      _reconnectTimer = Timer(
+        const Duration(seconds: 5),
+        () => init(_coinName),
+      ); //retry if not intentional
     }
   }
 
