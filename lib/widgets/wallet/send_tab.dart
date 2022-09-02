@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:coinslib/coinslib.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -467,46 +468,54 @@ class _SendTabState extends State<SendTab> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      PeerButtonBorder(
-                        text: AppLocalizations.instance.translate(
-                          'send_import_csv',
-                        ),
-                        action: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['csv'],
-                          );
+                      if (!kIsWeb)
+                        PeerButtonBorder(
+                          //TODO Error: Unsupported operation: _Namespace on web
+                          text: AppLocalizations.instance.translate(
+                            'send_import_csv',
+                          ),
+                          action: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['csv'],
+                            );
 
-                          if (result != null) {
-                            File file = File(result.files.single.path!);
-                            var csv = await file.readAsString();
-                            final parsed = fast_csv.parse(csv);
-                            var i = 0;
-                            for (final row in parsed) {
-                              final address = row[0];
-                              final amount =
-                                  double.parse(row[1].replaceAll(',', '.'));
-                              if (i == 0) {
-                                _addressControllerList[0].text = address;
-                                _amountControllerList[0].text =
-                                    amount.toString();
-                                setState(() {});
+                            if (result != null) {
+                              File file;
+                              if (kIsWeb) {
+                                file = File.fromRawPath(
+                                    result.files.single.bytes!);
                               } else {
-                                _addNewAddress(
-                                  address: address,
-                                  amount: amount,
-                                  fromImport: true,
-                                );
-                                setState(() {
-                                  _numberOfRecipients++;
-                                });
+                                file = File(result.files.single.path!);
                               }
-                              i++;
+                              var csv = await file.readAsString();
+                              final parsed = fast_csv.parse(csv);
+                              var i = 0;
+                              for (final row in parsed) {
+                                final address = row[0];
+                                final amount =
+                                    double.parse(row[1].replaceAll(',', '.'));
+                                if (i == 0) {
+                                  _addressControllerList[0].text = address;
+                                  _amountControllerList[0].text =
+                                      amount.toString();
+                                  setState(() {});
+                                } else {
+                                  _addNewAddress(
+                                    address: address,
+                                    amount: amount,
+                                    fromImport: true,
+                                  );
+                                  setState(() {
+                                    _numberOfRecipients++;
+                                  });
+                                }
+                                i++;
+                              }
                             }
-                          }
-                        },
-                      ),
+                          },
+                        ),
                     ],
                   ),
                 ),
