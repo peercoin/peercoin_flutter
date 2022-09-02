@@ -572,6 +572,7 @@ class ActiveWallets with ChangeNotifier {
     required Map<String, int> recipients,
     String opReturn = '',
     bool firstPass = true,
+    int sizeBefore = 0,
     List<WalletUtxo>? paperWalletUtxos,
     String paperWalletPrivkey = '',
   }) async {
@@ -752,11 +753,14 @@ class ActiveWallets with ChangeNotifier {
             LoggerWrapper.logInfo(
               'ActiveWallets',
               'buildTransaction',
-              "signing - ${value["addr"]}",
+              "signing - ${value["addr"]} at vin $key",
             );
             tx.sign(
               vin: key,
-              keyPair: ECPair.fromWIF(value['wif'], network: network),
+              keyPair: ECPair.fromWIF(
+                value['wif'],
+                network: network,
+              ),
             );
           },
         );
@@ -773,12 +777,19 @@ class ActiveWallets with ChangeNotifier {
           'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
         );
 
-        if (firstPass == true) {
+        LoggerWrapper.logInfo(
+          'ActiveWallets',
+          'buildTransaction',
+          'sizeBefore: $sizeBefore - size now:${intermediate.txSize}',
+        );
+
+        if (firstPass == true || intermediate.txSize > sizeBefore) {
           return await buildTransaction(
             identifier: identifier,
             recipients: recipients,
             opReturn: opReturn,
             fee: requiredFeeInSatoshis,
+            sizeBefore: intermediate.txSize,
             firstPass: false,
             paperWalletPrivkey: paperWalletPrivkey,
             paperWalletUtxos: paperWalletUtxos,
@@ -791,7 +802,6 @@ class ActiveWallets with ChangeNotifier {
             'intermediate size: ${intermediate.txSize}',
           );
           hex = intermediate.toHex();
-
           return BuildResult(
             fee: requiredFeeInSatoshis,
             hex: hex,

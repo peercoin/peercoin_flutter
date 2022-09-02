@@ -500,6 +500,7 @@ class _SendTabState extends State<SendTab> {
                                   _addressControllerList[0].text = address;
                                   _amountControllerList[0].text =
                                       amount.toString();
+                                  _requestedAmountInCoinsList[0] = amount;
                                   setState(() {});
                                 } else {
                                   _addNewAddress(
@@ -661,10 +662,10 @@ class _SendTabState extends State<SendTab> {
             0;
 
     if (_fiatEnabled == false) {
-      setState(() {
-        _totalAmountRequestedInCoins = inputAmount;
-        _requestedAmountInCoinsList[index] = inputAmount;
-      });
+      // setState(() {
+      //   _totalAmountRequestedInCoins = inputAmount;
+      //   _requestedAmountInCoinsList[index] = inputAmount;
+      // }); TODO sending from csv input did not work when fiat was enabled
       return;
     }
 

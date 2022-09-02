@@ -116,7 +116,8 @@ class _TransactionConfirmationScreenState
                               SelectableText(
                                 '${buildResult.totalAmount / decimalProduct} $coinLetterCode',
                               ),
-                              if (!arguments.coinIdentifier.contains('Testnet'))
+                              if (!arguments.coinIdentifier.contains(
+                                  'Testnet')) //TODO don't show if price feed is disabled!
                                 Text(
                                   '${((buildResult.totalAmount / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
@@ -331,4 +332,5 @@ class _TransactionConfirmationScreenState
       ),
     );
   }
+  //TODO show totals bold
 }
