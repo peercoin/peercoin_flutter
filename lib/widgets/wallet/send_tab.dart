@@ -783,4 +783,5 @@ class _SendTabState extends State<SendTab> {
       },
     );
   }
+  //TODO fix requestedAmountInCoins - tx building without csv presently not possible
 }
