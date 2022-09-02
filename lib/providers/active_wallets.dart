@@ -604,6 +604,12 @@ class ActiveWallets with ChangeNotifier {
 
     //check if tx needs change
     var needsChange = true;
+    LoggerWrapper.logInfo(
+      'ActiveWallets',
+      'buildTransaction',
+      'txAmount: $txAmount - wallet balance: ${openWallet.balance}',
+    );
+
     if (txAmount == openWallet.balance || paperWalletUtxos != null) {
       needsChange = false;
       LoggerWrapper.logInfo(
