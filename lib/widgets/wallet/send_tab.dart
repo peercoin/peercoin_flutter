@@ -572,8 +572,8 @@ class _SendTabState extends State<SendTab> {
       _labelKeyList.add(GlobalKey<FormFieldState>());
       _addressKeyList.add(GlobalKey<FormFieldState>());
       _amountKeyList.add(GlobalKey<FormFieldState>());
-      _amountInputHelperTextList[_currentAddressIndex] = '';
-      _requestedAmountInCoinsList[_currentAddressIndex] = amount;
+      _amountInputHelperTextList[_numberOfRecipients] = '';
+      _requestedAmountInCoinsList[_numberOfRecipients] = amount;
 
       setState(() {
         _currentAddressIndex = _numberOfRecipients;
