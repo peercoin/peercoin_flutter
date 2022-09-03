@@ -863,8 +863,10 @@ class _AddressTabState extends State<AddressTab> {
                           children: [
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).backgroundColor,
-                                onPrimary: Theme.of(context).backgroundColor,
+                                foregroundColor:
+                                    Theme.of(context).backgroundColor,
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5
@@ -899,8 +901,10 @@ class _AddressTabState extends State<AddressTab> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).backgroundColor,
-                                onPrimary: Theme.of(context).backgroundColor,
+                                foregroundColor:
+                                    Theme.of(context).backgroundColor,
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5

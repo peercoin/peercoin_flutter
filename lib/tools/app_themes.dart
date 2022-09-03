@@ -56,15 +56,15 @@ class MyTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-            primary: LightColors.green,
-            onPrimary: LightColors.green,
+            foregroundColor: LightColors.green,
+            backgroundColor: LightColors.green,
             textStyle: TextStyle(
               color: LightColors.white,
             )),
       ),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-        primary: LightColors.green,
+        foregroundColor: LightColors.green,
       )),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
@@ -133,13 +133,13 @@ class MyTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: DarkColors.white,
-          onPrimary: DarkColors.white,
+          foregroundColor: DarkColors.white,
+          backgroundColor: DarkColors.white,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-        primary: DarkColors.black,
+        foregroundColor: DarkColors.black,
       )),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(color: DarkColors.white),
