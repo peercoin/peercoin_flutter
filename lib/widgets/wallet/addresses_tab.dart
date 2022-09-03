@@ -476,8 +476,10 @@ class _AddressTabState extends State<AddressTab> {
                           await showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                              title: Text(AppLocalizations.instance.translate(
-                                  'addressbook_dialog_remove_title')),
+                              title: Text(
+                                AppLocalizations.instance.translate(
+                                    'addressbook_dialog_remove_title'),
+                              ),
                               content: Text(addr.address),
                               actions: <Widget>[
                                 TextButton.icon(

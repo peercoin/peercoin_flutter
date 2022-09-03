@@ -71,8 +71,8 @@ class _SendTabState extends State<SendTab> {
   late final int _decimalProduct;
   bool _fiatEnabled = false;
   bool _fiatInputEnabled = false;
-  final List<String> _amountInputHelperTextList = [''];
-  final List<double> _requestedAmountInCoinsList = [0.0];
+  final Map<int, String> _amountInputHelperTextList = {};
+  final Map<int, double> _requestedAmountInCoinsList = {};
   double _totalAmountRequestedInCoins = 0.0;
   double _coinValue = 0.0;
   int _numberOfRecipients = 1;
@@ -572,8 +572,8 @@ class _SendTabState extends State<SendTab> {
       _labelKeyList.add(GlobalKey<FormFieldState>());
       _addressKeyList.add(GlobalKey<FormFieldState>());
       _amountKeyList.add(GlobalKey<FormFieldState>());
-      _amountInputHelperTextList.add('');
-      _requestedAmountInCoinsList.add(amount);
+      _amountInputHelperTextList[_currentAddressIndex] = '';
+      _requestedAmountInCoinsList[_currentAddressIndex] = amount;
 
       setState(() {
         _currentAddressIndex = _numberOfRecipients;
@@ -634,7 +634,7 @@ class _SendTabState extends State<SendTab> {
     _amountControllerList.asMap().forEach((key, value) {
       var coins = _requestedAmountInCoinsList[key];
       recipients[_addressControllerList[key].text.trim()] =
-          (coins * _decimalProduct).toInt();
+          (coins! * _decimalProduct).toInt();
       totalCoins += coins;
     });
 
@@ -662,10 +662,11 @@ class _SendTabState extends State<SendTab> {
             0;
 
     if (_fiatEnabled == false) {
-      // setState(() {
-      //   _totalAmountRequestedInCoins = inputAmount;
-      //   _requestedAmountInCoinsList[index] = inputAmount;
-      // }); TODO sending from csv input did not work when fiat was enabled
+      setState(() {
+        //   _totalAmountRequestedInCoins = inputAmount;
+        _requestedAmountInCoinsList[index] = inputAmount;
+      });
+      //TODO sending from csv input did not work when fiat was enabled
       return;
     }
 
@@ -743,8 +744,8 @@ class _SendTabState extends State<SendTab> {
     _labelKeyList.removeAt(index);
     _addressKeyList.removeAt(index);
     _amountKeyList.removeAt(index);
-    _amountInputHelperTextList.removeAt(index);
-    _requestedAmountInCoinsList.removeAt(index);
+    _amountInputHelperTextList.remove(index);
+    _requestedAmountInCoinsList.remove(index);
 
     setState(() {
       _numberOfRecipients--;
@@ -783,5 +784,4 @@ class _SendTabState extends State<SendTab> {
       },
     );
   }
-  //TODO fix requestedAmountInCoins - tx building without csv presently not possible
 }
