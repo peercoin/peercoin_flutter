@@ -766,7 +766,7 @@ class ActiveWallets with ChangeNotifier {
         );
 
         final intermediate = tx.build();
-        var number = ((intermediate.txSize) / 1000 * coin.fixedFeePerKb)
+        var number = (intermediate.txSize / 1000 * coin.fixedFeePerKb)
             .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * decimalProduct;
         var requiredFeeInSatoshis = asDouble.toInt();
