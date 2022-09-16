@@ -139,10 +139,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         i < _addressScanPointer + _addressChunkSize;
         i++) {
       var res = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        0,
-        i,
-        0,
+        identifier: _coinName,
+        account: 0,
+        chain: i,
+        address: 0,
       );
       adressesToQuery[res!] = 0;
     }
@@ -197,11 +197,11 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       LoggerWrapper.logInfo('WalletImportScan', 'startScan', 'Scan started');
       //returns master address for hd wallet
       var masterAddr = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        0,
-        0,
-        0,
-        true,
+        identifier: _coinName,
+        account: 0,
+        chain: 0,
+        address: 0,
+        isMaster: true,
       );
 
       //subscribe to hd master

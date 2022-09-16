@@ -100,12 +100,16 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> getAddressFromDerivationPath(
-      String identifier, int account, int chain, int address,
-      [master = false]) async {
+  Future<String?> getAddressFromDerivationPath({
+    required String identifier,
+    required int account,
+    required int chain,
+    required int address,
+    bool isMaster = false,
+  }) async {
     var hdWallet = await getHdWallet(identifier);
 
-    if (master == true) {
+    if (isMaster == true) {
       return hdWallet.address;
     } else {
       var derivePath = "m/$account'/$chain/$address";
@@ -120,7 +124,10 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> addAddressFromWif(
-      String identifier, String wif, String publicAddress) async {
+    String identifier,
+    String wif,
+    String publicAddress,
+  ) async {
     var openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.addNewAddress = WalletAddress(
@@ -920,7 +927,10 @@ class ActiveWallets with ChangeNotifier {
   }
 
   void addAddressFromScan(
-      String identifier, String address, String status) async {
+    String identifier,
+    String address,
+    String status,
+  ) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,

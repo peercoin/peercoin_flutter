@@ -445,10 +445,10 @@ class ElectrumConnection with ChangeNotifier {
       );
 
       var nextAddr = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        _queryDepth['account']!,
-        _queryDepth['chain']!,
-        _queryDepth['address']!,
+        identifier: _coinName,
+        account: _queryDepth['account']!,
+        chain: _queryDepth['chain']!,
+        address: _queryDepth['address']!,
       );
 
       LoggerWrapper.logInfo(
