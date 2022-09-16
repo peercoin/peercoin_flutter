@@ -50,7 +50,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _showLabel = true;
   bool _showUsed = true;
   bool _showEmpty = true;
-  bool _showUnwatched = true;
+  bool _showUnwatched = false;
   final Map _addressBalanceMap = {};
   final Map _isWatchedMap = {};
   late ActiveWallets _activeWallets;
