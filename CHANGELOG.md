@@ -1,5 +1,6 @@
 ### **1.0.1** (2022-09-xx)
-* 
+* Even more robust scanning
+
 ### **1.0.0** (2022-08-17)
 * Allow to send to multiple addresses in one transaction
 * Allow import of CSV to import addresses for sending
