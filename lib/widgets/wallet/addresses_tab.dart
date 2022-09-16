@@ -252,8 +252,8 @@ class _AddressTabState extends State<AddressTab> {
 
                 if (address.wif!.isEmpty || address.wif == null) {
                   wif = await context.read<ActiveWallets>().getWif(
-                        _availableCoin.name,
-                        address.address,
+                        identifier: _availableCoin.name,
+                        address: address.address,
                       );
                 } else {
                   wif = address.wif!;

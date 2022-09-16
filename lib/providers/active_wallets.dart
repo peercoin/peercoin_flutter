@@ -527,7 +527,7 @@ class ActiveWallets with ChangeNotifier {
       addrInWallet.newStatus = status;
 
       if (addrInWallet.wif!.isEmpty || addrInWallet.wif == null) {
-        await getWif(identifier, address);
+        await getWif(identifier: identifier, address: address);
       }
     }
     await openWallet.save();
@@ -544,10 +544,10 @@ class ActiveWallets with ChangeNotifier {
     return '';
   }
 
-  Future<String> getWif(
-    String identifier,
-    String address,
-  ) async {
+  Future<String> getWif({
+    required String identifier,
+    required String address,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses
         .firstWhereOrNull((element) => element.address == address);
@@ -744,7 +744,10 @@ class ActiveWallets with ChangeNotifier {
               if (walletAddr.address == inputUtxo.address) {
                 var wif = paperWalletUtxos != null
                     ? paperWalletPrivkey
-                    : await getWif(identifier, walletAddr.address);
+                    : await getWif(
+                        identifier: identifier,
+                        address: walletAddr.address,
+                      );
                 keyMap[inputKey] = {'wif': wif, 'addr': inputUtxo.address};
                 tx.addInput(inputUtxo.hash, inputUtxo.txPos);
               }
@@ -942,7 +945,10 @@ class ActiveWallets with ChangeNotifier {
         used: true,
         status: status,
         isOurs: true,
-        wif: await getWif(identifier, address),
+        wif: await getWif(
+          identifier: identifier,
+          address: address,
+        ),
       );
     } else {
       await updateAddressStatus(identifier, address, status);

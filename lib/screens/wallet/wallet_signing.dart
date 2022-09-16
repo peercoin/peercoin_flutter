@@ -83,7 +83,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
         'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}');
 
     try {
-      var wif = await _activeWallets.getWif(_walletName, _signingAddress);
+      var wif = await _activeWallets.getWif(
+        identifier: _walletName,
+        address: _signingAddress,
+      );
       var result = Wallet.fromWIF(
         wif,
         _activeCoin.networkType,
