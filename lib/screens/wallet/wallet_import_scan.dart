@@ -169,11 +169,15 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       if (foundDifference == true) {
         //loop through addresses in result
         var addresses = bodyDecoded['addresses'];
-        addresses.forEach((element) {
-          var elementAddr = element['address'];
-          //backend knows this addr
-          _activeWallets.addAddressFromScan(_coinName, elementAddr, 'null');
-        });
+        addresses.forEach(
+          (element) {
+            var elementAddr = element['address'];
+            //backend knows this addr
+            if (element['utxos'] == true) {
+              _activeWallets.addAddressFromScan(_coinName, elementAddr, 'null');
+            }
+          },
+        );
 
         //keep searching in next chunk
         setState(() {
