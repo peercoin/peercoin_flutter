@@ -107,13 +107,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           );
         }
       });
-
-      if (_settings.notificationInterval > 0) {
-        setState(() {
-          backgroundNotificationsAvailable = true;
-        });
-        await fetchAddressesFromBackend();
-      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       if (_connectionState == ElectrumConnectionState.connected) {
@@ -174,7 +167,12 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
             var elementAddr = element['address'];
             //backend knows this addr
             if (element['utxos'] == true) {
-              _activeWallets.addAddressFromScan(_coinName, elementAddr, 'null');
+              _activeWallets.addAddressFromScan(
+                identifier: _coinName,
+                address: elementAddr,
+                status: 'null',
+                adressListSize: _addressScanPointer + _addressChunkSize,
+              );
             }
           },
         );

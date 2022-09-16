@@ -426,7 +426,11 @@ class ElectrumConnection with ChangeNotifier {
           'writing $address to wallet',
         );
         //saving to wallet
-        _activeWallets.addAddressFromScan(_coinName, address, newStatus);
+        _activeWallets.addAddressFromScan(
+          identifier: _coinName,
+          address: address,
+          status: newStatus,
+        );
         //try next
         await subscribeNextDerivedAddress();
       }

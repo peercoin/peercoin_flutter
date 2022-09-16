@@ -547,6 +547,7 @@ class ActiveWallets with ChangeNotifier {
   Future<String> getWif({
     required String identifier,
     required String address,
+    int listModifier = 5,
   }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses
@@ -557,7 +558,7 @@ class ActiveWallets with ChangeNotifier {
         var wifs = {};
         var hdWallet = await getHdWallet(identifier);
 
-        for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
+        for (var i = 0; i <= openWallet.addresses.length + listModifier; i++) {
           //parse 5 extra WIFs, just to be sure
           final child = hdWallet.derivePath("m/0'/$i/0");
           wifs[child.address] = child.wif;
@@ -929,11 +930,12 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAddressFromScan(
-    String identifier,
-    String address,
-    String status,
-  ) async {
+  void addAddressFromScan({
+    required String identifier,
+    required String address,
+    required String status,
+    int? adressListSize,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,
@@ -945,10 +947,16 @@ class ActiveWallets with ChangeNotifier {
         used: true,
         status: status,
         isOurs: true,
-        wif: await getWif(
-          identifier: identifier,
-          address: address,
-        ),
+        wif: adressListSize == null
+            ? await getWif(
+                identifier: identifier,
+                address: address,
+              )
+            : await getWif(
+                identifier: identifier,
+                address: address,
+                listModifier: adressListSize,
+              ),
       );
     } else {
       await updateAddressStatus(identifier, address, status);
