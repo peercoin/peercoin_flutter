@@ -930,7 +930,7 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAddressFromScan({
+  Future<void> addAddressFromScan({
     required String identifier,
     required String address,
     required String status,

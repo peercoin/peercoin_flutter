@@ -496,8 +496,8 @@ class ElectrumConnection with ChangeNotifier {
     );
   }
 
-  void subscribeToScriptHashes(Map scripthashes) {
-    for (var hash in scripthashes.entries) {
+  void subscribeToScriptHashes(Map scriptHashes) {
+    for (var hash in scriptHashes.entries) {
       _addresses[hash.key] = hash.value;
       sendMessage('blockchain.scripthash.subscribe', hash.key, [hash.value]);
       notifyListeners();
