@@ -43,6 +43,7 @@ class ActiveWallets with ChangeNotifier {
 
     //load wallets into cache
     for (var element in activeWalletsValues) {
+      getSpecificCoinWallet(element.name);
       getHdWallet(element.name);
     }
   }
