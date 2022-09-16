@@ -25,7 +25,7 @@ class WalletImportScanScreen extends StatefulWidget {
 class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _initial = true;
   bool _scanStarted = false;
-  bool backgroundNotificationsAvailable = false;
+  bool _backgroundNotificationsAvailable = false;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
   late AppSettings _settings;
@@ -107,11 +107,17 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           );
         }
       });
+      if (_settings.notificationInterval > 0) {
+        setState(() {
+          _backgroundNotificationsAvailable = true;
+        });
+        await fetchAddressesFromBackend();
+      }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       if (_connectionState == ElectrumConnectionState.connected) {
         _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        if (backgroundNotificationsAvailable == false) {
+        if (_backgroundNotificationsAvailable == false) {
           startScan();
         }
       }
@@ -171,7 +177,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
                 identifier: _coinName,
                 address: elementAddr,
                 status: 'null',
-                adressListSize: _addressScanPointer + _addressChunkSize,
               );
             }
           },
