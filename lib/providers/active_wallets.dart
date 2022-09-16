@@ -852,7 +852,8 @@ class ActiveWallets with ChangeNotifier {
 
           if (addr.isWatched ||
               utxoRes != null && utxoRes.value > 0 ||
-              addr.address == _unusedAddress) {
+              addr.address == _unusedAddress ||
+              addr.status == 'hasUtxo') {
             answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }
         }

@@ -176,7 +176,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
               _activeWallets.addAddressFromScan(
                 identifier: _coinName,
                 address: elementAddr,
-                status: 'null',
+                status: 'hasUtxo',
               );
             }
           },

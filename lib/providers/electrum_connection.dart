@@ -348,7 +348,15 @@ class ElectrumConnection with ChangeNotifier {
         _connection.add('\n'.codeUnits);
       } else if (_serverType == ElectrumServerType.wss &&
           _connection.sink != null) {
-        _connection.sink.add(encodedMessage);
+        try {
+          _connection.sink.add(encodedMessage);
+        } catch (e) {
+          LoggerWrapper.logError(
+            'ElectrumConnection',
+            "sendMessage",
+            e.toString(),
+          );
+        }
       }
     }
   }
