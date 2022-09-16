@@ -92,19 +92,16 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
+      _settings = Provider.of<AppSettings>(context, listen: false);
       setState(() {
         _initial = false;
+        _backgroundNotificationsAvailable = _settings.notificationInterval > 0;
       });
       _coinName = ModalRoute.of(context)!.settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _settings = Provider.of<AppSettings>(context, listen: false);
       await _activeWallets.prepareForRescan(_coinName);
-      if (_settings.notificationInterval > 0) {
-        setState(() {
-          _backgroundNotificationsAvailable = true;
-        });
-      }
+
       await _connectionProvider!.init(_coinName, scanMode: true);
 
       _timer = Timer.periodic(const Duration(seconds: 7), (timer) async {
@@ -174,24 +171,22 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       if (foundDifference == true) {
         //loop through addresses in result
         var addresses = bodyDecoded['addresses'];
-        addresses.forEach(
-          (element) async {
-            var elementAddr = element['address'];
-            //backend knows this addr
-            await _activeWallets.addAddressFromScan(
-              identifier: _coinName,
-              address: elementAddr,
-              status: element['utxos'] == true ? 'hasUtxo' : 'null',
-            );
-          },
-        );
+        for (var element in addresses) {
+          var elementAddr = element['address'];
+          //backend knows this addr
+          await _activeWallets.addAddressFromScan(
+            identifier: _coinName,
+            address: elementAddr,
+            status: element['utxos'] == true ? 'hasUtxo' : 'null',
+          );
+        }
 
         //keep searching in next chunk
         setState(() {
           _addressScanPointer += _addressChunkSize;
           _addressChunkSize += 5;
         });
-        fetchAddressesFromBackend();
+        await fetchAddressesFromBackend();
       } else {
         //done
         await startScan();
