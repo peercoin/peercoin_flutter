@@ -469,8 +469,8 @@ class _SendTabState extends State<SendTab> {
                       ),
                       const SizedBox(height: 10),
                       if (!kIsWeb)
+                        //TODO Error: Unsupported operation: _Namespace on web - dart:io isn't available on web
                         PeerButtonBorder(
-                          //TODO Error: Unsupported operation: _Namespace on web
                           text: AppLocalizations.instance.translate(
                             'send_import_csv',
                           ),
@@ -480,12 +480,12 @@ class _SendTabState extends State<SendTab> {
                               type: FileType.custom,
                               allowedExtensions: ['csv'],
                             );
-
                             if (result != null) {
                               File file;
                               if (kIsWeb) {
                                 file = File.fromRawPath(
-                                    result.files.single.bytes!);
+                                  result.files.single.bytes!,
+                                );
                               } else {
                                 file = File(result.files.single.path!);
                               }
@@ -782,4 +782,5 @@ class _SendTabState extends State<SendTab> {
       },
     );
   }
+  //TODO improve web performance with hive collections
 }
