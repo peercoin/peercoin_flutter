@@ -791,7 +791,7 @@ class ActiveWallets with ChangeNotifier {
         LoggerWrapper.logInfo(
           'ActiveWallets',
           'buildTransaction',
-          'sizeBefore: $sizeBefore - size now:${intermediate.txSize}',
+          'sizeBefore: $sizeBefore - size now: ${intermediate.txSize}',
         );
 
         if (firstPass == true || intermediate.txSize > sizeBefore) {

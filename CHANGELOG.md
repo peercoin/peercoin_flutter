@@ -1,5 +1,6 @@
-### **1.0.1** (2022-09-xx)
+### **1.0.1** (2022-09-23)
 * Even more robust scanning
+* Fiat values will no longer be shown in transaction confirmation when price feed is disabled
 
 ### **1.0.0** (2022-08-17)
 * Allow to send to multiple addresses in one transaction
