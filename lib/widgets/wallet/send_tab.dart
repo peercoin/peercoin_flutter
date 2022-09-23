@@ -782,5 +782,4 @@ class _SendTabState extends State<SendTab> {
       },
     );
   }
-  //TODO improve web performance with hive collections
 }
