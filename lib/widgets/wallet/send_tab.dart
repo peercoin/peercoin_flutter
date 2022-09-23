@@ -663,10 +663,8 @@ class _SendTabState extends State<SendTab> {
 
     if (_fiatEnabled == false) {
       setState(() {
-        //   _totalAmountRequestedInCoins = inputAmount;
         _requestedAmountInCoinsList[index] = inputAmount;
       });
-      //TODO sending from csv input did not work when fiat was enabled
       return;
     }
 
