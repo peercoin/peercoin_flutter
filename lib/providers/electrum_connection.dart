@@ -590,8 +590,7 @@ class ElectrumConnection with ChangeNotifier {
       await _activeWallets.putTx(_coinName, addr, tx);
     } else {
       LoggerWrapper.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
-      //TODO figure out what to do in that case ...
-      //if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
+      //do nothing for now. if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
     }
   }
 
