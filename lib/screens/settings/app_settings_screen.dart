@@ -415,6 +415,27 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       )
                     ],
                   ),
+                if (!kIsWeb)
+                  if (Platform.isIOS)
+                    ExpansionTile(
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_delete'),
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      childrenPadding: const EdgeInsets.all(10),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            AppLocalizations.instance
+                                .translate('app_settings_delete_description'),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
               ],
             ),
           ),
