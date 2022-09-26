@@ -170,7 +170,7 @@
     "paperwallet_step_3": "Step 3",
     "paperwallet_step_3_text": "Check balance",
     "paperwallet_step_4": "Step 4",
-    "paperwallet_step_4_text": "Empty wallet & import",
+    "paperwallet_step_4_text": "Sweep Paper Wallet",
     "paperwallet_success": "Paper Wallet imported successfully.\nTransaction will appear very soon.",
     "periodic_reminder_donate_title": "Donation Reminder",
     "periodic_reminder_donate_body": "This app is developed by the Peercoin Foundation.\nPlease consider donating to support the development of Peercoin and this app.",
@@ -288,7 +288,7 @@
     "wallet_bottom_nav_tx": "Transactions",
     "wallet_connected": "connected",
     "wallet_offline": "offline",
-    "wallet_pop_menu_paperwallet": "Import Paper Wallet",
+    "wallet_pop_menu_paperwallet": "Sweep Paper Wallet",
     "wallet_pop_menu_wif": "Import Private Key",
     "wallet_pop_menu_signing": "Sign Messages",
     "wallet_pop_menu_rescan": "Rescan",
@@ -334,5 +334,7 @@
     "setup_auth_subtitle_plural": "Your session will expire after $days days.",
     "setup_auth_subtitle_singular": "Your session will expire after $days day.",
     "setup_auth_hint": "You have to enter your seed again after the session has expired.",
-    "about_donate_button": "Donate PPC now"
+    "about_donate_button": "Donate PPC now",
+    "app_settings_delete": "Delete account",
+    "app_settings_delete_description": "Since you have not created an account in this app, there is nothing to delete. You created a \"wallet seed\", which is a cryptographical operation. Your seed is math. It can be used in any application that supports seed phrases. You also don't have any accounts with the background notification or price feed APIs. This app values your privacy and is private by design."
 }
