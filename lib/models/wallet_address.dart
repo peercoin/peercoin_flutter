@@ -13,8 +13,8 @@ class WalletAddress extends HiveObject {
   bool used;
   @HiveField(4)
   bool? isOurs = true; //nullable for backward compatability
-  @HiveField(5)
-  String? wif = ''; //nullable for backward compatability
+  @HiveField(5, defaultValue: '')
+  String wif = '';
   @HiveField(6)
   bool? _isChangeAddr = false;
   @HiveField(7, defaultValue: 0)

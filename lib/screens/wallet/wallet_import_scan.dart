@@ -137,6 +137,11 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
 
   Future<void> fetchAddressesFromBackend() async {
     var adressesToQuery = <String, int>{};
+    await _activeWallets.populateWifMap(
+      _coinName,
+      _addressScanPointer + _addressChunkSize,
+    );
+
     for (int i = _addressScanPointer;
         i < _addressScanPointer + _addressChunkSize;
         i++) {
@@ -155,6 +160,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         adressesToQuery,
       ),
     );
+    _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
   Future<void> parseBackendResult(Response response) async {
@@ -174,11 +180,13 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         for (var element in addresses) {
           var elementAddr = element['address'];
           //backend knows this addr
-          await _activeWallets.addAddressFromScan(
-            identifier: _coinName,
-            address: elementAddr,
-            status: element['utxos'] == true ? 'hasUtxo' : 'null',
-          );
+          if (element['utxos'] == true) {
+            await _activeWallets.addAddressFromScan(
+              identifier: _coinName,
+              address: elementAddr,
+              status: 'hasUtxo',
+            );
+          }
         }
 
         //keep searching in next chunk
@@ -192,6 +200,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         await startScan();
       }
     }
+    _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
   Future<void> startScan() async {

@@ -250,13 +250,13 @@ class _AddressTabState extends State<AddressTab> {
                 void showQrDialog(wif) =>
                     WalletHomeQr.showQrDialog(context, wif);
 
-                if (address.wif!.isEmpty || address.wif == null) {
+                if (address.wif.isEmpty) {
                   wif = await context.read<ActiveWallets>().getWif(
                         identifier: _availableCoin.name,
                         address: address.address,
                       );
                 } else {
-                  wif = address.wif!;
+                  wif = address.wif;
                 }
                 navigator.pop();
                 showQrDialog(wif);

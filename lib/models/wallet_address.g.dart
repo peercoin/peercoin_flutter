@@ -22,7 +22,7 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       used: fields[3] as bool,
       status: fields[2] as String?,
       isOurs: fields[4] as bool?,
-      wif: fields[5] as String?,
+      wif: fields[5] == null ? '' : fields[5] as String,
     )
       .._isChangeAddr = fields[6] as bool?
       ..notificationBackendCount = fields[7] == null ? 0 : fields[7] as int

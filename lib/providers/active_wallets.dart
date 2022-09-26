@@ -33,6 +33,7 @@ class ActiveWallets with ChangeNotifier {
   String _unusedAddress = '';
   late Box _walletBox;
   Box? _vaultBox;
+  final Map<String, String> _wifs = {};
   // ignore: prefer_final_fields
   Map<String?, CoinWallet?> _specificWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
@@ -168,7 +169,7 @@ class ActiveWallets with ChangeNotifier {
         used: false,
         status: null,
         isOurs: true,
-        wif: hdWallet.wif,
+        wif: hdWallet.wif ?? '',
       );
       unusedAddress = hdWallet.address!;
     } else {
@@ -208,7 +209,7 @@ class ActiveWallets with ChangeNotifier {
           used: false,
           status: null,
           isOurs: true,
-          wif: newHdWallet.wif,
+          wif: newHdWallet.wif ?? '',
         );
 
         unusedAddress = newHdWallet.address!;
@@ -527,8 +528,11 @@ class ActiveWallets with ChangeNotifier {
       addrInWallet.newUsed = status == null ? false : true;
       addrInWallet.newStatus = status;
 
-      if (addrInWallet.wif!.isEmpty || addrInWallet.wif == null) {
-        await getWif(identifier: identifier, address: address);
+      if (addrInWallet.wif.isEmpty) {
+        await getWif(
+          identifier: identifier,
+          address: address,
+        );
       }
     }
     await openWallet.save();
@@ -554,24 +558,28 @@ class ActiveWallets with ChangeNotifier {
         .firstWhereOrNull((element) => element.address == address);
 
     if (walletAddress != null) {
-      if (walletAddress.wif == null || walletAddress.wif == '') {
-        var wifs = {};
-        var hdWallet = await getHdWallet(identifier);
-
-        for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
-          //parse 5 extra WIFs, just to be sure
-          final child = hdWallet.derivePath("m/0'/$i/0");
-          wifs[child.address] = child.wif;
-        }
-        wifs[hdWallet.address] = hdWallet.wif;
-        walletAddress.newWif = wifs[address]; //save
+      if (walletAddress.wif == '') {
+        //no wif set
+        await populateWifMap(identifier, openWallet.addresses.length);
+        walletAddress.newWif = _wifs[address] ?? ''; //save
         await openWallet.save();
-        return wifs[walletAddress.address];
+
+        return _wifs[walletAddress.address] ?? '';
       }
     } else if (walletAddress == null) {
       return '';
     }
-    return walletAddress.wif ?? '';
+    return walletAddress.wif;
+  }
+
+  Future<void> populateWifMap(String identifier, int maxValue) async {
+    var hdWallet = await getHdWallet(identifier);
+
+    for (var i = 0; i <= maxValue + 1; i++) {
+      final child = hdWallet.derivePath("m/0'/$i/0");
+      _wifs[child.address!] = child.wif!;
+    }
+    _wifs[hdWallet.address!] = hdWallet.wif!;
   }
 
   Future<BuildResult> buildTransaction({

@@ -306,8 +306,6 @@ class ElectrumConnection with ChangeNotifier {
       );
       if (idString == 'version') {
         handleVersion(result);
-      } else if (idString.startsWith('history_')) {
-        handleHistory(result);
       } else if (idString.startsWith('tx_')) {
         handleTx(id, result);
       } else if (idString.startsWith('utxo_')) {
@@ -404,14 +402,14 @@ class ElectrumConnection with ChangeNotifier {
   void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
         await _activeWallets.getWalletAddressStatus(_coinName, address);
+    var hash = _addresses.entries
+        .firstWhereOrNull((element) => element.key == address)!;
     if (newStatus != oldStatus) {
       //emulate scripthash subscribe push
-      var hash = _addresses.entries
-          .firstWhereOrNull((element) => element.key == address)!;
       LoggerWrapper.logInfo(
         'ElectrumConnection',
         'handleAddressStatus',
-        'status changed! $oldStatus, $newStatus',
+        '$address status changed! $oldStatus, $newStatus',
       );
       //handle the status update
       handleScriptHashSubscribeNotification(hash.value, newStatus);
@@ -434,11 +432,20 @@ class ElectrumConnection with ChangeNotifier {
           'writing $address to wallet',
         );
         //saving to wallet
-        _activeWallets.addAddressFromScan(
-          identifier: _coinName,
-          address: address,
-          status: newStatus,
-        );
+        if (oldStatus == "hasUtxo") {
+          sendMessage(
+            'blockchain.scripthash.listunspent',
+            'utxo_$address',
+            [hash.value],
+          );
+          print("einhorn $address");
+        } else {
+          _activeWallets.addAddressFromScan(
+            identifier: _coinName,
+            address: address,
+            status: newStatus,
+          );
+        }
         //try next
         await subscribeNextDerivedAddress();
       }
@@ -546,25 +553,6 @@ class ElectrumConnection with ChangeNotifier {
       txAddr,
       utxos,
     );
-    //fire get_history
-    if (_scanMode == false) {
-      sendMessage(
-        'blockchain.scripthash.get_history',
-        'history_$txAddr',
-        [_addresses[txAddr]],
-      );
-    }
-  }
-
-  void handleHistory(List result) async {
-    for (var historyTx in result) {
-      var txId = historyTx['tx_hash'];
-      sendMessage(
-        'blockchain.transaction.get',
-        'tx_$txId',
-        [txId, true],
-      );
-    }
   }
 
   void requestTxUpdate(String txId) {
