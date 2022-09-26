@@ -57,6 +57,7 @@ class _AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_initial) return const SizedBox();
     return Scaffold(
       appBar: AppBar(
         title: Text(
