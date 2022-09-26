@@ -511,7 +511,9 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   void handleScriptHashSubscribeNotification(
-      String? hashId, String? newStatus) async {
+    String? hashId,
+    String? newStatus,
+  ) async {
     //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(
         (element) => _addresses[element] == hashId,
@@ -574,7 +576,11 @@ class ElectrumConnection with ChangeNotifier {
     var txId = id.replaceFirst('tx_', '');
     var addr = await _activeWallets.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(_coinName, addr, tx);
+      await _activeWallets.putTx(
+        identifier: _coinName,
+        address: addr,
+        tx: tx,
+      );
     } else {
       LoggerWrapper.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
       //do nothing for now. if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
