@@ -554,6 +554,16 @@ class ElectrumConnection with ChangeNotifier {
       txAddr,
       utxos,
     );
+
+    var walletTx = await _activeWallets.getWalletTransactions(_coinName);
+    for (var utxo in utxos) {
+      var res = walletTx.firstWhereOrNull(
+        (element) => element.txid == utxo["tx_hash"],
+      );
+      if (res == null) {
+        requestTxUpdate(utxo["tx_hash"]);
+      }
+    }
   }
 
   void requestTxUpdate(String txId) {
