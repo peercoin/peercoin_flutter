@@ -438,7 +438,6 @@ class ElectrumConnection with ChangeNotifier {
             'utxo_$address',
             [hash.value],
           );
-          print("einhorn $address");
         } else {
           _activeWallets.addAddressFromScan(
             identifier: _coinName,
