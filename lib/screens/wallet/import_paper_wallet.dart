@@ -145,7 +145,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _balanceLoading = true;
     });
     _connectionProvider.requestPaperWalletUtxos(
-        _activeWallets.getScriptHash(_walletName, _pubKey), _pubKey);
+      _activeWallets.getScriptHash(_walletName, _pubKey),
+      _pubKey,
+    );
   }
 
   void calculateBalance() {
