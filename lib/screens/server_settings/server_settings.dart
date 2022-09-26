@@ -69,7 +69,10 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   void deactivate() {
-    Provider.of<ElectrumConnection>(context).init(_walletName);
+    Provider.of<ElectrumConnection>(context).init(
+      _walletName,
+      fromConnectivityChangeOrLifeCycle: true,
+    );
     super.deactivate();
   }
 

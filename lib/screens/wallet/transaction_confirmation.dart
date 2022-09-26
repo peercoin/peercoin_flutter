@@ -75,6 +75,8 @@ class _TransactionConfirmationScreenState
     final int decimalProduct = arguments.decimalProduct;
     int totalAmountWithFeesAndDust =
         buildResult.fee + buildResult.totalAmount + buildResult.destroyedChange;
+    final bool fiatAvailable = !arguments.coinIdentifier.contains('Testnet') &&
+        arguments.fiatPricePerCoin != 0;
 
     if (buildResult.feesHaveBeenDeductedFromRecipient) {
       //recipient output was cut to pay for fees!
@@ -116,7 +118,7 @@ class _TransactionConfirmationScreenState
                               SelectableText(
                                 '${buildResult.totalAmount / decimalProduct} $coinLetterCode',
                               ),
-                              if (!arguments.coinIdentifier.contains('Testnet'))
+                              if (fiatAvailable)
                                 Text(
                                   '${((buildResult.totalAmount / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
@@ -138,7 +140,7 @@ class _TransactionConfirmationScreenState
                               SelectableText(
                                 '${buildResult.fee / decimalProduct} $coinLetterCode',
                               ),
-                              if (!arguments.coinIdentifier.contains('Testnet'))
+                              if (fiatAvailable)
                                 Text(
                                   '${((buildResult.fee / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
@@ -163,8 +165,7 @@ class _TransactionConfirmationScreenState
                                 SelectableText(
                                   '${buildResult.destroyedChange / decimalProduct} $coinLetterCode',
                                 ),
-                                if (!arguments.coinIdentifier
-                                    .contains('Testnet'))
+                                if (fiatAvailable)
                                   Text(
                                     '${((buildResult.destroyedChange / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                   ),
@@ -191,7 +192,9 @@ class _TransactionConfirmationScreenState
                           Text(
                             AppLocalizations.instance
                                 .translate('send_total_amount'),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,7 +202,7 @@ class _TransactionConfirmationScreenState
                               SelectableText(
                                 '${totalAmountWithFeesAndDust / decimalProduct} $coinLetterCode',
                               ),
-                              if (!arguments.coinIdentifier.contains('Testnet'))
+                              if (fiatAvailable)
                                 Text(
                                   '${((totalAmountWithFeesAndDust / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),

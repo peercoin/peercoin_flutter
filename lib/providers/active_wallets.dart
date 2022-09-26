@@ -33,6 +33,7 @@ class ActiveWallets with ChangeNotifier {
   String _unusedAddress = '';
   late Box _walletBox;
   Box? _vaultBox;
+  final Map<String, String> _wifs = {};
   // ignore: prefer_final_fields
   Map<String?, CoinWallet?> _specificWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
@@ -43,6 +44,7 @@ class ActiveWallets with ChangeNotifier {
 
     //load wallets into cache
     for (var element in activeWalletsValues) {
+      getSpecificCoinWallet(element.name);
       getHdWallet(element.name);
     }
   }
@@ -100,12 +102,16 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> getAddressFromDerivationPath(
-      String identifier, int account, int chain, int address,
-      [master = false]) async {
+  Future<String?> getAddressFromDerivationPath({
+    required String identifier,
+    required int account,
+    required int chain,
+    required int address,
+    bool isMaster = false,
+  }) async {
     var hdWallet = await getHdWallet(identifier);
 
-    if (master == true) {
+    if (isMaster == true) {
       return hdWallet.address;
     } else {
       var derivePath = "m/$account'/$chain/$address";
@@ -120,7 +126,10 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> addAddressFromWif(
-      String identifier, String wif, String publicAddress) async {
+    String identifier,
+    String wif,
+    String publicAddress,
+  ) async {
     var openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.addNewAddress = WalletAddress(
@@ -160,7 +169,7 @@ class ActiveWallets with ChangeNotifier {
         used: false,
         status: null,
         isOurs: true,
-        wif: hdWallet.wif,
+        wif: hdWallet.wif ?? '',
       );
       unusedAddress = hdWallet.address!;
     } else {
@@ -200,7 +209,7 @@ class ActiveWallets with ChangeNotifier {
           used: false,
           status: null,
           isOurs: true,
-          wif: newHdWallet.wif,
+          wif: newHdWallet.wif ?? '',
         );
 
         unusedAddress = newHdWallet.address!;
@@ -519,8 +528,11 @@ class ActiveWallets with ChangeNotifier {
       addrInWallet.newUsed = status == null ? false : true;
       addrInWallet.newStatus = status;
 
-      if (addrInWallet.wif!.isEmpty || addrInWallet.wif == null) {
-        await getWif(identifier, address);
+      if (addrInWallet.wif.isEmpty) {
+        await getWif(
+          identifier: identifier,
+          address: address,
+        );
       }
     }
     await openWallet.save();
@@ -537,33 +549,37 @@ class ActiveWallets with ChangeNotifier {
     return '';
   }
 
-  Future<String> getWif(
-    String identifier,
-    String address,
-  ) async {
+  Future<String> getWif({
+    required String identifier,
+    required String address,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var walletAddress = openWallet.addresses
         .firstWhereOrNull((element) => element.address == address);
 
     if (walletAddress != null) {
-      if (walletAddress.wif == null || walletAddress.wif == '') {
-        var wifs = {};
-        var hdWallet = await getHdWallet(identifier);
-
-        for (var i = 0; i <= openWallet.addresses.length + 5; i++) {
-          //parse 5 extra WIFs, just to be sure
-          final child = hdWallet.derivePath("m/0'/$i/0");
-          wifs[child.address] = child.wif;
-        }
-        wifs[hdWallet.address] = hdWallet.wif;
-        walletAddress.newWif = wifs[address]; //save
+      if (walletAddress.wif == '') {
+        //no wif set
+        await populateWifMap(identifier, openWallet.addresses.length);
+        walletAddress.newWif = _wifs[address] ?? ''; //save
         await openWallet.save();
-        return wifs[walletAddress.address];
+
+        return _wifs[walletAddress.address] ?? '';
       }
     } else if (walletAddress == null) {
       return '';
     }
-    return walletAddress.wif ?? '';
+    return walletAddress.wif;
+  }
+
+  Future<void> populateWifMap(String identifier, int maxValue) async {
+    var hdWallet = await getHdWallet(identifier);
+
+    for (var i = 0; i <= maxValue + 1; i++) {
+      final child = hdWallet.derivePath("m/0'/$i/0");
+      _wifs[child.address!] = child.wif!;
+    }
+    _wifs[hdWallet.address!] = hdWallet.wif!;
   }
 
   Future<BuildResult> buildTransaction({
@@ -572,6 +588,7 @@ class ActiveWallets with ChangeNotifier {
     required Map<String, int> recipients,
     String opReturn = '',
     bool firstPass = true,
+    int sizeBefore = 0,
     List<WalletUtxo>? paperWalletUtxos,
     String paperWalletPrivkey = '',
   }) async {
@@ -604,6 +621,12 @@ class ActiveWallets with ChangeNotifier {
 
     //check if tx needs change
     var needsChange = true;
+    LoggerWrapper.logInfo(
+      'ActiveWallets',
+      'buildTransaction',
+      'txAmount: $txAmount - wallet balance: ${openWallet.balance}',
+    );
+
     if (txAmount == openWallet.balance || paperWalletUtxos != null) {
       needsChange = false;
       LoggerWrapper.logInfo(
@@ -730,7 +753,10 @@ class ActiveWallets with ChangeNotifier {
               if (walletAddr.address == inputUtxo.address) {
                 var wif = paperWalletUtxos != null
                     ? paperWalletPrivkey
-                    : await getWif(identifier, walletAddr.address);
+                    : await getWif(
+                        identifier: identifier,
+                        address: walletAddr.address,
+                      );
                 keyMap[inputKey] = {'wif': wif, 'addr': inputUtxo.address};
                 tx.addInput(inputUtxo.hash, inputUtxo.txPos);
               }
@@ -746,17 +772,20 @@ class ActiveWallets with ChangeNotifier {
             LoggerWrapper.logInfo(
               'ActiveWallets',
               'buildTransaction',
-              "signing - ${value["addr"]}",
+              "signing - ${value["addr"]} at vin $key",
             );
             tx.sign(
               vin: key,
-              keyPair: ECPair.fromWIF(value['wif'], network: network),
+              keyPair: ECPair.fromWIF(
+                value['wif'],
+                network: network,
+              ),
             );
           },
         );
 
         final intermediate = tx.build();
-        var number = ((intermediate.txSize) / 1000 * coin.fixedFeePerKb)
+        var number = (intermediate.txSize / 1000 * coin.fixedFeePerKb)
             .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * decimalProduct;
         var requiredFeeInSatoshis = asDouble.toInt();
@@ -767,12 +796,19 @@ class ActiveWallets with ChangeNotifier {
           'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
         );
 
-        if (firstPass == true) {
+        LoggerWrapper.logInfo(
+          'ActiveWallets',
+          'buildTransaction',
+          'sizeBefore: $sizeBefore - size now: ${intermediate.txSize}',
+        );
+
+        if (firstPass == true || intermediate.txSize > sizeBefore) {
           return await buildTransaction(
             identifier: identifier,
             recipients: recipients,
             opReturn: opReturn,
             fee: requiredFeeInSatoshis,
+            sizeBefore: intermediate.txSize,
             firstPass: false,
             paperWalletPrivkey: paperWalletPrivkey,
             paperWalletUtxos: paperWalletUtxos,
@@ -785,7 +821,6 @@ class ActiveWallets with ChangeNotifier {
             'intermediate size: ${intermediate.txSize}',
           );
           hex = intermediate.toHex();
-
           return BuildResult(
             fee: requiredFeeInSatoshis,
             hex: hex,
@@ -826,7 +861,8 @@ class ActiveWallets with ChangeNotifier {
 
           if (addr.isWatched ||
               utxoRes != null && utxoRes.value > 0 ||
-              addr.address == _unusedAddress) {
+              addr.address == _unusedAddress ||
+              addr.status == 'hasUtxo') {
             answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }
         }
@@ -903,8 +939,11 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAddressFromScan(
-      String identifier, String address, String status) async {
+  Future<void> addAddressFromScan({
+    required String identifier,
+    required String address,
+    required String status,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,
@@ -916,7 +955,10 @@ class ActiveWallets with ChangeNotifier {
         used: true,
         status: status,
         isOurs: true,
-        wif: await getWif(identifier, address),
+        wif: await getWif(
+          identifier: identifier,
+          address: address,
+        ),
       );
     } else {
       await updateAddressStatus(identifier, address, status);

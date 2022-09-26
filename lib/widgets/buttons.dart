@@ -20,8 +20,8 @@ class PeerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).primaryColor,
-        onPrimary: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).primaryColor,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4
@@ -56,8 +56,8 @@ class PeerButtonBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).backgroundColor,
-        onPrimary: Theme.of(context).backgroundColor,
+        foregroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4
@@ -101,8 +101,9 @@ class PeerButtonSetup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: active ? Theme.of(context).backgroundColor : Colors.grey,
-        onPrimary: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).primaryColor,
+        backgroundColor:
+            active ? Theme.of(context).backgroundColor : Colors.grey,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4
@@ -146,8 +147,8 @@ class PeerButtonSetupLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).backgroundColor,
-        onPrimary: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4

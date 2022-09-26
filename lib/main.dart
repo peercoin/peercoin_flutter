@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
@@ -134,6 +135,13 @@ void main() async {
     );
 
     LoggerWrapper.logInfo('main', 'initLogs', 'Init logs..');
+
+    var packageInfo = await PackageInfo.fromPlatform();
+    LoggerWrapper.logInfo(
+      'main',
+      'initLogs',
+      'Version ${packageInfo.version} Build ${packageInfo.buildNumber}',
+    );
   }
 
   //run

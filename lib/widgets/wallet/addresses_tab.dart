@@ -50,7 +50,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _showLabel = true;
   bool _showUsed = true;
   bool _showEmpty = true;
-  bool _showUnwatched = true;
+  bool _showUnwatched = false;
   final Map _addressBalanceMap = {};
   final Map _isWatchedMap = {};
   late ActiveWallets _activeWallets;
@@ -250,13 +250,13 @@ class _AddressTabState extends State<AddressTab> {
                 void showQrDialog(wif) =>
                     WalletHomeQr.showQrDialog(context, wif);
 
-                if (address.wif!.isEmpty || address.wif == null) {
+                if (address.wif.isEmpty) {
                   wif = await context.read<ActiveWallets>().getWif(
-                        _availableCoin.name,
-                        address.address,
+                        identifier: _availableCoin.name,
+                        address: address.address,
                       );
                 } else {
-                  wif = address.wif!;
+                  wif = address.wif;
                 }
                 navigator.pop();
                 showQrDialog(wif);
@@ -476,8 +476,10 @@ class _AddressTabState extends State<AddressTab> {
                           await showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                              title: Text(AppLocalizations.instance.translate(
-                                  'addressbook_dialog_remove_title')),
+                              title: Text(
+                                AppLocalizations.instance.translate(
+                                    'addressbook_dialog_remove_title'),
+                              ),
                               content: Text(addr.address),
                               actions: <Widget>[
                                 TextButton.icon(
@@ -863,8 +865,10 @@ class _AddressTabState extends State<AddressTab> {
                           children: [
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).backgroundColor,
-                                onPrimary: Theme.of(context).backgroundColor,
+                                foregroundColor:
+                                    Theme.of(context).backgroundColor,
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5
@@ -899,8 +903,10 @@ class _AddressTabState extends State<AddressTab> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).backgroundColor,
-                                onPrimary: Theme.of(context).backgroundColor,
+                                foregroundColor:
+                                    Theme.of(context).backgroundColor,
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5

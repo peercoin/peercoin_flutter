@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:background_fetch/background_fetch.dart';
@@ -196,7 +195,7 @@ class BackgroundSync {
               wallet.putPendingTransactionNotification(
                 PendingNotification(
                   address: element['address'],
-                  tx: element['tx'],
+                  tx: element['n'],
                 ),
               );
             });
@@ -227,7 +226,7 @@ class BackgroundSync {
   static Future<http.Response> getDataFromAddressBackend(
       String walletName, Map<String, int> adressesToQuery) async {
     var result = await http.post(
-      Uri.parse('https://peercoinexplorer.net/address-status'),
+      Uri.parse('https://peercoinexplorer.net/address-status-2'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -25,7 +25,7 @@ class WalletImportScanScreen extends StatefulWidget {
 class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _initial = true;
   bool _scanStarted = false;
-  bool backgroundNotificationsAvailable = false;
+  bool _backgroundNotificationsAvailable = false;
   ElectrumConnection? _connectionProvider;
   late ActiveWallets _activeWallets;
   late AppSettings _settings;
@@ -77,17 +77,31 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     super.deactivate();
   }
 
+  void timeOutTasks(BuildContext context) async {
+    //tasks to finish after timeout
+    final navigator = Navigator.of(context);
+    //sync notification backend
+    await BackgroundSync.executeSync(fromScan: true);
+    _timer.cancel();
+    await navigator.pushReplacementNamed(
+      Routes.walletList,
+      arguments: {'fromScan': true},
+    );
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
+      _settings = Provider.of<AppSettings>(context, listen: false);
       setState(() {
         _initial = false;
+        _backgroundNotificationsAvailable = _settings.notificationInterval > 0;
       });
       _coinName = ModalRoute.of(context)!.settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _activeWallets = Provider.of<ActiveWallets>(context);
-      _settings = Provider.of<AppSettings>(context, listen: false);
       await _activeWallets.prepareForRescan(_coinName);
+
       await _connectionProvider!.init(_coinName, scanMode: true);
 
       _timer = Timer.periodic(const Duration(seconds: 7), (timer) async {
@@ -96,30 +110,18 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
             _scanStarted == true) {
-          //tasks to finish after timeout
-          final navigator = Navigator.of(context);
-          //sync notification backend
-          await BackgroundSync.executeSync(fromScan: true);
-          _timer.cancel();
-          await navigator.pushReplacementNamed(
-            Routes.walletList,
-            arguments: {'fromScan': true},
-          );
+          timeOutTasks(context);
         }
       });
-
-      if (_settings.notificationInterval > 0) {
-        setState(() {
-          backgroundNotificationsAvailable = true;
-        });
+      if (_backgroundNotificationsAvailable == true) {
         await fetchAddressesFromBackend();
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       if (_connectionState == ElectrumConnectionState.connected) {
         _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        if (backgroundNotificationsAvailable == false) {
-          startScan();
+        if (_backgroundNotificationsAvailable == false) {
+          await startScan();
         }
       }
     }
@@ -135,14 +137,19 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
 
   Future<void> fetchAddressesFromBackend() async {
     var adressesToQuery = <String, int>{};
+    await _activeWallets.populateWifMap(
+      _coinName,
+      _addressScanPointer + _addressChunkSize,
+    );
+
     for (int i = _addressScanPointer;
         i < _addressScanPointer + _addressChunkSize;
         i++) {
       var res = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        0,
-        i,
-        0,
+        identifier: _coinName,
+        account: 0,
+        chain: i,
+        address: 0,
       );
       adressesToQuery[res!] = 0;
     }
@@ -153,6 +160,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         adressesToQuery,
       ),
     );
+    _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
   Future<void> parseBackendResult(Response response) async {
@@ -169,43 +177,58 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       if (foundDifference == true) {
         //loop through addresses in result
         var addresses = bodyDecoded['addresses'];
-        addresses.forEach((element) {
+        for (var element in addresses) {
           var elementAddr = element['address'];
           //backend knows this addr
-          _activeWallets.addAddressFromScan(_coinName, elementAddr, 'null');
-        });
+          if (element['utxos'] == true) {
+            await _activeWallets.addAddressFromScan(
+              identifier: _coinName,
+              address: elementAddr,
+              status: 'hasUtxo',
+            );
+          }
+        }
 
         //keep searching in next chunk
         setState(() {
           _addressScanPointer += _addressChunkSize;
           _addressChunkSize += 5;
         });
-        fetchAddressesFromBackend();
+        await fetchAddressesFromBackend();
       } else {
-        //no more differences found
-        startScan();
+        //done
+        await startScan();
       }
     }
+    _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
-  void startScan() async {
+  Future<void> startScan() async {
     if (_scanStarted == false) {
-      LoggerWrapper.logInfo('WalletImportScan', 'startScan', 'Scan started');
+      LoggerWrapper.logInfo(
+        'WalletImportScan',
+        'startScan',
+        'Scan started - _backgroundNotificationsAvailable $_backgroundNotificationsAvailable',
+      );
       //returns master address for hd wallet
       var masterAddr = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        0,
-        0,
-        0,
-        true,
+        identifier: _coinName,
+        account: 0,
+        chain: 0,
+        address: 0,
+        isMaster: true,
       );
 
       //subscribe to hd master
       _connectionProvider!.subscribeToScriptHashes(
-        await _activeWallets.getWalletScriptHashes(
-          _coinName,
-          masterAddr,
-        ),
+        _backgroundNotificationsAvailable
+            ? await _activeWallets.getWalletScriptHashes(
+                _coinName,
+              )
+            : await _activeWallets.getWalletScriptHashes(
+                _coinName,
+                masterAddr,
+              ),
       );
 
       setState(() {

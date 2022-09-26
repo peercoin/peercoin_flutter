@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:coinslib/coinslib.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -70,8 +71,8 @@ class _SendTabState extends State<SendTab> {
   late final int _decimalProduct;
   bool _fiatEnabled = false;
   bool _fiatInputEnabled = false;
-  final List<String> _amountInputHelperTextList = [''];
-  final List<double> _requestedAmountInCoinsList = [0.0];
+  final Map<int, String> _amountInputHelperTextList = {};
+  final Map<int, double> _requestedAmountInCoinsList = {};
   double _totalAmountRequestedInCoins = 0.0;
   double _coinValue = 0.0;
   int _numberOfRecipients = 1;
@@ -467,46 +468,55 @@ class _SendTabState extends State<SendTab> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      PeerButtonBorder(
-                        text: AppLocalizations.instance.translate(
-                          'send_import_csv',
-                        ),
-                        action: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['csv'],
-                          );
-
-                          if (result != null) {
-                            File file = File(result.files.single.path!);
-                            var csv = await file.readAsString();
-                            final parsed = fast_csv.parse(csv);
-                            var i = 0;
-                            for (final row in parsed) {
-                              final address = row[0];
-                              final amount =
-                                  double.parse(row[1].replaceAll(',', '.'));
-                              if (i == 0) {
-                                _addressControllerList[0].text = address;
-                                _amountControllerList[0].text =
-                                    amount.toString();
-                                setState(() {});
-                              } else {
-                                _addNewAddress(
-                                  address: address,
-                                  amount: amount,
-                                  fromImport: true,
+                      if (!kIsWeb)
+                        //TODO Error: Unsupported operation: _Namespace on web - dart:io isn't available on web
+                        PeerButtonBorder(
+                          text: AppLocalizations.instance.translate(
+                            'send_import_csv',
+                          ),
+                          action: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['csv'],
+                            );
+                            if (result != null) {
+                              File file;
+                              if (kIsWeb) {
+                                file = File.fromRawPath(
+                                  result.files.single.bytes!,
                                 );
-                                setState(() {
-                                  _numberOfRecipients++;
-                                });
+                              } else {
+                                file = File(result.files.single.path!);
                               }
-                              i++;
+                              var csv = await file.readAsString();
+                              final parsed = fast_csv.parse(csv);
+                              var i = 0;
+                              for (final row in parsed) {
+                                final address = row[0];
+                                final amount =
+                                    double.parse(row[1].replaceAll(',', '.'));
+                                if (i == 0) {
+                                  _addressControllerList[0].text = address;
+                                  _amountControllerList[0].text =
+                                      amount.toString();
+                                  _requestedAmountInCoinsList[0] = amount;
+                                  setState(() {});
+                                } else {
+                                  _addNewAddress(
+                                    address: address,
+                                    amount: amount,
+                                    fromImport: true,
+                                  );
+                                  setState(() {
+                                    _numberOfRecipients++;
+                                  });
+                                }
+                                i++;
+                              }
                             }
-                          }
-                        },
-                      ),
+                          },
+                        ),
                     ],
                   ),
                 ),
@@ -562,8 +572,8 @@ class _SendTabState extends State<SendTab> {
       _labelKeyList.add(GlobalKey<FormFieldState>());
       _addressKeyList.add(GlobalKey<FormFieldState>());
       _amountKeyList.add(GlobalKey<FormFieldState>());
-      _amountInputHelperTextList.add('');
-      _requestedAmountInCoinsList.add(amount);
+      _amountInputHelperTextList[_numberOfRecipients] = '';
+      _requestedAmountInCoinsList[_numberOfRecipients] = amount;
 
       setState(() {
         _currentAddressIndex = _numberOfRecipients;
@@ -624,7 +634,7 @@ class _SendTabState extends State<SendTab> {
     _amountControllerList.asMap().forEach((key, value) {
       var coins = _requestedAmountInCoinsList[key];
       recipients[_addressControllerList[key].text.trim()] =
-          (coins * _decimalProduct).toInt();
+          (coins! * _decimalProduct).toInt();
       totalCoins += coins;
     });
 
@@ -653,7 +663,6 @@ class _SendTabState extends State<SendTab> {
 
     if (_fiatEnabled == false) {
       setState(() {
-        _totalAmountRequestedInCoins = inputAmount;
         _requestedAmountInCoinsList[index] = inputAmount;
       });
       return;
@@ -733,8 +742,8 @@ class _SendTabState extends State<SendTab> {
     _labelKeyList.removeAt(index);
     _addressKeyList.removeAt(index);
     _amountKeyList.removeAt(index);
-    _amountInputHelperTextList.removeAt(index);
-    _requestedAmountInCoinsList.removeAt(index);
+    _amountInputHelperTextList.remove(index);
+    _requestedAmountInCoinsList.remove(index);
 
     setState(() {
       _numberOfRecipients--;

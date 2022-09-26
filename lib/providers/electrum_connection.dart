@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -42,6 +41,7 @@ class ElectrumConnection with ChangeNotifier {
   int _maxAddressDepth = 0; //no address depth scan for now
   Map<String, int> _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
   List _openReplies = [];
+  int _resetAttempt = 1;
 
   ElectrumConnection(this._activeWallets, this._servers);
 
@@ -126,14 +126,20 @@ class ElectrumConnection with ChangeNotifier {
       startPingTimer();
 
       return true;
-    } else if (fromConnectivityChangeOrLifeCycle == false) {
+    } else if (fromConnectivityChangeOrLifeCycle == false &&
+        _closedIntentionally == false) {
       //init has been called but connection is not null yet? try again
       LoggerWrapper.logInfo(
         'ElectrumConnection',
         'init',
-        'connection was not reset (yet), will try again in 1 second',
+        'connection was not reset (yet), will try again in 1 second, reset attempt $_resetAttempt',
       );
       await Future.delayed(const Duration(seconds: 1));
+      if (_resetAttempt > 3) {
+        _connection.sink.close();
+        cleanUpOnDone();
+      }
+      _resetAttempt++;
       await init(
         walletName,
         scanMode: scanMode,
@@ -263,10 +269,13 @@ class ElectrumConnection with ChangeNotifier {
     _maxChainDepth = 5;
     _maxAddressDepth = 0; //no address depth scan for now
     _depthPointer = 1;
+    _resetAttempt = 1;
 
     if (_closedIntentionally == false) {
-      _reconnectTimer = Timer(const Duration(seconds: 5),
-          () => init(_coinName)); //retry if not intentional
+      _reconnectTimer = Timer(
+        const Duration(seconds: 5),
+        () => init(_coinName),
+      ); //retry if not intentional
     }
   }
 
@@ -297,8 +306,6 @@ class ElectrumConnection with ChangeNotifier {
       );
       if (idString == 'version') {
         handleVersion(result);
-      } else if (idString.startsWith('history_')) {
-        handleHistory(result);
       } else if (idString.startsWith('tx_')) {
         handleTx(id, result);
       } else if (idString.startsWith('utxo_')) {
@@ -339,7 +346,15 @@ class ElectrumConnection with ChangeNotifier {
         _connection.add('\n'.codeUnits);
       } else if (_serverType == ElectrumServerType.wss &&
           _connection.sink != null) {
-        _connection.sink.add(encodedMessage);
+        try {
+          _connection.sink.add(encodedMessage);
+        } catch (e) {
+          LoggerWrapper.logError(
+            'ElectrumConnection',
+            "sendMessage",
+            e.toString(),
+          );
+        }
       }
     }
   }
@@ -387,14 +402,14 @@ class ElectrumConnection with ChangeNotifier {
   void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
         await _activeWallets.getWalletAddressStatus(_coinName, address);
+    var hash = _addresses.entries
+        .firstWhereOrNull((element) => element.key == address)!;
     if (newStatus != oldStatus) {
       //emulate scripthash subscribe push
-      var hash = _addresses.entries
-          .firstWhereOrNull((element) => element.key == address)!;
       LoggerWrapper.logInfo(
         'ElectrumConnection',
         'handleAddressStatus',
-        'status changed! $oldStatus, $newStatus',
+        '$address status changed! $oldStatus, $newStatus',
       );
       //handle the status update
       handleScriptHashSubscribeNotification(hash.value, newStatus);
@@ -417,7 +432,19 @@ class ElectrumConnection with ChangeNotifier {
           'writing $address to wallet',
         );
         //saving to wallet
-        _activeWallets.addAddressFromScan(_coinName, address, newStatus);
+        if (oldStatus == "hasUtxo") {
+          sendMessage(
+            'blockchain.scripthash.listunspent',
+            'utxo_$address',
+            [hash.value],
+          );
+        } else {
+          _activeWallets.addAddressFromScan(
+            identifier: _coinName,
+            address: address,
+            status: newStatus,
+          );
+        }
         //try next
         await subscribeNextDerivedAddress();
       }
@@ -436,10 +463,10 @@ class ElectrumConnection with ChangeNotifier {
       );
 
       var nextAddr = await _activeWallets.getAddressFromDerivationPath(
-        _coinName,
-        _queryDepth['account']!,
-        _queryDepth['chain']!,
-        _queryDepth['address']!,
+        identifier: _coinName,
+        account: _queryDepth['account']!,
+        chain: _queryDepth['chain']!,
+        address: _queryDepth['address']!,
       );
 
       LoggerWrapper.logInfo(
@@ -475,8 +502,8 @@ class ElectrumConnection with ChangeNotifier {
     );
   }
 
-  void subscribeToScriptHashes(Map addresses) {
-    for (var hash in addresses.entries) {
+  void subscribeToScriptHashes(Map scriptHashes) {
+    for (var hash in scriptHashes.entries) {
       _addresses[hash.key] = hash.value;
       sendMessage('blockchain.scripthash.subscribe', hash.key, [hash.value]);
       notifyListeners();
@@ -525,25 +552,6 @@ class ElectrumConnection with ChangeNotifier {
       txAddr,
       utxos,
     );
-    //fire get_history
-    if (_scanMode == false) {
-      sendMessage(
-        'blockchain.scripthash.get_history',
-        'history_$txAddr',
-        [_addresses[txAddr]],
-      );
-    }
-  }
-
-  void handleHistory(List result) async {
-    for (var historyTx in result) {
-      var txId = historyTx['tx_hash'];
-      sendMessage(
-        'blockchain.transaction.get',
-        'tx_$txId',
-        [txId, true],
-      );
-    }
   }
 
   void requestTxUpdate(String txId) {
@@ -569,8 +577,7 @@ class ElectrumConnection with ChangeNotifier {
       await _activeWallets.putTx(_coinName, addr, tx);
     } else {
       LoggerWrapper.logWarn('ElectrumConnection', 'handleTx', 'tx not found');
-      //TODO figure out what to do in that case ...
-      //if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
+      //do nothing for now. if we set it to rejected, it won't be queried anymore and not be recognized if it ever confirms
     }
   }
 
