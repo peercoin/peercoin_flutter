@@ -36,7 +36,7 @@ dependencies:
   mailto: ^2.0.0
   flutter_slidable: ^0.6.0
   flutter_typeahead: ^4.0.0
-  connectivity_plus: ^2.2.1
+  connectivity_plus: ^3.0.2
   theme_mode_handler: ^3.0.0
   http: ^0.13.3
   collection: ^1.15.0-nullsafety.4
