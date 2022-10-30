@@ -42,7 +42,8 @@ dependencies:
   collection: ^1.15.0-nullsafety.4
   flutter_markdown: ^0.6.6
   background_fetch: ^1.0.1
-  flutter_logs: ^2.1.7
+  flutter_logs: 
+    git: https://github.com/willyfromtheblock/flutter_logs
   auto_size_text: ^3.0.0
   camera: ^0.10.0+1
   hex: ^0.2.0
