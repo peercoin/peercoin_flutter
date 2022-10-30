@@ -1,3 +1,6 @@
+### **1.0.2** (2022-10-30)
+* Bug fix: reconnect loop that would result in servers banning clients
+
 ### **1.0.1** (2022-09-26)
 * Even more robust scanning
 * Fiat values will no longer be shown in transaction confirmation when price feed is disabled

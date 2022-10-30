@@ -62,11 +62,12 @@ class ElectrumConnection with ChangeNotifier {
 
       _offlineSubscription = Connectivity()
           .onConnectivityChanged
-          .listen((ConnectivityResult result) {
+          .listen((ConnectivityResult result) async {
         if (result != ConnectivityResult.none) {
           //connection re-established
           _offlineSubscription.cancel();
-          _connection = null;
+          await closeConnection();
+          cleanUpOnDone();
           init(
             walletName,
             scanMode: scanMode,
@@ -136,8 +137,7 @@ class ElectrumConnection with ChangeNotifier {
       );
       await Future.delayed(const Duration(seconds: 1));
       if (_resetAttempt > 3) {
-        _connection.sink.close();
-        cleanUpOnDone();
+        await closeConnection();
       }
       _resetAttempt++;
       await init(
