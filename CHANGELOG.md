@@ -1,3 +1,6 @@
+### **1.0.3** (2022-xx-xx)
+* Bug fix: reconnect loop that would result in servers banning clients
+
 ### **1.0.2** (2022-10-30)
 * Bug fix: reconnect loop that would result in servers banning clients
 
