@@ -732,7 +732,9 @@ class _SendTabState extends State<SendTab> {
         _labelControllerList[_currentAddressIndex].text = value;
       }
     });
+
     _addressControllerList[_currentAddressIndex].text = parsed.path;
+    triggerFormValidation();
   }
 
   _removeAddress(int index) {
