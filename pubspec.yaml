@@ -44,7 +44,7 @@ dependencies:
   background_fetch: ^1.0.1
   flutter_logs: ^2.1.8
   auto_size_text: ^3.0.0
-  camera: ^0.10.0+1
+  camera: ^0.10.0+4
   hex: ^0.2.0
   path_provider: ^2.0.11
   characters: ^1.2.0
