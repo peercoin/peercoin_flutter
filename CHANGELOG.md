@@ -1,4 +1,4 @@
-### **1.0.3** (2022-xx-xx)
+### **1.0.3** (2022-11-06)
 * Send tab: perform form validation after scanning QR-code
 
 ### **1.0.2** (2022-10-30)
