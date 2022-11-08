@@ -282,7 +282,7 @@
     "tx_value": "Value",
     "tx_view_in_explorer": "View in explorer",
     "tx_retry_broadcast": "Retry broadcast",
-    "tx_retry_snack": "Broadcasting has been retried. If it was successful, the transaction will appear in a bit.",
+    "tx_retry_snack": "Broadcasting has been retried. If it was successful, the transaction will update in a bit.",
     "unconfirmed": "unconfirmed",
     "wallet_bottom_nav_addr": "Addresses",
     "wallet_bottom_nav_receive": "Receive",
