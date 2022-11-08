@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peercoin/providers/active_wallets.dart';
+import 'package:peercoin/providers/electrum_connection.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../models/available_coins.dart';
@@ -107,6 +110,7 @@ class TransactionDetails extends StatelessWidget {
                   )
                 ],
               ),
+              Text(tx.broadcastHex),
               const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +143,9 @@ class TransactionDetails extends StatelessWidget {
                       children: [
                         const Divider(),
                         Text(
-                          AppLocalizations.instance.translate('send_op_return'),
+                          AppLocalizations.instance.translate(
+                            'send_op_return',
+                          ),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         SelectableText(tx.opReturn)
@@ -147,13 +153,43 @@ class TransactionDetails extends StatelessWidget {
                     )
                   : const SizedBox(),
               const SizedBox(height: 20),
-              Center(
-                child: PeerButton(
-                  action: () => _launchURL(baseUrl + tx.txid),
-                  text: AppLocalizations.instance
-                      .translate('tx_view_in_explorer'),
-                ),
-              )
+              tx.confirmations == -1
+                  ? Center(
+                      child: PeerButton(
+                        action: () {
+                          Provider.of<ElectrumConnection>(
+                            context,
+                            listen: false,
+                          ).broadcastTransaction(
+                            tx.broadcastHex,
+                            tx.txid,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                AppLocalizations.instance.translate(
+                                  'tx_retry_snack',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        text: AppLocalizations.instance.translate(
+                          'tx_retry_broadcast',
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: PeerButton(
+                        action: () => _launchURL(baseUrl + tx.txid),
+                        text: AppLocalizations.instance.translate(
+                          'tx_view_in_explorer',
+                        ),
+                      ),
+                    )
             ],
           ),
         ),

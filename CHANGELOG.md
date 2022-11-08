@@ -1,5 +1,5 @@
-### **1.0.4** (2022-xx-xx)
-* 
+### **1.0.4** (2022-11-08)
+* Allow re-broadcasting of rejected tx
 
 ### **1.0.3** (2022-11-06)
 * Send tab: perform form validation after scanning QR-code

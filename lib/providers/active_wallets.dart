@@ -882,37 +882,45 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> updateBroadcasted(
-      String identifier, String txId, bool broadcasted) async {
+    String identifier,
+    String txId,
+  ) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    var tx = openWallet.transactions
-        .firstWhereOrNull((element) => element.txid == txId);
+    var tx = openWallet.transactions.firstWhereOrNull(
+      (element) => element.txid == txId,
+    );
     if (tx != null) {
-      tx.broadCasted = broadcasted;
+      tx.broadCasted = true;
       tx.resetBroadcastHex();
+      tx.confirmations = 0;
       await openWallet.save();
     }
   }
 
   Future<void> updateRejected(
-      String identifier, String txId, bool rejected) async {
+    String identifier,
+    String txId,
+    bool rejected,
+  ) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    var tx = openWallet.transactions.firstWhere(
+    var tx = openWallet.transactions.firstWhereOrNull(
         (element) => element.txid == txId && element.confirmations != -1);
-    if (rejected) {
-      tx.newConfirmations = -1;
+    if (tx != null) {
+      if (rejected) {
+        tx.newConfirmations = -1;
 
-      var lockedUtxos =
-          openWallet.utxos.where((element) => element.height == -1);
-      for (var element in lockedUtxos) {
-        //unlock ALL utxos after reject
-        element.newHeight = 1;
-        await openWallet.save();
+        var lockedUtxos =
+            openWallet.utxos.where((element) => element.height == -1);
+        for (var element in lockedUtxos) {
+          //unlock ALL locked utxos after reject
+          element.newHeight = 1;
+          await openWallet.save();
+        }
+        await updateWalletBalance(identifier);
+      } else {
+        tx.newConfirmations = 0;
       }
-      await updateWalletBalance(identifier);
-    } else {
-      tx.newConfirmations = 0;
     }
-    tx.resetBroadcastHex();
     await openWallet.save();
     notifyListeners();
   }
