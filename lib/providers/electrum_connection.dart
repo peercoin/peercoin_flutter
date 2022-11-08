@@ -605,7 +605,7 @@ class ElectrumConnection with ChangeNotifier {
         'handleBroadcast',
         'tx rejected by server',
       );
-      await _activeWallets.updateRejected(_coinName, txId, true);
+      await _activeWallets.updateRejected(_coinName, txId);
     } else if (txId != 'import') {
       await _activeWallets.updateBroadcasted(_coinName, txId);
     }
