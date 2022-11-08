@@ -67,7 +67,9 @@ class _TransactionListState extends State<TransactionList> {
         ? Text(
             '?',
             textScaleFactor: 0.9,
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           )
         : CircularStepProgressIndicator(
             selectedStepSize: 5,
@@ -87,20 +89,27 @@ class _TransactionListState extends State<TransactionList> {
   @override
   Widget build(BuildContext context) {
     var reversedTx = widget.walletTransactions
-        .where((element) => element.timestamp != -1) //filter "phantom" tx
+        .where(
+          (element) => element.timestamp != -1,
+        ) //filter "phantom" tx
         .toList()
         .reversed
         .toList();
     var filteredTx = reversedTx;
     if (_filterChoice != 'all') {
       filteredTx = reversedTx
-          .where((element) => element.direction == _filterChoice)
+          .where(
+            (element) => element.direction == _filterChoice,
+          )
           .toList();
     }
 
     return Stack(
       children: [
-        WalletBalanceHeader(widget.connectionState, widget.wallet),
+        WalletBalanceHeader(
+          widget.connectionState,
+          widget.wallet,
+        ),
         widget.walletTransactions
                 .where(
                   (element) => element.timestamp != -1,
@@ -160,11 +169,13 @@ class _TransactionListState extends State<TransactionList> {
                               elevation: 0,
                               child: ListTile(
                                 horizontalTitleGap: 32.0,
-                                onTap: () => Navigator.of(context)
-                                    .pushNamed(Routes.transaction, arguments: {
-                                  'tx': filteredTx[i - 1],
-                                  'wallet': widget.wallet
-                                }),
+                                onTap: () => Navigator.of(context).pushNamed(
+                                  Routes.transaction,
+                                  arguments: {
+                                    'tx': filteredTx[i - 1],
+                                    'wallet': widget.wallet
+                                  },
+                                ),
                                 leading: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
