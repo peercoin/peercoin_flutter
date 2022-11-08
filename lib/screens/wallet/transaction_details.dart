@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/electrum_connection.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:provider/provider.dart';
