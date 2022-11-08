@@ -110,7 +110,6 @@ class TransactionDetails extends StatelessWidget {
                   )
                 ],
               ),
-              Text(tx.broadcastHex),
               const Divider(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
