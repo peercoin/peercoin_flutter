@@ -150,6 +150,24 @@ class TransactionDetails extends StatelessWidget {
                       ],
                     )
                   : const SizedBox(),
+              tx.confirmations == -1
+                  ? ExpansionTile(
+                      tilePadding: EdgeInsets.zero,
+                      title: Text(
+                        AppLocalizations.instance.translate('tx_show_hex'),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      children: [
+                        DoubleTabToClipboard(
+                          clipBoardData: tx.broadcastHex,
+                          child: Text(tx.broadcastHex),
+                        )
+                      ],
+                    )
+                  : const SizedBox(),
               const SizedBox(height: 20),
               tx.confirmations == -1
                   ? Center(
