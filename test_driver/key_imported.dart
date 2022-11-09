@@ -175,6 +175,36 @@ void main() {
               'vapor please suffer wood enrich quality position chest quantum fog rival museum'),
         );
       });
+
+      test('Settings, change pin', () async {
+        await driver.tap(find.text('Authentication'));
+        await driver.tap(find.text('Reveal authentication options'));
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('0'));
+        }
+        await driver.tap(find.text('Change PIN'));
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('0'));
+        }
+        for (var i = 1; i <= 12; i++) {
+          await driver.tap(find.text('1'));
+        }
+        await driver.tap(find.pageBack());
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.byValueKey('appSettingsButton'));
+          },
+        );
+        await driver.tap(find.text('Seed phrase'));
+        await driver.tap(find.text('Reveal seed phrase'));
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('1'));
+        }
+        await driver.waitFor(
+          find.text(
+              'vapor please suffer wood enrich quality position chest quantum fog rival museum'),
+        );
+      });
     },
   );
 }
