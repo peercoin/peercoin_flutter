@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/functions.dart';
-import 'package:flutter_screen_lock/heading_title.dart';
-import 'package:local_auth/auth_strings.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/encrypted_box.dart';
@@ -103,20 +102,26 @@ class Auth {
   static Future<void> localAuth(BuildContext context,
       [Function? callback]) async {
     final localAuth = LocalAuthentication();
-    final authStrings = AndroidAuthMessages(
-      signInTitle:
-          AppLocalizations.instance.translate('authenticate_biometric_title'),
-      biometricHint:
-          AppLocalizations.instance.translate('authenticate_biometric_hint'),
-    );
+
     Future<void> executeCB() async => executeCallback(context, callback);
     try {
       final didAuthenticate = await localAuth.authenticate(
-          androidAuthStrings: authStrings,
+        authMessages: <AuthMessages>[
+          AndroidAuthMessages(
+            signInTitle: AppLocalizations.instance
+                .translate('authenticate_biometric_title'),
+            biometricHint: AppLocalizations.instance
+                .translate('authenticate_biometric_hint'),
+          ),
+        ],
+        options: const AuthenticationOptions(
+          stickyAuth: true,
           biometricOnly: true,
-          localizedReason: AppLocalizations.instance
-              .translate('authenticate_biometric_reason'),
-          stickyAuth: true);
+        ),
+        localizedReason: AppLocalizations.instance.translate(
+          'authenticate_biometric_reason',
+        ),
+      );
       if (didAuthenticate) {
         await executeCB();
       }
@@ -140,7 +145,6 @@ class Auth {
     await screenLock(
       context: context,
       correctString: await encryptedBox.passCode as String,
-      digits: 6,
       maxRetries: retriesLeft,
       canCancel: canCancel,
       title: RichText(
@@ -163,9 +167,6 @@ class Auth {
           ],
         ),
       ),
-      confirmTitle: HeadingTitle(
-          text: AppLocalizations.instance
-              .translate('authenticate_confirm_title')),
       customizedButtonChild: biometricsAllowed
           ? const Icon(
               Icons.fingerprint,
@@ -174,14 +175,14 @@ class Auth {
       customizedButtonTap: () async {
         if (biometricsAllowed) await localAuth(context, callback);
       },
-      didOpened: () async {
+      onOpened: () async {
         if (biometricsAllowed) await localAuth(context, callback);
       },
-      didUnlocked: () {
+      onUnlocked: () {
         executeCallback(context, callback);
       },
-      didError: (retries) => errorHandler(context, retries),
-      didMaxRetries: (_) async {
+      onError: (retries) => errorHandler(context, retries),
+      onMaxRetries: (_) async {
         await spawnJail(context, jailedFromHome);
       },
     );

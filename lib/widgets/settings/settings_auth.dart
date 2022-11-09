@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/app_settings.dart';
@@ -24,7 +24,7 @@ class SettingsAuth extends StatelessWidget {
     await Auth.requireAuth(
       context: context,
       biometricsAllowed: biometricsAllowed,
-      callback: () async => await screenLock(
+      callback: () async => await screenLockCreate(
         title: Text(
           AppLocalizations.instance.translate('authenticate_title_new'),
           style: const TextStyle(
@@ -38,10 +38,8 @@ class SettingsAuth extends StatelessWidget {
           ),
         ),
         context: context,
-        correctString: '',
         digits: 6,
-        confirmation: true,
-        didConfirmed: (matchedText) async {
+        onConfirmed: (matchedText) async {
           final scaffoldMessenger = ScaffoldMessenger.of(context);
           final navigator = Navigator.of(context);
           await context.read<EncryptedBox>().setPassCode(matchedText);
