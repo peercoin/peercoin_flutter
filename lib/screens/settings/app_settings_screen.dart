@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:path_provider/path_provider.dart';
@@ -107,7 +108,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
             'existsSync',
             'Logs zip found, opening Share overlay',
           );
-          await Share.shareFiles([file.path]);
+          await Share.shareXFiles(
+            [
+              XFile(file.path),
+            ],
+          );
         } else {
           LoggerWrapper.logError(
             'AppSettingsScreen',

@@ -1,5 +1,5 @@
 PODS:
-  - background_fetch (1.1.0):
+  - background_fetch (1.1.2):
     - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
@@ -146,7 +146,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 3795af8a49054dc526477cc2f60d2ed41de60587
+  background_fetch: aaf8fc9d1da7f04e5373aabd4bb239704a5be6eb
   camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
