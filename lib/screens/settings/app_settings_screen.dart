@@ -94,13 +94,19 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           externalDirectory = await getExternalStorageDirectory();
         }
 
-        LoggerWrapper.logInfo('AppSettingsScreen', 'found',
-            'External Storage:$externalDirectory');
+        LoggerWrapper.logInfo(
+          'AppSettingsScreen',
+          'found',
+          'External Storage:$externalDirectory',
+        );
 
         var file = File('${externalDirectory!.path}/$zipName');
 
         LoggerWrapper.logInfo(
-            'AppSettingsScreen', 'path', 'Path: \n${file.path}');
+          'AppSettingsScreen',
+          'path',
+          'Path: \n${file.path}',
+        );
 
         if (file.existsSync()) {
           LoggerWrapper.logInfo(
