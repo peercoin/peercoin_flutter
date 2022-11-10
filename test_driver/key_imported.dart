@@ -212,14 +212,14 @@ void main() {
             print('Tap 1 twelve times');
           },
         );
-        print('Tapping unsynchronized over');        
-        await driver.tap(find.pageBack());
-        print('Found pageBack');
+        print('Tapping unsynchronized over');
         final pixels = await driver.screenshot();
         final file = File('shot.png');
         await file.writeAsBytes(pixels);
         await driver.runUnsynchronized(
+        print('Found pageBack');
           () async {
+          await driver.tap(find.pageBack());
           await driver.tap(find.byValueKey('appSettingsButton'));
           print('Found appSettingsButton');
         });
