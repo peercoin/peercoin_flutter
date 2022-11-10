@@ -481,9 +481,9 @@ class _SendTabState extends State<SendTab> {
                           String csv;
                           if (result != null) {
                             if (kIsWeb) {
-                              csv = (String.fromCharCodes(
+                              csv = String.fromCharCodes(
                                 result.files.single.bytes!,
-                              ));
+                              );
                             } else {
                               csv = await File(result.files.single.path!)
                                   .readAsString();
