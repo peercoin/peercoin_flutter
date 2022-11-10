@@ -190,36 +190,47 @@ void main() {
 
       test('Settings, change pin', () async {
         await driver.tap(find.text('Authentication'));
+        print('Found text authentication');
         await driver.tap(find.text('Reveal authentication options'));
+        print('Found text reveal');
         await driver.runUnsynchronized(
           () async {
             for (var i = 1; i <= 6; i++) {
               await driver.tap(find.text('0'));
             }
+            print('Tap 0 six times');
             await driver.tap(find.text('Change PIN'));
-
+            print('found Change PIN');
             for (var i = 1; i <= 6; i++) {
               await driver.tap(find.text('0'));
             }
+            print('Tap 0 six times');
             for (var i = 1; i <= 12; i++) {
               await driver.tap(find.text('1'));
             }
+            print('Tap 1 twelve times');
           },
         );
-        await Future.delayed(const Duration(seconds: 2));
+        print('Tapping unsynchronized over');        
         await driver.tap(find.pageBack());
-        await Future.delayed(const Duration(seconds: 2));
+        print('Found pageBack');
         await driver.tap(find.byValueKey('appSettingsButton'));
+        print('Found appSettingsButton');
         await driver.tap(find.text('Seed phrase'));
+        print('found Seed Phrase');
         await driver.tap(find.text('Reveal seed phrase'));
+        print('found Reveal seed phrase');
         await driver.runUnsynchronized(
           () async {
             for (var i = 1; i <= 6; i++) {
               await driver.tap(find.text('1'));
             }
+            print('Tap 1 six times');
           },
         );
+        print('Tapping unsynchronized over');
         await driver.waitFor(find.text(seedPhrase));
+        print('Found seedPhrase');
       });
     },
   );
