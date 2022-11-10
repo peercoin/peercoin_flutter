@@ -222,15 +222,10 @@ void main() {
         print('found Seed Phrase');
         await driver.tap(find.text('Reveal seed phrase'));
         print('found Reveal seed phrase');
-        await driver.runUnsynchronized(
-          () async {
             for (var i = 1; i <= 6; i++) {
               await driver.tap(find.text('1'));
             }
             print('Tap 1 six times');
-          },
-        );
-        print('Tapping unsynchronized over');
         await driver.waitFor(find.text(seedPhrase));
         print('Found seedPhrase');
       });
