@@ -194,25 +194,20 @@ void main() {
         print('Found text authentication');
         await driver.tap(find.text('Reveal authentication options'));
         print('Found text reveal');
-        await driver.runUnsynchronized(
-          () async {
-            for (var i = 1; i <= 6; i++) {
-              await driver.tap(find.text('0'));
-            }
-            print('Tap 0 six times');
-            await driver.tap(find.text('Change PIN'));
-            print('found Change PIN');
-            for (var i = 1; i <= 6; i++) {
-              await driver.tap(find.text('0'));
-            }
-            print('Tap 0 six times');
-            for (var i = 1; i <= 12; i++) {
-              await driver.tap(find.text('1'));
-            }
-            print('Tap 1 twelve times');
-          },
-        );
-        print('Tapping unsynchronized over');
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('0'));
+        }
+        print('Tap 0 six times');
+        await driver.tap(find.text('Change PIN'));
+        print('found Change PIN');
+        for (var i = 1; i <= 6; i++) {
+          await driver.tap(find.text('0'));
+        }
+        print('Tap 0 six times');
+        for (var i = 1; i <= 12; i++) {
+          await driver.tap(find.text('1'));
+        }
+        print('Tap 1 twelve times');
         final pixels = await driver.screenshot();
         final file = File('shot.png');
         await file.writeAsBytes(pixels);
