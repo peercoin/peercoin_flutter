@@ -70,10 +70,12 @@ void main() async {
       AndroidInitializationSettings('@drawable/splash');
   const initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: DarwinInitializationSettings(),
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) async {
+      onDidReceiveNotificationResponse: (
+    NotificationResponse notificationResponse,
+  ) async {
     if (notificationResponse.payload != null) {
       LoggerWrapper.logInfo(
         'notification',
