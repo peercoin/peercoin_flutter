@@ -214,7 +214,9 @@ void main() {
         print('Tapping unsynchronized over');        
         await driver.tap(find.pageBack());
         print('Found pageBack');
-        await Future.delayed(const Duration(seconds: 3));
+        final pixels = await driver.screenshot();
+        final file = File('shot.png');
+        await file.writeAsBytes(pixels);
         await driver.tap(find.byValueKey('appSettingsButton'));
         print('Found appSettingsButton');
         await driver.tap(find.text('Seed phrase'));
