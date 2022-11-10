@@ -2,6 +2,9 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
+  const seedPhrase =
+      "vapor please suffer wood enrich quality position chest quantum fog rival museum";
+
   group(
     'Setup, Signing and Settings',
     () {
@@ -42,16 +45,18 @@ void main() {
           await driver.tap(find.text('Import Seed'));
           await driver.scrollIntoView(find.byValueKey('importTextField'));
           await driver.tap(find.byValueKey('importTextField'));
-          await driver.enterText(
-            'vapor please suffer wood enrich quality position chest quantum fog rival museum',
-          );
+          await driver.enterText(seedPhrase);
           await driver.tap(find.text('Import'));
           await driver.scrollIntoView(elevatedButtonFinder);
           await driver.tap(find.byValueKey('setupAllowBiometrics'));
           await driver.tap(elevatedButtonFinder); //pin pad
-          for (var i = 1; i <= 12; i++) {
-            await driver.tap(find.text('0'));
-          }
+          await driver.runUnsynchronized(
+            () async {
+              for (var i = 1; i <= 12; i++) {
+                await driver.tap(find.text('0'));
+              }
+            },
+          );
           await driver
               .scrollIntoView(find.byValueKey('setupApiTickerSwitchKey'));
           await driver.tap(find.byValueKey('setupApiTickerSwitchKey'));
@@ -121,7 +126,8 @@ void main() {
         await driver.tap(find.text('Sign'));
         await driver.waitFor(
           find.text(
-              'Hyd9cBXuT9CMgE8sK7YNeLQF1qaLxjQCMQv3pwKXCGdpOurIceSiuHfgXCnEtAhExq6iP/+vMn6sYC5OfpSBhRc='),
+            'Hyd9cBXuT9CMgE8sK7YNeLQF1qaLxjQCMQv3pwKXCGdpOurIceSiuHfgXCnEtAhExq6iP/+vMn6sYC5OfpSBhRc=',
+          ),
         );
       });
 
@@ -135,15 +141,20 @@ void main() {
         );
         await driver.tap(find.text('Seed phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
+
         //tap wrong code two times
         for (var i = 1; i <= 12; i++) {
           await driver.tap(find.text('1'));
         }
         //tap okay for warning to go away
         await driver.tap(find.text('Okay'));
-        for (var i = 1; i <= 6; i++) {
-          await driver.tap(find.text('1'));
-        }
+        await driver.runUnsynchronized(
+          () async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('1'));
+            }
+          },
+        );
         await driver.tap(find.text('Okay'));
         //auth jail open now
         await driver.runUnsynchronized(
@@ -167,28 +178,34 @@ void main() {
         );
         await driver.tap(find.text('Seed phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
-        for (var i = 1; i <= 6; i++) {
-          await driver.tap(find.text('0'));
-        }
-        await driver.waitFor(
-          find.text(
-              'vapor please suffer wood enrich quality position chest quantum fog rival museum'),
+        await driver.runUnsynchronized(
+          () async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('0'));
+            }
+          },
         );
+        await driver.waitFor(find.text(seedPhrase));
       });
 
       test('Settings, change pin', () async {
         await driver.tap(find.text('Authentication'));
         await driver.tap(find.text('Reveal authentication options'));
-        for (var i = 1; i <= 6; i++) {
-          await driver.tap(find.text('0'));
-        }
-        await driver.tap(find.text('Change PIN'));
-        for (var i = 1; i <= 6; i++) {
-          await driver.tap(find.text('0'));
-        }
-        for (var i = 1; i <= 12; i++) {
-          await driver.tap(find.text('1'));
-        }
+        await driver.runUnsynchronized(
+          () async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('0'));
+            }
+            await driver.tap(find.text('Change PIN'));
+
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('0'));
+            }
+            for (var i = 1; i <= 12; i++) {
+              await driver.tap(find.text('1'));
+            }
+          },
+        );
         await driver.tap(find.pageBack());
         await driver.runUnsynchronized(
           () async {
@@ -197,13 +214,14 @@ void main() {
         );
         await driver.tap(find.text('Seed phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
-        for (var i = 1; i <= 6; i++) {
-          await driver.tap(find.text('1'));
-        }
-        await driver.waitFor(
-          find.text(
-              'vapor please suffer wood enrich quality position chest quantum fog rival museum'),
+        await driver.runUnsynchronized(
+          () async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('1'));
+            }
+          },
         );
+        await driver.waitFor(find.text(seedPhrase));
       });
     },
   );
