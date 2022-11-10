@@ -206,12 +206,10 @@ void main() {
             }
           },
         );
-        await driver.runUnsynchronized(
-          () async {
-            await driver.tap(find.pageBack());
-            await driver.tap(find.byValueKey('appSettingsButton'));
-          },
-        );
+        await Future.delayed(const Duration(seconds: 2));
+        await driver.tap(find.pageBack());
+        await Future.delayed(const Duration(seconds: 2));
+        await driver.tap(find.byValueKey('appSettingsButton'));
         await driver.tap(find.text('Seed phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
         await driver.runUnsynchronized(
