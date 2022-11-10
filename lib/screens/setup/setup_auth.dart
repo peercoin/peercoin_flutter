@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/functions.dart';
-import 'package:flutter_screen_lock/heading_title.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -143,20 +142,17 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                   final encryptedBox = context.read<EncryptedBox>();
                   final settings = context.read<AppSettings>();
                   final navigator = Navigator.of(context);
-                  await screenLock(
-                    title: HeadingTitle(
-                      text: AppLocalizations.instance
-                          .translate('authenticate_title'),
+                  await screenLockCreate(
+                    title: Text(
+                      AppLocalizations.instance.translate('authenticate_title'),
                     ),
-                    confirmTitle: HeadingTitle(
-                      text: AppLocalizations.instance
+                    confirmTitle: Text(
+                      AppLocalizations.instance
                           .translate('authenticate_confirm_title'),
                     ),
                     context: context,
-                    correctString: '',
                     digits: 6,
-                    confirmation: true,
-                    didConfirmed: (matchedText) async {
+                    onConfirmed: (matchedText) async {
                       await encryptedBox.setPassCode(matchedText);
                       await settings.init(true);
                       await settings.createInitialSettings(

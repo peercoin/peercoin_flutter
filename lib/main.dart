@@ -68,15 +68,20 @@ void main() async {
 
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@drawable/splash');
-  const initializationSettingsIOS = IOSInitializationSettings();
   const initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
+    iOS: DarwinInitializationSettings(),
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String? payload) async {
-    if (payload != null) {
-      LoggerWrapper.logInfo('notification', 'payload', payload);
+      onDidReceiveNotificationResponse: (
+    NotificationResponse notificationResponse,
+  ) async {
+    if (notificationResponse.payload != null) {
+      LoggerWrapper.logInfo(
+        'notification',
+        'payload',
+        notificationResponse.payload!,
+      );
     }
   });
 
@@ -111,7 +116,8 @@ void main() async {
     } else {
       _homeWidget = WalletListScreen(
         fromColdStart: true,
-        walletToOpenDirectly: notificationAppLaunchDetails?.payload ?? '',
+        walletToOpenDirectly:
+            notificationAppLaunchDetails?.notificationResponse?.payload ?? '',
       );
     }
   }

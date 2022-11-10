@@ -212,8 +212,10 @@ class BackgroundSync {
         if (shouldNotify == true) {
           await flutterLocalNotificationsPlugin.show(
             DateTime.now().millisecondsSinceEpoch ~/ 10000,
-            AppLocalizations.instance
-                .translate('notification_title', {'walletTitle': wallet.title}),
+            AppLocalizations.instance.translate(
+              'notification_title',
+              {'walletTitle': wallet.title},
+            ),
             AppLocalizations.instance.translate('notification_body'),
             LocalNotificationSettings.platformChannelSpecifics,
             payload: wallet.name,
