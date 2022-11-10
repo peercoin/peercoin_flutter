@@ -218,8 +218,11 @@ void main() {
         final pixels = await driver.screenshot();
         final file = File('shot.png');
         await file.writeAsBytes(pixels);
-        await driver.tap(find.byValueKey('appSettingsButton'));
-        print('Found appSettingsButton');
+        await driver.runUnsynchronized(
+          () async {
+          await driver.tap(find.byValueKey('appSettingsButton'));
+          print('Found appSettingsButton');
+        });
         await driver.tap(find.text('Seed phrase'));
         print('found Seed Phrase');
         await driver.tap(find.text('Reveal seed phrase'));
