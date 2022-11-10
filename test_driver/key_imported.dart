@@ -219,9 +219,13 @@ void main() {
           for (var i = 1; i <= 6; i++) {
             await driver.tap(find.text('1'));
           }
-          await driver.waitFor(find.text(seedPhrase));
+          await driver.waitFor(
+            find.text(seedPhrase),
+            timeout: const Duration(
+              minutes: 15,
+            ),
+          );
         },
-        retry: 2,
         timeout: const Timeout.factor(2),
       );
     },
