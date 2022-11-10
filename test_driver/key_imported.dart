@@ -228,9 +228,9 @@ void main() {
         print('Tap 1 six times');
         await driver.waitFor(find.text(seedPhrase));
         print('Found seedPhrase');
-        }
+        },
         retry: 2,
-        timeout: const Duration(minutes: 15),
+        timeout: const Timeout.factor(2),
       );
     },
   );
