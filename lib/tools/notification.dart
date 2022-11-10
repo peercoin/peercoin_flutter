@@ -1,8 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationSettings {
-  static const IOSNotificationDetails iOSPlatformChannelSpecifics =
-      IOSNotificationDetails(sound: 'money'); //TODO doesn't work
+  // static const IOSNotificationDetails iOSPlatformChannelSpecifics =
+  //     IOSNotificationDetails(sound: 'money'); //TODO doesn't work
 
   static const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
@@ -18,7 +18,7 @@ class LocalNotificationSettings {
   static NotificationDetails get platformChannelSpecifics {
     return const NotificationDetails(
       android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
+      // iOS: iOSPlatformChannelSpecifics,
     );
   }
 }
