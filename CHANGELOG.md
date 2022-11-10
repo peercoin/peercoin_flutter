@@ -1,5 +1,5 @@
-### **1.0.5** (2022-11-xx)
-* 
+### **1.0.5** (2022-11-10)
+* Maintenance and dependency upgrades
 
 ### **1.0.4** (2022-11-08)
 * Allow re-broadcasting of rejected tx
