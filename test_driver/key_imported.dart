@@ -206,9 +206,9 @@ void main() {
             }
           },
         );
-        await driver.tap(find.pageBack());
         await driver.runUnsynchronized(
           () async {
+            await driver.tap(find.pageBack());
             await driver.tap(find.byValueKey('appSettingsButton'));
           },
         );
