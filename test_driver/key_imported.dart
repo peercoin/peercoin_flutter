@@ -217,9 +217,9 @@ void main() {
         final file = File('shot.png');
         await file.writeAsBytes(pixels);
         await driver.runUnsynchronized(
-        print('Found pageBack');
           () async {
           await driver.tap(find.pageBack());
+          print('Found pageBack');
           await driver.tap(find.byValueKey('appSettingsButton'));
           print('Found appSettingsButton');
         });
