@@ -26,6 +26,9 @@ jobs:
   e2e-test:
     runs-on: macos-latest
     timeout-minutes: 30
+    strategy:
+      matrix:
+        api-level: [29, 30, 31, 32, 33]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -37,10 +40,9 @@ jobs:
         with:
           channel: 'stable'
       - name: run tests
-        uses: ReactiveCircus/android-emulator-runner@v2.21.0
+        uses: ReactiveCircus/android-emulator-runner@v2.27.0
         with:
-          api-level: 30
-          arch: x86_64
+          api-level: ${{ matrix.api-level }}
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
