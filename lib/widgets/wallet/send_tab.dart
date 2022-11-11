@@ -494,8 +494,10 @@ class _SendTabState extends State<SendTab> {
                               final address = row[0];
                               final amount =
                                   double.parse(row[1].replaceAll(',', '.'));
+                              final label = row[2];
                               if (i == 0) {
                                 _addressControllerList[0].text = address;
+                                _labelControllerList[0].text = label;
                                 _amountControllerList[0].text =
                                     amount.toString();
                                 _requestedAmountInCoinsList[0] = amount;
@@ -504,6 +506,7 @@ class _SendTabState extends State<SendTab> {
                                 _addNewAddress(
                                   address: address,
                                   amount: amount,
+                                  label: label,
                                   fromImport: true,
                                 );
                                 setState(() {
@@ -556,13 +559,18 @@ class _SendTabState extends State<SendTab> {
     return _formKey.currentState!.validate();
   }
 
-  bool _addNewAddress(
-      {String address = '', double amount = 0.0, bool fromImport = false}) {
+  bool _addNewAddress({
+    String address = '',
+    double amount = 0.0,
+    String label = '',
+    bool fromImport = false,
+  }) {
     if (triggerFormValidation() || fromImport == true) {
       if (fromImport == false) {
         _formKey.currentState!.save();
       }
       _labelControllerList.add(TextEditingController());
+      _labelControllerList.last.text = label;
       _addressControllerList.add(TextEditingController());
       _addressControllerList.last.text = address;
       _amountControllerList.add(TextEditingController());
