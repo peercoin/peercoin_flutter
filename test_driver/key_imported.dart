@@ -1,5 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+// import 'dart:io';
 
 void main() {
   const seedPhrase =
@@ -188,41 +189,36 @@ void main() {
         await driver.waitFor(find.text(seedPhrase));
       });
 
-      test('Settings, change pin', () async {
-        await driver.tap(find.text('Authentication'));
-        await driver.tap(find.text('Reveal authentication options'));
-        await driver.runUnsynchronized(
-          () async {
-            for (var i = 1; i <= 6; i++) {
-              await driver.tap(find.text('0'));
-            }
-            await driver.tap(find.text('Change PIN'));
-
-            for (var i = 1; i <= 6; i++) {
-              await driver.tap(find.text('0'));
-            }
-            for (var i = 1; i <= 12; i++) {
-              await driver.tap(find.text('1'));
-            }
-          },
-        );
-        await driver.runUnsynchronized(
-          () async {
+      test(
+        'Settings, change pin',
+        () async {
+          await driver.tap(find.text('Authentication'));
+          await driver.tap(find.text('Reveal authentication options'));
+          for (var i = 1; i <= 6; i++) {
+            await driver.tap(find.text('0'));
+          }
+          await driver.tap(find.text('Change PIN'));
+          for (var i = 1; i <= 6; i++) {
+            await driver.tap(find.text('0'));
+          }
+          for (var i = 1; i <= 12; i++) {
+            await driver.tap(find.text('1'));
+          }
+          // final pixels = await driver.screenshot();
+          // final file = File('shot.png');
+          // await file.writeAsBytes(pixels);
+          await driver.runUnsynchronized(() async {
             await driver.tap(find.pageBack());
             await driver.tap(find.byValueKey('appSettingsButton'));
-          },
-        );
-        await driver.tap(find.text('Seed phrase'));
-        await driver.tap(find.text('Reveal seed phrase'));
-        await driver.runUnsynchronized(
-          () async {
-            for (var i = 1; i <= 6; i++) {
-              await driver.tap(find.text('1'));
-            }
-          },
-        );
-        await driver.waitFor(find.text(seedPhrase));
-      });
+          });
+          await driver.tap(find.text('Seed phrase'));
+          await driver.tap(find.text('Reveal seed phrase'));
+          for (var i = 1; i <= 6; i++) {
+            await driver.tap(find.text('1'));
+          }
+        },
+        timeout: const Timeout.factor(2),
+      );
     },
   );
 }
