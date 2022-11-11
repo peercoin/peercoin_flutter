@@ -52,7 +52,7 @@ jobs:
     timeout-minutes: 30
     strategy:
       matrix:
-        api-level: [31, 32]
+        api-level: [31, 33]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -68,7 +68,6 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: arm64-v8a
-          target: google_apis
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
