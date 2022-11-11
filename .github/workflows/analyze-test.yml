@@ -47,12 +47,12 @@ jobs:
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
-  e2e-test-31-32:
+  e2e-test-31:
     runs-on: macos-latest
     timeout-minutes: 30
     strategy:
       matrix:
-        api-level: [31, 33]
+        api-level: [31]
     steps:
       - name: checkout
         uses: actions/checkout@v3
