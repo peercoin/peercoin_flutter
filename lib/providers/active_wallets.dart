@@ -687,6 +687,11 @@ class ActiveWallets with ChangeNotifier {
             //change is too small! no change output, add dust to last output
             destroyedChange = totalInputValue - txAmount;
             if (txAmount > 0) {
+              LoggerWrapper.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'dust of $destroyedChange added to ${recipients.keys.last}',
+              );
               recipients.update(
                 recipients.keys.last,
                 (value) => value + destroyedChange,
