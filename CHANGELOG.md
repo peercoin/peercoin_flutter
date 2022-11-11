@@ -1,5 +1,6 @@
 ### **1.0.6** (2022-11-xx)
 * CSV import: allow labels as third column
+* Fix transaction building issue when spending full balance
 
 ### **1.0.5** (2022-11-10)
 * Maintenance and dependency upgrades

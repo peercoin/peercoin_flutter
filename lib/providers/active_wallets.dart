@@ -703,6 +703,8 @@ class ActiveWallets with ChangeNotifier {
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else if (txAmount + fee > totalInputValue) {
+          //TODO 10 PPC in, 9.99 out not possible
+
           //empty wallet case - full wallet balance has been requested but fees have to be paid
           LoggerWrapper.logInfo(
             'ActiveWallets',
@@ -711,6 +713,7 @@ class ActiveWallets with ChangeNotifier {
           );
           recipients.update(recipients.keys.last, (value) => value - fee);
           txAmount = parseTxOutputValue(recipients);
+          feesHaveBeenDeductedFromRecipient = true;
         }
 
         //add recipient outputs
