@@ -67,7 +67,7 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
-          arch: arm64-v8
+          arch: arm64-v8a
           target: google_apis
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
