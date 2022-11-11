@@ -227,6 +227,9 @@ void main() {
             await driver.tap(find.text('1'));
           }
           print('Tap 1 six times');
+          final pixels2 = await driver.screenshot();
+          final file2 = File('shot2.png');
+          await file2.writeAsBytes(pixels);
           await driver.waitFor(find.text(seedPhrase));
           print('Found seedPhrase');
         },

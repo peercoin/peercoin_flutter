@@ -52,5 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: screenshot
-          path: shot.png
+          path: | 
+            shot.png
+            shot2.png
           retention-days: 5
