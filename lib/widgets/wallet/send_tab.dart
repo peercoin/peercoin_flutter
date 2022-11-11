@@ -609,7 +609,7 @@ class _SendTabState extends State<SendTab> {
     LoggerWrapper.logInfo(
       'SendTab',
       'send_amount',
-      'req value $txValueInSatoshis - ${widget.wallet.balance}',
+      'req value $txValueInSatoshis - wallet balance ${widget.wallet.balance}',
     );
     if (sanitizedValue.contains('.') &&
         sanitizedValue.split('.')[1].length > _availableCoin.fractions) {
