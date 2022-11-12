@@ -475,9 +475,9 @@ class _SendTabState extends State<SendTab> {
                         action: () async {
                           FilePickerResult? result =
                               await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['csv'],
-                          );
+                                  // type: FileType.custom,
+                                  // allowedExtensions: ['csv'], TODO re-enable when fixed in flutter_file_picker
+                                  );
                           String csv;
                           if (result != null) {
                             if (kIsWeb) {
@@ -494,8 +494,10 @@ class _SendTabState extends State<SendTab> {
                               final address = row[0];
                               final amount =
                                   double.parse(row[1].replaceAll(',', '.'));
+                              final label = row[2];
                               if (i == 0) {
                                 _addressControllerList[0].text = address;
+                                _labelControllerList[0].text = label;
                                 _amountControllerList[0].text =
                                     amount.toString();
                                 _requestedAmountInCoinsList[0] = amount;
@@ -504,6 +506,7 @@ class _SendTabState extends State<SendTab> {
                                 _addNewAddress(
                                   address: address,
                                   amount: amount,
+                                  label: label,
                                   fromImport: true,
                                 );
                                 setState(() {
@@ -556,13 +559,18 @@ class _SendTabState extends State<SendTab> {
     return _formKey.currentState!.validate();
   }
 
-  bool _addNewAddress(
-      {String address = '', double amount = 0.0, bool fromImport = false}) {
+  bool _addNewAddress({
+    String address = '',
+    double amount = 0.0,
+    String label = '',
+    bool fromImport = false,
+  }) {
     if (triggerFormValidation() || fromImport == true) {
       if (fromImport == false) {
         _formKey.currentState!.save();
       }
       _labelControllerList.add(TextEditingController());
+      _labelControllerList.last.text = label;
       _addressControllerList.add(TextEditingController());
       _addressControllerList.last.text = address;
       _amountControllerList.add(TextEditingController());
@@ -601,7 +609,7 @@ class _SendTabState extends State<SendTab> {
     LoggerWrapper.logInfo(
       'SendTab',
       'send_amount',
-      'req value $txValueInSatoshis - ${widget.wallet.balance}',
+      'req value $txValueInSatoshis - wallet balance ${widget.wallet.balance}',
     );
     if (sanitizedValue.contains('.') &&
         sanitizedValue.split('.')[1].length > _availableCoin.fractions) {

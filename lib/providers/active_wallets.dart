@@ -597,17 +597,8 @@ class ActiveWallets with ChangeNotifier {
       identifier: identifier,
     );
 
-    var txAmount = 0;
-    recipients.forEach(
-      (address, amount) {
-        txAmount += amount;
-        LoggerWrapper.logInfo(
-          'ActiveWallets',
-          'buildTransaction',
-          'sending $amount to $address',
-        );
-      },
-    );
+    int txAmount = 0;
+    txAmount = parseTxOutputValue(recipients);
 
     var openWallet = getSpecificCoinWallet(identifier);
     var hex = '';
@@ -629,12 +620,13 @@ class ActiveWallets with ChangeNotifier {
 
     if (txAmount == openWallet.balance || paperWalletUtxos != null) {
       needsChange = false;
-      LoggerWrapper.logInfo(
-        'ActiveWallets',
-        'buildTransaction',
-        'needschange $needsChange, fee $fee',
-      );
     }
+
+    LoggerWrapper.logInfo(
+      'ActiveWallets',
+      'buildTransaction',
+      'needschange $needsChange, fee $fee',
+    );
 
     //define utxo pool
     var utxoPool = paperWalletUtxos ?? openWallet.utxos;
@@ -692,26 +684,36 @@ class ActiveWallets with ChangeNotifier {
           );
 
           if (changeAmount < coin.minimumTxValue) {
-            //change is too small! no change output
+            //change is too small! no change output, add dust to last output
             destroyedChange = totalInputValue - txAmount;
-            // if (txAmount > 0) {
-            //   // recipients.update(recipients.keys.last, (value) => value - fee);
-            // } used to look like this: https://github.com/peercoin/peercoin_flutter/blob/ab62d3c78ed88dd08dbb51f4a5c5515839d677c8/lib/providers/active_wallets.dart#L642
-            // I can not remember what this case was fore and why the recipient was canabalized to pay for fees
+            if (txAmount > 0) {
+              LoggerWrapper.logInfo(
+                'ActiveWallets',
+                'buildTransaction',
+                'dust of $destroyedChange added to ${recipients.keys.last}',
+              );
+              recipients.update(recipients.keys.last, (value) {
+                if (value + destroyedChange < totalInputValue) {
+                  feesHaveBeenDeductedFromRecipient = true;
+                  return value + destroyedChange;
+                }
+                return value;
+              });
+            }
           } else {
             //add change output to unused address
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
-        } else {
+        } else if (txAmount + fee > totalInputValue) {
           //empty wallet case - full wallet balance has been requested but fees have to be paid
           LoggerWrapper.logInfo(
             'ActiveWallets',
             'buildTransaction',
-            'no change needed, tx amount $txAmount, fee $fee, output added for ${recipients.keys.last} ${txAmount - fee}',
+            'no change needed, tx amount $txAmount, fee $fee, reduced output added for ${recipients.keys.last} ${txAmount - fee}',
           );
           recipients.update(recipients.keys.last, (value) => value - fee);
+          txAmount = parseTxOutputValue(recipients);
           feesHaveBeenDeductedFromRecipient = true;
-          txAmount -= fee;
         }
 
         //add recipient outputs
@@ -842,6 +844,16 @@ class ActiveWallets with ChangeNotifier {
     } else {
       throw ('tx amount greater wallet balance');
     }
+  }
+
+  int parseTxOutputValue(Map<String, int> recipients) {
+    int txAmount = 0;
+    recipients.forEach(
+      (_, amount) {
+        txAmount += amount;
+      },
+    );
+    return txAmount;
   }
 
   Future<Map> getWalletScriptHashes(String identifier,
