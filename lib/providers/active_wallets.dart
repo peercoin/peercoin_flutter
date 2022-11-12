@@ -692,10 +692,12 @@ class ActiveWallets with ChangeNotifier {
                 'buildTransaction',
                 'dust of $destroyedChange added to ${recipients.keys.last}',
               );
-              recipients.update(
-                recipients.keys.last,
-                (value) => value + destroyedChange,
-              );
+              recipients.update(recipients.keys.last, (value) {
+                if (value + destroyedChange < totalInputValue) {
+                  return value + destroyedChange;
+                }
+                return value;
+              });
               feesHaveBeenDeductedFromRecipient = true;
             }
           } else {
@@ -703,8 +705,6 @@ class ActiveWallets with ChangeNotifier {
             tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
           }
         } else if (txAmount + fee > totalInputValue) {
-          //TODO 10 PPC in, 9.99 out not possible
-
           //empty wallet case - full wallet balance has been requested but fees have to be paid
           LoggerWrapper.logInfo(
             'ActiveWallets',
