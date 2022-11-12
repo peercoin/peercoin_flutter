@@ -11,7 +11,9 @@ void main() {
       late FlutterDriver driver;
 
       Future<FlutterDriver> setupAndGetDriver() async {
-        var driver = await FlutterDriver.connect();
+        var driver = await FlutterDriver.connect(
+          timeout: const Duration(minutes: 20),
+        );
         var connected = false;
         while (!connected) {
           try {
@@ -73,6 +75,7 @@ void main() {
             },
           );
         },
+        retry: 2,
         timeout: Timeout.none,
       );
 
