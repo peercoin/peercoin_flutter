@@ -55,12 +55,12 @@ jobs:
           path: fail-screenshots/
           retention-days: 5
 
-  e2e-test-32:
+  e2e-test-32-33:
     runs-on: macos-latest
     timeout-minutes: 30
     strategy:
       matrix:
-        api-level: [32]
+        api-level: [32,33]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -84,6 +84,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshot_31
+          name: screenshot_32_33
           path: fail-screenshots/
           retention-days: 5
