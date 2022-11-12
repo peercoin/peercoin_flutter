@@ -129,6 +129,8 @@ void main() {
                   .text('ssl://testnet-electrum.peercoinexplorer.net:50008')),
               'ssl://testnet-electrum.peercoinexplorer.net:50008');
         },
+        retry: 2,
+        timeout: const Timeout.factor(2),
       );
     },
   );
