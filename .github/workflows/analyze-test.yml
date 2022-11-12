@@ -44,14 +44,13 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           target: google_apis 
-          emulator-options: -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim        
           script: | 
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart --screenshot=fail-screenshots/${{ matrix.api-level }}/
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart --screenshot=fail-screenshots/${{ matrix.api-level }}/
-      - name: Upload screenshots
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshot
-          path: fail-screenshots/${{ matrix.api-level }}/
-          retention-days: 5
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
+      # - name: Upload screenshots
+      #   if: failure()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: screenshot-${{ matrix.api-level }}
+      #     path: fail-screenshots/${{ matrix.api-level }}/
+      #     retention-days: 5
