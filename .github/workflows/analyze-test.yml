@@ -20,7 +20,6 @@ jobs:
       with:
         channel: 'stable'
     - run: flutter pub get
-      # run static analys code
     - run: flutter analyze
 
   e2e-test:
