@@ -694,11 +694,11 @@ class ActiveWallets with ChangeNotifier {
               );
               recipients.update(recipients.keys.last, (value) {
                 if (value + destroyedChange < totalInputValue) {
+                  feesHaveBeenDeductedFromRecipient = true;
                   return value + destroyedChange;
                 }
                 return value;
               });
-              feesHaveBeenDeductedFromRecipient = true;
             }
           } else {
             //add change output to unused address
