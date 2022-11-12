@@ -11,7 +11,9 @@ void main() {
       late FlutterDriver driver;
 
       Future<FlutterDriver> setupAndGetDriver() async {
-        var driver = await FlutterDriver.connect();
+        var driver = await FlutterDriver.connect(
+          timeout: const Duration(minutes: 20),
+        );
         var connected = false;
         while (!connected) {
           try {
@@ -73,6 +75,7 @@ void main() {
             },
           );
         },
+        retry: 2,
         timeout: Timeout.none,
       );
 
@@ -88,6 +91,8 @@ void main() {
             },
           );
         },
+        retry: 2,
+        timeout: const Timeout.factor(2),
       );
 
       test(
@@ -124,6 +129,8 @@ void main() {
                   .text('ssl://testnet-electrum.peercoinexplorer.net:50008')),
               'ssl://testnet-electrum.peercoinexplorer.net:50008');
         },
+        retry: 2,
+        timeout: const Timeout.factor(2),
       );
     },
   );
