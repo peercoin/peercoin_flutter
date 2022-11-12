@@ -88,6 +88,8 @@ void main() {
             },
           );
         },
+        retry: 2,
+        timeout: const Timeout.factor(2),
       );
 
       test(
