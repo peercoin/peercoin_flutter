@@ -23,12 +23,12 @@ jobs:
       # run static analys code
     - run: flutter analyze
 
-  e2e-test-29-30:
+  e2e-test-29-30-31:
     runs-on: macos-latest
     timeout-minutes: 45
     strategy:
       matrix:
-        api-level: [29, 30]
+        api-level: [29, 30, 31]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -51,16 +51,16 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshot_29_30
+          name: screenshot_29_30_31
           path: fail-screenshots/
           retention-days: 5
 
-  e2e-test-31:
+  e2e-test-32:
     runs-on: macos-latest
     timeout-minutes: 30
     strategy:
       matrix:
-        api-level: [31]
+        api-level: [32]
     steps:
       - name: checkout
         uses: actions/checkout@v3
