@@ -45,8 +45,16 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           script: | 
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart --screenshot=fail-screenshots/
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart --screenshot=fail-screenshots/
+      - name: Upload screenshots
+            if: always()
+            uses: actions/upload-artifact@v3
+            with:
+              name: screenshot_29_30
+              path: fail-screenshots/
+              retention-days: 5
+
   e2e-test-31:
     runs-on: macos-latest
     timeout-minutes: 30
@@ -69,14 +77,12 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: arm64-v8a
           script: | 
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
-      # - name: Upload screenshots
-      #   if: always()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: screenshot
-      #     path: | 
-      #       shot.png
-      #       shot2.png
-      #     retention-days: 5
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart --screenshot=fail-screenshots/
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart --screenshot=fail-screenshots/
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot_31
+          path: fail-screenshots/
+          retention-days: 5
