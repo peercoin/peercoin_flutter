@@ -76,7 +76,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: arm64-v8a
-          target: google_apis_playstore
+          target: playstore
           script: | 
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart --screenshot=fail-screenshots/
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart --screenshot=fail-screenshots/
