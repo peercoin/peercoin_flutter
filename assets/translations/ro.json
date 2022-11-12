@@ -336,5 +336,8 @@
     "send_navigator": "Adresa $index din $maximum",
     "send_address_already_exists": "Adresa deja există",
     "tx_recipients": "Destinatari",
-    "app_settings_delete": "Ștergeți contul"
+    "app_settings_delete": "Ștergeți contul",
+    "tx_retry_broadcast": "Reîncercați difuzarea",
+    "tx_show_hex": "Afișați Hex-ul Tranzacției",
+    "tx_retry_snack": "Difuzarea a fost reîncercată. Dacă a fost cu succes, tranzacția se va actualiza în scurt timp ."
 }
