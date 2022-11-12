@@ -48,12 +48,12 @@ jobs:
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart --screenshot=fail-screenshots/
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart --screenshot=fail-screenshots/
       - name: Upload screenshots
-            if: always()
-            uses: actions/upload-artifact@v3
-            with:
-              name: screenshot_29_30
-              path: fail-screenshots/
-              retention-days: 5
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot_29_30
+          path: fail-screenshots/
+          retention-days: 5
 
   e2e-test-31:
     runs-on: macos-latest
@@ -80,7 +80,7 @@ jobs:
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart --screenshot=fail-screenshots/
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart --screenshot=fail-screenshots/
       - name: Upload screenshots
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: screenshot_31
