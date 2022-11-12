@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -154,51 +152,44 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       adressesToQuery[res!] = 0;
     }
 
-    await parseBackendResult(
-      await BackgroundSync.getDataFromAddressBackend(
-        _coinName,
-        adressesToQuery,
+    await parseMarismaResult(
+      await BackgroundSync.getNumberOfUtxosFromMarisma(
+        walletName: _coinName,
+        addressesToQuery: adressesToQuery,
+        fromScan: true,
       ),
     );
     _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
-  Future<void> parseBackendResult(Response response) async {
-    bool foundDifference;
-    if (response.body.contains('foundDifference')) {
-      //valid answer
-      var bodyDecoded = jsonDecode(response.body);
+  Future<void> parseMarismaResult(Map<String, int> result) async {
+    if (result.isNotEmpty) {
       LoggerWrapper.logInfo(
         'WalletImportScan',
         'parseBackendResult',
-        bodyDecoded.toString(),
+        result.toString(),
       );
-      foundDifference = bodyDecoded['foundDifference'];
-      if (foundDifference == true) {
-        //loop through addresses in result
-        var addresses = bodyDecoded['addresses'];
-        for (var element in addresses) {
-          var elementAddr = element['address'];
-          //backend knows this addr
-          if (element['utxos'] == true) {
-            await _activeWallets.addAddressFromScan(
-              identifier: _coinName,
-              address: elementAddr,
-              status: 'hasUtxo',
-            );
-          }
+      //loop through addresses in result
+      result.forEach((addr, n) async {
+        //backend knows this addr
+        if (n > 0) {
+          await _activeWallets.addAddressFromScan(
+            identifier: _coinName,
+            address: addr,
+            status: 'hasUtxo',
+          );
         }
+      });
 
-        //keep searching in next chunk
-        setState(() {
-          _addressScanPointer += _addressChunkSize;
-          _addressChunkSize += 5;
-        });
-        await fetchAddressesFromBackend();
-      } else {
-        //done
-        await startScan();
-      }
+      //keep searching in next chunk
+      setState(() {
+        _addressScanPointer += _addressChunkSize;
+        _addressChunkSize += 5;
+      });
+      await fetchAddressesFromBackend();
+    } else {
+      //done
+      await startScan();
     }
     _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
