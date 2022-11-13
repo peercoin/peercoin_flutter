@@ -336,5 +336,8 @@
     "send_navigator": "Адрес $index из $maximum",
     "send_address_already_exists": "Адрес уже существует",
     "tx_recipients": "Получатели",
-    "app_settings_delete": "Удалить аккаунт"
+    "app_settings_delete": "Удалить аккаунт",
+    "tx_retry_broadcast": "Повторить вещание",
+    "tx_show_hex": "Показать Hex Транзакции",
+    "tx_retry_snack": "Вещание было повторено. Если она была успешна, транзакция скоро обновится."
 }

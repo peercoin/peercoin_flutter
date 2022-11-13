@@ -1,3 +1,6 @@
+### **1.0.7** (2022-11-13)
+* New notification API Marisma, also improves scan reliability 
+
 ### **1.0.6** (2022-11-12)
 * CSV import: allow labels as third column
 * Fix transaction building issue when spending full balance
