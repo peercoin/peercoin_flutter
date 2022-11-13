@@ -6,11 +6,12 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
+import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../generated/marisma.pbgrpc.dart';
 import '../models/app_options.dart';
 import '../models/coin_wallet.dart';
 import '../models/pending_notifications.dart';
@@ -173,43 +174,51 @@ class BackgroundSync {
           'addressesToQuery $adressesToQuery',
         );
 
-        http.Response result =
-            await getDataFromAddressBackend(wallet.name, adressesToQuery);
+        var marismaResult = await getNumberOfUtxosFromMarisma(
+          walletName: wallet.name,
+          addressesToQuery: adressesToQuery,
+        );
 
         var shouldNotify = false;
-        bool foundDifference;
-        if (result.body.contains('foundDifference')) {
-          //valid answer
-          var bodyDecoded = jsonDecode(result.body);
-          LoggerWrapper.logInfo(
-            'BackgroundSync',
-            'executeSync ${wallet.name}',
-            bodyDecoded.toString(),
-          );
-          foundDifference = bodyDecoded['foundDifference'];
-          if (foundDifference == true) {
-            //loop through addresses in result
-            var addresses = bodyDecoded['addresses'];
-            addresses.forEach((element) {
-              //write tx result from API into coinwallet
-              wallet.putPendingTransactionNotification(
-                PendingNotification(
-                  address: element['address'],
-                  tx: element['n'],
-                ),
-              );
-            });
 
-            if (fromScan == true) {
-              //persist backend data
-              wallet.clearPendingTransactionNotifications();
-            } else {
-              shouldNotify = true;
-            }
+        LoggerWrapper.logInfo(
+          'BackgroundSync',
+          'executeSync ${wallet.name}',
+          marismaResult.toString(),
+        );
+
+        if (marismaResult.isNotEmpty) {
+          //loop through addresses in result
+          marismaResult.forEach(
+            (addr, n) {
+              //write tx result from API into coinwallet
+              if (n > adressesToQuery[addr]!) {
+                wallet.putPendingTransactionNotification(
+                  PendingNotification(
+                    address: addr,
+                    tx: n,
+                  ),
+                );
+                shouldNotify = true;
+              } else {
+                WalletAddress? walletAddress =
+                    wallet.addresses.firstWhereOrNull(
+                  (element) => element.address == addr,
+                );
+                if (walletAddress != null) {
+                  walletAddress.newNotificationBackendCount = n;
+                }
+              }
+            },
+          );
+
+          if (fromScan == true) {
+            //persist backend data
+            wallet.clearPendingTransactionNotifications();
           }
         }
 
-        if (shouldNotify == true) {
+        if (shouldNotify == true && fromScan == false) {
           await flutterLocalNotificationsPlugin.show(
             DateTime.now().millisecondsSinceEpoch ~/ 10000,
             AppLocalizations.instance.translate(
@@ -225,18 +234,43 @@ class BackgroundSync {
     }
   }
 
-  static Future<http.Response> getDataFromAddressBackend(
-      String walletName, Map<String, int> adressesToQuery) async {
-    var result = await http.post(
-      Uri.parse('https://peercoinexplorer.net/address-status-2'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'coin': walletName,
-        'addresses': [adressesToQuery]
-      }),
+  static Future<Map<String, int>> getNumberOfUtxosFromMarisma({
+    required String walletName,
+    required Map<String, int> addressesToQuery,
+    bool fromScan = false,
+  }) async {
+    var grpcClient = MarismaClient(
+      walletName == "peercoin"
+          ? ClientChannel("marisma.ppc.lol", port: 8443)
+          : ClientChannel("test-marisma.ppc.lol", port: 2096),
     );
-    return result;
+
+    Map<String, int> answerMap = {};
+
+    await Future.forEach(
+      addressesToQuery.keys,
+      (String addr) async {
+        int n = addressesToQuery[addr]!;
+
+        var isKnownRes = await grpcClient.getAddressIsKnown(
+          AddressRequest(address: addr),
+        );
+        if (isKnownRes.isKnown == true) {
+          var addressNumberOfUtxosReply =
+              await grpcClient.getAddressNumberOfUtxos(
+            AddressRequest(
+              address: addr,
+            ),
+          );
+          if (fromScan == true) {
+            answerMap[addr] = addressNumberOfUtxosReply.n;
+          } else if (addressNumberOfUtxosReply.n != n) {
+            answerMap[addr] = addressNumberOfUtxosReply.n;
+          }
+        }
+      },
+    );
+
+    return answerMap;
   }
 }

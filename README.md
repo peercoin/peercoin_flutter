@@ -50,6 +50,9 @@ This repository currently relies on
 **Update splash screen**  
 `flutter pub run flutter_native_splash:create`
 
+**Generate proto files**  
+`protoc --dart_out=grpc:lib/generated -Iprotos protos/marisma.proto`
+
 **Build for web**  
 `flutter pub global activate peanut`  
 `flutter pub global run peanut -b production`  

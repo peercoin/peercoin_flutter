@@ -1,0 +1,91 @@
+syntax = "proto3";
+package marisma;
+
+service Marisma {
+  rpc GetBlockHeight (BlockHeightRequest) returns (BlockHeightReply) {}
+  rpc GetAdressBalance (AddressRequest) returns (AddressBalanceReply) {}
+  rpc GetAddressUtxoList (AddressListRequest) returns (AddressUtxoListReply) {}
+  rpc GetAddressHasUtxos (AddressRequest) returns (AddressHasUtxosReply) {}
+  rpc GetAddressIsKnown (AddressRequest) returns (AddressIsKnownReply) {}
+  rpc GetAddressNumberOfUtxos (AddressRequest) returns (AddressNumberOfUtxosReply) {}
+  rpc GetAddressHistory (AddressListRequest) returns (AddressHistoryReply) {}
+  rpc GetTransaction (TxRequest) returns (TxReply) {}
+  rpc GetEstimateFeePerKb (EstimateFeeRequest) returns (EstimateFeeReply) {}
+  rpc BroadCastTransaction (BroadCastTransactionRequest) returns (BroadCastTransactionReply) {}
+  rpc SubscribeTestStream(TestStreamRequest) returns (stream TestStreamReply) {} //not functional yet, don't use
+  //TODO STREAM block subscription
+  //TODO STREAM address subscription
+  //TODO STREAM address hasUtos scan
+}
+
+message BlockHeightRequest {
+}
+
+message BlockHeightReply {
+  uint32 height = 1;
+}
+
+message EstimateFeeRequest {
+  //Return the estimated transaction fee per kilobyte for a transaction to be confirmed within a certain number of blocks.
+  uint32 blockTarget = 1;
+}
+
+message EstimateFeeReply {
+  uint64 feePerKb = 1;
+}
+
+message BroadCastTransactionRequest {
+  string hex = 1;
+}
+
+message BroadCastTransactionReply {
+  string txid = 1;
+  optional string rpcError = 2;
+}
+
+message AddressRequest {
+  string address = 1;
+}
+
+message AddressListRequest {
+  string address = 1;
+  bool ascending = 2;
+}
+
+message AddressBalanceReply {
+  uint64 balance = 1;
+}
+message AddressUtxoListReply {
+ string utxos = 1;
+}
+
+message AddressHistoryReply {
+ repeated string history = 1;
+}
+
+message AddressHasUtxosReply {
+ bool has_utxos = 1;
+}
+
+message AddressNumberOfUtxosReply {
+  uint32 n = 1;
+}
+
+message AddressIsKnownReply {
+  bool is_known = 1;
+}
+
+message TxRequest {
+  string txid = 1;
+}
+
+message TxReply {
+  string tx = 1;
+}
+
+message TestStreamRequest {
+}
+
+message TestStreamReply {
+  string name = 1;
+}
