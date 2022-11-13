@@ -20,15 +20,14 @@ jobs:
       with:
         channel: 'stable'
     - run: flutter pub get
-      # run static analys code
     - run: flutter analyze
 
-  e2e-test-29-30:
+  e2e-test:
     runs-on: macos-latest
     timeout-minutes: 45
     strategy:
       matrix:
-        api-level: [29, 30]
+        api-level: [29, 30, 31]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -45,14 +44,12 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           script: | 
-           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart 
+           flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
       # - name: Upload screenshots
-      #   if: always()
+      #   if: failure()
       #   uses: actions/upload-artifact@v3
       #   with:
-      #     name: screenshot
-      #     path: | 
-      #       shot.png
-      #       shot2.png
+      #     name: screenshot-${{ matrix.api-level }}
+      #     path: fail-screenshots/${{ matrix.api-level }}/
       #     retention-days: 5
