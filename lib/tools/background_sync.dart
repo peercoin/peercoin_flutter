@@ -189,25 +189,36 @@ class BackgroundSync {
 
         if (marismaResult.isNotEmpty) {
           //loop through addresses in result
-          marismaResult.forEach((addr, n) {
-            //write tx result from API into coinwallet
-            wallet.putPendingTransactionNotification(
-              PendingNotification(
-                address: addr,
-                tx: n,
-              ),
-            );
-          });
+          marismaResult.forEach(
+            (addr, n) {
+              //write tx result from API into coinwallet
+              if (n > adressesToQuery[addr]!) {
+                wallet.putPendingTransactionNotification(
+                  PendingNotification(
+                    address: addr,
+                    tx: n,
+                  ),
+                );
+                shouldNotify = true;
+              } else {
+                WalletAddress? walletAddress =
+                    wallet.addresses.firstWhereOrNull(
+                  (element) => element.address == addr,
+                );
+                if (walletAddress != null) {
+                  walletAddress.newNotificationBackendCount = n;
+                }
+              }
+            },
+          );
 
           if (fromScan == true) {
             //persist backend data
             wallet.clearPendingTransactionNotifications();
-          } else {
-            shouldNotify = true;
           }
         }
 
-        if (shouldNotify == true) {
+        if (shouldNotify == true && fromScan == false) {
           await flutterLocalNotificationsPlugin.show(
             DateTime.now().millisecondsSinceEpoch ~/ 10000,
             AppLocalizations.instance.translate(
@@ -241,23 +252,19 @@ class BackgroundSync {
       (String addr) async {
         int n = addressesToQuery[addr]!;
 
-        if (fromScan == true) {
-          var isKnownRes = await grpcClient.getAddressIsKnown(
-            AddressRequest(address: addr),
-          );
-          if (isKnownRes.isKnown == true) {
-            var addressNumberOfUtxosReply =
-                await grpcClient.getAddressNumberOfUtxos(
-              AddressRequest(address: addr),
-            );
-            answerMap[addr] = addressNumberOfUtxosReply.n;
-          }
-        } else {
+        var isKnownRes = await grpcClient.getAddressIsKnown(
+          AddressRequest(address: addr),
+        );
+        if (isKnownRes.isKnown == true) {
           var addressNumberOfUtxosReply =
               await grpcClient.getAddressNumberOfUtxos(
-            AddressRequest(address: addr),
+            AddressRequest(
+              address: addr,
+            ),
           );
-          if (addressNumberOfUtxosReply.n > n) {
+          if (fromScan == true) {
+            answerMap[addr] = addressNumberOfUtxosReply.n;
+          } else if (addressNumberOfUtxosReply.n != n) {
             answerMap[addr] = addressNumberOfUtxosReply.n;
           }
         }
