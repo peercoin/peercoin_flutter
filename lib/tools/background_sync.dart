@@ -24,6 +24,7 @@ import 'logger_wrapper.dart';
 import 'notification.dart';
 
 class BackgroundSync {
+  @pragma('vm:entry-point')
   static void backgroundFetchHeadlessTask(HeadlessTask task) async {
     var taskId = task.taskId;
     var isTimeout = task.timeout;
