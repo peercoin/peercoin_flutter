@@ -790,7 +790,7 @@ class ActiveWallets with ChangeNotifier {
         var number = (intermediate.txSize / 1000 * coin.fixedFeePerKb)
             .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * decimalProduct;
-        var requiredFeeInSatoshis = asDouble.toInt();
+        var requiredFeeInSatoshis = asDouble.round();
 
         LoggerWrapper.logInfo(
           'ActiveWallets',
