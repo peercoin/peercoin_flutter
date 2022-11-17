@@ -1,5 +1,5 @@
-### **1.0.8** (2022-11-xx)
-*  
+### **1.0.8** (2022-11-17)
+* Fix transaction fee rounding issue
 
 ### **1.0.7** (2022-11-13)
 * New notification API Marisma, also improves scan reliability 
