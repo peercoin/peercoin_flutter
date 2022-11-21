@@ -492,9 +492,10 @@ class _SendTabState extends State<SendTab> {
                             var i = 0;
                             for (final row in parsed) {
                               final address = row[0];
-                              final amount =
-                                  double.parse(row[1].replaceAll(',', '.'));
-                              final label = row[2];
+                              final amount = double.parse(
+                                row[1].replaceAll(',', '.'),
+                              );
+                              final label = row.length == 3 ? row[2] : '';
                               if (i == 0) {
                                 _addressControllerList[0].text = address;
                                 _labelControllerList[0].text = label;

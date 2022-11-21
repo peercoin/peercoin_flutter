@@ -1,5 +1,6 @@
-### **1.0.9** (2022-11-xx)
-* 
+### **1.0.9** (2022-11-21)
+* Fix CSV file import
+
 ### **1.0.8** (2022-11-17)
 * Fix transaction fee rounding issue
 
