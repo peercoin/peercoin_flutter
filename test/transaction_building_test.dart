@@ -5,6 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 import 'package:peercoin/models/coin_wallet.dart';
+import 'package:peercoin/models/wallet_address.dart';
+import 'package:peercoin/models/wallet_transaction.dart';
+import 'package:peercoin/models/wallet_utxo.dart';
 import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/encrypted_box.dart';
 
@@ -28,9 +31,17 @@ class MockHiveBox extends Mock implements EncryptedBox {
 }
 
 void main() async {
-  setUpAll(() {
+  const walletName = 'peercoin';
+  final ActiveWallets wallet = ActiveWallets(MockHiveBox());
+
+  setUpAll(() async {
     Hive.init("test");
     Hive.registerAdapter(CoinWalletAdapter());
+    Hive.registerAdapter(WalletTransactionAdapter());
+    Hive.registerAdapter(WalletAddressAdapter());
+    Hive.registerAdapter(WalletUtxoAdapter());
+    await wallet.init();
+    wallet.addWallet(walletName, walletName, 'ppc');
   });
 
   tearDownAll(() async {
@@ -41,12 +52,10 @@ void main() async {
   });
 
   test(
-    'Build transaction',
+    'Generate unused address',
     () async {
-      final ActiveWallets wallet = ActiveWallets(MockHiveBox());
-      await wallet.init();
-      wallet.addWallet('peercoin', 'peercoin', 'ppc');
-      await Future.delayed(const Duration(seconds: 1));
+      await wallet.generateUnusedAddress(walletName);
+      assert(wallet.getUnusedAddress == 'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ');
     },
   );
 }
