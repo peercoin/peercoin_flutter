@@ -114,7 +114,7 @@ void main() async {
   });
 
   test(
-      'Build transaction, spend 100% of wallet balance with dust and fees deducted',
+      'Build transaction, spend 100% of wallet balance, with fees deducted from last recipient',
       () async {
     final result = await wallet.buildTransaction(
       identifier: walletName,
