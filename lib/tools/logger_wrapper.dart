@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 
@@ -9,6 +11,7 @@ class LoggerWrapper {
       print('$tag $subTag $logMessage');
       return;
     }
+    if (Platform.environment.containsKey('FLUTTER_TEST')) return;
 
     FlutterLogs.logInfo(
       tag,
@@ -22,6 +25,7 @@ class LoggerWrapper {
       print('$tag $subTag $logMessage');
       return;
     }
+    if (Platform.environment.containsKey('FLUTTER_TEST')) return;
 
     FlutterLogs.logError(
       tag,
@@ -35,6 +39,7 @@ class LoggerWrapper {
       print('$tag $subTag $logMessage');
       return;
     }
+    if (Platform.environment.containsKey('FLUTTER_TEST')) return;
 
     FlutterLogs.logWarn(
       tag,

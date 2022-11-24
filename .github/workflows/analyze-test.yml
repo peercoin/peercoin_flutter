@@ -7,7 +7,7 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  code-analysis:
+  code-analysis-and-unit-test:
     runs-on: macos-latest
     timeout-minutes: 45
     steps:
@@ -21,6 +21,7 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     - run: flutter analyze
+    - run: flutter test
 
   e2e-test:
     runs-on: macos-latest
