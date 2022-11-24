@@ -336,5 +336,8 @@
     "send_address_already_exists": "Adressen findes allerede",
     "tx_recipients": "Modtagere",
     "app_settings_delete": "Slet konto",
-    "send_navigator": "Adresse $index af $maximum"
+    "send_navigator": "Adresse $index af $maximum",
+    "tx_retry_broadcast": "Prøv at udsende igen",
+    "tx_show_hex": "Vis transaktionshex",
+    "tx_retry_snack": "Udsendelsen er blevet forsøgt igen. Hvis det lykkedes, opdateres transaktionen om lidt."
 }
