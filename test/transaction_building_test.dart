@@ -58,4 +58,26 @@ void main() async {
       assert(wallet.getUnusedAddress == 'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ');
     },
   );
+
+  test(
+    'Add utxo',
+    () async {
+      await wallet.putUtxos(
+        walletName,
+        wallet.getUnusedAddress,
+        [
+          {
+            "tx_hash": "asdf",
+            "tx_pos": 1,
+            "height": 0,
+            "value": 10000000,
+          }
+        ],
+      );
+
+      final getUtxos = await wallet.getWalletUtxos(walletName);
+      assert(getUtxos.length == 1);
+      assert(getUtxos[0].runtimeType == WalletUtxo);
+    },
+  );
 }
