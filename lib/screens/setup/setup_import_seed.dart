@@ -242,7 +242,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     errorBorder: border,
                                     focusedErrorBorder: border,
                                   ),
-                                  keyboardType: TextInputType.multiline,
+                                  keyboardType: TextInputType.visiblePassword,
                                   minLines: 5,
                                   maxLines: 5,
                                 ),
