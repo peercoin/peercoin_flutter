@@ -182,6 +182,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                   textInputAction: TextInputAction.done,
                                   key: const Key('importTextField'),
                                   controller: _controller,
+                                  enableSuggestions: false,
                                   validator: (value) {
                                     if (value!.split(' ').length < 12) {
                                       return AppLocalizations.instance
