@@ -168,8 +168,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             Container(
                               padding: const EdgeInsets.only(bottom: 8),
                               decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20)),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
                                 color: Theme.of(context).backgroundColor,
                                 border: Border.all(
                                   width: 2,
