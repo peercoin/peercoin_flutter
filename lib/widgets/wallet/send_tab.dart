@@ -536,9 +536,6 @@ class _SendTabState extends State<SendTab> {
       _amountInputHelperTextList[_numberOfRecipients] = '';
       _requestedAmountInCoinsList[_numberOfRecipients] = amount;
 
-      setState(() {
-        _currentAddressIndex = _numberOfRecipients;
-      });
       return true;
     }
     return false;
