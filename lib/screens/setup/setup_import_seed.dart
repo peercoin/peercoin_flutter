@@ -168,8 +168,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                             Container(
                               padding: const EdgeInsets.only(bottom: 8),
                               decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20)),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
                                 color: Theme.of(context).backgroundColor,
                                 border: Border.all(
                                   width: 2,
@@ -182,6 +183,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                   textInputAction: TextInputAction.done,
                                   key: const Key('importTextField'),
                                   controller: _controller,
+                                  enableSuggestions: false,
                                   validator: (value) {
                                     if (value!.split(' ').length < 12) {
                                       return AppLocalizations.instance
@@ -241,7 +243,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     errorBorder: border,
                                     focusedErrorBorder: border,
                                   ),
-                                  keyboardType: TextInputType.multiline,
+                                  keyboardType: TextInputType.visiblePassword,
                                   minLines: 5,
                                   maxLines: 5,
                                 ),

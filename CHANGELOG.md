@@ -1,3 +1,6 @@
+### **1.1.0** (2022-12-03)
+* More CSV import fixes
+
 ### **1.0.9** (2022-11-21)
 * Fix CSV file import
 

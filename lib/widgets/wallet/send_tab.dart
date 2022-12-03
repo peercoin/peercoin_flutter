@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:coinslib/coinslib.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -473,50 +473,7 @@ class _SendTabState extends State<SendTab> {
                           'send_import_csv',
                         ),
                         action: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                                  // type: FileType.custom,
-                                  // allowedExtensions: ['csv'], TODO re-enable when fixed in flutter_file_picker
-                                  );
-                          String csv;
-                          if (result != null) {
-                            if (kIsWeb) {
-                              csv = String.fromCharCodes(
-                                result.files.single.bytes!,
-                              );
-                            } else {
-                              csv = await File(result.files.single.path!)
-                                  .readAsString();
-                            }
-                            final parsed = fast_csv.parse(csv);
-                            var i = 0;
-                            for (final row in parsed) {
-                              final address = row[0];
-                              final amount = double.parse(
-                                row[1].replaceAll(',', '.'),
-                              );
-                              final label = row.length == 3 ? row[2] : '';
-                              if (i == 0) {
-                                _addressControllerList[0].text = address;
-                                _labelControllerList[0].text = label;
-                                _amountControllerList[0].text =
-                                    amount.toString();
-                                _requestedAmountInCoinsList[0] = amount;
-                                setState(() {});
-                              } else {
-                                _addNewAddress(
-                                  address: address,
-                                  amount: amount,
-                                  label: label,
-                                  fromImport: true,
-                                );
-                                setState(() {
-                                  _numberOfRecipients++;
-                                });
-                              }
-                              i++;
-                            }
-                          }
+                          await importCsv();
                         },
                       ),
                     ],
@@ -570,21 +527,15 @@ class _SendTabState extends State<SendTab> {
       if (fromImport == false) {
         _formKey.currentState!.save();
       }
-      _labelControllerList.add(TextEditingController());
-      _labelControllerList.last.text = label;
-      _addressControllerList.add(TextEditingController());
-      _addressControllerList.last.text = address;
-      _amountControllerList.add(TextEditingController());
-      _amountControllerList.last.text = amount.toString();
+      _labelControllerList.add(TextEditingController(text: label));
+      _addressControllerList.add(TextEditingController(text: address));
+      _amountControllerList.add(TextEditingController(text: amount.toString()));
       _labelKeyList.add(GlobalKey<FormFieldState>());
       _addressKeyList.add(GlobalKey<FormFieldState>());
       _amountKeyList.add(GlobalKey<FormFieldState>());
       _amountInputHelperTextList[_numberOfRecipients] = '';
       _requestedAmountInCoinsList[_numberOfRecipients] = amount;
 
-      setState(() {
-        _currentAddressIndex = _numberOfRecipients;
-      });
       return true;
     }
     return false;
@@ -790,5 +741,49 @@ class _SendTabState extends State<SendTab> {
         }
       },
     );
+  }
+
+  Future<void> importCsv() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        // type: FileType.custom,
+        // allowedExtensions: ['csv'], TODO re-enable when fixed in flutter_file_picker
+        );
+    String csv;
+    if (result != null) {
+      if (kIsWeb) {
+        csv = String.fromCharCodes(
+          result.files.single.bytes!,
+        );
+      } else {
+        csv = await File(result.files.single.path!).readAsString();
+      }
+      final parsed = fast_csv.parse(csv);
+      var i = 0;
+      for (final row in parsed) {
+        final address = row[0];
+        final amount = double.parse(
+          row[1].replaceAll(',', '.'),
+        );
+        final label = row.length == 3 ? row[2] : '';
+        if (i == 0) {
+          _addressControllerList[0].text = address;
+          _labelControllerList[0].text = label;
+          _amountControllerList[0].text = amount.toString();
+          _requestedAmountInCoinsList[0] = amount;
+          setState(() {});
+        } else {
+          _addNewAddress(
+            address: address,
+            amount: amount,
+            label: label,
+            fromImport: true,
+          );
+          setState(() {
+            _numberOfRecipients++;
+          });
+        }
+        i++;
+      }
+    }
   }
 }
