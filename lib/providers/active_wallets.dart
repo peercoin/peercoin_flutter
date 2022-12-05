@@ -716,6 +716,7 @@ class ActiveWallets with ChangeNotifier {
           recipients.update(recipients.keys.last, (value) => value - fee);
           txAmount = parseTxOutputValue(recipients);
           feesHaveBeenDeductedFromRecipient = true;
+          //TODO edge case where last recipient can not pay for fees because fees are too large (e.g. fee 0.42, last recipient 0.01)
         }
 
         //add recipient outputs

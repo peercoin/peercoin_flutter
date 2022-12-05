@@ -42,6 +42,7 @@ class SendTabNavigator extends StatelessWidget {
                 width: 48,
               )
       ],
+      //TODO add jump to end and jump to front
     );
   }
 }
