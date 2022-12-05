@@ -965,41 +965,34 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                 ),
               ),
-              kIsWeb
-                  ? SliverAppBar(
-                      centerTitle: false,
-                      automaticallyImplyLeading: false,
-                      title: Text(
-                        AppLocalizations.instance.translate(
-                          'addressbook_bottom_bar_sending_addresses',
-                        ),
-                        style: TextStyle(
+              SliverAppBar(
+                centerTitle: false,
+                automaticallyImplyLeading: false,
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'addressbook_bottom_bar_sending_addresses',
+                  ),
+                  style: kIsWeb
+                      ? TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    )
-                  : SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      title: Text(
-                        AppLocalizations.instance.translate(
-                          'addressbook_bottom_bar_sending_addresses',
-                        ),
-                      ),
-                      actions: [
-                        IconButton(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          onPressed: () => _toggleSendingAddressesVisilibity(),
-                          icon: Icon(
-                            _showSendingAddresses
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                        ),
-                      ],
+                        )
+                      : const TextStyle(),
+                ),
+                actions: [
+                  IconButton(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
                     ),
+                    onPressed: () => _toggleSendingAddressesVisilibity(),
+                    icon: Icon(
+                      _showSendingAddresses
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
+                ],
+              ),
               SliverList(
                 delegate: SliverChildListDelegate(
                   _showSendingAddresses ? listSend : [const SizedBox()],
