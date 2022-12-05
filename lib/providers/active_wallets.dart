@@ -355,40 +355,37 @@ class ActiveWallets with ChangeNotifier {
         for (var vOut in voutList) {
           final asMap = vOut as Map;
           if (asMap['scriptPubKey']['type'] != 'nulldata') {
-            asMap['scriptPubKey']['addresses'].forEach(
-              (addr) {
-                if (openWallet.addresses.firstWhereOrNull(
-                        (element) => element.address == addr) !=
-                    null) {
-                  //address is ours, add new tx
-                  final int txValue = (vOut['value'] * decimalProduct).toInt();
+            final addr = asMap['scriptPubKey']['address'];
+            if (openWallet.addresses
+                    .firstWhereOrNull((element) => element.address == addr) !=
+                null) {
+              //address is ours, add new tx
+              final int txValue = (vOut['value'] * decimalProduct).toInt();
 
-                  //increase notification value for addr
-                  final addrInWallet = openWallet.addresses
-                      .firstWhere((element) => element.address == addr);
-                  addrInWallet.newNotificationBackendCount =
-                      addrInWallet.notificationBackendCount + 1;
-                  openWallet.save();
+              //increase notification value for addr
+              final addrInWallet = openWallet.addresses
+                  .firstWhere((element) => element.address == addr);
+              addrInWallet.newNotificationBackendCount =
+                  addrInWallet.notificationBackendCount + 1;
+              openWallet.save();
 
-                  //write tx
-                  openWallet.putTransaction(
-                    WalletTransaction(
-                      txid: tx['txid'],
-                      timestamp: tx['blocktime'] ?? 0,
-                      value: txValue,
-                      fee: 0,
-                      address: addr,
-                      recipients: {addr: txValue},
-                      direction: direction,
-                      broadCasted: true,
-                      confirmations: tx['confirmations'] ?? 0,
-                      broadcastHex: '',
-                      opReturn: '',
-                    ),
-                  );
-                }
-              },
-            );
+              //write tx
+              openWallet.putTransaction(
+                WalletTransaction(
+                  txid: tx['txid'],
+                  timestamp: tx['blocktime'] ?? 0,
+                  value: txValue,
+                  fee: 0,
+                  address: addr,
+                  recipients: {addr: txValue},
+                  direction: direction,
+                  broadCasted: true,
+                  confirmations: tx['confirmations'] ?? 0,
+                  broadcastHex: '',
+                  opReturn: '',
+                ),
+              );
+            }
           }
         }
 
