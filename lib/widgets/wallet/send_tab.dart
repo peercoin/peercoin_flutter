@@ -524,9 +524,6 @@ class _SendTabState extends State<SendTab> {
     bool fromImport = false,
   }) {
     if (triggerFormValidation() || fromImport == true) {
-      if (fromImport == false) {
-        _formKey.currentState!.save();
-      }
       _labelControllerList.add(TextEditingController(text: label));
       _addressControllerList.add(TextEditingController(text: address));
       _amountControllerList.add(TextEditingController(text: amount.toString()));
@@ -535,7 +532,12 @@ class _SendTabState extends State<SendTab> {
       _amountKeyList.add(GlobalKey<FormFieldState>());
       _amountInputHelperTextList[_numberOfRecipients] = '';
       _requestedAmountInCoinsList[_numberOfRecipients] = amount;
-
+      if (fromImport == false) {
+        _formKey.currentState!.save();
+        setState(() {
+          _currentAddressIndex = _numberOfRecipients;
+        });
+      }
       return true;
     }
     return false;

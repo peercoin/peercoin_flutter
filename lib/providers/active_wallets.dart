@@ -355,40 +355,43 @@ class ActiveWallets with ChangeNotifier {
         for (var vOut in voutList) {
           final asMap = vOut as Map;
           if (asMap['scriptPubKey']['type'] != 'nulldata') {
-            asMap['scriptPubKey']['addresses'].forEach(
-              (addr) {
-                if (openWallet.addresses.firstWhereOrNull(
-                        (element) => element.address == addr) !=
-                    null) {
-                  //address is ours, add new tx
-                  final int txValue = (vOut['value'] * decimalProduct).toInt();
+            //pre 0.12 backwards compatability TODO remove after 0.12 HF
+            String addr;
+            if (asMap['scriptPubKey']['addresses'].runtimeType == List) {
+              addr = asMap['scriptPubKey']['addresses'][0];
+            }
+            addr = asMap['scriptPubKey']['address'];
 
-                  //increase notification value for addr
-                  final addrInWallet = openWallet.addresses
-                      .firstWhere((element) => element.address == addr);
-                  addrInWallet.newNotificationBackendCount =
-                      addrInWallet.notificationBackendCount + 1;
-                  openWallet.save();
+            if (openWallet.addresses
+                    .firstWhereOrNull((element) => element.address == addr) !=
+                null) {
+              //address is ours, add new tx
+              final int txValue = (vOut['value'] * decimalProduct).toInt();
 
-                  //write tx
-                  openWallet.putTransaction(
-                    WalletTransaction(
-                      txid: tx['txid'],
-                      timestamp: tx['blocktime'] ?? 0,
-                      value: txValue,
-                      fee: 0,
-                      address: addr,
-                      recipients: {addr: txValue},
-                      direction: direction,
-                      broadCasted: true,
-                      confirmations: tx['confirmations'] ?? 0,
-                      broadcastHex: '',
-                      opReturn: '',
-                    ),
-                  );
-                }
-              },
-            );
+              //increase notification value for addr
+              final addrInWallet = openWallet.addresses
+                  .firstWhere((element) => element.address == addr);
+              addrInWallet.newNotificationBackendCount =
+                  addrInWallet.notificationBackendCount + 1;
+              openWallet.save();
+
+              //write tx
+              openWallet.putTransaction(
+                WalletTransaction(
+                  txid: tx['txid'],
+                  timestamp: tx['blocktime'] ?? 0,
+                  value: txValue,
+                  fee: 0,
+                  address: addr,
+                  recipients: {addr: txValue},
+                  direction: direction,
+                  broadCasted: true,
+                  confirmations: tx['confirmations'] ?? 0,
+                  broadcastHex: '',
+                  opReturn: '',
+                ),
+              );
+            }
           }
         }
 
