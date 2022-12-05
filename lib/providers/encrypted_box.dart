@@ -77,10 +77,12 @@ class EncryptedBox with ChangeNotifier {
   }
 
   Future<Box?> getGenericBox(String name) async {
-    _cryptoBox[name] = await Hive.openBox(
-      name,
-      encryptionCipher: HiveAesCipher(await key as Uint8List),
-    );
+    if (!_cryptoBox.containsKey(name)) {
+      _cryptoBox[name] = await Hive.openBox(
+        name,
+        encryptionCipher: HiveAesCipher(await key as Uint8List),
+      );
+    }
     return _cryptoBox[name];
   }
 
