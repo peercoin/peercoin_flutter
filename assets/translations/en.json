@@ -305,6 +305,7 @@
     "wallet_send_label_hint_metadata": "Metadata is unencrypted and will be publicly visible on the blockchain.",
     "wallet_scan_appBar_title": "Scanning your imported seed",
     "wallet_scan_notice": "This might take a while. Don't close this screen!",
+    "wallet_scan_notice_bg_notifications": "Enabling background notifications in App Settings can severely improve scanning reliability.",
     "wallet_send": "Send",
     "wallet_transactions": "Transactions",
     "wallets_list": "Your wallets",
