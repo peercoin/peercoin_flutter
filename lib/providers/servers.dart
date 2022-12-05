@@ -16,10 +16,7 @@ class Servers with ChangeNotifier {
 
   Future<void> init(String identifier) async {
     LoggerWrapper.logInfo('Servers', 'init', 'init server provider');
-    _serverBox = await Hive.openBox<Server>(
-      'serverBox-$identifier',
-      encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>),
-    );
+    _serverBox = await _encryptedBox.getServerBox(identifier);
 
     final seedServers =
         AvailableCoins.getSpecificCoin(identifier).electrumServers;

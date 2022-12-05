@@ -23,7 +23,7 @@ class MockHiveBox extends Mock implements EncryptedBox {
   }
 
   @override
-  Future<Box> getWalletBox() async {
+  Future<Box<CoinWallet>> getWalletBox() async {
     return await Hive.openBox<CoinWallet>(
       'wallets',
     );

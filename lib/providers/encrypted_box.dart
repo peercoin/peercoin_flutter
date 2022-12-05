@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/coin_wallet.dart';
+import '../models/server.dart';
 
 class EncryptedBox with ChangeNotifier {
   final Map<String, Box> _cryptoBox = {};
@@ -86,7 +87,14 @@ class EncryptedBox with ChangeNotifier {
     return _cryptoBox[name];
   }
 
-  Future<Box> getWalletBox() async {
+  Future<Box<Server>> getServerBox(String identifier) async {
+    return await Hive.openBox<Server>(
+      'serverBox-$identifier',
+      encryptionCipher: HiveAesCipher(await key as Uint8List),
+    );
+  }
+
+  Future<Box<CoinWallet>> getWalletBox() async {
     return await Hive.openBox<CoinWallet>(
       'wallets',
       encryptionCipher: HiveAesCipher(await key as Uint8List),
