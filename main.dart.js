@@ -100739,7 +100739,7 @@ a2=f.a(d[a0])
 a3=J.af(a2)
 if(!J.j(J.au(a3.h(a2,"scriptPubKey"),"type"),"nulldata")){a1.a=null
 if(J.ai(J.au(a3.h(a2,"scriptPubKey"),"addresses"))===B.ad2)a1.a=J.au(J.au(a3.h(a2,"scriptPubKey"),"addresses"),0)
-a1.a=J.au(a3.h(a2,"scriptPubKey"),"address")
+else a1.a=J.au(a3.h(a2,"scriptPubKey"),"address")
 if(A.dZ(b1.f,new A.adZ(a1))!=null){a4=J.bhD(J.adk(a3.h(a2,"value"),j));++J.b2H(b1.f,new A.ae_(a1)).z
 a3=b1
 a5=a3.fe$
