@@ -227,4 +227,5 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       });
     }
   }
+  //TODO hint that enabling background notification can improve performance
 }
