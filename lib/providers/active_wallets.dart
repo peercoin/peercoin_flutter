@@ -359,8 +359,9 @@ class ActiveWallets with ChangeNotifier {
             String addr;
             if (asMap['scriptPubKey']['addresses'].runtimeType == List) {
               addr = asMap['scriptPubKey']['addresses'][0];
+            } else {
+              addr = asMap['scriptPubKey']['address'];
             }
-            addr = asMap['scriptPubKey']['address'];
 
             if (openWallet.addresses
                     .firstWhereOrNull((element) => element.address == addr) !=
