@@ -16,6 +16,7 @@ import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 import 'package:peercoin/models/buildresult.dart';
 
+import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
 import '../models/coin_wallet.dart';
 import '../tools/app_localizations.dart';
@@ -714,9 +715,13 @@ class ActiveWallets with ChangeNotifier {
             'no change needed, tx amount $txAmount, fee $fee, reduced output added for ${recipients.keys.last} ${txAmount - fee}',
           );
           recipients.update(recipients.keys.last, (value) => value - fee);
+          if (recipients.values.last < coin.minimumTxValue) {
+            throw CantPayForFeesException(
+              recipients.values.last * -1,
+            );
+          }
           txAmount = parseTxOutputValue(recipients);
           feesHaveBeenDeductedFromRecipient = true;
-          //TODO edge case where last recipient can not pay for fees because fees are too large (e.g. fee 0.42, last recipient 0.01)
         }
 
         //add recipient outputs

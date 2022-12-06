@@ -140,4 +140,25 @@ void main() async {
           "0300000001fd9ea98d289c171e9ab855cac718fba1585bd20cc3b92b7e77c8bda2d2780e6c010000006a4730440220402478a7caee83751fda54971f2f6ab1071a4bf17b060f8f4ffd93dcfe08b73e02200ac9fe3e8e01f829c66cfeed48e1a53a970c80aad97ef98c5ff0fd5d279f49b10121022036646b3fd79dee41351f727f0a6e10d0e7f98585961bc14e7aadaf5f4b66abffffffff0d1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024303d70a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024403d60a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024503d50a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024603d50a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024703d60a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024803d70a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024403d80a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024703d80a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024603d90a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024503d90a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024603d70a1027000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024503d70ae32a000000000000220020c766cec1ef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bdef7bde024503d60a00000000",
     );
   });
+
+  test('Add another UTXO', () async {
+    await wallet.putUtxos(
+      walletName,
+      wallet.getUnusedAddress,
+      [
+        {
+          "tx_hash":
+              "6c0e78d2a2bdc8777e2bb9c30cd25b58a1fb18c7ca55b89a1e179c288da99efd",
+          "tx_pos": 1,
+          "height": 99,
+          "value": 10000000, //test output of 10
+        }
+      ],
+    );
+    final getUtxos = await wallet.getWalletUtxos(walletName);
+    assert(getUtxos.length == 1);
+    assert(getUtxos[0].runtimeType == WalletUtxo);
+    assert(getUtxos[0].address == wallet.getUnusedAddress);
+    assert(getUtxos[0].value == 10000000);
+  });
 }
