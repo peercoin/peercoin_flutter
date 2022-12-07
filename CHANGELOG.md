@@ -1,3 +1,7 @@
+### **1.1.1** (2022-12-06)
+* Address book: allow hiding of sending addresses  
+* Send tab: allow fast forwarding or rewiding to addresses
+
 ### **1.1.0** (2022-12-03)
 * More CSV import fixes
 

@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:peercoin/exceptions/exceptions.dart';
 import 'package:peercoin/models/buildresult.dart';
 import 'package:peercoin/widgets/wallet/send_tab_management.dart';
 import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
@@ -604,13 +605,35 @@ class _SendTabState extends State<SendTab> {
     return recipients;
   }
 
-  Future<BuildResult> _buildTx() async {
-    return await _activeWallets.buildTransaction(
-      identifier: widget.wallet.name,
-      recipients: _buildRecipientMap(),
-      fee: 0,
-      opReturn: _opReturnKey.currentState?.value ?? '',
-    );
+  Future<BuildResult?> _buildTx() async {
+    try {
+      return await _activeWallets.buildTransaction(
+        identifier: widget.wallet.name,
+        recipients: _buildRecipientMap(),
+        fee: 0,
+        opReturn: _opReturnKey.currentState?.value ?? '',
+      );
+    } catch (e) {
+      if (e.runtimeType == CantPayForFeesException) {
+        final exception = e as CantPayForFeesException;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance.translate(
+                'send_errors_cant_pay_fees',
+                {
+                  'feesMissing':
+                      (exception.feesMissing / _decimalProduct).toString(),
+                  'letter_code': widget.wallet.letterCode
+                },
+              ),
+            ),
+            duration: const Duration(seconds: 7),
+          ),
+        );
+      }
+    }
+    return null;
   }
 
   void _calcAmountInputHelperText(int index) {
@@ -719,30 +742,32 @@ class _SendTabState extends State<SendTab> {
 
   void _showTransactionConfirmation(context) async {
     var buildResult = await _buildTx();
-    await Navigator.of(context).pushNamed(
-      Routes.transactionConfirmation,
-      arguments: TransactionConfirmationArguments(
-        buildResult: buildResult,
-        decimalProduct: _decimalProduct,
-        coinLetterCode: widget.wallet.letterCode,
-        coinIdentifier: widget.wallet.name,
-        callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
-        fiatPricePerCoin: _coinValue,
-        fiatCode: _appSettings.selectedCurrency,
-      ),
-    );
-    //persist labels
-    _labelControllerList.asMap().forEach(
-      (index, controller) {
-        if (controller.text != '') {
-          _activeWallets.updateLabel(
-            widget.wallet.name,
-            _addressControllerList[index].text,
-            controller.text,
-          );
-        }
-      },
-    );
+    if (buildResult != null) {
+      await Navigator.of(context).pushNamed(
+        Routes.transactionConfirmation,
+        arguments: TransactionConfirmationArguments(
+          buildResult: buildResult,
+          decimalProduct: _decimalProduct,
+          coinLetterCode: widget.wallet.letterCode,
+          coinIdentifier: widget.wallet.name,
+          callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
+          fiatPricePerCoin: _coinValue,
+          fiatCode: _appSettings.selectedCurrency,
+        ),
+      );
+      //persist labels
+      _labelControllerList.asMap().forEach(
+        (index, controller) {
+          if (controller.text != '') {
+            _activeWallets.updateLabel(
+              widget.wallet.name,
+              _addressControllerList[index].text,
+              controller.text,
+            );
+          }
+        },
+      );
+    }
   }
 
   Future<void> importCsv() async {

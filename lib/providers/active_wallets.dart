@@ -16,6 +16,7 @@ import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 import 'package:peercoin/models/buildresult.dart';
 
+import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
 import '../models/coin_wallet.dart';
 import '../tools/app_localizations.dart';
@@ -31,11 +32,10 @@ class ActiveWallets with ChangeNotifier {
   ActiveWallets(this._encryptedBox);
   late String _seedPhrase;
   String _unusedAddress = '';
-  late Box _walletBox;
+  late Box<CoinWallet> _walletBox;
   Box? _vaultBox;
   final Map<String, String> _wifs = {};
-  // ignore: prefer_final_fields
-  Map<String?, CoinWallet?> _specificWalletCache = {};
+  final Map<String?, CoinWallet?> _specificWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
 
   Future<void> init() async {
@@ -80,7 +80,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   List<CoinWallet> get activeWalletsValues {
-    return _walletBox.values.toList() as List<CoinWallet>;
+    return _walletBox.values.toList();
   }
 
   List get activeWalletsKeys {
@@ -96,8 +96,7 @@ class ActiveWallets with ChangeNotifier {
   }
 
   Future<void> addWallet(String name, String title, String letterCode) async {
-    var box = await Hive.openBox<CoinWallet>('wallets',
-        encryptionCipher: HiveAesCipher(await _encryptedBox.key as List<int>));
+    var box = await _encryptedBox.getWalletBox();
     await box.put(name, CoinWallet(name, title, letterCode));
     notifyListeners();
   }
@@ -716,6 +715,11 @@ class ActiveWallets with ChangeNotifier {
             'no change needed, tx amount $txAmount, fee $fee, reduced output added for ${recipients.keys.last} ${txAmount - fee}',
           );
           recipients.update(recipients.keys.last, (value) => value - fee);
+          if (recipients.values.last < coin.minimumTxValue) {
+            throw CantPayForFeesException(
+              recipients.values.last * -1,
+            );
+          }
           txAmount = parseTxOutputValue(recipients);
           feesHaveBeenDeductedFromRecipient = true;
         }

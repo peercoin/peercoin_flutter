@@ -40,7 +40,9 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            AppLocalizations.instance.translate('wallet_scan_appBar_title'),
+            AppLocalizations.instance.translate(
+              'wallet_scan_appBar_title',
+            ),
           ),
         ),
       ),
@@ -52,6 +54,24 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           Text(
             AppLocalizations.instance.translate('wallet_scan_notice'),
           ),
+          if (_backgroundNotificationsAvailable == false)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                const Divider(),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    AppLocalizations.instance.translate(
+                      'wallet_scan_notice_bg_notifications',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           const SizedBox(height: 20),
           PeerButton(
             text: AppLocalizations.instance

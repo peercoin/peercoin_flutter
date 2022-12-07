@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 1.1.0+121
+version: 1.1.1+122
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -54,6 +54,7 @@ dependencies:
   protobuf: ^2.1.0
   grpc: ^3.1.0
   mockito: ^5.3.2
+  cryptography_flutter: ^2.0.2
 
 dev_dependencies:
   integration_test:

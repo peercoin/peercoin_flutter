@@ -51,6 +51,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _showUsed = true;
   bool _showEmpty = true;
   bool _showUnwatched = false;
+  bool _showSendingAddresses = true;
   final Map _addressBalanceMap = {};
   final Map _isWatchedMap = {};
   late ActiveWallets _activeWallets;
@@ -272,6 +273,12 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
 
+  void _toggleSendingAddressesVisilibity() {
+    setState(() {
+      _showSendingAddresses = !_showSendingAddresses;
+    });
+  }
+
   Future<void> _toggleWatched(WalletAddress addr) async {
     String snackText;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -449,8 +456,10 @@ class _AddressTabState extends State<AddressTab> {
                           Icons.share,
                           color: Theme.of(context).colorScheme.secondary,
                         ),
-                        onTap: () =>
-                            WalletHomeQr.showQrDialog(context, addr.address),
+                        onTap: () => WalletHomeQr.showQrDialog(
+                          context,
+                          addr.address,
+                        ),
                       ),
                       IconSlideAction(
                         caption: AppLocalizations.instance
@@ -470,40 +479,48 @@ class _AddressTabState extends State<AddressTab> {
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_delete'),
                         color: Theme.of(context).errorColor,
-                        iconWidget:
-                            const Icon(Icons.delete, color: Colors.white),
+                        iconWidget: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
                         onTap: () async {
                           await showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
                               title: Text(
                                 AppLocalizations.instance.translate(
-                                    'addressbook_dialog_remove_title'),
+                                  'addressbook_dialog_remove_title',
+                                ),
                               ),
                               content: Text(addr.address),
                               actions: <Widget>[
                                 TextButton.icon(
-                                    label: Text(AppLocalizations.instance
-                                        .translate(
-                                            'server_settings_alert_cancel')),
+                                    label: Text(
+                                      AppLocalizations.instance.translate(
+                                          'server_settings_alert_cancel'),
+                                    ),
                                     icon: const Icon(Icons.cancel),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     }),
                                 TextButton.icon(
-                                  label: Text(AppLocalizations.instance
-                                      .translate('jail_dialog_button')),
+                                  label: Text(
+                                    AppLocalizations.instance
+                                        .translate('jail_dialog_button'),
+                                  ),
                                   icon: const Icon(Icons.check),
                                   onPressed: () {
-                                    context
-                                        .read<ActiveWallets>()
-                                        .removeAddress(widget.walletName, addr);
+                                    context.read<ActiveWallets>().removeAddress(
+                                          widget.walletName,
+                                          addr,
+                                        );
                                     applyFilter();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
                                           AppLocalizations.instance.translate(
-                                              'addressbook_dialog_remove_snack'),
+                                            'addressbook_dialog_remove_snack',
+                                          ),
                                           textAlign: TextAlign.center,
                                         ),
                                         duration: const Duration(seconds: 5),
@@ -683,8 +700,10 @@ class _AddressTabState extends State<AddressTab> {
                       ChoiceChip(
                         backgroundColor: Theme.of(context).backgroundColor,
                         selectedColor: Theme.of(context).shadowColor,
-                        visualDensity:
-                            const VisualDensity(horizontal: 0.0, vertical: -4),
+                        visualDensity: const VisualDensity(
+                          horizontal: 0.0,
+                          vertical: -4,
+                        ),
                         label: AutoSizeText(
                           AppLocalizations.instance
                               .translate('addressbook_hide_change'),
@@ -708,8 +727,10 @@ class _AddressTabState extends State<AddressTab> {
                       ChoiceChip(
                         backgroundColor: Theme.of(context).backgroundColor,
                         selectedColor: Theme.of(context).shadowColor,
-                        visualDensity:
-                            const VisualDensity(horizontal: 0.0, vertical: -4),
+                        visualDensity: const VisualDensity(
+                          horizontal: 0.0,
+                          vertical: -4,
+                        ),
                         label: AutoSizeText(
                           AppLocalizations.instance
                               .translate('addressbook_hide_unwatched'),
@@ -732,20 +753,19 @@ class _AddressTabState extends State<AddressTab> {
                           backgroundColor: Theme.of(context).backgroundColor,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
-                              horizontal: 0.0, vertical: -4),
-                          // ignore: avoid_unnecessary_containers
-                          label: Container(
-                            child: AutoSizeText(
-                              _showLabel
-                                  ? AppLocalizations.instance
-                                      .translate('addressbook_show_balance')
-                                  : AppLocalizations.instance
-                                      .translate('addressbook_show_label'),
-                              textAlign: TextAlign.center,
-                              minFontSize: 10,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
+                            horizontal: 0.0,
+                            vertical: -4,
+                          ),
+                          label: AutoSizeText(
+                            _showLabel
+                                ? AppLocalizations.instance
+                                    .translate('addressbook_show_balance')
+                                : AppLocalizations.instance
+                                    .translate('addressbook_show_label'),
+                            textAlign: TextAlign.center,
+                            minFontSize: 10,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                           selected: _showLabel,
@@ -768,7 +788,9 @@ class _AddressTabState extends State<AddressTab> {
                           backgroundColor: Theme.of(context).backgroundColor,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
-                              horizontal: 0.0, vertical: -4),
+                            horizontal: 0.0,
+                            vertical: -4,
+                          ),
                           label: AutoSizeText(
                             AppLocalizations.instance
                                 .translate('addressbook_hide_used'),
@@ -791,7 +813,9 @@ class _AddressTabState extends State<AddressTab> {
                           backgroundColor: Theme.of(context).backgroundColor,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
-                              horizontal: 0.0, vertical: -4),
+                            horizontal: 0.0,
+                            vertical: -4,
+                          ),
                           label: AutoSizeText(
                             AppLocalizations.instance
                                 .translate('addressbook_hide_empty'),
@@ -941,29 +965,38 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                 ),
               ),
-              kIsWeb
-                  ? SliverAppBar(
-                      centerTitle: false,
-                      automaticallyImplyLeading: false,
-                      title: Text(
-                        AppLocalizations.instance.translate(
-                            'addressbook_bottom_bar_sending_addresses'),
-                        style: TextStyle(
+              SliverAppBar(
+                centerTitle: false,
+                automaticallyImplyLeading: false,
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'addressbook_bottom_bar_sending_addresses',
+                  ),
+                  style: kIsWeb
+                      ? TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    )
-                  : SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      title: Text(
-                        AppLocalizations.instance.translate(
-                          'addressbook_bottom_bar_sending_addresses',
-                        ),
-                      ),
+                        )
+                      : const TextStyle(),
+                ),
+                actions: [
+                  IconButton(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
                     ),
+                    onPressed: () => _toggleSendingAddressesVisilibity(),
+                    icon: Icon(
+                      _showSendingAddresses
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
+                ],
+              ),
               SliverList(
-                delegate: SliverChildListDelegate(listSend),
+                delegate: SliverChildListDelegate(
+                  _showSendingAddresses ? listSend : [const SizedBox()],
+                ),
               ),
               sliverToBoxAdapter,
               const SliverToBoxAdapter(

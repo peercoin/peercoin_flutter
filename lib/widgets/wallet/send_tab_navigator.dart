@@ -15,14 +15,25 @@ class SendTabNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         currentIndex - 1 > 0
-            ? IconButton(
-                onPressed: () => raiseNewindex(currentIndex - 1),
-                icon: const Icon(Icons.arrow_left_rounded),
-              )
-            : const SizedBox(),
+            ? Row(children: [
+                IconButton(
+                  onPressed: () => raiseNewindex(1),
+                  icon: const Icon(
+                    Icons.fast_rewind_rounded,
+                    size: 15,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => raiseNewindex(currentIndex - 1),
+                  icon: const Icon(Icons.arrow_left_rounded),
+                ),
+              ])
+            : const SizedBox(
+                width: 96,
+              ),
         Text(
           AppLocalizations.instance.translate('send_navigator', {
             "index": currentIndex.toString(),
@@ -34,13 +45,24 @@ class SendTabNavigator extends StatelessWidget {
           ),
         ),
         currentIndex + 1 <= numberOfRecipients
-            ? IconButton(
-                onPressed: () => raiseNewindex(currentIndex + 1),
-                icon: const Icon(Icons.arrow_right_rounded),
+            ? Row(
+                children: [
+                  IconButton(
+                    onPressed: () => raiseNewindex(currentIndex + 1),
+                    icon: const Icon(Icons.arrow_right_rounded),
+                  ),
+                  IconButton(
+                    onPressed: () => raiseNewindex(numberOfRecipients),
+                    icon: const Icon(
+                      Icons.fast_forward_rounded,
+                      size: 15,
+                    ),
+                  ),
+                ],
               )
             : const SizedBox(
-                width: 48,
-              )
+                width: 96,
+              ),
       ],
     );
   }
