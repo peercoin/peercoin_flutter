@@ -812,5 +812,6 @@ class _SendTabState extends State<SendTab> {
         i++;
       }
     }
+    //TODO find performance problem with labels on web
   }
 }
