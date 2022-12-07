@@ -1,3 +1,6 @@
+### **1.1.2** (2022-12-xx)
+*   
+
 ### **1.1.1** (2022-12-06)
 * Address book: allow hiding of sending addresses  
 * Send tab: allow fast forwarding or rewiding to addresses
