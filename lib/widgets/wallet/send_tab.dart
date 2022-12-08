@@ -755,6 +755,12 @@ class _SendTabState extends State<SendTab> {
           fiatCode: _appSettings.selectedCurrency,
         ),
       );
+
+      //temporarily disable persisting labels for more than 100 addresses on web
+      if (kIsWeb && buildResult.recipients.length > 100) {
+        return;
+      } //TODO fix underlying performance issue with Hive on web that makes this necessary
+
       //persist labels
       _labelControllerList.asMap().forEach(
         (index, controller) {
@@ -797,7 +803,6 @@ class _SendTabState extends State<SendTab> {
           _labelControllerList[0].text = label;
           _amountControllerList[0].text = amount.toString();
           _requestedAmountInCoinsList[0] = amount;
-          setState(() {});
         } else {
           _addNewAddress(
             address: address,
@@ -812,6 +817,5 @@ class _SendTabState extends State<SendTab> {
         i++;
       }
     }
-    //TODO find performance problem with labels on web
   }
 }

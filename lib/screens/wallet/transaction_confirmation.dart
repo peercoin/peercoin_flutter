@@ -259,7 +259,10 @@ class _TransactionConfirmationScreenState
                         children: [
                           _firstPress == false
                               ? SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
+                                  width: MediaQuery.of(context).size.width >
+                                          1200
+                                      ? MediaQuery.of(context).size.width / 3
+                                      : MediaQuery.of(context).size.width / 2,
                                   child: const LoadingIndicator(),
                                 )
                               : PeerButton(
