@@ -405,7 +405,7 @@ class ActiveWallets with ChangeNotifier {
           final script = decompile(out.script)!;
           // Find OP_RETURN + push data
           if (script.length == 2 &&
-              script[0] == OPS['OP_RETURN'] &&
+              script[0] == ops['OP_RETURN'] &&
               script[1] is Uint8List) {
             String? parsedMessage;
 
