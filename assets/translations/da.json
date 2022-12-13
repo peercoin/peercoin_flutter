@@ -339,5 +339,7 @@
     "send_navigator": "Adresse $index af $maximum",
     "tx_retry_broadcast": "Prøv at udsende igen",
     "tx_show_hex": "Vis transaktionshex",
-    "tx_retry_snack": "Udsendelsen er blevet forsøgt igen. Hvis det lykkedes, opdateres transaktionen om lidt."
+    "tx_retry_snack": "Udsendelsen er blevet forsøgt igen. Hvis det lykkedes, opdateres transaktionen om lidt.",
+    "wallet_scan_notice_bg_notifications": "Aktivering af baggrundsmeddelelser i appindstillinger kan forbedre scanningens pålidelighed betydeligt.",
+    "send_errors_cant_pay_fees": "Kan ikke betale for gebyrer. $feesMissing $letter_code mangler i øjeblikket. Overvej at fjerne adresser eller reducere transaktionsbeløbet."
 }
