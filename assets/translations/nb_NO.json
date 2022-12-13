@@ -339,5 +339,7 @@
     "app_settings_delete_description": "Siden du ikke har opprettet en konto i denne appen, er det ingenting å slette. Du skapte en gjenopprettingsfrase, som er en kryptografisk operasjon. Gjenopprettingsfrasen din er matematikk. Den kan brukes i alle programmer som støtter gjenopprettingsfraser. Du har heller ingen kontoer med bakgrunnsvarsling eller API for prisfeed. Denne appen verdsetter personvernet ditt og er privat av design.",
     "tx_show_hex": "Vis transaksjonshex",
     "tx_retry_broadcast": "Prøv å kringkaste på nytt",
-    "tx_retry_snack": "Kringkastingen er forsøkt på nytt. Hvis den var vellykket, vil transaksjonen oppdateres om litt."
+    "tx_retry_snack": "Kringkastingen er forsøkt på nytt. Hvis den var vellykket, vil transaksjonen oppdateres om litt.",
+    "send_errors_cant_pay_fees": "Kan ikke betale for gebyrer. $feesMissing $letter_code mangler for øyeblikket. Vurder å fjerne adresser eller redusere transaksjonsbeløpet.",
+    "wallet_scan_notice_bg_notifications": "Aktivering av bakgrunnsvarsler i appinnstillinger kan forbedre skanningens pålitelighet betydelig."
 }
