@@ -76,7 +76,10 @@ class PriceTicker {
 
   static void checkUpdate(AppSettings settings) async {
     LoggerWrapper.logInfo(
-        'PriceTicker', 'checkUpdate', 'checking price update');
+      'PriceTicker',
+      'checkUpdate',
+      'checking price update',
+    );
     //check if last update was longer than an hour ago
     final oneHourAgo = (DateTime.now())
         .subtract(const Duration(minutes: Duration.minutesPerHour));

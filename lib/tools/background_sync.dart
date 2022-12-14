@@ -46,8 +46,10 @@ class BackgroundSync {
     BackgroundFetch.finish(taskId);
   }
 
-  static Future<void> init(
-      {required int notificationInterval, bool needsStart = false}) async {
+  static Future<void> init({
+    required int notificationInterval,
+    bool needsStart = false,
+  }) async {
     Future<void> initPlatformState() async {
       var status = await BackgroundFetch.configure(
           BackgroundFetchConfig(
@@ -62,16 +64,25 @@ class BackgroundSync {
             requiredNetworkType: NetworkType.ANY,
           ), (String taskId) async {
         LoggerWrapper.logInfo(
-            'BackgroundSync', 'init', 'Event received $taskId');
+          'BackgroundSync',
+          'init',
+          'Event received $taskId',
+        );
         await BackgroundSync.executeSync();
         BackgroundFetch.finish(taskId);
       }, (String taskId) async {
         LoggerWrapper.logInfo(
-            'BackgroundSync', 'init', 'TASK TIMEOUT taskId: $taskId');
+          'BackgroundSync',
+          'init',
+          'TASK TIMEOUT taskId: $taskId',
+        );
         BackgroundFetch.finish(taskId);
       });
       LoggerWrapper.logInfo(
-          'BackgroundSync', 'init', 'configure success: $status');
+        'BackgroundSync',
+        'init',
+        'configure success: $status',
+      );
     }
 
     await initPlatformState();
@@ -142,7 +153,8 @@ class BackgroundSync {
 
         for (var walletAddress in wallet.addresses) {
           var utxoRes = utxos.firstWhereOrNull(
-              (element) => element.address == walletAddress.address);
+            (element) => element.address == walletAddress.address,
+          );
 
           if (walletAddress.isOurs == true) {
             if (walletAddress.isWatched == true ||

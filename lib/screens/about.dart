@@ -122,15 +122,16 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                       ),
                       TextButton(
-                          onPressed: () => _launchURL(
-                                'https://github.com/peercoin/peercoin_flutter',
-                              ),
-                          child: Text(
-                            AppLocalizations.instance.translate(
-                              'about_view_source',
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
+                        onPressed: () => _launchURL(
+                          'https://github.com/peercoin/peercoin_flutter',
+                        ),
+                        child: Text(
+                          AppLocalizations.instance.translate(
+                            'about_view_source',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                       const Divider(),
                       const SizedBox(height: 10),
                       Text(

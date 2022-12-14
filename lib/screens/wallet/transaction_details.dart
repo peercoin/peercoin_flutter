@@ -28,9 +28,10 @@ class TransactionDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-        AppLocalizations.instance.translate('transaction_details'),
-      )),
+        title: Text(
+          AppLocalizations.instance.translate('transaction_details'),
+        ),
+      ),
       body: Align(
         child: PeerContainer(
           noSpacers: true,

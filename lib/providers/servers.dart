@@ -24,7 +24,10 @@ class Servers with ChangeNotifier {
     //check first run
     if (_serverBox.isEmpty) {
       LoggerWrapper.logInfo(
-          'Servers', 'init', 'server storage is empty, initializing');
+        'Servers',
+        'init',
+        'server storage is empty, initializing',
+      );
 
       seedServers.asMap().forEach((index, hardcodedSeedAddress) {
         var newServer = Server(
@@ -39,7 +42,8 @@ class Servers with ChangeNotifier {
     // check if all hard coded seeds for this coin are already in db
     for (var hardcodedSeedAddress in seedServers) {
       var res = _serverBox.values.firstWhereOrNull(
-          (element) => element.getAddress == hardcodedSeedAddress);
+        (element) => element.getAddress == hardcodedSeedAddress,
+      );
       if (res == null) {
         //hard coded server not yet in storage
         LoggerWrapper.logInfo(
@@ -54,8 +58,9 @@ class Servers with ChangeNotifier {
     for (var boxElement in _serverBox.values) {
       if (boxElement.userGenerated == false) {
         var res = seedServers.firstWhere(
-            (element) => element == boxElement.address,
-            orElse: () => null);
+          (element) => element == boxElement.address,
+          orElse: () => null,
+        );
         if (res == null) {
           LoggerWrapper.logInfo(
             'Servers',

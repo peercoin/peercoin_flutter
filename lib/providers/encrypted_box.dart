@@ -73,7 +73,9 @@ class EncryptedBox with ChangeNotifier {
 
   Future<void> setFailedAuthAttempts(int newInt) async {
     await _secureStorage.write(
-        key: 'failedAuthAttempts', value: newInt.toString());
+      key: 'failedAuthAttempts',
+      value: newInt.toString(),
+    );
     _failedAuthAttempts = newInt;
   }
 

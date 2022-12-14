@@ -50,15 +50,17 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         navigator.pop();
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          _coin == ''
-              ? AppLocalizations.instance.translate('select_coin')
-              : AppLocalizations.instance.translate('add_coin_failed'),
-          textAlign: TextAlign.center,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            _coin == ''
+                ? AppLocalizations.instance.translate('select_coin')
+                : AppLocalizations.instance.translate('add_coin_failed'),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 2),
         ),
-        duration: const Duration(seconds: 2),
-      ));
+      );
     }
   }
 
@@ -99,27 +101,32 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
     if (actualAvailableWallets.isNotEmpty) {
       for (var wallet in actualAvailableWallets) {
-        list.add(SimpleDialogOption(
-          onPressed: () {
-            _coin = wallet;
-            addWallet();
-          },
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Image.asset(
+        list.add(
+          SimpleDialogOption(
+            onPressed: () {
+              _coin = wallet;
+              addWallet();
+            },
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Image.asset(
                   AvailableCoins.getSpecificCoin(availableCoins[wallet]!.name)
                       .iconPath,
-                  width: 16),
+                  width: 16,
+                ),
+              ),
+              title: Text(availableCoins[wallet]!.displayName),
             ),
-            title: Text(availableCoins[wallet]!.displayName),
           ),
-        ));
+        );
       }
     } else {
-      list.add(Center(
-        child: Text(AppLocalizations.instance.translate('no_new_wallet')),
-      ));
+      list.add(
+        Center(
+          child: Text(AppLocalizations.instance.translate('no_new_wallet')),
+        ),
+      );
     }
 
     return SimpleDialog(

@@ -79,8 +79,11 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   }
 
   Future<void> _handleSign() async {
-    LoggerWrapper.logInfo('WalletSigning', 'handleSign',
-        'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}');
+    LoggerWrapper.logInfo(
+      'WalletSigning',
+      'handleSign',
+      'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}',
+    );
 
     try {
       var wif = await _activeWallets.getWif(
@@ -98,7 +101,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
       });
 
       LoggerWrapper.logInfo(
-          'WalletSigning', 'handleSign', 'signature produced $_signature');
+        'WalletSigning',
+        'handleSign',
+        'signature produced $_signature',
+      );
     } catch (e) {
       LoggerWrapper.logError('WalletSigning', 'handleSign', e.toString());
     }
@@ -116,19 +122,25 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
         ),
         actions: <Widget>[
           TextButton.icon(
-              label: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')),
-              icon: const Icon(Icons.cancel),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              }),
+            label: Text(
+              AppLocalizations.instance
+                  .translate('server_settings_alert_cancel'),
+            ),
+            icon: const Icon(Icons.cancel),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
           TextButton.icon(
             label:
                 Text(AppLocalizations.instance.translate('sign_reset_button')),
             icon: const Icon(Icons.check),
             onPressed: () async {
               LoggerWrapper.logInfo(
-                  'WalletSigning', '_performReset', 'reset performed');
+                'WalletSigning',
+                '_performReset',
+                'reset performed',
+              );
               await Navigator.of(ctx).pushNamedAndRemoveUntil(
                 Routes.walletSigning,
                 (route) {
@@ -178,8 +190,10 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: _signingAddress == ''
-                                ? Text(AppLocalizations.instance
-                                    .translate('sign_step_1_description'))
+                                ? Text(
+                                    AppLocalizations.instance
+                                        .translate('sign_step_1_description'),
+                                  )
                                 : DoubleTabToClipboard(
                                     clipBoardData: _signingAddress,
                                     child: SelectableText(_signingAddress),
@@ -206,9 +220,9 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                              AppLocalizations.instance
-                                  .translate('sign_step_2'),
-                              style: Theme.of(context).textTheme.headline6),
+                            AppLocalizations.instance.translate('sign_step_2'),
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ],
                       ),
                       TextFormField(
@@ -220,7 +234,8 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                         minLines: 5,
                         maxLines: 5,
                         onChanged: (_) => setState(
-                            () {}), //to activate sign button on key stroke
+                          () {},
+                        ), //to activate sign button on key stroke
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                             onPressed: () async {

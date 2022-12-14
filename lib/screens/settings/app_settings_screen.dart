@@ -160,13 +160,15 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     await AppLocalizations.delegate.load(Locale(lang));
 
     //show notification
-    scaffoldMessenger.showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack'),
-        textAlign: TextAlign.center,
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('app_settings_saved_snack'),
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(seconds: 2),
       ),
-      duration: const Duration(seconds: 2),
-    ));
+    );
   }
 
   void saveTheme(String label, ThemeMode theme) async {
@@ -176,13 +178,15 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       _selectedTheme = label;
     });
     //show notification
-    scaffoldMessenger.showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack'),
-        textAlign: TextAlign.center,
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('app_settings_saved_snack'),
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(seconds: 2),
       ),
-      duration: const Duration(seconds: 2),
-    ));
+    );
   }
 
   List<Widget> generateDefaultWallets() {
@@ -214,13 +218,15 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveSnack(context) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('app_settings_saved_snack'),
-        textAlign: TextAlign.center,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('app_settings_saved_snack'),
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(seconds: 2),
       ),
-      duration: const Duration(seconds: 2),
-    ));
+    );
   }
 
   void saveDefaultWallet(String wallet) async {
@@ -296,68 +302,73 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     children: generateDefaultWallets(),
                   ),
                 ExpansionTile(
-                    title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_auth_header'),
-                        style: Theme.of(context).textTheme.headline6),
-                    childrenPadding: const EdgeInsets.all(10),
-                    children: [
-                      _biometricsRevealed == false
-                          ? PeerButton(
-                              action: () => revealAuthOptions(
-                                  _settings.biometricsAllowed),
-                              text: AppLocalizations.instance
-                                  .translate('app_settings_revealAuthButton'),
-                            )
-                          : SettingsAuth(
-                              _biometricsAllowed,
-                              _biometricsAvailable,
-                              _settings,
-                              saveSnack,
-                              _settings.authenticationOptions!,
-                            )
-                    ]),
-                ExpansionTile(
-                    title: Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_seed'),
-                        style: Theme.of(context).textTheme.headline6),
-                    childrenPadding: const EdgeInsets.all(10),
-                    children: [
-                      _seedPhrase == ''
-                          ? PeerButton(
-                              action: () =>
-                                  revealSeedPhrase(_settings.biometricsAllowed),
-                              text: AppLocalizations.instance
-                                  .translate('app_settings_revealSeedButton'),
-                            )
-                          : Column(
-                              children: [
-                                const SizedBox(height: 20),
-                                DoubleTabToClipboard(
-                                  clipBoardData: _seedPhrase,
-                                  child: SelectableText(
-                                    _seedPhrase,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                if (!kIsWeb)
-                                  PeerButton(
-                                    action: () => ShareWrapper.share(
-                                      context: context,
-                                      message: _seedPhrase,
-                                    ),
-                                    text: AppLocalizations.instance
-                                        .translate('app_settings_shareseed'),
-                                  )
-                              ],
-                            )
-                    ]),
+                  title: Text(
+                    AppLocalizations.instance
+                        .translate('app_settings_auth_header'),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  childrenPadding: const EdgeInsets.all(10),
+                  children: [
+                    _biometricsRevealed == false
+                        ? PeerButton(
+                            action: () => revealAuthOptions(
+                              _settings.biometricsAllowed,
+                            ),
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealAuthButton'),
+                          )
+                        : SettingsAuth(
+                            _biometricsAllowed,
+                            _biometricsAvailable,
+                            _settings,
+                            saveSnack,
+                            _settings.authenticationOptions!,
+                          )
+                  ],
+                ),
                 ExpansionTile(
                   title: Text(
-                      AppLocalizations.instance.translate('app_settings_theme'),
-                      style: Theme.of(context).textTheme.headline6),
+                    AppLocalizations.instance.translate('app_settings_seed'),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  childrenPadding: const EdgeInsets.all(10),
+                  children: [
+                    _seedPhrase == ''
+                        ? PeerButton(
+                            action: () =>
+                                revealSeedPhrase(_settings.biometricsAllowed),
+                            text: AppLocalizations.instance
+                                .translate('app_settings_revealSeedButton'),
+                          )
+                        : Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              DoubleTabToClipboard(
+                                clipBoardData: _seedPhrase,
+                                child: SelectableText(
+                                  _seedPhrase,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              if (!kIsWeb)
+                                PeerButton(
+                                  action: () => ShareWrapper.share(
+                                    context: context,
+                                    message: _seedPhrase,
+                                  ),
+                                  text: AppLocalizations.instance
+                                      .translate('app_settings_shareseed'),
+                                )
+                            ],
+                          )
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text(
+                    AppLocalizations.instance.translate('app_settings_theme'),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                   childrenPadding: const EdgeInsets.all(10),
                   children: _availableThemes.keys.map((theme) {
                     return InkWell(
@@ -397,7 +408,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     children: [
                       PeerButton(
                         text: AppLocalizations.instance.translate(
-                            'app_settings_notifications_open_button'),
+                          'app_settings_notifications_open_button',
+                        ),
                         action: () => Navigator.of(context).pushNamed(
                           Routes.appSettingsNotifications,
                         ),

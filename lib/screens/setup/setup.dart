@@ -99,7 +99,9 @@ class _SetupScreenState extends State<SetupScreen> {
                           Text(
                             AppLocalizations.instance.translate('setup_text3'),
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 20),
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                           PeerExplanationText(
@@ -187,5 +189,5 @@ class PeerProgress extends StatelessWidget {
 }
 
 //TODO web: material icons are not rendered on firefox /
-//also rendering issues with non latin characters (flutter render engine issue) 
+//also rendering issues with non latin characters (flutter render engine issue)
 //-> use html renderer instead of canvas for now

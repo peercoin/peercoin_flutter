@@ -130,9 +130,10 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
               '1 PPC = ${PriceTicker.renderPrice(1, currency, "PPC", widget._settings.exchangeRates).toStringAsFixed(6)} $currency',
             ),
             leading: Radio(
-                value: currency,
-                groupValue: widget._settings.selectedCurrency,
-                onChanged: (dynamic _) => saveCurrency(ctx, currency)),
+              value: currency,
+              groupValue: widget._settings.selectedCurrency,
+              onChanged: (dynamic _) => saveCurrency(ctx, currency),
+            ),
             trailing: Text(
               PriceTicker.currencySymbols[currency] ?? '',
               style: const TextStyle(fontWeight: FontWeight.w500),

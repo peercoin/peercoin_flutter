@@ -189,7 +189,9 @@ class _SendTabState extends State<SendTab> {
                           }
                           var sanitized = value.trim();
                           if (Address.validateAddress(
-                                  sanitized, _availableCoin.networkType) ==
+                                sanitized,
+                                _availableCoin.networkType,
+                              ) ==
                               false) {
                             return AppLocalizations.instance
                                 .translate('send_invalid_address');
@@ -576,8 +578,10 @@ class _SendTabState extends State<SendTab> {
     }
     if (txValueInSatoshis < _availableCoin.minimumTxValue &&
         _opReturnController.text.isEmpty) {
-      return AppLocalizations.instance.translate('send_amount_below_minimum',
-          {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'});
+      return AppLocalizations.instance.translate(
+        'send_amount_below_minimum',
+        {'amount': '${_availableCoin.minimumTxValue / _decimalProduct}'},
+      );
     }
     if (txValueInSatoshis == widget.wallet.balance &&
         widget.wallet.balance == _availableCoin.minimumTxValue) {

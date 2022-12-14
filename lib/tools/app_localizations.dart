@@ -79,7 +79,8 @@ class AppLocalizations {
   }
 
   Future<Map<String, String>> _loadLocalizedStrings(
-      Locale localeToBeLoaded) async {
+    Locale localeToBeLoaded,
+  ) async {
     String jsonString;
     var localizedStrings = <String, String>{};
 

@@ -235,7 +235,8 @@ class _TransactionConfirmationScreenState
                                   AppLocalizations.instance
                                       .translate('send_op_return'),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 SelectableText(buildResult.opReturn)
                               ],
@@ -301,7 +302,8 @@ class _TransactionConfirmationScreenState
                                       }
                                       //update balance
                                       await activeWallets.updateWalletBalance(
-                                          arguments.coinIdentifier);
+                                        arguments.coinIdentifier,
+                                      );
                                       //pop message
                                       navigator.pop();
                                       //navigate back to tx list

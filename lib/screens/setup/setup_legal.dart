@@ -95,7 +95,8 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                           children: [
                             PeerButton(
                               action: () => _launchURL(
-                                  'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE'),
+                                'https://github.com/peercoin/peercoin_flutter/blob/main/LICENSE',
+                              ),
                               text: AppLocalizations.instance.translate(
                                 'setup_legal_license',
                               ),
@@ -138,7 +139,9 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                   var prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('setupFinished', true);
                   await navigator.pushNamedAndRemoveUntil(
-                      Routes.walletList, (_) => false);
+                    Routes.walletList,
+                    (_) => false,
+                  );
                 },
               ),
               const SizedBox(

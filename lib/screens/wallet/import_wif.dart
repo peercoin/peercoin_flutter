@@ -114,13 +114,15 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
     if (specificAddressResult.isNotEmpty) {
       //we have that address already
-      scaffoldMessenger.showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('import_wif_error_snack'),
-          textAlign: TextAlign.center,
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('import_wif_error_snack'),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 3),
         ),
-        duration: const Duration(seconds: 3),
-      ));
+      );
     } else {
       await showDialog(
         context: ctx,

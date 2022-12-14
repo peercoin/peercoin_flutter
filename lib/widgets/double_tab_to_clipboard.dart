@@ -14,13 +14,15 @@ class DoubleTabToClipboard extends StatelessWidget {
   }) : super(key: key);
 
   static void tapEvent(BuildContext context, String clipBoardData) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        AppLocalizations.instance.translate('snack_copied'),
-        textAlign: TextAlign.center,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate('snack_copied'),
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(seconds: 1),
       ),
-      duration: const Duration(seconds: 1),
-    ));
+    );
     Clipboard.setData(
       ClipboardData(text: clipBoardData),
     );

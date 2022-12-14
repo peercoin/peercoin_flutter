@@ -44,13 +44,15 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
         'createWallet',
         e.toString(),
       );
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('setup_securebox_fail'),
-          textAlign: TextAlign.center,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('setup_securebox_fail'),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 10),
         ),
-        duration: const Duration(seconds: 10),
-      ));
+      );
     }
     await activeWallets.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
@@ -201,10 +203,11 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     return null;
                                   },
                                   style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer,
-                                      fontSize: 16),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                    fontSize: 16,
+                                  ),
                                   decoration: InputDecoration(
                                     hintText:
                                         'e.g. mushrooms pepper courgette onion asparagus garlic sweetcorn nut pumpkin potato bean spinach',
@@ -222,7 +225,8 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                         final focusScope =
                                             FocusScope.of(context);
                                         var data = await Clipboard.getData(
-                                            'text/plain');
+                                          'text/plain',
+                                        );
                                         if (data != null) {
                                           _controller.text = data.text!.trim();
                                         }
@@ -239,7 +243,8 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     focusedBorder: border,
                                     enabledBorder: border,
                                     errorStyle: TextStyle(
-                                        color: Theme.of(context).errorColor),
+                                      color: Theme.of(context).errorColor,
+                                    ),
                                     errorBorder: border,
                                     focusedErrorBorder: border,
                                   ),

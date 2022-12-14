@@ -111,11 +111,16 @@ void main() {
           ); //main net server for testnet wallet
           await driver.tap(find.byValueKey('saveServerButton'));
           expect(
-              await driver.getText(find.text(
-                  'Genesis hash does not match.\nThis server does not support this coin.')),
-              'Genesis hash does not match.\nThis server does not support this coin.');
+            await driver.getText(
+              find.text(
+                'Genesis hash does not match.\nThis server does not support this coin.',
+              ),
+            ),
+            'Genesis hash does not match.\nThis server does not support this coin.',
+          );
           await driver.enterText(
-              'ssl://testnet-electrum.peercoinexplorer.net:50008'); //main net server for testnet wallet
+            'ssl://testnet-electrum.peercoinexplorer.net:50008',
+          ); //main net server for testnet wallet
           await driver.tap(find.byValueKey('saveServerButton'));
           await driver.tap(find.pageBack());
           await driver.tap(find.byTooltip('Show menu'));
@@ -125,9 +130,11 @@ void main() {
             },
           );
           expect(
-              await driver.getText(find
-                  .text('ssl://testnet-electrum.peercoinexplorer.net:50008')),
-              'ssl://testnet-electrum.peercoinexplorer.net:50008');
+            await driver.getText(
+              find.text('ssl://testnet-electrum.peercoinexplorer.net:50008'),
+            ),
+            'ssl://testnet-electrum.peercoinexplorer.net:50008',
+          );
         },
         retry: 2,
         timeout: const Timeout.factor(2),

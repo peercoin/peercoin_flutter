@@ -52,9 +52,10 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-        AppLocalizations.instance.translate('app_settings_language'),
-      )),
+        title: Text(
+          AppLocalizations.instance.translate('app_settings_language'),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

@@ -76,9 +76,10 @@ class PeerButtonBorder extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-              letterSpacing: 1.4,
-              fontSize: 16,
-              color: Theme.of(context).primaryColor),
+            letterSpacing: 1.4,
+            fontSize: 16,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
     );

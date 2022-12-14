@@ -325,7 +325,9 @@ class ElectrumConnection with ChangeNotifier {
       switch (decoded['method']) {
         case 'blockchain.scripthash.subscribe':
           handleScriptHashSubscribeNotification(
-              decoded['params'][0], decoded['params'][1]);
+            decoded['params'][0],
+            decoded['params'][1],
+          );
           break;
         case 'blockchain.headers.subscribe':
           handleBlock(decoded['params'][0]['height']);
@@ -516,8 +518,9 @@ class ElectrumConnection with ChangeNotifier {
   ) async {
     //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(
-        (element) => _addresses[element] == hashId,
-        orElse: () => null);
+      (element) => _addresses[element] == hashId,
+      orElse: () => null,
+    );
     LoggerWrapper.logInfo(
       'ElectrumConnection',
       'handleScriptHashSubscribeNotification',
