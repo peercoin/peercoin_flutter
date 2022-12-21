@@ -101,9 +101,8 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
     final scaffoldMessenger = ScaffoldMessenger.of(ctx);
-    final publicAddress =
-        Wallet.fromWIF(privKey, _activeCoin.networkType).address ??
-            ''; //TODO won't return a bech32 addr
+    final publicAddress = Wallet.fromWIF(privKey, _activeCoin.networkType)
+        .address; //TODO won't return a bech32 addr
 
     //check if that address is already in the list
     final walletAddresses =

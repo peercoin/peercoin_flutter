@@ -165,14 +165,14 @@ class ActiveWallets with ChangeNotifier {
     if (openWallet.addresses.isEmpty) {
       //generate new address
       openWallet.addNewAddress = WalletAddress(
-        address: hdWallet.address!,
+        address: hdWallet.address,
         addressBookName: '',
         used: false,
         status: null,
         isOurs: true,
         wif: hdWallet.wif ?? '',
       );
-      unusedAddress = hdWallet.address!;
+      unusedAddress = hdWallet.address;
     } else {
       //wallet is not brand new, lets find an unused address
       String? unusedAddr;
@@ -207,7 +207,7 @@ class ActiveWallets with ChangeNotifier {
         }
 
         openWallet.addNewAddress = WalletAddress(
-          address: newHdWallet.address!,
+          address: newHdWallet.address,
           addressBookName: '',
           used: false,
           status: null,
@@ -215,7 +215,7 @@ class ActiveWallets with ChangeNotifier {
           wif: newHdWallet.wif ?? '',
         );
 
-        unusedAddress = newHdWallet.address!;
+        unusedAddress = newHdWallet.address;
       }
     }
     await openWallet.save();
@@ -592,9 +592,9 @@ class ActiveWallets with ChangeNotifier {
 
     for (var i = 0; i <= maxValue + 1; i++) {
       final child = hdWallet.derivePath("m/0'/$i/0");
-      _wifs[child.address!] = child.wif!;
+      _wifs[child.address] = child.wif!;
     }
-    _wifs[hdWallet.address!] = hdWallet.wif!;
+    _wifs[hdWallet.address] = hdWallet.wif!;
   }
 
   Future<BuildResult> buildTransaction({
