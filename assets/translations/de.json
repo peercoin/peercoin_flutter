@@ -339,5 +339,7 @@
     "send_add_address": "Adresse hinzufügen",
     "send_navigator": "Adresse $index von $maximum",
     "send_address_already_exists": "Adresse existiert bereits",
-    "tx_recipients": "Empfänger"
+    "tx_recipients": "Empfänger",
+    "send_errors_cant_pay_fees": "Kann nicht für Gebühren bezahlen. $feesMissing $letter_code fehlen derzeit. Bedenke Adressen zu entfernen oder den Betrag zu verringern.",
+    "wallet_scan_notice_bg_notifications": "Aktivierung der Hintergrundbenachrichtungen in den App Einstellungen kann die Zuverlässigkeit signifikant erhöhen."
 }
