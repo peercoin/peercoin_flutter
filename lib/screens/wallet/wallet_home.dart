@@ -292,7 +292,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case 'signing':
         Navigator.of(context).pushNamed(
-          Routes.walletSigning,
+          Routes.walletMessageSigning,
+          arguments: _wallet.name,
+        );
+        break;
+      case 'verification':
+        Navigator.of(context).pushNamed(
+          Routes.walletMessageVerification,
           arguments: _wallet.name,
         );
         break;
@@ -411,6 +417,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 title: Text(
                   AppLocalizations.instance
                       .translate('wallet_pop_menu_signing'),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'verification',
+              child: ListTile(
+                leading: Icon(
+                  Icons.fact_check,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance
+                      .translate('wallet_pop_menu_verification'),
                 ),
               ),
             ),

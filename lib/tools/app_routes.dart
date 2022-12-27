@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
+import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 
 import '../screens/settings/app_settings_notifications.dart';
 import '../screens/settings/app_settings_screen.dart';
@@ -22,7 +23,7 @@ import '../screens/wallet/transaction_details.dart';
 import '../screens/wallet/wallet_home.dart';
 import '../screens/wallet/wallet_import_scan.dart';
 import '../screens/wallet/wallet_list.dart';
-import '../screens/wallet/wallet_signing.dart';
+import '../screens/wallet/wallet_sign_message.dart';
 
 class Routes {
   // Route name constants
@@ -38,7 +39,9 @@ class Routes {
   static const String setupLegal = '/setup-legal';
   static const String transaction = '/tx-detail';
   static const String walletHome = '/wallet-home';
-  static const String walletSigning = '/wallet-signing';
+  static const String walletMessageSigning = '/wallet-message-signing';
+  static const String walletMessageVerification =
+      '/wallet-message-verification';
   static const String walletImportScan = '/wallet-import-scan';
   static const String importPaperWallet = '/import-paperwallet';
   static const String importWif = '/import-wif';
@@ -91,8 +94,12 @@ class Routes {
             widget: WalletImportScanScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.walletSigning: (context) => const RouterMaster(
-            widget: WalletSigningScreen(),
+      Routes.walletMessageSigning: (context) => const RouterMaster(
+            widget: WalletMessageSigningScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.walletMessageVerification: (context) => const RouterMaster(
+            widget: WaleltMessagesVerificationScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
       Routes.addressSelector: (context) => const RouterMaster(

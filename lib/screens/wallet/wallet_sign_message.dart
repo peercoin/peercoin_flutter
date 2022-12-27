@@ -16,14 +16,16 @@ import '../../widgets/buttons.dart';
 import '../../widgets/double_tab_to_clipboard.dart';
 import '../../widgets/service_container.dart';
 
-class WalletSigningScreen extends StatefulWidget {
-  const WalletSigningScreen({Key? key}) : super(key: key);
+class WalletMessageSigningScreen extends StatefulWidget {
+  const WalletMessageSigningScreen({Key? key}) : super(key: key);
 
   @override
-  State<WalletSigningScreen> createState() => _WalletSigningScreenState();
+  State<WalletMessageSigningScreen> createState() =>
+      _WalletMessageSigningScreenState();
 }
 
-class _WalletSigningScreenState extends State<WalletSigningScreen> {
+class _WalletMessageSigningScreenState
+    extends State<WalletMessageSigningScreen> {
   late String _walletName;
   late ActiveWallets _activeWallets;
   bool _initial = true;
@@ -142,7 +144,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
                 'reset performed',
               );
               await Navigator.of(ctx).pushNamedAndRemoveUntil(
-                Routes.walletSigning,
+                Routes.walletMessageSigning,
                 (route) {
                   if (route.settings.name == '/wallet-home') {
                     return true;
