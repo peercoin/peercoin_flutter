@@ -336,5 +336,10 @@
     "send_navigator": "Adress $index av $maximum",
     "send_address_already_exists": "Adressen finns redan",
     "tx_recipients": "Mottagare",
-    "app_settings_delete": "Radera konto"
+    "app_settings_delete": "Radera konto",
+    "tx_retry_broadcast": "Försök att sända igen",
+    "tx_show_hex": "Visa transaktionshex",
+    "tx_retry_snack": "Sändningen har försökts igen. Om det lyckades kommer transaktionen att uppdateras om en stund.",
+    "send_errors_cant_pay_fees": "Kan inte betala avgifter. $feesMissing $letter_code saknas för närvarande. Överväg att ta bort adresser eller minska transaktionsbeloppet.",
+    "wallet_scan_notice_bg_notifications": "Aktivering av bakgrundsaviseringar i appinställningar kan förbättra skanningens tillförlitlighet avsevärt."
 }
