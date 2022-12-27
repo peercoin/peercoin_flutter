@@ -4,7 +4,7 @@ buildscript {
        compileSdkVersion   = 33         
        targetSdkVersion    = 33               
        appCompatVersion    = "1.1.0"       
-   }
+    }
 
     repositories {
         google()

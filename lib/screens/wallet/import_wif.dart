@@ -101,9 +101,8 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
     final scaffoldMessenger = ScaffoldMessenger.of(ctx);
-    final publicAddress =
-        Wallet.fromWIF(privKey, _activeCoin.networkType).address ??
-            ''; //TODO won't return a bech32 addr
+    final publicAddress = Wallet.fromWIF(privKey, _activeCoin.networkType)
+        .address; //TODO won't return a bech32 addr
 
     //check if that address is already in the list
     final walletAddresses =
@@ -114,13 +113,15 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
     if (specificAddressResult.isNotEmpty) {
       //we have that address already
-      scaffoldMessenger.showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('import_wif_error_snack'),
-          textAlign: TextAlign.center,
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('import_wif_error_snack'),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 3),
         ),
-        duration: const Duration(seconds: 3),
-      ));
+      );
     } else {
       await showDialog(
         context: ctx,
@@ -166,6 +167,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('wallet_pop_menu_wif'),
         ),

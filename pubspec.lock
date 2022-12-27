@@ -203,7 +203,7 @@ packages:
       name: coinslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.4"
+    version: "3.1.7"
   collection:
     dependency: "direct main"
     description:

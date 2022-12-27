@@ -48,6 +48,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
@@ -87,7 +88,9 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                             AppLocalizations.instance
                                 .translate('app_settings_auth_header'),
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 28),
+                              color: Colors.white,
+                              fontSize: 28,
+                            ),
                           ),
                           const SizedBox(
                             width: 40,
@@ -116,15 +119,17 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                                 inactiveThumbColor: Colors.grey,
                                 onChanged: (newState) {
                                   if (_biometricsAvailable == false) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(
-                                        AppLocalizations.instance.translate(
-                                            'setup_pin_no_biometrics'),
-                                        textAlign: TextAlign.center,
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          AppLocalizations.instance.translate(
+                                            'setup_pin_no_biometrics',
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        duration: const Duration(seconds: 5),
                                       ),
-                                      duration: const Duration(seconds: 5),
-                                    ));
+                                    );
                                   } else {
                                     setState(() {
                                       _biometricsAllowed = newState;

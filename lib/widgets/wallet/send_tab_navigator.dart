@@ -18,19 +18,21 @@ class SendTabNavigator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         currentIndex - 1 > 0
-            ? Row(children: [
-                IconButton(
-                  onPressed: () => raiseNewindex(1),
-                  icon: const Icon(
-                    Icons.fast_rewind_rounded,
-                    size: 15,
+            ? Row(
+                children: [
+                  IconButton(
+                    onPressed: () => raiseNewindex(1),
+                    icon: const Icon(
+                      Icons.fast_rewind_rounded,
+                      size: 15,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () => raiseNewindex(currentIndex - 1),
-                  icon: const Icon(Icons.arrow_left_rounded),
-                ),
-              ])
+                  IconButton(
+                    onPressed: () => raiseNewindex(currentIndex - 1),
+                    icon: const Icon(Icons.arrow_left_rounded),
+                  ),
+                ],
+              )
             : const SizedBox(
                 width: 96,
               ),

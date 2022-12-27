@@ -90,6 +90,7 @@ class _TransactionConfirmationScreenState
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('send_confirm_transaction'),
         ),
@@ -235,7 +236,8 @@ class _TransactionConfirmationScreenState
                                   AppLocalizations.instance
                                       .translate('send_op_return'),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 SelectableText(buildResult.opReturn)
                               ],
@@ -259,7 +261,10 @@ class _TransactionConfirmationScreenState
                         children: [
                           _firstPress == false
                               ? SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
+                                  width: MediaQuery.of(context).size.width >
+                                          1200
+                                      ? MediaQuery.of(context).size.width / 3
+                                      : MediaQuery.of(context).size.width / 2,
                                   child: const LoadingIndicator(),
                                 )
                               : PeerButton(
@@ -298,7 +303,8 @@ class _TransactionConfirmationScreenState
                                       }
                                       //update balance
                                       await activeWallets.updateWalletBalance(
-                                          arguments.coinIdentifier);
+                                        arguments.coinIdentifier,
+                                      );
                                       //pop message
                                       navigator.pop();
                                       //navigate back to tx list

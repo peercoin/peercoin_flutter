@@ -73,18 +73,20 @@ void main() async {
     android: initializationSettingsAndroid,
     iOS: DarwinInitializationSettings(),
   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: (
-    NotificationResponse notificationResponse,
-  ) async {
-    if (notificationResponse.payload != null) {
-      LoggerWrapper.logInfo(
-        'notification',
-        'payload',
-        notificationResponse.payload!,
-      );
-    }
-  });
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (
+      NotificationResponse notificationResponse,
+    ) async {
+      if (notificationResponse.payload != null) {
+        LoggerWrapper.logInfo(
+          'notification',
+          'payload',
+          notificationResponse.payload!,
+        );
+      }
+    },
+  );
 
   final notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();

@@ -9,6 +9,7 @@ class SecureStorageFailedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Center(
           child: Text(
             AppLocalizations.instance.translate(

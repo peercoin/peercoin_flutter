@@ -158,7 +158,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
           //subscribe to newly created addresses
           _connectionProvider!.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(
-                _wallet.name, _unusedAddress),
+              _wallet.name,
+              _unusedAddress,
+            ),
           );
         }
       }
@@ -171,11 +173,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
         );
         _latestBlock = _connectionProvider!.latestBlock;
 
-        var unconfirmedTx = _walletTransactions.where((element) =>
-            element.confirmations < 6 &&
-                element.confirmations != -1 &&
-                element.timestamp != -1 ||
-            element.timestamp == null);
+        var unconfirmedTx = _walletTransactions.where(
+          (element) =>
+              element.confirmations < 6 &&
+                  element.confirmations != -1 &&
+                  element.timestamp != -1 ||
+              element.timestamp == null,
+        );
         for (var element in unconfirmedTx) {
           LoggerWrapper.logInfo(
             'WalletHome',
@@ -196,8 +200,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   void rebroadCastUnsendTx() {
-    var nonBroadcastedTx = _walletTransactions.where((element) =>
-        element.broadCasted == false && element.confirmations == 0);
+    var nonBroadcastedTx = _walletTransactions.where(
+      (element) => element.broadCasted == false && element.confirmations == 0,
+    );
     for (var element in nonBroadcastedTx) {
       _connectionProvider!.broadcastTransaction(
         element.broadcastHex,
@@ -226,22 +231,26 @@ class _WalletHomeState extends State<WalletHomeScreen>
         await showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: Text(AppLocalizations.instance
-                .translate('wallet_value_alert_title')),
-            content: Text(AppLocalizations.instance
-                .translate('wallet_value_alert_content')),
+            title: Text(
+              AppLocalizations.instance.translate('wallet_value_alert_title'),
+            ),
+            content: Text(
+              AppLocalizations.instance.translate('wallet_value_alert_content'),
+            ),
             actions: <Widget>[
               TextButton.icon(
-                  label: Text(AppLocalizations.instance.translate('not_again')),
-                  icon: const Icon(Icons.cancel),
-                  onPressed: () async {
-                    final navigator = Navigator.of(context);
-                    await prefs.setBool('highValueNotice', true);
-                    navigator.pop();
-                  }),
+                label: Text(AppLocalizations.instance.translate('not_again')),
+                icon: const Icon(Icons.cancel),
+                onPressed: () async {
+                  final navigator = Navigator.of(context);
+                  await prefs.setBool('highValueNotice', true);
+                  navigator.pop();
+                },
+              ),
               TextButton.icon(
                 label: Text(
-                    AppLocalizations.instance.translate('jail_dialog_button')),
+                  AppLocalizations.instance.translate('jail_dialog_button'),
+                ),
                 icon: const Icon(Icons.check),
                 onPressed: () => Navigator.of(context).pop(),
               ),
@@ -283,7 +292,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case 'signing':
         Navigator.of(context).pushNamed(
-          Routes.walletSigning,
+          Routes.walletMessageSigning,
+          arguments: _wallet.name,
+        );
+        break;
+      case 'verification':
+        Navigator.of(context).pushNamed(
+          Routes.walletMessageVerification,
           arguments: _wallet.name,
         );
         break;
@@ -299,8 +314,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
             ),
             actions: <Widget>[
               TextButton.icon(
-                label: Text(AppLocalizations.instance
-                    .translate('server_settings_alert_cancel')),
+                label: Text(
+                  AppLocalizations.instance
+                      .translate('server_settings_alert_cancel'),
+                ),
                 icon: const Icon(Icons.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -403,6 +420,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 ),
               ),
             ),
+            PopupMenuItem(
+              value: 'verification',
+              child: ListTile(
+                leading: Icon(
+                  Icons.fact_check,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance
+                      .translate('wallet_pop_menu_verification'),
+                ),
+              ),
+            ),
           ];
         },
       )
@@ -496,10 +526,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return Scaffold(
       bottomNavigationBar: _calcBottomNavBar(context),
       appBar: AppBar(
+        centerTitle: true,
         elevation: 1,
-        title: Center(
-          child: Text(_wallet.title),
-        ),
+        title: Text(_wallet.title),
         actions: _calcPopupMenuItems(context),
       ),
       body: _initial

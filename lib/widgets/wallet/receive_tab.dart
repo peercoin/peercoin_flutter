@@ -219,10 +219,12 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         autocorrect: false,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                              getValidator(_availableCoin.fractions)),
+                            getValidator(_availableCoin.fractions),
+                          ),
                         ],
                         keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
+                          decimal: true,
+                        ),
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.money,
@@ -255,9 +257,10 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         action: () async {
                           if (labelController.text != '') {
                             context.read<ActiveWallets>().updateLabel(
-                                widget.wallet.name,
-                                widget.unusedAddress,
-                                labelController.text);
+                                  widget.wallet.name,
+                                  widget.unusedAddress,
+                                  labelController.text,
+                                );
                           }
                           await ShareWrapper.share(
                             context: context,
@@ -297,8 +300,9 @@ class _ReceiveTabState extends State<ReceiveTab> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           PeerServiceTitle(
-                              title: AppLocalizations.instance
-                                  .translate('receive_obtain')),
+                            title: AppLocalizations.instance
+                                .translate('receive_obtain'),
+                          ),
                           const SizedBox(height: 20),
                           Text(
                             AppLocalizations.instance

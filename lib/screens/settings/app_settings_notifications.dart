@@ -185,12 +185,13 @@ class _AppSettingsNotificationsScreenState
           ),
         ),
         Text(
-            AppLocalizations.instance
-                .translate('app_settings_notifications_hint_sync_2'),
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).colorScheme.secondary,
-            )),
+          AppLocalizations.instance
+              .translate('app_settings_notifications_hint_sync_2'),
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
         const SizedBox(height: 10),
         const Divider(),
         const SizedBox(height: 10),
@@ -211,6 +212,7 @@ class _AppSettingsNotificationsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('app_settings_notifications'),
         ),

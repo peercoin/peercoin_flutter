@@ -10,8 +10,11 @@ class WalletHomeQr extends StatelessWidget {
   final String _unusedAddress;
   const WalletHomeQr(this._unusedAddress, {Key? key}) : super(key: key);
 
-  static void showQrDialog(BuildContext context, String address,
-      [bool hideShareButton = false]) {
+  static void showQrDialog(
+    BuildContext context,
+    String address, [
+    bool hideShareButton = false,
+  ]) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -164,7 +164,9 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> _addressEditDialog(
-      BuildContext context, WalletAddress address) async {
+    BuildContext context,
+    WalletAddress address,
+  ) async {
     var textFieldController = TextEditingController();
     textFieldController.text = address.addressBookName ?? '';
     return showDialog(
@@ -179,21 +181,27 @@ class _AddressTabState extends State<AddressTab> {
             controller: textFieldController,
             maxLength: 32,
             decoration: InputDecoration(
-                hintText: AppLocalizations.instance
-                    .translate('addressbook_edit_dialog_input')),
+              hintText: AppLocalizations.instance
+                  .translate('addressbook_edit_dialog_input'),
+            ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')),
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
             ),
             TextButton(
               onPressed: () {
-                context.read<ActiveWallets>().updateLabel(widget.walletName,
-                    address.address, textFieldController.text);
+                context.read<ActiveWallets>().updateLabel(
+                      widget.walletName,
+                      address.address,
+                      textFieldController.text,
+                    );
                 Navigator.pop(context);
               },
               child: Text(
@@ -207,7 +215,9 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> _showAddressExportDialog(
-      BuildContext context, WalletAddress address) async {
+    BuildContext context,
+    WalletAddress address,
+  ) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -302,8 +312,11 @@ class _AddressTabState extends State<AddressTab> {
         if (!_listenedAddresses.containsKey(addr.address) &&
             addr.isWatched == true) {
           //subscribe
-          LoggerWrapper.logInfo('AddressTab', '_toggleWatched',
-              'watched and subscribed ${addr.address}');
+          LoggerWrapper.logInfo(
+            'AddressTab',
+            '_toggleWatched',
+            'watched and subscribed ${addr.address}',
+          );
           _connection.subscribeToScriptHashes(
             await _activeWallets.getWalletScriptHashes(
               widget.walletName,
@@ -358,8 +371,10 @@ class _AddressTabState extends State<AddressTab> {
                           .translate('send_enter_address');
                     }
                     var sanitized = value.trim();
-                    if (Address.validateAddress(
-                            sanitized, _availableCoin.networkType) ==
+                    if (validateAddress(
+                          sanitized,
+                          _availableCoin.networkType,
+                        ) ==
                         false) {
                       return AppLocalizations.instance
                           .translate('send_invalid_address');
@@ -387,8 +402,10 @@ class _AddressTabState extends State<AddressTab> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(AppLocalizations.instance
-                  .translate('server_settings_alert_cancel')),
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -495,14 +512,16 @@ class _AddressTabState extends State<AddressTab> {
                               content: Text(addr.address),
                               actions: <Widget>[
                                 TextButton.icon(
-                                    label: Text(
-                                      AppLocalizations.instance.translate(
-                                          'server_settings_alert_cancel'),
+                                  label: Text(
+                                    AppLocalizations.instance.translate(
+                                      'server_settings_alert_cancel',
                                     ),
-                                    icon: const Icon(Icons.cancel),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    }),
+                                  ),
+                                  icon: const Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
                                 TextButton.icon(
                                   label: Text(
                                     AppLocalizations.instance
@@ -785,28 +804,29 @@ class _AddressTabState extends State<AddressTab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ChoiceChip(
-                          backgroundColor: Theme.of(context).backgroundColor,
-                          selectedColor: Theme.of(context).shadowColor,
-                          visualDensity: const VisualDensity(
-                            horizontal: 0.0,
-                            vertical: -4,
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        selectedColor: Theme.of(context).shadowColor,
+                        visualDensity: const VisualDensity(
+                          horizontal: 0.0,
+                          vertical: -4,
+                        ),
+                        label: AutoSizeText(
+                          AppLocalizations.instance
+                              .translate('addressbook_hide_used'),
+                          textAlign: TextAlign.center,
+                          minFontSize: 10,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
-                          label: AutoSizeText(
-                            AppLocalizations.instance
-                                .translate('addressbook_hide_used'),
-                            textAlign: TextAlign.center,
-                            minFontSize: 10,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          selected: _showUsed,
-                          onSelected: (_) {
-                            setState(() {
-                              _showUsed = _;
-                            });
-                            applyFilter();
-                          }),
+                        ),
+                        selected: _showUsed,
+                        onSelected: (_) {
+                          setState(() {
+                            _showUsed = _;
+                          });
+                          applyFilter();
+                        },
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
@@ -903,8 +923,9 @@ class _AddressTabState extends State<AddressTab> {
                                   //to set border radius to button
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context).primaryColor),
+                                    width: 2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                                 elevation: 0,
                               ),

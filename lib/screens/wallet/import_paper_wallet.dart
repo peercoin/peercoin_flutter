@@ -108,7 +108,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePubKey(String pubKey) {
     String newKey;
-    if (Address.validateAddress(pubKey, _activeCoin.networkType)) {
+    if (validateAddress(pubKey, _activeCoin.networkType)) {
       newKey = pubKey;
       moveStep(2);
     } else {
@@ -243,14 +243,16 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       //pop message
                       Navigator.of(context).pop();
                       //pop again to close import screen
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          AppLocalizations.instance
-                              .translate('paperwallet_success'),
-                          textAlign: TextAlign.center,
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            AppLocalizations.instance
+                                .translate('paperwallet_success'),
+                            textAlign: TextAlign.center,
+                          ),
+                          duration: const Duration(seconds: 5),
                         ),
-                        duration: const Duration(seconds: 5),
-                      ));
+                      );
                       Navigator.of(context).pop();
                     } catch (e) {
                       LoggerWrapper.logError(
@@ -307,6 +309,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
         ),
@@ -325,9 +328,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_1'),
-                            style: Theme.of(context).textTheme.headline6),
+                          AppLocalizations.instance
+                              .translate('paperwallet_step_1'),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
                         PeerButton(
                           action: () => handlePress(1),
                           text: AppLocalizations.instance.translate(
@@ -344,9 +348,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_2'),
-                            style: Theme.of(context).textTheme.headline6),
+                          AppLocalizations.instance
+                              .translate('paperwallet_step_2'),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
                         PeerButton(
                           action: () => handlePress(2),
                           text: AppLocalizations.instance
@@ -386,9 +391,10 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_step_4'),
-                            style: Theme.of(context).textTheme.headline6),
+                          AppLocalizations.instance
+                              .translate('paperwallet_step_4'),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
                         PeerButton(
                           small: true,
                           action: () => handlePress(4),

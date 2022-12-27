@@ -70,7 +70,8 @@ void main() async {
         () async {
           await wallet.generateUnusedAddress(walletName);
           assert(
-              wallet.getUnusedAddress == 'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ');
+            wallet.getUnusedAddress == 'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ',
+          );
         },
       );
 
@@ -178,7 +179,8 @@ void main() async {
         () async {
           await wallet.generateUnusedAddress(testnetWalletName);
           assert(
-              wallet.getUnusedAddress == 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw');
+            wallet.getUnusedAddress == 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw',
+          );
         },
       );
 

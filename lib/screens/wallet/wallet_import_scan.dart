@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
@@ -38,11 +39,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            AppLocalizations.instance.translate(
-              'wallet_scan_appBar_title',
-            ),
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.instance.translate(
+            'wallet_scan_appBar_title',
           ),
         ),
       ),
@@ -54,7 +54,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
           Text(
             AppLocalizations.instance.translate('wallet_scan_notice'),
           ),
-          if (_backgroundNotificationsAvailable == false)
+          if (_backgroundNotificationsAvailable == false && !kIsWeb)
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

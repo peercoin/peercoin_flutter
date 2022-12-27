@@ -16,7 +16,9 @@ class Auth {
   static int failedAuthAttempts = 0;
 
   static Future<void> executeCallback(
-      BuildContext context, Function? callback) async {
+    BuildContext context,
+    Function? callback,
+  ) async {
     //reset unsuccesful login and attempt counter
     final encryptedBox = context.read<EncryptedBox>();
     final navigator = Navigator.of(context);
@@ -71,36 +73,41 @@ class Auth {
   }
 
   static Future<void> spawnJail(
-      BuildContext context, bool jailedFromHome) async {
+    BuildContext context,
+    bool jailedFromHome,
+  ) async {
     final navigator = Navigator.of(context);
     await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              AppLocalizations.instance.translate('jail_dialog_title'),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
-                ),
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('jail_dialog_title'),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
               ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
     await navigator.pushReplacementNamed(
       Routes.authJail,
       arguments: jailedFromHome,
     );
   }
 
-  static Future<void> localAuth(BuildContext context,
-      [Function? callback]) async {
+  static Future<void> localAuth(
+    BuildContext context, [
+    Function? callback,
+  ]) async {
     final localAuth = LocalAuthentication();
 
     Future<void> executeCB() async => executeCallback(context, callback);

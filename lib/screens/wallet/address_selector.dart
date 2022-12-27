@@ -116,6 +116,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
             tooltip: 'Back',

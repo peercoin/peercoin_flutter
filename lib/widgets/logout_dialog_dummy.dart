@@ -15,6 +15,4 @@ class LogoutDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container();
   }
-}
-
-/* This dummy is required to prevent build time errors since dart:html is not availble on native devices */
+} /* This dummy is required to prevent build time errors since dart:html is not availble on native devices */

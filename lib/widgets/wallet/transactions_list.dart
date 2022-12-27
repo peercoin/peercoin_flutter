@@ -278,12 +278,13 @@ class _TransactionListState extends State<TransactionList> {
                                 height: 30,
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                      colors: [
-                                        Theme.of(context).bottomAppBarColor,
-                                        Theme.of(context).primaryColor,
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter),
+                                    colors: [
+                                      Theme.of(context).bottomAppBarColor,
+                                      Theme.of(context).primaryColor,
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
                                 ),
                               ),
                               Container(
@@ -299,7 +300,9 @@ class _TransactionListState extends State<TransactionList> {
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
-                                            horizontal: 0.0, vertical: -4),
+                                          horizontal: 0.0,
+                                          vertical: -4,
+                                        ),
                                         label: Text(
                                           AppLocalizations.instance
                                               .translate('transactions_in'),
@@ -318,15 +321,18 @@ class _TransactionListState extends State<TransactionList> {
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
-                                            horizontal: 0.0, vertical: -4),
+                                          horizontal: 0.0,
+                                          vertical: -4,
+                                        ),
                                         label: Text(
-                                            AppLocalizations.instance
-                                                .translate('transactions_all'),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                            )),
+                                          AppLocalizations.instance
+                                              .translate('transactions_all'),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
                                         selected: _filterChoice == 'all',
                                         onSelected: (_) => _handleSelect('all'),
                                       ),
@@ -336,15 +342,18 @@ class _TransactionListState extends State<TransactionList> {
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
-                                            horizontal: 0.0, vertical: -4),
+                                          horizontal: 0.0,
+                                          vertical: -4,
+                                        ),
                                         label: Text(
-                                            AppLocalizations.instance
-                                                .translate('transactions_out'),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                            )),
+                                          AppLocalizations.instance
+                                              .translate('transactions_out'),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
                                         selected: _filterChoice == 'out',
                                         onSelected: (_) => _handleSelect('out'),
                                       ),

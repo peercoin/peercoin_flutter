@@ -61,13 +61,15 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             .firstWhereOrNull((element) => element.address == serverUrl) !=
         null) {
       //show notification
-      scaffoldMessanger.showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('server_add_server_exists'),
-          textAlign: TextAlign.center,
+      scaffoldMessanger.showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('server_add_server_exists'),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 2),
         ),
-        duration: const Duration(seconds: 2),
-      ));
+      );
     } else {
       //continue: try to connect
       LoggerWrapper.logInfo('ServerAdd', 'tryConnect', 'trying to connect');
@@ -144,14 +146,16 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
             Navigator.of(context).pop(true);
           } else {
             //gensis hash doesn't match
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                AppLocalizations.instance
-                    .translate('server_add_server_wrong_genesis'),
-                textAlign: TextAlign.center,
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.instance
+                      .translate('server_add_server_wrong_genesis'),
+                  textAlign: TextAlign.center,
+                ),
+                duration: const Duration(seconds: 2),
               ),
-              duration: const Duration(seconds: 2),
-            ));
+            );
           }
         }
         setState(() {
@@ -168,11 +172,14 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
 
       if (stream == null) return;
 
-      stream.listen((elem) {
-        replyHandler(elem);
-      }, onError: (error) {
-        displayError(error);
-      });
+      stream.listen(
+        (elem) {
+          replyHandler(elem);
+        },
+        onError: (error) {
+          displayError(error);
+        },
+      );
 
       sendMessage('server.features', 'features');
     }
@@ -203,6 +210,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Center(
           child: Text(
             AppLocalizations.instance.translate('server_add_title'),
@@ -230,42 +238,42 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                      textInputAction: TextInputAction.done,
-                      key: _serverKey,
-                      autocorrect: false,
-                      controller: _serverController,
-                      decoration: InputDecoration(
-                        icon: const Icon(Icons.outbond),
-                        labelText: AppLocalizations.instance
-                            .translate('server_add_input_label'),
-                      ),
-                      maxLines: null,
-                      onFieldSubmitted: (_) =>
-                          _formKey.currentState!.validate(),
-                      validator: (value) {
-                        var portRegex = RegExp(':[0-9]');
+                    textInputAction: TextInputAction.done,
+                    key: _serverKey,
+                    autocorrect: false,
+                    controller: _serverController,
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.outbond),
+                      labelText: AppLocalizations.instance
+                          .translate('server_add_input_label'),
+                    ),
+                    maxLines: null,
+                    onFieldSubmitted: (_) => _formKey.currentState!.validate(),
+                    validator: (value) {
+                      var portRegex = RegExp(':[0-9]');
 
-                        if (value!.isEmpty) {
-                          return AppLocalizations.instance
-                              .translate('server_add_input_empty');
-                        } else if (kIsWeb && !value.contains('wss://')) {
-                          return AppLocalizations.instance
-                              .translate('server_add_no_wss');
-                        } else if (!kIsWeb &&
-                            !value.contains('wss://') &&
-                            !value.contains('ssl://')) {
-                          return AppLocalizations.instance
-                              .translate('server_add_no_wss_or_ssl');
-                        } else if (!portRegex.hasMatch(value)) {
-                          return AppLocalizations.instance
-                              .translate('server_add_no_port');
-                        }
-                        //valid string, try further
+                      if (value!.isEmpty) {
+                        return AppLocalizations.instance
+                            .translate('server_add_input_empty');
+                      } else if (kIsWeb && !value.contains('wss://')) {
+                        return AppLocalizations.instance
+                            .translate('server_add_no_wss');
+                      } else if (!kIsWeb &&
+                          !value.contains('wss://') &&
+                          !value.contains('ssl://')) {
+                        return AppLocalizations.instance
+                            .translate('server_add_no_wss_or_ssl');
+                      } else if (!portRegex.hasMatch(value)) {
+                        return AppLocalizations.instance
+                            .translate('server_add_no_port');
+                      }
+                      //valid string, try further
 
-                        tryConnect(value);
+                      tryConnect(value);
 
-                        return null;
-                      }),
+                      return null;
+                    },
+                  ),
                   if (_loading)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 30),

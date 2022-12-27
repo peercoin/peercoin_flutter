@@ -39,13 +39,15 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       await Clipboard.setData(
         ClipboardData(text: seed),
       );
-      scaffoldMessenger.showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('snack_copied'),
-          textAlign: TextAlign.center,
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('snack_copied'),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 2),
         ),
-        duration: const Duration(seconds: 2),
-      ));
+      );
     } else {
       await ShareWrapper.share(
         context: context,
@@ -166,6 +168,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
@@ -252,7 +255,8 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                               child: Text(
                                                 AppLocalizations.instance
                                                     .translate(
-                                                        'setup_save_text1'),
+                                                  'setup_save_text1',
+                                                ),
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -269,15 +273,17 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                       GestureDetector(
                                         onDoubleTap: () {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                              AppLocalizations.instance
-                                                  .translate('snack_copied'),
-                                              textAlign: TextAlign.center,
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                AppLocalizations.instance
+                                                    .translate('snack_copied'),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 1),
                                             ),
-                                            duration:
-                                                const Duration(seconds: 1),
-                                          ));
+                                          );
                                           Clipboard.setData(
                                             ClipboardData(text: _seed),
                                           );
@@ -288,7 +294,11 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                         child: Container(
                                           height: 250,
                                           padding: const EdgeInsets.fromLTRB(
-                                              16, 32, 16, 24),
+                                            16,
+                                            32,
+                                            16,
+                                            24,
+                                          ),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 const BorderRadius.all(

@@ -82,6 +82,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
         context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Center(
           child: Text(
             AppLocalizations.instance.translate('server_settings_title'),
@@ -130,21 +131,29 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           return await showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                              title: Text(AppLocalizations.instance.translate(
-                                  'server_settings_alert_generated_title')),
+                              title: Text(
+                                AppLocalizations.instance.translate(
+                                  'server_settings_alert_generated_title',
+                                ),
+                              ),
                               content: Text(_servers[index].address),
                               actions: <Widget>[
                                 TextButton.icon(
-                                    label: Text(AppLocalizations.instance
-                                        .translate(
-                                            'server_settings_alert_cancel')),
-                                    icon: const Icon(Icons.cancel),
-                                    onPressed: () {
-                                      Navigator.of(context).pop(false);
-                                    }),
+                                  label: Text(
+                                    AppLocalizations.instance.translate(
+                                      'server_settings_alert_cancel',
+                                    ),
+                                  ),
+                                  icon: const Icon(Icons.cancel),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                ),
                                 TextButton.icon(
-                                  label: Text(AppLocalizations.instance
-                                      .translate('jail_dialog_button')),
+                                  label: Text(
+                                    AppLocalizations.instance
+                                        .translate('jail_dialog_button'),
+                                  ),
                                   icon: const Icon(Icons.check),
                                   onPressed: () {
                                     Navigator.of(context).pop(true);
@@ -157,10 +166,16 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           return await showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                              title: Text(AppLocalizations.instance.translate(
-                                  'server_settings_alert_hardcoded_title')),
-                              content: Text(AppLocalizations.instance.translate(
-                                  'server_settings_alert_hardcoded_content')),
+                              title: Text(
+                                AppLocalizations.instance.translate(
+                                  'server_settings_alert_hardcoded_title',
+                                ),
+                              ),
+                              content: Text(
+                                AppLocalizations.instance.translate(
+                                  'server_settings_alert_hardcoded_content',
+                                ),
+                              ),
                               actions: <Widget>[
                                 TextButton.icon(
                                   label: Text(
@@ -187,7 +202,9 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 10),
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 4),
+                          horizontal: 15,
+                          vertical: 4,
+                        ),
                         color: Theme.of(context).errorColor,
                         child: const Icon(
                           Icons.delete,
@@ -217,15 +234,17 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                                     !_servers[index].connectable;
                               });
                               //check if still one connectable server is left
-                              if (_servers.firstWhereOrNull((element) =>
-                                      element.connectable == true) ==
+                              if (_servers.firstWhereOrNull(
+                                    (element) => element.connectable == true,
+                                  ) ==
                                   null) {
                                 //show snack bar
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
                                       AppLocalizations.instance.translate(
-                                          'server_settings_error_no_server_left'),
+                                        'server_settings_error_no_server_left',
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                     duration: const Duration(seconds: 2),
@@ -261,7 +280,9 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             ),
                           ),
                           tileColor: calculateTileColor(
-                              index, _servers[index].connectable),
+                            index,
+                            _servers[index].connectable,
+                          ),
                           title: Text(_servers[index].address),
                           subtitle: _servers[index].address == connectedServer
                               ? Center(

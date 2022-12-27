@@ -29,6 +29,7 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(ModalRoute.of(context)!.settings.arguments as String),
       ),
       body: Column(

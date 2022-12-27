@@ -56,16 +56,18 @@ class MyTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-            foregroundColor: LightColors.green,
-            backgroundColor: LightColors.green,
-            textStyle: TextStyle(
-              color: LightColors.white,
-            )),
+          foregroundColor: LightColors.green,
+          backgroundColor: LightColors.green,
+          textStyle: TextStyle(
+            color: LightColors.white,
+          ),
+        ),
       ),
       textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-        foregroundColor: LightColors.green,
-      )),
+        style: TextButton.styleFrom(
+          foregroundColor: LightColors.green,
+        ),
+      ),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
       colorScheme: ColorScheme(
@@ -114,7 +116,10 @@ class MyTheme {
         bodyText1: TextStyle(color: DarkColors.white),
         bodyText2: TextStyle(color: DarkColors.white),
         button: TextStyle(
-            letterSpacing: 1.4, fontSize: 16, color: DarkColors.white),
+          letterSpacing: 1.4,
+          fontSize: 16,
+          color: DarkColors.white,
+        ),
       ),
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
@@ -138,9 +143,10 @@ class MyTheme {
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-        foregroundColor: DarkColors.black,
-      )),
+        style: TextButton.styleFrom(
+          foregroundColor: DarkColors.black,
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(color: DarkColors.white),
         focusedBorder: UnderlineInputBorder(
