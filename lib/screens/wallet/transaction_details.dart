@@ -28,6 +28,7 @@ class TransactionDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('transaction_details'),
         ),

@@ -77,6 +77,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),

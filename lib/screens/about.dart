@@ -60,6 +60,7 @@ class _AboutScreenState extends State<AboutScreen> {
     if (_initial) return const SizedBox();
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('about'),
         ),

@@ -162,6 +162,7 @@ class _WalletSigningScreenState extends State<WalletSigningScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('wallet_pop_menu_signing'),
         ),

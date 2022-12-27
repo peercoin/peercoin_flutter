@@ -1,5 +1,5 @@
-### **1.1.2** (2022-12-xx)
-*   
+### **1.1.2** (2022-12-27)
+* Allow verification of signed messages
 
 ### **1.1.1** (2022-12-06)
 * Address book: allow hiding of sending addresses  

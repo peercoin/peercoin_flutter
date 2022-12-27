@@ -82,6 +82,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
         context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Center(
           child: Text(
             AppLocalizations.instance.translate('server_settings_title'),

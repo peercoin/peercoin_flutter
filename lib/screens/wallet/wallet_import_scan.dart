@@ -39,11 +39,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            AppLocalizations.instance.translate(
-              'wallet_scan_appBar_title',
-            ),
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.instance.translate(
+            'wallet_scan_appBar_title',
           ),
         ),
       ),

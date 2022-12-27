@@ -52,6 +52,7 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('app_settings_language'),
         ),

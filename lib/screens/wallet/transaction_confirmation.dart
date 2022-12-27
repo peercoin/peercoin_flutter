@@ -90,6 +90,7 @@ class _TransactionConfirmationScreenState
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('send_confirm_transaction'),
         ),

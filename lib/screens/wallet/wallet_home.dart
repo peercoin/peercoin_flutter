@@ -507,10 +507,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return Scaffold(
       bottomNavigationBar: _calcBottomNavBar(context),
       appBar: AppBar(
+        centerTitle: true,
         elevation: 1,
-        title: Center(
-          child: Text(_wallet.title),
-        ),
+        title: Text(_wallet.title),
         actions: _calcPopupMenuItems(context),
       ),
       body: _initial

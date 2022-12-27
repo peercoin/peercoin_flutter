@@ -309,6 +309,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('wallet_pop_menu_paperwallet'),
         ),

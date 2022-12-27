@@ -168,6 +168,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),

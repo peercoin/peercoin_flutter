@@ -167,6 +167,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('wallet_pop_menu_wif'),
         ),

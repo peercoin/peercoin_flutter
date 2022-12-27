@@ -41,6 +41,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),

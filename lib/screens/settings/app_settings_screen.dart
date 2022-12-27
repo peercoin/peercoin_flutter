@@ -245,6 +245,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('app_settings_appbar'),
         ),

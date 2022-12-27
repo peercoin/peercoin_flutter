@@ -212,6 +212,7 @@ class _AppSettingsNotificationsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate('app_settings_notifications'),
         ),

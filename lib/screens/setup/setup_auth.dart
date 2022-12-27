@@ -48,6 +48,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),

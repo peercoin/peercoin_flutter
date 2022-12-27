@@ -63,6 +63,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 0,
         automaticallyImplyLeading: false,
       ),
