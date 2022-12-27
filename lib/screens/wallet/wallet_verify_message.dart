@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinslib/coinslib.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -275,6 +276,10 @@ class _WaleltMessagesVerificationScreenState
                         const SizedBox(
                           height: 10,
                         ),
+                        if (kIsWeb)
+                          const SizedBox(
+                            height: 20,
+                          ),
                         if (_verificationPerformed)
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
