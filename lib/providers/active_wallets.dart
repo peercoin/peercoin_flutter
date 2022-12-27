@@ -910,7 +910,7 @@ class ActiveWallets with ChangeNotifier {
 
   String getScriptHash(String identifier, String address) {
     var network = AvailableCoins.getSpecificCoin(identifier).networkType;
-    var script = Address.addressToOutputScript(address, network);
+    var script = addressToOutputScript(address, network);
     var hash = sha256.convert(script).toString();
     return (reverseString(hash));
   }

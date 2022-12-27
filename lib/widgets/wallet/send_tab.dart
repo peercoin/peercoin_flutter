@@ -188,7 +188,7 @@ class _SendTabState extends State<SendTab> {
                                 .translate('send_address_already_exists');
                           }
                           var sanitized = value.trim();
-                          if (Address.validateAddress(
+                          if (validateAddress(
                                 sanitized,
                                 _availableCoin.networkType,
                               ) ==

@@ -371,7 +371,7 @@ class _AddressTabState extends State<AddressTab> {
                           .translate('send_enter_address');
                     }
                     var sanitized = value.trim();
-                    if (Address.validateAddress(
+                    if (validateAddress(
                           sanitized,
                           _availableCoin.networkType,
                         ) ==

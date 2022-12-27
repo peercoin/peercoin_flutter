@@ -108,7 +108,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePubKey(String pubKey) {
     String newKey;
-    if (Address.validateAddress(pubKey, _activeCoin.networkType)) {
+    if (validateAddress(pubKey, _activeCoin.networkType)) {
       newKey = pubKey;
       moveStep(2);
     } else {
