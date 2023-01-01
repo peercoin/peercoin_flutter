@@ -156,7 +156,6 @@
     "app_settings_notifications_hint_sync_1": "设置app在后台检查新交易的时间间隔。\n活动时间间隔:$minutes 分钟。",
     "buy_peercoin": "购买Peercoin",
     "currency_GBP": "英镑",
-    "currency_HRK": "克罗地亚库纳",
     "currency_INR": "印度卢比",
     "not_again": "不再显示",
     "notification_title": "$walletTitle -收到新交易",
