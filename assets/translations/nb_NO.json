@@ -257,7 +257,7 @@
     "tx_value": "Verdi",
     "tx_view_in_explorer": "Se i utforsker",
     "wallet_pop_menu_servers": "Juster Servere",
-    "wallet_receive_label_hint": "Ved å trykke på Del-knappen lagres etiketten til adressen",
+    "wallet_receive_label_hint": "Ved å trykke på Del-knappen lagres etiketten til adressen.",
     "wallet_rescan_content": "Skanner lommeboken på nytt. Hvis du har problemer med transaksjoner eller beløp, kan dette være nyttig.\nDette kan ta litt tid.",
     "wallet_send": "Send",
     "store_description": "Send og motta peercoin, pioneren innen Proof-of-Stake, på telefonen din.\n\nHold gjenopprettingsfrasen din beskyttet.\nDenne appen kommer med absolutt ingen garanti.\nBruk på egen risiko.\n\nFunksjoner:\n- Basert på Electrum sin protokoll.\n- Send og motta peercoin.\n- Klar til å utføre transaksjoner etter installasjon (ingen venting).\n- Peercoin-lommebøker for mainnett og testnett .\n- Organisering ved hjelp av adressebok.\n- Importer papirlommebøker.\n- Importer & eksporter private nøkler (WIF).\n- Serveradministrasjon.\n- Flerspråklig støtte.\n- Bakgrunnsvarsler.\n\nKjente begrensninger kan bli funnet i GitHub-depotet.",
@@ -340,5 +340,16 @@
     "tx_retry_broadcast": "Prøv å kringkaste på nytt",
     "tx_retry_snack": "Kringkastingen er forsøkt på nytt. Hvis den var vellykket, vil transaksjonen oppdateres om litt.",
     "send_errors_cant_pay_fees": "Kan ikke betale for gebyrer. $feesMissing $letter_code mangler for øyeblikket. Vurder å fjerne adresser eller redusere transaksjonsbeløpet.",
-    "wallet_scan_notice_bg_notifications": "Aktivering av bakgrunnsvarsler i appinnstillinger kan forbedre skanningens pålitelighet betydelig."
+    "wallet_scan_notice_bg_notifications": "Aktivering av bakgrunnsvarsler i appinnstillinger kan forbedre skanningens pålitelighet betydelig.",
+    "verify_enter_message": "Vennligst skriv inn en melding",
+    "verify_step_1": "Skriv Inn Adresse",
+    "verify_input_label_message": "Melding å verifisere",
+    "verify_input_label_address": "Adresse å verifisere",
+    "verify_enter_signature": "Vennligst skriv inn en signatur",
+    "wallet_pop_menu_verification": "Verifiser Meldinger",
+    "verify_step_3": "Skriv Inn Signatur",
+    "verify_step_3_button": "Verifiser",
+    "verify_input_label_signature": "Signatur å verifisere",
+    "verify_success": "Melding verifisert.",
+    "verify_fail": "Meldingen kunne ikke verifiseres."
 }

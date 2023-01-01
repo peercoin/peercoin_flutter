@@ -225,7 +225,7 @@
     "wallet_pop_menu_rescan": "Genscan",
     "wallet_pop_menu_servers": "Juster Servere",
     "wallet_receive": "Modtage",
-    "wallet_receive_label_hint": "Et tryk på Del-knappen gemmer etiketten til adressen",
+    "wallet_receive_label_hint": "Et tryk på Del-knappen gemmer etiketten til adressen.",
     "wallet_rescan_title": "Genscan tegnebogen",
     "wallet_send_label_hint_scan": "Hvis du scanner din QR-kode, sparer du noget tid",
     "wallet_scan_appBar_title": "Scanner din importerede gendannelsessætning",
@@ -340,5 +340,16 @@
     "tx_show_hex": "Vis transaktionshex",
     "tx_retry_snack": "Udsendelsen er blevet forsøgt igen. Hvis det lykkedes, opdateres transaktionen om lidt.",
     "wallet_scan_notice_bg_notifications": "Aktivering af baggrundsmeddelelser i appindstillinger kan forbedre scanningens pålidelighed betydeligt.",
-    "send_errors_cant_pay_fees": "Kan ikke betale for gebyrer. $feesMissing $letter_code mangler i øjeblikket. Overvej at fjerne adresser eller reducere transaktionsbeløbet."
+    "send_errors_cant_pay_fees": "Kan ikke betale for gebyrer. $feesMissing $letter_code mangler i øjeblikket. Overvej at fjerne adresser eller reducere transaktionsbeløbet.",
+    "verify_enter_message": "Indtast venligst en besked",
+    "verify_enter_signature": "Indtast venligst en signatur",
+    "verify_step_1": "Indtast Adresse",
+    "verify_input_label_message": "Besked for at verificere",
+    "wallet_pop_menu_verification": "Bekræft Beskeder",
+    "verify_step_3": "Indtast Signatur",
+    "verify_step_3_button": "Verificere",
+    "verify_input_label_address": "Adresse for at verificere",
+    "verify_input_label_signature": "Signatur for at verificere",
+    "verify_success": "Besked verificeret.",
+    "verify_fail": "Besked kunne ikke verificeres."
 }
