@@ -36,7 +36,6 @@ class PriceTicker {
     'BRL': 'R\$',
     'EUR': '€',
     'GBP': '£',
-    'HRK': 'kn',
     'IDR': 'Rp',
     'INR': '₹',
     'IRR': '﷼',

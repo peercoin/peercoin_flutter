@@ -207,7 +207,6 @@
     "setup_pin_no_biometrics": "Je toestel ondersteunt geen biometrische autentificatie.",
     "setup_import_title": "Seed importeren",
     "setup_import_note": "Voer de seed phrase in om te importeren. Let op dit is dus niet een private key.",
-    "currency_HRK": "Kroatische_kuna",
     "setup_finish": "Setup Afronden",
     "setup_price_feed_allow": "Prijs feed API toestaan"
 }
