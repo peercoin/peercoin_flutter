@@ -137,7 +137,7 @@ class _WaleltMessagesVerificationScreenState
                                 Text(
                                   AppLocalizations.instance
                                       .translate('verify_step_1'),
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ],
                             ),
@@ -192,7 +192,7 @@ class _WaleltMessagesVerificationScreenState
                             Text(
                               AppLocalizations.instance
                                   .translate('sign_step_2'),
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ],
                         ),
@@ -237,7 +237,7 @@ class _WaleltMessagesVerificationScreenState
                             Text(
                               AppLocalizations.instance
                                   .translate('verify_step_3'),
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ],
                         ),
@@ -292,7 +292,7 @@ class _WaleltMessagesVerificationScreenState
                               style: TextStyle(
                                 color: _verificationResult == true
                                     ? Theme.of(context).primaryColor
-                                    : Theme.of(context).errorColor,
+                                    : Theme.of(context).colorScheme.error,
                               ),
                             ),
                           ),

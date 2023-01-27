@@ -121,6 +121,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           .init(_wallet.name, requestedFromWalletHome: true);
 
       if (_appSettings.authenticationOptions!['walletHome']!) {
+        // ignore: use_build_context_synchronously
         await Auth.requireAuth(
           context: context,
           biometricsAllowed: _appSettings.biometricsAllowed,
@@ -228,6 +229,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               ) >=
               1000) {
         //Coins worth 1000 USD or more
+        // ignore: use_build_context_synchronously
         await showDialog(
           context: context,
           builder: (_) => AlertDialog(

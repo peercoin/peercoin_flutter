@@ -35,7 +35,7 @@ class ChangeLogScreen extends StatelessWidget {
                       child: Text(
                         AppLocalizations.instance
                             .translate('changelog_headline'),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     const Divider(),

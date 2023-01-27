@@ -123,6 +123,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         ),
       );
     } else {
+      // ignore: use_build_context_synchronously
       await showDialog(
         context: ctx,
         builder: (BuildContext context) {

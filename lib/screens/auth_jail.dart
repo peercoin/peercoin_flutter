@@ -47,6 +47,7 @@ class _AuthJailState extends State<AuthJailScreen> {
   void onTimerEnd() async {
     final appSettings = context.read<AppSettings>();
     await appSettings.init();
+    // ignore: use_build_context_synchronously
     await Auth.requireAuth(
       context: context,
       biometricsAllowed: appSettings.biometricsAllowed,
