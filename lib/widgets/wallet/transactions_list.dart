@@ -131,7 +131,7 @@ class _TransactionListState extends State<TransactionList> {
                       style: TextStyle(
                         fontSize: 16,
                         fontStyle: FontStyle.italic,
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                       ),
                     ),
                   ),
@@ -241,7 +241,9 @@ class _TransactionListState extends State<TransactionList> {
                                                 : FontWeight.w300,
                                         color:
                                             filteredTx[i - 1].direction == 'out'
-                                                ? Theme.of(context).errorColor
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .error
                                                 : Theme.of(context)
                                                     .colorScheme
                                                     .primaryContainer,
@@ -252,8 +254,9 @@ class _TransactionListState extends State<TransactionList> {
                                             '-${filteredTx[i - 1].fee / _decimalProduct}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w300,
-                                              color:
-                                                  Theme.of(context).errorColor,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
                                               fontSize: 12,
                                             ),
                                           )
@@ -279,7 +282,7 @@ class _TransactionListState extends State<TransactionList> {
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
-                                      Theme.of(context).bottomAppBarColor,
+                                      BottomAppBarTheme.of(context).color!,
                                       Theme.of(context).primaryColor,
                                     ],
                                     begin: Alignment.topCenter,
@@ -295,8 +298,9 @@ class _TransactionListState extends State<TransactionList> {
                                     spacing: 8.0,
                                     children: <Widget>[
                                       ChoiceChip(
-                                        backgroundColor:
-                                            Theme.of(context).backgroundColor,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .background,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
@@ -316,8 +320,9 @@ class _TransactionListState extends State<TransactionList> {
                                         onSelected: (_) => _handleSelect('in'),
                                       ),
                                       ChoiceChip(
-                                        backgroundColor:
-                                            Theme.of(context).backgroundColor,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .background,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
@@ -337,8 +342,9 @@ class _TransactionListState extends State<TransactionList> {
                                         onSelected: (_) => _handleSelect('all'),
                                       ),
                                       ChoiceChip(
-                                        backgroundColor:
-                                            Theme.of(context).backgroundColor,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .background,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(

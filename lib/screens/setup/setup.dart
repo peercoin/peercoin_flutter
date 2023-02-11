@@ -135,7 +135,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   },
                   icon: Icon(
                     Icons.language_rounded,
-                    color: Theme.of(context).backgroundColor,
+                    color: Theme.of(context).colorScheme.background,
                     size: 32,
                   ),
                 ),

@@ -249,7 +249,7 @@ class _TransactionConfirmationScreenState
                               AppLocalizations.instance
                                   .translate('send_fees_deducted'),
                               style: TextStyle(
-                                color: Theme.of(context).errorColor,
+                                color: Theme.of(context).colorScheme.error,
                               ),
                             )
                           : const SizedBox(),

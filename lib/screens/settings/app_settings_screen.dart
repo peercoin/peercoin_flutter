@@ -131,6 +131,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   void revealSeedPhrase(bool biometricsAllowed) async {
     final seed = await context.read<ActiveWallets>().seedPhrase;
+    // ignore: use_build_context_synchronously
     await Auth.requireAuth(
       context: context,
       biometricsAllowed: biometricsAllowed,
@@ -274,7 +275,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   title: Text(
                     AppLocalizations.instance
                         .translate('app_settings_language'),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   childrenPadding: const EdgeInsets.all(10),
                   children: AppLocalizations.availableLocales.keys.map((lang) {
@@ -297,7 +298,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     title: Text(
                       AppLocalizations.instance
                           .translate('app_settings_default_wallet'),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     childrenPadding: const EdgeInsets.all(10),
                     children: generateDefaultWallets(),
@@ -306,7 +307,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   title: Text(
                     AppLocalizations.instance
                         .translate('app_settings_auth_header'),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   childrenPadding: const EdgeInsets.all(10),
                   children: [
@@ -330,7 +331,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance.translate('app_settings_seed'),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   childrenPadding: const EdgeInsets.all(10),
                   children: [
@@ -368,7 +369,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance.translate('app_settings_theme'),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   childrenPadding: const EdgeInsets.all(10),
                   children: _availableThemes.keys.map((theme) {
@@ -393,7 +394,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   title: Text(
                     AppLocalizations.instance
                         .translate('app_settings_price_feed'),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   childrenPadding: const EdgeInsets.all(10),
                   children: [SettingsPriceTicker(_settings, saveSnack)],
@@ -403,7 +404,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     title: Text(
                       AppLocalizations.instance
                           .translate('app_settings_notifications'),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     childrenPadding: const EdgeInsets.all(10),
                     children: [
@@ -421,7 +422,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   ExpansionTile(
                     title: Text(
                       AppLocalizations.instance.translate('app_settings_logs'),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     childrenPadding: const EdgeInsets.all(10),
                     children: [
@@ -444,7 +445,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       title: Text(
                         AppLocalizations.instance
                             .translate('app_settings_delete'),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       childrenPadding: const EdgeInsets.all(10),
                       children: [

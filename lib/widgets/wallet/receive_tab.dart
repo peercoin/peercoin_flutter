@@ -150,7 +150,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).bottomAppBarColor,
+                    BottomAppBarTheme.of(context).color!,
                     Theme.of(context).primaryColor,
                   ],
                   begin: Alignment.topCenter,
