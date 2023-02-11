@@ -205,7 +205,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                           horizontal: 15,
                           vertical: 4,
                         ),
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         child: const Icon(
                           Icons.delete,
                           color: Colors.white,

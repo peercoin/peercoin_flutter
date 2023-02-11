@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -117,6 +118,7 @@ class _WalletListScreenState extends State<WalletListScreen>
           const Duration(minutes: 10),
           (timer) async {
             if (await checkSessionExpired()) {
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
               LogoutDialog.reloadWindow();
             }
@@ -132,6 +134,7 @@ class _WalletListScreenState extends State<WalletListScreen>
       }
       if (widget.fromColdStart == true &&
           _appSettings.authenticationOptions!['walletList']!) {
+        // ignore: use_build_context_synchronously
         await Auth.requireAuth(
           context: context,
           biometricsAllowed: _appSettings.biometricsAllowed,
@@ -275,7 +278,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(50.0)),
                             border: Border.all(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               width: 2,
                             ),
                           ),
@@ -305,7 +308,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                       style: TextStyle(
                         letterSpacing: 1.4,
                         fontSize: 24,
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                       ),
                     ),
                   ),
@@ -324,7 +327,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontStyle: FontStyle.italic,
-                                  color: Theme.of(context).backgroundColor,
+                                  color:
+                                      Theme.of(context).colorScheme.background,
                                 ),
                               ),
                               if (kIsWeb)
@@ -363,11 +367,13 @@ class _WalletListScreenState extends State<WalletListScreen>
                                     vertical: 8,
                                     horizontal: 16,
                                   ),
-                                  color: Theme.of(context).backgroundColor,
+                                  color:
+                                      Theme.of(context).colorScheme.background,
                                   child: Column(
                                     children: [
                                       InkWell(
                                         onTap: () async {
+                                          context.loaderOverlay.show();
                                           await Navigator.of(context).pushNamed(
                                             Routes.walletHome,
                                             arguments: {

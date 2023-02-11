@@ -180,6 +180,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       var buildResult = await buildImportTx();
       var txFee = buildResult.fee;
 
+      // ignore: use_build_context_synchronously
       await showDialog(
         context: context,
         builder: (_) {
@@ -330,7 +331,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         Text(
                           AppLocalizations.instance
                               .translate('paperwallet_step_1'),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         PeerButton(
                           action: () => handlePress(1),
@@ -350,7 +351,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         Text(
                           AppLocalizations.instance
                               .translate('paperwallet_step_2'),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         PeerButton(
                           action: () => handlePress(2),
@@ -369,7 +370,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         Text(
                           AppLocalizations.instance
                               .translate('paperwallet_step_3'),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         PeerButton(
                           action: () => handlePress(3),
@@ -393,7 +394,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                         Text(
                           AppLocalizations.instance
                               .translate('paperwallet_step_4'),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         PeerButton(
                           small: true,

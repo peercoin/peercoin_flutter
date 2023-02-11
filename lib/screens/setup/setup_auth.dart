@@ -115,7 +115,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                                   ),
                                 ),
                                 value: _biometricsAllowed,
-                                activeColor: Theme.of(context).backgroundColor,
+                                activeColor: Theme.of(context).colorScheme.background,
                                 inactiveThumbColor: Colors.grey,
                                 onChanged: (newState) {
                                   if (_biometricsAvailable == false) {

@@ -95,7 +95,7 @@ class _AppSettingsNotificationsScreenState
         Text(
           AppLocalizations.instance
               .translate('app_settings_notifications_not_enabled'),
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 10),
         const Divider(),
@@ -128,7 +128,7 @@ class _AppSettingsNotificationsScreenState
         Text(
           AppLocalizations.instance
               .translate('app_settings_notifications_heading_manage_wallets'),
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 10),
         Column(
@@ -157,7 +157,7 @@ class _AppSettingsNotificationsScreenState
         Text(
           AppLocalizations.instance
               .translate('app_settings_notifications_heading_interval'),
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 10),
         Text(

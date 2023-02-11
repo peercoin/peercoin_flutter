@@ -186,7 +186,7 @@ class _WalletMessageSigningScreenState
                               Text(
                                 AppLocalizations.instance
                                     .translate('sign_step_1'),
-                                style: Theme.of(context).textTheme.headline6,
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ],
                           ),
@@ -224,7 +224,7 @@ class _WalletMessageSigningScreenState
                         children: [
                           Text(
                             AppLocalizations.instance.translate('sign_step_2'),
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
                       ),
@@ -267,7 +267,7 @@ class _WalletMessageSigningScreenState
                         children: [
                           Text(
                             AppLocalizations.instance.translate('sign_step_3'),
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
                       ),

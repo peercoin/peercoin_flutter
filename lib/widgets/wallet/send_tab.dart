@@ -94,7 +94,7 @@ class _SendTabState extends State<SendTab> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).bottomAppBarColor,
+                    BottomAppBarTheme.of(context).color!,
                     Theme.of(context).primaryColor,
                   ],
                   begin: Alignment.topCenter,
@@ -285,7 +285,7 @@ class _SendTabState extends State<SendTab> {
                                 utf8.encode(_opReturnController.text).length;
                             return Text(
                               '$utf8Length/$maxLength',
-                              style: Theme.of(context).textTheme.caption,
+                              style: Theme.of(context).textTheme.bodySmall,
                             );
                           },
                           inputFormatters: [

@@ -62,7 +62,7 @@ class PeerContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: isTransparent
             ? Colors.transparent
-            : Theme.of(context).backgroundColor,
+            : Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,

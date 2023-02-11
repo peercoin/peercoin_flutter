@@ -239,7 +239,7 @@ class _AddressTabState extends State<AddressTab> {
                   fontSize: 16,
                   letterSpacing: 1.2,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).errorColor,
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
             ],
@@ -468,7 +468,7 @@ class _AddressTabState extends State<AddressTab> {
                       IconSlideAction(
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_share'),
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         iconWidget: Icon(
                           Icons.share,
                           color: Theme.of(context).colorScheme.secondary,
@@ -484,7 +484,7 @@ class _AddressTabState extends State<AddressTab> {
                         color: Theme.of(context).colorScheme.secondary,
                         iconWidget: Icon(
                           Icons.send,
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                         onTap: () => widget.changeIndex(
                           Tabs.send,
@@ -495,7 +495,7 @@ class _AddressTabState extends State<AddressTab> {
                       IconSlideAction(
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_delete'),
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         iconWidget: const Icon(
                           Icons.delete,
                           color: Colors.white,
@@ -612,7 +612,7 @@ class _AddressTabState extends State<AddressTab> {
                       IconSlideAction(
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_share'),
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         iconWidget: Icon(
                           Icons.share,
                           color: Theme.of(context).colorScheme.secondary,
@@ -633,17 +633,17 @@ class _AddressTabState extends State<AddressTab> {
                           _isWatchedMap[addr.address] == true
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                         onTap: () => _toggleWatched(addr),
                       ),
                       IconSlideAction(
                         caption: AppLocalizations.instance
                             .translate('addressbook_swipe_export'),
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         iconWidget: Icon(
                           Icons.vpn_key,
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                         onTap: () => Auth.requireAuth(
                           context: context,
@@ -717,7 +717,7 @@ class _AddressTabState extends State<AddressTab> {
                   Column(
                     children: [
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).backgroundColor,
+                        backgroundColor: Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -744,7 +744,7 @@ class _AddressTabState extends State<AddressTab> {
                           height: 10,
                         ),
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).backgroundColor,
+                        backgroundColor: Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -769,7 +769,7 @@ class _AddressTabState extends State<AddressTab> {
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
-                          backgroundColor: Theme.of(context).backgroundColor,
+                          backgroundColor: Theme.of(context).colorScheme.background,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
                             horizontal: 0.0,
@@ -804,7 +804,7 @@ class _AddressTabState extends State<AddressTab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).backgroundColor,
+                        backgroundColor: Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -830,7 +830,7 @@ class _AddressTabState extends State<AddressTab> {
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
-                          backgroundColor: Theme.of(context).backgroundColor,
+                          backgroundColor: Theme.of(context).colorScheme.background,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
                             horizontal: 0.0,
@@ -873,7 +873,7 @@ class _AddressTabState extends State<AddressTab> {
                 automaticallyImplyLeading: false,
                 floating: true,
                 backgroundColor: _search
-                    ? Theme.of(context).backgroundColor
+                    ? Theme.of(context).colorScheme.background
                     : Theme.of(context).primaryColor,
                 title: Container(
                   margin: const EdgeInsets.only(top: 8),
@@ -910,9 +910,9 @@ class _AddressTabState extends State<AddressTab> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor:
-                                    Theme.of(context).backgroundColor,
+                                    Theme.of(context).colorScheme.background,
                                 backgroundColor:
-                                    Theme.of(context).backgroundColor,
+                                    Theme.of(context).colorScheme.background,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5
@@ -949,9 +949,9 @@ class _AddressTabState extends State<AddressTab> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor:
-                                    Theme.of(context).backgroundColor,
+                                    Theme.of(context).colorScheme.background,
                                 backgroundColor:
-                                    Theme.of(context).backgroundColor,
+                                    Theme.of(context).colorScheme.background,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5

@@ -16,7 +16,7 @@ class WalletHomeConnection extends StatelessWidget {
       widget = Text(
         AppLocalizations.instance.translate('wallet_connected'),
         style: TextStyle(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).colorScheme.background,
           letterSpacing: 1.4,
           fontSize: 16,
         ),
@@ -25,7 +25,7 @@ class WalletHomeConnection extends StatelessWidget {
       widget = Text(
         AppLocalizations.instance.translate('wallet_offline'),
         style: TextStyle(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).colorScheme.background,
           fontSize: 16,
           letterSpacing: 1.4,
         ),
