@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -372,6 +373,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                     children: [
                                       InkWell(
                                         onTap: () async {
+                                          context.loaderOverlay.show();
                                           await Navigator.of(context).pushNamed(
                                             Routes.walletHome,
                                             arguments: {

@@ -34,19 +34,20 @@ class ActiveWallets with ChangeNotifier {
   String _unusedAddress = '';
   late Box<CoinWallet> _walletBox;
   Box? _vaultBox;
-  final Map<String, String> _wifs = {};
+  Map<String, String> _wifs = {};
   final Map<String?, CoinWallet?> _specificWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
 
   Future<void> init() async {
     _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
     _walletBox = await _encryptedBox.getWalletBox();
+  }
 
-    //load wallets into cache
-    for (var element in activeWalletsValues) {
-      getSpecificCoinWallet(element.name);
-      getHdWallet(element.name);
-    }
+  void closeWallet(String identifier) {
+    _specificWalletCache.removeWhere((key, _) => key == identifier);
+    _hdWalletCache.removeWhere((key, _) => key == identifier);
+    _wifs = {};
+    _unusedAddress = '';
   }
 
   Future<String> get seedPhrase async {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,6 +82,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void dispose() {
+    _activeWallets.closeWallet(_wallet.name);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -117,8 +119,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await _activeWallets.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _activeWallets.getWalletTransactions(_wallet.name);
-      await _connectionProvider!
-          .init(_wallet.name, requestedFromWalletHome: true);
+      await _connectionProvider!.init(
+        _wallet.name,
+        requestedFromWalletHome: true,
+      );
 
       if (_appSettings.authenticationOptions!['walletHome']!) {
         // ignore: use_build_context_synchronously
@@ -138,6 +142,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
 
       checkPendingNotifications();
+      // ignore: use_build_context_synchronously
+      context.loaderOverlay.hide();
 
       if (arguments.containsKey('pushedAddress')) {
         changeIndex(Tabs.send, arguments['pushedAddress']);

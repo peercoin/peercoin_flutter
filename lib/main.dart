@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +34,7 @@ import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
 import 'tools/session_checker.dart';
+import 'widgets/spinning_peercoin_icon.dart';
 
 late bool setupFinished;
 late Widget _homeWidget;
@@ -201,22 +203,29 @@ class PeercoinApp extends StatelessWidget {
       child: ThemeModeHandler(
         manager: ThemeManager(),
         builder: (ThemeMode themeMode) {
-          return MaterialApp(
-            title: 'Peercoin',
-            debugShowCheckedModeBanner: false,
-            supportedLocales: AppLocalizations.availableLocales.keys
-                .map((lang) => Locale(lang)),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate
-            ],
-            locale: _locale == const Locale('und') ? null : _locale,
-            themeMode: themeMode,
-            theme: MyTheme.getTheme(ThemeMode.light),
-            darkTheme: MyTheme.getTheme(ThemeMode.dark),
-            home: _homeWidget,
-            routes: Routes.getRoutes(),
+          return GlobalLoaderOverlay(
+            useDefaultLoading: false,
+            overlayOpacity: 0.6,
+            overlayWidget: const Center(
+              child: SpinningPeercoinIcon(),
+            ),
+            child: MaterialApp(
+              title: 'Peercoin',
+              debugShowCheckedModeBanner: false,
+              supportedLocales: AppLocalizations.availableLocales.keys
+                  .map((lang) => Locale(lang)),
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate
+              ],
+              locale: _locale == const Locale('und') ? null : _locale,
+              themeMode: themeMode,
+              theme: MyTheme.getTheme(ThemeMode.light),
+              darkTheme: MyTheme.getTheme(ThemeMode.dark),
+              home: _homeWidget,
+              routes: Routes.getRoutes(),
+            ),
           );
         },
       ),
