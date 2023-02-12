@@ -1,3 +1,9 @@
+### **1.1.4** (2023-02-11)
+* Cease loading all wallets into cache on startup
+
+### **1.1.3** (2023-01-01)
+* Remove HRK (Croatian Kuna)
+
 ### **1.1.2** (2022-12-27)
 * Allow verification of signed messages
 
