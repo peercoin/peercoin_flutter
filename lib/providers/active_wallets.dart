@@ -362,7 +362,7 @@ class ActiveWallets with ChangeNotifier {
         for (var vOut in voutList) {
           final asMap = vOut as Map;
           if (asMap['scriptPubKey']['type'] != 'nulldata') {
-            //pre 0.12 backwards compatability TODO remove after 0.12 HF
+            //pre 0.12 backwards compatability
             String addr;
             if (asMap['scriptPubKey']['addresses'].runtimeType == List) {
               addr = asMap['scriptPubKey']['addresses'][0];
