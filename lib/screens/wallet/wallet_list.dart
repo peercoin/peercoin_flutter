@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 
@@ -19,7 +21,7 @@ import '../../tools/background_sync.dart';
 import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
 import '../../tools/share_wrapper.dart';
-import '../../widgets/loading_indicator.dart';
+import '../../widgets/spinning_peercoin_icon.dart';
 import '../../widgets/wallet/new_wallet.dart';
 import '../../tools/session_checker.dart';
 import '../../widgets/buttons.dart';
@@ -42,7 +44,6 @@ class WalletListScreen extends StatefulWidget {
 
 class _WalletListScreenState extends State<WalletListScreen>
     with SingleTickerProviderStateMixin {
-  bool _isLoading = false;
   bool _initial = true;
   late ActiveWallets _activeWallets;
   late Animation<double> _animation;
@@ -118,7 +119,6 @@ class _WalletListScreenState extends State<WalletListScreen>
           const Duration(minutes: 10),
           (timer) async {
             if (await checkSessionExpired()) {
-              // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
               LogoutDialog.reloadWindow();
             }
@@ -134,7 +134,6 @@ class _WalletListScreenState extends State<WalletListScreen>
       }
       if (widget.fromColdStart == true &&
           _appSettings.authenticationOptions!['walletList']!) {
-        // ignore: use_build_context_synchronously
         await Auth.requireAuth(
           context: context,
           biometricsAllowed: _appSettings.biometricsAllowed,
@@ -164,8 +163,8 @@ class _WalletListScreenState extends State<WalletListScreen>
         if (_activeWalletValues.length == 1 &&
             widget.walletToOpenDirectly.isEmpty) {
           //only one wallet available, pushing to that one (no walletToOpenDirectly set)
-
           if (!kIsWeb) {
+            context.loaderOverlay.show();
             await navigator.pushNamed(
               Routes.walletHome,
               arguments: {
@@ -176,6 +175,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         } else if (_activeWalletValues.length > 1 ||
             widget.walletToOpenDirectly.isNotEmpty) {
           if (defaultWallet != null) {
+            context.loaderOverlay.show();
             if (!kIsWeb) {
               await navigator.pushNamed(
                 Routes.walletHome,
@@ -245,9 +245,9 @@ class _WalletListScreenState extends State<WalletListScreen>
             )
         ],
       ),
-      body: _isLoading || _initial
+      body: _initial
           ? const Center(
-              child: LoadingIndicator(),
+              child: SpinningPeercoinIcon(),
             )
           : Container(
               width: double.infinity,
