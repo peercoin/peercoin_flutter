@@ -50,7 +50,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   late Timer _priceTimer;
   late Timer _sessionTimer;
   late AppSettings _appSettings;
-  late List _activeWalletValues;
+  late List<CoinWallet> _activeWalletValues;
 
   @override
   void initState() {
@@ -161,8 +161,9 @@ class _WalletListScreenState extends State<WalletListScreen>
           );
         }
         //push to default wallet
-        if (_activeWalletValues.length == 1) {
-          //only one wallet available, pushing to that one
+        if (_activeWalletValues.length == 1 &&
+            widget.walletToOpenDirectly.isEmpty) {
+          //only one wallet available, pushing to that one (no walletToOpenDirectly set)
           setState(() {
             _isLoading = true;
           });
@@ -170,14 +171,15 @@ class _WalletListScreenState extends State<WalletListScreen>
             await navigator.pushNamed(
               Routes.walletHome,
               arguments: {
-                'wallet': _activeWalletValues[0],
+                'wallet': _activeWalletValues.first,
               },
             );
           }
           setState(() {
             _isLoading = false;
           });
-        } else if (_activeWalletValues.length > 1) {
+        } else if (_activeWalletValues.length > 1 ||
+            widget.walletToOpenDirectly.isNotEmpty) {
           if (defaultWallet != null) {
             setState(() {
               _isLoading = true;
