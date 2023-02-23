@@ -28,7 +28,7 @@ import 'models/wallet_utxo.dart';
 import 'providers/active_wallets.dart';
 import 'providers/electrum_connection.dart';
 import 'providers/encrypted_box.dart';
-import 'screens/setup/setup.dart';
+import 'screens/setup/setup_landing.dart';
 import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
@@ -113,7 +113,7 @@ void main() async {
     //check web session expired
 
     if (setupFinished == false || sessionExpired == true) {
-      _homeWidget = const SetupScreen();
+      _homeWidget = const SetupLandingScreen();
     } else if (failedAuths > 0) {
       _homeWidget = const AuthJailScreen(
         jailedFromHome: true,

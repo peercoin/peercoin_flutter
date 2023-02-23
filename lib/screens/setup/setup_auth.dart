@@ -10,7 +10,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/setup/session_slider.dart';
-import 'setup.dart';
+import 'setup_landing.dart';
 
 class SetupAuthScreen extends StatefulWidget {
   const SetupAuthScreen({Key? key}) : super(key: key);
@@ -54,7 +54,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: SetupScreen.calcContainerHeight(context),
+          height: SetupLandingScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -115,7 +115,8 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                                   ),
                                 ),
                                 value: _biometricsAllowed,
-                                activeColor: Theme.of(context).colorScheme.background,
+                                activeColor:
+                                    Theme.of(context).colorScheme.background,
                                 inactiveThumbColor: Colors.grey,
                                 onChanged: (newState) {
                                   if (_biometricsAvailable == false) {

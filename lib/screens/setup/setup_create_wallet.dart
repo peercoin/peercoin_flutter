@@ -13,7 +13,7 @@ import '../../tools/app_routes.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
-import 'setup.dart';
+import 'setup_landing.dart';
 import '../../widgets/logout_dialog_dummy.dart'
     if (dart.library.html) '../../widgets/logout_dialog.dart';
 
@@ -174,7 +174,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: SetupScreen.calcContainerHeight(context),
+          height: SetupLandingScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: _isLoading
               ? const Center(
@@ -305,7 +305,8 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                               Radius.circular(20),
                                             ),
                                             color: Theme.of(context)
-                                                .colorScheme.background,
+                                                .colorScheme
+                                                .background,
                                             border: Border.all(
                                               width: 2,
                                               color: _sharedYet

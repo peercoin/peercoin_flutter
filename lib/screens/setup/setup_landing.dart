@@ -7,11 +7,11 @@ import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/setup_progress.dart';
 
-class SetupScreen extends StatefulWidget {
-  const SetupScreen({Key? key}) : super(key: key);
+class SetupLandingScreen extends StatefulWidget {
+  const SetupLandingScreen({Key? key}) : super(key: key);
 
   @override
-  State<SetupScreen> createState() => _SetupScreenState();
+  State<SetupLandingScreen> createState() => _SetupLandingScreenState();
 
   static double calcContainerHeight(BuildContext ctx) {
     var height = MediaQuery.of(ctx).size.height;
@@ -27,7 +27,7 @@ class SetupScreen extends StatefulWidget {
   }
 }
 
-class _SetupScreenState extends State<SetupScreen> {
+class _SetupLandingScreenState extends State<SetupLandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,7 @@ class _SetupScreenState extends State<SetupScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: SetupScreen.calcContainerHeight(context),
+          height: SetupLandingScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Stack(
             fit: StackFit.expand,
@@ -57,7 +57,7 @@ class _SetupScreenState extends State<SetupScreen> {
                             height: MediaQuery.of(context).size.height / 20,
                           ),
                           Image.asset(
-                            'assets/img/setup-launch.png',
+                            'assets/icon/ppc-icon-white.png',
                             height: MediaQuery.of(context).size.height / 5,
                           ),
                           Column(

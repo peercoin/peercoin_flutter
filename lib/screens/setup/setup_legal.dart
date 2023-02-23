@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
-import 'setup.dart';
+import 'setup_landing.dart';
 
 class SetupLegalScreen extends StatefulWidget {
   const SetupLegalScreen({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
 
   double calcHeight(BuildContext context) {
     if (MediaQuery.of(context).size.width < 500) return 900;
-    return SetupScreen.calcContainerHeight(context);
+    return SetupLandingScreen.calcContainerHeight(context);
   }
 
   @override
