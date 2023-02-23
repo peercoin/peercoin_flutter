@@ -8,7 +8,7 @@ import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
-import 'setup.dart';
+import 'setup_landing.dart';
 
 class SetupDataFeedsScreen extends StatefulWidget {
   const SetupDataFeedsScreen({Key? key}) : super(key: key);
@@ -69,7 +69,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: SetupScreen.calcContainerHeight(context),
+          height: SetupLandingScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

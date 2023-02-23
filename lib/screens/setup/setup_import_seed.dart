@@ -10,7 +10,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
-import 'setup.dart';
+import 'setup_landing.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
   const SetupImportSeedScreen({Key? key}) : super(key: key);
@@ -83,7 +83,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: SetupScreen.calcContainerHeight(context),
+          height: SetupLandingScreen.calcContainerHeight(context),
           color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -219,8 +219,9 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                       fontSize: 16,
                                     ),
                                     filled: true,
-                                    fillColor:
-                                        Theme.of(context).colorScheme.background,
+                                    fillColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                     suffixIcon: IconButton(
                                       onPressed: () async {
                                         final focusScope =
@@ -244,7 +245,8 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     focusedBorder: border,
                                     enabledBorder: border,
                                     errorStyle: TextStyle(
-                                      color: Theme.of(context).colorScheme.error,
+                                      color:
+                                          Theme.of(context).colorScheme.error,
                                     ),
                                     errorBorder: border,
                                     focusedErrorBorder: border,
