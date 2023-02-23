@@ -1,5 +1,6 @@
-### **1.1.5** (2023-xx-xx)
+### **1.1.5** (2023-02-23)
 * Fixed bug which would sometimes push to the wrong wallet after notification
+* Address labels are no longer persistent for CSV file imports
 
 ### **1.1.4** (2023-02-11)
 * Cease loading all wallets into cache on startup
