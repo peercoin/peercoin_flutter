@@ -164,9 +164,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         if (_activeWalletValues.length == 1 &&
             widget.walletToOpenDirectly.isEmpty) {
           //only one wallet available, pushing to that one (no walletToOpenDirectly set)
-          setState(() {
-            _isLoading = true;
-          });
+
           if (!kIsWeb) {
             await navigator.pushNamed(
               Routes.walletHome,
@@ -175,24 +173,15 @@ class _WalletListScreenState extends State<WalletListScreen>
               },
             );
           }
-          setState(() {
-            _isLoading = false;
-          });
         } else if (_activeWalletValues.length > 1 ||
             widget.walletToOpenDirectly.isNotEmpty) {
           if (defaultWallet != null) {
-            setState(() {
-              _isLoading = true;
-            });
             if (!kIsWeb) {
               await navigator.pushNamed(
                 Routes.walletHome,
                 arguments: {'wallet': defaultWallet},
               );
             }
-            setState(() {
-              _isLoading = false;
-            });
           }
         }
       }
