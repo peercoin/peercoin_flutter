@@ -260,6 +260,13 @@ class BackgroundSync {
 
     Map<String, int> answerMap = {};
 
+    try {
+      await grpcClient.getBlockHeight(BlockHeightRequest());
+    } catch (e) {
+      //client not available
+      return answerMap;
+    }
+
     await Future.forEach(
       addressesToQuery.keys,
       (String addr) async {

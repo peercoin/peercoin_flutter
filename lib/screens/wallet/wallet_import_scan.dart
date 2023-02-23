@@ -178,7 +178,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         addressesToQuery: adressesToQuery,
         fromScan: true,
       ),
-    ); //FIXME wont finish when marisma is offline
+    );
     _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
