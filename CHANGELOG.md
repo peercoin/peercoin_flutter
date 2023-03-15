@@ -1,3 +1,6 @@
+### **1.1.6** (2023-03-15)
+* Update Peercoin Foundation address
+
 ### **1.1.5** (2023-02-23)
 * Fixed bug which would sometimes push to the wrong wallet after notification
 * Address labels are no longer persistent for CSV file imports

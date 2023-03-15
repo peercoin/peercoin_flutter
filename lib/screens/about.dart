@@ -175,7 +175,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                     arguments: {
                                       'wallet': ppcWallet,
                                       'pushedAddress':
-                                          'p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK',
+                                          'p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre',
                                     },
                                   );
                                 },
