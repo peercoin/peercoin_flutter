@@ -4,12 +4,12 @@ library ledger_interface;
 import 'package:js/js.dart';
 
 @JS('TransportWebUSB.create')
-external Future<Object> transportWebUSBCreate();
+external Object transportWebUSBCreate();
 
 @JS('Btc')
 class Btc {
   external Btc(Object transport);
-  external Future<dynamic> getWalletPublicKey(
+  external Object getWalletPublicKey(
     String path,
     Options options,
   );

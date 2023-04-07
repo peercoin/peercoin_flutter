@@ -1,9 +1,9 @@
-import 'package:js/js.dart';
+import 'dart:html';
+import 'dart:js_util';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:js/js_util.dart';
 
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -108,7 +108,7 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                                 transportWebUSBCreate(),
                               );
                               final btc = Btc(transport);
-                              final result = await promiseToFuture(
+                              final result = await promiseToFutureAsMap(
                                 btc.getWalletPublicKey(
                                   '44/1/0/0',
                                   Options(
@@ -117,7 +117,6 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                                   ),
                                 ),
                               );
-                              print('res');
                               //convert to dart object
                               print(result);
                             },
