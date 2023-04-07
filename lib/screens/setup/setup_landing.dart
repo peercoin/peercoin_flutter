@@ -1,9 +1,13 @@
+import 'package:js/js.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:js/js_util.dart';
 
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
+import '../../web_only/ledger_interface.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/setup_progress.dart';
 
@@ -96,6 +100,27 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                             ),
                             action: () => Navigator.of(context)
                                 .pushNamed(Routes.setupImport),
+                          ),
+                          PeerButtonSetup(
+                            text: 'Ledger me',
+                            action: () async {
+                              final transport = await promiseToFuture(
+                                transportWebUSBCreate(),
+                              );
+                              final btc = Btc(transport);
+                              final result = await promiseToFuture(
+                                btc.getWalletPublicKey(
+                                  '44/1/0/0',
+                                  Options(
+                                    verify: false,
+                                    format: 'legacy',
+                                  ),
+                                ),
+                              );
+                              print('res');
+                              //convert to dart object
+                              print(result);
+                            },
                           ),
                           Text(
                             AppLocalizations.instance.translate('setup_text3'),
