@@ -1,13 +1,10 @@
-import 'dart:html';
-import 'dart:js_util';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/ledger/ledger_interface.dart';
 
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
-import '../../web_only/ledger_interface.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/setup_progress.dart';
 
@@ -104,21 +101,15 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                           PeerButtonSetup(
                             text: 'Ledger me',
                             action: () async {
-                              final transport = await promiseToFuture(
-                                transportWebUSBCreate(),
-                              );
-                              final btc = Btc(transport);
-                              final result = await promiseToFutureAsMap(
-                                btc.getWalletPublicKey(
-                                  '44/1/0/0',
-                                  Options(
-                                    verify: false,
-                                    format: 'legacy',
-                                  ),
-                                ),
-                              );
-                              //convert to dart object
-                              print(result);
+                              await LedgerInterace().init();
+
+                              for (var i = 0; i < 10; i++) {
+                                final res =
+                                    await LedgerInterace().getWalletPublicKey(
+                                  path: "44'/6'/0'/0/$i",
+                                );
+                                print(res.address);
+                              }
                             },
                           ),
                           Text(
