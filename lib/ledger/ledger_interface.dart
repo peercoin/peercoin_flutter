@@ -75,3 +75,12 @@ class LedgerPublicKey {
 }
 
 //TODO make it sign https://gist.github.com/miguelmota/62559d02a1b99cb291635de4b224349c
+/*
+	            "getWalletXpub",
+	            "getWalletPublicKey",
+	            "signP2SHTransaction",
+	            "signMessageNew",
+	            "createPaymentTransactionNew",
+	            "getTrustedInput",
+	            "getTrustedInputBIP143",
+ */
