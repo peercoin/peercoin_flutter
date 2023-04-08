@@ -99,13 +99,15 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                                 .pushNamed(Routes.setupImport),
                           ),
                           PeerButtonSetup(
-                            text: 'Ledger me',
+                            text: AppLocalizations.instance.translate(
+                              'setup_ledger_title',
+                            ),
                             action: () async {
-                              await LedgerInterace().init();
+                              await LedgerInterface().init();
 
                               for (var i = 0; i < 10; i++) {
                                 final res =
-                                    await LedgerInterace().getWalletPublicKey(
+                                    await LedgerInterface().getWalletPublicKey(
                                   path: "44'/6'/0'/0/$i",
                                 );
                                 print(res.address);

@@ -5,18 +5,19 @@ import 'dart:js_util';
 import 'ledger_exceptions.dart';
 import 'ledger_js_binding.dart';
 
-class LedgerInterace {
+class LedgerInterface {
   late Object transport;
   late Btc btc; //Ledger JS binding class
-  static final Map<String, LedgerInterace> _cache = <String, LedgerInterace>{};
+  static final Map<String, LedgerInterface> _cache =
+      <String, LedgerInterface>{};
 
-  factory LedgerInterace() {
+  factory LedgerInterface() {
     return _cache.putIfAbsent(
       'ledgerinstance',
-      () => LedgerInterace._internal(),
+      () => LedgerInterface._internal(),
     );
   }
-  LedgerInterace._internal();
+  LedgerInterface._internal();
 
   Future<void> init() async {
     try {

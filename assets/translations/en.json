@@ -248,6 +248,7 @@
     "setup_create_pin": "Create PIN",
     "setup_import_title": "Import Seed",
     "setup_finish": "Finish Setup",
+    "setup_ledger_title": "Use Ledger",
     "setup_import_note": "Please enter the seed you wish to import. This is not to be confused with a private key.",
     "setup_pin": "Please set a PIN before you continue.",
     "setup_pin_no_biometrics": "Your device does not support biometric authentication.",
