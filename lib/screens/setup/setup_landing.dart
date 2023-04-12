@@ -137,20 +137,9 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                               text: AppLocalizations.instance.translate(
                                 'setup_ledger_title',
                               ),
-                              action: () => Navigator.of(context)
-                                  .pushNamed(Routes.setupLedger)
-                              // action: () async {
-                              //   await LedgerInterface().init();
-
-                              //   for (var i = 0; i < 10; i++) {
-                              //     final res = await LedgerInterface()
-                              //         .getWalletPublicKey(
-                              //       path: "44'/6'/0'/0/$i",
-                              //     );
-                              //     print(res.address);
-                              //   }
-                              // },
-                              ,
+                              action: () => Navigator.of(context).pushNamed(
+                                Routes.setupLedger,
+                              ),
                             ),
                           const SizedBox(
                             height: 8,

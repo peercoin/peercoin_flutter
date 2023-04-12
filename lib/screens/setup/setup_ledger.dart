@@ -1,8 +1,12 @@
+import 'dart:js_util';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../ledger/ledger_interface.dart';
+import '../../ledger/ledger_js_binding.dart';
 import '../../providers/active_wallets.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -19,6 +23,7 @@ class SetupLedgerScreen extends StatefulWidget {
 
 class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
   bool _initial = true;
+  bool _browserSupport = false;
   bool _ledgerAvailable = false;
   bool _loading = false;
 
@@ -61,8 +66,21 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      //TODO test browser capabilties
-      try {} catch (e) {}
+      final res = await promiseToFuture(transportWebUSBIsSupported());
+      if (res == true) {
+        _browserSupport = true;
+        print('true');
+      }
+      try {
+        // await LedgerInterface().init();
+
+        // for (var i = 0; i < 10; i++) {
+        //   final res = await LedgerInterface().getWalletPublicKey(
+        //     path: "44'/6'/0'/0/$i",
+        //   );
+        //   print(res.address);
+        // }
+      } catch (e) {}
     }
     setState(() {
       _initial = false;
