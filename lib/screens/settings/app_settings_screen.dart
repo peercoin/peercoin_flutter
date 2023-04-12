@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
 import '../../models/coin_wallet.dart';
@@ -35,6 +36,7 @@ class AppSettingsScreen extends StatefulWidget {
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   late bool _biometricsAllowed;
+  late bool _ledgerMode;
   bool _biometricsRevealed = false;
   bool _biometricsAvailable = false;
   String _seedPhrase = '';
@@ -56,6 +58,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       _activeWallets = Provider.of<ActiveWallets>(context);
       _settings = Provider.of<AppSettings>(context);
       final themeModeHandler = ThemeModeHandler.of(context)!;
+      final prefs = await SharedPreferences.getInstance();
+      _ledgerMode = prefs.getBool('ledgerMode') ?? false;
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
@@ -328,44 +332,45 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           )
                   ],
                 ),
-                ExpansionTile(
-                  title: Text(
-                    AppLocalizations.instance.translate('app_settings_seed'),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  childrenPadding: const EdgeInsets.all(10),
-                  children: [
-                    _seedPhrase == ''
-                        ? PeerButton(
-                            action: () =>
-                                revealSeedPhrase(_settings.biometricsAllowed),
-                            text: AppLocalizations.instance
-                                .translate('app_settings_revealSeedButton'),
-                          )
-                        : Column(
-                            children: [
-                              const SizedBox(height: 20),
-                              DoubleTabToClipboard(
-                                clipBoardData: _seedPhrase,
-                                child: SelectableText(
-                                  _seedPhrase,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              if (!kIsWeb)
-                                PeerButton(
-                                  action: () => ShareWrapper.share(
-                                    context: context,
-                                    message: _seedPhrase,
+                if (_ledgerMode == false)
+                  ExpansionTile(
+                    title: Text(
+                      AppLocalizations.instance.translate('app_settings_seed'),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    childrenPadding: const EdgeInsets.all(10),
+                    children: [
+                      _seedPhrase == ''
+                          ? PeerButton(
+                              action: () =>
+                                  revealSeedPhrase(_settings.biometricsAllowed),
+                              text: AppLocalizations.instance
+                                  .translate('app_settings_revealSeedButton'),
+                            )
+                          : Column(
+                              children: [
+                                const SizedBox(height: 20),
+                                DoubleTabToClipboard(
+                                  clipBoardData: _seedPhrase,
+                                  child: SelectableText(
+                                    _seedPhrase,
+                                    textAlign: TextAlign.center,
                                   ),
-                                  text: AppLocalizations.instance
-                                      .translate('app_settings_shareseed'),
-                                )
-                            ],
-                          )
-                  ],
-                ),
+                                ),
+                                const SizedBox(height: 20),
+                                if (!kIsWeb)
+                                  PeerButton(
+                                    action: () => ShareWrapper.share(
+                                      context: context,
+                                      message: _seedPhrase,
+                                    ),
+                                    text: AppLocalizations.instance
+                                        .translate('app_settings_shareseed'),
+                                  )
+                              ],
+                            )
+                    ],
+                  ),
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance.translate('app_settings_theme'),
