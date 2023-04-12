@@ -63,24 +63,32 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
     });
   }
 
+  Future<bool> connectLedgerAndTryToGetPubKey() async {
+    try {
+      await LedgerInterface().init();
+      await LedgerInterface().getWalletPublicKey(
+        path: "44'/6'/0'/0/0",
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Widget renderContainerChild() {
+    if (_browserSupport == false) {
+      return AutoSizeText('Your browser does not support WebUSB');
+    }
+    return Text('Your browser supports WebUSB');
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial) {
       final res = await promiseToFuture(transportWebUSBIsSupported());
       if (res == true) {
         _browserSupport = true;
-        print('true');
       }
-      try {
-        // await LedgerInterface().init();
-
-        // for (var i = 0; i < 10; i++) {
-        //   final res = await LedgerInterface().getWalletPublicKey(
-        //     path: "44'/6'/0'/0/$i",
-        //   );
-        //   print(res.address);
-        // }
-      } catch (e) {}
     }
     setState(() {
       _initial = false;
@@ -132,6 +140,19 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
                             width: 40,
                           ),
                         ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        width: MediaQuery.of(context).size.width > 1200
+                            ? MediaQuery.of(context).size.width / 2
+                            : MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                          color: Theme.of(context).shadowColor,
+                        ),
+                        child: renderContainerChild(),
                       ),
                     ],
                   ),
