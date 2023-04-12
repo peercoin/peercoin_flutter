@@ -9,3 +9,7 @@ class LedgerUnknownException implements Exception {
 class LedgerTransportOpenUserCancelled implements Exception {
   LedgerTransportOpenUserCancelled();
 }
+
+class LedgerTimeoutException implements Exception {
+  LedgerTimeoutException();
+}

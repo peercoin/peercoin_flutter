@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_web_libraries_in_flutter, use_build_context_synchronously
+
 import 'dart:js_util';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/ledger/ledger_exceptions.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,11 +28,12 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
   bool _initial = true;
   bool _browserSupport = false;
   bool _ledgerAvailable = false;
-  bool _loading = false;
+  bool _screenLoading = false;
+  bool _ledgerLoading = false;
 
   void createWallet(BuildContext context) async {
     setState(() {
-      _loading = true;
+      _screenLoading = true;
     });
     final activeWallets = context.read<ActiveWallets>();
     final navigator = Navigator.of(context);
@@ -59,27 +63,170 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
     await prefs.setBool('ledgerMode', true);
     await navigator.pushNamed(Routes.setupAuth);
     setState(() {
-      _loading = false;
+      _screenLoading = false;
     });
   }
 
   Future<bool> connectLedgerAndTryToGetPubKey() async {
     try {
       await LedgerInterface().init();
-      await LedgerInterface().getWalletPublicKey(
-        path: "44'/6'/0'/0/0",
-      );
+      await LedgerInterface()
+          .getWalletPublicKey(
+            path: "44'/6'/0'/0/0",
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw LedgerTimeoutException(),
+          );
       return true;
     } catch (e) {
+      LoggerWrapper.logError(
+        'SetupLedger',
+        'connectLedgerAndTryToGetPubKey',
+        e.toString(),
+      );
+      final errorType = e.runtimeType;
+      String errorText;
+
+      switch (errorType) {
+        case LedgerApplicationNotOpen:
+          errorText =
+              'Please open the Peercoin application on your Ledger'; //TODO i18n
+          break;
+        case LedgerTransportOpenUserCancelled:
+          errorText =
+              'Please allow the browser to access your Ledger'; //TODO i18n
+          break;
+        case LedgerTimeoutException:
+          errorText =
+              'Connection to Ledger timed out. Is the device unlocked? Please try again'; //TODO i18n
+          break;
+        case LedgerUnknownException:
+        default:
+          errorText = 'An unknown error occured. Please try again'; //TODO i18n
+          break;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            errorText, //TODO i18n
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+
       return false;
     }
   }
 
   Widget renderContainerChild() {
     if (_browserSupport == false) {
-      return AutoSizeText('Your browser does not support WebUSB');
+      return browserDoesNotSupportWebUSB();
     }
-    return Text('Your browser supports WebUSB');
+    return activeLedgerStepper();
+  }
+
+  Widget activeLedgerStepper() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.check),
+            const SizedBox(
+              width: 20,
+            ),
+            Text(
+              'Your browser supports WebUSB', //TODO i18n
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'Please unlock your Ledger and open the Peercoin application on your device before clicking "Connect Ledger".', //TODO i18n
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primaryContainer,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        PeerButtonSetupLoading(
+          loading: _ledgerLoading,
+          active: _ledgerAvailable == false,
+          action: () async {
+            if (_ledgerAvailable) return;
+            setState(() {
+              _ledgerLoading = true;
+            });
+            final res = await connectLedgerAndTryToGetPubKey();
+            if (res == true) {
+              setState(() {
+                _ledgerAvailable = true;
+                _ledgerLoading = false;
+              });
+            } else {
+              await Future.delayed(const Duration(seconds: 1));
+              setState(() {
+                _ledgerLoading = false;
+              });
+            }
+          },
+          text: _ledgerAvailable
+              ? 'Ledger Connected'
+              : 'Connect Ledger', //TODO i18n
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        if (_ledgerAvailable)
+          Text(
+            'Ledger connected succesfully. Please continue with the button below.', //TODO i18n
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primaryContainer,
+            ),
+          ),
+        if (_ledgerAvailable)
+          const SizedBox(
+            height: 20,
+          ),
+      ],
+    );
+  }
+
+  Widget browserDoesNotSupportWebUSB() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.close),
+            SizedBox(
+              width: 20,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              'Your browser does not support WebUSB', //TODO i18n
+              maxFontSize: 28,
+              minFontSize: 25,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        const Text('Please consider using Chrome'), //TODO i18n
+      ],
+    );
   }
 
   @override
@@ -142,7 +289,7 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width > 1200
                             ? MediaQuery.of(context).size.width / 2
                             : MediaQuery.of(context).size.width,
@@ -167,7 +314,7 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
                 text: AppLocalizations.instance.translate(
                   'continue',
                 ),
-                loading: _loading,
+                loading: _screenLoading,
               ),
               const SizedBox(
                 height: 32,
