@@ -100,14 +100,15 @@ class LedgerInterface {
           break;
         case LedgerUnknownException:
         default:
-          errorText = 'An unknown error occured. Please try again'; //TODO i18n
+          errorText =
+              'An unknown error occured while communicating with Ledger. Please try again'; //TODO i18n
           break;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            errorText, //TODO i18n
+            errorText,
             textAlign: TextAlign.center,
           ),
           duration: const Duration(seconds: 5),
