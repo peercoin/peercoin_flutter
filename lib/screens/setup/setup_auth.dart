@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/app_settings.dart';
 import '../../providers/encrypted_box.dart';
@@ -23,7 +24,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
   bool _biometricsAllowed = true;
   bool _initial = true;
   bool _biometricsAvailable = false;
-  bool _ledgerMode = false;
+  late bool _ledgerMode;
 
   @override
   void didChangeDependencies() async {
@@ -38,6 +39,9 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
       if (_biometricsAvailable == false) {
         _biometricsAllowed = false;
       }
+
+      final prefs = await SharedPreferences.getInstance();
+      _ledgerMode = prefs.getBool('ledgerMode') ?? false;
     }
     setState(() {
       _initial = false;

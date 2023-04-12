@@ -36,7 +36,7 @@ class AppSettings with ChangeNotifier {
   Future<void> createInitialSettings({
     required bool allowBiometrics,
     required String lang,
-    required bool ledgerMode, //TODO ??
+    required bool ledgerMode,
   }) async {
     var optionsBox =
         await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
@@ -146,6 +146,15 @@ class AppSettings with ChangeNotifier {
 
   void setPeriodicReminterItemsNextView(Map<String, DateTime> newMap) {
     _appOptions.periodicReminterItemsNextView = newMap;
+    notifyListeners();
+  }
+
+  bool get ledgerMode {
+    return _appOptions.ledgerMode;
+  }
+
+  set ledgerMode(bool newStatus) {
+    _appOptions.ledgerMode = newStatus;
     notifyListeners();
   }
 }
