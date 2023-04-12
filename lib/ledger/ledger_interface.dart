@@ -2,6 +2,9 @@
 
 import 'dart:js_util';
 
+import 'package:flutter/material.dart';
+
+import '../tools/logger_wrapper.dart';
 import 'ledger_exceptions.dart';
 import 'ledger_js_binding.dart';
 
@@ -58,6 +61,59 @@ class LedgerInterface {
         throw LedgerApplicationNotOpen();
       }
       throw LedgerUnknownException();
+    }
+  }
+
+  Future<void> performTransaction({
+    required BuildContext context,
+    required Future future,
+  }) async {
+    try {
+      await future.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw LedgerTimeoutException();
+        },
+      );
+    } catch (e) {
+      LoggerWrapper.logError(
+        'LedgerInterface',
+        'performTransaction',
+        e.toString(),
+      );
+
+      final errorType = e.runtimeType;
+      String errorText;
+
+      switch (errorType) {
+        case LedgerApplicationNotOpen:
+          errorText =
+              'Please open the Peercoin application on your Ledger'; //TODO i18n
+          break;
+        case LedgerTransportOpenUserCancelled:
+          errorText =
+              'Please allow the browser to access your Ledger'; //TODO i18n
+          break;
+        case LedgerTimeoutException:
+          errorText =
+              'Connection to Ledger timed out. Is the device unlocked? Please try again'; //TODO i18n
+          break;
+        case LedgerUnknownException:
+        default:
+          errorText = 'An unknown error occured. Please try again'; //TODO i18n
+          break;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            errorText, //TODO i18n
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      rethrow;
     }
   }
 }

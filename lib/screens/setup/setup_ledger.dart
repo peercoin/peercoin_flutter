@@ -69,52 +69,23 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
 
   Future<bool> connectLedgerAndTryToGetPubKey() async {
     try {
-      await LedgerInterface().init();
-      await LedgerInterface()
-          .getWalletPublicKey(
-            path: "44'/6'/0'/0/0",
-          )
-          .timeout(
-            const Duration(seconds: 10),
-            onTimeout: () => throw LedgerTimeoutException(),
-          );
+      await LedgerInterface().performTransaction(
+        context: context,
+        future: LedgerInterface().init(),
+      );
+      await LedgerInterface().performTransaction(
+        context: context,
+        future: LedgerInterface().getWalletPublicKey(
+          path: "44'/6'/0'/0/0",
+        ),
+      );
+
       return true;
     } catch (e) {
       LoggerWrapper.logError(
         'SetupLedger',
         'connectLedgerAndTryToGetPubKey',
         e.toString(),
-      );
-      final errorType = e.runtimeType;
-      String errorText;
-
-      switch (errorType) {
-        case LedgerApplicationNotOpen:
-          errorText =
-              'Please open the Peercoin application on your Ledger'; //TODO i18n
-          break;
-        case LedgerTransportOpenUserCancelled:
-          errorText =
-              'Please allow the browser to access your Ledger'; //TODO i18n
-          break;
-        case LedgerTimeoutException:
-          errorText =
-              'Connection to Ledger timed out. Is the device unlocked? Please try again'; //TODO i18n
-          break;
-        case LedgerUnknownException:
-        default:
-          errorText = 'An unknown error occured. Please try again'; //TODO i18n
-          break;
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            errorText, //TODO i18n
-            textAlign: TextAlign.center,
-          ),
-          duration: const Duration(seconds: 5),
-        ),
       );
 
       return false;
