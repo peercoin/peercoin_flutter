@@ -39,8 +39,12 @@ class AppOptionsStore extends HiveObject {
   @HiveField(9, defaultValue: {})
   Map<String, DateTime> _periodicReminterItemsNextView = {};
 
+  @HiveField(10, defaultValue: false)
+  bool _ledgerMode = false;
+
   AppOptionsStore(
     this._allowBiometrics,
+    this._ledgerMode,
   );
 
   bool get allowBiometrics {
@@ -89,6 +93,15 @@ class AppOptionsStore extends HiveObject {
 
   set latestTickerUpdate(DateTime newTime) {
     _latestTickerUpdate = newTime;
+    save();
+  }
+
+  bool get ledgerMode {
+    return _ledgerMode;
+  }
+
+  set ledgerMode(bool newStatus) {
+    _ledgerMode = newStatus;
     save();
   }
 
