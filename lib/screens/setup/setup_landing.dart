@@ -98,25 +98,6 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                             action: () => Navigator.of(context)
                                 .pushNamed(Routes.setupImport),
                           ),
-                          if (kIsWeb) //only show ledger button on web
-                            PeerButtonSetup(
-                              text: AppLocalizations.instance.translate(
-                                'setup_ledger_title',
-                              ),
-                              action: () => null
-                              // action: () async {
-                              //   await LedgerInterface().init();
-
-                              //   for (var i = 0; i < 10; i++) {
-                              //     final res = await LedgerInterface()
-                              //         .getWalletPublicKey(
-                              //       path: "44'/6'/0'/0/$i",
-                              //     );
-                              //     print(res.address);
-                              //   }
-                              // },
-                              ,
-                            ),
                           Text(
                             AppLocalizations.instance.translate('setup_text3'),
                             style: const TextStyle(
@@ -135,6 +116,42 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                             action: () => Navigator.of(context)
                                 .pushNamed(Routes.setupCreateWallet),
                           ),
+                          if (kIsWeb)
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('setup_text3'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          if (kIsWeb) //only show ledger button on web
+                            PeerExplanationText(
+                              text: AppLocalizations.instance
+                                  .translate('setup_text4'),
+                              maxLines: 2,
+                            ),
+                          if (kIsWeb) //only show ledger button on web
+                            PeerButtonSetup(
+                              text: AppLocalizations.instance.translate(
+                                'setup_ledger_title',
+                              ),
+                              action: () => Navigator.of(context)
+                                  .pushNamed(Routes.setupLedger)
+                              // action: () async {
+                              //   await LedgerInterface().init();
+
+                              //   for (var i = 0; i < 10; i++) {
+                              //     final res = await LedgerInterface()
+                              //         .getWalletPublicKey(
+                              //       path: "44'/6'/0'/0/$i",
+                              //     );
+                              //     print(res.address);
+                              //   }
+                              // },
+                              ,
+                            ),
                           const SizedBox(
                             height: 8,
                           ),

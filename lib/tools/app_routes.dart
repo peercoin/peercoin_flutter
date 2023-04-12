@@ -1,20 +1,21 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/setup/setup_ledger.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 
-import '../screens/settings/app_settings_notifications.dart';
-import '../screens/settings/app_settings_screen.dart';
 import '../screens/auth_jail.dart';
 import '../screens/changelog.dart';
 import '../screens/qrcode_scanner.dart';
+import '../screens/router_master.dart';
 import '../screens/server_settings/server_add.dart';
 import '../screens/server_settings/server_settings.dart';
+import '../screens/settings/app_settings_notifications.dart';
+import '../screens/settings/app_settings_screen.dart';
+import '../screens/setup/setup_auth.dart';
 import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
 import '../screens/setup/setup_language.dart';
-import '../screens/router_master.dart';
-import '../screens/setup/setup_auth.dart';
 import '../screens/setup/setup_legal.dart';
 import '../screens/wallet/address_selector.dart';
 import '../screens/wallet/import_paper_wallet.dart';
@@ -51,6 +52,7 @@ class Routes {
   static const String changeLog = '/changelog';
   static const String addressSelector = '/address-selector';
   static const String transactionConfirmation = '/transaction-confirmation';
+  static const String setupLedger = '/setup-ledger';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -145,6 +147,10 @@ class Routes {
       Routes.transactionConfirmation: (context) => const RouterMaster(
             widget: TransactionConfirmationScreen(),
             routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.setupLedger: (context) => const RouterMaster(
+            widget: SetupLedgerScreen(),
+            routeType: RouteTypes.setupOnly,
           ),
     };
   }

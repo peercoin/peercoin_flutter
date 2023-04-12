@@ -136,12 +136,14 @@ class PeerButtonSetupLoading extends StatelessWidget {
   final Function() action;
   final String text;
   final bool loading;
+  final bool active;
 
   const PeerButtonSetupLoading({
     Key? key,
     required this.text,
     required this.action,
     this.loading = false,
+    this.active = true,
   }) : super(key: key);
 
   @override
@@ -149,7 +151,8 @@ class PeerButtonSetupLoading extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         foregroundColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor:
+            active ? Theme.of(context).colorScheme.background : Colors.grey,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4
