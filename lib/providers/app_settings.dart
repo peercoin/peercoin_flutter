@@ -33,10 +33,20 @@ class AppSettings with ChangeNotifier {
     }
   }
 
-  Future<void> createInitialSettings(bool allowBiometrics, String lang) async {
+  Future<void> createInitialSettings({
+    required bool allowBiometrics,
+    required String lang,
+    required bool ledgerMode,
+  }) async {
     var optionsBox =
         await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
-    await optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
+    await optionsBox.put(
+      'appOptions',
+      AppOptionsStore(
+        allowBiometrics,
+        ledgerMode,
+      ),
+    );
     await _sharedPrefs.setString('language_code', lang);
   }
 

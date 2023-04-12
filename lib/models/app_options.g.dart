@@ -17,16 +17,18 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AppOptionsStore(
-      fields[1] as bool?,
+      fields[1] == null ? false : fields[1] as bool,
+      fields[10] == null ? false : fields[10] as bool,
     )
-      .._authenticationOptions = (fields[0] as Map?)?.cast<String, bool>()
-      .._defaultWallet = fields[2] as String?
-      .._selectedCurrency = fields[3] as String?
+      .._defaultWallet = fields[2] == null ? '' : fields[2] as String
+      .._selectedCurrency = fields[3] == null ? '' : fields[3] as String
       .._latestTickerUpdate = fields[4] as DateTime?
-      .._exchangeRates = (fields[5] as Map?)?.cast<String, dynamic>()
-      .._buildIdentifier = fields[6] as String?
-      .._notificationInterval = fields[7] as int?
-      .._notificationActiveWallets = (fields[8] as List?)?.cast<String>()
+      .._exchangeRates =
+          fields[5] == null ? {} : (fields[5] as Map).cast<String, dynamic>()
+      .._buildIdentifier = fields[6] == null ? '' : fields[6] as String
+      .._notificationInterval = fields[7] == null ? 0 : fields[7] as int
+      .._notificationActiveWallets =
+          fields[8] == null ? [] : (fields[8] as List).cast<String>()
       .._periodicReminterItemsNextView =
           fields[9] == null ? {} : (fields[9] as Map).cast<String, DateTime>();
   }
@@ -34,7 +36,7 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
   @override
   void write(BinaryWriter writer, AppOptionsStore obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj._authenticationOptions)
       ..writeByte(1)
@@ -54,7 +56,9 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       ..writeByte(8)
       ..write(obj._notificationActiveWallets)
       ..writeByte(9)
-      ..write(obj._periodicReminterItemsNextView);
+      ..write(obj._periodicReminterItemsNextView)
+      ..writeByte(10)
+      ..write(obj._ledgerMode);
   }
 
   @override

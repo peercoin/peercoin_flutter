@@ -23,6 +23,7 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
   bool _biometricsAllowed = true;
   bool _initial = true;
   bool _biometricsAvailable = false;
+  bool _ledgerMode = false;
 
   @override
   void didChangeDependencies() async {
@@ -162,8 +163,9 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
                       await encryptedBox.setPassCode(matchedText);
                       await settings.init(true);
                       await settings.createInitialSettings(
-                        _biometricsAllowed,
-                        AppLocalizations.instance.locale.toString(),
+                        allowBiometrics: _biometricsAllowed,
+                        lang: AppLocalizations.instance.locale.toString(),
+                        ledgerMode: _ledgerMode,
                       );
                       navigator.pop();
                       await navigator.pushNamed(Routes.setupDataFeeds);
