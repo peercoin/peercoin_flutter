@@ -48,8 +48,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
       if (searchedKey != null && searchedKey.isNotEmpty) {
         filteredList = _addresses.where((element) {
           return element.address.contains(searchedKey) ||
-              element.addressBookName != null &&
-                  element.addressBookName!.contains(searchedKey);
+              element.addressBookName.contains(searchedKey);
         }).toList();
       } else {
         filteredList = _addresses;
@@ -80,7 +79,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
               ),
             ),
             subtitle: Text(
-              address.addressBookName ?? '',
+              address.addressBookName,
               textAlign: TextAlign.center,
             ),
             leading: Radio(
@@ -144,7 +143,9 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                   key: const Key('selectorSearchBar'),
                   child: TextFormField(
                     autofocus: true,
-                    style: TextStyle(color: Theme.of(context).colorScheme.background),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.background,
+                    ),
                     key: const Key('selectorSearchKey'),
                     textInputAction: TextInputAction.done,
                     autocorrect: false,

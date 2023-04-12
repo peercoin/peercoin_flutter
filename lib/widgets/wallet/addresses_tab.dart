@@ -99,7 +99,7 @@ class _AddressTabState extends State<AddressTab> {
     var filteredListSend = <WalletAddress>[];
 
     for (var e in widget.walletAddresses) {
-      if (e.isOurs == true || e.isOurs == null) {
+      if (e.isOurs == true) {
         filteredListReceive.add(e);
         //fake watch change address and addresses with balance
         if (_addressBalanceMap[e.address] != null ||
@@ -147,13 +147,11 @@ class _AddressTabState extends State<AddressTab> {
     if (searchedKey != null) {
       filteredListReceive = filteredListReceive.where((element) {
         return element.address.contains(searchedKey) ||
-            element.addressBookName != null &&
-                element.addressBookName!.contains(searchedKey);
+            element.addressBookName.contains(searchedKey);
       }).toList();
       filteredListSend = filteredListSend.where((element) {
         return element.address.contains(searchedKey) ||
-            element.addressBookName != null &&
-                element.addressBookName!.contains(searchedKey);
+            element.addressBookName.contains(searchedKey);
       }).toList();
     }
 
@@ -168,7 +166,7 @@ class _AddressTabState extends State<AddressTab> {
     WalletAddress address,
   ) async {
     var textFieldController = TextEditingController();
-    textFieldController.text = address.addressBookName ?? '';
+    textFieldController.text = address.addressBookName;
     return showDialog(
       context: context,
       builder: (context) {
@@ -432,7 +430,7 @@ class _AddressTabState extends State<AddressTab> {
 
   String _renderLabel(WalletAddress addr) {
     if (_showLabel) {
-      return addr.addressBookName ?? '-';
+      return addr.addressBookName;
     }
     var number = _addressBalanceMap[addr.address] ?? 0;
     return '${(number / _decimalProduct)} ${_availableCoin.letterCode}';
@@ -570,7 +568,7 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                       title: Center(
                         child: Text(
-                          addr.addressBookName ?? '-',
+                          addr.addressBookName,
                           style: const TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
@@ -717,7 +715,8 @@ class _AddressTabState extends State<AddressTab> {
                   Column(
                     children: [
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -744,7 +743,8 @@ class _AddressTabState extends State<AddressTab> {
                           height: 10,
                         ),
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -769,7 +769,8 @@ class _AddressTabState extends State<AddressTab> {
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
-                          backgroundColor: Theme.of(context).colorScheme.background,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
                             horizontal: 0.0,
@@ -804,7 +805,8 @@ class _AddressTabState extends State<AddressTab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -830,7 +832,8 @@ class _AddressTabState extends State<AddressTab> {
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
-                          backgroundColor: Theme.of(context).colorScheme.background,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
                             horizontal: 0.0,

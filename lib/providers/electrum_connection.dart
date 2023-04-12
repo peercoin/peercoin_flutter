@@ -401,7 +401,7 @@ class ElectrumConnection with ChangeNotifier {
     latestBlock = height;
   }
 
-  void handleAddressStatus(String address, String? newStatus) async {
+  void handleAddressStatus(String address, String newStatus) async {
     var oldStatus =
         await _activeWallets.getWalletAddressStatus(_coinName, address);
     var hash = _addresses.entries
@@ -417,7 +417,7 @@ class ElectrumConnection with ChangeNotifier {
       handleScriptHashSubscribeNotification(hash.value, newStatus);
     }
     if (_scanMode == true) {
-      if (newStatus == null) {
+      if (newStatus.isEmpty) {
         await subscribeNextDerivedAddress();
       } else {
         //increase depth because we found one != null
@@ -514,7 +514,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleScriptHashSubscribeNotification(
     String? hashId,
-    String? newStatus,
+    String newStatus,
   ) async {
     //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(

@@ -138,7 +138,7 @@ class ActiveWallets with ChangeNotifier {
       address: publicAddress,
       addressBookName: '',
       used: true,
-      status: null,
+      status: '',
       isOurs: true,
       wif: wif,
     );
@@ -169,7 +169,7 @@ class ActiveWallets with ChangeNotifier {
         address: hdWallet.address,
         addressBookName: '',
         used: false,
-        status: null,
+        status: '',
         isOurs: true,
         wif: hdWallet.wif ?? '',
       );
@@ -178,7 +178,7 @@ class ActiveWallets with ChangeNotifier {
       //wallet is not brand new, lets find an unused address
       String? unusedAddr;
       for (var walletAddr in openWallet.addresses) {
-        if (walletAddr.used == false && walletAddr.status == null) {
+        if (walletAddr.used == false && walletAddr.status.isEmpty) {
           unusedAddr = walletAddr.address;
         }
       }
@@ -211,7 +211,7 @@ class ActiveWallets with ChangeNotifier {
           address: newHdWallet.address,
           addressBookName: '',
           used: false,
-          status: null,
+          status: '',
           isOurs: true,
           wif: newHdWallet.wif ?? '',
         );
@@ -517,7 +517,7 @@ class ActiveWallets with ChangeNotifier {
         .removeWhere((element) => element.broadCasted == false);
 
     for (var element in openWallet.addresses) {
-      element.newStatus = null;
+      element.newStatus = '';
       element.newNotificationBackendCount = 0;
     }
 
@@ -528,7 +528,7 @@ class ActiveWallets with ChangeNotifier {
   Future<void> updateAddressStatus(
     String identifier,
     String address,
-    String? status,
+    String status,
   ) async {
     LoggerWrapper.logInfo(
       'ActiveWallets',
@@ -541,8 +541,8 @@ class ActiveWallets with ChangeNotifier {
     var addrInWallet = openWallet.addresses
         .firstWhereOrNull((element) => element.address == address);
     if (addrInWallet != null) {
-      addrInWallet.newUsed = status == null ? false : true;
-      addrInWallet.newStatus = status;
+      addrInWallet.newUsed = status.isEmpty ? false : true;
+      addrInWallet.newStatus = '';
 
       if (addrInWallet.wif.isEmpty) {
         await getWif(
@@ -888,7 +888,7 @@ class ActiveWallets with ChangeNotifier {
       var utxos = await getWalletUtxos(identifier);
       addresses = await getWalletAddresses(identifier);
       for (var addr in addresses) {
-        if (addr.isOurs == true || addr.isOurs == null) {
+        if (addr.isOurs == true) {
           // == null for backwards compatability
           //does addr have a balance?
           var utxoRes = utxos
@@ -968,7 +968,7 @@ class ActiveWallets with ChangeNotifier {
         address: address,
         addressBookName: label,
         used: true,
-        status: null,
+        status: '',
         isOurs: false,
         wif: '',
       );
@@ -1034,7 +1034,7 @@ class ActiveWallets with ChangeNotifier {
       (element) => element.address == address,
     );
     if (addr == null) return '';
-    return addr.addressBookName ?? '';
+    return addr.addressBookName;
   }
 
   String reverseString(String input) {

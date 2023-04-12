@@ -36,7 +36,7 @@ class AppSettings with ChangeNotifier {
   Future<void> createInitialSettings({
     required bool allowBiometrics,
     required String lang,
-    required bool ledgerMode,
+    required bool ledgerMode, //TODO ??
   }) async {
     var optionsBox =
         await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
