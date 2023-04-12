@@ -44,7 +44,6 @@ class AppSettings with ChangeNotifier {
       'appOptions',
       AppOptionsStore(
         allowBiometrics,
-        ledgerMode,
       ),
     );
     await _sharedPrefs.setString('language_code', lang);

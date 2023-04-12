@@ -18,7 +18,6 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
     };
     return AppOptionsStore(
       fields[1] == null ? false : fields[1] as bool,
-      fields[10] == null ? false : fields[10] as bool,
     )
       .._defaultWallet = fields[2] == null ? '' : fields[2] as String
       .._selectedCurrency = fields[3] == null ? '' : fields[3] as String
@@ -36,7 +35,7 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
   @override
   void write(BinaryWriter writer, AppOptionsStore obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj._authenticationOptions)
       ..writeByte(1)
@@ -56,9 +55,7 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       ..writeByte(8)
       ..write(obj._notificationActiveWallets)
       ..writeByte(9)
-      ..write(obj._periodicReminterItemsNextView)
-      ..writeByte(10)
-      ..write(obj._ledgerMode);
+      ..write(obj._periodicReminterItemsNextView);
   }
 
   @override
