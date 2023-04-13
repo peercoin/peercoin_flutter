@@ -32,6 +32,12 @@ class LedgerInterface {
       );
       btc = Btc(transport);
     } catch (e) {
+      LoggerWrapper.logError(
+        'LedgerInterface',
+        'init',
+        e.toString(),
+      );
+
       if (e.toString().contains('TransportOpenUserCancelled')) {
         throw LedgerTransportOpenUserCancelled();
       }
@@ -60,6 +66,12 @@ class LedgerInterface {
         address: getProperty(walletPublicKey, 'bitcoinAddress'),
       );
     } catch (e) {
+      LoggerWrapper.logError(
+        'LedgerInterface',
+        'getWalletPublicKey',
+        e.toString(),
+      );
+
       if (e.toString().contains('0x6511')) {
         throw LedgerApplicationNotOpen();
       }
@@ -135,3 +147,5 @@ class LedgerInterface {
 	            "getTrustedInput",
 	            "getTrustedInputBIP143",
  */
+
+//TODO path without setup
