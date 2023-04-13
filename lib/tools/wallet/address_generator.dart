@@ -141,7 +141,9 @@ class AddressGenerator {
     }
   }
 
-  int _getNumberOfOurAddresses({required CoinWallet openWallet}) {
+  int _getNumberOfOurAddresses({
+    required CoinWallet openWallet,
+  }) {
     return openWallet.addresses
         .where((element) => element.isOurs == true)
         .length;
@@ -160,7 +162,7 @@ class AddressGenerator {
     required CoinWallet openWallet,
   }) async {
     return openWallet.addresses.firstWhereOrNull(
-      (element) => element.used == false && element.status.isEmpty,
+      (element) => element.used == false && element.status == null,
     );
   }
 }
