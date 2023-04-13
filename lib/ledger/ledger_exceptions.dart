@@ -10,6 +10,10 @@ class LedgerTransportOpenUserCancelled implements Exception {
   LedgerTransportOpenUserCancelled();
 }
 
-class LedgerTimeoutException implements Exception {
-  LedgerTimeoutException();
+class LedgerTimeout implements Exception {
+  LedgerTimeout();
+}
+
+class LedgerDeviceBusy implements Exception {
+  LedgerDeviceBusy();
 }

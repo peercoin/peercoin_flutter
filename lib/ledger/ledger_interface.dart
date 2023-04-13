@@ -74,20 +74,21 @@ class LedgerInterface {
 
       if (e.toString().contains('0x6511')) {
         throw LedgerApplicationNotOpen();
+      } else if (e.toString().contains('lock getWalletPublicKey')) {
+        throw LedgerDeviceBusy();
       }
       throw LedgerUnknownException();
     }
   }
 
   Future<dynamic> performTransaction({
-    // required BuildContext context,
     required Future future,
   }) async {
     try {
       return await future.timeout(
         const Duration(seconds: 10),
         onTimeout: () {
-          throw LedgerTimeoutException();
+          throw LedgerTimeout();
         },
       );
     } catch (e) {
@@ -109,7 +110,7 @@ class LedgerInterface {
           errorText =
               'Please allow the browser to access your Ledger'; //TODO i18n
           break;
-        case LedgerTimeoutException:
+        case LedgerTimeout:
           errorText =
               'Connection to Ledger timed out. Is the device unlocked? Please try again'; //TODO i18n
           break;
