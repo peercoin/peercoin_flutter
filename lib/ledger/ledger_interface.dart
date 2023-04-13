@@ -83,6 +83,7 @@ class LedgerInterface {
 
   Future<dynamic> performTransaction({
     required Future future,
+    bool retried = false,
   }) async {
     try {
       return await future.timeout(
@@ -99,6 +100,16 @@ class LedgerInterface {
       );
 
       final errorType = e.runtimeType;
+      if (e.runtimeType == LedgerDeviceBusy && retried == false) {
+        //try again!
+        await Future.delayed(const Duration(seconds: 3));
+        await performTransaction(
+          future: future,
+          retried: true,
+        );
+        return;
+      }
+
       String errorText;
 
       switch (errorType) {
