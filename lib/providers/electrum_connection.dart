@@ -514,7 +514,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleScriptHashSubscribeNotification(
     String? hashId,
-    String newStatus,
+    String? newStatus,
   ) async {
     //got update notification for hash => get utxo
     final address = _addresses.keys.firstWhere(
@@ -527,7 +527,11 @@ class ElectrumConnection with ChangeNotifier {
       'update for $hashId',
     );
     //update status so we flag that we proccessed this update already
-    await _activeWallets.updateAddressStatus(_coinName, address, newStatus);
+    await _activeWallets.updateAddressStatus(
+      identifier: _coinName,
+      address: address,
+      status: newStatus ?? '',
+    );
     //fire listunspent to get utxo
     sendMessage(
       'blockchain.scripthash.listunspent',

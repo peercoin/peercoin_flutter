@@ -478,11 +478,11 @@ class ActiveWallets with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<void> updateAddressStatus(
-    String identifier,
-    String address,
-    String status,
-  ) async {
+  Future<void> updateAddressStatus({
+    required String identifier,
+    required String address,
+    required String status,
+  }) async {
     LoggerWrapper.logInfo(
       'ActiveWallets',
       'updateAddressStatus',
@@ -953,7 +953,11 @@ class ActiveWallets with ChangeNotifier {
         ),
       );
     } else {
-      await updateAddressStatus(identifier, address, status);
+      await updateAddressStatus(
+        address: address,
+        identifier: identifier,
+        status: status,
+      );
     }
 
     await openWallet.save();
