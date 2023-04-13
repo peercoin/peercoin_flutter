@@ -929,6 +929,12 @@ class ActiveWallets with ChangeNotifier {
     required String address,
     required String status,
   }) async {
+    LoggerWrapper.logInfo(
+      'ActiveWallets',
+      'addAddressFromScan',
+      'adding address $address with status $status',
+    );
+
     var openWallet = getSpecificCoinWallet(identifier);
     var addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,

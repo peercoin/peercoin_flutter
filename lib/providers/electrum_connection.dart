@@ -524,7 +524,7 @@ class ElectrumConnection with ChangeNotifier {
     LoggerWrapper.logInfo(
       'ElectrumConnection',
       'handleScriptHashSubscribeNotification',
-      'update for $hashId',
+      'update for $address - $hashId',
     );
     //update status so we flag that we proccessed this update already
     await _activeWallets.updateAddressStatus(

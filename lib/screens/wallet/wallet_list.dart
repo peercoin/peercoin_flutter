@@ -27,6 +27,8 @@ import '../../tools/session_checker.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/logout_dialog_dummy.dart'
     if (dart.library.html) '../../widgets/logout_dialog.dart';
+import '../../../ledger/ledger_interface_dummy.dart'
+    if (dart.library.html) '../../ledger/ledger_interface.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
@@ -85,6 +87,15 @@ class _WalletListScreenState extends State<WalletListScreen>
       setState(() {
         _initial = false;
       });
+
+      //check if we are in ledger mode
+      if (_appSettings.ledgerMode == true) {
+        //init ledger
+        await LedgerInterface().performTransaction(
+          future: LedgerInterface().init(),
+        );
+        //TODO refine
+      }
 
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {

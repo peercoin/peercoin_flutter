@@ -103,11 +103,10 @@ class LedgerInterface {
       if (e.runtimeType == LedgerDeviceBusy && retried == false) {
         //try again!
         await Future.delayed(const Duration(seconds: 3));
-        await performTransaction(
+        return await performTransaction(
           future: future,
           retried: true,
         );
-        return;
       }
 
       String errorText;
