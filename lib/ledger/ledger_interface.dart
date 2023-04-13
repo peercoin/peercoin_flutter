@@ -3,6 +3,7 @@
 import 'dart:js_util';
 
 import 'package:flutter/material.dart';
+import 'package:peercoin/tools/global_keys.dart';
 
 import '../tools/logger_wrapper.dart';
 import 'ledger_exceptions.dart';
@@ -106,16 +107,16 @@ class LedgerInterface {
           break;
       }
 
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(
-      //       errorText,
-      //       textAlign: TextAlign.center,
-      //     ),
-      //     duration: const Duration(seconds: 5),
-      //   ),
-      // ); TODO
-      throw LedgerTransactionException(errorText, errorType);
+      rootScaffoldMessengerKey.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(
+            errorText,
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      rethrow;
     }
   }
 }

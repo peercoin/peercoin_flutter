@@ -19,6 +19,7 @@ import 'providers/app_settings.dart';
 import 'providers/servers.dart';
 import 'screens/auth_jail.dart';
 import 'screens/secure_storage_error_screen.dart';
+import 'tools/global_keys.dart';
 import 'tools/logger_wrapper.dart';
 import 'tools/theme_manager.dart';
 import 'models/coin_wallet.dart';
@@ -212,6 +213,7 @@ class PeercoinApp extends StatelessWidget {
             child: MaterialApp(
               title: 'Peercoin',
               debugShowCheckedModeBanner: false,
+              scaffoldMessengerKey: rootScaffoldMessengerKey,
               supportedLocales: AppLocalizations.availableLocales.keys
                   .map((lang) => Locale(lang)),
               localizationsDelegates: const [

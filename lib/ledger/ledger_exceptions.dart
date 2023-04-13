@@ -13,9 +13,3 @@ class LedgerTransportOpenUserCancelled implements Exception {
 class LedgerTimeoutException implements Exception {
   LedgerTimeoutException();
 }
-
-class LedgerTransactionException implements Exception {
-  final String cause;
-  final Type baseExceptionType;
-  LedgerTransactionException(this.cause, this.baseExceptionType);
-}
