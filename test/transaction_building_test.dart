@@ -13,6 +13,7 @@ import 'package:peercoin/models/wallet_utxo.dart';
 import 'package:peercoin/providers/active_wallets.dart';
 import 'package:peercoin/providers/encrypted_box.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockHiveBox extends Mock implements EncryptedBox {
   @override
@@ -45,11 +46,15 @@ void main() async {
   ).toInt();
 
   setUpAll(() async {
+    final Map<String, Object> values = {};
+    SharedPreferences.setMockInitialValues(values);
+
     Hive.init("test");
     Hive.registerAdapter(CoinWalletAdapter());
     Hive.registerAdapter(WalletTransactionAdapter());
     Hive.registerAdapter(WalletAddressAdapter());
     Hive.registerAdapter(WalletUtxoAdapter());
+
     await wallet.init();
     wallet.addWallet(walletName, walletName, 'PPC');
     wallet.addWallet(testnetWalletName, testnetWalletName, 'tPPC');
