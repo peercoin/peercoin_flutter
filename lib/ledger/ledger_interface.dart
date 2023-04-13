@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../tools/logger_wrapper.dart';
 import 'ledger_exceptions.dart';
 import 'ledger_js_binding.dart';
+import 'ledger_public_key.dart';
 
 class LedgerInterface {
   late Object transport;
@@ -64,12 +65,12 @@ class LedgerInterface {
     }
   }
 
-  Future<void> performTransaction({
-    required BuildContext context,
+  Future<dynamic> performTransaction({
+    // required BuildContext context,
     required Future future,
   }) async {
     try {
-      await future.timeout(
+      return await future.timeout(
         const Duration(seconds: 10),
         onTimeout: () {
           throw LedgerTimeoutException();
@@ -105,31 +106,21 @@ class LedgerInterface {
           break;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            errorText,
-            textAlign: TextAlign.center,
-          ),
-          duration: const Duration(seconds: 5),
-        ),
-      );
-      rethrow;
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       errorText,
+      //       textAlign: TextAlign.center,
+      //     ),
+      //     duration: const Duration(seconds: 5),
+      //   ),
+      // ); TODO
+      throw LedgerTransactionException(errorText, errorType);
     }
   }
 }
 
-class LedgerPublicKey {
-  final String publicKey;
-  final String chainCode;
-  final String address;
 
-  LedgerPublicKey({
-    required this.publicKey,
-    required this.chainCode,
-    required this.address,
-  });
-}
 
 //TODO make it sign https://gist.github.com/miguelmota/62559d02a1b99cb291635de4b224349c
 /*
