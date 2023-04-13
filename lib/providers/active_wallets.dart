@@ -15,6 +15,8 @@ import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/providers/app_settings.dart';
+import 'package:peercoin/tools/address_generator.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
@@ -29,12 +31,15 @@ import 'encrypted_box.dart';
 
 class ActiveWallets with ChangeNotifier {
   final EncryptedBox _encryptedBox;
-  ActiveWallets(this._encryptedBox);
-  late String _seedPhrase;
+  ActiveWallets(
+    this._encryptedBox,
+  );
+
   String _unusedAddress = '';
-  late Box<CoinWallet> _walletBox;
   Box? _vaultBox;
   Map<String, String> _wifs = {};
+  late String _seedPhrase;
+  late Box<CoinWallet> _walletBox;
   final Map<String?, CoinWallet?> _specificWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
 
@@ -163,62 +168,11 @@ class ActiveWallets with ChangeNotifier {
     var openWallet = getSpecificCoinWallet(identifier);
     var hdWallet = await getHdWallet(identifier);
 
-    if (openWallet.addresses.isEmpty) {
-      //generate new address
-      openWallet.addNewAddress = WalletAddress(
-        address: hdWallet.address,
-        addressBookName: '',
-        used: false,
-        status: '',
-        isOurs: true,
-        wif: hdWallet.wif ?? '',
-      );
-      unusedAddress = hdWallet.address;
-    } else {
-      //wallet is not brand new, lets find an unused address
-      String? unusedAddr;
-      for (var walletAddr in openWallet.addresses) {
-        if (walletAddr.used == false && walletAddr.status.isEmpty) {
-          unusedAddr = walletAddr.address;
-        }
-      }
-      if (unusedAddr != null) {
-        //unused address available
-        unusedAddress = unusedAddr;
-      } else {
-        //not empty, but all used -> create new one
-        var numberOfOurAddr = openWallet.addresses
-            .where((element) => element.isOurs == true)
-            .length;
-        var derivePath = "m/0'/$numberOfOurAddr/0";
-        var newHdWallet = hdWallet.derivePath(derivePath);
-        var newAddrResult = openWallet.addresses.firstWhereOrNull(
-          (element) => element.address == newHdWallet.address,
-        );
+    unusedAddress = await AddressGenerator().generateUnusedAddress(
+      openWallet: openWallet,
+      hdWallet: hdWallet,
+    );
 
-        while (newAddrResult != null) {
-          //next addr in derivePath already exists for some reason, find a non-existing one
-          numberOfOurAddr++;
-          derivePath = "m/0'/$numberOfOurAddr/0";
-          newHdWallet = hdWallet.derivePath(derivePath);
-
-          newAddrResult = openWallet.addresses.firstWhereOrNull(
-            (element) => element.address == newHdWallet.address,
-          );
-        }
-
-        openWallet.addNewAddress = WalletAddress(
-          address: newHdWallet.address,
-          addressBookName: '',
-          used: false,
-          status: '',
-          isOurs: true,
-          wif: newHdWallet.wif ?? '',
-        );
-
-        unusedAddress = newHdWallet.address;
-      }
-    }
     await openWallet.save();
   }
 

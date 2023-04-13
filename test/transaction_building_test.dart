@@ -179,12 +179,13 @@ void main() async {
   group(
     'testnet',
     () {
+      const initialWalletAddress = 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw';
       test(
         'Generate unused testnet address',
         () async {
           await wallet.generateUnusedAddress(testnetWalletName);
           assert(
-            wallet.getUnusedAddress == 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw',
+            wallet.getUnusedAddress == initialWalletAddress,
           );
         },
       );
@@ -261,6 +262,25 @@ void main() async {
           result.id ==
               "2d5b05caf02eb07571fc3685e404e1c00085ce6bd75862a61ddb282b37d73838",
         );
+      });
+
+      test('check if new wallet address was created', () async {
+        await wallet.generateUnusedAddress(testnetWalletName);
+        final oldUnused = wallet.getUnusedAddress;
+        assert(oldUnused == initialWalletAddress);
+
+        final addresses = await wallet.getWalletAddresses(testnetWalletName);
+
+        //set old address to used
+        final oldAddressInWallet =
+            addresses.firstWhere((element) => element.address == oldUnused);
+
+        oldAddressInWallet.newUsed = true;
+
+        //generate new and check
+        await wallet.generateUnusedAddress(testnetWalletName);
+        final newUnused = wallet.getUnusedAddress;
+        assert(newUnused == 'mxbH521tV8BJQ8RRbWqJ6RCNYb22YJLZ7z');
       });
     },
   );

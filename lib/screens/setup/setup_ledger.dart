@@ -70,11 +70,11 @@ class _SetupLedgerScreenState extends State<SetupLedgerScreen> {
   Future<bool> connectLedgerAndTryToGetPubKey() async {
     try {
       await LedgerInterface().performTransaction(
-        context: context,
+        // context: context, //TODO
         future: LedgerInterface().init(),
       );
       await LedgerInterface().performTransaction(
-        context: context,
+        // context: context, //TODO
         future: LedgerInterface().getWalletPublicKey(
           path: "44'/6'/0'/0/0",
         ),
