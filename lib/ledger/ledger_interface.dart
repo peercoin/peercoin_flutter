@@ -160,3 +160,4 @@ class LedgerInterface {
  */
 
 //TODO path without setup
+//TODO notification when device is disconnected
