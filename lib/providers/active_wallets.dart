@@ -108,7 +108,7 @@ class ActiveWallets with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> getAddressFromDerivationPath({
+  Future<String> getAddressFromDerivationPath({
     required String identifier,
     required int account,
     required int chain,
@@ -116,20 +116,12 @@ class ActiveWallets with ChangeNotifier {
     bool isMaster = false,
   }) async {
     var hdWallet = await getHdWallet(identifier);
-    print('address' + hdWallet.address);
-    print('path 0' + hdWallet.derivePath("m/0/0/0").address);
-    if (isMaster == true) {
-      return hdWallet.address;
-    } else {
-      var derivePath = "m/$account'/$chain/$address";
-      LoggerWrapper.logInfo(
-        'ActiveWallets',
-        'getAddressFromDerivationPath',
-        derivePath,
-      );
-
-      return hdWallet.derivePath(derivePath).address;
-    }
+    return await AddressGenerator().generateAddressFromPath(
+      account: account,
+      chain: chain,
+      address: address,
+      hdWallet: hdWallet,
+    );
   }
 
   Future<void> addAddressFromWif(

@@ -1,5 +1,6 @@
 import 'package:coinslib/coinslib.dart';
 import 'package:collection/collection.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../ledger/ledger_interface_dummy.dart'
@@ -9,6 +10,54 @@ import '../../../models/coin_wallet.dart';
 import '../../../models/wallet_address.dart';
 
 class AddressGenerator {
+  Future<String> generateAddressFromPath({
+    required HDWallet hdWallet,
+    String path = '',
+    int account = 0,
+    int chain = 0,
+    int address = 0,
+    bool master = false,
+  }) async {
+    //check ledger mode
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var ledgerMode = prefs.getBool('ledgerMode') ?? false;
+
+    //form path if not provided
+    if (path.isEmpty) {
+      if (ledgerMode == true) {
+        path = "44'/6'/0'/0/$chain";
+      } else {
+        path = "m/$account'/$chain/$address";
+      }
+    }
+
+    LoggerWrapper.logInfo(
+      'AddressGenerator',
+      'generateAddressFromPath',
+      'Generating address from path: $path',
+    );
+
+    String newAddr = '';
+    if (ledgerMode == true) {
+      final LedgerPublicKey res = await LedgerInterface().performTransaction(
+        future: LedgerInterface().getWalletPublicKey(
+          path: path,
+        ),
+      );
+      newAddr = res.address;
+    } else {
+      newAddr =
+          master == true ? hdWallet.address : hdWallet.derivePath(path).address;
+    }
+
+    LoggerWrapper.logInfo(
+      'AddressGenerator',
+      'generateAddressFromPath',
+      'newaddr: $newAddr',
+    );
+    return newAddr;
+  }
+
   Future<String> generateUnusedAddress({
     required CoinWallet openWallet,
     required HDWallet hdWallet,
@@ -60,9 +109,10 @@ class AddressGenerator {
               ? "44'/6'/0'/0/$numberOfOurAddr"
               : "m/0'/$numberOfOurAddr/0";
 
-          newAddress = ledgerMode == true
-              ? await _getAddressFromLedgerAtPath(path: derivePath)
-              : hdWallet.derivePath(derivePath).address;
+          newAddress = await generateAddressFromPath(
+            hdWallet: hdWallet,
+            path: derivePath,
+          );
 
           final addressInWallet = _tryFindGeneratedAddressInWallet(
             openWallet: openWallet,
@@ -89,17 +139,6 @@ class AddressGenerator {
         return newAddress;
       }
     }
-  }
-
-  Future<String> _getAddressFromLedgerAtPath({
-    required String path,
-  }) async {
-    final LedgerPublicKey res = await LedgerInterface().performTransaction(
-      future: LedgerInterface().getWalletPublicKey(
-        path: path,
-      ),
-    );
-    return res.address;
   }
 
   int _getNumberOfOurAddresses({required CoinWallet openWallet}) {

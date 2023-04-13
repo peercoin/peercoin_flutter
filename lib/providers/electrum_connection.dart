@@ -474,7 +474,7 @@ class ElectrumConnection with ChangeNotifier {
       LoggerWrapper.logInfo(
         'ElectrumConnection',
         'subscribeNextDerivedAddress',
-        '$nextAddr',
+        nextAddr,
       );
 
       subscribeToScriptHashes(

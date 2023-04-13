@@ -169,7 +169,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         chain: i,
         address: 0,
       );
-      adressesToQuery[res!] = 0;
+      adressesToQuery[res] = 0;
     }
 
     await parseMarismaResult(
