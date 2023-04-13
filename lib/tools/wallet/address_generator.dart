@@ -85,15 +85,16 @@ class AddressGenerator {
         address: newAddr,
         addressBookName: '',
         used: false,
-        status: '',
+        status: null,
         isOurs: true,
         wif: ledgerMode == true ? '' : hdWallet.wif ?? '',
       );
       return newAddr;
     } else {
       //wallet is not brand new, lets find an unused address
-      WalletAddress? unusedAddr =
-          await _tryFindUnusedAddressInWallet(openWallet: openWallet);
+      WalletAddress? unusedAddr = await _tryFindUnusedAddressInWallet(
+        openWallet: openWallet,
+      );
 
       if (unusedAddr != null) {
         //unused address available
@@ -131,7 +132,7 @@ class AddressGenerator {
           address: newAddress,
           addressBookName: '',
           used: false,
-          status: '',
+          status: null,
           isOurs: true,
           wif: '',
         );

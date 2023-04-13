@@ -526,17 +526,18 @@ class ElectrumConnection with ChangeNotifier {
       'handleScriptHashSubscribeNotification',
       'update for $address - $hashId',
     );
-    //update status so we flag that we proccessed this update already
-    await _activeWallets.updateAddressStatus(
-      identifier: _coinName,
-      address: address,
-      status: newStatus ?? '',
-    );
     //fire listunspent to get utxo
     sendMessage(
       'blockchain.scripthash.listunspent',
       'utxo_$address',
       [hashId],
+    );
+
+    //update status so we flag that we proccessed this update already
+    await _activeWallets.updateAddressStatus(
+      identifier: _coinName,
+      address: address,
+      status: newStatus,
     );
   }
 

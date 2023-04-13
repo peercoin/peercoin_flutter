@@ -7,9 +7,9 @@ class WalletAddress extends HiveObject {
   final String address;
   @HiveField(1, defaultValue: '')
   String addressBookName;
-  @HiveField(2, defaultValue: '')
-  String status;
-  @HiveField(3)
+  @HiveField(2, defaultValue: null)
+  String? status;
+  @HiveField(3, defaultValue: false)
   bool used;
   @HiveField(4, defaultValue: true)
   bool isOurs = true;
@@ -33,7 +33,7 @@ class WalletAddress extends HiveObject {
     required this.wif,
   });
 
-  set newStatus(String newStatus) {
+  set newStatus(String? newStatus) {
     status = newStatus;
   }
 

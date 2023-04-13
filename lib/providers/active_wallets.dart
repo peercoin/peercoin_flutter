@@ -135,7 +135,7 @@ class ActiveWallets with ChangeNotifier {
       address: publicAddress,
       addressBookName: '',
       used: true,
-      status: '',
+      status: null,
       isOurs: true,
       wif: wif,
     );
@@ -463,7 +463,7 @@ class ActiveWallets with ChangeNotifier {
         .removeWhere((element) => element.broadCasted == false);
 
     for (var element in openWallet.addresses) {
-      element.newStatus = '';
+      element.newStatus = null;
       element.newNotificationBackendCount = 0;
     }
 
@@ -474,7 +474,7 @@ class ActiveWallets with ChangeNotifier {
   Future<void> updateAddressStatus({
     required String identifier,
     required String address,
-    required String status,
+    required String? status,
   }) async {
     LoggerWrapper.logInfo(
       'ActiveWallets',
@@ -484,11 +484,12 @@ class ActiveWallets with ChangeNotifier {
     //set address to used
     //update status for address
     var openWallet = getSpecificCoinWallet(identifier);
-    var addrInWallet = openWallet.addresses
-        .firstWhereOrNull((element) => element.address == address);
+    var addrInWallet = openWallet.addresses.firstWhereOrNull(
+      (element) => element.address == address,
+    );
     if (addrInWallet != null) {
-      addrInWallet.newUsed = status.isEmpty ? false : true;
-      addrInWallet.newStatus = '';
+      addrInWallet.newUsed = status == null ? false : true;
+      addrInWallet.newStatus = status ?? '';
 
       if (addrInWallet.wif.isEmpty) {
         await getWif(
@@ -914,7 +915,7 @@ class ActiveWallets with ChangeNotifier {
         address: address,
         addressBookName: label,
         used: true,
-        status: '',
+        status: null,
         isOurs: false,
         wif: '',
       );
@@ -927,7 +928,7 @@ class ActiveWallets with ChangeNotifier {
   Future<void> addAddressFromScan({
     required String identifier,
     required String address,
-    required String status,
+    required String? status,
   }) async {
     LoggerWrapper.logInfo(
       'ActiveWallets',
