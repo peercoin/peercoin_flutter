@@ -1,16 +1,9 @@
 import 'ledger_public_key.dart';
 
 class LedgerInterface {
-  static final Map<String, LedgerInterface> _cache =
-      <String, LedgerInterface>{};
-
-  factory LedgerInterface() {
-    return _cache.putIfAbsent(
-      'ledgerinstance',
-      () => LedgerInterface._internal(),
-    );
+  Future<void> init() {
+    return Future.value();
   }
-  LedgerInterface._internal();
 
   Future<dynamic> performTransaction({
     required Future future,

@@ -15,7 +15,7 @@ import 'package:coinslib/src/utils/script.dart';
 import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 import 'package:peercoin/models/buildresult.dart';
-import 'package:peercoin/tools/address_generator.dart';
+import 'package:peercoin/tools/wallet/address_generator.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';

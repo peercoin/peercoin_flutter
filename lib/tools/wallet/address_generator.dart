@@ -2,11 +2,11 @@ import 'package:coinslib/coinslib.dart';
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../ledger/ledger_interface_dummy.dart'
+import '../../ledger/ledger_interface_dummy.dart'
     if (dart.library.html) '../ledger/ledger_interface.dart';
-import '../ledger/ledger_public_key.dart';
-import '../models/coin_wallet.dart';
-import '../models/wallet_address.dart';
+import '../../ledger/ledger_public_key.dart';
+import '../../models/coin_wallet.dart';
+import '../../models/wallet_address.dart';
 
 class AddressGenerator {
   Future<String> generateUnusedAddress({
