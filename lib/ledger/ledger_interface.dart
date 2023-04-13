@@ -3,6 +3,7 @@
 import 'dart:js_util';
 
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/tools/global_keys.dart';
 
 import '../tools/logger_wrapper.dart';
@@ -107,6 +108,7 @@ class LedgerInterface {
           break;
       }
 
+      rootScaffoldMessengerKey.currentContext!.loaderOverlay.hide();
       rootScaffoldMessengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(
