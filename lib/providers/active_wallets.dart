@@ -116,7 +116,8 @@ class ActiveWallets with ChangeNotifier {
     bool isMaster = false,
   }) async {
     var hdWallet = await getHdWallet(identifier);
-
+    print('address' + hdWallet.address);
+    print('path 0' + hdWallet.derivePath("m/0/0/0").address);
     if (isMaster == true) {
       return hdWallet.address;
     } else {
