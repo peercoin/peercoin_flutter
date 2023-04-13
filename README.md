@@ -59,6 +59,9 @@ This repository currently relies on
 Web files are now on the production branch and ready to be deployed.  
 This will use the html renderer by default. Add *--web-renderer canvas* to peanut if you want to switch to the canvas renderer.
 
+## Unit tests
+`flutter test -r expanded`
+
 ## Basic e2e testing
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart`  
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart`
