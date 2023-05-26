@@ -15,7 +15,10 @@ class AvailableCoins {
       networkType: NetworkType(
         messagePrefix: 'Peercoin Signed Message:\n',
         bech32: 'pc',
-        bip32: Bip32Type(public: 0x043587cf, private: 0x04358394),
+        bip32: Bip32Type(
+          public: 0x0488b21e,
+          private: 0x0488ade4,
+        ),
         pubKeyHash: 0x37,
         scriptHash: 0x75,
         wif: 0xb7,
@@ -45,7 +48,10 @@ class AvailableCoins {
       networkType: NetworkType(
         messagePrefix: 'Peercoin Signed Message:\n',
         bech32: 'tpc',
-        bip32: Bip32Type(public: 0x043587cf, private: 0x04358394),
+        bip32: Bip32Type(
+          public: 0x0488b21e,
+          private: 0x0488ade4,
+        ),
         pubKeyHash: 0x6f,
         scriptHash: 0xc4,
         wif: 0xef,
