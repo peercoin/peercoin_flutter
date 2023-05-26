@@ -49,8 +49,8 @@ class AvailableCoins {
         messagePrefix: 'Peercoin Signed Message:\n',
         bech32: 'tpc',
         bip32: Bip32Type(
-          public: 0x0488b21e,
-          private: 0x0488ade4,
+          public: 0x043587cf,
+          private: 0x04358394,
         ),
         pubKeyHash: 0x6f,
         scriptHash: 0xc4,
