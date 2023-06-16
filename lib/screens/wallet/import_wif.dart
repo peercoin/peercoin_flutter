@@ -105,8 +105,9 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         .address; //TODO won't return a bech32 addr
 
     //check if that address is already in the list
-    final walletAddresses =
-        await _walletProvider.getWalletAddresses(_walletName);
+    final walletAddresses = await _walletProvider.getWalletAddresses(
+      _walletName,
+    );
     final specificAddressResult = walletAddresses.where(
       (element) => element.address == publicAddress,
     );
