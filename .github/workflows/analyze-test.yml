@@ -44,7 +44,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          script: | 
+          script: |
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart
            flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart
       # - name: Upload screenshots
