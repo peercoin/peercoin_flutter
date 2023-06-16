@@ -68,8 +68,11 @@ class WalletProvider with ChangeNotifier {
     return _unusedAddressCache[identifier] ?? '';
   }
 
-  void setUnusedAddress(String identifier, String newAddr) {
-    _unusedAddressCache[identifier] = newAddr;
+  void setUnusedAddress({
+    required String identifier,
+    required String address,
+  }) {
+    _unusedAddressCache[identifier] = address;
     notifyListeners();
   }
 
@@ -182,7 +185,10 @@ class WalletProvider with ChangeNotifier {
         isOurs: true,
         wif: hdWallet.wif ?? '',
       );
-      setUnusedAddress(identifier, hdWallet.address);
+      setUnusedAddress(
+        identifier: identifier,
+        address: hdWallet.address,
+      );
     } else {
       //wallet is not brand new, lets find an unused address
       String? unusedAddr;
@@ -193,7 +199,10 @@ class WalletProvider with ChangeNotifier {
       }
       if (unusedAddr != null) {
         //unused address available
-        setUnusedAddress(identifier, unusedAddr);
+        setUnusedAddress(
+          identifier: identifier,
+          address: unusedAddr,
+        );
       } else {
         //not empty, but all used -> create new one
         var numberOfOurAddr = openWallet.addresses
@@ -225,7 +234,10 @@ class WalletProvider with ChangeNotifier {
           wif: newHdWallet.wif ?? '',
         );
 
-        setUnusedAddress(identifier, newHdWallet.address);
+        setUnusedAddress(
+          identifier: identifier,
+          address: newHdWallet.address,
+        );
       }
     }
     await openWallet.save();
@@ -502,7 +514,7 @@ class WalletProvider with ChangeNotifier {
 
     //flag _unusedAddress as change addr
     var addrInWallet = openWallet.addresses.firstWhereOrNull(
-      (element) => element.address == _unusedAddressCache[identifier],
+      (element) => element.address == getUnusedAddress(identifier),
     );
     if (addrInWallet != null) {
       if (buildResult.neededChange == true) {
@@ -728,7 +740,10 @@ class WalletProvider with ChangeNotifier {
             }
           } else {
             //add change output to unused address
-            tx.addOutput(_unusedAddressCache, BigInt.from(changeAmount));
+            tx.addOutput(
+              getUnusedAddress(identifier),
+              BigInt.from(changeAmount),
+            );
           }
         } else if (txAmount + fee > totalInputValue) {
           //empty wallet case - full wallet balance has been requested but fees have to be paid
@@ -906,7 +921,7 @@ class WalletProvider with ChangeNotifier {
 
           if (addr.isWatched ||
               utxoRes != null && utxoRes.value > 0 ||
-              addr.address == _unusedAddressCache[identifier] ||
+              addr.address == getUnusedAddress(identifier) ||
               addr.status == 'hasUtxo') {
             answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }
