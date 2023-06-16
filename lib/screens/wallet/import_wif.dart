@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/electrum_connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -25,7 +25,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   late Coin _activeCoin;
   late String _walletName;
   bool _initial = true;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late ElectrumConnection _electrumConnection;
   final _wifGlobalKey = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
@@ -37,7 +37,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       setState(() {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
-        _activeWallets = Provider.of<ActiveWallets>(context);
+        _walletProvider = Provider.of<WalletProvider>(context);
         _electrumConnection = Provider.of<ElectrumConnection>(context);
         _initial = false;
       });
@@ -69,17 +69,17 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     //write to wallet
-    await _activeWallets.addAddressFromWif(_walletName, wif, address);
+    await _walletProvider.addAddressFromWif(_walletName, wif, address);
 
     //subscribe
     _electrumConnection.subscribeToScriptHashes(
       {
-        address: _activeWallets.getScriptHash(_walletName, address),
+        address: _walletProvider.getScriptHash(_walletName, address),
       },
     );
 
     //set to watched
-    await _activeWallets.updateAddressWatched(_walletName, address, true);
+    await _walletProvider.updateAddressWatched(_walletName, address, true);
 
     //sync background notification
     await BackgroundSync.executeSync(fromScan: true);
@@ -106,7 +106,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
     //check if that address is already in the list
     final walletAddresses =
-        await _activeWallets.getWalletAddresses(_walletName);
+        await _walletProvider.getWalletAddresses(_walletName);
     final specificAddressResult = walletAddresses.where(
       (element) => element.address == publicAddress,
     );

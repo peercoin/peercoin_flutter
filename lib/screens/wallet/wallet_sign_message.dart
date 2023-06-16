@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
@@ -27,7 +27,7 @@ class WalletMessageSigningScreen extends StatefulWidget {
 class _WalletMessageSigningScreenState
     extends State<WalletMessageSigningScreen> {
   late String _walletName;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   bool _initial = true;
   late Coin _activeCoin;
   bool _signingDone = false;
@@ -39,7 +39,7 @@ class _WalletMessageSigningScreenState
   void didChangeDependencies() {
     if (_initial == true) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
       setState(() {
         _initial = false;
@@ -68,7 +68,7 @@ class _WalletMessageSigningScreenState
     var result = await Navigator.of(context).pushNamed(
       Routes.addressSelector,
       arguments: {
-        'addresses': await _activeWallets.getWalletAddresses(_walletName),
+        'addresses': await _walletProvider.getWalletAddresses(_walletName),
         'selectedAddress': _signingAddress
       },
     );
@@ -88,7 +88,7 @@ class _WalletMessageSigningScreenState
     );
 
     try {
-      var wif = await _activeWallets.getWif(
+      var wif = await _walletProvider.getWif(
         identifier: _walletName,
         address: _signingAddress,
       );

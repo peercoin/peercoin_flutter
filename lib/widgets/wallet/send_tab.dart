@@ -19,7 +19,7 @@ import '/../models/available_coins.dart';
 import '/../models/coin.dart';
 import '/../models/coin_wallet.dart';
 import '/../models/wallet_address.dart';
-import '/../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '/../providers/app_settings.dart';
 import '/../providers/electrum_connection.dart';
 import '/../screens/wallet/wallet_home.dart';
@@ -65,7 +65,7 @@ class _SendTabState extends State<SendTab> {
   final _opReturnController = TextEditingController();
   bool _initial = true;
   late Coin _availableCoin;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
   late AppSettings _appSettings;
@@ -494,11 +494,11 @@ class _SendTabState extends State<SendTab> {
   void didChangeDependencies() async {
     if (_initial == true) {
       _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       _appSettings = context.read<AppSettings>();
 
       _availableAddresses =
-          await _activeWallets.getWalletAddresses(widget.wallet.name);
+          await _walletProvider.getWalletAddresses(widget.wallet.name);
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget.wallet.name,
       );
@@ -611,7 +611,7 @@ class _SendTabState extends State<SendTab> {
 
   Future<BuildResult?> _buildTx() async {
     try {
-      return await _activeWallets.buildTransaction(
+      return await _walletProvider.buildTransaction(
         identifier: widget.wallet.name,
         recipients: _buildRecipientMap(),
         fee: 0,
@@ -764,7 +764,7 @@ class _SendTabState extends State<SendTab> {
       _labelControllerList.asMap().forEach(
         (index, controller) {
           if (controller.text != '') {
-            _activeWallets.updateLabel(
+            _walletProvider.updateLabel(
               widget.wallet.name,
               _addressControllerList[index].text,
               controller.text,

@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/active_wallets.dart';
+import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -19,8 +19,8 @@ class PeriodicReminders {
     BuildContext ctx,
     PeriodicReminderItem reminderItem,
   ) async {
-    final activeWallets = ctx.read<ActiveWallets>();
-    final listOfActiveWallets = activeWallets.activeWalletsKeys;
+    final walletProvider = ctx.read<WalletProvider>();
+    final listOfAvailableWallets = walletProvider.availableWalletKeys;
 
     //show alert
     await showDialog(
@@ -50,11 +50,11 @@ class PeriodicReminders {
                 ),
               ),
             if (reminderItem.id == 'donate' && !kIsWeb)
-              listOfActiveWallets.contains('peercoin') && !Platform.isIOS
+              listOfAvailableWallets.contains('peercoin') && !Platform.isIOS
                   ? TextButton(
                       onPressed: () async {
                         final navigator = Navigator.of(context);
-                        final values = activeWallets.activeWalletsValues;
+                        final values = walletProvider.availableWalletValues;
                         final ppcWallet = values.firstWhere(
                           (element) => element.name == 'peercoin',
                         );

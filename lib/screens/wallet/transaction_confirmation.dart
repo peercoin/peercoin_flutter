@@ -3,7 +3,7 @@ import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/buildresult.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/electrum_connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/logger_wrapper.dart';
@@ -278,12 +278,12 @@ class _TransactionConfirmationScreenState
                                     });
                                     final electrumConnection =
                                         context.read<ElectrumConnection>();
-                                    final activeWallets =
-                                        context.read<ActiveWallets>();
+                                    final walletProvcider =
+                                        context.read<WalletProvider>();
                                     final navigator = Navigator.of(context);
                                     try {
                                       //write tx to history
-                                      await activeWallets.putOutgoingTx(
+                                      await walletProvcider.putOutgoingTx(
                                         identifier: arguments.coinIdentifier,
                                         buildResult: buildResult,
                                         totalFees: buildResult.fee,
@@ -302,7 +302,7 @@ class _TransactionConfirmationScreenState
                                         element.newHeight = -1;
                                       }
                                       //update balance
-                                      await activeWallets.updateWalletBalance(
+                                      await walletProvcider.updateWalletBalance(
                                         arguments.coinIdentifier,
                                       );
                                       //pop message

@@ -10,7 +10,7 @@ import 'package:peercoin/models/coin_wallet.dart';
 import 'package:peercoin/models/wallet_address.dart';
 import 'package:peercoin/models/wallet_transaction.dart';
 import 'package:peercoin/models/wallet_utxo.dart';
-import 'package:peercoin/providers/active_wallets.dart';
+import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/providers/encrypted_box.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
 
@@ -36,7 +36,7 @@ class MockHiveBox extends Mock implements EncryptedBox {
 void main() async {
   const walletName = 'peercoin';
   const testnetWalletName = 'peercoinTestnet';
-  final ActiveWallets wallet = ActiveWallets(MockHiveBox());
+  final WalletProvider wallet = WalletProvider(MockHiveBox());
   TestWidgetsFlutterBinding.ensureInitialized();
 
   final decimalProduct = pow(
@@ -70,7 +70,8 @@ void main() async {
         () async {
           await wallet.generateUnusedAddress(walletName);
           assert(
-            wallet.getUnusedAddress == 'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ',
+            wallet.getUnusedAddress(walletName) ==
+                'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ',
           );
         },
       );
@@ -80,7 +81,7 @@ void main() async {
         () async {
           await wallet.putUtxos(
             walletName,
-            wallet.getUnusedAddress,
+            wallet.getUnusedAddress(walletName),
             [
               {
                 "tx_hash":
@@ -95,7 +96,7 @@ void main() async {
           final getUtxos = await wallet.getWalletUtxos(walletName);
           assert(getUtxos.length == 1);
           assert(getUtxos[0].runtimeType == WalletUtxo);
-          assert(getUtxos[0].address == wallet.getUnusedAddress);
+          assert(getUtxos[0].address == wallet.getUnusedAddress(walletName));
         },
       );
 
@@ -179,7 +180,8 @@ void main() async {
         () async {
           await wallet.generateUnusedAddress(testnetWalletName);
           assert(
-            wallet.getUnusedAddress == 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw',
+            wallet.getUnusedAddress(walletName) ==
+                'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw',
           );
         },
       );
@@ -187,7 +189,7 @@ void main() async {
       test('Add testnet UTXO', () async {
         await wallet.putUtxos(
           testnetWalletName,
-          wallet.getUnusedAddress,
+          wallet.getUnusedAddress(walletName),
           [
             {
               "tx_hash":
@@ -201,7 +203,7 @@ void main() async {
         final getUtxos = await wallet.getWalletUtxos(testnetWalletName);
         assert(getUtxos.length == 1);
         assert(getUtxos[0].runtimeType == WalletUtxo);
-        assert(getUtxos[0].address == wallet.getUnusedAddress);
+        assert(getUtxos[0].address == wallet.getUnusedAddress(walletName));
         assert(getUtxos[0].value == 10000000);
       });
 

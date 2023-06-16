@@ -11,7 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
 import '../../models/coin_wallet.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -42,7 +42,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   String _defaultWallet = '';
   String _selectedTheme = '';
   late AppSettings _settings;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _activeWallets;
   List<CoinWallet> _availableWallets = [];
   final Map _availableThemes = {
     'system': ThemeMode.system,
@@ -53,14 +53,14 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _activeWallets = Provider.of<WalletProvider>(context);
       _settings = Provider.of<AppSettings>(context);
       final themeModeHandler = ThemeModeHandler.of(context)!;
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
 
-      _availableWallets = _activeWallets.activeWalletsValues;
+      _availableWallets = _activeWallets.availableWalletValues;
 
       var localAuth = LocalAuthentication();
       _biometricsAvailable =
@@ -130,7 +130,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void revealSeedPhrase(bool biometricsAllowed) async {
-    final seed = await context.read<ActiveWallets>().seedPhrase;
+    final seed = await context.read<WalletProvider>().seedPhrase;
     // ignore: use_build_context_synchronously
     await Auth.requireAuth(
       context: context,

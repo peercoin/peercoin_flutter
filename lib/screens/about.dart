@@ -9,7 +9,7 @@ import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../providers/active_wallets.dart';
+import '../providers/wallet_provider.dart';
 import '../tools/app_localizations.dart';
 import '../tools/app_routes.dart';
 
@@ -23,14 +23,14 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   bool _initial = true;
   late PackageInfo _packageInfo;
-  late ActiveWallets _activeWallets;
-  late List _listOfActiveWallets;
+  late WalletProvider _walletProvider;
+  late List _listOfAvailableWallets;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _activeWallets = context.read<ActiveWallets>();
-      _listOfActiveWallets = _activeWallets.activeWalletsKeys;
+      _walletProvider = context.read<WalletProvider>();
+      _listOfAvailableWallets = _walletProvider.availableWalletKeys;
       _packageInfo = await PackageInfo.fromPlatform();
       setState(() {
         _initial = false;
@@ -159,13 +159,13 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                       ),
                       if (!kIsWeb)
-                        _listOfActiveWallets.contains('peercoin') &&
+                        _listOfAvailableWallets.contains('peercoin') &&
                                 !Platform.isIOS
                             ? TextButton(
                                 onPressed: () async {
                                   final navigator = Navigator.of(context);
                                   final values =
-                                      _activeWallets.activeWalletsValues;
+                                      _walletProvider.availableWalletValues;
                                   final ppcWallet = values.firstWhere(
                                     (element) => element.name == 'peercoin',
                                   );

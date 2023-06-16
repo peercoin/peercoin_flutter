@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/electrum_connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -26,7 +26,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   bool _scanStarted = false;
   bool _backgroundNotificationsAvailable = false;
   ElectrumConnection? _connectionProvider;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late AppSettings _settings;
   late String _coinName = '';
   late ElectrumConnectionState _connectionState;
@@ -117,8 +117,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       });
       _coinName = ModalRoute.of(context)!.settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
-      _activeWallets = Provider.of<ActiveWallets>(context);
-      await _activeWallets.prepareForRescan(_coinName);
+      _walletProvider = Provider.of<WalletProvider>(context);
+      await _walletProvider.prepareForRescan(_coinName);
 
       await _connectionProvider!.init(_coinName, scanMode: true);
 
@@ -155,7 +155,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
 
   Future<void> fetchAddressesFromBackend() async {
     var adressesToQuery = <String, int>{};
-    await _activeWallets.populateWifMap(
+    await _walletProvider.populateWifMap(
       _coinName,
       _addressScanPointer + _addressChunkSize,
     );
@@ -163,7 +163,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     for (int i = _addressScanPointer;
         i < _addressScanPointer + _addressChunkSize;
         i++) {
-      var res = await _activeWallets.getAddressFromDerivationPath(
+      var res = await _walletProvider.getAddressFromDerivationPath(
         identifier: _coinName,
         account: 0,
         chain: i,
@@ -193,7 +193,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       result.forEach((addr, n) async {
         //backend knows this addr
         if (n > 0) {
-          await _activeWallets.addAddressFromScan(
+          await _walletProvider.addAddressFromScan(
             identifier: _coinName,
             address: addr,
             status: 'hasUtxo',
@@ -222,7 +222,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         'Scan started - _backgroundNotificationsAvailable $_backgroundNotificationsAvailable',
       );
       //returns master address for hd wallet
-      var masterAddr = await _activeWallets.getAddressFromDerivationPath(
+      var masterAddr = await _walletProvider.getAddressFromDerivationPath(
         identifier: _coinName,
         account: 0,
         chain: 0,
@@ -233,10 +233,10 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       //subscribe to hd master
       _connectionProvider!.subscribeToScriptHashes(
         _backgroundNotificationsAvailable
-            ? await _activeWallets.getWalletScriptHashes(
+            ? await _walletProvider.getWalletScriptHashes(
                 _coinName,
               )
-            : await _activeWallets.getWalletScriptHashes(
+            : await _walletProvider.getWalletScriptHashes(
                 _coinName,
                 masterAddr,
               ),

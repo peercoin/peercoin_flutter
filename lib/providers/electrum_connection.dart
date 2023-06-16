@@ -10,7 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../models/available_coins.dart';
 import '../tools/logger_wrapper.dart';
-import 'active_wallets.dart';
+import 'wallet_provider.dart';
 import 'servers.dart';
 
 enum ElectrumConnectionState { waiting, connected, offline }
@@ -21,7 +21,7 @@ class ElectrumConnection with ChangeNotifier {
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   var _connection;
-  final ActiveWallets _activeWallets;
+  final WalletProvider _walletProvider;
   ElectrumConnectionState _connectionState = ElectrumConnectionState.waiting;
   late ElectrumServerType _serverType;
   final Servers _servers;
@@ -43,7 +43,7 @@ class ElectrumConnection with ChangeNotifier {
   List _openReplies = [];
   int _resetAttempt = 1;
 
-  ElectrumConnection(this._activeWallets, this._servers);
+  ElectrumConnection(this._walletProvider, this._servers);
 
   Future<bool> init(
     walletName, {
@@ -403,7 +403,7 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
-        await _activeWallets.getWalletAddressStatus(_coinName, address);
+        await _walletProvider.getWalletAddressStatus(_coinName, address);
     var hash = _addresses.entries
         .firstWhereOrNull((element) => element.key == address)!;
     if (newStatus != oldStatus) {
@@ -441,7 +441,7 @@ class ElectrumConnection with ChangeNotifier {
             [hash.value],
           );
         } else {
-          _activeWallets.addAddressFromScan(
+          _walletProvider.addAddressFromScan(
             identifier: _coinName,
             address: address,
             status: newStatus,
@@ -464,7 +464,7 @@ class ElectrumConnection with ChangeNotifier {
         '$_queryDepth',
       );
 
-      var nextAddr = await _activeWallets.getAddressFromDerivationPath(
+      var nextAddr = await _walletProvider.getAddressFromDerivationPath(
         identifier: _coinName,
         account: _queryDepth['account']!,
         chain: _queryDepth['chain']!,
@@ -478,7 +478,7 @@ class ElectrumConnection with ChangeNotifier {
       );
 
       subscribeToScriptHashes(
-        await _activeWallets.getWalletScriptHashes(_coinName, nextAddr),
+        await _walletProvider.getWalletScriptHashes(_coinName, nextAddr),
       );
 
       var number = _queryDepth[currentPointer] as int;
@@ -527,7 +527,7 @@ class ElectrumConnection with ChangeNotifier {
       'update for $hashId',
     );
     //update status so we flag that we proccessed this update already
-    await _activeWallets.updateAddressStatus(_coinName, address, newStatus);
+    await _walletProvider.updateAddressStatus(_coinName, address, newStatus);
     //fire listunspent to get utxo
     sendMessage(
       'blockchain.scripthash.listunspent',
@@ -552,13 +552,13 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleUtxo(String id, List utxos) async {
     final txAddr = id.replaceFirst('utxo_', '');
-    await _activeWallets.putUtxos(
+    await _walletProvider.putUtxos(
       _coinName,
       txAddr,
       utxos,
     );
 
-    var walletTx = await _activeWallets.getWalletTransactions(_coinName);
+    var walletTx = await _walletProvider.getWalletTransactions(_coinName);
     for (var utxo in utxos) {
       var res = walletTx.firstWhereOrNull(
         (element) => element.txid == utxo["tx_hash"],
@@ -587,9 +587,9 @@ class ElectrumConnection with ChangeNotifier {
 
   void handleTx(String id, Map? tx) async {
     var txId = id.replaceFirst('tx_', '');
-    var addr = await _activeWallets.getAddressForTx(_coinName, txId);
+    var addr = await _walletProvider.getAddressForTx(_coinName, txId);
     if (tx != null) {
-      await _activeWallets.putTx(
+      await _walletProvider.putTx(
         identifier: _coinName,
         address: addr,
         tx: tx,
@@ -608,9 +608,9 @@ class ElectrumConnection with ChangeNotifier {
         'handleBroadcast',
         'tx rejected by server',
       );
-      await _activeWallets.updateRejected(_coinName, txId);
+      await _walletProvider.updateRejected(_coinName, txId);
     } else if (txId != 'import') {
-      await _activeWallets.updateBroadcasted(_coinName, txId);
+      await _walletProvider.updateBroadcasted(_coinName, txId);
     }
   }
 
