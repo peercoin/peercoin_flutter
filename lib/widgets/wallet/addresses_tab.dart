@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/wallet_address.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../providers/electrum_connection.dart';
 import '../../screens/wallet/wallet_home.dart';
@@ -54,7 +54,7 @@ class _AddressTabState extends State<AddressTab> {
   bool _showSendingAddresses = true;
   final Map _addressBalanceMap = {};
   final Map _isWatchedMap = {};
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late ElectrumConnection _connection;
   late Map _listenedAddresses;
   late final int _decimalProduct;
@@ -64,7 +64,7 @@ class _AddressTabState extends State<AddressTab> {
     if (_initial) {
       applyFilter();
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       _connection = Provider.of<ElectrumConnection>(context);
       _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
@@ -80,7 +80,7 @@ class _AddressTabState extends State<AddressTab> {
   }
 
   Future<void> fillAddressBalanceMap() async {
-    final utxos = await _activeWallets.getWalletUtxos(widget.walletName);
+    final utxos = await _walletProvider.getWalletUtxos(widget.walletName);
     for (var tx in utxos) {
       if (tx.value > 0) {
         if (_addressBalanceMap[tx.address] != null) {
@@ -103,7 +103,7 @@ class _AddressTabState extends State<AddressTab> {
         filteredListReceive.add(e);
         //fake watch change address and addresses with balance
         if (_addressBalanceMap[e.address] != null ||
-            e.address == _activeWallets.getUnusedAddress ||
+            e.address == _walletProvider.getUnusedAddress(widget.walletName) ||
             e.isWatched == true) {
           _isWatchedMap[e.address] = true;
         } else {
@@ -197,7 +197,7 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () {
-                context.read<ActiveWallets>().updateLabel(
+                context.read<WalletProvider>().updateLabel(
                       widget.walletName,
                       address.address,
                       textFieldController.text,
@@ -262,7 +262,7 @@ class _AddressTabState extends State<AddressTab> {
                     WalletHomeQr.showQrDialog(context, wif);
 
                 if (address.wif.isEmpty) {
-                  wif = await context.read<ActiveWallets>().getWif(
+                  wif = await context.read<WalletProvider>().getWif(
                         identifier: _availableCoin.name,
                         address: address.address,
                       );
@@ -294,14 +294,17 @@ class _AddressTabState extends State<AddressTab> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     //addresses with balance or currentChangeAddress can not be unwatched
     if (_addressBalanceMap[addr.address] != null ||
-        addr.address == _activeWallets.getUnusedAddress) {
+        addr.address ==
+            _walletProvider.getUnusedAddress(
+              widget.walletName,
+            )) {
       snackText = 'addressbook_dialog_addr_unwatch_unable';
     } else {
       snackText = _isWatchedMap[addr.address] == true
           ? 'addressbook_dialog_addr_unwatched'
           : 'addressbook_dialog_addr_watched';
 
-      await _activeWallets.updateAddressWatched(
+      await _walletProvider.updateAddressWatched(
         widget.walletName,
         addr.address,
         !addr.isWatched,
@@ -318,7 +321,7 @@ class _AddressTabState extends State<AddressTab> {
             'watched and subscribed ${addr.address}',
           );
           _connection.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(
+            await _walletProvider.getWalletScriptHashes(
               widget.walletName,
               addr.address,
             ),
@@ -411,7 +414,7 @@ class _AddressTabState extends State<AddressTab> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
-                  context.read<ActiveWallets>().updateLabel(
+                  context.read<WalletProvider>().updateLabel(
                         widget.walletName,
                         addressController.text,
                         labelController.text == '' ? '' : labelController.text,
@@ -529,7 +532,9 @@ class _AddressTabState extends State<AddressTab> {
                                   ),
                                   icon: const Icon(Icons.check),
                                   onPressed: () {
-                                    context.read<ActiveWallets>().removeAddress(
+                                    context
+                                        .read<WalletProvider>()
+                                        .removeAddress(
                                           widget.walletName,
                                           addr,
                                         );
@@ -556,9 +561,9 @@ class _AddressTabState extends State<AddressTab> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
-                      leading: Column(
+                      leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.swipe_left),
                         ],
                       ),
@@ -656,9 +661,9 @@ class _AddressTabState extends State<AddressTab> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
-                      leading: Column(
+                      leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.swipe_left),
                         ],
                       ),
@@ -717,7 +722,8 @@ class _AddressTabState extends State<AddressTab> {
                   Column(
                     children: [
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -744,7 +750,8 @@ class _AddressTabState extends State<AddressTab> {
                           height: 10,
                         ),
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -769,7 +776,8 @@ class _AddressTabState extends State<AddressTab> {
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
-                          backgroundColor: Theme.of(context).colorScheme.background,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
                             horizontal: 0.0,
@@ -804,7 +812,8 @@ class _AddressTabState extends State<AddressTab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ChoiceChip(
-                        backgroundColor: Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                         selectedColor: Theme.of(context).shadowColor,
                         visualDensity: const VisualDensity(
                           horizontal: 0.0,
@@ -830,7 +839,8 @@ class _AddressTabState extends State<AddressTab> {
                       Padding(
                         padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                         child: ChoiceChip(
-                          backgroundColor: Theme.of(context).colorScheme.background,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
                           selectedColor: Theme.of(context).shadowColor,
                           visualDensity: const VisualDensity(
                             horizontal: 0.0,

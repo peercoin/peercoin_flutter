@@ -253,9 +253,9 @@ class BackgroundSync {
     bool fromScan = false,
   }) async {
     var grpcClient = MarismaClient(
-      walletName == "peercoin"
-          ? ClientChannel("marisma.ppc.lol", port: 8443)
-          : ClientChannel("test-marisma.ppc.lol", port: 2096),
+      walletName == 'peercoin'
+          ? ClientChannel('marisma.ppc.lol', port: 8443)
+          : ClientChannel('test-marisma.ppc.lol', port: 2096),
     );
 
     Map<String, int> answerMap = {};

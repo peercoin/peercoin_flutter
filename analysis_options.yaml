@@ -6,3 +6,4 @@ analyzer:
 linter:
   rules:
     - require_trailing_commas
+    - prefer_single_quotes

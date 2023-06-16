@@ -27,40 +27,52 @@ import '../models/wallet_transaction.dart';
 import '../models/wallet_utxo.dart';
 import 'encrypted_box.dart';
 
-class ActiveWallets with ChangeNotifier {
+class WalletProvider with ChangeNotifier {
+  WalletProvider(this._encryptedBox);
+
   final EncryptedBox _encryptedBox;
-  ActiveWallets(this._encryptedBox);
-  late String _seedPhrase;
-  String _unusedAddress = '';
-  late Box<CoinWallet> _walletBox;
-  Box? _vaultBox;
-  Map<String, String> _wifs = {};
-  final Map<String?, CoinWallet?> _specificWalletCache = {};
+  final Map<String?, CoinWallet?> _coinWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
+  final Map<String, String> _unusedAddressCache = {};
+  final Map<String, String> _wifs = {};
+  late String _seedPhrase;
+  late Box<CoinWallet> _walletBox;
+  late Box _vaultBox;
 
   Future<void> init() async {
-    _vaultBox = await _encryptedBox.getGenericBox('vaultBox');
+    //set vaultBox
+    final vaultBoxRes = await _encryptedBox.getGenericBox('vaultBox');
+    if (vaultBoxRes != null) {
+      _vaultBox = vaultBoxRes;
+    } else {
+      throw Exception('Vault box not found'); //TODO toggle global snackbar ?
+    }
+
+    //set walletBox
     _walletBox = await _encryptedBox.getWalletBox();
   }
 
   void closeWallet(String identifier) {
-    _specificWalletCache.removeWhere((key, _) => key == identifier);
+    _coinWalletCache.removeWhere((key, _) => key == identifier);
     _hdWalletCache.removeWhere((key, _) => key == identifier);
-    _wifs = {};
-    _unusedAddress = '';
+    _wifs.removeWhere((key, _) => key == identifier);
+    _unusedAddressCache.removeWhere((key, _) => key == identifier);
   }
 
   Future<String> get seedPhrase async {
-    _seedPhrase = _vaultBox!.get('mnemonicSeed') ?? '';
+    _seedPhrase = _vaultBox.get('mnemonicSeed') ?? '';
     return _seedPhrase;
   }
 
-  String get getUnusedAddress {
-    return _unusedAddress;
+  String getUnusedAddress(String identifier) {
+    return _unusedAddressCache[identifier] ?? '';
   }
 
-  set unusedAddress(String newAddr) {
-    _unusedAddress = newAddr;
+  void setUnusedAddress({
+    required String identifier,
+    required String address,
+  }) {
+    _unusedAddressCache[identifier] = address;
     notifyListeners();
   }
 
@@ -74,28 +86,28 @@ class ActiveWallets with ChangeNotifier {
   ]) async {
     if (providedPhrase == null) {
       var mnemonicSeed = bip39.generateMnemonic(strength: strength);
-      await _vaultBox!.put('mnemonicSeed', mnemonicSeed);
+      await _vaultBox.put('mnemonicSeed', mnemonicSeed);
       _seedPhrase = mnemonicSeed;
     } else {
-      await _vaultBox!.put('mnemonicSeed', providedPhrase);
+      await _vaultBox.put('mnemonicSeed', providedPhrase);
       _seedPhrase = providedPhrase;
     }
   }
 
-  List<CoinWallet> get activeWalletsValues {
+  List<CoinWallet> get availableWalletValues {
     return _walletBox.values.toList();
   }
 
-  List get activeWalletsKeys {
+  List get availableWalletKeys {
     return _walletBox.keys.toList();
   }
 
   CoinWallet getSpecificCoinWallet(String identifier) {
-    if (_specificWalletCache[identifier] == null) {
+    if (_coinWalletCache[identifier] == null) {
       //cache wallet
-      _specificWalletCache[identifier] = _walletBox.get(identifier);
+      _coinWalletCache[identifier] = _walletBox.get(identifier);
     }
-    return _specificWalletCache[identifier]!;
+    return _coinWalletCache[identifier]!;
   }
 
   Future<void> addWallet(String name, String title, String letterCode) async {
@@ -118,7 +130,7 @@ class ActiveWallets with ChangeNotifier {
     } else {
       var derivePath = "m/$account'/$chain/$address";
       LoggerWrapper.logInfo(
-        'ActiveWallets',
+        'WalletProvider',
         'getAddressFromDerivationPath',
         derivePath,
       );
@@ -173,7 +185,10 @@ class ActiveWallets with ChangeNotifier {
         isOurs: true,
         wif: hdWallet.wif ?? '',
       );
-      unusedAddress = hdWallet.address;
+      setUnusedAddress(
+        identifier: identifier,
+        address: hdWallet.address,
+      );
     } else {
       //wallet is not brand new, lets find an unused address
       String? unusedAddr;
@@ -184,7 +199,10 @@ class ActiveWallets with ChangeNotifier {
       }
       if (unusedAddr != null) {
         //unused address available
-        unusedAddress = unusedAddr;
+        setUnusedAddress(
+          identifier: identifier,
+          address: unusedAddr,
+        );
       } else {
         //not empty, but all used -> create new one
         var numberOfOurAddr = openWallet.addresses
@@ -216,7 +234,10 @@ class ActiveWallets with ChangeNotifier {
           wif: newHdWallet.wif ?? '',
         );
 
-        unusedAddress = newHdWallet.address;
+        setUnusedAddress(
+          identifier: identifier,
+          address: newHdWallet.address,
+        );
       }
     }
     await openWallet.save();
@@ -322,7 +343,7 @@ class ActiveWallets with ChangeNotifier {
     required Map tx,
   }) async {
     var openWallet = getSpecificCoinWallet(identifier);
-    LoggerWrapper.logInfo('ActiveWallets', 'putTx', '$address puttx: $tx');
+    LoggerWrapper.logInfo('WalletProvider', 'putTx', '$address puttx: $tx');
 
     //check if that tx is already in the db
     var txInWallet = openWallet.transactions;
@@ -421,7 +442,7 @@ class ActiveWallets with ChangeNotifier {
               parsedMessage = utf8.decode(script[1]);
             } catch (e) {
               LoggerWrapper.logError(
-                'ActiveWallets',
+                'WalletProvider',
                 'putTx',
                 e.toString(),
               );
@@ -492,8 +513,9 @@ class ActiveWallets with ChangeNotifier {
     );
 
     //flag _unusedAddress as change addr
-    var addrInWallet = openWallet.addresses
-        .firstWhereOrNull((element) => element.address == _unusedAddress);
+    var addrInWallet = openWallet.addresses.firstWhereOrNull(
+      (element) => element.address == getUnusedAddress(identifier),
+    );
     if (addrInWallet != null) {
       if (buildResult.neededChange == true) {
         addrInWallet.isChangeAddr = true;
@@ -531,7 +553,7 @@ class ActiveWallets with ChangeNotifier {
     String? status,
   ) async {
     LoggerWrapper.logInfo(
-      'ActiveWallets',
+      'WalletProvider',
       'updateAddressStatus',
       'updating $address to $status',
     );
@@ -621,7 +643,7 @@ class ActiveWallets with ChangeNotifier {
     var destroyedChange = 0;
 
     LoggerWrapper.logInfo(
-      'ActiveWallets',
+      'WalletProvider',
       'buildTransaction',
       'firstPass: $firstPass',
     );
@@ -629,7 +651,7 @@ class ActiveWallets with ChangeNotifier {
     //check if tx needs change
     var needsChange = true;
     LoggerWrapper.logInfo(
-      'ActiveWallets',
+      'WalletProvider',
       'buildTransaction',
       'txAmount: $txAmount - wallet balance: ${openWallet.balance}',
     );
@@ -639,7 +661,7 @@ class ActiveWallets with ChangeNotifier {
     }
 
     LoggerWrapper.logInfo(
-      'ActiveWallets',
+      'WalletProvider',
       'buildTransaction',
       'needschange $needsChange, fee $fee',
     );
@@ -668,14 +690,14 @@ class ActiveWallets with ChangeNotifier {
                 totalInputValue += utxo.value;
                 inputTx.add(utxo);
                 LoggerWrapper.logInfo(
-                  'ActiveWallets',
+                  'WalletProvider',
                   'buildTransaction',
                   'adding inputTx: ${utxo.hash} (${utxo.value}) - totalInputValue: $totalInputValue',
                 );
               }
             } else {
               LoggerWrapper.logInfo(
-                'ActiveWallets',
+                'WalletProvider',
                 'buildTransaction',
                 'discarded inputTx: ${utxo.hash} (${utxo.value}) because unconfirmed',
               );
@@ -694,7 +716,7 @@ class ActiveWallets with ChangeNotifier {
 
         if (needsChange == true) {
           LoggerWrapper.logInfo(
-            'ActiveWallets',
+            'WalletProvider',
             'buildTransaction',
             'change amount $changeAmount, tx amount $txAmount, fee $fee',
           );
@@ -704,7 +726,7 @@ class ActiveWallets with ChangeNotifier {
             destroyedChange = totalInputValue - txAmount;
             if (txAmount > 0) {
               LoggerWrapper.logInfo(
-                'ActiveWallets',
+                'WalletProvider',
                 'buildTransaction',
                 'dust of $destroyedChange added to ${recipients.keys.last}',
               );
@@ -718,12 +740,15 @@ class ActiveWallets with ChangeNotifier {
             }
           } else {
             //add change output to unused address
-            tx.addOutput(_unusedAddress, BigInt.from(changeAmount));
+            tx.addOutput(
+              getUnusedAddress(identifier),
+              BigInt.from(changeAmount),
+            );
           }
         } else if (txAmount + fee > totalInputValue) {
           //empty wallet case - full wallet balance has been requested but fees have to be paid
           LoggerWrapper.logInfo(
-            'ActiveWallets',
+            'WalletProvider',
             'buildTransaction',
             'no change needed, tx amount $txAmount, fee $fee, reduced output added for ${recipients.keys.last} ${txAmount - fee}',
           );
@@ -740,7 +765,7 @@ class ActiveWallets with ChangeNotifier {
         //add recipient outputs
         recipients.forEach((address, amount) {
           LoggerWrapper.logInfo(
-            'ActiveWallets',
+            'WalletProvider',
             'buildTransaction',
             'adding output $amount for $address',
           );
@@ -793,7 +818,7 @@ class ActiveWallets with ChangeNotifier {
         keyMap.forEach(
           (key, value) {
             LoggerWrapper.logInfo(
-              'ActiveWallets',
+              'WalletProvider',
               'buildTransaction',
               "signing - ${value["addr"]} at vin $key",
             );
@@ -814,13 +839,13 @@ class ActiveWallets with ChangeNotifier {
         var requiredFeeInSatoshis = asDouble.round();
 
         LoggerWrapper.logInfo(
-          'ActiveWallets',
+          'WalletProvider',
           'buildTransaction',
           'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
         );
 
         LoggerWrapper.logInfo(
-          'ActiveWallets',
+          'WalletProvider',
           'buildTransaction',
           'sizeBefore: $sizeBefore - size now: ${intermediate.txSize}',
         );
@@ -839,7 +864,7 @@ class ActiveWallets with ChangeNotifier {
         } else {
           //second pass
           LoggerWrapper.logInfo(
-            'ActiveWallets',
+            'WalletProvider',
             'buildTransaction',
             'intermediate size: ${intermediate.txSize}',
           );
@@ -896,7 +921,7 @@ class ActiveWallets with ChangeNotifier {
 
           if (addr.isWatched ||
               utxoRes != null && utxoRes.value > 0 ||
-              addr.address == _unusedAddress ||
+              addr.address == getUnusedAddress(identifier) ||
               addr.status == 'hasUtxo') {
             answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/share_wrapper.dart';
@@ -31,7 +31,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   bool _isLoading = false;
   String _seed = '';
   double _currentSliderValue = 12;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
 
   Future<void> shareSeed(seed) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -67,9 +67,9 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
       _isLoading = true;
     });
     try {
-      await _activeWallets.init();
-      await _activeWallets.createPhrase();
-      _seed = await _activeWallets.seedPhrase;
+      await _walletProvider.init();
+      await _walletProvider.createPhrase();
+      _seed = await _walletProvider.seedPhrase;
     } catch (e) {
       await LogoutDialog.clearData();
       await createWallet(context);
@@ -82,7 +82,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       await createWallet(context);
       setState(() {
         _initial = false;
@@ -113,8 +113,8 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
         entropy = 128;
     }
 
-    await _activeWallets.createPhrase(null, entropy);
-    _seed = await _activeWallets.seedPhrase;
+    await _walletProvider.createPhrase(null, entropy);
+    _seed = await _walletProvider.seedPhrase;
 
     setState(() {
       _sharedYet = false;

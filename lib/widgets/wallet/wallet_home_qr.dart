@@ -27,10 +27,8 @@ class WalletHomeQr extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.33,
                     width: MediaQuery.of(context).size.width * 1,
                     child: Center(
-                      child: QrImage(
+                      child: QrImageView(
                         data: address,
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
                       ),
                     ),
                   ),
@@ -70,12 +68,10 @@ class WalletHomeQr extends StatelessWidget {
   Widget build(BuildContext context) {
     var inkWell = InkWell(
       onTap: () => showQrDialog(context, _unusedAddress),
-      child: QrImage(
+      child: QrImageView(
         data: _unusedAddress,
         size: 60.0,
         padding: const EdgeInsets.all(1),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
       ),
     );
     return _unusedAddress == ''

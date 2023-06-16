@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
 import '../../models/wallet_transaction.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../providers/electrum_connection.dart';
 import '../../tools/app_localizations.dart';
@@ -40,7 +40,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late ElectrumConnectionState _connectionState =
       ElectrumConnectionState.waiting;
   ElectrumConnection? _connectionProvider;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late AppSettings _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
@@ -82,7 +82,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   @override
   void dispose() {
-    _activeWallets.closeWallet(_wallet.name);
+    _walletProvider.closeWallet(_wallet.name);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -113,12 +113,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _wallet = arguments['wallet'];
 
       _connectionProvider = Provider.of<ElectrumConnection>(context);
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       _appSettings = context.read<AppSettings>();
 
-      await _activeWallets.generateUnusedAddress(_wallet.name);
+      await _walletProvider.generateUnusedAddress(_wallet.name);
       _walletTransactions =
-          await _activeWallets.getWalletTransactions(_wallet.name);
+          await _walletProvider.getWalletTransactions(_wallet.name);
       await _connectionProvider!.init(
         _wallet.name,
         requestedFromWalletHome: true,
@@ -150,21 +150,21 @@ class _WalletHomeState extends State<WalletHomeScreen>
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
-      _unusedAddress = _activeWallets.getUnusedAddress;
+      _unusedAddress = _walletProvider.getUnusedAddress(_wallet.name);
 
       _listenedAddresses = _connectionProvider!.listenedAddresses.keys;
       if (_connectionState == ElectrumConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider!.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(_wallet.name),
+            await _walletProvider.getWalletScriptHashes(_wallet.name),
           );
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
           _connectionProvider!.subscribeToScriptHashes(
-            await _activeWallets.getWalletScriptHashes(
+            await _walletProvider.getWalletScriptHashes(
               _wallet.name,
               _unusedAddress,
             ),
@@ -198,7 +198,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
         //unconfirmed balance? update balance
         if (_wallet.unconfirmedBalance > 0) {
-          await _activeWallets.updateWalletBalance(_wallet.name);
+          await _walletProvider.updateWalletBalance(_wallet.name);
         }
       }
     }

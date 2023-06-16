@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -28,7 +28,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     try {
       var appSettings = context.read<AppSettings>();
       final navigator = Navigator.of(context);
-      await context.read<ActiveWallets>().addWallet(
+      await context.read<WalletProvider>().addWallet(
             _coin,
             availableCoins[_coin]!.displayName,
             availableCoins[_coin]!.letterCode,
@@ -68,7 +68,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   void didChangeDependencies() async {
     if (_initial) {
       var appSettings = context.read<AppSettings>();
-      var activeWallets = context.read<ActiveWallets>();
+      var activeWallets = context.read<WalletProvider>();
       if (appSettings.authenticationOptions!['newWallet']!) {
         await Auth.requireAuth(
           context: context,
@@ -76,7 +76,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           canCancel: false,
         );
       }
-      var activeWalletList = activeWallets.activeWalletsKeys;
+      var activeWalletList = activeWallets.availableWalletKeys;
       for (var element in activeWalletList) {
         if (availableCoins.keys.contains(element)) {
           setState(() {

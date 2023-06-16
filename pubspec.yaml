@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 1.1.6+127
+version: 1.1.7+128
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -25,7 +25,7 @@ dependencies:
   provider: ^6.0.3
   share_plus: ^6.2.0
   qr_flutter: ^4.0.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   step_progress_indicator: ^1.0.0
   qr_code_scanner: ^1.0.0
   url_launcher: ^6.1.4
