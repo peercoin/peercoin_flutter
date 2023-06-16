@@ -180,7 +180,7 @@ void main() async {
         () async {
           await wallet.generateUnusedAddress(testnetWalletName);
           assert(
-            wallet.getUnusedAddress(walletName) ==
+            wallet.getUnusedAddress(testnetWalletName) ==
                 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw',
           );
         },
@@ -189,7 +189,7 @@ void main() async {
       test('Add testnet UTXO', () async {
         await wallet.putUtxos(
           testnetWalletName,
-          wallet.getUnusedAddress(walletName),
+          wallet.getUnusedAddress(testnetWalletName),
           [
             {
               "tx_hash":
@@ -203,7 +203,9 @@ void main() async {
         final getUtxos = await wallet.getWalletUtxos(testnetWalletName);
         assert(getUtxos.length == 1);
         assert(getUtxos[0].runtimeType == WalletUtxo);
-        assert(getUtxos[0].address == wallet.getUnusedAddress(walletName));
+        assert(
+          getUtxos[0].address == wallet.getUnusedAddress(testnetWalletName),
+        );
         assert(getUtxos[0].value == 10000000);
       });
 
