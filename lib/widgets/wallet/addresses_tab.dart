@@ -561,9 +561,9 @@ class _AddressTabState extends State<AddressTab> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
-                      leading: Column(
+                      leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.swipe_left),
                         ],
                       ),
@@ -661,9 +661,9 @@ class _AddressTabState extends State<AddressTab> {
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
-                      leading: Column(
+                      leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.swipe_left),
                         ],
                       ),
