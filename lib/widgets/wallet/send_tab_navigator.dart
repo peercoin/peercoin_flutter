@@ -38,8 +38,8 @@ class SendTabNavigator extends StatelessWidget {
               ),
         Text(
           AppLocalizations.instance.translate('send_navigator', {
-            "index": currentIndex.toString(),
-            "maximum": numberOfRecipients.toString()
+            'index': currentIndex.toString(),
+            'maximum': numberOfRecipients.toString()
           }),
           style: TextStyle(
             fontSize: 12,

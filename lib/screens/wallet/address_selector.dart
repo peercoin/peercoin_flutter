@@ -22,8 +22,8 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
   void didChangeDependencies() {
     if (_initial) {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
-      _addresses = args["addresses"] as List<WalletAddress>;
-      _selectedAddress = args["selectedAddress"] as String;
+      _addresses = args['addresses'] as List<WalletAddress>;
+      _selectedAddress = args['selectedAddress'] as String;
 
       applyFilter();
       setState(() {

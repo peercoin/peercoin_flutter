@@ -353,7 +353,7 @@ class ElectrumConnection with ChangeNotifier {
         } catch (e) {
           LoggerWrapper.logError(
             'ElectrumConnection',
-            "sendMessage",
+            'sendMessage',
             e.toString(),
           );
         }
@@ -434,7 +434,7 @@ class ElectrumConnection with ChangeNotifier {
           'writing $address to wallet',
         );
         //saving to wallet
-        if (oldStatus == "hasUtxo") {
+        if (oldStatus == 'hasUtxo') {
           sendMessage(
             'blockchain.scripthash.listunspent',
             'utxo_$address',
@@ -561,10 +561,10 @@ class ElectrumConnection with ChangeNotifier {
     var walletTx = await _walletProvider.getWalletTransactions(_coinName);
     for (var utxo in utxos) {
       var res = walletTx.firstWhereOrNull(
-        (element) => element.txid == utxo["tx_hash"],
+        (element) => element.txid == utxo['tx_hash'],
       );
       if (res == null) {
-        requestTxUpdate(utxo["tx_hash"]);
+        requestTxUpdate(utxo['tx_hash']);
       }
     }
   }
