@@ -1,3 +1,6 @@
+### **1.1.7** (2023-06-16)
+* Minor updates under the hood
+
 ### **1.1.6** (2023-03-15)
 * Update Peercoin Foundation address
 

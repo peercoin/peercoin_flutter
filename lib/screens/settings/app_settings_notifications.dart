@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/coin_wallet.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/background_sync.dart';
@@ -21,15 +21,15 @@ class _AppSettingsNotificationsScreenState
     extends State<AppSettingsNotificationsScreen> {
   bool _initial = true;
   late AppSettings _appSettings;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   List<CoinWallet> _availableWallets = [];
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
       _appSettings = Provider.of<AppSettings>(context);
-      _activeWallets = context.watch<ActiveWallets>();
-      _availableWallets = _activeWallets.activeWalletsValues;
+      _walletProvider = context.watch<WalletProvider>();
+      _availableWallets = _walletProvider.availableWalletValues;
       setState(() {
         _initial = false;
       });

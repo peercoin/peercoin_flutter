@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   const seedPhrase =
-      "vapor please suffer wood enrich quality position chest quantum fog rival museum";
+      'vapor please suffer wood enrich quality position chest quantum fog rival museum';
 
   group(
     'Setup, Signing and Settings',
@@ -162,11 +162,11 @@ void main() {
 
         //restart
         await driver.tap(find.byValueKey('verifyRestart'));
-        expect(await driver.getText(find.byValueKey('verifyAddressInput')), "");
-        expect(await driver.getText(find.byValueKey('verifyMessageInput')), "");
+        expect(await driver.getText(find.byValueKey('verifyAddressInput')), '');
+        expect(await driver.getText(find.byValueKey('verifyMessageInput')), '');
         expect(
           await driver.getText(find.byValueKey('verifSignatureInput')),
-          "",
+          '',
         );
 
         await driver.tap(find.byValueKey('verifyAddressInput'));

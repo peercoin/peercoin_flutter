@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/wallet_utxo.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/electrum_connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -33,7 +33,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   bool _initial = true;
   bool _balanceLoading = false;
   late ElectrumConnection _connectionProvider;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late Map<String, List?> _paperWalletUtxos = {};
   late final int _decimalProduct;
 
@@ -44,7 +44,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _connectionProvider = Provider.of<ElectrumConnection>(context);
-        _activeWallets = Provider.of<ActiveWallets>(context);
+        _walletProvider = Provider.of<WalletProvider>(context);
         _decimalProduct = AvailableCoins.getDecimalProduct(
           identifier: _walletName,
         );
@@ -145,7 +145,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       _balanceLoading = true;
     });
     _connectionProvider.requestPaperWalletUtxos(
-      _activeWallets.getScriptHash(_walletName, _pubKey),
+      _walletProvider.getScriptHash(_walletName, _pubKey),
       _pubKey,
     );
   }
@@ -292,14 +292,14 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
           txPos: utxo['tx_pos'],
           height: utxo['height'],
           value: utxo['value'],
-          address: _activeWallets.getUnusedAddress,
+          address: _walletProvider.getUnusedAddress(_walletName),
         ),
       );
     }
 
-    return await _activeWallets.buildTransaction(
+    return await _walletProvider.buildTransaction(
       identifier: _activeCoin.name,
-      recipients: {_activeWallets.getUnusedAddress: _balanceInt},
+      recipients: {_walletProvider.getUnusedAddress(_walletName): _balanceInt},
       fee: 0,
       paperWalletPrivkey: _privKey,
       paperWalletUtxos: parsedWalletUtxos,

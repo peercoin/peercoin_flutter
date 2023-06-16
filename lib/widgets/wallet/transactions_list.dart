@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
 import '../../providers/electrum_connection.dart';
-import '/../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/wallet_transaction.dart';
 import '/../tools/app_routes.dart';
@@ -49,7 +49,7 @@ class _TransactionListState extends State<TransactionList> {
 
   String resolveAddressDisplayName(String address) {
     final result = context
-        .read<ActiveWallets>()
+        .read<WalletProvider>()
         .getLabelForAddress(widget.wallet.name, address);
     if (result != '') return result;
     return address;

@@ -1,4 +1,3 @@
-import 'package:cryptography_flutter/cryptography_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,7 +24,7 @@ import 'models/coin_wallet.dart';
 import 'models/wallet_address.dart';
 import 'models/wallet_transaction.dart';
 import 'models/wallet_utxo.dart';
-import 'providers/active_wallets.dart';
+import 'providers/wallet_provider.dart';
 import 'providers/electrum_connection.dart';
 import 'providers/encrypted_box.dart';
 import 'screens/setup/setup_landing.dart';
@@ -128,9 +127,6 @@ void main() async {
   }
 
   if (!kIsWeb) {
-    // Enable Flutter cryptography
-    FlutterCryptography.enable();
-
     //init logger
     await FlutterLogs.initLogs(
       logLevelsEnabled: [
@@ -172,7 +168,7 @@ class PeercoinApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: EncryptedBox()),
         ChangeNotifierProvider(
           create: (context) {
-            return ActiveWallets(
+            return WalletProvider(
               Provider.of<EncryptedBox>(context, listen: false),
             );
           },
@@ -194,7 +190,7 @@ class PeercoinApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) {
             return ElectrumConnection(
-              Provider.of<ActiveWallets>(context, listen: false),
+              Provider.of<WalletProvider>(context, listen: false),
               Provider.of<Servers>(context, listen: false),
             );
           },

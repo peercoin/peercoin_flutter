@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../providers/electrum_connection.dart';
 import '../../tools/share_wrapper.dart';
-import '/../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/available_coins.dart';
 import '/../models/coin.dart';
@@ -256,7 +256,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                             .translate('receive_share'),
                         action: () async {
                           if (labelController.text != '') {
-                            context.read<ActiveWallets>().updateLabel(
+                            context.read<WalletProvider>().updateLabel(
                                   widget.wallet.name,
                                   widget.unusedAddress,
                                   labelController.text,

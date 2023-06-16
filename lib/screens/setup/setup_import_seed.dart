@@ -5,7 +5,7 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
@@ -34,10 +34,10 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
     setState(() {
       _loading = true;
     });
-    final activeWallets = context.read<ActiveWallets>();
+    final walletProvider = context.read<WalletProvider>();
     final navigator = Navigator.of(context);
     try {
-      await activeWallets.init();
+      await walletProvider.init();
     } catch (e) {
       LoggerWrapper.logError(
         'SetupImportSeed',
@@ -54,7 +54,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
         ),
       );
     }
-    await activeWallets.createPhrase(_controller.text);
+    await walletProvider.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('importedSeed', true);
     await navigator.pushNamed(Routes.setupAuth);

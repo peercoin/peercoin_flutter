@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin_wallet.dart';
-import '../../providers/active_wallets.dart';
+import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
@@ -45,7 +45,7 @@ class WalletListScreen extends StatefulWidget {
 class _WalletListScreenState extends State<WalletListScreen>
     with SingleTickerProviderStateMixin {
   bool _initial = true;
-  late ActiveWallets _activeWallets;
+  late WalletProvider _walletProvider;
   late Animation<double> _animation;
   late AnimationController _controller;
   late Timer _priceTimer;
@@ -69,7 +69,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   void didChangeDependencies() async {
     if (_initial) {
       _appSettings = Provider.of<AppSettings>(context);
-      _activeWallets = Provider.of<ActiveWallets>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       final navigator = Navigator.of(context);
       Future<bool> checkReminder() async {
         return await PeriodicReminders.checkReminder(
@@ -80,8 +80,8 @@ class _WalletListScreenState extends State<WalletListScreen>
 
       final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
-      await _activeWallets.init();
-      _activeWalletValues = _activeWallets.activeWalletsValues;
+      await _walletProvider.init();
+      _activeWalletValues = _walletProvider.availableWalletValues;
       setState(() {
         _initial = false;
       });
@@ -204,7 +204,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   @override
   Widget build(BuildContext context) {
     if (_initial == false) {
-      _activeWalletValues = _activeWallets.activeWalletsValues;
+      _activeWalletValues = _walletProvider.availableWalletValues;
     }
 
     return Scaffold(
