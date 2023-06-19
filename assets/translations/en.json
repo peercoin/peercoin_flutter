@@ -74,7 +74,7 @@
     "app_settings_notifications_hint_sync_2": "The notifications might be significantly delayed, depending on how or if your operating system throttles background tasks. iOS devices can expect longer intervals.",
     "app_settings_revealAuthButton": "Reveal authentication options",
     "app_settings_revealSeedButton": "Reveal seed phrase",
-    "app_settings_seed": "Seed phrase",
+    "app_settings_seed": "Seed Phrase",
     "app_settings_sendTransaction": "Require before sending a transaction",
     "app_settings_shareseed": "Share seed",
     "app_settings_theme": "App Theme",

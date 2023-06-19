@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:theme_mode_handler/theme_mode_handler.dart';
 
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
@@ -18,7 +17,6 @@ import '../../tools/logger_wrapper.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/double_tab_to_clipboard.dart';
-import '../../widgets/settings/settings_price_ticker.dart';
 import '../../widgets/service_container.dart';
 import '../about.dart';
 
@@ -32,27 +30,18 @@ class AppSettingsScreen extends StatefulWidget {
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   String _seedPhrase = '';
-  String _selectedTheme = '';
   late AppSettings _settings;
   late WalletProvider _activeWallets;
-  final Map _availableThemes = {
-    'system': ThemeMode.system,
-    'light': ThemeMode.light,
-    'dark': ThemeMode.dark,
-  };
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
       _activeWallets = Provider.of<WalletProvider>(context);
       _settings = Provider.of<AppSettings>(context);
-      final themeModeHandler = ThemeModeHandler.of(context)!;
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
 
-      _selectedTheme =
-          themeModeHandler.themeMode.toString().replaceFirst('ThemeMode.', '');
       await initDebugLogHandler();
 
       setState(() {
@@ -121,24 +110,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         () {
           _seedPhrase = seed;
         },
-      ),
-    );
-  }
-
-  void saveTheme(String label, ThemeMode theme) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    await ThemeModeHandler.of(context)!.saveThemeMode(theme);
-    setState(() {
-      _selectedTheme = label;
-    });
-    //show notification
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('app_settings_saved_snack'),
-          textAlign: TextAlign.center,
-        ),
-        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -229,39 +200,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             ],
                           )
                   ],
-                ),
-                ExpansionTile(
-                  title: Text(
-                    AppLocalizations.instance.translate('app_settings_theme'),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  childrenPadding: const EdgeInsets.all(10),
-                  children: _availableThemes.keys.map((theme) {
-                    return InkWell(
-                      onTap: () => saveTheme(theme, _availableThemes[theme]),
-                      child: ListTile(
-                        title: Text(
-                          AppLocalizations.instance
-                              .translate('app_settings_theme_$theme'),
-                        ),
-                        leading: Radio(
-                          value: theme,
-                          groupValue: _selectedTheme,
-                          onChanged: (dynamic _) =>
-                              saveTheme(theme, _availableThemes[theme]),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                ExpansionTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_price_feed'),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  childrenPadding: const EdgeInsets.all(10),
-                  children: [SettingsPriceTicker(_settings, saveSnack)],
                 ),
                 if (!kIsWeb)
                   ExpansionTile(

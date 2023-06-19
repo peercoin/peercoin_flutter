@@ -2,10 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 
+import '../screens/settings/app_settings_app_theme.dart';
 import '../screens/settings/app_settings_authentication.dart';
 import '../screens/settings/app_settings_default_wallet.dart';
 import '../screens/settings/app_settings_language.dart';
 import '../screens/settings/app_settings_notifications.dart';
+import '../screens/settings/app_settings_price_feed.dart';
 import '../screens/settings/app_settings_screen.dart';
 import '../screens/auth_jail.dart';
 import '../screens/changelog.dart';
@@ -33,8 +35,10 @@ class Routes {
   static const String walletList = '/wallet-list';
   static const String appSettings = '/app-settings';
   static const String appSettingsNotifications = '/app-settings-notifications';
+  static const String appSettingsPriceFeed = '/app-settings-price-feed';
   static const String appSettingsLanguage = '/app-settings-language';
   static const String appSettingsDefaultWallet = '/app-settings-default-wallet';
+  static const String appSettingsAppTheme = '/app-settings-app-theme';
   static const String appSettingsAuthentication =
       '/app-settings-authentication';
   static const String qrScan = '/qr-scan';
@@ -163,6 +167,14 @@ class Routes {
           ),
       Routes.appSettingsAuthentication: (context) => const RouterMaster(
             widget: AppSettingsAuthenticationScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.appSettingsPriceFeed: (context) => const RouterMaster(
+            widget: AppSettingsPriceFeedScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.appSettingsAppTheme: (context) => const RouterMaster(
+            widget: AppSettingsAppThemeScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
     };
