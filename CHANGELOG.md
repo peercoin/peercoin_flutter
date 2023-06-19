@@ -1,3 +1,6 @@
+### **1.1.8** (2023-xx-xx)
+* 
+
 ### **1.1.7** (2023-06-16)
 * Minor updates under the hood
 
