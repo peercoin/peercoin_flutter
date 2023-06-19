@@ -38,7 +38,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _biometricsRevealed = false;
   bool _biometricsAvailable = false;
   String _seedPhrase = '';
-  String _lang = '';
   String _defaultWallet = '';
   String _selectedTheme = '';
   late AppSettings _settings;
@@ -155,23 +154,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
-  void saveLang(String lang) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    await _settings.setSelectedLang(lang);
-    await AppLocalizations.delegate.load(Locale(lang));
-
-    //show notification
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('app_settings_saved_snack'),
-          textAlign: TextAlign.center,
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
   void saveTheme(String label, ThemeMode theme) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     await ThemeModeHandler.of(context)!.saveThemeMode(theme);
@@ -208,7 +190,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     return [
       ...inkwells,
       Text(
-        AppLocalizations.instance.translate('app_settings_default_description'),
+        AppLocalizations.instance.translate(
+          'app_settings_default_description',
+        ),
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 12,
@@ -222,7 +206,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          AppLocalizations.instance.translate('app_settings_saved_snack'),
+          AppLocalizations.instance.translate(
+            'app_settings_saved_snack',
+          ),
           textAlign: TextAlign.center,
         ),
         duration: const Duration(seconds: 2),
@@ -231,7 +217,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   }
 
   void saveDefaultWallet(String wallet) async {
-    _settings.setDefaultWallet(wallet == _settings.defaultWallet ? '' : wallet);
+    _settings.setDefaultWallet(
+      wallet == _settings.defaultWallet ? '' : wallet,
+    );
     saveSnack(context);
   }
 
@@ -240,8 +228,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     if (_initial) return Container();
 
     _biometricsAllowed = _settings.biometricsAllowed;
-    _lang =
-        _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
     _defaultWallet = _settings.defaultWallet;
 
     return Scaffold(
@@ -271,27 +257,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
             noSpacers: true,
             child: Column(
               children: [
-                ExpansionTile(
+                ListTile(
+                  onTap: () => Navigator.of(context).pushNamed(
+                    Routes.appSettingsLanguage,
+                  ),
                   title: Text(
                     AppLocalizations.instance
                         .translate('app_settings_language'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  childrenPadding: const EdgeInsets.all(10),
-                  children: AppLocalizations.availableLocales.keys.map((lang) {
-                    return InkWell(
-                      onTap: () => saveLang(lang),
-                      child: ListTile(
-                        title: Text(AppLocalizations.availableLocales[lang]!),
-                        key: Key(lang),
-                        leading: Radio(
-                          value: lang,
-                          groupValue: _lang,
-                          onChanged: (dynamic _) => saveLang(lang),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
                 if (!kIsWeb)
                   ExpansionTile(
