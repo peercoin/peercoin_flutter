@@ -5,7 +5,6 @@ import 'package:flutter_logs/flutter_logs.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -19,7 +18,6 @@ import '../../tools/logger_wrapper.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/double_tab_to_clipboard.dart';
-import '../../widgets/settings/settings_auth.dart';
 import '../../widgets/settings/settings_price_ticker.dart';
 import '../../widgets/service_container.dart';
 import '../about.dart';
@@ -33,9 +31,6 @@ class AppSettingsScreen extends StatefulWidget {
 
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
-  late bool _biometricsAllowed;
-  bool _biometricsRevealed = false;
-  bool _biometricsAvailable = false;
   String _seedPhrase = '';
   String _selectedTheme = '';
   late AppSettings _settings;
@@ -56,15 +51,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
 
-      var localAuth = LocalAuthentication();
-      _biometricsAvailable =
-          kIsWeb ? false : await localAuth.canCheckBiometrics;
-
       _selectedTheme =
           themeModeHandler.themeMode.toString().replaceFirst('ThemeMode.', '');
-      if (_biometricsAvailable == false) {
-        _settings.setBiometricsAllowed(false);
-      }
       await initDebugLogHandler();
 
       setState(() {
@@ -137,18 +125,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
-  void revealAuthOptions(bool biometricsAllowed) async {
-    await Auth.requireAuth(
-      context: context,
-      biometricsAllowed: biometricsAllowed,
-      callback: () => setState(
-        () {
-          _biometricsRevealed = true;
-        },
-      ),
-    );
-  }
-
   void saveTheme(String label, ThemeMode theme) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     await ThemeModeHandler.of(context)!.saveThemeMode(theme);
@@ -170,8 +146,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_initial) return Container();
-
-    _biometricsAllowed = _settings.biometricsAllowed;
 
     return Scaffold(
       appBar: AppBar(
@@ -218,31 +192,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     );
                   },
                 ).toList(),
-                ExpansionTile(
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_auth_header'),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  childrenPadding: const EdgeInsets.all(10),
-                  children: [
-                    _biometricsRevealed == false
-                        ? PeerButton(
-                            action: () => revealAuthOptions(
-                              _settings.biometricsAllowed,
-                            ),
-                            text: AppLocalizations.instance
-                                .translate('app_settings_revealAuthButton'),
-                          )
-                        : SettingsAuth(
-                            _biometricsAllowed,
-                            _biometricsAvailable,
-                            _settings,
-                            saveSnack,
-                            _settings.authenticationOptions!,
-                          )
-                  ],
-                ),
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance.translate('app_settings_seed'),
