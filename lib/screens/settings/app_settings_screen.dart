@@ -6,11 +6,11 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
-import '../../models/coin_wallet.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
@@ -38,11 +38,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _biometricsRevealed = false;
   bool _biometricsAvailable = false;
   String _seedPhrase = '';
-  String _defaultWallet = '';
   String _selectedTheme = '';
   late AppSettings _settings;
   late WalletProvider _activeWallets;
-  List<CoinWallet> _availableWallets = [];
   final Map _availableThemes = {
     'system': ThemeMode.system,
     'light': ThemeMode.light,
@@ -58,8 +56,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
-
-      _availableWallets = _activeWallets.availableWalletValues;
 
       var localAuth = LocalAuthentication();
       _biometricsAvailable =
@@ -172,63 +168,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     );
   }
 
-  List<Widget> generateDefaultWallets() {
-    final inkwells = _availableWallets.map((wallet) {
-      return InkWell(
-        onTap: () => saveDefaultWallet(wallet.letterCode),
-        child: ListTile(
-          title: Text(wallet.title),
-          leading: Radio(
-            value: wallet.letterCode,
-            groupValue: _defaultWallet,
-            onChanged: (dynamic _) => saveDefaultWallet(wallet.letterCode),
-          ),
-        ),
-      );
-    }).toList();
-
-    return [
-      ...inkwells,
-      Text(
-        AppLocalizations.instance.translate(
-          'app_settings_default_description',
-        ),
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 12,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-      )
-    ];
-  }
-
-  void saveSnack(context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate(
-            'app_settings_saved_snack',
-          ),
-          textAlign: TextAlign.center,
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void saveDefaultWallet(String wallet) async {
-    _settings.setDefaultWallet(
-      wallet == _settings.defaultWallet ? '' : wallet,
-    );
-    saveSnack(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_initial) return Container();
 
     _biometricsAllowed = _settings.biometricsAllowed;
-    _defaultWallet = _settings.defaultWallet;
 
     return Scaffold(
       appBar: AppBar(
@@ -257,31 +201,24 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
             noSpacers: true,
             child: Column(
               children: [
-                ListTile(
-                  onTap: () => Navigator.of(context).pushNamed(
-                    Routes.appSettingsLanguage,
-                  ),
-                  title: Text(
-                    AppLocalizations.instance
-                        .translate('app_settings_language'),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-                if (!kIsWeb)
-                  ExpansionTile(
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('app_settings_default_wallet'),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    childrenPadding: const EdgeInsets.all(10),
-                    children: generateDefaultWallets(),
-                  ),
+                ...availableSettings.keys.map(
+                  (key) {
+                    return ListTile(
+                      onTap: () => Navigator.of(context).pushNamed(
+                        availableSettings[key]!,
+                      ),
+                      title: Text(
+                        AppLocalizations.instance.translate(key),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    );
+                  },
+                ).toList(),
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance

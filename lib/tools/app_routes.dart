@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 
+import '../screens/settings/app_settings_default_wallet.dart';
 import '../screens/settings/app_settings_language.dart';
 import '../screens/settings/app_settings_notifications.dart';
 import '../screens/settings/app_settings_screen.dart';
@@ -32,6 +33,7 @@ class Routes {
   static const String appSettings = '/app-settings';
   static const String appSettingsNotifications = '/app-settings-notifications';
   static const String appSettingsLanguage = '/app-settings-language';
+  static const String appSettingsDefaultWallet = '/app-settings-default-wallet';
   static const String qrScan = '/qr-scan';
   static const String setupAuth = '/setup-auth';
   static const String setupCreateWallet = '/setup-create-wallet';
@@ -150,6 +152,10 @@ class Routes {
           ),
       Routes.appSettingsLanguage: (context) => const RouterMaster(
             widget: AppSettingsLanguageScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.appSettingsDefaultWallet: (context) => const RouterMaster(
+            widget: AppSettingsDefaultWalletScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
     };
