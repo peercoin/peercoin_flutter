@@ -7,6 +7,7 @@ import '../../tools/app_routes.dart';
 const Map<String, String> availableSettings = {
   'app_settings_language': Routes.appSettingsLanguage,
   if (!kIsWeb) 'app_settings_default_wallet': Routes.appSettingsDefaultWallet,
+  if (!kIsWeb) 'app_settings_notifications': Routes.appSettingsNotifications
 };
 
 void saveSnack(context) {

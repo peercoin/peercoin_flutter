@@ -14,7 +14,6 @@ import 'package:theme_mode_handler/theme_mode_handler.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
-import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../tools/share_wrapper.dart';
@@ -315,25 +314,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   childrenPadding: const EdgeInsets.all(10),
                   children: [SettingsPriceTicker(_settings, saveSnack)],
                 ),
-                if (!kIsWeb)
-                  ExpansionTile(
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('app_settings_notifications'),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    childrenPadding: const EdgeInsets.all(10),
-                    children: [
-                      PeerButton(
-                        text: AppLocalizations.instance.translate(
-                          'app_settings_notifications_open_button',
-                        ),
-                        action: () => Navigator.of(context).pushNamed(
-                          Routes.appSettingsNotifications,
-                        ),
-                      )
-                    ],
-                  ),
                 if (!kIsWeb)
                   ExpansionTile(
                     title: Text(
