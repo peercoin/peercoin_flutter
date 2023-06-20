@@ -98,12 +98,14 @@ void main() {
       test(
         'try to add an ssl server and see if it persists',
         () async {
-          await driver.tap(find.byTooltip('Show menu'));
+          await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
-              await driver.tap(find.byValueKey('walletHomeServerSettings'));
+              await driver.tap(find.byValueKey('appSettingsButton'));
             },
           );
+          await driver.tap(find.text('Server Settings'));
+          await driver.tap(find.text('Peercoin Testnet'));
           await driver.tap(find.byValueKey('serverSettingsAddServer'));
           await driver.tap(find.byType('TextFormField'));
           await driver.enterText(
@@ -120,13 +122,12 @@ void main() {
           );
           await driver.enterText(
             'ssl://testnet-electrum.peercoinexplorer.net:50008',
-          ); //main net server for testnet wallet
+          ); //testnet server for testnet wallet
           await driver.tap(find.byValueKey('saveServerButton'));
           await driver.tap(find.pageBack());
-          await driver.tap(find.byTooltip('Show menu'));
           await driver.runUnsynchronized(
             () async {
-              await driver.tap(find.byValueKey('walletHomeServerSettings'));
+              await driver.tap(find.text('Peercoin Testnet'));
             },
           );
           expect(
