@@ -292,12 +292,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
           arguments: _wallet.name,
         );
         break;
-      case 'server_settings':
-        Navigator.of(context).pushNamed(
-          Routes.serverSettings,
-          arguments: _wallet.name,
-        );
-        break;
       case 'signing':
         Navigator.of(context).pushNamed(
           Routes.walletMessageSigning,
@@ -386,20 +380,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 ),
                 title: Text(
                   AppLocalizations.instance.translate('wallet_pop_menu_wif'),
-                ),
-              ),
-            ),
-            PopupMenuItem(
-              value: 'server_settings',
-              key: const Key('walletHomeServerSettings'),
-              child: ListTile(
-                leading: Icon(
-                  Icons.sync,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_servers'),
                 ),
               ),
             ),

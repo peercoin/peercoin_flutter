@@ -15,7 +15,11 @@ class Servers with ChangeNotifier {
   Servers(this._encryptedBox);
 
   Future<void> init(String identifier) async {
-    LoggerWrapper.logInfo('Servers', 'init', 'init server provider');
+    LoggerWrapper.logInfo(
+      'Servers',
+      'init',
+      'init server provider $identifier',
+    );
     _serverBox = await _encryptedBox.getServerBox(identifier);
 
     final seedServers =

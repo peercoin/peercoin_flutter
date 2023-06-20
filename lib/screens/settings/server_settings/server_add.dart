@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../../models/available_coins.dart';
-import '../../models/server.dart';
-import '../../providers/electrum_connection.dart';
-import '../../providers/servers.dart';
-import '../../tools/app_localizations.dart';
-import '../../tools/logger_wrapper.dart';
-import '../../widgets/loading_indicator.dart';
-import '../../widgets/service_container.dart';
+import '../../../models/available_coins.dart';
+import '../../../models/server.dart';
+import '../../../providers/electrum_connection.dart';
+import '../../../providers/servers.dart';
+import '../../../tools/app_localizations.dart';
+import '../../../tools/logger_wrapper.dart';
+import '../../../widgets/loading_indicator.dart';
+import '../../../widgets/service_container.dart';
 
 class ServerAddScreen extends StatefulWidget {
   const ServerAddScreen({Key? key}) : super(key: key);

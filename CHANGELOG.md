@@ -1,5 +1,5 @@
 ### **1.1.8** (2023-xx-xx)
-* 
+* Server Settings have been moved from inside the wallets to application settings
 
 ### **1.1.7** (2023-06-16)
 * Minor updates under the hood

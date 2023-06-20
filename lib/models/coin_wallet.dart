@@ -39,7 +39,11 @@ class CoinWallet extends HiveObject {
   @HiveField(8)
   List<PendingNotification>? _pendingTransactionNotifications = [];
 
-  CoinWallet(this._name, this._title, this._letterCode);
+  CoinWallet(
+    this._name,
+    this._title,
+    this._letterCode,
+  );
 
   String get name {
     return _name;

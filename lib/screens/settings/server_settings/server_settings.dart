@@ -2,12 +2,12 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/server.dart';
-import '../../providers/electrum_connection.dart';
-import '../../widgets/service_container.dart';
-import '../../providers/servers.dart';
-import '../../tools/app_localizations.dart';
-import '../../tools/app_routes.dart';
+import '../../../models/server.dart';
+import '../../../providers/electrum_connection.dart';
+import '../../../widgets/service_container.dart';
+import '../../../providers/servers.dart';
+import '../../../tools/app_localizations.dart';
+import '../../../tools/app_routes.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
   const ServerSettingsScreen({Key? key}) : super(key: key);
@@ -28,6 +28,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     if (_initial) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
       _serversProvider = Provider.of<Servers>(context);
+      await _serversProvider.init(_walletName);
       await loadServers();
       setState(() {
         _initial = false;
@@ -105,12 +106,12 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           )
         ],
       ),
-      body: _servers.isEmpty
-          ? Container()
-          : Align(
-              child: PeerContainer(
-                noSpacers: true,
-                child: ReorderableListView.builder(
+      body: Align(
+        child: PeerContainer(
+          noSpacers: true,
+          child: _servers.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ReorderableListView.builder(
                   onReorder: (oldIndex, newIndex) {
                     if (_servers[oldIndex].connectable == false) return;
                     if (oldIndex < newIndex) {
@@ -297,8 +298,9 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                     );
                   },
                 ),
-              ),
-            ),
+        ),
+      ),
     );
   }
+  //TODO server won't be connected anymore when accessing this from setup
 }

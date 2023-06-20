@@ -12,8 +12,9 @@ import '../screens/settings/app_settings_screen.dart';
 import '../screens/auth_jail.dart';
 import '../screens/changelog.dart';
 import '../screens/qrcode_scanner.dart';
-import '../screens/server_settings/server_add.dart';
-import '../screens/server_settings/server_settings.dart';
+import '../screens/settings/server_settings/server_add.dart';
+import '../screens/settings/server_settings/server_settings.dart';
+import '../screens/settings/server_settings/server_settings_home.dart';
 import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
@@ -57,7 +58,8 @@ class Routes {
   static const String importPaperWallet = '/import-paperwallet';
   static const String importWif = '/import-wif';
   static const String authJail = '/auth-jail';
-  static const String serverSettings = '/server-settings';
+  static const String serverSettingsHome = '/server-settings-home';
+  static const String serverSettingsDetail = '/server-settings-detail';
   static const String serverAdd = '/server-add';
   static const String changeLog = '/changelog';
   static const String addressSelector = '/address-selector';
@@ -129,9 +131,13 @@ class Routes {
             widget: AuthJailScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.serverSettings: (context) => const RouterMaster(
+      Routes.serverSettingsDetail: (context) => const RouterMaster(
             widget: ServerSettingsScreen(),
             routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.serverSettingsHome: (context) => const RouterMaster(
+            widget: AppSettingsServerHome(),
+            routeType: RouteTypes.requiresSetupFinished,
           ),
       Routes.serverAdd: (context) => const RouterMaster(
             widget: ServerAddScreen(),
