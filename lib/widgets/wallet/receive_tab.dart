@@ -293,7 +293,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 ),
               ),
             ),
-            widget.wallet.title.contains('Testnet')
+            widget.wallet.letterCode == 'tPPC'
                 ? Align(
                     child: PeerContainer(
                       child: Column(

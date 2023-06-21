@@ -135,7 +135,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
       if (!kIsWeb) {
         if (Platform.isIOS || Platform.isAndroid) {
-          if (!_wallet.title.contains('Testnet')) {
+          if (_wallet.letterCode != 'tPPC') {
             triggerHighValueAlert();
           }
         }
