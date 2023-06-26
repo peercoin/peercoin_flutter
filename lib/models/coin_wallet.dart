@@ -16,16 +16,13 @@ class CoinWallet extends HiveObject {
   final String _letterCode;
 
   @HiveField(2)
-  // ignore: prefer_final_fields
-  List<WalletAddress> _addresses = [];
+  final List<WalletAddress> _addresses = [];
 
   @HiveField(3)
-  // ignore: prefer_final_fields
-  List<WalletTransaction> _transactions = [];
+  final List<WalletTransaction> _transactions = [];
 
   @HiveField(4)
-  // ignore: prefer_final_fields
-  List<WalletUtxo> _utxos = [];
+  final List<WalletUtxo> _utxos = [];
 
   @HiveField(5)
   int _balance = 0;
@@ -39,10 +36,14 @@ class CoinWallet extends HiveObject {
   @HiveField(8)
   List<PendingNotification>? _pendingTransactionNotifications = [];
 
+  @HiveField(9, defaultValue: 0)
+  int _walletNumber = 0;
+
   CoinWallet(
     this._name,
     this._title,
     this._letterCode,
+    this._walletNumber,
   );
 
   String get name {
@@ -51,6 +52,15 @@ class CoinWallet extends HiveObject {
 
   String get letterCode {
     return _letterCode;
+  }
+
+  int get walletNumber {
+    return _walletNumber;
+  }
+
+  set walletNumber(int newWalletNumber) {
+    _walletNumber = walletNumber;
+    save();
   }
 
   List<WalletAddress> get addresses {

@@ -20,10 +20,8 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       fields[0] as String,
       fields[6] as String,
       fields[1] as String,
+      fields[9] == null ? 0 : fields[9] as int,
     )
-      .._addresses = (fields[2] as List).cast<WalletAddress>()
-      .._transactions = (fields[3] as List).cast<WalletTransaction>()
-      .._utxos = (fields[4] as List).cast<WalletUtxo>()
       .._balance = fields[5] as int
       .._unconfirmedBalance = fields[7] as int
       .._pendingTransactionNotifications =
@@ -33,7 +31,7 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
   @override
   void write(BinaryWriter writer, CoinWallet obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj._name)
       ..writeByte(1)
@@ -51,7 +49,9 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       ..writeByte(7)
       ..write(obj._unconfirmedBalance)
       ..writeByte(8)
-      ..write(obj._pendingTransactionNotifications);
+      ..write(obj._pendingTransactionNotifications)
+      ..writeByte(9)
+      ..write(obj._walletNumber);
   }
 
   @override

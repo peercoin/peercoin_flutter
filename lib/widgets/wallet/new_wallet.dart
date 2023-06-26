@@ -28,11 +28,17 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     try {
       var appSettings = context.read<AppSettings>();
       final navigator = Navigator.of(context);
-      await context.read<WalletProvider>().addWallet(
-            name: _coin,
-            title: availableCoins[_coin]!.displayName,
-            letterCode: availableCoins[_coin]!.letterCode,
-          );
+      final WalletProvider walletProvider = context.read<WalletProvider>();
+      final letterCode = availableCoins[_coin]!.letterCode;
+      final nOfWalletOfLetterCode = walletProvider.availableWalletValues
+          .where((element) => element.letterCode == letterCode)
+          .length;
+
+      await walletProvider.addWallet(
+        name: '${_coin}_$nOfWalletOfLetterCode',
+        title: availableCoins[_coin]!.displayName,
+        letterCode: letterCode,
+      );
 
       //enable notifications
       var notificationList = appSettings.notificationActiveWallets;

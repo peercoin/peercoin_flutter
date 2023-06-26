@@ -116,7 +116,25 @@ class WalletProvider with ChangeNotifier {
     required String letterCode,
   }) async {
     var box = await _encryptedBox.getWalletBox();
-    await box.put(name, CoinWallet(name, title, letterCode));
+    final nOfWalletOfLetterCode = availableWalletValues
+        .where((element) => element.letterCode == letterCode)
+        .length;
+
+    LoggerWrapper.logInfo(
+      'WalletProvider',
+      'addWallet',
+      '$name $title $letterCode $nOfWalletOfLetterCode',
+    );
+
+    await box.put(
+      name,
+      CoinWallet(
+        name,
+        title,
+        letterCode,
+        nOfWalletOfLetterCode,
+      ),
+    );
     notifyListeners();
   }
 

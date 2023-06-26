@@ -78,10 +78,14 @@ class AvailableCoins {
   }
 
   static Coin getSpecificCoin(String identifier) {
-    return _availableCoinList[identifier]!;
+    final coin = identifier.split('_').first;
+
+    return _availableCoinList[coin]!;
   }
 
-  static int getDecimalProduct({required String identifier}) {
+  static int getDecimalProduct({
+    required String identifier,
+  }) {
     return pow(
       10,
       getSpecificCoin(identifier).fractions,
