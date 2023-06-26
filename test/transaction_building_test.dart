@@ -51,8 +51,16 @@ void main() async {
     Hive.registerAdapter(WalletAddressAdapter());
     Hive.registerAdapter(WalletUtxoAdapter());
     await wallet.init();
-    wallet.addWallet(walletName, walletName, 'PPC');
-    wallet.addWallet(testnetWalletName, testnetWalletName, 'tPPC');
+    wallet.addWallet(
+      name: walletName,
+      title: walletName,
+      letterCode: 'PPC',
+    );
+    wallet.addWallet(
+      name: testnetWalletName,
+      title: testnetWalletName,
+      letterCode: 'tPPC',
+    );
   });
 
   tearDownAll(() async {

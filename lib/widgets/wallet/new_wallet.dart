@@ -29,9 +29,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       var appSettings = context.read<AppSettings>();
       final navigator = Navigator.of(context);
       await context.read<WalletProvider>().addWallet(
-            _coin,
-            availableCoins[_coin]!.displayName,
-            availableCoins[_coin]!.letterCode,
+            name: _coin,
+            title: availableCoins[_coin]!.displayName,
+            letterCode: availableCoins[_coin]!.letterCode,
           );
 
       //enable notifications

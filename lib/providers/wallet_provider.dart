@@ -110,7 +110,11 @@ class WalletProvider with ChangeNotifier {
     return _coinWalletCache[identifier]!;
   }
 
-  Future<void> addWallet(String name, String title, String letterCode) async {
+  Future<void> addWallet({
+    required String name,
+    required String title,
+    required String letterCode,
+  }) async {
     var box = await _encryptedBox.getWalletBox();
     await box.put(name, CoinWallet(name, title, letterCode));
     notifyListeners();
