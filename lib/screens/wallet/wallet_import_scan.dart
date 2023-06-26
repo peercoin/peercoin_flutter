@@ -156,8 +156,9 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   Future<void> fetchAddressesFromBackend() async {
     var adressesToQuery = <String, int>{};
     await _walletProvider.populateWifMap(
-      _coinName,
-      _addressScanPointer + _addressChunkSize,
+      identifier: _coinName,
+      maxValue: _addressScanPointer + _addressChunkSize,
+      walletNumber: _walletProvider.getWalletNumber(_coinName),
     );
 
     for (int i = _addressScanPointer;

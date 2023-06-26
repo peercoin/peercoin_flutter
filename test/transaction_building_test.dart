@@ -76,7 +76,7 @@ void main() async {
       test(
         'Generate unused mainnet address',
         () async {
-          await wallet.generateUnusedAddress(walletName);
+          await wallet.generateUnusedAddress(walletName, true);
           assert(
             wallet.getUnusedAddress(walletName) ==
                 'PXDR4KZn2WdTocNx1GPJXR96PfzZBvWqKQ',
@@ -186,7 +186,7 @@ void main() async {
       test(
         'Generate unused testnet address',
         () async {
-          await wallet.generateUnusedAddress(testnetWalletName);
+          await wallet.generateUnusedAddress(testnetWalletName, true);
           assert(
             wallet.getUnusedAddress(testnetWalletName) ==
                 'n49CCQFuncaXbtBoNm39gSP9dvRP2eFFSw',
