@@ -265,7 +265,11 @@ class ElectrumConnection with ChangeNotifier {
     _scanMode = false;
     _paperWalletUtxos = {};
     _openReplies = [];
-    _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
+    _queryDepth = {
+      'account': 0,
+      'chain': 0,
+      'address': 0
+    }; //TODO check if this is correct
     _maxChainDepth = 5;
     _maxAddressDepth = 0; //no address depth scan for now
     _depthPointer = 1;

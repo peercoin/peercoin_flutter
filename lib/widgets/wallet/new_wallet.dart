@@ -33,6 +33,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       final nOfWalletOfLetterCode = walletProvider.availableWalletValues
           .where((element) => element.letterCode == letterCode)
           .length;
+      final walletName = '${_coin}_$nOfWalletOfLetterCode';
 
       String title = availableCoins[_coin]!.displayName;
       if (nOfWalletOfLetterCode > 0) {
@@ -40,14 +41,15 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       }
 
       await walletProvider.addWallet(
-        name: '${_coin}_$nOfWalletOfLetterCode',
+        name: walletName,
         title: title,
         letterCode: letterCode,
       );
 
       //enable notifications
       var notificationList = appSettings.notificationActiveWallets;
-      notificationList.add(availableCoins[_coin]!.letterCode);
+      notificationList
+          .add(availableCoins[_coin]!.letterCode); //TODO has to add identifiers
       appSettings.setNotificationActiveWallets(notificationList);
 
       var prefs = await SharedPreferences.getInstance();
@@ -55,7 +57,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         await navigator.pushNamedAndRemoveUntil(
           Routes.walletImportScan,
           (_) => false,
-          arguments: _coin,
+          arguments: walletName,
         );
       } else {
         navigator.pop();

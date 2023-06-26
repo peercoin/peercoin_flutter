@@ -253,7 +253,7 @@ class BackgroundSync {
     bool fromScan = false,
   }) async {
     var grpcClient = MarismaClient(
-      walletName == 'peercoin'
+      walletName == 'peercoin' //TODO has to check lettercode
           ? ClientChannel('marisma.ppc.lol', port: 8443)
           : ClientChannel('test-marisma.ppc.lol', port: 2096),
     );

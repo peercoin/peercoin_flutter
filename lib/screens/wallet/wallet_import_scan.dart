@@ -30,6 +30,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
   late AppSettings _settings;
   late String _coinName = '';
   late ElectrumConnectionState _connectionState;
+  late int _walletNumber;
   int _latestUpdate = 0;
   int _addressScanPointer = 0;
   int _addressChunkSize = 10;
@@ -118,6 +119,8 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       _coinName = ModalRoute.of(context)!.settings.arguments as String;
       _connectionProvider = Provider.of<ElectrumConnection>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
+      _walletNumber = _walletProvider.getWalletNumber(_coinName);
+
       await _walletProvider.prepareForRescan(_coinName);
 
       await _connectionProvider!.init(_coinName, scanMode: true);
@@ -158,7 +161,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
     await _walletProvider.populateWifMap(
       identifier: _coinName,
       maxValue: _addressScanPointer + _addressChunkSize,
-      walletNumber: _walletProvider.getWalletNumber(_coinName),
+      walletNumber: _walletNumber,
     );
 
     for (int i = _addressScanPointer;
@@ -166,7 +169,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
         i++) {
       var res = await _walletProvider.getAddressFromDerivationPath(
         identifier: _coinName,
-        account: 0,
+        account: _walletNumber,
         chain: i,
         address: 0,
       );
@@ -225,7 +228,7 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       //returns master address for hd wallet
       var masterAddr = await _walletProvider.getAddressFromDerivationPath(
         identifier: _coinName,
-        account: 0,
+        account: _walletNumber,
         chain: 0,
         address: 0,
         isMaster: true,
@@ -248,4 +251,5 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       });
     }
   }
+  //TODO test multi wallets without background notifications
 }

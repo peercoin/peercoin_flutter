@@ -31,7 +31,7 @@ class WalletProvider with ChangeNotifier {
   WalletProvider(this._encryptedBox);
 
   final EncryptedBox _encryptedBox;
-  final Map<String?, CoinWallet?> _coinWalletCache = {};
+  final Map<String, CoinWallet> _coinWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
   final Map<String, String> _unusedAddressCache = {};
   final Map<String, String> _wifs = {};
@@ -105,7 +105,12 @@ class WalletProvider with ChangeNotifier {
   CoinWallet getSpecificCoinWallet(String identifier) {
     if (_coinWalletCache[identifier] == null) {
       //cache wallet
-      _coinWalletCache[identifier] = _walletBox.get(identifier);
+      final res = _walletBox.get(identifier);
+      if (res == null) {
+        throw Exception('Wallet not found');
+      } else {
+        _coinWalletCache[identifier] = res;
+      }
     }
     return _coinWalletCache[identifier]!;
   }
