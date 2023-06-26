@@ -34,9 +34,14 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           .where((element) => element.letterCode == letterCode)
           .length;
 
+      String title = availableCoins[_coin]!.displayName;
+      if (nOfWalletOfLetterCode > 0) {
+        title = '$title ${nOfWalletOfLetterCode + 1}';
+      }
+
       await walletProvider.addWallet(
         name: '${_coin}_$nOfWalletOfLetterCode',
-        title: availableCoins[_coin]!.displayName,
+        title: title,
         letterCode: letterCode,
       );
 
