@@ -37,13 +37,13 @@ class CoinWallet extends HiveObject {
   List<PendingNotification>? _pendingTransactionNotifications = [];
 
   @HiveField(9, defaultValue: 0)
-  int _walletNumber = 0;
+  int _walletIndex = 0;
 
   CoinWallet(
     this._name,
     this._title,
     this._letterCode,
-    this._walletNumber,
+    this._walletIndex,
   );
 
   String get name {
@@ -54,12 +54,12 @@ class CoinWallet extends HiveObject {
     return _letterCode;
   }
 
-  int get walletNumber {
-    return _walletNumber;
+  int get walletIndex {
+    return _walletIndex;
   }
 
-  set walletNumber(int newWalletNumber) {
-    _walletNumber = walletNumber;
+  set walletIndex(int newWalletNumber) {
+    _walletIndex = newWalletNumber;
     save();
   }
 

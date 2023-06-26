@@ -198,15 +198,12 @@ class WalletProvider with ChangeNotifier {
     }
   }
 
-  Future<void> generateUnusedAddress(
-    String identifier, [
-    bool getRootAddress = false,
-  ]) async {
+  Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
     var hdWallet = await getHdWallet(identifier);
 
-    if (getRootAddress == true) {
-      //generate new address
+    if (openWallet.addresses.isEmpty && openWallet.walletIndex == 0) {
+      //generate new address from master at wallet index 0
       openWallet.addNewAddress = WalletAddress(
         address: hdWallet.address,
         addressBookName: '',
@@ -238,7 +235,7 @@ class WalletProvider with ChangeNotifier {
         var numberOfOurAddr = openWallet.addresses
             .where((element) => element.isOurs == true)
             .length;
-        var derivePath = "m/${openWallet.walletNumber}'/$numberOfOurAddr/0";
+        var derivePath = "m/${openWallet.walletIndex}'/$numberOfOurAddr/0";
         var newHdWallet = hdWallet.derivePath(derivePath);
         var newAddrResult = openWallet.addresses.firstWhereOrNull(
           (element) => element.address == newHdWallet.address,
@@ -247,7 +244,7 @@ class WalletProvider with ChangeNotifier {
         while (newAddrResult != null) {
           //next addr in derivePath already exists for some reason, find a non-existing one
           numberOfOurAddr++;
-          derivePath = "m/${openWallet.walletNumber}'/$numberOfOurAddr/0";
+          derivePath = "m/${openWallet.walletIndex}'/$numberOfOurAddr/0";
           newHdWallet = hdWallet.derivePath(derivePath);
 
           newAddrResult = openWallet.addresses.firstWhereOrNull(
@@ -631,7 +628,7 @@ class WalletProvider with ChangeNotifier {
         await populateWifMap(
           identifier: identifier,
           maxValue: openWallet.addresses.length,
-          walletNumber: openWallet.walletNumber,
+          walletNumber: openWallet.walletIndex,
         );
         walletAddress.newWif = _wifs[address] ?? ''; //save
         await openWallet.save();
@@ -1117,6 +1114,6 @@ class WalletProvider with ChangeNotifier {
 
   int getWalletNumber(String identifier) {
     var openWallet = getSpecificCoinWallet(identifier);
-    return openWallet.walletNumber;
+    return openWallet.walletIndex;
   }
 }

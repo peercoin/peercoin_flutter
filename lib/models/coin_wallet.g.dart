@@ -51,7 +51,7 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       ..writeByte(8)
       ..write(obj._pendingTransactionNotifications)
       ..writeByte(9)
-      ..write(obj._walletNumber);
+      ..write(obj._walletIndex);
   }
 
   @override
