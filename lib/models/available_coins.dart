@@ -84,8 +84,9 @@ class AvailableCoins {
   }
 
   static Coin getSpecificCoin(String identifier) {
-    if (_availableCoinList.containsKey(identifier)) {
-      return _availableCoinList[identifier.split('_').first]!;
+    final coin = identifier.split('_').first;
+    if (_availableCoinList.containsKey(coin)) {
+      return _availableCoinList[coin]!;
     } else {
       throw Exception('Coin not found');
     }
