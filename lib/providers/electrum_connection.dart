@@ -265,11 +265,7 @@ class ElectrumConnection with ChangeNotifier {
     _scanMode = false;
     _paperWalletUtxos = {};
     _openReplies = [];
-    _queryDepth = {
-      'account': 0,
-      'chain': 0,
-      'address': 0
-    }; //TODO check if this is correct
+    _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
     _maxChainDepth = 5;
     _maxAddressDepth = 0; //no address depth scan for now
     _depthPointer = 1;
@@ -422,7 +418,7 @@ class ElectrumConnection with ChangeNotifier {
     }
     if (_scanMode == true) {
       if (newStatus == null) {
-        await subscribeNextDerivedAddress();
+        await subscribeNextDerivedAddress(); //TODO move this logic out of the connection provider, it has no real business here
       } else {
         //increase depth because we found one != null
         if (_depthPointer == 1) {

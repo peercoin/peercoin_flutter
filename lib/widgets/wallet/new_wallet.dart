@@ -48,8 +48,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
       //enable notifications
       var notificationList = appSettings.notificationActiveWallets;
-      notificationList.add(
-          _availableCoins[_coin]!.letterCode); //TODO has to add identifiers
+      notificationList.add(walletName);
       appSettings.setNotificationActiveWallets(notificationList);
 
       var prefs = await SharedPreferences.getInstance();
