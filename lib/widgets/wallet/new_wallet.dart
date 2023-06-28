@@ -17,8 +17,8 @@ class NewWalletDialog extends StatefulWidget {
   State<NewWalletDialog> createState() => _NewWalletDialogState();
 }
 
-Map<String, Coin> availableCoins = AvailableCoins.availableCoins;
-List activeCoins = [];
+Map<String, Coin> _availableCoins = AvailableCoins.availableCoins;
+List _activeCoins = [];
 
 class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
@@ -29,13 +29,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       var appSettings = context.read<AppSettings>();
       final navigator = Navigator.of(context);
       final WalletProvider walletProvider = context.read<WalletProvider>();
-      final letterCode = availableCoins[_coin]!.letterCode;
+      final letterCode = _availableCoins[_coin]!.letterCode;
       final nOfWalletOfLetterCode = walletProvider.availableWalletValues
           .where((element) => element.letterCode == letterCode)
           .length;
       final walletName = '${_coin}_$nOfWalletOfLetterCode';
 
-      String title = availableCoins[_coin]!.displayName;
+      String title = _availableCoins[_coin]!.displayName;
       if (nOfWalletOfLetterCode > 0) {
         title = '$title ${nOfWalletOfLetterCode + 1}';
       }
@@ -48,8 +48,8 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
       //enable notifications
       var notificationList = appSettings.notificationActiveWallets;
-      notificationList
-          .add(availableCoins[_coin]!.letterCode); //TODO has to add identifiers
+      notificationList.add(
+          _availableCoins[_coin]!.letterCode); //TODO has to add identifiers
       appSettings.setNotificationActiveWallets(notificationList);
 
       var prefs = await SharedPreferences.getInstance();
@@ -91,9 +91,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       }
       var activeWalletList = activeWallets.availableWalletKeys;
       for (var element in activeWalletList) {
-        if (availableCoins.keys.contains(element)) {
+        if (_availableCoins.keys.contains(element)) {
           setState(() {
-            activeCoins.add(element);
+            _activeCoins.add(element);
           });
         }
       }
@@ -108,8 +108,8 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   Widget build(BuildContext context) {
     var list = <Widget>[];
-    final actualAvailableWallets = availableCoins.keys
-        .where((element) => !activeCoins.contains(element))
+    final actualAvailableWallets = _availableCoins.keys
+        .where((element) => !_activeCoins.contains(element))
         .toList();
 
     if (actualAvailableWallets.isNotEmpty) {
@@ -124,12 +124,12 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
               leading: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Image.asset(
-                  AvailableCoins.getSpecificCoin(availableCoins[wallet]!.name)
+                  AvailableCoins.getSpecificCoin(_availableCoins[wallet]!.name)
                       .iconPath,
                   width: 16,
                 ),
               ),
-              title: Text(availableCoins[wallet]!.displayName),
+              title: Text(_availableCoins[wallet]!.displayName),
             ),
           ),
         );
