@@ -249,13 +249,13 @@ class BackgroundSync {
   }
 
   static MarismaClient getMarismaClient(String walletName) {
-    final server =
+    final (url, port) =
         AvailableCoins.getSpecificCoin(walletName).marismaServers.first;
 
     return MarismaClient(
       ClientChannel(
-        server.$1,
-        port: server.$2,
+        url,
+        port: port,
       ),
     );
   }
