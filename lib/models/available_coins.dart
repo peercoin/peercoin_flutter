@@ -37,6 +37,9 @@ class AvailableCoins {
         'wss://electrum.peercoinexplorer.net:50004',
         'wss://allingas.peercoinexplorer.net:50004',
       ],
+      marismaServers: [
+        ('marisma.ppc.lol', 8443),
+      ],
     ),
     'peercoinTestnet': Coin(
       name: 'peercoinTestnet',
@@ -69,6 +72,9 @@ class AvailableCoins {
       electrumServers: [
         'wss://testnet-electrum.peercoinexplorer.net:50009',
         'wss://allingas.peercoinexplorer.net:50009',
+      ],
+      marismaServers: [
+        ('test-marisma.ppc.lol', 2096),
       ],
     ),
   };

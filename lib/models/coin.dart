@@ -17,6 +17,7 @@ class Coin {
   final int txVersion;
   final double electrumRequiredProtocol;
   final List electrumServers;
+  final List<(String, int)> marismaServers;
 
   Coin({
     required this.name,
@@ -35,5 +36,6 @@ class Coin {
     required this.txVersion,
     required this.electrumRequiredProtocol,
     required this.electrumServers,
+    required this.marismaServers,
   });
 }
