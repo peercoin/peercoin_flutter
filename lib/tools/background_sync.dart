@@ -147,7 +147,7 @@ class BackgroundSync {
     //loop through wallets
     for (var wallet in walletBox.values) {
       //increment identifier for notifications
-      if (appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
+      if (appOptions.notificationActiveWallets.contains(wallet.name)) {
         //if activated, parse all addresses to a list that will be POSTed to backend later on
         var adressesToQuery = <String, int>{};
         var utxos = wallet.utxos;
