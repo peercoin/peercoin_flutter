@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
 
@@ -16,13 +18,13 @@ class CoinWallet extends HiveObject {
   final String _letterCode;
 
   @HiveField(2)
-  final List<WalletAddress> _addresses = [];
+  List<WalletAddress> _addresses = [];
 
   @HiveField(3)
-  final List<WalletTransaction> _transactions = [];
+  List<WalletTransaction> _transactions = [];
 
   @HiveField(4)
-  final List<WalletUtxo> _utxos = [];
+  List<WalletUtxo> _utxos = [];
 
   @HiveField(5)
   int _balance = 0;
@@ -168,4 +170,6 @@ class CoinWallet extends HiveObject {
     }
     save();
   }
+
+  //TODO allow title to be edited here and in GUI
 }

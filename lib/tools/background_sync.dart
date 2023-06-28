@@ -184,7 +184,7 @@ class BackgroundSync {
 
         LoggerWrapper.logInfo(
           'BackgroundSync',
-          'executeSync',
+          'executeSync ${wallet.name}',
           'addressesToQuery $adressesToQuery',
         );
 
@@ -198,7 +198,7 @@ class BackgroundSync {
         LoggerWrapper.logInfo(
           'BackgroundSync',
           'executeSync ${wallet.name}',
-          marismaResult.toString(),
+          'result $marismaResult',
         );
 
         if (marismaResult.isNotEmpty) {
