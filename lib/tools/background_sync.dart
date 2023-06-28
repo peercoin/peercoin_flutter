@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/models/available_coins.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/marisma.pbgrpc.dart';
@@ -247,16 +248,24 @@ class BackgroundSync {
     }
   }
 
+  static MarismaClient getMarismaClient(String walletName) {
+    final server =
+        AvailableCoins.getSpecificCoin(walletName).marismaServers.first;
+
+    return MarismaClient(
+      ClientChannel(
+        server.$1,
+        port: server.$2,
+      ),
+    );
+  }
+
   static Future<Map<String, int>> getNumberOfUtxosFromMarisma({
     required String walletName,
     required Map<String, int> addressesToQuery,
     bool fromScan = false,
   }) async {
-    var grpcClient = MarismaClient(
-      walletName == 'peercoin' //TODO has to check lettercode
-          ? ClientChannel('marisma.ppc.lol', port: 8443)
-          : ClientChannel('test-marisma.ppc.lol', port: 2096),
-    );
+    var grpcClient = getMarismaClient(walletName);
 
     Map<String, int> answerMap = {};
 
