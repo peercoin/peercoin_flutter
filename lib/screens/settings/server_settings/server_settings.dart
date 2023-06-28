@@ -79,8 +79,6 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final connectedServer =
-        context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -257,13 +255,6 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                               }
                               //connectable now false ? move to bottom of list
                               if (!_servers[index].connectable) {
-                                if (_servers[index].address ==
-                                    connectedServer) {
-                                  //were we connected to this server? close connection
-                                  await context
-                                      .read<ElectrumConnection>()
-                                      .closeConnection(false);
-                                }
                                 final item = _servers.removeAt(index);
                                 _servers.insert(_servers.length, item);
                                 _servers[index].setPriority =
@@ -284,15 +275,9 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             index,
                             _servers[index].connectable,
                           ),
-                          title: Text(_servers[index].address),
-                          subtitle: _servers[index].address == connectedServer
-                              ? Center(
-                                  child: Text(
-                                    AppLocalizations.instance
-                                        .translate('wallet_connected'),
-                                  ),
-                                )
-                              : Container(),
+                          title: Text(
+                            _servers[index].address,
+                          ),
                         ),
                       ),
                     );
@@ -302,5 +287,4 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
       ),
     );
   }
-  //TODO server won't be connected anymore when accessing this from setup
 }
