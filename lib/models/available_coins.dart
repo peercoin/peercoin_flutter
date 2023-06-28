@@ -78,9 +78,11 @@ class AvailableCoins {
   }
 
   static Coin getSpecificCoin(String identifier) {
-    final coin = identifier.split('_').first;
-
-    return _availableCoinList[coin]!;
+    if (_availableCoinList.containsKey(identifier)) {
+      return _availableCoinList[identifier.split('_').first]!;
+    } else {
+      throw Exception('Coin not found');
+    }
   }
 
   static int getDecimalProduct({
