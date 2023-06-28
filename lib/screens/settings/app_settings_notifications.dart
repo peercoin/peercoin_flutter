@@ -134,16 +134,16 @@ class _AppSettingsNotificationsScreenState
         Column(
           children: _availableWallets.map((wallet) {
             return SwitchListTile(
-              key: Key(wallet.letterCode),
+              key: Key(wallet.name),
               title: Text(wallet.title),
-              value: _appSettings.notificationActiveWallets
-                  .contains(wallet.letterCode),
+              value:
+                  _appSettings.notificationActiveWallets.contains(wallet.name),
               onChanged: (newState) {
                 var newList = _appSettings.notificationActiveWallets;
                 if (newState == true) {
-                  newList.add(wallet.letterCode);
+                  newList.add(wallet.name);
                 } else {
-                  newList.remove(wallet.letterCode);
+                  newList.remove(wallet.name);
                 }
                 _appSettings.setNotificationActiveWallets(newList);
                 saveSnack(context);
