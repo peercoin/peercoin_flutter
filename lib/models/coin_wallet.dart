@@ -175,6 +175,4 @@ class CoinWallet extends HiveObject {
     }
     save();
   }
-
-  //TODO allow title to be edited here and in GUI
 }

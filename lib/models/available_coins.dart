@@ -100,4 +100,6 @@ class AvailableCoins {
       getSpecificCoin(identifier).fractions,
     ).toInt();
   }
+
+  //TODO give testnet a grey icon to visually discriminate it from mainnet
 }
