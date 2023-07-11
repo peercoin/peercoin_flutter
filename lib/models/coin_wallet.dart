@@ -30,7 +30,7 @@ class CoinWallet extends HiveObject {
   int _balance = 0;
 
   @HiveField(6)
-  final String _title;
+  String _title;
 
   @HiveField(7)
   int _unconfirmedBalance = 0;
@@ -87,6 +87,11 @@ class CoinWallet extends HiveObject {
 
   String get title {
     return _title;
+  }
+
+  set title(String newTitle) {
+    _title = newTitle;
+    save();
   }
 
   List<PendingNotification> get pendingTransactionNotifications {
