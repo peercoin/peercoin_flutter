@@ -278,6 +278,58 @@ class _WalletHomeState extends State<WalletHomeScreen>
     super.deactivate();
   }
 
+  Future<void> _titleEditDialog(
+    BuildContext context,
+    CoinWallet wallet,
+  ) async {
+    var textFieldController = TextEditingController();
+    textFieldController.text = wallet.title;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate(
+              'wallet_title_edit',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: TextField(
+            controller: textFieldController,
+            maxLength: 20,
+            decoration: InputDecoration(
+              hintText: AppLocalizations.instance
+                  .translate('wallet_title_edit_new_title'),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<WalletProvider>().updateWalletTitle(
+                      identifier: _wallet.name,
+                      newTitle: textFieldController.text,
+                    );
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void selectPopUpMenuItem(String value) {
     switch (value) {
       case 'import_wallet':
@@ -303,6 +355,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
           Routes.walletMessageVerification,
           arguments: _wallet.name,
         );
+        break;
+      case 'change_title':
+        _titleEditDialog(context, _wallet);
         break;
       case 'rescan':
         showDialog(
@@ -418,6 +473,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 title: Text(
                   AppLocalizations.instance
                       .translate('wallet_pop_menu_verification'),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'change_title',
+              child: ListTile(
+                leading: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance
+                      .translate('wallet_pop_menu_change_title'),
                 ),
               ),
             ),

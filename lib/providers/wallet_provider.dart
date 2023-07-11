@@ -68,6 +68,15 @@ class WalletProvider with ChangeNotifier {
     return _unusedAddressCache[identifier] ?? '';
   }
 
+  void updateWalletTitle({
+    required String identifier,
+    required String newTitle,
+  }) {
+    final wallet = getSpecificCoinWallet(identifier);
+    wallet.title = newTitle;
+    notifyListeners();
+  }
+
   void setUnusedAddress({
     required String identifier,
     required String address,
