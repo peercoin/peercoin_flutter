@@ -40,6 +40,7 @@ class AppLocalizations {
     'nb': 'Norsk Bokmål',
     'pl': 'Polski',
     'pt': 'Português',
+    'pa': 'ਪੰਜਾਬੀ',
     'ro': 'Română',
     'ru': 'Русский',
     'sv': 'Svenska',
