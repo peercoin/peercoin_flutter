@@ -18,38 +18,40 @@ class AppLocalizations {
     instance = this;
   }
 
-  static const Map<String, String> availableLocales = {
-    'en': 'English',
-    'ar': '(al arabiya) العربية',
-    'bn': 'বাংলা (baɛṅlā)',
-    'id': 'Bahasa Indonesia',
-    'da': 'Dansk',
-    'de': 'Deutsch',
-    'es': 'Español',
-    'fa': '(fārsī) فارسى',
-    'fil': 'Wikang Filipino',
-    'fr': 'Français',
-    // 'ha': '(ḥawsa) حَوْسَ', presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
-    'hi': 'हिन्दी (hindī)',
-    'hr': 'Hrvatski',
-    'it': 'Italiano',
-    'ja': '日本語 (nihongo)',
-    'sw': 'Kiswahili',
-    'ko': '한국어 [韓國語] (han-guk-eo)',
-    'nl': 'Nederlands',
-    'nb': 'Norsk Bokmål',
-    'pl': 'Polski',
-    'pt': 'Português',
-    'ro': 'Română',
-    'ru': 'Русский',
-    'sv': 'Svenska',
-    'th': 'ภาษาไทย (paasaa-tai)',
-    'tr': 'Türkçe',
-    'uk': 'Українська (Ukrajins’ka)',
-    'ur': '(urdū) اردو',
-    'vi': 'Tiếng Việt',
-    'zh': '中文 (Zhōngwén)'
+  static const Map<String, (Locale, String)> availableLocales = {
+    'en': (Locale('en'), 'English'),
+    'ar': (Locale('ar'), '(al arabiya) العربية'),
+    'bn': (Locale('bn'), 'বাংলা (baɛṅlā)'),
+    'id': (Locale('id'), 'Bahasa Indonesia'),
+    'da': (Locale('da'), 'Dansk'),
+    'de': (Locale('de'), 'Deutsch'),
+    'es': (Locale('es'), 'Español'),
+    'fa': (Locale('fa'), '(fārsī) فارسى'),
+    'fil': (Locale('fil'), 'Wikang Filipino'),
+    'fr': (Locale('fr'), 'Français'),
+    // 'ha': (Locale('ha'), '(ḥawsa) حَوْسَ'), presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
+    'hi': (Locale('hi'), 'हिन्दी (hindī)'),
+    'hr': (Locale('hr'), 'Hrvatski'),
+    'it': (Locale('it'), 'Italiano'),
+    'ja': (Locale('ja'), '日本語 (nihongo)'),
+    'sw': (Locale('sw'), 'Kiswahili'),
+    'ko': (Locale('ko'), '한국어 [韓國語] (han-guk-eo)'),
+    'nl': (Locale('nl'), 'Nederlands'),
+    'nb': (Locale('nb'), 'Norsk Bokmål'),
+    'pl': (Locale('pl'), 'Polski'),
+    'pt': (Locale('pt'), 'Português'),
+    'ro': (Locale('ro'), 'Română'),
+    'ru': (Locale('ru'), 'Русский'),
+    'sv': (Locale('sv'), 'Svenska'),
+    'th': (Locale('th'), 'ภาษาไทย (paasaa-tai)'),
+    'tr': (Locale('tr'), 'Türkçe'),
+    'uk': (Locale('uk'), 'Українська (Ukrajins’ka)'),
+    'ur': (Locale('ur'), '(urdū) اردو'),
+    'vi': (Locale('vi'), 'Tiếng Việt'),
+    'zh': (Locale('zh'), '中文 (Zhōngwén)'),
   };
+
+  //TODO add test
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
