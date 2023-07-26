@@ -17,7 +17,7 @@ class AppLocalizations {
   AppLocalizations._init(this.locale) {
     instance = this;
   }
-  
+
   static const Map<String, (Locale, String)> availableLocales = {
     'en': (Locale('en'), 'English'),
     'ar': (Locale('ar'), '(al arabiya) العربية'),
