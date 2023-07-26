@@ -1,1 +1,15 @@
-{}
+{
+    "about_send_mail": "發送電子郵件",
+    "addressbook_swipe_delete": "刪除",
+    "app_settings_logs_export": "導出調試日誌",
+    "app_settings_notifications_open_button": "打開通知設置",
+    "receive_website": "打開網站",
+    "app_settings_delete": "刪除帳戶",
+    "setup_legal_title": "法律聲明",
+    "about_illustrations_button": "designs.AI",
+    "about_license": "根據 AGPL-3.0 許可",
+    "app_settings_logs": "調試日誌",
+    "logout": "登出",
+    "logout_title": "您即將退出",
+    "wallet_offline": "離線"
+}
