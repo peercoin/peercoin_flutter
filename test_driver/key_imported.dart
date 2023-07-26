@@ -280,6 +280,13 @@ void main() {
         },
         timeout: const Timeout.factor(2),
       );
+
+      test('Settings, change language', () async {
+        //creates a peercoin testnet wallet from an imported seed and checks if it connects
+        await driver.tap(find.text('Language'));
+        await driver.tap(find.text('Deutsch'));
+        await driver.scrollIntoView(find.text('Sprachen'));
+      });
     },
   );
 }

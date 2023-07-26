@@ -51,8 +51,6 @@ class AppLocalizations {
     'zh': (Locale('zh'), '中文 (Zhōngwén)'),
   };
 
-  //TODO add test
-
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
 
