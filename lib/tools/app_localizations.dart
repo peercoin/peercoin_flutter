@@ -48,8 +48,8 @@ class AppLocalizations {
     'uk': 'Українська (Ukrajins’ka)',
     'ur': '(urdū) اردو',
     'vi': 'Tiếng Việt',
-    'zh_Hant': '繁體中文 (Fántǐ zhōngwén)',
-    'zh_Hans': '简体中文 (Jiǎntǐ zhōngwén)'
+  const Locale('zh', 'Hant'): '繁體中文 (Fántǐ zhōngwén)',
+  const Locale('zh', 'Hans'): '简体中文 (Jiǎntǐ zhōngwén)'
   };
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
