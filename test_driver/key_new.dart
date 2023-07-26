@@ -40,6 +40,11 @@ void main() {
         () async {
           //creates a brand new peercoin testnet wallet from scratch and check if it connects
           await driver.tap(find.byValueKey('setupLanguageButton'));
+          await driver.tap(find.text('Deutsch'));
+          await driver.tap(find.pageBack());
+          await driver.scrollIntoView(find.text('Wallet erstellen'));
+          //back to english
+          await driver.tap(find.byValueKey('setupLanguageButton'));
           await driver.tap(find.text('English'));
           await driver.tap(find.pageBack());
           await driver.scrollIntoView(find.text('Create Wallet'));

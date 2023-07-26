@@ -338,5 +338,8 @@
     "app_settings_delete": "Ștergeți contul",
     "tx_retry_broadcast": "Reîncercați difuzarea",
     "tx_show_hex": "Afișați Hex-ul Tranzacției",
-    "tx_retry_snack": "Difuzarea a fost reîncercată. Dacă a fost cu succes, tranzacția se va actualiza în scurt timp ."
+    "tx_retry_snack": "Difuzarea a fost reîncercată. Dacă a fost cu succes, tranzacția se va actualiza în scurt timp .",
+    "verify_enter_signature": "Introduceți semnătura",
+    "verify_enter_message": "Introduceți mesajul",
+    "send_errors_cant_pay_fees": "Nu se poate plăti taxa. $feesMissing $letter_code lipsesc în prezent. Eliminați careva adrese, sau reduceți sumei tranzacției."
 }
