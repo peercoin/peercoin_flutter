@@ -341,5 +341,15 @@
     "tx_retry_snack": "Difuzarea a fost reîncercată. Dacă a fost cu succes, tranzacția se va actualiza în scurt timp .",
     "verify_enter_signature": "Introduceți semnătura",
     "verify_enter_message": "Introduceți mesajul",
-    "send_errors_cant_pay_fees": "Nu se poate plăti taxa. $feesMissing $letter_code lipsesc în prezent. Eliminați careva adrese, sau reduceți sumei tranzacției."
+    "send_errors_cant_pay_fees": "Nu se poate plăti taxa. $feesMissing $letter_code lipsesc în prezent. Eliminați careva adrese, sau reduceți suma tranzacției.",
+    "wallet_pop_menu_verification": "Verificați mesajele",
+    "verify_step_1": "Introduceți Adresa",
+    "verify_step_3": "Introduceți Semnătura",
+    "verify_step_3_button": "Verificați",
+    "verify_input_label_message": "Mesaj pentru verificare",
+    "verify_input_label_address": "Adresa pentru verificare",
+    "verify_input_label_signature": "Semnătură pentru verificare",
+    "verify_success": "Mesaj verificat.",
+    "verify_fail": "Mesajul nu a putut fi verificat.",
+    "wallet_scan_notice_bg_notifications": "Activarea notificărilor de fundal în Setările aplicației poate îmbunătăți considerabil fiabilitatea scanării."
 }
