@@ -1,4 +1,5 @@
 ### **1.1.8** (2023-xx-xx)
+* You may now add multiple wallets of the same coin
 * Server Settings have been moved from inside the wallets to application settings
 * Add language: Burmese
 * Add language: Panjabi / Punjabi
