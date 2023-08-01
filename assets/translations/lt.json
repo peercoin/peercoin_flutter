@@ -318,7 +318,7 @@
     "wallet_value_alert_title": "Didelės monetų vertės",
     "secure_storage_app_bar_title": "Klaida",
     "secure_storage_body": "Nepavyko nuskaityti saugaus laikymo. Ištrinkite šios programos duomenis ir talpyklą ir bandykite dar kartą.",
-    "wallet_value_alert_content": "Šios monetų vertės laikymas mobiliojoje piniginėje yra rizikingas.\nApsvarstykite galimybę perkelti savo monetas į Stakebox, "Ledger" aparatūrinę piniginę ar šaltą piniginę.",
+    "wallet_value_alert_content": "Šios monetų vertės laikymas mobiliojoje piniginėje yra rizikingas.\nApsvarstykite galimybę perkelti savo monetas į Stakebox, Ledger aparatūrinę piniginę ar šaltą piniginę.",
     "store_description": "Siųskite ir gaukite Peercoin, įrodymu, jog savo turimą Peercoin telefonu.\n\nSaugokite savo piniginės sėklą. Ši programa yra pateikiama be jokios garantijos.\nNaudokite savo riziką.\n\nYpatybės:\n- Paremta elektros protokolu.\n- Siųskite ir gaukite Peercoin.\n- Pasiruoškite atlikti operacijas iš karto po įdiegimo (nereikia laukti).\n- Peercoin ir Peercoin testinės piniginės.\n- Adresų knygos valdymas.\n- Importuoti popierines pinigines.\n- Importuoti ir eksportuoti privačius raktus (WIF).\n- Serverių valdymas.\n- Daugiakalbė palaikymas.\n- Fono pranešimai.\n\nŽinomi apribojimai yra prieinami „Github“ repozitorijoje.",
     "store_short": "Jūsų mobilioji piniginė Peercoin ir Peercoin testinėje versijoje.",
     "sign_step_1": "Pasirinkite adresą",
