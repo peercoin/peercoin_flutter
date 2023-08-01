@@ -23,6 +23,7 @@ class AppLocalizations {
     'ar': (Locale('ar'), '(al arabiya) العربية'),
     'bn': (Locale('bn'), 'বাংলা (baɛṅlā)'),
     'id': (Locale('id'), 'Bahasa Indonesia'),
+    'my': (Locale('my'), 'မြန်မာဘာသာ (mranma bhasa)'),
     'da': (Locale('da'), 'Dansk'),
     'de': (Locale('de'), 'Deutsch'),
     'es': (Locale('es'), 'Español'),
