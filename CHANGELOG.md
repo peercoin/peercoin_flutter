@@ -10,6 +10,7 @@
 * Add language: Bosnian
 * Add language: Bulgarian
 * Add language: Burmese
+* Add language: Catalan
 * Add language: Georgian
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
