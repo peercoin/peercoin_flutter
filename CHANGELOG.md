@@ -4,6 +4,7 @@
 * Add language: Burmese
 * Add language: Georgian
 * Add language: Hungarian / Magyar
+* Add language: Lithuanian
 * Add language: Panjabi / Punjabi
 * Add language: Tagalog
 
