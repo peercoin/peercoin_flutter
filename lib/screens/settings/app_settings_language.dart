@@ -73,11 +73,14 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
             noSpacers: true,
             child: Column(
               children: AppLocalizations.availableLocales.keys.map((lang) {
-                final (_, langTitle) = AppLocalizations.availableLocales[lang]!;
+                final (locale, langTitle) =
+                    AppLocalizations.availableLocales[lang]!;
+                final countryCode = locale.countryCode ?? '';
                 return InkWell(
                   onTap: () => saveLang(lang),
                   child: ListTile(
                     title: Text(langTitle),
+                    subtitle: Text('${locale.languageCode} $countryCode'),
                     key: Key(lang),
                     leading: Radio(
                       value: lang,
