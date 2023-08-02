@@ -251,5 +251,6 @@ class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
       });
     }
   }
+  //TODO rewrite to find wallet accounts and be more verbose
   //TODO test multi wallets without background notifications
 }
