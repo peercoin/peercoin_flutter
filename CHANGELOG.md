@@ -1,3 +1,5 @@
+### **1.1.9** (2023-xx-xx)
+
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
 * Wallet titles may now be edited from within the wallet
