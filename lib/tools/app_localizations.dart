@@ -46,6 +46,7 @@ class AppLocalizations {
     'ru': (Locale('ru'), 'Русский'),
     'sv': (Locale('sv'), 'Svenska'),
     'th': (Locale('th'), 'ภาษาไทย (paasaa-tai)'),
+    'tl': (Locale('tl'), 'Wikang Tagalog'),
     'tr': (Locale('tr'), 'Türkçe'),
     'uk': (Locale('uk'), 'Українська (Ukrajins’ka)'),
     'ur': (Locale('ur'), '(urdū) اردو'),

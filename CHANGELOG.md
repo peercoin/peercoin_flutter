@@ -3,6 +3,7 @@
 * Server Settings have been moved from inside the wallets to application settings
 * Add language: Burmese
 * Add language: Panjabi / Punjabi
+* Add language: Tagalog
 
 ### **1.1.7** (2023-06-16)
 * Minor updates under the hood
