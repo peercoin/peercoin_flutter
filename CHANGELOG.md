@@ -39,6 +39,7 @@
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
 * Add language: Pushto Pashto
+* Add language: Sinhala / Sinhalese
 * Add language: Swiss German Alemannic Alsatian
 * Add language: Tagalog
 * Add language: Welsh

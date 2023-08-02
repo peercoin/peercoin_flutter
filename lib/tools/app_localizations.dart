@@ -81,6 +81,7 @@ class AppLocalizations {
     'ro': (Locale('ro'), 'Română'),
     'ru': (Locale('ru'), 'Русский'),
     'fi': (Locale('fi'), 'Suomi'),
+    'si': (Locale('si'), 'සිංහල (siṁhala)'),
     'sq': (Locale('sq'), 'Shqipja'),
     'sv': (Locale('sv'), 'Svenska'),
     'th': (Locale('th'), 'ภาษาไทย (paasaa-tai)'),
