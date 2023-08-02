@@ -14,6 +14,7 @@
 * Add language: Catalan
 * Add language: Czech
 * Add language: Estonian
+* Add language: Finnish
 * Add language: Georgian
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
