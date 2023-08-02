@@ -60,7 +60,7 @@
     "app_settings_language": "Hizkuntza",
     "app_settings_language_restart": "Ezarpen hau aplikazioa berrabiarazi behar da.",
     "app_settings_logs": "Arrazoi-registroak",
-    "app_settings_description": "Errore-registroek informazio sintzientziala eduki dezakete. \nGainera, gako pribatuak ez dutenez, kontuz ibili pribatutasuna zerengan partekatzen duzun.",
+    "app_settings_description": "Errore-registroek informazio sintzientziala eduki dezakete.\nGainera, gako pribatuak ez dutenez, kontuz ibili pribatutasuna zerengan partekatzen duzun.",
     "app_settings_logs_export": "Esportatu arrazoi-registroak",
     "app_settings_newWallet": "Eska da gehitu diru-makina berria",
     "app_settings_notifications": "Jakinarazpenak",
