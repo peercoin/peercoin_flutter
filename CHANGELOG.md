@@ -45,6 +45,7 @@
 * Add language: Slovenian
 * Add language: Swiss German Alemannic Alsatian
 * Add language: Tagalog
+* Add language: Tamil
 * Add language: Welsh
 
 ### **1.1.7** (2023-06-16)
