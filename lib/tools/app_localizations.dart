@@ -88,6 +88,7 @@ class AppLocalizations {
     'sr': (Locale('sr'), 'Српски (Srpski)'),
     'sv': (Locale('sv'), 'Svenska'),
     'ta': (Locale('ta'), 'தமிழ் (Tamiḻ)'),
+    'te': (Locale('te'), 'తెలుగు (telugu)'),
     'th': (Locale('th'), 'ภาษาไทย (paasaa-tai)'),
     'tl': (Locale('tl'), 'Wikang Tagalog'),
     'tr': (Locale('tr'), 'Türkçe'),
