@@ -1,10 +1,13 @@
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
+* Fixed a bug where some devices could not create a new seed and where stuck in setup 
 * Add language: Afrikaans
 * Add language: Albanian
 * Add language: Amharic
+* Add language Azerbaijani
 * Add language: Assamese
 * Add language: Burmese
+* Add language: Belarusian
 * Add language: Georgian
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
