@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
-import '../../models/coin_wallet.dart';
-import '../../models/wallet_transaction.dart';
+import '../../models/hive/coin_wallet.dart';
+import '../../models/hive/wallet_transaction.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../providers/electrum_connection.dart';

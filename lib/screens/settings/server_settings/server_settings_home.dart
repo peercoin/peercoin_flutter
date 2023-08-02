@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/coin_wallet.dart';
+import '../../../models/hive/coin_wallet.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../widgets/service_container.dart';

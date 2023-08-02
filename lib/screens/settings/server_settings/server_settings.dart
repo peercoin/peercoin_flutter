@@ -2,7 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/server.dart';
+import '../../../models/hive/server.dart';
 import '../../../providers/electrum_connection.dart';
 import '../../../widgets/service_container.dart';
 import '../../../providers/servers.dart';

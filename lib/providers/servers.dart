@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../models/available_coins.dart';
-import '../models/server.dart';
+import '../models/hive/server.dart';
 import '../tools/logger_wrapper.dart';
 import 'encrypted_box.dart';
 

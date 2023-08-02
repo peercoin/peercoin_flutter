@@ -4,11 +4,11 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
-import '../../models/coin_wallet.dart';
+import '../../models/hive/coin_wallet.dart';
 import '../../providers/electrum_connection.dart';
 import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';
-import '/../models/wallet_transaction.dart';
+import '/../models/hive/wallet_transaction.dart';
 import '/../tools/app_routes.dart';
 import '/../widgets/wallet/wallet_balance_header.dart';
 import '/../widgets/service_container.dart';

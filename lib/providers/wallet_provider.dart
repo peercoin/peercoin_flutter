@@ -18,13 +18,13 @@ import 'package:peercoin/models/buildresult.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
-import '../models/coin_wallet.dart';
+import '../models/hive/coin_wallet.dart';
 import '../tools/app_localizations.dart';
 import '../tools/logger_wrapper.dart';
 import '../tools/notification.dart';
-import '../models/wallet_address.dart';
-import '../models/wallet_transaction.dart';
-import '../models/wallet_utxo.dart';
+import '../models/hive/wallet_address.dart';
+import '../models/hive/wallet_transaction.dart';
+import '../models/hive/wallet_utxo.dart';
 import 'encrypted_box.dart';
 
 class WalletProvider with ChangeNotifier {

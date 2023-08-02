@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../models/available_coins.dart';
-import '../../../models/server.dart';
+import '../../../models/hive/server.dart';
 import '../../../providers/electrum_connection.dart';
 import '../../../providers/servers.dart';
 import '../../../tools/app_localizations.dart';

@@ -11,7 +11,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
-import '../../models/coin_wallet.dart';
+import '../../models/hive/coin_wallet.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';

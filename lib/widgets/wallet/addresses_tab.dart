@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
-import '../../models/wallet_address.dart';
+import '../../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../providers/electrum_connection.dart';
