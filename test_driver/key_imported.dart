@@ -39,6 +39,7 @@ void main() {
         () async {
           //creates a peercoin testnet wallet from an imported seed and checks if it connects
           await driver.tap(find.byValueKey('setupLanguageButton'));
+          await driver.scrollIntoView(find.text('English'));
           await driver.tap(find.text('English'));
           await driver.tap(find.pageBack());
           await driver.scrollIntoView(find.text('Import Seed'));
@@ -284,6 +285,7 @@ void main() {
       test('Settings, change language', () async {
         //creates a peercoin testnet wallet from an imported seed and checks if it connects
         await driver.tap(find.text('Language'));
+        await driver.scrollIntoView(find.text('Deutsch'));
         await driver.tap(find.text('Deutsch'));
         await driver.scrollIntoView(find.text('Sprachen'));
       });
