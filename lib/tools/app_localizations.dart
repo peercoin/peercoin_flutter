@@ -30,6 +30,7 @@ class AppLocalizations {
     'bg': (Locale('bg'), 'Български (Bălgarski)'),
     'be': (Locale('be'), 'Беларуская (Bielaruskaja)'),
     'ca': (Locale('ca'), 'Català'),
+    'cs': (Locale('cs'), 'Čeština'),
     'id': (Locale('id'), 'Bahasa Indonesia'),
     'my': (Locale('my'), 'မြန်မာဘာသာ (mranma bhasa)'),
     'da': (Locale('da'), 'Dansk'),
