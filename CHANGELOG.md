@@ -1,5 +1,6 @@
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
+* Wallet titles may now be edited from within the wallet
 * Fixed a bug where some devices could not create a new seed and where stuck in setup 
 * Add language: Afrikaans
 * Add language: Albanian
