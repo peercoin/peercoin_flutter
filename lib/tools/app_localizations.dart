@@ -72,6 +72,7 @@ class AppLocalizations {
     'hy': (Locale('hy'), 'Հայերեն (Hayeren)'),
     'nl': (Locale('nl'), 'Nederlands'),
     'nb': (Locale('nb'), 'Norsk Bokmål'),
+    'ne': (Locale('ne'), 'नेपाली (Nēpālī)'),
     'or': (Locale('or'), 'ଓଡ଼ିଆ (ōṛiā)'),
     'pl': (Locale('pl'), 'Polski'),
     'pt': (Locale('pt'), 'Português'),

@@ -35,6 +35,7 @@
 * Add language: Marathi
 * Add language: Modern Greek
 * Add language: Mongolian
+* Add language: Nepali
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
 * Add language: Pushto Pashto
