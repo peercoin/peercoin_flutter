@@ -19,6 +19,7 @@
 * Add language: Panjabi / Punjabi
 * Add language: Pushto Pashto
 * Add language: Tagalog
+* Add language: Welsh
 
 ### **1.1.7** (2023-06-16)
 * Minor updates under the hood
