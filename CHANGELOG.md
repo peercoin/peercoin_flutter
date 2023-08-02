@@ -7,6 +7,7 @@
 * Add language: Lithuanian
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
+* Add language: Pushto Pashto
 * Add language: Tagalog
 
 ### **1.1.7** (2023-06-16)

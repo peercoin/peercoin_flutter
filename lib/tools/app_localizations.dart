@@ -45,6 +45,7 @@ class AppLocalizations {
     'or': (Locale('or'), 'ଓଡ଼ିଆ (ōṛiā)'),
     'pl': (Locale('pl'), 'Polski'),
     'pt': (Locale('pt'), 'Português'),
+    'ps': (Locale('ps'), '(paṣhto) پښتو'),
     'pa': (Locale('pa'), 'ਪੰਜਾਬੀ'),
     'ro': (Locale('ro'), 'Română'),
     'ru': (Locale('ru'), 'Русский'),
