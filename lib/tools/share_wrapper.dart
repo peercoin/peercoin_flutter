@@ -30,7 +30,15 @@ class ShareWrapper {
         ),
       );
     } else {
-      await Share.share(message);
+      final box = context.findRenderObject() as RenderBox?;
+      await Share.share(
+        message,
+        sharePositionOrigin: Rect.fromCenter(
+          center: box!.size.center(box.localToGlobal(Offset.zero)),
+          width: 100,
+          height: 100,
+        ),
+      );
     }
   }
 }
