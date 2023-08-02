@@ -62,6 +62,7 @@ class AppLocalizations {
     'kn': (Locale('kn'), 'ಕನ್ನಡ (kannaḍa)'),
     'ky': (Locale('ky'), 'Кыргызча (Kyrgyzcha)'),
     'lt': (Locale('lt'), 'Lietuvių kalba'),
+    'lv': (Locale('lv'), 'Latviešu valoda'),
     'hu': (Locale('hu'), 'Magyar'),
     'hy': (Locale('hy'), 'Հայերեն (Hayeren)'),
     'nl': (Locale('nl'), 'Nederlands'),

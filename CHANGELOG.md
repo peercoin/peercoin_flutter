@@ -26,6 +26,7 @@
 * Add language: Kirghiz / Kyrgyz
 * Add language: Kannada
 * Add language: Khmer
+* Add language: Latvian
 * Add language: Lithuanian
 * Add language: Lao
 * Add language: Modern Greek
