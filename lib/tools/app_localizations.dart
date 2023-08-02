@@ -41,6 +41,7 @@ class AppLocalizations {
     'es': (Locale('es'), 'Español'),
     'el': (Locale('el'), 'Ελληνικά (Elliniká)'),
     'fa': (Locale('fa'), '(fārsī) فارسى'),
+    'gl': (Locale('gl'), 'Galego'),
     'fil': (Locale('fil'), 'Wikang Filipino'),
     'fr': (Locale('fr'), 'Français'),
     // 'ha': (Locale('ha'), '(ḥawsa) حَوْسَ'), presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
