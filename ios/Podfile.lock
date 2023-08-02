@@ -1,12 +1,12 @@
 PODS:
-  - background_fetch (1.1.2):
+  - background_fetch (1.2.0):
     - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
-  - cryptography_flutter (0.1.0):
+  - cryptography_flutter (0.2.0):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
@@ -52,7 +52,7 @@ PODS:
     - ZIPFoundation
   - flutter_native_splash (0.0.1):
     - Flutter
-  - flutter_secure_storage (3.3.1):
+  - flutter_secure_storage (6.0.0):
     - Flutter
   - integration_test (0.0.1):
     - Flutter
@@ -61,23 +61,25 @@ PODS:
   - MTBBarcodeScanner (5.0.11)
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider_ios (0.0.1):
+  - path_provider_foundation (0.0.1):
     - Flutter
+    - FlutterMacOS
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
   - ReachabilitySwift (5.0.0)
-  - SDWebImage (5.13.3):
-    - SDWebImage/Core (= 5.13.3)
-  - SDWebImage/Core (5.13.3)
+  - SDWebImage (5.17.0):
+    - SDWebImage/Core (= 5.17.0)
+  - SDWebImage/Core (5.17.0)
   - share_plus (0.0.1):
     - Flutter
-  - shared_preferences_ios (0.0.1):
+  - shared_preferences_foundation (0.0.1):
     - Flutter
-  - SwiftyGif (5.4.3)
+    - FlutterMacOS
+  - SwiftyGif (5.4.4)
   - url_launcher_ios (0.0.1):
     - Flutter
-  - ZIPFoundation (0.9.13)
+  - ZIPFoundation (0.9.16)
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
@@ -94,10 +96,10 @@ DEPENDENCIES:
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
-  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -139,45 +141,45 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/local_auth_ios/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider_ios:
-    :path: ".symlinks/plugins/path_provider_ios/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
-  shared_preferences_ios:
-    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: aaf8fc9d1da7f04e5373aabd4bb239704a5be6eb
-  camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
+  background_fetch: 79229f3677f19e1851b8e46d051720842e25a7fc
+  camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
-  cryptography_flutter: a2c541ba25ff28549f989f856dde126c961defcd
+  cryptography_flutter: 381bdacc984abcfbe3ca45ef7c76566ff061614c
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
+  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
-  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
-  local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
+  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+  local_auth_ios: c6cf091ded637a88f24f86a8875d8b0f526e2605
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
-  SDWebImage: af5bbffef2cde09f148d826f9733dcde1a9414cd
+  SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
-  SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
-  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
-  ZIPFoundation: ae5b4b813d216d3bf0a148773267fff14bd51d37
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
 PODFILE CHECKSUM: f10c0438b63bc24e6bbc207956dc27d16c4408f2
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
