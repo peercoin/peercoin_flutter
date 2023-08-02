@@ -62,11 +62,14 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: AppLocalizations.availableLocales.keys.map((lang) {
-              final (_, langTitle) = AppLocalizations.availableLocales[lang]!;
+              final (locale, langTitle) =
+                  AppLocalizations.availableLocales[lang]!;
+              final countryCode = locale.countryCode ?? '';
               return InkWell(
                 onTap: () => saveLang(lang),
                 child: ListTile(
                   title: Text(langTitle),
+                  subtitle: Text('${locale.languageCode} $countryCode'),
                   leading: Radio(
                     value: _lang,
                     groupValue: lang,
