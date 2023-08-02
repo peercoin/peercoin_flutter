@@ -88,11 +88,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           canCancel: false,
         );
       }
+      //TODO remove when multiple wallets are allowed
       var activeWalletList = activeWallets.availableWalletKeys;
       for (var element in activeWalletList) {
-        if (_availableCoins.keys.contains(element)) {
+        final split = element.split('_')[0];
+        if (_availableCoins.keys.contains(split)) {
           setState(() {
-            _activeCoins.add(element);
+            _activeCoins.add(split);
           });
         }
       }
@@ -109,7 +111,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     var list = <Widget>[];
     final actualAvailableWallets = _availableCoins.keys
         .where((element) => !_activeCoins.contains(element))
-        .toList();
+        .toList(); //TODO remove when multiple wallets are allowed
 
     if (actualAvailableWallets.isNotEmpty) {
       for (var wallet in actualAvailableWallets) {
