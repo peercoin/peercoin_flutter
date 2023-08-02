@@ -6,9 +6,10 @@
 * Add language: Amharic
 * Add language: Azerbaijani
 * Add language: Assamese
+* Add language: Belarusian
+* Add language: Bosnian
 * Add language: Bulgarian
 * Add language: Burmese
-* Add language: Belarusian
 * Add language: Georgian
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
