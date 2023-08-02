@@ -30,6 +30,7 @@
 * Add language: Lithuanian
 * Add language: Lao
 * Add language: Macedonian
+* Add language: Malay
 * Add language: Malayalam
 * Add language: Marathi
 * Add language: Modern Greek

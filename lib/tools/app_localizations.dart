@@ -68,6 +68,7 @@ class AppLocalizations {
     'mk': (Locale('mk'), 'Македонски (Makedonski)'),
     'mn': (Locale('mn'), 'Монгол (Mongol)'),
     'mr': (Locale('mr'), 'मराठी (marāṭhī)'),
+    'ms': (Locale('ms'), 'Bahasa Melayu'),
     'hy': (Locale('hy'), 'Հայերեն (Hayeren)'),
     'nl': (Locale('nl'), 'Nederlands'),
     'nb': (Locale('nb'), 'Norsk Bokmål'),
