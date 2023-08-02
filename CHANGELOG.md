@@ -15,6 +15,7 @@
 * Add language: Georgian
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
+* Add language: Modern Greek
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
 * Add language: Pushto Pashto

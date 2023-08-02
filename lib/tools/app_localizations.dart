@@ -37,6 +37,7 @@ class AppLocalizations {
     'da': (Locale('da'), 'Dansk'),
     'de': (Locale('de'), 'Deutsch'),
     'es': (Locale('es'), 'Español'),
+    'el': (Locale('el'), 'Ελληνικά (Elliniká)'),
     'fa': (Locale('fa'), '(fārsī) فارسى'),
     'fil': (Locale('fil'), 'Wikang Filipino'),
     'fr': (Locale('fr'), 'Français'),
