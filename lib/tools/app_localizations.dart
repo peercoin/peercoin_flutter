@@ -64,6 +64,7 @@ class AppLocalizations {
     'lt': (Locale('lt'), 'Lietuvių kalba'),
     'lv': (Locale('lv'), 'Latviešu valoda'),
     'hu': (Locale('hu'), 'Magyar'),
+    'ml': (Locale('ml'), 'മലയാളം (malayāḷaṁ)'),
     'mk': (Locale('mk'), 'Македонски (Makedonski)'),
     'hy': (Locale('hy'), 'Հայերեն (Hayeren)'),
     'nl': (Locale('nl'), 'Nederlands'),
