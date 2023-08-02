@@ -32,6 +32,7 @@
 * Add language: Macedonian
 * Add language: Malayalam
 * Add language: Modern Greek
+* Add language: Mongolian
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
 * Add language: Pushto Pashto
