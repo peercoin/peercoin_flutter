@@ -47,7 +47,9 @@
 * Add language: Tagalog
 * Add language: Tamil
 * Add language: Telugu
+* Add language: Uzbek
 * Add language: Welsh
+* Add language: Zulu
 
 ### **1.1.7** (2023-06-16)
 * Minor updates under the hood

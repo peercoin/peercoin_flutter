@@ -94,8 +94,10 @@ class AppLocalizations {
     'tr': (Locale('tr'), 'Türkçe'),
     'uk': (Locale('uk'), 'Українська (Ukrajins’ka)'),
     'ur': (Locale('ur'), '(urdū) اردو'),
+    'uz': (Locale('uz'), 'O‘zbek'),
     'vi': (Locale('vi'), 'Tiếng Việt'),
     'zh': (Locale('zh'), '中文 (Zhōngwén)'),
+    'zu': (Locale('zu'), 'isiZulu'),
   };
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
