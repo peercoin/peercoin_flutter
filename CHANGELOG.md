@@ -39,6 +39,7 @@
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
 * Add language: Pushto Pashto
+* Add language: Serbian
 * Add language: Sinhala / Sinhalese
 * Add language: Slovak
 * Add language: Slovenian
