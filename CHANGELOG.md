@@ -31,6 +31,7 @@
 * Add language: Lao
 * Add language: Macedonian
 * Add language: Malayalam
+* Add language: Marathi
 * Add language: Modern Greek
 * Add language: Mongolian
 * Add language: Oriya
