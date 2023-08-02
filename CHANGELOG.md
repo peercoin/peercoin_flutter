@@ -23,6 +23,7 @@
 * Add language: Hungarian / Magyar
 * Add language: Icelandic
 * Add language: Kazakh
+* Add language: Kannada
 * Add language: Khmer
 * Add language: Lithuanian
 * Add language: Modern Greek
