@@ -27,6 +27,7 @@
 * Add language: Kannada
 * Add language: Khmer
 * Add language: Lithuanian
+* Add language: Lao
 * Add language: Modern Greek
 * Add language: Oriya
 * Add language: Panjabi / Punjabi

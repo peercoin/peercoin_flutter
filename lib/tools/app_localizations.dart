@@ -54,6 +54,7 @@ class AppLocalizations {
     'kk': (Locale('kk'), 'Қазақ тілі (Qazaq tili)'),
     'is': (Locale('is'), 'Íslenska'),
     'it': (Locale('it'), 'Italiano'),
+    'lo': (Locale('lo'), 'ພາສາລາວ (phasa lao)'),
     'ja': (Locale('ja'), '日本語 (nihongo)'),
     'sw': (Locale('sw'), 'Kiswahili'),
     'ko': (Locale('ko'), '한국어 [韓國語] (han-guk-eo)'),
