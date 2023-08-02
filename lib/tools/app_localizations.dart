@@ -51,6 +51,7 @@ class AppLocalizations {
     'hi': (Locale('hi'), 'हिन्दी (hindī)'),
     'hr': (Locale('hr'), 'Hrvatski'),
     'ka': (Locale('ka'), 'ქართული (k’art’uli)'),
+    'kk': (Locale('kk'), 'Қазақ тілі (Qazaq tili)'),
     'is': (Locale('is'), 'Íslenska'),
     'it': (Locale('it'), 'Italiano'),
     'ja': (Locale('ja'), '日本語 (nihongo)'),
