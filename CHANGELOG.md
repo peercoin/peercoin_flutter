@@ -17,6 +17,7 @@
 * Add language: Finnish
 * Add language: Galician
 * Add language: Georgian
+* Add language: Gujarati
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
 * Add language: Modern Greek
