@@ -41,6 +41,7 @@
 * Add language: Pushto Pashto
 * Add language: Sinhala / Sinhalese
 * Add language: Slovak
+* Add language: Slovenian
 * Add language: Swiss German Alemannic Alsatian
 * Add language: Tagalog
 * Add language: Welsh

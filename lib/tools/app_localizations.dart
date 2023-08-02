@@ -83,6 +83,7 @@ class AppLocalizations {
     'fi': (Locale('fi'), 'Suomi'),
     'si': (Locale('si'), 'සිංහල (siṁhala)'),
     'sk': (Locale('sk'), 'Slovenčina'),
+    'sl': (Locale('sl'), 'Slovenščina'),
     'sq': (Locale('sq'), 'Shqipja'),
     'sv': (Locale('sv'), 'Svenska'),
     'th': (Locale('th'), 'ภาษาไทย (paasaa-tai)'),
