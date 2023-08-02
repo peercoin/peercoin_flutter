@@ -3,6 +3,7 @@
 * Add language: Afrikaans
 * Add language: Albanian
 * Add language: Amharic
+* Add language: Assamese
 * Add language: Burmese
 * Add language: Georgian
 * Add language: Hungarian / Magyar
