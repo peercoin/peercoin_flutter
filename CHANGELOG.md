@@ -21,6 +21,7 @@
 * Add language: Gujarati
 * Add language: Hebrew
 * Add language: Hungarian / Magyar
+* Add language: Icelandic
 * Add language: Lithuanian
 * Add language: Modern Greek
 * Add language: Oriya
