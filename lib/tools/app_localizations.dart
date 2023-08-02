@@ -96,7 +96,8 @@ class AppLocalizations {
     'ur': (Locale('ur'), '(urdū) اردو'),
     'uz': (Locale('uz'), 'O‘zbek'),
     'vi': (Locale('vi'), 'Tiếng Việt'),
-    'zh': (Locale('zh'), '中文 (Zhōngwén)'),
+    'zh': (Locale('zh', 'Hans'), '简体中文 (Jiǎntǐ zhōngwén)'),
+    'zh_Hant': (Locale('zh', 'Hant'), '繁體中文 (Fántǐ zhōngwén)'),
     'zu': (Locale('zu'), 'isiZulu'),
   };
 

@@ -47,6 +47,7 @@
 * Add language: Tagalog
 * Add language: Tamil
 * Add language: Telugu
+* Add language: Traditional Chinese
 * Add language: Uzbek
 * Add language: Welsh
 * Add language: Zulu
