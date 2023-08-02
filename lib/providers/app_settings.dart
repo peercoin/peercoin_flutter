@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 
-import '../models/app_options.dart';
+import '../models/hive/app_options.dart';
 import 'encrypted_box.dart';
 
 class AppSettings with ChangeNotifier {

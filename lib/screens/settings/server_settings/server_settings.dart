@@ -2,12 +2,12 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/server.dart';
-import '../../providers/electrum_connection.dart';
-import '../../widgets/service_container.dart';
-import '../../providers/servers.dart';
-import '../../tools/app_localizations.dart';
-import '../../tools/app_routes.dart';
+import '../../../models/hive/server.dart';
+import '../../../providers/electrum_connection.dart';
+import '../../../widgets/service_container.dart';
+import '../../../providers/servers.dart';
+import '../../../tools/app_localizations.dart';
+import '../../../tools/app_routes.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
   const ServerSettingsScreen({Key? key}) : super(key: key);
@@ -28,6 +28,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
     if (_initial) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
       _serversProvider = Provider.of<Servers>(context);
+      await _serversProvider.init(_walletName);
       await loadServers();
       setState(() {
         _initial = false;
@@ -78,8 +79,6 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final connectedServer =
-        context.watch<ElectrumConnection>().connectedServerUrl;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -105,12 +104,12 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           )
         ],
       ),
-      body: _servers.isEmpty
-          ? Container()
-          : Align(
-              child: PeerContainer(
-                noSpacers: true,
-                child: ReorderableListView.builder(
+      body: Align(
+        child: PeerContainer(
+          noSpacers: true,
+          child: _servers.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ReorderableListView.builder(
                   onReorder: (oldIndex, newIndex) {
                     if (_servers[oldIndex].connectable == false) return;
                     if (oldIndex < newIndex) {
@@ -256,13 +255,6 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                               }
                               //connectable now false ? move to bottom of list
                               if (!_servers[index].connectable) {
-                                if (_servers[index].address ==
-                                    connectedServer) {
-                                  //were we connected to this server? close connection
-                                  await context
-                                      .read<ElectrumConnection>()
-                                      .closeConnection(false);
-                                }
                                 final item = _servers.removeAt(index);
                                 _servers.insert(_servers.length, item);
                                 _servers[index].setPriority =
@@ -283,22 +275,16 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             index,
                             _servers[index].connectable,
                           ),
-                          title: Text(_servers[index].address),
-                          subtitle: _servers[index].address == connectedServer
-                              ? Center(
-                                  child: Text(
-                                    AppLocalizations.instance
-                                        .translate('wallet_connected'),
-                                  ),
-                                )
-                              : Container(),
+                          title: Text(
+                            _servers[index].address,
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
-              ),
-            ),
+        ),
+      ),
     );
   }
 }

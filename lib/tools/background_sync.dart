@@ -9,16 +9,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:peercoin/models/available_coins.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/marisma.pbgrpc.dart';
-import '../models/app_options.dart';
-import '../models/coin_wallet.dart';
-import '../models/pending_notifications.dart';
-import '../models/server.dart';
-import '../models/wallet_address.dart';
-import '../models/wallet_transaction.dart';
-import '../models/wallet_utxo.dart';
+import '../models/hive/app_options.dart';
+import '../models/hive/coin_wallet.dart';
+import '../models/hive/pending_notifications.dart';
+import '../models/hive/server.dart';
+import '../models/hive/wallet_address.dart';
+import '../models/hive/wallet_transaction.dart';
+import '../models/hive/wallet_utxo.dart';
 import 'app_localizations.dart';
 import 'logger_wrapper.dart';
 import 'notification.dart';
@@ -146,7 +147,7 @@ class BackgroundSync {
     //loop through wallets
     for (var wallet in walletBox.values) {
       //increment identifier for notifications
-      if (appOptions.notificationActiveWallets.contains(wallet.letterCode)) {
+      if (appOptions.notificationActiveWallets.contains(wallet.name)) {
         //if activated, parse all addresses to a list that will be POSTed to backend later on
         var adressesToQuery = <String, int>{};
         var utxos = wallet.utxos;
@@ -183,7 +184,7 @@ class BackgroundSync {
 
         LoggerWrapper.logInfo(
           'BackgroundSync',
-          'executeSync',
+          'executeSync ${wallet.name}',
           'addressesToQuery $adressesToQuery',
         );
 
@@ -197,7 +198,7 @@ class BackgroundSync {
         LoggerWrapper.logInfo(
           'BackgroundSync',
           'executeSync ${wallet.name}',
-          marismaResult.toString(),
+          'result $marismaResult',
         );
 
         if (marismaResult.isNotEmpty) {
@@ -247,16 +248,24 @@ class BackgroundSync {
     }
   }
 
+  static MarismaClient getMarismaClient(String walletName) {
+    final (url, port) =
+        AvailableCoins.getSpecificCoin(walletName).marismaServers.first;
+
+    return MarismaClient(
+      ClientChannel(
+        url,
+        port: port,
+      ),
+    );
+  }
+
   static Future<Map<String, int>> getNumberOfUtxosFromMarisma({
     required String walletName,
     required Map<String, int> addressesToQuery,
     bool fromScan = false,
   }) async {
-    var grpcClient = MarismaClient(
-      walletName == 'peercoin'
-          ? ClientChannel('marisma.ppc.lol', port: 8443)
-          : ClientChannel('test-marisma.ppc.lol', port: 2096),
-    );
+    var grpcClient = getMarismaClient(walletName);
 
     Map<String, int> answerMap = {};
 

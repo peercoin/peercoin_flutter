@@ -338,5 +338,18 @@
     "app_settings_delete": "Удалить аккаунт",
     "tx_retry_broadcast": "Повторить вещание",
     "tx_show_hex": "Показать Hex Транзакции",
-    "tx_retry_snack": "Вещание было повторено. Если она была успешна, транзакция скоро обновится."
+    "tx_retry_snack": "Вещание было повторено. Если она была успешна, транзакция скоро обновится.",
+    "wallet_pop_menu_verification": "Проверка сообщений",
+    "wallet_scan_notice_bg_notifications": "Включение фоновых уведомлений в Настройках может значительно повысить надежность сканирования.",
+    "verify_step_3": "Введите Подпись",
+    "verify_input_label_address": "Адрес для проверки",
+    "verify_input_label_signature": "Подпись для проверки",
+    "verify_success": "Сообщение проверено.",
+    "verify_enter_message": "Введите сообщение",
+    "verify_enter_signature": "Введите подпись",
+    "verify_step_1": "Введите адрес",
+    "verify_step_3_button": "Проверьте",
+    "verify_input_label_message": "Сообщение для проверки",
+    "verify_fail": "Сообщение не может быть проверено.",
+    "send_errors_cant_pay_fees": "Невозможно платить за комиссию. $feesMissing $letter_code в настоящее время отсутствует. Удалите адреса или уменьшите суммы транзакций."
 }

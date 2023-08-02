@@ -9,7 +9,7 @@ import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/available_coins.dart';
 import '/../models/coin.dart';
-import '/../models/coin_wallet.dart';
+import '/../models/hive/coin_wallet.dart';
 import '/../widgets/buttons.dart';
 import '/../widgets/double_tab_to_clipboard.dart';
 import '/../widgets/service_container.dart';
@@ -293,7 +293,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                 ),
               ),
             ),
-            widget.wallet.title.contains('Testnet')
+            widget.wallet.letterCode == 'tPPC'
                 ? Align(
                     child: PeerContainer(
                       child: Column(

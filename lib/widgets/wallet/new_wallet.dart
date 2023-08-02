@@ -17,8 +17,8 @@ class NewWalletDialog extends StatefulWidget {
   State<NewWalletDialog> createState() => _NewWalletDialogState();
 }
 
-Map<String, Coin> availableCoins = AvailableCoins.availableCoins;
-List activeCoins = [];
+Map<String, Coin> _availableCoins = AvailableCoins.availableCoins;
+List _activeCoins = [];
 
 class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
@@ -28,15 +28,27 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     try {
       var appSettings = context.read<AppSettings>();
       final navigator = Navigator.of(context);
-      await context.read<WalletProvider>().addWallet(
-            _coin,
-            availableCoins[_coin]!.displayName,
-            availableCoins[_coin]!.letterCode,
-          );
+      final WalletProvider walletProvider = context.read<WalletProvider>();
+      final letterCode = _availableCoins[_coin]!.letterCode;
+      final nOfWalletOfLetterCode = walletProvider.availableWalletValues
+          .where((element) => element.letterCode == letterCode)
+          .length;
+      final walletName = '${_coin}_$nOfWalletOfLetterCode';
+
+      String title = _availableCoins[_coin]!.displayName;
+      if (nOfWalletOfLetterCode > 0) {
+        title = '$title ${nOfWalletOfLetterCode + 1}';
+      }
+
+      await walletProvider.addWallet(
+        name: walletName,
+        title: title,
+        letterCode: letterCode,
+      );
 
       //enable notifications
       var notificationList = appSettings.notificationActiveWallets;
-      notificationList.add(availableCoins[_coin]!.letterCode);
+      notificationList.add(walletName);
       appSettings.setNotificationActiveWallets(notificationList);
 
       var prefs = await SharedPreferences.getInstance();
@@ -44,7 +56,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         await navigator.pushNamedAndRemoveUntil(
           Routes.walletImportScan,
           (_) => false,
-          arguments: _coin,
+          arguments: walletName,
         );
       } else {
         navigator.pop();
@@ -76,11 +88,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           canCancel: false,
         );
       }
+      //TODO remove when multiple wallets are allowed
       var activeWalletList = activeWallets.availableWalletKeys;
       for (var element in activeWalletList) {
-        if (availableCoins.keys.contains(element)) {
+        final split = element.split('_')[0];
+        if (_availableCoins.keys.contains(split)) {
           setState(() {
-            activeCoins.add(element);
+            _activeCoins.add(split);
           });
         }
       }
@@ -95,9 +109,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   Widget build(BuildContext context) {
     var list = <Widget>[];
-    final actualAvailableWallets = availableCoins.keys
-        .where((element) => !activeCoins.contains(element))
-        .toList();
+    final actualAvailableWallets = _availableCoins.keys
+        .where((element) => !_activeCoins.contains(element))
+        .toList(); //TODO remove when multiple wallets are allowed
 
     if (actualAvailableWallets.isNotEmpty) {
       for (var wallet in actualAvailableWallets) {
@@ -111,12 +125,12 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
               leading: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Image.asset(
-                  AvailableCoins.getSpecificCoin(availableCoins[wallet]!.name)
+                  AvailableCoins.getSpecificCoin(_availableCoins[wallet]!.name)
                       .iconPath,
                   width: 16,
                 ),
               ),
-              title: Text(availableCoins[wallet]!.displayName),
+              title: Text(_availableCoins[wallet]!.displayName),
             ),
           ),
         );

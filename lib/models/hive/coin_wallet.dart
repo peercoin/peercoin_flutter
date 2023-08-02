@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
 
@@ -16,22 +18,19 @@ class CoinWallet extends HiveObject {
   final String _letterCode;
 
   @HiveField(2)
-  // ignore: prefer_final_fields
   List<WalletAddress> _addresses = [];
 
   @HiveField(3)
-  // ignore: prefer_final_fields
   List<WalletTransaction> _transactions = [];
 
   @HiveField(4)
-  // ignore: prefer_final_fields
   List<WalletUtxo> _utxos = [];
 
   @HiveField(5)
   int _balance = 0;
 
   @HiveField(6)
-  final String _title;
+  String _title;
 
   @HiveField(7)
   int _unconfirmedBalance = 0;
@@ -39,7 +38,15 @@ class CoinWallet extends HiveObject {
   @HiveField(8)
   List<PendingNotification>? _pendingTransactionNotifications = [];
 
-  CoinWallet(this._name, this._title, this._letterCode);
+  @HiveField(9, defaultValue: 0)
+  int _walletIndex = 0;
+
+  CoinWallet(
+    this._name,
+    this._title,
+    this._letterCode,
+    this._walletIndex,
+  );
 
   String get name {
     return _name;
@@ -47,6 +54,15 @@ class CoinWallet extends HiveObject {
 
   String get letterCode {
     return _letterCode;
+  }
+
+  int get walletIndex {
+    return _walletIndex;
+  }
+
+  set walletIndex(int newWalletNumber) {
+    _walletIndex = newWalletNumber;
+    save();
   }
 
   List<WalletAddress> get addresses {
@@ -71,6 +87,11 @@ class CoinWallet extends HiveObject {
 
   String get title {
     return _title;
+  }
+
+  set title(String newTitle) {
+    _title = newTitle;
+    save();
   }
 
   List<PendingNotification> get pendingTransactionNotifications {
@@ -154,4 +175,6 @@ class CoinWallet extends HiveObject {
     }
     save();
   }
+
+  //TODO tests for wallet title edit
 }

@@ -2,7 +2,7 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/coin_wallet.dart';
+import '../../models/hive/coin_wallet.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
@@ -134,16 +134,16 @@ class _AppSettingsNotificationsScreenState
         Column(
           children: _availableWallets.map((wallet) {
             return SwitchListTile(
-              key: Key(wallet.letterCode),
+              key: Key(wallet.name),
               title: Text(wallet.title),
-              value: _appSettings.notificationActiveWallets
-                  .contains(wallet.letterCode),
+              value:
+                  _appSettings.notificationActiveWallets.contains(wallet.name),
               onChanged: (newState) {
                 var newList = _appSettings.notificationActiveWallets;
                 if (newState == true) {
-                  newList.add(wallet.letterCode);
+                  newList.add(wallet.name);
                 } else {
-                  newList.remove(wallet.letterCode);
+                  newList.remove(wallet.name);
                 }
                 _appSettings.setNotificationActiveWallets(newList);
                 saveSnack(context);

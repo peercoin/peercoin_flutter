@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../models/available_coins.dart';
-import '../models/server.dart';
+import '../models/hive/server.dart';
 import '../tools/logger_wrapper.dart';
 import 'encrypted_box.dart';
 
@@ -15,7 +15,11 @@ class Servers with ChangeNotifier {
   Servers(this._encryptedBox);
 
   Future<void> init(String identifier) async {
-    LoggerWrapper.logInfo('Servers', 'init', 'init server provider');
+    LoggerWrapper.logInfo(
+      'Servers',
+      'init',
+      'init server provider $identifier',
+    );
     _serverBox = await _encryptedBox.getServerBox(identifier);
 
     final seedServers =

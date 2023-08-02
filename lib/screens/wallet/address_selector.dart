@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/wallet_address.dart';
+import '../../models/hive/wallet_address.dart';
 import '../../tools/app_localizations.dart';
 
 class AddressSelectorScreen extends StatefulWidget {
@@ -144,7 +144,9 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                   key: const Key('selectorSearchBar'),
                   child: TextFormField(
                     autofocus: true,
-                    style: TextStyle(color: Theme.of(context).colorScheme.background),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.background,
+                    ),
                     key: const Key('selectorSearchKey'),
                     textInputAction: TextInputAction.done,
                     autocorrect: false,

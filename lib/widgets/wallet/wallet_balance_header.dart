@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
-import '/../models/coin_wallet.dart';
+import '/../models/hive/coin_wallet.dart';
 import '/../providers/app_settings.dart';
 import '/../providers/electrum_connection.dart';
 import '/../tools/price_ticker.dart';
@@ -60,7 +60,7 @@ class WalletBalanceHeader extends StatelessWidget {
                   ],
                 ),
                 settings.selectedCurrency.isNotEmpty &&
-                        !_wallet.title.contains('Testnet')
+                        _wallet.letterCode != 'tPPC'
                     ? WalletBalancePrice(
                         valueInFiat: Text(
                           '${PriceTicker.renderPrice(

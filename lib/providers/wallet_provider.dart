@@ -18,20 +18,20 @@ import 'package:peercoin/models/buildresult.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
-import '../models/coin_wallet.dart';
+import '../models/hive/coin_wallet.dart';
 import '../tools/app_localizations.dart';
 import '../tools/logger_wrapper.dart';
 import '../tools/notification.dart';
-import '../models/wallet_address.dart';
-import '../models/wallet_transaction.dart';
-import '../models/wallet_utxo.dart';
+import '../models/hive/wallet_address.dart';
+import '../models/hive/wallet_transaction.dart';
+import '../models/hive/wallet_utxo.dart';
 import 'encrypted_box.dart';
 
 class WalletProvider with ChangeNotifier {
   WalletProvider(this._encryptedBox);
 
   final EncryptedBox _encryptedBox;
-  final Map<String?, CoinWallet?> _coinWalletCache = {};
+  final Map<String, CoinWallet> _coinWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
   final Map<String, String> _unusedAddressCache = {};
   final Map<String, String> _wifs = {};
@@ -66,6 +66,15 @@ class WalletProvider with ChangeNotifier {
 
   String getUnusedAddress(String identifier) {
     return _unusedAddressCache[identifier] ?? '';
+  }
+
+  void updateWalletTitle({
+    required String identifier,
+    required String newTitle,
+  }) {
+    final wallet = getSpecificCoinWallet(identifier);
+    wallet.title = newTitle;
+    notifyListeners();
   }
 
   void setUnusedAddress({
@@ -105,14 +114,41 @@ class WalletProvider with ChangeNotifier {
   CoinWallet getSpecificCoinWallet(String identifier) {
     if (_coinWalletCache[identifier] == null) {
       //cache wallet
-      _coinWalletCache[identifier] = _walletBox.get(identifier);
+      final res = _walletBox.get(identifier);
+      if (res == null) {
+        throw Exception('Wallet not found');
+      } else {
+        _coinWalletCache[identifier] = res;
+      }
     }
     return _coinWalletCache[identifier]!;
   }
 
-  Future<void> addWallet(String name, String title, String letterCode) async {
+  Future<void> addWallet({
+    required String name,
+    required String title,
+    required String letterCode,
+  }) async {
     var box = await _encryptedBox.getWalletBox();
-    await box.put(name, CoinWallet(name, title, letterCode));
+    final nOfWalletOfLetterCode = availableWalletValues
+        .where((element) => element.letterCode == letterCode)
+        .length;
+
+    LoggerWrapper.logInfo(
+      'WalletProvider',
+      'addWallet',
+      '$name $title $letterCode $nOfWalletOfLetterCode',
+    );
+
+    await box.put(
+      name,
+      CoinWallet(
+        name,
+        title,
+        letterCode,
+        nOfWalletOfLetterCode,
+      ),
+    );
     notifyListeners();
   }
 
@@ -175,8 +211,8 @@ class WalletProvider with ChangeNotifier {
     var openWallet = getSpecificCoinWallet(identifier);
     var hdWallet = await getHdWallet(identifier);
 
-    if (openWallet.addresses.isEmpty) {
-      //generate new address
+    if (openWallet.addresses.isEmpty && openWallet.walletIndex == 0) {
+      //generate new address from master at wallet index 0
       openWallet.addNewAddress = WalletAddress(
         address: hdWallet.address,
         addressBookName: '',
@@ -190,7 +226,7 @@ class WalletProvider with ChangeNotifier {
         address: hdWallet.address,
       );
     } else {
-      //wallet is not brand new, lets find an unused address
+      //lets find an unused address
       String? unusedAddr;
       for (var walletAddr in openWallet.addresses) {
         if (walletAddr.used == false && walletAddr.status == null) {
@@ -208,7 +244,7 @@ class WalletProvider with ChangeNotifier {
         var numberOfOurAddr = openWallet.addresses
             .where((element) => element.isOurs == true)
             .length;
-        var derivePath = "m/0'/$numberOfOurAddr/0";
+        var derivePath = "m/${openWallet.walletIndex}'/$numberOfOurAddr/0";
         var newHdWallet = hdWallet.derivePath(derivePath);
         var newAddrResult = openWallet.addresses.firstWhereOrNull(
           (element) => element.address == newHdWallet.address,
@@ -217,7 +253,7 @@ class WalletProvider with ChangeNotifier {
         while (newAddrResult != null) {
           //next addr in derivePath already exists for some reason, find a non-existing one
           numberOfOurAddr++;
-          derivePath = "m/0'/$numberOfOurAddr/0";
+          derivePath = "m/${openWallet.walletIndex}'/$numberOfOurAddr/0";
           newHdWallet = hdWallet.derivePath(derivePath);
 
           newAddrResult = openWallet.addresses.firstWhereOrNull(
@@ -598,7 +634,11 @@ class WalletProvider with ChangeNotifier {
     if (walletAddress != null) {
       if (walletAddress.wif == '') {
         //no wif set
-        await populateWifMap(identifier, openWallet.addresses.length);
+        await populateWifMap(
+          identifier: identifier,
+          maxValue: openWallet.addresses.length,
+          walletNumber: openWallet.walletIndex,
+        );
         walletAddress.newWif = _wifs[address] ?? ''; //save
         await openWallet.save();
 
@@ -610,11 +650,15 @@ class WalletProvider with ChangeNotifier {
     return walletAddress.wif;
   }
 
-  Future<void> populateWifMap(String identifier, int maxValue) async {
+  Future<void> populateWifMap({
+    required String identifier,
+    required int maxValue,
+    required int walletNumber,
+  }) async {
     var hdWallet = await getHdWallet(identifier);
 
     for (var i = 0; i <= maxValue + 1; i++) {
-      final child = hdWallet.derivePath("m/0'/$i/0");
+      final child = hdWallet.derivePath("m/$walletNumber'/$i/0");
       _wifs[child.address] = child.wif!;
     }
     _wifs[hdWallet.address] = hdWallet.wif!;
@@ -1075,5 +1119,10 @@ class WalletProvider with ChangeNotifier {
       }
     });
     return itemsReversed.join();
+  }
+
+  int getWalletNumber(String identifier) {
+    var openWallet = getSpecificCoinWallet(identifier);
+    return openWallet.walletIndex;
   }
 }

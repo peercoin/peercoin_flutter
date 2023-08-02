@@ -43,13 +43,13 @@ This repository currently relies on
 [Vesta-wallet/coinslib](https://github.com/Vesta-wallet/coinslib "github.com/Vesta-wallet/coinslib")
 
 **Update icons**  
-`flutter pub run flutter_launcher_icons:main`
+`dart run flutter_launcher_icons:main`
 
 **Update Hive adapters**  
-`flutter packages pub run build_runner build`
+`dart run build_runner build`
 
 **Update splash screen**  
-`flutter pub run flutter_native_splash:create`
+`dart run flutter_native_splash:create`
 
 **Generate proto files**  
 `protoc --dart_out=grpc:lib/generated -Iprotos protos/marisma.proto`

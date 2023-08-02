@@ -39,6 +39,7 @@ void main() {
         () async {
           //creates a peercoin testnet wallet from an imported seed and checks if it connects
           await driver.tap(find.byValueKey('setupLanguageButton'));
+          await driver.scrollIntoView(find.text('English'));
           await driver.tap(find.text('English'));
           await driver.tap(find.pageBack());
           await driver.scrollIntoView(find.text('Import Seed'));
@@ -197,7 +198,7 @@ void main() {
             await driver.tap(find.byValueKey('appSettingsButton'));
           },
         );
-        await driver.tap(find.text('Seed phrase'));
+        await driver.tap(find.text('Seed Phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
 
         //tap wrong code two times
@@ -234,7 +235,7 @@ void main() {
             await driver.tap(find.byValueKey('appSettingsButton'));
           },
         );
-        await driver.tap(find.text('Seed phrase'));
+        await driver.tap(find.text('Seed Phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
         await driver.runUnsynchronized(
           () async {
@@ -250,10 +251,13 @@ void main() {
         'Settings, change pin',
         () async {
           await driver.tap(find.text('Authentication'));
-          await driver.tap(find.text('Reveal authentication options'));
-          for (var i = 1; i <= 6; i++) {
-            await driver.tap(find.text('0'));
-          }
+          await driver.runUnsynchronized(
+            () async {
+              for (var i = 1; i <= 6; i++) {
+                await driver.tap(find.text('0'));
+              }
+            },
+          );
           await driver.tap(find.text('Change PIN'));
           for (var i = 1; i <= 6; i++) {
             await driver.tap(find.text('0'));
@@ -266,9 +270,10 @@ void main() {
           // await file.writeAsBytes(pixels);
           await driver.runUnsynchronized(() async {
             await driver.tap(find.pageBack());
+            await driver.tap(find.pageBack());
             await driver.tap(find.byValueKey('appSettingsButton'));
           });
-          await driver.tap(find.text('Seed phrase'));
+          await driver.tap(find.text('Seed Phrase'));
           await driver.tap(find.text('Reveal seed phrase'));
           for (var i = 1; i <= 6; i++) {
             await driver.tap(find.text('1'));
@@ -276,6 +281,14 @@ void main() {
         },
         timeout: const Timeout.factor(2),
       );
+
+      test('Settings, change language', () async {
+        //creates a peercoin testnet wallet from an imported seed and checks if it connects
+        await driver.tap(find.text('Language'));
+        await driver.scrollIntoView(find.text('Deutsch'));
+        await driver.tap(find.text('Deutsch'));
+        await driver.scrollIntoView(find.text('Sprachen'));
+      });
     },
   );
 }

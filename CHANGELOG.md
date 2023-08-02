@@ -1,3 +1,58 @@
+### **1.1.8** (2023-08-02)
+* Server Settings have been moved from inside the wallets to application settings
+* Wallet titles may now be edited from within the wallet
+* Fixed a bug where some devices could not create a new seed and where stuck in setup 
+* Add language: Afrikaans
+* Add language: Albanian
+* Add language: Amharic
+* Add language: Armenian
+* Add language: Assamese
+* Add language: Azerbaijani
+* Add language: Basque
+* Add language: Belarusian
+* Add language: Bosnian
+* Add language: Bulgarian
+* Add language: Burmese
+* Add language: Catalan
+* Add language: Czech
+* Add language: Estonian
+* Add language: Finnish
+* Add language: Galician
+* Add language: Georgian
+* Add language: Gujarati
+* Add language: Hebrew
+* Add language: Hungarian / Magyar
+* Add language: Icelandic
+* Add language: Kazakh
+* Add language: Kirghiz / Kyrgyz
+* Add language: Kannada
+* Add language: Khmer
+* Add language: Latvian
+* Add language: Lithuanian
+* Add language: Lao
+* Add language: Macedonian
+* Add language: Malay
+* Add language: Malayalam
+* Add language: Marathi
+* Add language: Modern Greek
+* Add language: Mongolian
+* Add language: Nepali
+* Add language: Oriya
+* Add language: Panjabi / Punjabi
+* Add language: Pushto Pashto
+* Add language: Serbian
+* Add language: Sinhala / Sinhalese
+* Add language: Slovak
+* Add language: Slovenian
+* Add language: Swiss German Alemannic Alsatian
+* Add language: Tagalog
+* Add language: Tamil
+* Add language: Telugu
+* Add language: Traditional Chinese
+* Add language: Uzbek
+* Add language: Welsh
+* Add language: Zulu
+
 ### **1.1.7** (2023-06-16)
 * Minor updates under the hood
 
