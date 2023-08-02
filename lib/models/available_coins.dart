@@ -46,8 +46,8 @@ class AvailableCoins {
       displayName: 'Peercoin Testnet',
       uriCode: 'peercoin',
       letterCode: 'tPPC',
-      iconPath: 'assets/icon/ppc-icon-48.png',
-      iconPathTransparent: 'assets/icon/ppc-icon-white-48.png',
+      iconPath: 'assets/icon/ppc-icon-48-grey.png',
+      iconPathTransparent: 'assets/icon/ppc-icon-48-grey.png',
       networkType: NetworkType(
         messagePrefix: 'Peercoin Signed Message:\n',
         bech32: 'tpc',
@@ -100,6 +100,4 @@ class AvailableCoins {
       getSpecificCoin(identifier).fractions,
     ).toInt();
   }
-
-  //TODO give testnet a grey icon to visually discriminate it from mainnet
 }
