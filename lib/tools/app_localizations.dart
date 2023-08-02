@@ -24,6 +24,7 @@ class AppLocalizations {
     'am': (Locale('am'), '(amharic) አማርኛ'),
     'ar': (Locale('ar'), '(al arabiya) العربية'),
     'as': (Locale('as'), '(asamiya) অসমীয়া'),
+    'az': (Locale('az'), '(azərbaycan) Azərbaycan dili'),
     'bn': (Locale('bn'), 'বাংলা (baɛṅlā)'),
     'id': (Locale('id'), 'Bahasa Indonesia'),
     'my': (Locale('my'), 'မြန်မာဘာသာ (mranma bhasa)'),
