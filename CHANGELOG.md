@@ -29,6 +29,7 @@
 * Add language: Latvian
 * Add language: Lithuanian
 * Add language: Lao
+* Add language: Macedonian
 * Add language: Modern Greek
 * Add language: Oriya
 * Add language: Panjabi / Punjabi
