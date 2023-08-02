@@ -2,6 +2,7 @@
 * Server Settings have been moved from inside the wallets to application settings
 * Add language: Afrikaans
 * Add language: Albanian
+* Add language: Amharic
 * Add language: Burmese
 * Add language: Georgian
 * Add language: Hungarian / Magyar
