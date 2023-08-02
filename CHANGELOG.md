@@ -2,6 +2,7 @@
 * You may now add multiple wallets of the same coin
 * Server Settings have been moved from inside the wallets to application settings
 * Add language: Burmese
+* Add language: Hungarian / Magyar
 * Add language: Panjabi / Punjabi
 * Add language: Tagalog
 

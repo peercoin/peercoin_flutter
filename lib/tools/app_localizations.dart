@@ -37,6 +37,7 @@ class AppLocalizations {
     'ja': (Locale('ja'), '日本語 (nihongo)'),
     'sw': (Locale('sw'), 'Kiswahili'),
     'ko': (Locale('ko'), '한국어 [韓國語] (han-guk-eo)'),
+    'hu': (Locale('hu'), 'Magyar'),
     'nl': (Locale('nl'), 'Nederlands'),
     'nb': (Locale('nb'), 'Norsk Bokmål'),
     'pl': (Locale('pl'), 'Polski'),
