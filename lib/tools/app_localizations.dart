@@ -33,6 +33,7 @@ class AppLocalizations {
     // 'ha': (Locale('ha'), '(ḥawsa) حَوْسَ'), presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
     'hi': (Locale('hi'), 'हिन्दी (hindī)'),
     'hr': (Locale('hr'), 'Hrvatski'),
+    'ka': (Locale('ka'), 'ქართული (k’art’uli)'),
     'it': (Locale('it'), 'Italiano'),
     'ja': (Locale('ja'), '日本語 (nihongo)'),
     'sw': (Locale('sw'), 'Kiswahili'),
