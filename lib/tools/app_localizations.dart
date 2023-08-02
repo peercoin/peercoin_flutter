@@ -1,23 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'logger_wrapper.dart';
 
 class AppLocalizations {
-  AppLocalizations(this.locale);
-  final Locale fallbackLocale = const Locale('en');
-
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
-  }
-
   static late AppLocalizations instance;
-
-  AppLocalizations._init(this.locale) {
-    instance = this;
-  }
-
   static const Map<String, (Locale, String)> availableLocales = {
     'en': (Locale('en'), 'English'),
     'af': (Locale('af'), 'Afrikaans'),
@@ -103,11 +92,15 @@ class AppLocalizations {
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
-
+  final Locale fallbackLocale = const Locale('en');
   Locale? locale;
   late Map<String, String> _localizedStrings;
   late Map<String, String> _fallbackLocalizedStrings;
 
+  AppLocalizations(this.locale);
+  AppLocalizations._init(this.locale) {
+    instance = this;
+  }
   Future<void> load() async {
     _localizedStrings = await _loadLocalizedStrings(locale!);
     _fallbackLocalizedStrings = {};
@@ -115,6 +108,30 @@ class AppLocalizations {
     if (locale != fallbackLocale) {
       _fallbackLocalizedStrings = await _loadLocalizedStrings(fallbackLocale);
     }
+  }
+
+  String translate(String key, [Map<String, String?>? arguments]) {
+    var translation = _localizedStrings[key];
+    translation = translation ?? _fallbackLocalizedStrings[key];
+    translation = translation ?? '';
+
+    if (arguments == null || arguments.isEmpty) {
+      return translation;
+    }
+
+    arguments.forEach((argumentKey, value) {
+      if (value == null) {
+        LoggerWrapper.logWarn(
+          'AppLocalizations',
+          'translate',
+          'Value for "$argumentKey" is null in call of translate(\'$key\')',
+        );
+        value = '';
+      }
+      translation = translation!.replaceAll('\$$argumentKey', value);
+    });
+
+    return translation ?? '';
   }
 
   Future<String> _getFilePath(Locale localeToBeLoaded) async {
@@ -155,28 +172,8 @@ class AppLocalizations {
     return localizedStrings;
   }
 
-  String translate(String key, [Map<String, String?>? arguments]) {
-    var translation = _localizedStrings[key];
-    translation = translation ?? _fallbackLocalizedStrings[key];
-    translation = translation ?? '';
-
-    if (arguments == null || arguments.isEmpty) {
-      return translation;
-    }
-
-    arguments.forEach((argumentKey, value) {
-      if (value == null) {
-        LoggerWrapper.logWarn(
-          'AppLocalizations',
-          'translate',
-          'Value for "$argumentKey" is null in call of translate(\'$key\')',
-        );
-        value = '';
-      }
-      translation = translation!.replaceAll('\$$argumentKey', value);
-    });
-
-    return translation ?? '';
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 }
 
