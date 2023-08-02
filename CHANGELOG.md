@@ -18,6 +18,7 @@
 * Add language: Galician
 * Add language: Georgian
 * Add language: Gujarati
+* Add language: Hebrew
 * Add language: Hungarian / Magyar
 * Add language: Lithuanian
 * Add language: Modern Greek

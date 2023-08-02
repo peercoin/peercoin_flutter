@@ -47,6 +47,7 @@ class AppLocalizations {
     'fil': (Locale('fil'), 'Wikang Filipino'),
     'fr': (Locale('fr'), 'Français'),
     // 'ha': (Locale('ha'), '(ḥawsa) حَوْسَ'), presently not supported by GlobalMaterialLocalizations / https://api.flutter.dev/flutter/flutter_localizations/kMaterialSupportedLanguages.html
+    'he': (Locale('he'), '(ivrit) עברית'),
     'hi': (Locale('hi'), 'हिन्दी (hindī)'),
     'hr': (Locale('hr'), 'Hrvatski'),
     'ka': (Locale('ka'), 'ქართული (k’art’uli)'),
