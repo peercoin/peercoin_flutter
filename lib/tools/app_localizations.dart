@@ -59,6 +59,7 @@ class AppLocalizations {
     'ko': (Locale('ko'), '한국어 [韓國語] (han-guk-eo)'),
     'km': (Locale('km'), 'ភាសាខ្មែរ (phéasa khmae)'),
     'kn': (Locale('kn'), 'ಕನ್ನಡ (kannaḍa)'),
+    'ky': (Locale('ky'), 'Кыргызча (Kyrgyzcha)'),
     'lt': (Locale('lt'), 'Lietuvių kalba'),
     'hu': (Locale('hu'), 'Magyar'),
     'hy': (Locale('hy'), 'Հայերեն (Hayeren)'),
