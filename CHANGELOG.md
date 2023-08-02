@@ -1,5 +1,6 @@
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
+* Add language: Afrikaans
 * Add language: Albanian
 * Add language: Burmese
 * Add language: Georgian
