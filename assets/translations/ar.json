@@ -34,7 +34,6 @@
     "app_settings_logs": "سجلات التصحيح",
     "app_settings_logs_export": "تصدير سجلات التصحيح",
     "app_settings_notifications": "الإشعارات",
-    "app_settings_notifications_open_button": "فتح إعدادات الإشعارات",
     "app_settings_notifications_disable_button": "أوقف التنبيهات",
     "app_settings_notifications_heading_manage_wallets": "إدارة الإخطارات للمحافظ",
     "app_settings_notifications_heading_interval": "فترة المزامنة",
@@ -351,5 +350,8 @@
     "periodic_reminder_donate_title": "تذكير التبرع",
     "periodic_reminder_donate_body": "تم تطوير هذا التطبيق بواسطة مؤسسة Peercoin.\nيرجى النظر في التبرع لدعم تطوير Peercoin وهذا التطبيق.",
     "periodic_reminder_backup_title": "تذكير بالنسخ الاحتياطي",
-    "periodic_reminder_backup_body": "قم بإنشاء نسخة احتياطية من بيانات الاسترداد الخاصة بمحفظتك في مكان آمن لتجنب فقدان الوصول إلى عملاتك."
+    "periodic_reminder_backup_body": "قم بإنشاء نسخة احتياطية من بيانات الاسترداد الخاصة بمحفظتك في مكان آمن لتجنب فقدان الوصول إلى عملاتك.",
+    "wallet_pop_menu_change_title": "غير العنوان",
+    "wallet_title_edit": "تحرير عنوان المحفظة",
+    "wallet_title_edit_new_title": "عنوان جديد"
 }
