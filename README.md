@@ -31,6 +31,7 @@ You can also sign up for our open beta testing here:
 ![Screenshot_small](https://user-images.githubusercontent.com/11148913/124509449-470f7c80-ddd2-11eb-9daf-56de7eb83594.png)
 
 ## Help Translate
+Some of the translations are translated with ChatGPT, so please edit if you find something that's not correct.
 <a href="https://weblate.ppc.lol/engage/peercoin-flutter/">
 <img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/multi-auto.svg" alt="Translation status" />
 </a>
