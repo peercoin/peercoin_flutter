@@ -2,7 +2,6 @@
     "about_send_mail": "發送電子郵件",
     "addressbook_swipe_delete": "刪除",
     "app_settings_logs_export": "導出調試日誌",
-    "app_settings_notifications_open_button": "打開通知設置",
     "receive_website": "打開網站",
     "app_settings_delete": "刪除帳戶",
     "setup_legal_title": "法律聲明",
@@ -351,5 +350,8 @@
     "wallet_receive_label_hint_privacy": "出於隱私原因，不建議重複使用您的地址。如果您想重複使用此地址，使用後必須在地址簿中將其設置為“已關注”。",
     "wallet_scan_notice_bg_notifications": "在應用程式設定中啟用後台通知可以大幅提高掃描的可靠性。",
     "wallet_value_alert_content": "在移動錢包中存儲此數量的幣值存在風險。\n考慮將您的幣值轉移到Stakebox、Ledger硬件錢包或冷錢包。",
-    "store_description": "在手機上發送和接收點點幣，這是權益證明的先驅。\n\n請保護好您的錢包種子碼。\n此應用程式不提供任何保修。\n請自行承擔風險。\n\n功能：\n- 基於電子系統協議。\n- 發送和接收點點幣。\n- 安裝後即可進行交易（無需等待）。\n- 點點幣和點點幣測試網路錢包。\n- 地址簿管理。\n- 導入紙錢包。\n- 導入和導出私鑰（WIF）。\n- 伺服器管理。\n- 多語言支援。\n- 後台通知。\n\n已知限制請參閱Github存儲庫。"
+    "store_description": "在手機上發送和接收點點幣，這是權益證明的先驅。\n\n請保護好您的錢包種子碼。\n此應用程式不提供任何保修。\n請自行承擔風險。\n\n功能：\n- 基於電子系統協議。\n- 發送和接收點點幣。\n- 安裝後即可進行交易（無需等待）。\n- 點點幣和點點幣測試網路錢包。\n- 地址簿管理。\n- 導入紙錢包。\n- 導入和導出私鑰（WIF）。\n- 伺服器管理。\n- 多語言支援。\n- 後台通知。\n\n已知限制請參閱Github存儲庫。",
+    "wallet_title_edit": "編輯錢包標題",
+    "wallet_title_edit_new_title": "新標題",
+    "wallet_pop_menu_change_title": "更改標題"
 }
