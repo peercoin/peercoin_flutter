@@ -228,7 +228,6 @@
     "app_settings_logs": "Felsökningsloggar",
     "app_settings_description": "Dessa loggar innehåller känslig information.\nDe innehåller inga privata nycklar, men var försiktig med vem du delar dessa loggar med.",
     "app_settings_newWallet": "Kräv att lägga till en ny plånbok",
-    "app_settings_notifications_open_button": "Öppna aviseringsinställningar",
     "app_settings_notifications_alert_content": "Detta kommer att aktivera våra integritetsvänliga bakgrundsaviseringar.\nDe kan inaktiveras när som helst.",
     "app_settings_notifications_hint_sync_1": "Anger det intervall med vilket appen söker efter nya transaktioner i bakgrunden.\nAktivt intervall: $minutes minuter.",
     "app_settings_notifications_hint_sync_2": "Aviseringar kan bli avsevärt försenade, beroende på hur eller om ditt operativsystem kväver bakgrundsuppgifter. iOS-enheter kan förvänta sig längre intervaller.",
@@ -351,5 +350,8 @@
     "verify_input_label_message": "Meddelande för att verifiera",
     "verify_input_label_signature": "Signatur för att verifiera",
     "verify_success": "Meddelandet verifierat.",
-    "verify_fail": "Meddelandet kunde inte verifieras."
+    "verify_fail": "Meddelandet kunde inte verifieras.",
+    "wallet_title_edit_new_title": "Nytt Namn",
+    "wallet_pop_menu_change_title": "Byt Namn",
+    "wallet_title_edit": "Redigera Plånbokens Namn"
 }
