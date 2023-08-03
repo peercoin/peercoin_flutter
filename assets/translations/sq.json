@@ -353,5 +353,5 @@
     "setup_auth_hint": "Do të duhet të shkruani farën tuaj përsëri pasi të skadojë sesioni.",
     "about_donate_button": "Dhuroni PPC tani",
     "app_settings_delete": "Fshij llogarinë",
-    "app_settings_delete_description": "Meqë ende nuk keni krijuar një llogari në këtë aplikacion, nuk ka asgjë për të fshirë. Keni krijuar një farë të xhepit, që është një veprim kriptografik. Farat tuaja janë matematikë. Mund të përdoren në çdo aplikacion që mbështet fraza të farës. Ju gjithashtu nuk keni asnjë llogari me njoftime në sfond ose shërbime të çmimeve. Ky aplikacion vlerëson privatësinë tuaj dhe është privat sipas dizajnit."
+    "app_settings_delete_description": "Meqë ende nuk keni krijuar një llogari në këtë aplikacion, nuk ka asgjë për të fshirë. Keni krijuar një \"farë të xhepit\", që është një veprim kriptografik. Farat tuaja janë matematikë. Mund të përdoren në çdo aplikacion që mbështet fraza të farës. Ju gjithashtu nuk keni asnjë llogari me njoftime në sfond ose shërbime të çmimeve. Ky aplikacion vlerëson privatësinë tuaj dhe është privat sipas dizajnit."
 }
