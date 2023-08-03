@@ -318,7 +318,7 @@
     "wallet_value_alert_title": "Mataas na halaga ng mga coins",
     "secure_storage_app_bar_title": "Error",
     "secure_storage_body": "Nabigo sa pagbabasa mula sa secure storage.\nPakipatay ang app data at cache ng aplikasyon na ito at subukang muli.",
-    "wallet_value_alert_content": "Ang pag-iimbak ng halagang ito ng mga coins sa mobile wallet ay may risgo.\npag-isipan ang paglipat ng iyong mga coins sa Stakebox, Ledger hardware wallet o cold wallet.",
+    "wallet_value_alert_content": "Ang pag-iimbak ng halagang ito ng mga coins sa mobile wallet ay may risgo.\nPag-isipan ang paglipat ng iyong mga coins sa Stakebox, Ledger hardware wallet o cold wallet.",
     "store_description": "Magpadala at tumanggap ng Peercoin, ang unang Proof-of-Stake, gamit ang iyong phone.\n\nPanatilihing protektado ang iyong wallet seed. \nWalang warranty ang app na ito. \nGamitin sa sariling kapahamakan.\n\nMga Tampok:\n- Base sa electrum protocol.\n- Magpadala at tumanggap ng peercoin.\n- Handang magtransact pagkatapos ng pag-install (walang paghihintay).\n- Peercoin at Peercoin testnet wallets.\n- Pamamahala ng address book.\n- Import ng paper wallets.\n- Import at export ng private keys (WIF).\n- Pamamahala ng mga server.\n- Suporta sa multi-language.\n- Background notifications.\n\nMaaari mong makita ang mga kilalang limitasyon sa Github repository.",
     "store_short": "Ang iyong mobile wallet para sa Peercoin at Peercoin testnet.",
     "sign_step_1": "Piliin ang Address",
