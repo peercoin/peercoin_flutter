@@ -102,8 +102,16 @@ void main() {
         timeout: const Timeout.factor(2),
       );
 
+      test('Change wallet title', () async {
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.tap(find.text('Change Title'));
+        await driver.tap(find.byType('TextField'));
+        await driver.enterText('Wallet Test');
+        await driver.tap(find.text('Okay'));
+      });
+
       test(
-        'try to add an ssl server and see if it persists',
+        'find wallet with edited title and try to add an ssl server and see if it persists',
         () async {
           await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
@@ -112,7 +120,7 @@ void main() {
             },
           );
           await driver.tap(find.text('Server Settings'));
-          await driver.tap(find.text('Peercoin Testnet'));
+          await driver.tap(find.text('Wallet Test'));
           await driver.tap(find.byValueKey('serverSettingsAddServer'));
           await driver.tap(find.byType('TextFormField'));
           await driver.enterText(
@@ -134,7 +142,7 @@ void main() {
           await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
-              await driver.tap(find.text('Peercoin Testnet'));
+              await driver.tap(find.text('Wallet Test'));
             },
           );
           expect(

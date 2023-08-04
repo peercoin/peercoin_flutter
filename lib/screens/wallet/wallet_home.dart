@@ -298,8 +298,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
             controller: textFieldController,
             maxLength: 20,
             decoration: InputDecoration(
-              hintText: AppLocalizations.instance
-                  .translate('wallet_title_edit_new_title'),
+              hintText: AppLocalizations.instance.translate(
+                'wallet_title_edit_new_title',
+              ),
             ),
           ),
           actions: <Widget>[
