@@ -18,7 +18,6 @@ class NewWalletDialog extends StatefulWidget {
 }
 
 Map<String, Coin> _availableCoins = AvailableCoins.availableCoins;
-List _activeCoins = [];
 
 class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
@@ -80,7 +79,6 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   void didChangeDependencies() async {
     if (_initial) {
       var appSettings = context.read<AppSettings>();
-      var activeWallets = context.read<WalletProvider>();
       if (appSettings.authenticationOptions!['newWallet']!) {
         await Auth.requireAuth(
           context: context,
@@ -88,16 +86,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           canCancel: false,
         );
       }
-      //TODO remove when multiple wallets are allowed
-      var activeWalletList = activeWallets.availableWalletKeys;
-      for (var element in activeWalletList) {
-        final split = element.split('_')[0];
-        if (_availableCoins.keys.contains(split)) {
-          setState(() {
-            _activeCoins.add(split);
-          });
-        }
-      }
+
       setState(() {
         _initial = false;
       });
@@ -109,9 +98,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   Widget build(BuildContext context) {
     var list = <Widget>[];
-    final actualAvailableWallets = _availableCoins.keys
-        .where((element) => !_activeCoins.contains(element))
-        .toList(); //TODO remove when multiple wallets are allowed
+    final actualAvailableWallets = _availableCoins.keys;
 
     if (actualAvailableWallets.isNotEmpty) {
       for (var wallet in actualAvailableWallets) {

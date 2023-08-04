@@ -1,4 +1,6 @@
 ### **1.1.9** (2023-xx-xx)
+* You may now add multiple wallets of the same type
+* Complete redesign of rescan process
 
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
