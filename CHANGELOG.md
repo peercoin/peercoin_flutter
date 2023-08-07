@@ -2,6 +2,7 @@
 * You may now add multiple wallets of the same type
 * Complete redesign of rescan process
 * A multitude of currencies is now available and losely corresponds with the languages added in 1.1.8
+* Items in "Language" and "Price Feed & Currency" settings can now be searched
 
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
