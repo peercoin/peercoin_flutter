@@ -68,5 +68,4 @@ class _AppSettingsPriceFeedScreenState
       ),
     );
   }
-  //TODO loading indicator
 }

@@ -5,7 +5,6 @@ import '../../providers/app_settings.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/price_ticker.dart';
 import '../buttons.dart';
-import '../expanded_section.dart';
 
 class SettingsPriceTicker extends StatefulWidget {
   final AppSettings _settings;
@@ -19,27 +18,11 @@ class SettingsPriceTicker extends StatefulWidget {
 }
 
 class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
-  late bool _listExpanded;
-  late String formattedTime;
-
-  @override
-  void initState() {
-    if (widget._settings.exchangeRates.isNotEmpty &&
-        widget._settings.selectedCurrency.isNotEmpty) {
-      setState(() {
-        _listExpanded = true;
-      });
-    } else {
-      setState(() {
-        _listExpanded = false;
-      });
-    }
-    super.initState();
-  }
+  late String _formattedTime;
 
   @override
   void didChangeDependencies() {
-    formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss')
+    _formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss')
         .format(widget._settings.latestTickerUpdate);
     super.didChangeDependencies();
   }
@@ -72,9 +55,6 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
                 widget._settings.setSelectedCurrency('USD');
                 PriceTicker.checkUpdate(widget._settings);
                 Navigator.pop(context);
-                setState(() {
-                  _listExpanded = true;
-                });
               },
               child: Text(
                 AppLocalizations.instance.translate('continue'),
@@ -99,9 +79,6 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
           .translate('app_settings_price_feed_disable_button'),
       action: () {
         widget._settings.setSelectedCurrency('');
-        setState(() {
-          _listExpanded = false;
-        });
       },
     );
   }
@@ -153,7 +130,7 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
             ? Text(
                 AppLocalizations.instance.translate(
                   'setup_price_feed_last_update',
-                  {'timestamp': formattedTime},
+                  {'timestamp': _formattedTime},
                 ),
                 style: TextStyle(
                   fontSize: 12,
@@ -161,11 +138,8 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
                 ),
               )
             : Container(),
-        ExpandedSection(
-          expand: _listExpanded,
-          child: Column(
-            children: renderCurrencies(context),
-          ),
+        Column(
+          children: renderCurrencies(context),
         ),
         renderButton(context),
       ],
