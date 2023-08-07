@@ -62,7 +62,6 @@ class PriceTicker {
     'AOA': 'Kz',
     'AZN': '₼',
     'BAM': 'KM',
-    'BDT': '৳',
     'BGN': 'лв',
     'BHD': 'ب.د',
     'BIF': 'FBu',
