@@ -34,6 +34,8 @@ class _AppSettingsWalletOrderScreenState
       });
 
       await _initWalletTitles();
+
+      //backwards compatability for older wallets without a saved wallet order
       if (_walletOrder.isEmpty) {
         await _initWalletOrder();
       }
@@ -54,7 +56,7 @@ class _AppSettingsWalletOrderScreenState
 
   Future<void> _initWalletOrder() async {
     _walletOrder = _walletTitles.keys.toList();
-    _appSettings.setWalletOrder(_walletOrder);
+    await saveOrder();
   }
 
   Color _calculateTileColor(int index) {
