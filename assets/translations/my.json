@@ -142,7 +142,6 @@
     "app_settings_logs_export": "အမှားရှာဖွေခြင်းကို တင်ပါ",
     "app_settings_newWallet": "အသစ်ဆော့ဖ်ဝင်လုပ်ရန်လိုအပ်ပါသည်",
     "app_settings_notifications": "အသိပေးချက်များ",
-    "app_settings_notifications_open_button": "အသိပေးချက်များကိုဖွင့်ပါ",
     "app_settings_notifications_enable_button": "အသိပေးချက်များကိုဖွင့်ပါ",
     "app_settings_notifications_disable_button": "အသိပေးချက်များကိုပိတ်ပါ",
     "app_settings_notifications_heading_manage_wallets": "ဆော့ဖ်ဝင်နှုန်းများအတွက် အသိပေးချက်များကို စီမံခန့်ခွဲပါ",
@@ -351,5 +350,8 @@
     "setup_auth_hint": "သင့်စီမံကိန်းသောအတွက် အချိန်အထိ သင်၏ seed ကို ကျွန်ပ်တို့ သတ်မှတ်ရန် ရှိနိုင်ပါမည်။",
     "about_donate_button": "PPC ကိုယူပါ",
     "app_settings_delete": "အကောင့်ဖျက်ပါ",
-    "about_foundation_button": "ပီအာရင် Foundation အကြောင်းကိုလက်ခံရန် နှိပ်ပါ"
+    "about_foundation_button": "ပီအာရင် Foundation အကြောင်းကိုလက်ခံရန် နှိပ်ပါ",
+    "wallet_pop_menu_change_title": "ခေါင်းစဉ်ပြောင်းပါ။",
+    "wallet_title_edit": "Wallet ခေါင်းစဉ်ကို တည်းဖြတ်ပါ။",
+    "wallet_title_edit_new_title": "ခေါင်းစဉ်အသစ်"
 }

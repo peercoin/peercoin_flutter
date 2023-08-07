@@ -86,7 +86,6 @@
     "app_settings_logs_export": "ਖੋਜ ਲੋਗ ਨੂੰ ਐਕਸਪੋਰਟ ਕਰੋ",
     "app_settings_newWallet": "ਨਵੀਂ ਵਾਲੈਟ ਜੋੜਨਾ ਲਾਜ਼ਮੀ ਹੈ",
     "app_settings_notifications": "ਸੂਚਨਾਵਾਂ",
-    "app_settings_notifications_open_button": "ਸੂਚਨਾ ਸੈਟਿੰਗਾਂ ਖੋਲੋ",
     "app_settings_notifications_enable_button": "ਸੂਚਨਾਵਾਂ ਚਾਲੂ ਕਰੋ",
     "app_settings_notifications_disable_button": "ਸੂਚਨਾਵਾਂ ਬੰਦ ਕਰੋ",
     "app_settings_notifications_heading_manage_wallets": "ਵਾਲੈਟਾਂ ਲਈ ਸੂਚਨਾਵਾਂ ਮੈਨੇਜ ਕਰੋ",
@@ -351,5 +350,8 @@
     "buy_peercoin_dialog_content": "ਇਸ ਐਪ ਦੇ ਪਾਲਤੂ ਕਰਤਾ ਇਸ ਦੇ ਸਮੱਗਰੀ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਨਹੀਂ ਹਨ।",
     "currency_DKK": "ਡੈਨਿਸ਼ ਕਰੋਨ",
     "currency_IRR": "ਈਰਾਨੀ ਰਿਆਲ",
-    "currency_NOK": "ਨਾਰਵੇਜਿਅਨ ਕਰੋਨ"
+    "currency_NOK": "ਨਾਰਵੇਜਿਅਨ ਕਰੋਨ",
+    "wallet_pop_menu_change_title": "ਸਿਰਲੇਖ ਬਦਲੋ",
+    "wallet_title_edit": "ਵਾਲਿਟ ਸਿਰਲੇਖ ਦਾ ਸੰਪਾਦਨ ਕਰੋ",
+    "wallet_title_edit_new_title": "ਨਵਾਂ ਸਿਰਲੇਖ"
 }
