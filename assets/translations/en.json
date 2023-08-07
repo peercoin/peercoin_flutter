@@ -83,6 +83,7 @@
     "app_settings_theme_system": "System Default",
     "app_settings_walletHome": "Require for coin wallet",
     "app_settings_walletList": "Require for list of wallets",
+    "app_settings_wallet_order": "Wallet Order",
     "app_settings_saved_snack": "Your changes have been saved",
     "app_settings_price_feed": "Price Feed & Currency",
     "app_settings_price_feed_enable_button": "Enable Price Feed API",

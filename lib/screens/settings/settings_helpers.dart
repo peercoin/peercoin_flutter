@@ -8,6 +8,7 @@ const Map<String, String> availableSettings = {
   'app_settings_language': Routes.appSettingsLanguage,
   if (!kIsWeb) 'app_settings_default_wallet': Routes.appSettingsDefaultWallet,
   if (!kIsWeb) 'app_settings_notifications': Routes.appSettingsNotifications,
+  'app_settings_wallet_order': Routes.appSettingsWalletOrder,
   'app_settings_auth_header': Routes.appSettingsAuthentication,
   'app_settings_price_feed': Routes.appSettingsPriceFeed,
   'app_settings_theme': Routes.appSettingsAppTheme,

@@ -12,6 +12,7 @@ import '../screens/settings/app_settings_screen.dart';
 import '../screens/auth_jail.dart';
 import '../screens/changelog.dart';
 import '../screens/qrcode_scanner.dart';
+import '../screens/settings/app_settings_wallet_order.dart';
 import '../screens/settings/server_settings/server_add.dart';
 import '../screens/settings/server_settings/server_settings.dart';
 import '../screens/settings/server_settings/server_settings_home.dart';
@@ -42,6 +43,7 @@ class Routes {
   static const String appSettingsAppTheme = '/app-settings-app-theme';
   static const String appSettingsAuthentication =
       '/app-settings-authentication';
+  static const String appSettingsWalletOrder = '/app-settings-wallet-order';
   static const String qrScan = '/qr-scan';
   static const String setupAuth = '/setup-auth';
   static const String setupCreateWallet = '/setup-create-wallet';
@@ -181,6 +183,10 @@ class Routes {
           ),
       Routes.appSettingsAppTheme: (context) => const RouterMaster(
             widget: AppSettingsAppThemeScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.appSettingsWalletOrder: (context) => const RouterMaster(
+            widget: AppSettingsWalletOrderScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
     };

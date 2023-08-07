@@ -448,7 +448,6 @@ class _WalletListScreenState extends State<WalletListScreen>
               ),
             ),
     );
-    //TODO allow ordering of wallets
   }
 
   void showWalletDialog(BuildContext context) {
