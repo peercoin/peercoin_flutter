@@ -9,9 +9,14 @@ import '../buttons.dart';
 class SettingsPriceTicker extends StatefulWidget {
   final AppSettings _settings;
   final Function _saveSnack;
+  final String _searchString;
 
-  const SettingsPriceTicker(this._settings, this._saveSnack, {Key? key})
-      : super(key: key);
+  const SettingsPriceTicker(
+    this._settings,
+    this._saveSnack,
+    this._searchString, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SettingsPriceTicker> createState() => _SettingsPriceTickerState();
@@ -24,6 +29,7 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
   void didChangeDependencies() {
     _formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss')
         .format(widget._settings.latestTickerUpdate);
+
     super.didChangeDependencies();
   }
 
@@ -96,7 +102,12 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
       currencyData.insert(0, 'USD'); //add USD
       currencyData.remove('PPC'); //don't show PPC
 
-      return currencyData.map((currency) {
+      final filteredMap = currencyData.where(
+        (element) =>
+            element.toLowerCase().contains(widget._searchString.toLowerCase()),
+      );
+
+      return filteredMap.map((currency) {
         return InkWell(
           onTap: () => saveCurrency(ctx, currency),
           child: ListTile(

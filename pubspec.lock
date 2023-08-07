@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+  app_bar_with_search_switch:
+    dependency: "direct main"
+    description:
+      name: app_bar_with_search_switch
+      sha256: "83c6902b1b4812ffa212ae6d106b921356403141f15c466b99843ad939cb9da2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.4"
   archive:
     dependency: transitive
     description:

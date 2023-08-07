@@ -1,3 +1,4 @@
+import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class AppSettingsPriceFeedScreen extends StatefulWidget {
 class _AppSettingsPriceFeedScreenState
     extends State<AppSettingsPriceFeedScreen> {
   bool _initial = true;
+  String _searchString = '';
   late AppSettings _settings;
 
   @override
@@ -44,11 +46,24 @@ class _AppSettingsPriceFeedScreenState
     }
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.instance.translate('app_settings_price_feed'),
-        ),
+      appBar: AppBarWithSearchSwitch(
+        fieldHintText: AppLocalizations.instance
+            .translate('app_settings_price_feed_search'),
+        onChanged: (text) {
+          setState(() {
+            _searchString = text;
+          });
+        },
+        appBarBuilder: (context) {
+          return AppBar(
+            title: Text(
+              AppLocalizations.instance.translate('app_settings_price_feed'),
+            ),
+            actions: const [
+              AppBarSearchButton(),
+            ],
+          );
+        },
       ),
       body: SingleChildScrollView(
         child: Align(
@@ -60,6 +75,7 @@ class _AppSettingsPriceFeedScreenState
                 SettingsPriceTicker(
                   _settings,
                   saveSnack,
+                  _searchString,
                 ),
               ],
             ),

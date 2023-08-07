@@ -88,6 +88,7 @@
     "app_settings_price_feed": "Price Feed & Currency",
     "app_settings_price_feed_enable_button": "Enable Price Feed API",
     "app_settings_price_feed_disable_button": "Disable Price Feed API",
+    "app_settings_price_feed_search": "Search currency code",
     "app_settings_price_alert_content": "This will enable our privacy friendly price data feed.\nIt can be disabled anytime.",
     "app_wallets": "Wallets",
     "authenticate_biometric_hint": "Verify identity",
