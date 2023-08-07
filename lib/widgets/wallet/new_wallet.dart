@@ -22,6 +22,7 @@ Map<String, Coin> _availableCoins = AvailableCoins.availableCoins;
 class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
   bool _initial = true;
+  late AppSettings _appSettings;
 
   Future<void> addWallet() async {
     try {
@@ -44,6 +45,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         title: title,
         letterCode: letterCode,
       );
+
+      //add to order list
+      _appSettings.setWalletOrder(_appSettings.walletOrder..add(walletName));
 
       //enable notifications
       var notificationList = appSettings.notificationActiveWallets;
@@ -78,11 +82,11 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      var appSettings = context.read<AppSettings>();
-      if (appSettings.authenticationOptions!['newWallet']!) {
+      _appSettings = context.read<AppSettings>();
+      if (_appSettings.authenticationOptions!['newWallet']!) {
         await Auth.requireAuth(
           context: context,
-          biometricsAllowed: appSettings.biometricsAllowed,
+          biometricsAllowed: _appSettings.biometricsAllowed,
           canCancel: false,
         );
       }

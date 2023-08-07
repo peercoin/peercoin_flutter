@@ -138,4 +138,13 @@ class AppSettings with ChangeNotifier {
     _appOptions.periodicReminterItemsNextView = newMap;
     notifyListeners();
   }
+
+  List<String> get walletOrder {
+    return _appOptions.walletOrder;
+  }
+
+  void setWalletOrder(List<String> newOrder) {
+    _appOptions.walletOrder = newOrder;
+    notifyListeners();
+  }
 }

@@ -51,7 +51,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   late Timer _priceTimer;
   late Timer _sessionTimer;
   late AppSettings _appSettings;
-  late List<CoinWallet> _activeWalletValues;
+  late List<CoinWallet> _activeWalletsOrdered;
 
   @override
   void initState() {
@@ -63,6 +63,17 @@ class _WalletListScreenState extends State<WalletListScreen>
     _animation = Tween(begin: 88.0, end: 92.0).animate(_controller);
     _controller.repeat(reverse: true);
     super.initState();
+  }
+
+  Future<void> _orderWallets() async {
+    final values = _walletProvider.availableWalletValues;
+    final order = _appSettings.walletOrder;
+    values.sort(
+      (a, b) => order.indexOf(a.name).compareTo(
+            order.indexOf(b.name),
+          ),
+    );
+    _activeWalletsOrdered = values;
   }
 
   @override
@@ -81,7 +92,8 @@ class _WalletListScreenState extends State<WalletListScreen>
       final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
       await _walletProvider.init();
-      _activeWalletValues = _walletProvider.availableWalletValues;
+      await _orderWallets();
+
       setState(() {
         _initial = false;
       });
@@ -107,7 +119,7 @@ class _WalletListScreenState extends State<WalletListScreen>
         }
 
         //toggle periodic reminders
-        if (_activeWalletValues.isNotEmpty) {
+        if (_activeWalletsOrdered.isNotEmpty) {
           //don't show for users with no wallets
           if (await checkReminder() == true) {
             return; //don't execute code below this line if checkReminder returned true
@@ -151,16 +163,16 @@ class _WalletListScreenState extends State<WalletListScreen>
         CoinWallet? defaultWallet;
         //push to wallet directly (from notification) or to default wallet
         if (widget.walletToOpenDirectly.isNotEmpty) {
-          defaultWallet = _activeWalletValues.firstWhereOrNull(
+          defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
             (elem) => elem.name == widget.walletToOpenDirectly,
           );
         } else {
-          defaultWallet = _activeWalletValues.firstWhereOrNull(
+          defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
             (elem) => elem.letterCode == _appSettings.defaultWallet,
           );
         }
         //push to default wallet
-        if (_activeWalletValues.length == 1 &&
+        if (_activeWalletsOrdered.length == 1 &&
             widget.walletToOpenDirectly.isEmpty) {
           //only one wallet available, pushing to that one (no walletToOpenDirectly set)
           if (!kIsWeb) {
@@ -168,11 +180,11 @@ class _WalletListScreenState extends State<WalletListScreen>
             await navigator.pushNamed(
               Routes.walletHome,
               arguments: {
-                'wallet': _activeWalletValues.first,
+                'wallet': _activeWalletsOrdered.first,
               },
             );
           }
-        } else if (_activeWalletValues.length > 1 ||
+        } else if (_activeWalletsOrdered.length > 1 ||
             widget.walletToOpenDirectly.isNotEmpty) {
           if (defaultWallet != null) {
             context.loaderOverlay.show();
@@ -186,6 +198,10 @@ class _WalletListScreenState extends State<WalletListScreen>
         }
       }
     }
+
+    //always on didChangeDependencies
+    await _orderWallets();
+
     super.didChangeDependencies();
   }
 
@@ -203,10 +219,6 @@ class _WalletListScreenState extends State<WalletListScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (_initial == false) {
-      _activeWalletValues = _walletProvider.availableWalletValues;
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -306,7 +318,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                   const SizedBox(
                     height: 40,
                   ),
-                  _activeWalletValues.isEmpty
+                  _activeWalletsOrdered.isEmpty
                       ? Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -341,9 +353,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 ? MediaQuery.of(context).size.width / 2
                                 : MediaQuery.of(context).size.width,
                             child: ListView.builder(
-                              itemCount: _activeWalletValues.length,
+                              itemCount: _activeWalletsOrdered.length,
                               itemBuilder: (ctx, i) {
-                                CoinWallet wallet = _activeWalletValues[i];
+                                CoinWallet wallet = _activeWalletsOrdered[i];
                                 String balance = (wallet.balance /
                                         AvailableCoins.getDecimalProduct(
                                           identifier: wallet.name,

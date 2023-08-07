@@ -155,7 +155,7 @@ class PeriodicReminders {
           LoggerWrapper.logInfo(
             'PriceTicker',
             'checkUpdate',
-            'reminder $name is not initialized})',
+            'reminder $name is not initialized',
           );
           shouldDisplayReminder = true;
         }
