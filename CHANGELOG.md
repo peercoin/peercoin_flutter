@@ -3,6 +3,7 @@
 * Complete redesign of rescan process
 * A multitude of currencies is now available and losely corresponds with the languages added in 1.1.8
 * Items in "Language" and "Price Feed & Currency" settings can now be searched
+* Fixed a bug where some devices would have issues when setting up an app that was locked before
 
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
