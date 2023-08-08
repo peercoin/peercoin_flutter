@@ -31,7 +31,7 @@ class _AuthJailState extends State<AuthJailScreen> {
       const Duration(seconds: 1),
       (Timer timer) {
         if (_lockCountdown == 0) {
-          setState(() {
+          setState(() { //TODO check
             timer.cancel();
             onTimerEnd();
           });
