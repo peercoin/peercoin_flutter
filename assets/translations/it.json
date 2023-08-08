@@ -262,7 +262,6 @@
     "import_wif_error_snack": "Questo indirizzo è già stato importato",
     "import_wif_hint": "La chiave deve essere nuovamente importata durante il ripristino del portafoglio dal seed. Non è collegata al seed.",
     "app_settings_logs_export": "Esporta i log di debug",
-    "app_settings_notifications_open_button": "Apri le impostazioni di notifica",
     "app_settings_notifications_enable_button": "Abilita le Notifiche",
     "app_settings_notifications_alert_content": "Questo consentirà le nostre notifiche in background, saranno rispettose della privacy.\nPossono essere disabilitati in qualsiasi momento.",
     "app_settings_notifications_disable_button": "Disabilita le Notifiche",
@@ -274,5 +273,8 @@
     "currency_PKR": "Rupia pakistana",
     "currency_TZS": "Scellino tanzaniano",
     "setup_bg_sync_description": "Questo abiliterà le notifiche in background per i tuoi wallet.",
-    "setup_bg_sync_allow": "Consenti API di sincronizzazione in background"
+    "setup_bg_sync_allow": "Consenti API di sincronizzazione in background",
+    "setup_price_feed_last_update": "Ultimo aggiornamento: $timestamp",
+    "about_donate_button": "Dona PPC ora",
+    "send_import_csv": "Importa da CSV"
 }
