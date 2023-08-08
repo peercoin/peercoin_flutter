@@ -46,6 +46,16 @@ void main() async {
   setupFinished = prefs.getBool('setupFinished') ?? false;
   _locale = Locale(prefs.getString('language_code') ?? 'und');
 
+  //clear storage if setup is not finished
+  if (!setupFinished) {
+    await prefs.clear();
+    LoggerWrapper.logInfo(
+      'main',
+      'SharedPreferences',
+      'SharedPreferences flushed',
+    );
+  }
+
   //init hive
   await Hive.initFlutter();
   Hive.registerAdapter(CoinWalletAdapter());
@@ -99,6 +109,16 @@ void main() async {
 
   try {
     const secureStorage = FlutterSecureStorage();
+    //clear secureStorage if setup is not finished
+    if (!setupFinished) {
+      await secureStorage.deleteAll();
+      LoggerWrapper.logInfo(
+        'main',
+        'secureStorage',
+        'secureStorage flushed',
+      );
+    }
+
     failedAuths =
         int.parse(await secureStorage.read(key: 'failedAuths') ?? '0');
   } catch (e) {
