@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^6.1.4
   flutter_local_notifications: ^13.0.0
   flutter_screen_lock: ^9.0.1
-  local_auth: ^2.1.2
+  local_auth: ^2.1.6
   local_auth_android: any
   package_info_plus: ^3.0.1
   mailto: ^2.0.0
