@@ -14,14 +14,16 @@ import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
 
-class WalletImportScanScreen extends StatefulWidget {
-  const WalletImportScanScreen({Key? key}) : super(key: key);
+class AppSettingsWalletScanScreen extends StatefulWidget {
+  const AppSettingsWalletScanScreen({Key? key}) : super(key: key);
 
   @override
-  State<WalletImportScanScreen> createState() => _WalletImportScanScreenState();
+  State<AppSettingsWalletScanScreen> createState() =>
+      _AppSettingsWalletScanScreenState();
 }
 
-class _WalletImportScanScreenState extends State<WalletImportScanScreen> {
+class _AppSettingsWalletScanScreenState
+    extends State<AppSettingsWalletScanScreen> {
   bool _initial = true;
   bool _scanStarted = false;
   bool _backgroundNotificationsAvailable = false;
