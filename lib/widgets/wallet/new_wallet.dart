@@ -57,7 +57,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       var prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('importedSeed') == true) {
         await navigator.pushNamedAndRemoveUntil(
-          Routes.appSettingsWalletScan,
+          Routes.appSettingsWalletScanLanding,
           (_) => false,
           arguments: walletName,
         );

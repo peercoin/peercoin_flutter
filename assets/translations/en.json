@@ -384,7 +384,6 @@
     "wallet_pop_menu_paperwallet": "Sweep Paper Wallet",
     "wallet_pop_menu_wif": "Import Private Key",
     "wallet_pop_menu_signing": "Sign Messages",
-    "wallet_pop_menu_rescan": "Rescan",
     "wallet_pop_menu_servers": "Adjust Servers",
     "wallet_pop_menu_verification": "Verify Messages",
     "wallet_pop_menu_change_title": "Change Title",
@@ -393,11 +392,8 @@
     "wallet_title_edit_new_title": "New Title",
     "wallet_receive_label_hint": "Pressing the Share button will save the address label.",
     "wallet_receive_label_hint_privacy": "Reusing your address is discouraged for privacy reasons. If you want to reuse this address, you have to set it to \"watched\" in the address book after having used it.",
-    "wallet_rescan_title": "Rescan wallet",
-    "wallet_rescan_content": "Scans the wallet again. If you're having trouble with transactions or amounts, this might be helpful.\nThis might take a moment.",
     "wallet_send_label_hint_scan": "Scanning the QR-Code will save you some time",
     "wallet_send_label_hint_metadata": "Metadata is unencrypted and will be publicly visible on the blockchain.",
-    "wallet_scan_appBar_title": "Scanning your imported seed",
     "wallet_scan_notice": "This might take a while. Don't close this screen!",
     "wallet_scan_notice_bg_notifications": "Enabling background notifications in App Settings can severely improve scanning reliability.",
     "wallet_send": "Send",
@@ -442,5 +438,6 @@
     "setup_auth_hint": "You have to enter your seed again after the session has expired.",
     "about_donate_button": "Donate PPC now",
     "app_settings_delete": "Delete account",
-    "app_settings_delete_description": "Since you have not created an account in this app, there is nothing to delete. You created a \"wallet seed\", which is a cryptographical operation. Your seed is math. It can be used in any application that supports seed phrases. You also don't have any accounts with the background notification or price feed APIs. This app values your privacy and is private by design."
+    "app_settings_delete_description": "Since you have not created an account in this app, there is nothing to delete. You created a \"wallet seed\", which is a cryptographical operation. Your seed is math. It can be used in any application that supports seed phrases. You also don't have any accounts with the background notification or price feed APIs. This app values your privacy and is private by design.",
+    "wallet_scan": "Wallet Scan" 
 }

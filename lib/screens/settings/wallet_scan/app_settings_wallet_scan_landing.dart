@@ -5,25 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/wallet_provider.dart';
-import '../../providers/electrum_connection.dart';
-import '../../tools/app_localizations.dart';
-import '../../tools/app_routes.dart';
-import '../../tools/background_sync.dart';
-import '../../tools/logger_wrapper.dart';
-import '../../widgets/buttons.dart';
-import '../../widgets/loading_indicator.dart';
+import '../../../providers/electrum_connection.dart';
+import '../../../providers/wallet_provider.dart';
+import '../../../tools/app_localizations.dart';
+import '../../../tools/app_routes.dart';
+import '../../../tools/background_sync.dart';
+import '../../../tools/logger_wrapper.dart';
+import '../../../widgets/buttons.dart';
+import '../../../widgets/loading_indicator.dart';
 
-class AppSettingsWalletScanScreen extends StatefulWidget {
-  const AppSettingsWalletScanScreen({Key? key}) : super(key: key);
+class AppSettingsWalletScanLandingScreen extends StatefulWidget {
+  const AppSettingsWalletScanLandingScreen({Key? key}) : super(key: key);
 
   @override
-  State<AppSettingsWalletScanScreen> createState() =>
-      _AppSettingsWalletScanScreenState();
+  State<AppSettingsWalletScanLandingScreen> createState() =>
+      _AppSettingsWalletScanLandingScreenState();
 }
 
-class _AppSettingsWalletScanScreenState
-    extends State<AppSettingsWalletScanScreen> {
+class _AppSettingsWalletScanLandingScreenState
+    extends State<AppSettingsWalletScanLandingScreen> {
   bool _initial = true;
   bool _scanStarted = false;
   bool _backgroundNotificationsAvailable = false;
@@ -98,18 +98,6 @@ class _AppSettingsWalletScanScreenState
     super.deactivate();
   }
 
-  void timeOutTasks(BuildContext context) async {
-    //tasks to finish after timeout
-    final navigator = Navigator.of(context);
-    //sync notification backend
-    await BackgroundSync.executeSync(fromScan: true);
-    _timer.cancel();
-    await navigator.pushReplacementNamed(
-      Routes.walletList,
-      arguments: {'fromScan': true},
-    );
-  }
-
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
@@ -133,18 +121,18 @@ class _AppSettingsWalletScanScreenState
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
             _scanStarted == true) {
-          timeOutTasks(context);
+          _timeOutTasks(context);
         }
       });
       if (_backgroundNotificationsAvailable == true) {
-        await fetchAddressesFromBackend();
+        await _fetchAddressesFromBackend();
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
       if (_connectionState == ElectrumConnectionState.connected) {
         _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
         if (_backgroundNotificationsAvailable == false) {
-          await startScan();
+          await _startScan();
         }
       }
     }
@@ -158,7 +146,7 @@ class _AppSettingsWalletScanScreenState
     super.dispose();
   }
 
-  Future<void> fetchAddressesFromBackend() async {
+  Future<void> _fetchAddressesFromBackend() async {
     var adressesToQuery = <String, int>{};
     await _walletProvider.populateWifMap(
       identifier: _coinName,
@@ -178,7 +166,7 @@ class _AppSettingsWalletScanScreenState
       adressesToQuery[res!] = 0;
     }
 
-    await parseMarismaResult(
+    await _parseMarismaResult(
       await BackgroundSync.getNumberOfUtxosFromMarisma(
         walletName: _coinName,
         addressesToQuery: adressesToQuery,
@@ -188,7 +176,7 @@ class _AppSettingsWalletScanScreenState
     _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
-  Future<void> parseMarismaResult(Map<String, int> result) async {
+  Future<void> _parseMarismaResult(Map<String, int> result) async {
     if (result.isNotEmpty) {
       LoggerWrapper.logInfo(
         'WalletImportScan',
@@ -212,15 +200,15 @@ class _AppSettingsWalletScanScreenState
         _addressScanPointer += _addressChunkSize;
         _addressChunkSize += 5;
       });
-      await fetchAddressesFromBackend();
+      await _fetchAddressesFromBackend();
     } else {
       //done
-      await startScan();
+      await _startScan();
     }
     _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
-  Future<void> startScan() async {
+  Future<void> _startScan() async {
     if (_scanStarted == false) {
       LoggerWrapper.logInfo(
         'WalletImportScan',
@@ -252,6 +240,18 @@ class _AppSettingsWalletScanScreenState
         _scanStarted = true;
       });
     }
+  }
+
+  void _timeOutTasks(BuildContext context) async {
+    //tasks to finish after timeout
+    final navigator = Navigator.of(context);
+    //sync notification backend
+    await BackgroundSync.executeSync(fromScan: true);
+    _timer.cancel();
+    await navigator.pushReplacementNamed(
+      Routes.walletList,
+      arguments: {'fromScan': true},
+    );
   }
   //TODO rewrite to find wallet accounts and be more verbose
   //TODO test multi wallets without background notifications

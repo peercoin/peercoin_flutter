@@ -9,7 +9,7 @@ const Map<String, String> availableSettings = {
   if (!kIsWeb) 'app_settings_default_wallet': Routes.appSettingsDefaultWallet,
   if (!kIsWeb) 'app_settings_notifications': Routes.appSettingsNotifications,
   'app_settings_wallet_order': Routes.appSettingsWalletOrder,
-  'wallet_pop_menu_rescan': Routes.appSettingsWalletScan,
+  'wallet_scan': Routes.appSettingsWalletScanLanding,
   'app_settings_auth_header': Routes.appSettingsAuthentication,
   'app_settings_price_feed': Routes.appSettingsPriceFeed,
   'app_settings_theme': Routes.appSettingsAppTheme,
