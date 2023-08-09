@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import '/../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '/../tools/app_localizations.dart';
 import '/../widgets/loading_indicator.dart';
 
 class WalletHomeConnection extends StatelessWidget {
-  final ElectrumConnectionState _connectionState;
+  final BackendConnectionState _connectionState;
   const WalletHomeConnection(this._connectionState, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget widget;
-    if (_connectionState == ElectrumConnectionState.connected) {
+    if (_connectionState == BackendConnectionState.connected) {
       widget = Text(
         AppLocalizations.instance.translate('wallet_connected'),
         style: TextStyle(
@@ -21,7 +21,7 @@ class WalletHomeConnection extends StatelessWidget {
           fontSize: 16,
         ),
       );
-    } else if (_connectionState == ElectrumConnectionState.offline) {
+    } else if (_connectionState == BackendConnectionState.offline) {
       widget = Text(
         AppLocalizations.instance.translate('wallet_offline'),
         style: TextStyle(

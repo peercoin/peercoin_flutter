@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/buildresult.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';
@@ -277,7 +277,7 @@ class _TransactionConfirmationScreenState
                                       _firstPress = false;
                                     });
                                     final electrumConnection =
-                                        context.read<ElectrumConnection>();
+                                        context.read<ConnectionProvider>();
                                     final walletProvcider =
                                         context.read<WalletProvider>();
                                     final navigator = Navigator.of(context);

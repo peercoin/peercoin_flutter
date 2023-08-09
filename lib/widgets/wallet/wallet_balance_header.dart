@@ -4,13 +4,13 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '/../models/hive/coin_wallet.dart';
 import '/../providers/app_settings.dart';
-import '/../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '/../tools/price_ticker.dart';
 import '/../widgets/wallet/wallet_home_connection.dart';
 import 'wallet_balance_price.dart';
 
 class WalletBalanceHeader extends StatelessWidget {
-  final ElectrumConnectionState _connectionState;
+  final BackendConnectionState _connectionState;
   final CoinWallet _wallet;
   const WalletBalanceHeader(this._connectionState, this._wallet, {Key? key})
       : super(key: key);

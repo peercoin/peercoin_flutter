@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/providers/app_settings.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/electrum_connection.dart';
+import '../../../providers/connection.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/app_routes.dart';
@@ -27,11 +27,11 @@ class _AppSettingsWalletScanLandingScreenState
   bool _initial = true;
   bool _scanStarted = false;
   bool _backgroundNotificationsAvailable = false;
-  ElectrumConnection? _connectionProvider;
+  ConnectionProvider? _connectionProvider;
   late WalletProvider _walletProvider;
   late AppSettings _settings;
   late String _coinName = '';
-  late ElectrumConnectionState _connectionState;
+  late BackendConnectionState _connectionState;
   late int _walletNumber;
   int _latestUpdate = 0;
   int _addressScanPointer = 0;
@@ -107,7 +107,7 @@ class _AppSettingsWalletScanLandingScreenState
         _backgroundNotificationsAvailable = _settings.notificationInterval > 0;
       });
       _coinName = ModalRoute.of(context)!.settings.arguments as String;
-      _connectionProvider = Provider.of<ElectrumConnection>(context);
+      _connectionProvider = Provider.of<ConnectionProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       _walletNumber = _walletProvider.getWalletNumber(_coinName);
 
@@ -117,7 +117,7 @@ class _AppSettingsWalletScanLandingScreenState
 
       _timer = Timer.periodic(const Duration(seconds: 7), (timer) async {
         var dueTime = _latestUpdate + 7;
-        if (_connectionState == ElectrumConnectionState.waiting) {
+        if (_connectionState == ConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
             _scanStarted == true) {
@@ -129,7 +129,7 @@ class _AppSettingsWalletScanLandingScreenState
       }
     } else if (_connectionProvider != null) {
       _connectionState = _connectionProvider!.connectionState;
-      if (_connectionState == ElectrumConnectionState.connected) {
+      if (_connectionState == BackendConnectionState.connected) {
         _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
         if (_backgroundNotificationsAvailable == false) {
           await _startScan();

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
@@ -26,7 +26,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   late String _walletName;
   bool _initial = true;
   late WalletProvider _walletProvider;
-  late ElectrumConnection _electrumConnection;
+  late ConnectionProvider _electrumConnection;
   final _wifGlobalKey = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
   final _wifController = TextEditingController();
@@ -38,7 +38,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _walletProvider = Provider.of<WalletProvider>(context);
-        _electrumConnection = Provider.of<ElectrumConnection>(context);
+        _electrumConnection = Provider.of<ConnectionProvider>(context);
         _initial = false;
       });
     }

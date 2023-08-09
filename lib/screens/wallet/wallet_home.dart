@@ -11,7 +11,7 @@ import '../../models/hive/coin_wallet.dart';
 import '../../models/hive/wallet_transaction.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -36,9 +36,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
   String _unusedAddress = '';
   late CoinWallet _wallet;
   int _pageIndex = 1;
-  late ElectrumConnectionState _connectionState =
-      ElectrumConnectionState.waiting;
-  ElectrumConnection? _connectionProvider;
+  late BackendConnectionState _connectionState = BackendConnectionState.waiting;
+  ConnectionProvider? _connectionProvider;
   late WalletProvider _walletProvider;
   late AppSettings _appSettings;
   late Iterable _listenedAddresses;
@@ -111,7 +110,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _wallet = arguments['wallet'];
 
-      _connectionProvider = Provider.of<ElectrumConnection>(context);
+      _connectionProvider = Provider.of<ConnectionProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       _appSettings = context.read<AppSettings>();
 
@@ -152,7 +151,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _unusedAddress = _walletProvider.getUnusedAddress(_wallet.name);
 
       _listenedAddresses = _connectionProvider!.listenedAddresses.keys;
-      if (_connectionState == ElectrumConnectionState.connected) {
+      if (_connectionState == BackendConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
           _connectionProvider!.subscribeToScriptHashes(

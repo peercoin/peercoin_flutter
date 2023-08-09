@@ -13,16 +13,16 @@ import '../tools/logger_wrapper.dart';
 import 'wallet_provider.dart';
 import 'servers.dart';
 
-enum ElectrumConnectionState { waiting, connected, offline }
+enum BackendConnectionState { waiting, connected, offline }
 
 enum ElectrumServerType { ssl, wss }
 
-class ElectrumConnection with ChangeNotifier {
+class ConnectionProvider with ChangeNotifier {
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   var _connection;
   final WalletProvider _walletProvider;
-  ElectrumConnectionState _connectionState = ElectrumConnectionState.waiting;
+  BackendConnectionState _connectionState = BackendConnectionState.waiting;
   late ElectrumServerType _serverType;
   final Servers _servers;
   Map _addresses = {};
@@ -43,7 +43,7 @@ class ElectrumConnection with ChangeNotifier {
   List _openReplies = [];
   int _resetAttempt = 1;
 
-  ElectrumConnection(this._walletProvider, this._servers);
+  ConnectionProvider(this._walletProvider, this._servers);
 
   Future<bool> init(
     walletName, {
@@ -58,7 +58,7 @@ class ElectrumConnection with ChangeNotifier {
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.none) {
-      connectionState = ElectrumConnectionState.offline;
+      connectionState = BackendConnectionState.offline;
 
       _offlineSubscription = Connectivity()
           .onConnectivityChanged
@@ -75,14 +75,14 @@ class ElectrumConnection with ChangeNotifier {
             fromConnectivityChangeOrLifeCycle: true,
           );
         } else if (result == ConnectivityResult.none) {
-          connectionState = ElectrumConnectionState.offline;
+          connectionState = BackendConnectionState.offline;
         }
       });
 
       return false;
     } else if (_connection == null) {
       _coinName = walletName;
-      connectionState = ElectrumConnectionState.waiting;
+      connectionState = BackendConnectionState.waiting;
       _scanMode = scanMode;
       LoggerWrapper.logInfo(
         'ElectrumConnection',
@@ -200,12 +200,12 @@ class ElectrumConnection with ChangeNotifier {
     }
   }
 
-  set connectionState(ElectrumConnectionState newState) {
+  set connectionState(BackendConnectionState newState) {
     _connectionState = newState;
     notifyListeners();
   }
 
-  ElectrumConnectionState get connectionState {
+  BackendConnectionState get connectionState {
     return _connectionState;
   }
 
@@ -258,7 +258,7 @@ class ElectrumConnection with ChangeNotifier {
   void cleanUpOnDone() {
     _pingTimer?.cancel();
     _pingTimer = null;
-    connectionState = ElectrumConnectionState.waiting; //setter!
+    connectionState = BackendConnectionState.waiting; //setter!
     _connection = null;
     _addresses = {};
     _latestBlock = null;
@@ -383,7 +383,7 @@ class ElectrumConnection with ChangeNotifier {
     if (result['genesis_hash'] ==
         AvailableCoins.getSpecificCoin(_coinName).genesisHash) {
       //we're connected and genesis handshake is successful
-      connectionState = ElectrumConnectionState.connected;
+      connectionState = BackendConnectionState.connected;
       //subscribe to block headers
       sendMessage('blockchain.headers.subscribe', 'blocks');
     } else {
@@ -615,7 +615,7 @@ class ElectrumConnection with ChangeNotifier {
   }
 
   String get connectedServerUrl {
-    if (_connectionState == ElectrumConnectionState.connected) {
+    if (_connectionState == BackendConnectionState.connected) {
       return _serverUrl;
     }
     return '';

@@ -7,7 +7,7 @@ import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/hive/wallet_utxo.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
@@ -32,7 +32,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   late String _walletName;
   bool _initial = true;
   bool _balanceLoading = false;
-  late ElectrumConnection _connectionProvider;
+  late ConnectionProvider _connectionProvider;
   late WalletProvider _walletProvider;
   late Map<String, List?> _paperWalletUtxos = {};
   late final int _decimalProduct;
@@ -43,7 +43,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       setState(() {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
-        _connectionProvider = Provider.of<ElectrumConnection>(context);
+        _connectionProvider = Provider.of<ConnectionProvider>(context);
         _walletProvider = Provider.of<WalletProvider>(context);
         _decimalProduct = AvailableCoins.getDecimalProduct(
           identifier: _walletName,

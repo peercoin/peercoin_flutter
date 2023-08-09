@@ -25,7 +25,7 @@ import 'models/hive/wallet_address.dart';
 import 'models/hive/wallet_transaction.dart';
 import 'models/hive/wallet_utxo.dart';
 import 'providers/wallet_provider.dart';
-import 'providers/electrum_connection.dart';
+import 'providers/connection.dart';
 import 'providers/encrypted_box.dart';
 import 'screens/setup/setup_landing.dart';
 import 'screens/wallet/wallet_list.dart';
@@ -209,7 +209,7 @@ class PeercoinApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return ElectrumConnection(
+            return ConnectionProvider(
               Provider.of<WalletProvider>(context, listen: false),
               Provider.of<Servers>(context, listen: false),
             );

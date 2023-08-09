@@ -21,7 +21,7 @@ import '/../models/hive/coin_wallet.dart';
 import '/../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
 import '/../providers/app_settings.dart';
-import '/../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '/../screens/wallet/wallet_home.dart';
 import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
@@ -38,7 +38,7 @@ class SendTab extends StatefulWidget {
   final Function changeIndex;
   final String? address;
   final String? label;
-  final ElectrumConnectionState connectionState;
+  final BackendConnectionState connectionState;
   final CoinWallet wallet;
   const SendTab({
     required this.changeIndex,

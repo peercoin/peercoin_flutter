@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/hive/server.dart';
-import '../../../providers/electrum_connection.dart';
+import '../../../providers/connection.dart';
 import '../../../widgets/service_container.dart';
 import '../../../providers/servers.dart';
 import '../../../tools/app_localizations.dart';
@@ -47,7 +47,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   Future<void> savePriorities(String? serverUrl, int newIndex) async {
     if (_indexCache[serverUrl] != null) {
-      await context.read<ElectrumConnection>().closeConnection();
+      await context.read<ConnectionProvider>().closeConnection();
     }
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
@@ -70,7 +70,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   void deactivate() {
-    Provider.of<ElectrumConnection>(context).init(
+    Provider.of<ConnectionProvider>(context).init(
       _walletName,
       fromConnectivityChangeOrLifeCycle: true,
     );

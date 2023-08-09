@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/hive/wallet_transaction.dart';
@@ -16,7 +16,7 @@ import '/../widgets/service_container.dart';
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> walletTransactions;
   final CoinWallet wallet;
-  final ElectrumConnectionState connectionState;
+  final BackendConnectionState connectionState;
 
   const TransactionList({
     required this.walletTransactions,

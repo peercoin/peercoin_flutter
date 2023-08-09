@@ -10,7 +10,7 @@ import '../../models/coin.dart';
 import '../../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection.dart';
 import '../../screens/wallet/wallet_home.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
@@ -55,7 +55,7 @@ class _AddressTabState extends State<AddressTab> {
   final Map _addressBalanceMap = {};
   final Map _isWatchedMap = {};
   late WalletProvider _walletProvider;
-  late ElectrumConnection _connection;
+  late ConnectionProvider _connection;
   late Map _listenedAddresses;
   late final int _decimalProduct;
 
@@ -65,7 +65,7 @@ class _AddressTabState extends State<AddressTab> {
       applyFilter();
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
       _walletProvider = Provider.of<WalletProvider>(context);
-      _connection = Provider.of<ElectrumConnection>(context);
+      _connection = Provider.of<ConnectionProvider>(context);
       _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget.walletName,
@@ -311,7 +311,7 @@ class _AddressTabState extends State<AddressTab> {
       );
 
       applyFilter();
-      if (_connection.connectionState == ElectrumConnectionState.connected) {
+      if (_connection.connectionState == BackendConnectionState.connected) {
         if (!_listenedAddresses.containsKey(addr.address) &&
             addr.isWatched == true) {
           //subscribe
