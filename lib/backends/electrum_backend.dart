@@ -24,7 +24,6 @@ class ElectrumBackend extends DataSource {
   final WalletProvider _walletProvider;
   late ElectrumServerType _serverType;
   final Servers _servers;
-  Map _addresses = {};
   late String _coinName;
   late String _serverUrl;
   bool _closedIntentionally = false;
@@ -209,7 +208,7 @@ class ElectrumBackend extends DataSource {
   }
 
   Map get listenedAddresses {
-    return _addresses; //TODO loops endlessly after receiving tx
+    return addresses;
   }
 
   @override
@@ -234,7 +233,7 @@ class ElectrumBackend extends DataSource {
     _pingTimer = null;
     updateConnectionState = BackendConnectionState.waiting; //setter!
     _connection = null;
-    _addresses = {};
+    addresses = {};
     latestBlock = 0;
     _scanMode = false;
     paperWalletUtxos = {};
@@ -284,7 +283,7 @@ class ElectrumBackend extends DataSource {
         handleBroadcast(id, result ?? decoded['error']['code'].toString());
       } else if (idString == 'blocks') {
         handleBlock(result['height']);
-      } else if (_addresses[idString] != null) {
+      } else if (addresses[idString] != null) {
         handleAddressStatus(id, result);
       } else if (idString == 'features') {
         handleFeatures(result);
@@ -383,7 +382,7 @@ class ElectrumBackend extends DataSource {
   void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
         await _walletProvider.getWalletAddressStatus(_coinName, address);
-    var hash = _addresses.entries
+    var hash = addresses.entries
         .firstWhereOrNull((element) => element.key == address)!;
     if (newStatus != oldStatus) {
       //emulate scripthash subscribe push
@@ -486,7 +485,7 @@ class ElectrumBackend extends DataSource {
   @override
   void subscribeToScriptHashes(Map scriptHashes) {
     for (var hash in scriptHashes.entries) {
-      _addresses[hash.key] = hash.value;
+      addresses[hash.key] = hash.value;
       sendMessage('blockchain.scripthash.subscribe', hash.key, [hash.value]);
     }
     notifyListeners();
@@ -497,8 +496,8 @@ class ElectrumBackend extends DataSource {
     String? newStatus,
   ) async {
     //got update notification for hash => get utxo
-    final address = _addresses.keys.firstWhere(
-      (element) => _addresses[element] == hashId,
+    final address = addresses.keys.firstWhere(
+      (element) => addresses[element] == hashId,
       orElse: () => null,
     );
     LoggerWrapper.logInfo(
