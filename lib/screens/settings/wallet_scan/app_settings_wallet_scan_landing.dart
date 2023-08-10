@@ -117,7 +117,7 @@ class _AppSettingsWalletScanLandingScreenState
 
       _timer = Timer.periodic(const Duration(seconds: 7), (timer) async {
         var dueTime = _latestUpdate + 7;
-        if (_connectionState == ConnectionState.waiting) {
+        if (_connectionState == BackendConnectionState.waiting) {
           await _connectionProvider!.init(_coinName, scanMode: true);
         } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
             _scanStarted == true) {

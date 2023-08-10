@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:peercoin/backends/electrum_backend.dart';
+import 'package:peercoin/providers/servers.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,11 +39,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late CoinWallet _wallet;
   int _pageIndex = 1;
   late BackendConnectionState _connectionState = BackendConnectionState.waiting;
-  ConnectionProvider? _connectionProvider;
+  late ConnectionProvider _connectionProvider;
   late WalletProvider _walletProvider;
   late AppSettings _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
+  late Servers _servers;
   int _latestBlock = 0;
   String? _address;
   String? _label;
@@ -62,7 +65,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await Future.delayed(
         const Duration(seconds: 2),
         () {
-          if (_connectionProvider!.openReplies.isEmpty) {
+          if (_connectionProvider.openReplies.isEmpty) {
             _wallet.clearPendingTransactionNotifications();
           } else {
             checkPendingNotifications();
@@ -88,7 +91,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      await _connectionProvider!.init(
+      await _connectionProvider.init(
         _wallet.name,
         requestedFromWalletHome: true,
         fromConnectivityChangeOrLifeCycle: true,
@@ -113,11 +116,19 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _connectionProvider = Provider.of<ConnectionProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       _appSettings = context.read<AppSettings>();
+      _servers = Provider.of<Servers>(context);
+
+      _connectionProvider.setDataSource(
+        ElectrumBackend(
+          _walletProvider,
+          _servers,
+        ),
+      );
 
       await _walletProvider.generateUnusedAddress(_wallet.name);
       _walletTransactions =
           await _walletProvider.getWalletTransactions(_wallet.name);
-      await _connectionProvider!.init(
+      await _connectionProvider.init(
         _wallet.name,
         requestedFromWalletHome: true,
       );
@@ -146,22 +157,22 @@ class _WalletHomeState extends State<WalletHomeScreen>
       if (arguments.containsKey('pushedAddress')) {
         changeIndex(Tabs.send, arguments['pushedAddress']);
       }
-    } else if (_connectionProvider != null) {
-      _connectionState = _connectionProvider!.connectionState;
+    } else {
+      _connectionState = _connectionProvider.connectionState;
       _unusedAddress = _walletProvider.getUnusedAddress(_wallet.name);
 
-      _listenedAddresses = _connectionProvider!.listenedAddresses.keys;
+      _listenedAddresses = _connectionProvider.listenedAddresses.keys;
       if (_connectionState == BackendConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
           //listenedAddresses not populated after reconnect - resubscribe
-          _connectionProvider!.subscribeToScriptHashes(
+          _connectionProvider.subscribeToScriptHashes(
             await _walletProvider.getWalletScriptHashes(_wallet.name),
           );
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
-          _connectionProvider!.subscribeToScriptHashes(
+          _connectionProvider.subscribeToScriptHashes(
             await _walletProvider.getWalletScriptHashes(
               _wallet.name,
               _unusedAddress,
@@ -169,14 +180,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
           );
         }
       }
-      if (_connectionProvider!.latestBlock > _latestBlock) {
+      if (_connectionProvider.latestBlock > _latestBlock) {
         //new block
         LoggerWrapper.logInfo(
           'WalletHome',
           'didChangeDependencies',
-          'new block ${_connectionProvider!.latestBlock}',
+          'new block ${_connectionProvider.latestBlock}',
         );
-        _latestBlock = _connectionProvider!.latestBlock;
+        _latestBlock = _connectionProvider.latestBlock;
 
         var unconfirmedTx = _walletTransactions.where(
           (element) =>
@@ -191,7 +202,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             'didChangeDependencies',
             'requesting update for ${element.txid}',
           );
-          _connectionProvider!.requestTxUpdate(element.txid);
+          _connectionProvider.requestTxUpdate(element.txid);
         }
 
         //unconfirmed balance? update balance
@@ -209,7 +220,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       (element) => element.broadCasted == false && element.confirmations == 0,
     );
     for (var element in nonBroadcastedTx) {
-      _connectionProvider!.broadcastTransaction(
+      _connectionProvider.broadcastTransaction(
         element.broadcastHex,
         element.txid,
       );
@@ -270,7 +281,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void deactivate() async {
     if (ModalRoute.of(context)!.settings.arguments != null) {
-      await _connectionProvider!.closeConnection();
+      await _connectionProvider.closeConnection();
     }
     super.deactivate();
   }

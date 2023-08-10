@@ -207,14 +207,7 @@ class PeercoinApp extends StatelessWidget {
             );
           },
         ),
-        ChangeNotifierProvider(
-          create: (context) {
-            return ConnectionProvider(
-              Provider.of<WalletProvider>(context, listen: false),
-              Provider.of<Servers>(context, listen: false),
-            );
-          },
-        ),
+        ChangeNotifierProvider.value(value: ConnectionProvider()),
       ],
       child: ThemeModeHandler(
         manager: ThemeManager(),
