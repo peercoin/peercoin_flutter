@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
+import 'package:peercoin/providers/app_settings_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/connection.dart';
+import '../../../providers/connection_provider.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/app_routes.dart';
@@ -29,7 +29,7 @@ class _AppSettingsWalletScanLandingScreenState
   bool _backgroundNotificationsAvailable = false;
   ConnectionProvider? _connectionProvider;
   late WalletProvider _walletProvider;
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
   late String _coinName = '';
   late BackendConnectionState _connectionState;
   late int _walletNumber;
@@ -101,7 +101,7 @@ class _AppSettingsWalletScanLandingScreenState
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettings>(context, listen: false);
+      _settings = Provider.of<AppSettingsProvider>(context, listen: false);
       setState(() {
         _initial = false;
         _backgroundNotificationsAvailable = _settings.notificationInterval > 0;

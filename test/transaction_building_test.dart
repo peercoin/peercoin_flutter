@@ -11,10 +11,10 @@ import 'package:peercoin/models/hive/wallet_address.dart';
 import 'package:peercoin/models/hive/wallet_transaction.dart';
 import 'package:peercoin/models/hive/wallet_utxo.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
-import 'package:peercoin/providers/encrypted_box.dart';
+import 'package:peercoin/providers/encrypted_box_provider.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
 
-class MockHiveBox extends Mock implements EncryptedBox {
+class MockHiveBox extends Mock implements EncryptedBoxProvider {
   @override
   Future<Uint8List?> get key async {
     return Uint8List(32);

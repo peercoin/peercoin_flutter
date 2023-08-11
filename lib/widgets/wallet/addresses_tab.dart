@@ -9,8 +9,8 @@ import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
-import '../../providers/connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '../../screens/wallet/wallet_home.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
@@ -652,8 +652,9 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                         onTap: () => Auth.requireAuth(
                           context: context,
-                          biometricsAllowed:
-                              context.read<AppSettings>().biometricsAllowed,
+                          biometricsAllowed: context
+                              .read<AppSettingsProvider>()
+                              .biometricsAllowed,
                           callback: () =>
                               _showAddressExportDialog(context, addr),
                         ),

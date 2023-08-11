@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../models/available_periodic_reminder_items.dart';
 import '../models/periodic_reminder_item.dart';
-import '../providers/app_settings.dart';
+import '../providers/app_settings_provider.dart';
 import 'app_localizations.dart';
 import 'app_routes.dart';
 import 'logger_wrapper.dart';
@@ -95,7 +95,7 @@ class PeriodicReminders {
     );
   }
 
-  static void scheduleNextEvent(String name, AppSettings settings) {
+  static void scheduleNextEvent(String name, AppSettingsProvider settings) {
     final newDate = (DateTime.now()).add(
       Duration(
         days: 30 + Random().nextInt(45 - 30),
@@ -114,7 +114,7 @@ class PeriodicReminders {
   }
 
   static Future<bool> checkReminder(
-    AppSettings settings,
+    AppSettingsProvider settings,
     BuildContext context,
   ) async {
     LoggerWrapper.logInfo(

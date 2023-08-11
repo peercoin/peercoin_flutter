@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/backends/electrum_backend.dart';
-import 'package:peercoin/providers/servers.dart';
+import 'package:peercoin/providers/server_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,8 +12,8 @@ import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
 import '../../models/hive/wallet_transaction.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
-import '../../providers/connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -41,10 +41,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late BackendConnectionState _connectionState = BackendConnectionState.waiting;
   late ConnectionProvider _connectionProvider;
   late WalletProvider _walletProvider;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
-  late Servers _servers;
+  late SeverProvider _servers;
   int _latestBlock = 0;
   String? _address;
   String? _label;
@@ -115,8 +115,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
       _connectionProvider = Provider.of<ConnectionProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
-      _appSettings = context.read<AppSettings>();
-      _servers = Provider.of<Servers>(context);
+      _appSettings = context.read<AppSettingsProvider>();
+      _servers = Provider.of<SeverProvider>(context);
 
       _connectionProvider.setDataSource(
         ElectrumBackend(

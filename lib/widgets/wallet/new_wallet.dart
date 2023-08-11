@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -22,11 +22,11 @@ Map<String, Coin> _availableCoins = AvailableCoins.availableCoins;
 class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
   bool _initial = true;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
 
   Future<void> addWallet() async {
     try {
-      var appSettings = context.read<AppSettings>();
+      var appSettings = context.read<AppSettingsProvider>();
       final navigator = Navigator.of(context);
       final WalletProvider walletProvider = context.read<WalletProvider>();
       final letterCode = _availableCoins[_coin]!.letterCode;
@@ -82,7 +82,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _appSettings = context.read<AppSettings>();
+      _appSettings = context.read<AppSettingsProvider>();
       if (_appSettings.authenticationOptions!['newWallet']!) {
         await Auth.requireAuth(
           context: context,

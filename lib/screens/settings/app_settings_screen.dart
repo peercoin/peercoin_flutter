@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
@@ -30,14 +30,14 @@ class AppSettingsScreen extends StatefulWidget {
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   String _seedPhrase = '';
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
   late WalletProvider _activeWallets;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
       _activeWallets = Provider.of<WalletProvider>(context);
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();

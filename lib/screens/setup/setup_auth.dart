@@ -4,8 +4,8 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
-import '../../providers/encrypted_box.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/encrypted_box_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -145,8 +145,8 @@ class _SetupAuthScreenState extends State<SetupAuthScreen> {
               ),
               PeerButtonSetup(
                 action: () async {
-                  final encryptedBox = context.read<EncryptedBox>();
-                  final settings = context.read<AppSettings>();
+                  final encryptedBox = context.read<EncryptedBoxProvider>();
+                  final settings = context.read<AppSettingsProvider>();
                   final navigator = Navigator.of(context);
                   await screenLockCreate(
                     title: Text(

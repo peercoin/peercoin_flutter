@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/share_wrapper.dart';
 import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';

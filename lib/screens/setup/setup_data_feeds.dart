@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -29,12 +29,12 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   bool _dataFeedAllowed = false;
   bool _bgSyncdAllowed = false;
   bool _initial = true;
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _settings = context.read<AppSettings>();
+      _settings = context.read<AppSettingsProvider>();
       await _settings.init();
       setState(() {
         _initial = false;

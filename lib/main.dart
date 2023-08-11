@@ -14,8 +14,8 @@ import 'package:theme_mode_handler/theme_mode_handler.dart';
 import 'models/hive/app_options.dart';
 import 'models/hive/pending_notifications.dart';
 import 'models/hive/server.dart';
-import 'providers/app_settings.dart';
-import 'providers/servers.dart';
+import 'providers/app_settings_provider.dart';
+import 'providers/server_provider.dart';
 import 'screens/auth_jail.dart';
 import 'screens/secure_storage_error_screen.dart';
 import 'tools/logger_wrapper.dart';
@@ -25,8 +25,8 @@ import 'models/hive/wallet_address.dart';
 import 'models/hive/wallet_transaction.dart';
 import 'models/hive/wallet_utxo.dart';
 import 'providers/wallet_provider.dart';
-import 'providers/connection.dart';
-import 'providers/encrypted_box.dart';
+import 'providers/connection_provider.dart';
+import 'providers/encrypted_box_provider.dart';
 import 'screens/setup/setup_landing.dart';
 import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
@@ -185,25 +185,25 @@ class PeercoinApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: EncryptedBox()),
+        ChangeNotifierProvider.value(value: EncryptedBoxProvider()),
         ChangeNotifierProvider(
           create: (context) {
             return WalletProvider(
-              Provider.of<EncryptedBox>(context, listen: false),
+              Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return AppSettings(
-              Provider.of<EncryptedBox>(context, listen: false),
+            return AppSettingsProvider(
+              Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return Servers(
-              Provider.of<EncryptedBox>(context, listen: false),
+            return SeverProvider(
+              Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },
         ),

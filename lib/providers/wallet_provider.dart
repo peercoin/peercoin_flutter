@@ -25,12 +25,12 @@ import '../tools/notification.dart';
 import '../models/hive/wallet_address.dart';
 import '../models/hive/wallet_transaction.dart';
 import '../models/hive/wallet_utxo.dart';
-import 'encrypted_box.dart';
+import 'encrypted_box_provider.dart';
 
 class WalletProvider with ChangeNotifier {
   WalletProvider(this._encryptedBox);
 
-  final EncryptedBox _encryptedBox;
+  final EncryptedBoxProvider _encryptedBox;
   final Map<String, CoinWallet> _coinWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
   final Map<String, String> _unusedAddressCache = {};

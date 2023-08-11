@@ -20,8 +20,8 @@ import '/../models/coin.dart';
 import '/../models/hive/coin_wallet.dart';
 import '/../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
-import '/../providers/app_settings.dart';
-import '../../providers/connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '/../screens/wallet/wallet_home.dart';
 import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
@@ -68,7 +68,7 @@ class _SendTabState extends State<SendTab> {
   late WalletProvider _walletProvider;
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late final int _decimalProduct;
   bool _fiatEnabled = false;
   bool _fiatInputEnabled = false;
@@ -495,7 +495,7 @@ class _SendTabState extends State<SendTab> {
     if (_initial == true) {
       _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
       _walletProvider = Provider.of<WalletProvider>(context);
-      _appSettings = context.read<AppSettings>();
+      _appSettings = context.read<AppSettingsProvider>();
 
       _availableAddresses =
           await _walletProvider.getWalletAddresses(widget.wallet.name);

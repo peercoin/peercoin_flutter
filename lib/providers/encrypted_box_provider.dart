@@ -9,7 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/hive/coin_wallet.dart';
 import '../models/hive/server.dart';
 
-class EncryptedBox with ChangeNotifier {
+class EncryptedBoxProvider with ChangeNotifier {
   final Map<String, Box> _cryptoBox = {};
   Uint8List? _encryptionKey;
   String? _passCode;

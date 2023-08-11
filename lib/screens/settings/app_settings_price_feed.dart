@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../widgets/service_container.dart';
 import '../../widgets/settings/settings_price_ticker.dart';
@@ -20,12 +20,12 @@ class _AppSettingsPriceFeedScreenState
     extends State<AppSettingsPriceFeedScreen> {
   bool _initial = true;
   String _searchString = '';
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
 
       setState(() {
         _initial = false;

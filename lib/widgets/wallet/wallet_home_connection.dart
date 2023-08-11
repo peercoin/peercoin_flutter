@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../providers/connection.dart';
+import '../../providers/connection_provider.dart';
 import '/../tools/app_localizations.dart';
 import '/../widgets/loading_indicator.dart';
 

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';

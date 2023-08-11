@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
 
-import '../providers/app_settings.dart';
+import '../providers/app_settings_provider.dart';
 import 'logger_wrapper.dart';
 
 class PriceTicker {
@@ -160,7 +160,7 @@ class PriceTicker {
     return amount * prices[coinLetterCode];
   }
 
-  static void checkUpdate(AppSettings settings) async {
+  static void checkUpdate(AppSettingsProvider settings) async {
     LoggerWrapper.logInfo(
       'PriceTicker',
       'checkUpdate',

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
-import '../../providers/encrypted_box.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/encrypted_box_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../buttons.dart';
@@ -11,7 +11,7 @@ import '../buttons.dart';
 class SettingsAuth extends StatelessWidget {
   final bool _biometricsAllowed;
   final bool _biometricsAvailable;
-  final AppSettings _settings;
+  final AppSettingsProvider _settings;
   final Function _saveSnack;
   final Map<String, bool> _authenticationOptions;
 
@@ -46,7 +46,7 @@ class SettingsAuth extends StatelessWidget {
         onConfirmed: (matchedText) async {
           final scaffoldMessenger = ScaffoldMessenger.of(context);
           final navigator = Navigator.of(context);
-          await context.read<EncryptedBox>().setPassCode(matchedText);
+          await context.read<EncryptedBoxProvider>().setPassCode(matchedText);
           scaffoldMessenger.showSnackBar(
             SnackBar(
               content: Text(

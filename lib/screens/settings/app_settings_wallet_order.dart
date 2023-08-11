@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/app_settings.dart';
+import 'package:peercoin/providers/app_settings_provider.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -20,14 +20,14 @@ class _AppSettingsWalletOrderScreenState
   bool _initial = true;
   List<String> _walletOrder = [];
   final Map<String, String> _walletTitles = {};
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late WalletProvider _walletProvider;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       setState(() {
-        _appSettings = context.watch<AppSettings>();
+        _appSettings = context.watch<AppSettingsProvider>();
         _walletProvider = context.watch<WalletProvider>();
         _walletOrder = _appSettings.walletOrder;
         _initial = false;

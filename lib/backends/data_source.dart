@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../providers/connection.dart';
+import '../providers/connection_provider.dart';
 
 abstract class DataSource {
   BackendConnectionState connectionState = BackendConnectionState.waiting;

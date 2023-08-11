@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:peercoin/providers/connection.dart';
+import 'package:peercoin/providers/connection_provider.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';

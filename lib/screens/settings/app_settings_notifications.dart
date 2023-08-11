@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/hive/coin_wallet.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/background_sync.dart';
 import '../../widgets/buttons.dart';
@@ -20,14 +20,14 @@ class AppSettingsNotificationsScreen extends StatefulWidget {
 class _AppSettingsNotificationsScreenState
     extends State<AppSettingsNotificationsScreen> {
   bool _initial = true;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late WalletProvider _walletProvider;
   List<CoinWallet> _availableWallets = [];
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _appSettings = Provider.of<AppSettings>(context);
+      _appSettings = Provider.of<AppSettingsProvider>(context);
       _walletProvider = context.watch<WalletProvider>();
       _availableWallets = _walletProvider.availableWalletValues;
       setState(() {

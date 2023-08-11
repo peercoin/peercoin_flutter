@@ -4,7 +4,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../../widgets/service_container.dart';
@@ -21,14 +21,14 @@ class AppSettingsAuthenticationScreen extends StatefulWidget {
 class _AppSettingsAuthenticationScreenState
     extends State<AppSettingsAuthenticationScreen> {
   bool _initial = true;
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
   late bool _biometricsAllowed;
   bool _biometricsAvailable = false;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
       var localAuth = LocalAuthentication();
 
       _biometricsAvailable =

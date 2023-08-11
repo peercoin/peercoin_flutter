@@ -7,12 +7,12 @@ import 'package:hive/hive.dart';
 import '../models/available_coins.dart';
 import '../models/hive/server.dart';
 import '../tools/logger_wrapper.dart';
-import 'encrypted_box.dart';
+import 'encrypted_box_provider.dart';
 
-class Servers with ChangeNotifier {
-  final EncryptedBox _encryptedBox;
+class SeverProvider with ChangeNotifier {
+  final EncryptedBoxProvider _encryptedBox;
   late Box<Server> _serverBox;
-  Servers(this._encryptedBox);
+  SeverProvider(this._encryptedBox);
 
   Future<void> init(String identifier) async {
     LoggerWrapper.logInfo(

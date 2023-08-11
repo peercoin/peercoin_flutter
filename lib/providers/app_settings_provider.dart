@@ -6,15 +6,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 
 import '../models/hive/app_options.dart';
-import 'encrypted_box.dart';
+import 'encrypted_box_provider.dart';
 
-class AppSettings with ChangeNotifier {
+class AppSettingsProvider with ChangeNotifier {
   late AppOptionsStore _appOptions;
-  final EncryptedBox _encryptedBox;
+  final EncryptedBoxProvider _encryptedBox;
   late SharedPreferences _sharedPrefs;
   String? _selectedLang;
   bool camerasAvailble = false;
-  AppSettings(this._encryptedBox);
+  AppSettingsProvider(this._encryptedBox);
 
   Future<void> init([bool fromSetup = false]) async {
     if (fromSetup == false) {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/price_ticker.dart';
 import '../buttons.dart';
 
 class SettingsPriceTicker extends StatefulWidget {
-  final AppSettings _settings;
+  final AppSettingsProvider _settings;
   final Function _saveSnack;
   final String _searchString;
 

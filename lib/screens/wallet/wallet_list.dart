@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -50,7 +50,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   late AnimationController _controller;
   late Timer _priceTimer;
   late Timer _sessionTimer;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late List<CoinWallet> _activeWalletsOrdered;
 
   @override
@@ -79,7 +79,7 @@ class _WalletListScreenState extends State<WalletListScreen>
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _appSettings = Provider.of<AppSettings>(context);
+      _appSettings = Provider.of<AppSettingsProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       final navigator = Navigator.of(context);
       Future<bool> checkReminder() async {

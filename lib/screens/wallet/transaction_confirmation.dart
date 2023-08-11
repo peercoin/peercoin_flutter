@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/buildresult.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../widgets/buttons.dart';

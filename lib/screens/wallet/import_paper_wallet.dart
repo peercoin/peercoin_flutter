@@ -7,7 +7,7 @@ import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/hive/wallet_utxo.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';

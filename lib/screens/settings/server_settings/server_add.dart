@@ -12,8 +12,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../backends/electrum_backend.dart';
 import '../../../models/available_coins.dart';
 import '../../../models/hive/server.dart';
-import '../../../providers/connection.dart';
-import '../../../providers/servers.dart';
+import '../../../providers/connection_provider.dart';
+import '../../../providers/server_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/logger_wrapper.dart';
 import '../../../widgets/loading_indicator.dart';
@@ -50,7 +50,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   void tryConnect(String serverUrl) async {
     final scaffoldMessanger = ScaffoldMessenger.of(context);
     final electrumConnection = context.read<ConnectionProvider>();
-    final serverProvider = context.read<Servers>();
+    final serverProvider = context.read<SeverProvider>();
     _currentServerList = await serverProvider.getServerDetailsList(_walletName);
 
     setState(() {

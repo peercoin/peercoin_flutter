@@ -2,7 +2,7 @@ import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../widgets/service_container.dart';
 
@@ -19,12 +19,12 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
   String _searchString = '';
   List<String> _filteredLanguages = [];
   late String _lang = '';
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
       updateFilteredList();
       setState(() {
         _initial = false;

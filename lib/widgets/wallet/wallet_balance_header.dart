@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '/../models/hive/coin_wallet.dart';
-import '/../providers/app_settings.dart';
-import '../../providers/connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '/../tools/price_ticker.dart';
 import '/../widgets/wallet/wallet_home_connection.dart';
 import 'wallet_balance_price.dart';
@@ -17,7 +17,7 @@ class WalletBalanceHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var settings = context.watch<AppSettings>();
+    var settings = context.watch<AppSettingsProvider>();
     final decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: _wallet.name,
     );
