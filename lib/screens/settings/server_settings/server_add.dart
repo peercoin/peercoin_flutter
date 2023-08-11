@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../../../backends/electrum_backend.dart';
+import '../../../data_sources/electrum_backend.dart';
 import '../../../models/available_coins.dart';
 import '../../../models/hive/server.dart';
 import '../../../providers/connection_provider.dart';

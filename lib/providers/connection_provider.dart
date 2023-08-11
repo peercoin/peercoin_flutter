@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../backends/data_source.dart';
+import '../data_sources/data_source.dart';
 
 enum BackendConnectionState { waiting, connected, offline }
 
