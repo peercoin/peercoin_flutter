@@ -302,7 +302,7 @@
     "sign_step_1_description": "Vælg den adresse der skal underskrive beskeden",
     "sign_step_1_button": "Vælg",
     "sign_step_1_button_alt": "Lave om",
-    "sign_step_2": "Indtast besked",
+    "sign_step_2": "Indtast Besked",
     "sign_step_3": "Underskriv besked",
     "sign_step_3_description": "Dette er din signatur. Du kan trykke to gange for at kopiere den til udklipsholderen.",
     "sign_step_3_button": "Underskriv",
