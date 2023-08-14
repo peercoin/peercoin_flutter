@@ -11,7 +11,6 @@ abstract class DataSource {
 
   Future<bool> init(
     walletName, {
-    bool scanMode = false,
     bool requestedFromWalletHome = false,
     bool fromConnectivityChangeOrLifeCycle = false,
   }) async {

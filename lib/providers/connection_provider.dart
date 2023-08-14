@@ -23,7 +23,6 @@ class ConnectionProvider with ChangeNotifier {
   }) async {
     return await _dataSource.init(
       walletName,
-      scanMode: scanMode,
       requestedFromWalletHome: requestedFromWalletHome,
       fromConnectivityChangeOrLifeCycle: fromConnectivityChangeOrLifeCycle,
     );
