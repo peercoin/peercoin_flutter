@@ -152,7 +152,7 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> getAddressFromDerivationPath({
+  Future<String> getAddressFromDerivationPath({
     required String identifier,
     required int account,
     required int chain,
