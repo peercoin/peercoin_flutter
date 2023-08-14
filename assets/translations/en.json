@@ -412,7 +412,7 @@
     "sign_step_1_description": "Select the address which should sign the message",
     "sign_step_1_button": "Select",
     "sign_step_1_button_alt": "Change",
-    "sign_step_2": "Enter message",
+    "sign_step_2": "Enter Message",
     "sign_step_3": "Sign message",
     "sign_step_3_description": "This is your signature. You may double tap to copy it to the clipboard.",
     "sign_step_3_button": "Sign",
