@@ -1,27 +1,33 @@
-import '../tools/logger_wrapper.dart';
-import 'data_source.dart';
-
-enum WalletScanMode { seed, singleWallet, singleCoin }
+import '../models/coin.dart';
+import '../models/wallet_scanner_stream_reply.dart';
+import 'logger_wrapper.dart';
+import '../data_sources/data_source.dart';
 
 class WalletScanner {
-  int _depthPointer = 1;
-  int _maxChainDepth = 5;
-  int _maxAddressDepth = 0; //no address depth scan for now
-  Map<String, int> _queryDepth = {'account': 0, 'chain': 0, 'address': 0};
-
-  String walletName;
-  WalletScanMode scanMode;
-  DataSource backend;
+  int _chainDepthPointer = 0;
+  Coin coin;
+  int accountNumber;
+  BackendType backend;
 
   WalletScanner({
-    required this.walletName,
-    required this.scanMode,
+    required this.accountNumber,
     required this.backend,
+    required this.coin,
   });
+
+  Stream<WalletScannerStreamReply> startScanning() async* {
+    LoggerWrapper.logInfo(
+      'WalletScanner',
+      'start',
+      'starting scan for ${coin.displayName} at $accountNumber with ${backend.name}',
+    );
+
+    //Return stream of scan results
+  }
 
   // void hold() {
   //     if (newStatus == null) {
-  //       await subscribeNextDerivedAddress(); //TODO move this logic out of the connection provider, it has no real business here
+  //       await subscribeNextDerivedAddress();
   //     } else {
   //       //increase depth because we found one != null
   //       if (_depthPointer == 1) {

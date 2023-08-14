@@ -2,6 +2,8 @@ import 'dart:async';
 
 import '../providers/connection_provider.dart';
 
+enum BackendType { electrum, marisma }
+
 abstract class DataSource {
   BackendConnectionState connectionState = BackendConnectionState.waiting;
   Map<String, List?> paperWalletUtxos = {};
