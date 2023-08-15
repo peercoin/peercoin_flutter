@@ -53,7 +53,7 @@
     "app_settings_newWallet": "Pentru a adăuga un nou portmoneu",
     "app_settings_revealSeedButton": "Vezi seed-ul",
     "app_settings_revealAuthButton": "Vezi setările autentificării",
-    "app_settings_seed": "Fraza seed",
+    "app_settings_seed": "Fraza Seed",
     "app_settings_shareseed": "Trimite seed-ul",
     "app_settings_auth_header": "Autentificare",
     "app_settings_appbar": "Setările aplicației",
@@ -228,7 +228,6 @@
     "app_settings_notifications_disable_button": "Dezactivați notificările",
     "app_settings_notifications_heading_interval": "Interval de sincronizare",
     "app_settings_notifications_not_enabled": "Notificările de fundal au fost dezactivate.",
-    "app_settings_notifications_open_button": "Deschideți setările notificărilor",
     "app_settings_notifications_hint_sync_2": "Notificările pot întârzia semnificativ, în funcție de modul în care sistemul dvs. de operare limitează funcțiile de fundal. La dispozitivele iOS intervale pot fi mai lungi.",
     "notification_title": "$walletTitle - Aveți o tranzacție nouă",
     "notification_body": "Deschide aplicația pentru a vedea tranzacția",
@@ -351,5 +350,8 @@
     "verify_input_label_signature": "Semnătură pentru verificare",
     "verify_success": "Mesaj verificat.",
     "verify_fail": "Mesajul nu a putut fi verificat.",
-    "wallet_scan_notice_bg_notifications": "Activarea notificărilor de fundal în Setările aplicației poate îmbunătăți considerabil fiabilitatea scanării."
+    "wallet_scan_notice_bg_notifications": "Activarea notificărilor de fundal în Setările aplicației poate îmbunătăți considerabil fiabilitatea scanării.",
+    "wallet_pop_menu_change_title": "Schimbați Titlul",
+    "wallet_title_edit": "Editați Titlul Portofelului",
+    "wallet_title_edit_new_title": "Titlu Nou"
 }
