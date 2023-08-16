@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/data_sources/data_source.dart';
 import 'package:peercoin/providers/app_settings_provider.dart';
+import 'package:peercoin/providers/server_provider.dart';
+import 'package:peercoin/tools/wallet_scanner.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/connection_provider.dart';
@@ -33,8 +36,6 @@ class _AppSettingsWalletScanLandingScreenState
   late String _coinName = '';
   late BackendConnectionState _connectionState;
   late int _walletNumber;
-  late Timer _timer;
-  int _latestUpdate = 0;
   int _addressScanPointer = 0;
   int _addressChunkSize = 10;
 
@@ -80,7 +81,6 @@ class _AppSettingsWalletScanLandingScreenState
             text: AppLocalizations.instance
                 .translate('server_settings_alert_cancel'),
             action: () async {
-              _timer.cancel();
               await Navigator.of(context).pushReplacementNamed(
                 Routes.walletList,
               );
@@ -93,48 +93,23 @@ class _AppSettingsWalletScanLandingScreenState
 
   @override
   void deactivate() async {
-    await _connectionProvider!.closeConnection();
-    _timer.cancel();
+//TODO tell current scanner to stop
     super.deactivate();
   }
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettingsProvider>(context, listen: false);
-      setState(() {
-        _initial = false;
-        _backgroundNotificationsAvailable = _settings.notificationInterval > 0;
+      final scanner = WalletScanner(
+        accountNumber: 0,
+        coinName: 'peercoin',
+        backend: BackendType.electrum,
+        serverProvider: Provider.of<ServerProvider>(context),
+        walletProvider: Provider.of<WalletProvider>(context),
+      );
+      scanner.startScan().listen((event) {
+        print(event.message);
       });
-      _coinName = ModalRoute.of(context)!.settings.arguments as String;
-      _connectionProvider = Provider.of<ConnectionProvider>(context);
-      _walletProvider = Provider.of<WalletProvider>(context);
-      _walletNumber = _walletProvider.getWalletNumber(_coinName);
-
-      await _walletProvider.prepareForRescan(_coinName);
-
-      await _connectionProvider!.init(_coinName, scanMode: true);
-
-      _timer = Timer.periodic(const Duration(seconds: 7), (timer) async {
-        var dueTime = _latestUpdate + 7;
-        if (_connectionState == BackendConnectionState.waiting) {
-          await _connectionProvider!.init(_coinName, scanMode: true);
-        } else if (dueTime <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
-            _scanStarted == true) {
-          _timeOutTasks(context);
-        }
-      });
-      if (_backgroundNotificationsAvailable == true) {
-        await _fetchAddressesFromBackend();
-      }
-    } else if (_connectionProvider != null) {
-      _connectionState = _connectionProvider!.connectionState;
-      if (_connectionState == BackendConnectionState.connected) {
-        _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        if (_backgroundNotificationsAvailable == false) {
-          await _startScan();
-        }
-      }
     }
 
     super.didChangeDependencies();
@@ -142,7 +117,6 @@ class _AppSettingsWalletScanLandingScreenState
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
   }
 
@@ -173,7 +147,6 @@ class _AppSettingsWalletScanLandingScreenState
         fromScan: true,
       ),
     );
-    _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
   Future<void> _parseMarismaResult(Map<String, int> result) async {
@@ -205,7 +178,6 @@ class _AppSettingsWalletScanLandingScreenState
       //done
       await _startScan();
     }
-    _latestUpdate = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 
   Future<void> _startScan() async {
@@ -242,17 +214,6 @@ class _AppSettingsWalletScanLandingScreenState
     }
   }
 
-  void _timeOutTasks(BuildContext context) async {
-    //tasks to finish after timeout
-    final navigator = Navigator.of(context);
-    //sync notification backend
-    await BackgroundSync.executeSync(fromScan: true);
-    _timer.cancel();
-    await navigator.pushReplacementNamed(
-      Routes.walletList,
-      arguments: {'fromScan': true},
-    );
-  }
   //TODO rewrite to find wallet accounts and be more verbose
   //TODO test multi wallets without background notifications
 }

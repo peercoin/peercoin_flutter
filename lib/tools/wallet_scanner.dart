@@ -1,28 +1,52 @@
+import 'package:peercoin/data_sources/electrum_backend.dart';
+import 'package:peercoin/providers/wallet_provider.dart';
+
 import '../models/coin.dart';
 import '../models/wallet_scanner_stream_reply.dart';
+import '../providers/server_provider.dart';
 import 'logger_wrapper.dart';
 import '../data_sources/data_source.dart';
 
 class WalletScanner {
   int _chainDepthPointer = 0;
-  Coin coin;
+  String coinName;
   int accountNumber;
   BackendType backend;
+  WalletProvider walletProvider;
+  ServerProvider serverProvider;
 
   WalletScanner({
     required this.accountNumber,
     required this.backend,
-    required this.coin,
+    required this.coinName,
+    required this.walletProvider,
+    required this.serverProvider,
   });
 
-  Stream<WalletScannerStreamReply> startScanning() async* {
+  Stream<WalletScannerStreamReply> startScan() async* {
     LoggerWrapper.logInfo(
       'WalletScanner',
       'start',
-      'starting scan for ${coin.displayName} at $accountNumber with ${backend.name}',
+      'starting scan for $coinName at $accountNumber with ${backend.name}',
     );
 
     //Return stream of scan results
+    if (backend == BackendType.electrum) {
+      // init electrum
+      var electrum = ElectrumBackend(
+        walletProvider,
+        serverProvider,
+      );
+
+      if (await electrum.init(coinName) == true) {
+        yield WalletScannerStreamReply(
+          type: WalletScannerMessageType.scanStarted,
+          message: 'scan initiliazed for $coinName at $accountNumber',
+        );
+      }
+    } else {
+      // marisma
+    }
   }
 
   // void hold() {

@@ -1,6 +1,7 @@
 enum WalletScannerMessageType {
-  newWallet,
-  newAddress,
+  scanStarted,
+  newWalletFound,
+  newAddressFound,
   scanFinished,
   error,
 }

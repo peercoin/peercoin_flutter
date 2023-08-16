@@ -12,7 +12,7 @@ abstract class DataSource {
   int latestBlock = 0;
 
   Future<bool> init(
-    walletName, {
+    String walletName, {
     bool requestedFromWalletHome = false,
     bool fromConnectivityChangeOrLifeCycle = false,
   }) async {
