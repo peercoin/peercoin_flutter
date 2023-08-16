@@ -59,9 +59,9 @@ class ElectrumBackend extends DataSource {
     if (connectivityResult == ConnectivityResult.none) {
       updateConnectionState = BackendConnectionState.offline;
 
-      _offlineSubscription = Connectivity()
-          .onConnectivityChanged
-          .listen((ConnectivityResult result) async {
+      _offlineSubscription = Connectivity().onConnectivityChanged.listen((
+        ConnectivityResult result,
+      ) async {
         if (result != ConnectivityResult.none) {
           //connection re-established
           _offlineSubscription.cancel();

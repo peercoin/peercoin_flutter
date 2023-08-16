@@ -1,7 +1,6 @@
 import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 
-import '../models/coin.dart';
 import '../models/wallet_scanner_stream_reply.dart';
 import '../providers/server_provider.dart';
 import 'logger_wrapper.dart';
@@ -33,7 +32,7 @@ class WalletScanner {
     //Return stream of scan results
     if (backend == BackendType.electrum) {
       // init electrum
-      var electrum = ElectrumBackend(
+      final electrum = ElectrumBackend(
         walletProvider,
         serverProvider,
       );
@@ -41,8 +40,22 @@ class WalletScanner {
       if (await electrum.init(coinName) == true) {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.scanStarted,
-          message: 'scan initiliazed for $coinName at $accountNumber',
+          message: 'scan initialized for $coinName at $accountNumber',
         );
+
+        // get master address
+        final masterAddr = walletProvider.getAddressFromDerivationPath(
+          identifier: coinName,
+          account: accountNumber,
+          chain: 0,
+          address: 0,
+          isMaster: true,
+        );
+
+        // query master addr
+        // TODO
+        // Problem is also that there are going to be a lot of side effects presently for wallets that are not yet created
+        // and thus unknown to the walletprovider
       }
     } else {
       // marisma
