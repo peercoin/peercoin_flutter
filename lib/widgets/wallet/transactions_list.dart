@@ -48,9 +48,10 @@ class _TransactionListState extends State<TransactionList> {
   }
 
   String resolveAddressDisplayName(String address) {
-    final result = context
-        .read<WalletProvider>()
-        .getLabelForAddress(widget.wallet.name, address);
+    final result = context.read<WalletProvider>().getLabelForAddress(
+          widget.wallet.name,
+          address,
+        );
     if (result != '') return result;
     return address;
   }
@@ -193,7 +194,7 @@ class _TransactionListState extends State<TransactionList> {
                                         filteredTx[i - 1].timestamp != 0
                                             ? DateTime
                                                 .fromMillisecondsSinceEpoch(
-                                                filteredTx[i - 1].timestamp! *
+                                                filteredTx[i - 1].timestamp *
                                                     1000,
                                               )
                                             : DateTime.now(),

@@ -5,14 +5,14 @@ part 'wallet_address.g.dart';
 class WalletAddress extends HiveObject {
   @HiveField(0)
   final String address;
-  @HiveField(1)
-  String? addressBookName; //nullable for backward compatability
+  @HiveField(1, defaultValue: '')
+  String addressBookName;
   @HiveField(2)
   String? status;
   @HiveField(3)
   bool used;
-  @HiveField(4)
-  bool? isOurs = true; //nullable for backward compatability
+  @HiveField(4, defaultValue: true)
+  bool isOurs = true;
   @HiveField(5, defaultValue: '')
   String wif = '';
   @HiveField(6)

@@ -58,10 +58,10 @@ class TransactionDetails extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SelectableText(
-                    tx.timestamp! != 0
+                    tx.timestamp != 0
                         ? DateFormat().format(
                             DateTime.fromMillisecondsSinceEpoch(
-                              tx.timestamp! * 1000,
+                              tx.timestamp * 1000,
                             ),
                           )
                         : AppLocalizations.instance.translate('unconfirmed'),

@@ -163,7 +163,7 @@ class _AppSettingsWalletScanLandingScreenState
         chain: i,
         address: 0,
       );
-      adressesToQuery[res!] = 0;
+      adressesToQuery[res] = 0;
     }
 
     await _parseMarismaResult(

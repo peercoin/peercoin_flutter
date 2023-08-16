@@ -5,8 +5,8 @@ part 'wallet_transaction.g.dart';
 class WalletTransaction extends HiveObject {
   @HiveField(0)
   final String txid;
-  @HiveField(1)
-  int? timestamp; //nullable for backward compatability
+  @HiveField(1, defaultValue: 0)
+  int timestamp;
   @HiveField(2)
   final int value;
   @HiveField(3)

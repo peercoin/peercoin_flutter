@@ -686,8 +686,7 @@ class _SendTabState extends State<SendTab> {
       if (element.isOurs == false && element.address.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
-          element.addressBookName != null &&
-          element.addressBookName!.contains(pattern)) {
+          element.addressBookName.contains(pattern)) {
         return true;
       }
       return false;

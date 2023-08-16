@@ -392,7 +392,7 @@ class WalletProvider with ChangeNotifier {
       if (walletTx.txid == tx['txid']) {
         isInWallet = true;
         if (isInWallet == true) {
-          if (walletTx.timestamp == 0 || walletTx.timestamp == null) {
+          if (walletTx.timestamp == 0) {
             //did the tx confirm?
             walletTx.newTimestamp = tx['blocktime'] ?? 0;
           }
@@ -957,8 +957,7 @@ class WalletProvider with ChangeNotifier {
       var utxos = await getWalletUtxos(identifier);
       addresses = await getWalletAddresses(identifier);
       for (var addr in addresses) {
-        if (addr.isOurs == true || addr.isOurs == null) {
-          // == null for backwards compatability
+        if (addr.isOurs == true) {
           //does addr have a balance?
           var utxoRes = utxos
               .firstWhereOrNull((element) => element.address == addr.address);
@@ -1103,7 +1102,7 @@ class WalletProvider with ChangeNotifier {
       (element) => element.address == address,
     );
     if (addr == null) return '';
-    return addr.addressBookName ?? '';
+    return addr.addressBookName;
   }
 
   String reverseString(String input) {
