@@ -21,10 +21,10 @@ class ElectrumBackend extends DataSource {
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   var _connection;
-  final WalletProvider _walletProvider;
+  final WalletProvider walletProvider;
   late ElectrumServerType _serverType;
   final ServerProvider _servers;
-  late String _coinName;
+  late String coinName;
   late String _serverUrl;
   bool _closedIntentionally = false;
   int _connectionAttempt = 0;
@@ -35,7 +35,7 @@ class ElectrumBackend extends DataSource {
   final StreamController _listenerNotifier = StreamController.broadcast();
 
   ElectrumBackend(
-    this._walletProvider,
+    this.walletProvider,
     this._servers,
   );
 
@@ -79,7 +79,7 @@ class ElectrumBackend extends DataSource {
 
       return false;
     } else if (_connection == null) {
-      _coinName = walletName;
+      coinName = walletName;
       updateConnectionState = BackendConnectionState.waiting;
       LoggerWrapper.logInfo(
         'ElectrumConnection',
@@ -147,7 +147,7 @@ class ElectrumBackend extends DataSource {
 
   Future<void> connect() async {
     //get server list from server provider
-    _availableServers = await _servers.getServerList(_coinName);
+    _availableServers = await _servers.getServerList(coinName);
     //reset attempt if attempt pointer is outside list
     if (_connectionAttempt > _availableServers.length - 1) {
       _connectionAttempt = 0;
@@ -236,7 +236,7 @@ class ElectrumBackend extends DataSource {
     if (_closedIntentionally == false) {
       _reconnectTimer = Timer(
         const Duration(seconds: 5),
-        () => init(_coinName),
+        () => init(coinName),
       ); //retry if not intentional
     }
   }
@@ -337,7 +337,7 @@ class ElectrumBackend extends DataSource {
 
   void handleFeatures(Map result) {
     if (result['genesis_hash'] ==
-        AvailableCoins.getSpecificCoin(_coinName).genesisHash) {
+        AvailableCoins.getSpecificCoin(coinName).genesisHash) {
       //we're connected and genesis handshake is successful
       updateConnectionState = BackendConnectionState.connected;
       //subscribe to block headers
@@ -370,7 +370,7 @@ class ElectrumBackend extends DataSource {
 
   void handleAddressStatus(String address, String? newStatus) async {
     var oldStatus =
-        await _walletProvider.getWalletAddressStatus(_coinName, address);
+        await walletProvider.getWalletAddressStatus(coinName, address);
     var hash = addresses.entries
         .firstWhereOrNull((element) => element.key == address)!;
     if (newStatus != oldStatus) {
@@ -418,7 +418,7 @@ class ElectrumBackend extends DataSource {
       'update for $hashId',
     );
     //update status so we flag that we proccessed this update already
-    await _walletProvider.updateAddressStatus(_coinName, address, newStatus);
+    await walletProvider.updateAddressStatus(coinName, address, newStatus);
     //fire listunspent to get utxo
     sendMessage(
       'blockchain.scripthash.listunspent',
@@ -444,13 +444,13 @@ class ElectrumBackend extends DataSource {
 
   void handleUtxo(String id, List utxos) async {
     final txAddr = id.replaceFirst('utxo_', '');
-    await _walletProvider.putUtxos(
-      _coinName,
+    await walletProvider.putUtxos(
+      coinName,
       txAddr,
       utxos,
     );
 
-    var walletTx = await _walletProvider.getWalletTransactions(_coinName);
+    var walletTx = await walletProvider.getWalletTransactions(coinName);
     for (var utxo in utxos) {
       var res = walletTx.firstWhereOrNull(
         (element) => element.txid == utxo['tx_hash'],
@@ -481,10 +481,10 @@ class ElectrumBackend extends DataSource {
 
   void handleTx(String id, Map? tx) async {
     var txId = id.replaceFirst('tx_', '');
-    var addr = await _walletProvider.getAddressForTx(_coinName, txId);
+    var addr = await walletProvider.getAddressForTx(coinName, txId);
     if (tx != null) {
-      await _walletProvider.putTx(
-        identifier: _coinName,
+      await walletProvider.putTx(
+        identifier: coinName,
         address: addr,
         tx: tx,
       );
@@ -502,9 +502,9 @@ class ElectrumBackend extends DataSource {
         'handleBroadcast',
         'tx rejected by server',
       );
-      await _walletProvider.updateRejected(_coinName, txId);
+      await walletProvider.updateRejected(coinName, txId);
     } else if (txId != 'import') {
-      await _walletProvider.updateBroadcasted(_coinName, txId);
+      await walletProvider.updateBroadcasted(coinName, txId);
     }
   }
 

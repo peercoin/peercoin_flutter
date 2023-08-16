@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/data_sources/data_source.dart';
 import 'package:peercoin/providers/server_provider.dart';
-import 'package:peercoin/tools/wallet_scanner.dart';
+import 'package:peercoin/tools/scanner/wallet_scanner.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/wallet_provider.dart';
@@ -73,7 +73,7 @@ class _AppSettingsWalletScanLandingScreenState
         serverProvider: Provider.of<ServerProvider>(context),
         walletProvider: Provider.of<WalletProvider>(context),
       );
-      scanner.startScan().listen((event) {
+      scanner.startWalletScan().listen((event) {
         print(event.message);
       });
 

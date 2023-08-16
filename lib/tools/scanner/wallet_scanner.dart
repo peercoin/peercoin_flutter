@@ -1,13 +1,12 @@
-import 'package:peercoin/data_sources/electrum_backend.dart';
+import 'package:peercoin/data_sources/electrum_scanner.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 
-import '../models/wallet_scanner_stream_reply.dart';
-import '../providers/server_provider.dart';
-import 'logger_wrapper.dart';
-import '../data_sources/data_source.dart';
+import '../../models/wallet_scanner_stream_reply.dart';
+import '../../providers/server_provider.dart';
+import '../logger_wrapper.dart';
+import '../../data_sources/data_source.dart';
 
 class WalletScanner {
-  int _chainDepthPointer = 0;
   String coinName;
   int accountNumber;
   BackendType backend;
@@ -22,44 +21,96 @@ class WalletScanner {
     required this.serverProvider,
   });
 
-  Stream<WalletScannerStreamReply> startScan() async* {
+  Stream<WalletScannerStreamReply> startWalletScan() async* {
     LoggerWrapper.logInfo(
       'WalletScanner',
-      'start',
+      'startWalletScan',
       'starting scan for $coinName at $accountNumber with ${backend.name}',
     );
 
     //Return stream of scan results
     if (backend == BackendType.electrum) {
       // init electrum
-      final electrum = ElectrumBackend(
+      final electrumScanner = ElectrumScanner(
         walletProvider,
         serverProvider,
       );
 
-      if (await electrum.init(coinName) == true) {
+      if (await electrumScanner.init(coinName) == true) {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.scanStarted,
           message: 'scan initialized for $coinName at $accountNumber',
         );
 
-        // get master address
-        final masterAddr = walletProvider.getAddressFromDerivationPath(
-          identifier: coinName,
-          account: accountNumber,
-          chain: 0,
-          address: 0,
-          isMaster: true,
+        final res = await queryAddressesFromElectrumBackend(electrumScanner);
+
+        // yield from res
+        for (var i = 0; i < res.length; i++) {
+          yield WalletScannerStreamReply(
+            type: WalletScannerMessageType.newAddressFound,
+            message: res[i],
+          );
+        }
+
+        // done
+        yield WalletScannerStreamReply(
+          type: WalletScannerMessageType.scanFinished,
+          message: 'scan finished for $coinName at $accountNumber',
         );
 
-        // query master addr
-        // TODO
-        // Problem is also that there are going to be a lot of side effects presently for wallets that are not yet created
-        // and thus unknown to the walletprovider
+        await electrumScanner.closeConnection(true);
       }
     } else {
       // marisma
     }
+  }
+
+  Future<List<String>> queryAddressesFromElectrumBackend(
+    ElectrumScanner electrumScanner,
+  ) async {
+    List<String> knownAddresses = [];
+
+    // get master address
+    final masterAddr = await walletProvider.getAddressFromDerivationPath(
+      identifier: coinName,
+      account: accountNumber,
+      chain: 0,
+      address: 0,
+      isMaster: true,
+    );
+
+    // query master addr
+    final masterAddrRes = await electrumScanner.getAddressIsKnown(masterAddr);
+    LoggerWrapper.logInfo(
+      'WalletScanner',
+      'queryAddressesFromElectrumBackend',
+      'master address $masterAddr is known: $masterAddrRes',
+    );
+
+    if (masterAddrRes == true) {
+      knownAddresses.add(masterAddr);
+    }
+
+    // query first 5 addresses
+    for (var i = 0; i < 5; i++) {
+      final addr = await walletProvider.getAddressFromDerivationPath(
+        identifier: coinName,
+        account: accountNumber,
+        chain: 0,
+        address: i,
+      );
+      final res = await electrumScanner.getAddressIsKnown(addr);
+      LoggerWrapper.logInfo(
+        'WalletScanner',
+        'queryAddressesFromElectrumBackend',
+        'address $addr is known: $res',
+      );
+      if (res == true) {
+        knownAddresses.add(addr);
+      }
+    }
+
+    return knownAddresses;
   }
 
   // void hold() {
