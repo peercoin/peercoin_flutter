@@ -202,7 +202,7 @@ class PeercoinApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return SeverProvider(
+            return ServerProvider(
               Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },

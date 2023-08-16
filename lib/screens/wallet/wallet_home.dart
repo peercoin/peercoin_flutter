@@ -44,7 +44,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late AppSettingsProvider _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
-  late SeverProvider _servers;
+  late ServerProvider _servers;
   int _latestBlock = 0;
   String? _address;
   String? _label;
@@ -116,7 +116,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _connectionProvider = Provider.of<ConnectionProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       _appSettings = context.read<AppSettingsProvider>();
-      _servers = Provider.of<SeverProvider>(context);
+      _servers = Provider.of<ServerProvider>(context);
 
       _connectionProvider.setDataSource(
         ElectrumBackend(
@@ -192,9 +192,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
         var unconfirmedTx = _walletTransactions.where(
           (element) =>
               element.confirmations < 6 &&
-                  element.confirmations != -1 &&
-                  element.timestamp != -1 ||
-              element.timestamp == null,
+              element.confirmations != -1 &&
+              element.timestamp != -1,
         );
         for (var element in unconfirmedTx) {
           LoggerWrapper.logInfo(

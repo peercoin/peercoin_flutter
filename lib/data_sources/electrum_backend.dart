@@ -23,7 +23,7 @@ class ElectrumBackend extends DataSource {
   var _connection;
   final WalletProvider _walletProvider;
   late ElectrumServerType _serverType;
-  final SeverProvider _servers;
+  final ServerProvider _servers;
   late String _coinName;
   late String _serverUrl;
   bool _closedIntentionally = false;
@@ -34,7 +34,10 @@ class ElectrumBackend extends DataSource {
   int _resetAttempt = 1;
   final StreamController _listenerNotifier = StreamController.broadcast();
 
-  ElectrumBackend(this._walletProvider, this._servers);
+  ElectrumBackend(
+    this._walletProvider,
+    this._servers,
+  );
 
   @override
   Stream listenerNotifierStream() {
@@ -43,7 +46,7 @@ class ElectrumBackend extends DataSource {
 
   @override
   Future<bool> init(
-    walletName, {
+    String walletName, {
     bool requestedFromWalletHome = false,
     bool fromConnectivityChangeOrLifeCycle = false,
   }) async {

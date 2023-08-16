@@ -50,7 +50,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
   void tryConnect(String serverUrl) async {
     final scaffoldMessanger = ScaffoldMessenger.of(context);
     final electrumConnection = context.read<ConnectionProvider>();
-    final serverProvider = context.read<SeverProvider>();
+    final serverProvider = context.read<ServerProvider>();
     _currentServerList = await serverProvider.getServerDetailsList(_walletName);
 
     setState(() {

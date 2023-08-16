@@ -21,13 +21,13 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   String _walletName = '';
   List<Server> _servers = [];
   final Map _indexCache = {};
-  late SeverProvider _serversProvider;
+  late ServerProvider _serversProvider;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
-      _serversProvider = Provider.of<SeverProvider>(context);
+      _serversProvider = Provider.of<ServerProvider>(context);
       await _serversProvider.init(_walletName);
       await loadServers();
       setState(() {

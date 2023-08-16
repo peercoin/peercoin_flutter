@@ -9,10 +9,10 @@ import '../models/hive/server.dart';
 import '../tools/logger_wrapper.dart';
 import 'encrypted_box_provider.dart';
 
-class SeverProvider with ChangeNotifier {
+class ServerProvider with ChangeNotifier {
   final EncryptedBoxProvider _encryptedBox;
   late Box<Server> _serverBox;
-  SeverProvider(this._encryptedBox);
+  ServerProvider(this._encryptedBox);
 
   Future<void> init(String identifier) async {
     LoggerWrapper.logInfo(
