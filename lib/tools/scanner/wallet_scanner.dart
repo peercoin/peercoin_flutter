@@ -108,8 +108,8 @@ class WalletScanner {
       final addr = await walletProvider.getAddressFromDerivationPath(
         identifier: coinName,
         account: accountNumber,
-        chain: 0,
-        address: i,
+        chain: i,
+        address: 0,
       );
       final res = await electrumScanner.getAddressIsKnown(addr);
       LoggerWrapper.logInfo(
