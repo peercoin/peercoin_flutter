@@ -42,23 +42,30 @@ class WalletScanner {
           message: 'scan initialized for $coinName at $accountNumber',
         );
 
-        final res = await queryAddressesFromElectrumBackend(electrumScanner);
+        try {
+          final res = await queryAddressesFromElectrumBackend(electrumScanner);
 
-        // yield from res
-        for (var i = 0; i < res.length; i++) {
+          // yield from res
+          for (var i = 0; i < res.length; i++) {
+            yield WalletScannerStreamReply(
+              type: WalletScannerMessageType.newAddressFound,
+              message: res[i],
+            );
+          }
+
+          // done
           yield WalletScannerStreamReply(
-            type: WalletScannerMessageType.newAddressFound,
-            message: res[i],
+            type: WalletScannerMessageType.scanFinished,
+            message: 'scan finished for $coinName at $accountNumber',
           );
+        } catch (e) {
+          yield WalletScannerStreamReply(
+            type: WalletScannerMessageType.error,
+            message: 'scan failed for $coinName at $accountNumber ($e))',
+          );
+        } finally {
+          await electrumScanner.closeConnection(true);
         }
-
-        // done
-        yield WalletScannerStreamReply(
-          type: WalletScannerMessageType.scanFinished,
-          message: 'scan finished for $coinName at $accountNumber',
-        );
-
-        await electrumScanner.closeConnection(true);
       }
     } else {
       // marisma
