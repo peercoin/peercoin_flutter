@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/data_sources/data_source.dart';
 import 'package:peercoin/providers/server_provider.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/tools/scanner/wallet_scanner.dart';
 import 'package:provider/provider.dart';
 
@@ -68,13 +69,13 @@ class _AppSettingsWalletScanLandingScreenState
     if (_initial == true) {
       final scanner = WalletScanner(
         accountNumber: 0,
-        coinName: 'peercoin',
+        coinName: 'peercoinTestnet',
         backend: BackendType.electrum,
         serverProvider: Provider.of<ServerProvider>(context),
         walletProvider: Provider.of<WalletProvider>(context),
       );
       scanner.startWalletScan().listen((event) {
-        print(event.message);
+        LoggerWrapper.logInfo('WalletScanner', event.type.name, event.message);
       });
 
       setState(() {
