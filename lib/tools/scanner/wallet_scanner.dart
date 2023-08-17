@@ -80,7 +80,12 @@ class WalletScanner {
     );
 
     // query master addr
-    final masterAddrRes = await electrumScanner.getAddressIsKnown(masterAddr);
+    final masterAddrRes =
+        await electrumScanner.getAddressIsKnown(masterAddr).timeout(
+              const Duration(
+                seconds: 5,
+              ),
+            );
     LoggerWrapper.logInfo(
       'WalletScanner',
       'queryAddressesFromElectrumBackend',

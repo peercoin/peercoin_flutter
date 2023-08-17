@@ -13,10 +13,16 @@ class ElectrumScanner extends ElectrumBackend {
       address: scriptHash,
     });
 
-    while (!statusAnswers.containsKey(address)) {
+    for (var i = 0; i < 100; i++) {
+      //will wait 10 seconds in total
       await Future.delayed(const Duration(milliseconds: 100));
+      if (statusAnswers.containsKey(address)) {
+        return statusAnswers[address] != null;
+      }
     }
-    return statusAnswers[address] != null;
+
+    //throw timeout exception if no answer was received within 10 seconds
+    throw Exception('Timeout');
   }
 
   @override
