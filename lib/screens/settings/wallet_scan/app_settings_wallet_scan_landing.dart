@@ -7,9 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
-import '../../../tools/app_routes.dart';
-import '../../../widgets/buttons.dart';
-import '../../../widgets/loading_indicator.dart';
 
 class AppSettingsWalletScanLandingScreen extends StatefulWidget {
   const AppSettingsWalletScanLandingScreen({Key? key}) : super(key: key);
@@ -22,6 +19,7 @@ class AppSettingsWalletScanLandingScreen extends StatefulWidget {
 class _AppSettingsWalletScanLandingScreenState
     extends State<AppSettingsWalletScanLandingScreen> {
   bool _initial = true;
+  List<String> logLines = [];
 
   @override
   Widget build(BuildContext context) {
@@ -35,27 +33,27 @@ class _AppSettingsWalletScanLandingScreenState
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const LoadingIndicator(),
-          const SizedBox(height: 20),
-          Text(
-            AppLocalizations.instance.translate('wallet_scan_notice'),
+          Expanded(
+            child: ListView.builder(
+              itemCount: logLines.length,
+              itemBuilder: (context, index) {
+                return Text(logLines[index]);
+              },
+            ),
           ),
-          const SizedBox(height: 20),
-          PeerButton(
-            text: AppLocalizations.instance
-                .translate('server_settings_alert_cancel'),
-            action: () async {
-              stopScan();
-              await Navigator.of(context).pushReplacementNamed(
-                Routes.walletList,
-              );
-            },
-          )
         ],
       ),
     );
+  }
+
+  void _addToLog(String text) {
+    setState(() {
+      logLines.add(text);
+      if (logLines.length > 10) {
+        logLines.removeAt(0);
+      }
+    });
   }
 
   @override
@@ -69,13 +67,14 @@ class _AppSettingsWalletScanLandingScreenState
     if (_initial == true) {
       final scanner = WalletScanner(
         accountNumber: 0,
-        coinName: 'peercoinTestnet',
+        coinName: 'peercoin',
         backend: BackendType.electrum,
         serverProvider: Provider.of<ServerProvider>(context),
         walletProvider: Provider.of<WalletProvider>(context),
       );
       scanner.startWalletScan().listen((event) {
         LoggerWrapper.logInfo('WalletScanner', event.type.name, event.message);
+        _addToLog('${event.type.name} ${event.message}');
       });
 
       setState(() {
