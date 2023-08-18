@@ -142,6 +142,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
           'walletScanEventHandler',
           'Wallet already exists: $walletName, skipping',
         );
+        _addToLog('Wallet already exists: $walletName'); //TODO i18n
       } else {
         //add wallet to wallet provider
         final coin = AvailableCoins.getSpecificCoin(currentTaskCoin);
