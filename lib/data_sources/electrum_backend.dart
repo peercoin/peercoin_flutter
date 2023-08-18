@@ -20,19 +20,19 @@ enum ElectrumServerType { ssl, wss }
 class ElectrumBackend extends DataSource {
   Timer? _pingTimer;
   Timer? _reconnectTimer;
-  var _connection;
+  StreamSubscription? _offlineSubscription;
   final WalletProvider walletProvider;
-  late ElectrumServerType _serverType;
   final ServerProvider _servers;
-  late String coinName;
-  late String _serverUrl;
+  final StreamController _listenerNotifier = StreamController.broadcast();
   bool _closedIntentionally = false;
   int _connectionAttempt = 0;
-  late List _availableServers;
-  StreamSubscription? _offlineSubscription;
-  late double _requiredProtocol;
   int _resetAttempt = 1;
-  final StreamController _listenerNotifier = StreamController.broadcast();
+  var _connection;
+  late String coinName;
+  late String _serverUrl;
+  late List _availableServers;
+  late ElectrumServerType _serverType;
+  late double _requiredProtocol;
 
   ElectrumBackend(
     this.walletProvider,
@@ -219,9 +219,7 @@ class ElectrumBackend extends DataSource {
       _closedIntentionally = true;
       _connectionAttempt = 0;
       if (_reconnectTimer != null) _reconnectTimer!.cancel();
-      if (_offlineSubscription != null) {
-        _offlineSubscription!.cancel();
-      }
+      if (_offlineSubscription != null) _offlineSubscription!.cancel();
     }
   }
 
