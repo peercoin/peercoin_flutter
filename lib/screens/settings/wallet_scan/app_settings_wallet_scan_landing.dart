@@ -77,6 +77,7 @@ class _AppSettingsWalletScanLandingScreenState
       //populate providers
       _serverProvider = Provider.of<ServerProvider>(context, listen: false);
       _walletProvider = Provider.of<WalletProvider>(context, listen: false);
+
       //populate tasks
       AvailableCoins.availableCoins.forEach((key, coin) {
         _tasks.add((coin.name, 0));
@@ -160,7 +161,7 @@ class _AppSettingsWalletScanLandingScreenState
             'walletScanEventHandler',
             e.toString(),
           );
-          _addToLog('Creating wallet failed: ${e.toString()}');
+          _addToLog('Creating wallet failed: ${e.toString()}'); //TODO i18n
         }
       }
 
@@ -182,7 +183,7 @@ class _AppSettingsWalletScanLandingScreenState
           'walletScanEventHandler',
           'No more tasks, scan finished',
         );
-        _addToLog('Scanning finished');
+        _addToLog('Scanning finished'); //TODO i18n
       }
     }
   }

@@ -25,7 +25,7 @@ class WalletScanner {
     LoggerWrapper.logInfo(
       'WalletScanner',
       'startWalletScan',
-      'starting scan for $coinName at $accountNumber with ${backend.name}',
+      'starting scan for $coinName at $accountNumber with ${backend.name}', //TODO i18n
     );
 
     //Return stream of scan results
@@ -39,7 +39,8 @@ class WalletScanner {
       if (await electrumScanner.init(coinName) == true) {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.scanStarted,
-          message: 'scan initialized for $coinName at $accountNumber',
+          message:
+              'scan initialized for $coinName at $accountNumber', //TODO i18n
           task: (coinName, accountNumber),
         );
 
@@ -59,7 +60,8 @@ class WalletScanner {
           if (res.isNotEmpty) {
             yield WalletScannerStreamReply(
               type: WalletScannerMessageType.newWalletFound,
-              message: 'new wallet found for $coinName at $accountNumber',
+              message:
+                  'new wallet found for $coinName at $accountNumber', //TODO i18n
               task: (coinName, accountNumber),
             );
           }
@@ -67,13 +69,15 @@ class WalletScanner {
           // done
           yield WalletScannerStreamReply(
             type: WalletScannerMessageType.scanFinished,
-            message: 'scan finished for $coinName at $accountNumber',
+            message:
+                'scan finished for $coinName at $accountNumber', //TODO i18n
             task: (coinName, accountNumber),
           );
         } catch (e) {
           yield WalletScannerStreamReply(
             type: WalletScannerMessageType.error,
-            message: 'scan failed for $coinName at $accountNumber ($e))',
+            message:
+                'scan failed for $coinName at $accountNumber ($e))', //TODO i18n
             task: (coinName, accountNumber),
           );
         } finally {
@@ -138,82 +142,4 @@ class WalletScanner {
 
     return knownAddresses;
   }
-
-  // void hold() {
-  //     if (newStatus == null) {
-  //       await subscribeNextDerivedAddress();
-  //     } else {
-  //       //increase depth because we found one != null
-  //       if (_depthPointer == 1) {
-  //         //chain pointer
-  //         _maxChainDepth++;
-  //       } else if (_depthPointer == 2) {
-  //         //address pointer
-  //         _maxAddressDepth++;
-  //       }
-  //       LoggerWrapper.logInfo(
-  //         'ElectrumConnection',
-  //         'handleAddressStatus',
-  //         'writing $address to wallet',
-  //       );
-  //       //saving to wallet
-  //       if (oldStatus == 'hasUtxo') {
-  //         sendMessage(
-  //           'blockchain.scripthash.listunspent',
-  //           'utxo_$address',
-  //           [hash.value],
-  //         );
-  //       } else {
-  //         _walletProvider.addAddressFromScan(
-  //           identifier: _coinName,
-  //           address: address,
-  //           status: newStatus,
-  //         );
-  //       }
-  //       //try next
-  //       await subscribeNextDerivedAddress();
-  //     }
-
-  // }
-  // Future<void> subscribeNextDerivedAddress() async {
-  //   var currentPointer = _queryDepth.keys.toList()[_depthPointer];
-
-  //   if (_depthPointer == 1 && _queryDepth[currentPointer]! < _maxChainDepth ||
-  //       _depthPointer == 2 && _queryDepth[currentPointer]! < _maxAddressDepth) {
-  //     LoggerWrapper.logInfo(
-  //       'ElectrumConnection',
-  //       'subscribeNextDerivedAddress',
-  //       '$_queryDepth',
-  //     );
-
-  //     var nextAddr = await _walletProvider.getAddressFromDerivationPath(
-  //       identifier: _coinName,
-  //       account: _queryDepth['account']!,
-  //       chain: _queryDepth['chain']!,
-  //       address: _queryDepth['address']!,
-  //     );
-
-  //     LoggerWrapper.logInfo(
-  //       'ElectrumConnection',
-  //       'subscribeNextDerivedAddress',
-  //       '$nextAddr',
-  //     );
-
-  //     subscribeToScriptHashes(
-  //       await _walletProvider.getWalletScriptHashes(_coinName, nextAddr),
-  //     );
-
-  //     var number = _queryDepth[currentPointer] as int;
-  //     _queryDepth[currentPointer] = number + 1;
-  //   } else if (_depthPointer < _queryDepth.keys.length - 1) {
-  //     LoggerWrapper.logInfo(
-  //       'ElectrumConnection',
-  //       'subscribeNextDerivedAddress',
-  //       'move pointer',
-  //     );
-  //     _queryDepth[currentPointer] = 0;
-  //     _depthPointer++;
-  //     await subscribeNextDerivedAddress();
-  //   }
-  // }
 }
