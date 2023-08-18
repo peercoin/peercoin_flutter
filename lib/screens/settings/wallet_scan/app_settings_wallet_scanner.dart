@@ -10,16 +10,15 @@ import 'package:provider/provider.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 
-class AppSettingsWalletScanLandingScreen extends StatefulWidget {
-  const AppSettingsWalletScanLandingScreen({Key? key}) : super(key: key);
+class AppSettingsWalletScanner extends StatefulWidget {
+  const AppSettingsWalletScanner({Key? key}) : super(key: key);
 
   @override
-  State<AppSettingsWalletScanLandingScreen> createState() =>
-      _AppSettingsWalletScanLandingScreenState();
+  State<AppSettingsWalletScanner> createState() =>
+      _AppSettingsWalletScannerState();
 }
 
-class _AppSettingsWalletScanLandingScreenState
-    extends State<AppSettingsWalletScanLandingScreen> {
+class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
   bool _initial = true;
   final List<String> _logLines = [];
   final List<(String, int)> _tasks = [];
@@ -98,7 +97,7 @@ class _AppSettingsWalletScanLandingScreenState
     final (String coinName, int accountNumber) = task;
 
     LoggerWrapper.logInfo(
-      'AppSettingsWalletScanLandingScreen',
+      'AppSettingsWalletScanner',
       'launchScan',
       '$coinName-$accountNumber',
     );
@@ -120,7 +119,7 @@ class _AppSettingsWalletScanLandingScreenState
 
   void walletScanEventHandler(WalletScannerStreamReply event) {
     LoggerWrapper.logInfo(
-      'AppSettingsWalletScanLandingScreen',
+      'AppSettingsWalletScanner',
       event.type.name,
       event.message,
     );
@@ -137,7 +136,7 @@ class _AppSettingsWalletScanLandingScreenState
       if (_walletProvider.availableWalletKeys.contains(walletName)) {
         //wallet already exists
         LoggerWrapper.logInfo(
-          'AppSettingsWalletScanLandingScreen',
+          'AppSettingsWalletScanner',
           'walletScanEventHandler',
           'Wallet already exists: $walletName, skipping',
         );
@@ -157,7 +156,7 @@ class _AppSettingsWalletScanLandingScreenState
           );
         } catch (e) {
           LoggerWrapper.logError(
-            'AppSettingsWalletScanLandingScreen',
+            'AppSettingsWalletScanner',
             'walletScanEventHandler',
             e.toString(),
           );
@@ -179,7 +178,7 @@ class _AppSettingsWalletScanLandingScreenState
         launchScan(_tasks.first);
       } else {
         LoggerWrapper.logInfo(
-          'AppSettingsWalletScanLandingScreen',
+          'AppSettingsWalletScanner',
           'walletScanEventHandler',
           'No more tasks, scan finished',
         );

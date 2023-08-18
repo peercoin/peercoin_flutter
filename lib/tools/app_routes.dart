@@ -28,7 +28,7 @@ import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
 import '../screens/wallet/transaction_details.dart';
 import '../screens/wallet/wallet_home.dart';
-import '../screens/settings/wallet_scan/app_settings_wallet_scan_landing.dart';
+import '../screens/settings/wallet_scan/app_settings_wallet_scanner.dart';
 import '../screens/wallet/wallet_list.dart';
 import '../screens/wallet/wallet_sign_message.dart';
 
@@ -44,8 +44,7 @@ class Routes {
   static const String appSettingsAuthentication =
       '/app-settings-authentication';
   static const String appSettingsWalletOrder = '/app-settings-wallet-order';
-  static const String appSettingsWalletScanLanding =
-      '/settings-wallet-scan-landing';
+  static const String appSettingsWalletScanner = '/settings-wallet-scanner';
   static const String qrScan = '/qr-scan';
   static const String setupAuth = '/setup-auth';
   static const String setupCreateWallet = '/setup-create-wallet';
@@ -106,8 +105,8 @@ class Routes {
             widget: SetupImportSeedScreen(),
             routeType: RouteTypes.setupOnly,
           ),
-      Routes.appSettingsWalletScanLanding: (context) => const RouterMaster(
-            widget: AppSettingsWalletScanLandingScreen(),
+      Routes.appSettingsWalletScanner: (context) => const RouterMaster(
+            widget: AppSettingsWalletScanner(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
       Routes.walletMessageSigning: (context) => const RouterMaster(
