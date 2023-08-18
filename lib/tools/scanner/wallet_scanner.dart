@@ -40,6 +40,7 @@ class WalletScanner {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.scanStarted,
           message: 'scan initialized for $coinName at $accountNumber',
+          task: (coinName, accountNumber),
         );
 
         try {
@@ -50,6 +51,16 @@ class WalletScanner {
             yield WalletScannerStreamReply(
               type: WalletScannerMessageType.newAddressFound,
               message: res[i],
+              task: (coinName, accountNumber),
+            );
+          }
+
+          // yield new wallet found if addresses where found
+          if (res.isNotEmpty) {
+            yield WalletScannerStreamReply(
+              type: WalletScannerMessageType.newWalletFound,
+              message: 'new wallet found for $coinName at $accountNumber',
+              task: (coinName, accountNumber),
             );
           }
 
@@ -57,11 +68,13 @@ class WalletScanner {
           yield WalletScannerStreamReply(
             type: WalletScannerMessageType.scanFinished,
             message: 'scan finished for $coinName at $accountNumber',
+            task: (coinName, accountNumber),
           );
         } catch (e) {
           yield WalletScannerStreamReply(
             type: WalletScannerMessageType.error,
             message: 'scan failed for $coinName at $accountNumber ($e))',
+            task: (coinName, accountNumber),
           );
         } finally {
           await electrumScanner.closeConnection(true);
@@ -77,30 +90,31 @@ class WalletScanner {
   ) async {
     List<String> knownAddresses = [];
 
-    // get master address
-    final masterAddr = await walletProvider.getAddressFromDerivationPath(
-      identifier: coinName,
-      account: accountNumber,
-      chain: 0,
-      address: 0,
-      isMaster: true,
-    );
+    // get master address if account number is 0
+    if (accountNumber == 0) {
+      final masterAddr = await walletProvider.getAddressFromDerivationPath(
+        identifier: coinName,
+        account: accountNumber,
+        chain: 0,
+        address: 0,
+        isMaster: true,
+      );
+      // query master addr
+      final masterAddrRes =
+          await electrumScanner.getAddressIsKnown(masterAddr).timeout(
+                const Duration(
+                  seconds: 5,
+                ),
+              );
+      LoggerWrapper.logInfo(
+        'WalletScanner',
+        'queryAddressesFromElectrumBackend',
+        'master address $masterAddr is known: $masterAddrRes',
+      );
 
-    // query master addr
-    final masterAddrRes =
-        await electrumScanner.getAddressIsKnown(masterAddr).timeout(
-              const Duration(
-                seconds: 5,
-              ),
-            );
-    LoggerWrapper.logInfo(
-      'WalletScanner',
-      'queryAddressesFromElectrumBackend',
-      'master address $masterAddr is known: $masterAddrRes',
-    );
-
-    if (masterAddrRes == true) {
-      knownAddresses.add(masterAddr);
+      if (masterAddrRes == true) {
+        knownAddresses.add(masterAddr);
+      }
     }
 
     // query first 5 addresses
