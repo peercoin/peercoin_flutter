@@ -219,6 +219,7 @@ class ElectrumBackend extends DataSource {
       _closedIntentionally = true;
       _connectionAttempt = 0;
       if (_reconnectTimer != null) _reconnectTimer!.cancel();
+      _offlineSubscription.cancel();
     }
   }
 

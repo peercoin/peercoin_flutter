@@ -36,7 +36,10 @@ class WalletScanner {
         serverProvider,
       );
 
-      if (await electrumScanner.init(coinName) == true) {
+      if (await electrumScanner
+              .init(coinName)
+              .timeout(const Duration(seconds: 10)) ==
+          true) {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.scanStarted,
           message:
@@ -83,6 +86,14 @@ class WalletScanner {
         } finally {
           await electrumScanner.closeConnection(true);
         }
+      } else {
+        yield WalletScannerStreamReply(
+          type: WalletScannerMessageType.error,
+          message:
+              'scan failed for $coinName at $accountNumber (Connection failed)', //TODO i18n
+          task: (coinName, accountNumber),
+        );
+        await electrumScanner.closeConnection(true);
       }
     } else {
       // marisma
