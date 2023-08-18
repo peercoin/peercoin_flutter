@@ -1,5 +1,6 @@
 import 'package:peercoin/data_sources/electrum_scanner.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 
 import '../../models/wallet_scanner_stream_reply.dart';
 import '../../providers/server_provider.dart';
@@ -25,7 +26,7 @@ class WalletScanner {
     LoggerWrapper.logInfo(
       'WalletScanner',
       'startWalletScan',
-      'starting scan for $coinName at $accountNumber with ${backend.name}', //TODO i18n
+      'starting scan for $coinName at $accountNumber with ${backend.name}',
     );
 
     //Return stream of scan results
@@ -42,8 +43,10 @@ class WalletScanner {
           true) {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.scanStarted,
-          message:
-              'scan initialized for $coinName at $accountNumber', //TODO i18n
+          message: AppLocalizations.instance.translate(
+            'wallet_scanner_message_init',
+            {'coin': coinName, 'account': accountNumber.toString()},
+          ),
           task: (coinName, accountNumber),
         );
 

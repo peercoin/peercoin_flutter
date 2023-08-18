@@ -100,12 +100,6 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
   }
 
   @override
-  void deactivate() {
-    stopScan();
-    super.deactivate();
-  }
-
-  @override
   void didChangeDependencies() async {
     if (_initial == true) {
       context.loaderOverlay.show();
@@ -149,10 +143,6 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
     });
   }
 
-  void stopScan() {
-    //TODO integrate
-  }
-
   void walletScanEventHandler(WalletScannerStreamReply event) {
     LoggerWrapper.logInfo(
       'AppSettingsWalletScanner',
@@ -160,10 +150,16 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
       event.message,
     );
 
-    //write to log widwet
-    _addToLog(
-      '${event.type.name} ${event.message}',
-    );
+    //translate log entry for newAddressFound
+    if (event.type == WalletScannerMessageType.newAddressFound) {
+      _addToLog(
+        '${AppLocalizations.instance.translate('wallet_scanner_message_${event.type.name}')}: ${event.message}',
+      );
+    } else {
+      _addToLog(
+        '${event.type.name}: ${event.message}',
+      );
+    }
 
     if (event.type == WalletScannerMessageType.newWalletFound) {
       final (currentTaskCoin, currentTaskAccountNumber) = event.task;
@@ -178,6 +174,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
           'walletScanEventHandler',
           'Wallet already exists: $walletName, skipping',
         );
+
         _addToLog(
           AppLocalizations.instance.translate(
             'wallet_scan_wallet_already_exists',
@@ -257,6 +254,9 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
   }
 
   void _addToLog(String text) {
+    if (_logLines.length > 20) {
+      _logLines.removeAt(0);
+    }
     setState(() {
       _logLines.add(text);
     });
