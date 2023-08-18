@@ -29,7 +29,7 @@ class ElectrumBackend extends DataSource {
   bool _closedIntentionally = false;
   int _connectionAttempt = 0;
   late List _availableServers;
-  late StreamSubscription _offlineSubscription;
+  StreamSubscription? _offlineSubscription;
   late double _requiredProtocol;
   int _resetAttempt = 1;
   final StreamController _listenerNotifier = StreamController.broadcast();
@@ -64,7 +64,7 @@ class ElectrumBackend extends DataSource {
       ) async {
         if (result != ConnectivityResult.none) {
           //connection re-established
-          _offlineSubscription.cancel();
+          _offlineSubscription!.cancel();
           await closeConnection();
           cleanUpOnDone();
           init(
@@ -219,7 +219,9 @@ class ElectrumBackend extends DataSource {
       _closedIntentionally = true;
       _connectionAttempt = 0;
       if (_reconnectTimer != null) _reconnectTimer!.cancel();
-      _offlineSubscription.cancel();
+      if (_offlineSubscription != null) {
+        _offlineSubscription!.cancel();
+      }
     }
   }
 
