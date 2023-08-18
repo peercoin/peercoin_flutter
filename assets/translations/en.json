@@ -439,5 +439,12 @@
     "about_donate_button": "Donate PPC now",
     "app_settings_delete": "Delete account",
     "app_settings_delete_description": "Since you have not created an account in this app, there is nothing to delete. You created a \"wallet seed\", which is a cryptographical operation. Your seed is math. It can be used in any application that supports seed phrases. You also don't have any accounts with the background notification or price feed APIs. This app values your privacy and is private by design.",
-    "wallet_scan": "Wallet Scan" 
+    "wallet_scan": "Wallet Scan",
+    "wallet_scan_finished": "Scan Finished",
+    "wallet_scan_create_success": "Wallet $title created successfully",
+    "wallet_scan_scanning_finished": "Scanning finished",
+    "wallet_scan_n_new_found": "$n new wallets found",
+    "wallet_scan_no_new_found": "No new wallets found",
+    "wallet_scan_wallet_already_exists": "Wallet already exists: $walletName",
+    "wallet_scan_create_error": "Creating wallet failed: $error"
 }

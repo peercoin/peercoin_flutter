@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/data_sources/data_source.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/wallet_scanner_stream_reply.dart';
@@ -20,6 +21,8 @@ class AppSettingsWalletScanner extends StatefulWidget {
 
 class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
   bool _initial = true;
+  bool _scanInProgress = true;
+  int _nOfWalletsFound = 0;
   final List<String> _logLines = [];
   final List<(String, int)> _tasks = [];
   late ServerProvider _serverProvider;
@@ -32,7 +35,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
         centerTitle: true,
         title: Text(
           AppLocalizations.instance.translate(
-            'wallet_scan_appBar_title',
+            'wallet_scan',
           ),
         ),
       ),
@@ -59,6 +62,38 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
               ),
             ),
           ),
+          if (_scanInProgress == false)
+            Flexible(
+              child: Column(
+                children: [
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'wallet_scan_finished',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _nOfWalletsFound > 0
+                      ? Text(
+                          AppLocalizations.instance.translate(
+                            'wallet_scan_n_new_found',
+                            {
+                              'n': _nOfWalletsFound.toString(),
+                            },
+                          ),
+                        )
+                      : Text(
+                          AppLocalizations.instance.translate(
+                            'wallet_scan_no_new_found',
+                          ),
+                        )
+                ],
+              ),
+            )
         ],
       ),
     );
@@ -73,6 +108,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
+      context.loaderOverlay.show();
       //populate providers
       _serverProvider = Provider.of<ServerProvider>(context, listen: false);
       _walletProvider = Provider.of<WalletProvider>(context, listen: false);
@@ -142,7 +178,12 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
           'walletScanEventHandler',
           'Wallet already exists: $walletName, skipping',
         );
-        _addToLog('Wallet already exists: $walletName'); //TODO i18n
+        _addToLog(
+          AppLocalizations.instance.translate(
+            'wallet_scan_wallet_already_exists',
+            {'walletName': walletName},
+          ),
+        );
       } else {
         //add wallet to wallet provider
         final coin = AvailableCoins.getSpecificCoin(currentTaskCoin);
@@ -157,13 +198,30 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
             title: title,
             letterCode: coin.letterCode,
           );
+          _addToLog(
+            AppLocalizations.instance.translate(
+              'wallet_scan_create_success',
+              {'title': title},
+            ),
+          );
+
+          setState(() {
+            _nOfWalletsFound++;
+          });
         } catch (e) {
           LoggerWrapper.logError(
             'AppSettingsWalletScanner',
             'walletScanEventHandler',
             e.toString(),
           );
-          _addToLog('Creating wallet failed: ${e.toString()}'); //TODO i18n
+          _addToLog(
+            AppLocalizations.instance.translate(
+              'wallet_scan_create_error',
+              {'error': e.toString()},
+            ),
+          );
+
+          _endScan();
         }
       }
 
@@ -185,17 +243,29 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
           'walletScanEventHandler',
           'No more tasks, scan finished',
         );
-        _addToLog('Scanning finished'); //TODO i18n
+        _addToLog(
+          AppLocalizations.instance.translate(
+            'wallet_scanning_finished',
+          ),
+        );
+
+        _endScan();
       }
+    } else if (event.type == WalletScannerMessageType.error) {
+      _endScan();
     }
   }
 
   void _addToLog(String text) {
     setState(() {
       _logLines.add(text);
-      if (_logLines.length > 20) {
-        _logLines.removeAt(0);
-      }
     });
+  }
+
+  void _endScan() {
+    setState(() {
+      _scanInProgress = false;
+    });
+    context.loaderOverlay.hide();
   }
 }
