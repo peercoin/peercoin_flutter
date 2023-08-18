@@ -40,25 +40,29 @@ class _AppSettingsWalletScanLandingScreenState
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: _logLines.length,
-              itemBuilder: (context, index) {
-                return Text(_logLines[index]);
-              },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: _logLines.length,
+                itemBuilder: (context, index) {
+                  return Text(
+                    _logLines[index],
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontFamily:
+                          'Courier', // Monospace font for that traditional log appearance
+                      letterSpacing:
+                          0.5, // Slight letter spacing for better readability
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  void _addToLog(String text) {
-    setState(() {
-      _logLines.add(text);
-      if (_logLines.length > 10) {
-        _logLines.removeAt(0);
-      }
-    });
   }
 
   @override
@@ -93,7 +97,7 @@ class _AppSettingsWalletScanLandingScreenState
     final (String coinName, int accountNumber) = task;
 
     LoggerWrapper.logInfo(
-      'WalletScanner ',
+      'AppSettingsWalletScanLandingScreen',
       'launchScan',
       '$coinName-$accountNumber',
     );
@@ -109,9 +113,13 @@ class _AppSettingsWalletScanLandingScreenState
     });
   }
 
+  void stopScan() {
+    //TODO integrate
+  }
+
   void walletScanEventHandler(WalletScannerStreamReply event) {
     LoggerWrapper.logInfo(
-      'WalletScanEventHandler',
+      'AppSettingsWalletScanLandingScreen',
       event.type.name,
       event.message,
     );
@@ -122,10 +130,41 @@ class _AppSettingsWalletScanLandingScreenState
     );
 
     if (event.type == WalletScannerMessageType.newWalletFound) {
-      //TODO add wallet to wallet provider
+      final (currentTaskCoin, currentTaskAccountNumber) = event.task;
+      final walletName = '${currentTaskCoin}_$currentTaskAccountNumber';
+
+      if (_walletProvider.availableWalletKeys.contains(walletName)) {
+        //wallet already exists
+        LoggerWrapper.logInfo(
+          'AppSettingsWalletScanLandingScreen',
+          'walletScanEventHandler',
+          'Wallet already exists: $walletName, skipping',
+        );
+      } else {
+        //add wallet to wallet provider
+        final coin = AvailableCoins.getSpecificCoin(currentTaskCoin);
+        String title = coin.displayName;
+        if (currentTaskAccountNumber > 0) {
+          title = '$title ${currentTaskAccountNumber + 1}';
+        }
+
+        try {
+          _walletProvider.addWallet(
+            name: walletName,
+            title: title,
+            letterCode: coin.letterCode,
+          );
+        } catch (e) {
+          LoggerWrapper.logError(
+            'AppSettingsWalletScanLandingScreen',
+            'walletScanEventHandler',
+            e.toString(),
+          );
+          _addToLog('Creating wallet failed: ${e.toString()}');
+        }
+      }
 
       //add next task to queue
-      final (currentTaskCoin, currentTaskAccountNumber) = event.task;
       setState(() {
         _tasks.add((currentTaskCoin, currentTaskAccountNumber + 1));
       });
@@ -138,14 +177,22 @@ class _AppSettingsWalletScanLandingScreenState
         //start next task
         launchScan(_tasks.first);
       } else {
-        //TODO finish
+        LoggerWrapper.logInfo(
+          'AppSettingsWalletScanLandingScreen',
+          'walletScanEventHandler',
+          'No more tasks, scan finished',
+        );
+        _addToLog('Scanning finished');
       }
     }
   }
 
-  void stopScan() {
-    //TODO integrate
+  void _addToLog(String text) {
+    setState(() {
+      _logLines.add(text);
+      if (_logLines.length > 20) {
+        _logLines.removeAt(0);
+      }
+    });
   }
-
-  //TODO case for multi wallets without background notifications
 }
