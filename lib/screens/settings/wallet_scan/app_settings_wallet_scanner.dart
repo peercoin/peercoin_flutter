@@ -133,7 +133,9 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
       final (currentTaskCoin, currentTaskAccountNumber) = event.task;
       final walletName = '${currentTaskCoin}_$currentTaskAccountNumber';
 
-      if (_walletProvider.availableWalletKeys.contains(walletName)) {
+      if (_walletProvider.availableWalletKeys.contains(walletName) ||
+          _walletProvider.availableWalletKeys.contains(currentTaskCoin)) {
+        //second condition is backward compatabilty for old wallets without trailing number
         //wallet already exists
         LoggerWrapper.logInfo(
           'AppSettingsWalletScanner',
