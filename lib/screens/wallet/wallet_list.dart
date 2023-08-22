@@ -76,18 +76,30 @@ class _WalletListScreenState extends State<WalletListScreen>
     _activeWalletsOrdered = values;
   }
 
+  void _triggerChangeLogCheck(
+    NavigatorState navigator,
+    String identifierInSettings,
+  ) async {
+    var packageInfo = await PackageInfo.fromPlatform();
+    if (packageInfo.buildNumber != identifierInSettings) {
+      await navigator.pushNamed(Routes.changeLog);
+      _appSettings.setBuildIdentifier(packageInfo.buildNumber);
+    }
+  }
+
+  Future<bool> checkReminder() async {
+    return await PeriodicReminders.checkReminder(
+      _appSettings,
+      context,
+    );
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _appSettings = Provider.of<AppSettingsProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       final navigator = Navigator.of(context);
-      Future<bool> checkReminder() async {
-        return await PeriodicReminders.checkReminder(
-          _appSettings,
-          context,
-        );
-      }
 
       final modalRoute = ModalRoute.of(context);
       await _appSettings.init(); //only required in home widget
@@ -112,11 +124,10 @@ class _WalletListScreenState extends State<WalletListScreen>
 
       if (!kIsWeb) {
         //toggle check for "whats new" changelog
-        var packageInfo = await PackageInfo.fromPlatform();
-        if (packageInfo.buildNumber != _appSettings.buildIdentifier) {
-          await navigator.pushNamed(Routes.changeLog);
-          _appSettings.setBuildIdentifier(packageInfo.buildNumber);
-        }
+        _triggerChangeLogCheck(
+          navigator,
+          _appSettings.buildIdentifier,
+        );
 
         //toggle periodic reminders
         if (_activeWalletsOrdered.isNotEmpty) {
