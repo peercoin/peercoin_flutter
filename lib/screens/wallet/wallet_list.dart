@@ -351,7 +351,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                               ),
                               if (_importedSeed)
                                 const SizedBox(
-                                  height: 10,
+                                  height: 20,
                                 ),
                               if (_importedSeed)
                                 PeerButtonBorder(
@@ -363,7 +363,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                   ),
                                 ),
                               const SizedBox(
-                                height: 10,
+                                height: 20,
                               ),
                               PeerButtonBorder(
                                 text: AppLocalizations.instance.translate(

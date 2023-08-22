@@ -37,8 +37,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   String _unusedAddress = '';
-  late CoinWallet _wallet;
   int _pageIndex = 1;
+  int _latestBlock = 0;
+  late CoinWallet _wallet;
   late BackendConnectionState _connectionState = BackendConnectionState.waiting;
   late ConnectionProvider _connectionProvider;
   late WalletProvider _walletProvider;
@@ -46,7 +47,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
   late ServerProvider _servers;
-  int _latestBlock = 0;
   String? _address;
   String? _label;
 
@@ -104,14 +104,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
   }
 
-  void _triggerRescanBottomSheet() {
+  void _triggerRescanBottomSheet() async {
     // show bottom sheet
     showModalBottomSheet(
+      isDismissible: false,
+      enableDrag: false,
       builder: (BuildContext context) {
         return const WalletRescanBottomSheet();
       },
       context: context,
     );
+
+    // check if _connectionProvider.openReplies has been empty for longer than 5 seconds
+    bool isEmptyForFiveSeconds = false;
+    Duration emptyDuration = const Duration(seconds: 0);
+
+    while (!isEmptyForFiveSeconds) {
+      if (_connectionProvider.openReplies.isEmpty) {
+        await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
+        emptyDuration += const Duration(seconds: 1);
+
+        if (emptyDuration >= const Duration(seconds: 5)) {
+          isEmptyForFiveSeconds = true;
+        }
+      } else {
+        emptyDuration = const Duration(seconds: 0); // Reset the duration
+        await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
+      }
+    }
+
+    // scan done
+    LoggerWrapper.logInfo(
+      'WalletHome',
+      '_triggerRescanBottomSheet',
+      'scan done, removing bottom sheet',
+    );
+
+    // pop bottom sheet
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
 
     // remove flag
     _walletProvider.updateDueForRescan(_wallet.name, false);
@@ -577,6 +608,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
             ),
     );
   }
+
+  // TODO check cursive roboto on iOS
+  // TODO wallet list: make larger list prettier
 }
 
 class Tabs {

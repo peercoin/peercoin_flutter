@@ -589,6 +589,8 @@ class WalletProvider with ChangeNotifier {
 
     await updateWalletBalance(identifier);
     await openWallet.save();
+
+    //TODO reimplement this
   }
 
   Future<void> updateAddressStatus(

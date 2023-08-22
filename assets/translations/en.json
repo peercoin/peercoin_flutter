@@ -392,9 +392,8 @@
     "wallet_title_edit_new_title": "New Title",
     "wallet_receive_label_hint": "Pressing the Share button will save the address label.",
     "wallet_receive_label_hint_privacy": "Reusing your address is discouraged for privacy reasons. If you want to reuse this address, you have to set it to \"watched\" in the address book after having used it.",
-    "wallet_send_label_hint_scan": "Scanning the QR-Code will save you some time",
     "wallet_send_label_hint_metadata": "Metadata is unencrypted and will be publicly visible on the blockchain.",
-    "wallet_scan_notice": "This might take a while. Don't close this screen!",
+    "wallet_scan_notice_new": "This might take a while.\nThis screen will close itself automatically!",
     "wallet_scan_notice_bg_notifications": "Enabling background notifications in App Settings can severely improve scanning reliability.",
     "wallet_send": "Send",
     "wallet_transactions": "Transactions",
@@ -454,5 +453,6 @@
     "wallet_scanner_message_new_wallet_found": "new wallet found for $coinName at $accountNumber",
     "wallet_scanner_message_scan_finished": "scan finished for $coinName at $accountNumber",
     "wallet_scanner_message_scan_failed": "scan failed for $coinName at $accountNumber ($e))",
-    "wallet_scanner_message_scan_connection_failed": "scan failed for $coinName at $accountNumber (Connection failed)"
+    "wallet_scanner_message_scan_connection_failed": "scan failed for $coinName at $accountNumber (Connection failed)",
+    "scan_modal_title": "Scanning this Wallet"
 }
