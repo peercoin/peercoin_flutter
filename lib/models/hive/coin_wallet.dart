@@ -7,6 +7,7 @@ import 'pending_notifications.dart';
 import 'wallet_address.dart';
 import 'wallet_transaction.dart';
 import 'wallet_utxo.dart';
+
 part 'coin_wallet.g.dart';
 
 @HiveType(typeId: 1)
@@ -41,48 +42,58 @@ class CoinWallet extends HiveObject {
   @HiveField(9, defaultValue: 0)
   int _walletIndex = 0;
 
+  @HiveField(10, defaultValue: false)
+  bool _dueForRescan = false;
+
   CoinWallet(
     this._name,
     this._title,
     this._letterCode,
     this._walletIndex,
+    this._dueForRescan,
   );
 
-  String get name {
-    return _name;
-  }
-
-  String get letterCode {
-    return _letterCode;
-  }
-
-  int get walletIndex {
-    return _walletIndex;
-  }
-
-  set walletIndex(int newWalletNumber) {
-    _walletIndex = newWalletNumber;
-    save();
+  set addNewAddress(WalletAddress newAddress) {
+    final res = _addresses
+        .firstWhereOrNull((element) => element.address == newAddress.address);
+    if (res == null) {
+      _addresses.add(newAddress);
+      save();
+    }
   }
 
   List<WalletAddress> get addresses {
     return _addresses;
   }
 
-  List<WalletTransaction> get transactions {
-    return _transactions;
-  }
-
-  List<WalletUtxo> get utxos {
-    return _utxos;
-  }
-
   int get balance {
     return _balance;
   }
 
-  int get unconfirmedBalance {
-    return _unconfirmedBalance;
+  set balance(int newBalance) {
+    _balance = newBalance;
+    save();
+  }
+
+  bool get dueForRescan {
+    return _dueForRescan;
+  }
+
+  set dueForRescan(bool value) {
+    _dueForRescan = value;
+    save();
+  }
+
+  String get letterCode {
+    return _letterCode;
+  }
+
+  String get name {
+    return _name;
+  }
+
+  List<PendingNotification> get pendingTransactionNotifications {
+    return _pendingTransactionNotifications ?? [];
   }
 
   String get title {
@@ -94,13 +105,12 @@ class CoinWallet extends HiveObject {
     save();
   }
 
-  List<PendingNotification> get pendingTransactionNotifications {
-    return _pendingTransactionNotifications ?? [];
+  List<WalletTransaction> get transactions {
+    return _transactions;
   }
 
-  set balance(int newBalance) {
-    _balance = newBalance;
-    save();
+  int get unconfirmedBalance {
+    return _unconfirmedBalance;
   }
 
   set unconfirmedBalance(int newBalance) {
@@ -108,33 +118,16 @@ class CoinWallet extends HiveObject {
     save();
   }
 
-  set addNewAddress(WalletAddress newAddress) {
-    final res = _addresses
-        .firstWhereOrNull((element) => element.address == newAddress.address);
-    if (res == null) {
-      _addresses.add(newAddress);
-      save();
-    }
+  List<WalletUtxo> get utxos {
+    return _utxos;
   }
 
-  void putTransaction(WalletTransaction newTx) {
-    _transactions.add(newTx);
-    save();
+  int get walletIndex {
+    return _walletIndex;
   }
 
-  void putUtxo(WalletUtxo newUtxo) {
-    _utxos.add(newUtxo);
-    save();
-  }
-
-  void clearUtxo(String address) {
-    _utxos.removeWhere((element) => element.address == address);
-    save();
-  }
-
-  void removeAddress(WalletAddress walletAddress) {
-    _addresses
-        .removeWhere((element) => element.address == walletAddress.address);
+  set walletIndex(int newWalletNumber) {
+    _walletIndex = newWalletNumber;
     save();
   }
 
@@ -151,6 +144,11 @@ class CoinWallet extends HiveObject {
       }
     }
     _pendingTransactionNotifications = [];
+    save();
+  }
+
+  void clearUtxo(String address) {
+    _utxos.removeWhere((element) => element.address == address);
     save();
   }
 
@@ -173,6 +171,22 @@ class CoinWallet extends HiveObject {
         _pendingTransactionNotifications!.add(tx);
       }
     }
+    save();
+  }
+
+  void putTransaction(WalletTransaction newTx) {
+    _transactions.add(newTx);
+    save();
+  }
+
+  void putUtxo(WalletUtxo newUtxo) {
+    _utxos.add(newUtxo);
+    save();
+  }
+
+  void removeAddress(WalletAddress walletAddress) {
+    _addresses
+        .removeWhere((element) => element.address == walletAddress.address);
     save();
   }
 }

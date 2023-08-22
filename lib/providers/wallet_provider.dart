@@ -147,9 +147,17 @@ class WalletProvider with ChangeNotifier {
         title,
         letterCode,
         nOfWalletOfLetterCode,
+        true,
       ),
     );
     notifyListeners();
+  }
+
+  Future<void> updateDueForRescan(String identifier, bool newState) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    openWallet.dueForRescan = newState;
+
+    await openWallet.save();
   }
 
   Future<String> getAddressFromDerivationPath({

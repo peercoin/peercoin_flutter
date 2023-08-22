@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
-import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
 
 class NewWalletDialog extends StatefulWidget {
@@ -54,16 +52,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       notificationList.add(walletName);
       appSettings.setNotificationActiveWallets(notificationList);
 
-      var prefs = await SharedPreferences.getInstance();
-      if (prefs.getBool('importedSeed') == true) {
-        await navigator.pushNamedAndRemoveUntil(
-          Routes.appSettingsWalletScanner,
-          (_) => false,
-          arguments: walletName,
-        );
-      } else {
-        navigator.pop();
-      }
+      navigator.pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

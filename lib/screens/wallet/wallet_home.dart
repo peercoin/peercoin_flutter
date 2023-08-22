@@ -24,6 +24,7 @@ import '../../widgets/wallet/addresses_tab.dart';
 import '../../widgets/wallet/receive_tab.dart';
 import '../../widgets/wallet/send_tab.dart';
 import '../../widgets/wallet/transactions_list.dart';
+import '../../widgets/wallet/wallet_rescan_bottom_sheet.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   const WalletHomeScreen({Key? key}) : super(key: key);
@@ -103,6 +104,74 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
   }
 
+  void _triggerRescanBottomSheet() {
+    // show bottom sheet
+    showModalBottomSheet(
+      builder: (BuildContext context) {
+        return const WalletRescanBottomSheet();
+      },
+      context: context,
+    );
+
+    // remove flag
+    _walletProvider.updateDueForRescan(_wallet.name, false);
+  }
+
+  Future<void> _performInit() async {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    _wallet = arguments['wallet'];
+
+    _connectionProvider = Provider.of<ConnectionProvider>(context);
+    _walletProvider = Provider.of<WalletProvider>(context);
+    _appSettings = context.read<AppSettingsProvider>();
+    _servers = Provider.of<ServerProvider>(context);
+
+    _connectionProvider.setDataSource(
+      ElectrumBackend(
+        _walletProvider,
+        _servers,
+      ),
+    );
+
+    await _walletProvider.generateUnusedAddress(_wallet.name);
+    _walletTransactions =
+        await _walletProvider.getWalletTransactions(_wallet.name);
+    await _connectionProvider.init(
+      _wallet.name,
+      requestedFromWalletHome: true,
+    );
+
+    if (_appSettings.authenticationOptions!['walletHome']!) {
+      // ignore: use_build_context_synchronously
+      await Auth.requireAuth(
+        context: context,
+        biometricsAllowed: _appSettings.biometricsAllowed,
+        canCancel: false,
+      );
+    }
+
+    if (!kIsWeb) {
+      if (Platform.isIOS || Platform.isAndroid) {
+        if (_wallet.letterCode != 'tPPC') {
+          triggerHighValueAlert();
+        }
+      }
+    }
+
+    checkPendingNotifications();
+    // ignore: use_build_context_synchronously
+    context.loaderOverlay.hide();
+
+    if (arguments.containsKey('pushedAddress')) {
+      changeIndex(Tabs.send, arguments['pushedAddress']);
+    }
+
+    //check if wallet is due for rescan
+    if (_wallet.dueForRescan == true) {
+      _triggerRescanBottomSheet();
+    }
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
@@ -110,53 +179,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _wallet = arguments['wallet'];
-
-      _connectionProvider = Provider.of<ConnectionProvider>(context);
-      _walletProvider = Provider.of<WalletProvider>(context);
-      _appSettings = context.read<AppSettingsProvider>();
-      _servers = Provider.of<ServerProvider>(context);
-
-      _connectionProvider.setDataSource(
-        ElectrumBackend(
-          _walletProvider,
-          _servers,
-        ),
-      );
-
-      await _walletProvider.generateUnusedAddress(_wallet.name);
-      _walletTransactions =
-          await _walletProvider.getWalletTransactions(_wallet.name);
-      await _connectionProvider.init(
-        _wallet.name,
-        requestedFromWalletHome: true,
-      );
-
-      if (_appSettings.authenticationOptions!['walletHome']!) {
-        // ignore: use_build_context_synchronously
-        await Auth.requireAuth(
-          context: context,
-          biometricsAllowed: _appSettings.biometricsAllowed,
-          canCancel: false,
-        );
-      }
-
-      if (!kIsWeb) {
-        if (Platform.isIOS || Platform.isAndroid) {
-          if (_wallet.letterCode != 'tPPC') {
-            triggerHighValueAlert();
-          }
-        }
-      }
-
-      checkPendingNotifications();
-      // ignore: use_build_context_synchronously
-      context.loaderOverlay.hide();
-
-      if (arguments.containsKey('pushedAddress')) {
-        changeIndex(Tabs.send, arguments['pushedAddress']);
-      }
+      await _performInit();
     } else {
       _connectionState = _connectionProvider.connectionState;
       _unusedAddress = _walletProvider.getUnusedAddress(_wallet.name);
