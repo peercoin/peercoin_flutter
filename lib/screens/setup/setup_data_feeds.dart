@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -36,6 +37,13 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
     if (_initial) {
       _settings = context.read<AppSettingsProvider>();
       await _settings.init();
+
+      //populate build identifier if not on web
+      if (!kIsWeb) {
+        var packageInfo = await PackageInfo.fromPlatform();
+        _settings.setBuildIdentifier(packageInfo.buildNumber);
+      }
+
       setState(() {
         _initial = false;
       });
