@@ -177,6 +177,4 @@ class WalletScanner {
 
     return knownAddresses;
   }
-
-  //TODO if wallet is opened show scan overlay till initial sync is done (use openReplies?)
 }
