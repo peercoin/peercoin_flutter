@@ -6,6 +6,7 @@ import 'package:peercoin/models/wallet_scanner_stream_reply.dart';
 import 'package:peercoin/providers/server_provider.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/tools/scanner/wallet_scanner.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/wallet_provider.dart';
@@ -90,7 +91,16 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
                           AppLocalizations.instance.translate(
                             'wallet_scan_no_new_found',
                           ),
-                        )
+                        ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  PeerButtonBorder(
+                    text: AppLocalizations.instance.translate(
+                      'wallet_scan_close',
+                    ),
+                    action: Navigator.of(context).pop,
+                  ),
                 ],
               ),
             )

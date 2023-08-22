@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
@@ -45,6 +46,7 @@ class WalletListScreen extends StatefulWidget {
 class _WalletListScreenState extends State<WalletListScreen>
     with SingleTickerProviderStateMixin {
   bool _initial = true;
+  late bool _importedSeed;
   late WalletProvider _walletProvider;
   late Animation<double> _animation;
   late AnimationController _controller;
@@ -105,6 +107,8 @@ class _WalletListScreenState extends State<WalletListScreen>
       await _appSettings.init(); //only required in home widget
       await _walletProvider.init();
       await _orderWallets();
+      final prefs = await SharedPreferences.getInstance();
+      _importedSeed = prefs.getBool('importedSeed') == true;
 
       setState(() {
         _initial = false;
@@ -345,12 +349,26 @@ class _WalletListScreenState extends State<WalletListScreen>
                                       Theme.of(context).colorScheme.background,
                                 ),
                               ),
+                              if (_importedSeed)
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              if (_importedSeed)
+                                PeerButtonBorder(
+                                  text: AppLocalizations.instance.translate(
+                                    'scan_for_wallets',
+                                  ),
+                                  action: () => Navigator.of(context).pushNamed(
+                                    Routes.appSettingsWalletScanner,
+                                  ),
+                                ),
                               const SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
-                              PeerButton(
-                                text: AppLocalizations.instance
-                                    .translate('add_new_wallet'),
+                              PeerButtonBorder(
+                                text: AppLocalizations.instance.translate(
+                                  'add_new_wallet',
+                                ),
                                 action: () => showWalletDialog(context),
                               )
                             ],

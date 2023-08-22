@@ -178,6 +178,5 @@ class WalletScanner {
     return knownAddresses;
   }
 
-  //TODO button in wallet list for imported seeds with no wallets that will point to scan
   //TODO if wallet is opened show scan overlay till initial sync is done (use openReplies?)
 }
