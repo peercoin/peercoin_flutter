@@ -204,6 +204,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
             name: walletName,
             title: title,
             letterCode: coin.letterCode,
+            isImportedSeed: true,
           );
           _addToLog(
             AppLocalizations.instance.translate(
