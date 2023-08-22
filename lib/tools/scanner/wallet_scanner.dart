@@ -66,8 +66,13 @@ class WalletScanner {
           if (res.isNotEmpty) {
             yield WalletScannerStreamReply(
               type: WalletScannerMessageType.newWalletFound,
-              message:
-                  'new wallet found for $coinName at $accountNumber', //TODO i18n
+              message: AppLocalizations.instance.translate(
+                'wallet_scanner_message_new_wallet_found',
+                {
+                  'coinName': coinName,
+                  'accountNumber': accountNumber.toString()
+                },
+              ),
               task: (coinName, accountNumber),
             );
           }
@@ -75,15 +80,26 @@ class WalletScanner {
           // done
           yield WalletScannerStreamReply(
             type: WalletScannerMessageType.scanFinished,
-            message:
-                'scan finished for $coinName at $accountNumber', //TODO i18n
+            message: AppLocalizations.instance.translate(
+              'wallet_scanner_message_scan_finished',
+              {
+                'coinName': coinName,
+                'accountNumber': accountNumber.toString(),
+              },
+            ),
             task: (coinName, accountNumber),
           );
         } catch (e) {
           yield WalletScannerStreamReply(
             type: WalletScannerMessageType.error,
-            message:
-                'scan failed for $coinName at $accountNumber ($e))', //TODO i18n
+            message: AppLocalizations.instance.translate(
+              'wallet_scanner_message_scan_failed',
+              {
+                'coinName': coinName,
+                'accountNumber': accountNumber.toString(),
+                'e': e.toString(),
+              },
+            ),
             task: (coinName, accountNumber),
           );
         } finally {
@@ -92,8 +108,13 @@ class WalletScanner {
       } else {
         yield WalletScannerStreamReply(
           type: WalletScannerMessageType.error,
-          message:
-              'scan failed for $coinName at $accountNumber (Connection failed)', //TODO i18n
+          message: AppLocalizations.instance.translate(
+            'wallet_scanner_message_scan_connection_failed',
+            {
+              'coinName': coinName,
+              'accountNumber': accountNumber.toString(),
+            },
+          ),
           task: (coinName, accountNumber),
         );
         await electrumScanner.closeConnection(true);
@@ -157,7 +178,6 @@ class WalletScanner {
     return knownAddresses;
   }
 
-  //TODO i18n here
   //TODO button in wallet list for imported seeds with no wallets that will point to scan
   //TODO if wallet is opened show scan overlay till initial sync is done (use openReplies?)
 }

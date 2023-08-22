@@ -448,5 +448,9 @@
     "wallet_scan_wallet_already_exists": "wallet already exists: $walletName",
     "wallet_scan_create_error": "creating wallet failed: $error",
     "wallet_scanner_message_init": "scan initialized for $coinName at $account",
-    "wallet_scanner_message_newAddressFound": "new address found"
+    "wallet_scanner_message_newAddressFound": "new address found",
+    "wallet_scanner_message_new_wallet_found": "new wallet found for $coinName at $accountNumber",
+    "wallet_scanner_message_scan_finished": "scan finished for $coinName at $accountNumber",
+    "wallet_scanner_message_scan_failed": "scan failed for $coinName at $accountNumber ($e))",
+    "wallet_scanner_message_scan_connection_failed": "scan failed for $coinName at $accountNumber (Connection failed)"
 }

@@ -254,9 +254,6 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
   }
 
   void _addToLog(String text) {
-    if (_logLines.length > 20) {
-      _logLines.removeAt(0);
-    }
     setState(() {
       _logLines.add(text);
     });
