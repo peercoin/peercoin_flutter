@@ -345,16 +345,14 @@ class _WalletListScreenState extends State<WalletListScreen>
                                       Theme.of(context).colorScheme.background,
                                 ),
                               ),
-                              if (kIsWeb)
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              if (kIsWeb)
-                                PeerButton(
-                                  text: AppLocalizations.instance
-                                      .translate('add_new_wallet'),
-                                  action: () => showWalletDialog(context),
-                                )
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              PeerButton(
+                                text: AppLocalizations.instance
+                                    .translate('add_new_wallet'),
+                                action: () => showWalletDialog(context),
+                              )
                             ],
                           ),
                         )
