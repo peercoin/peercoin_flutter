@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
@@ -37,11 +38,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       if (nOfWalletOfLetterCode > 0) {
         title = '$title ${nOfWalletOfLetterCode + 1}';
       }
+      final prefs = await SharedPreferences.getInstance();
 
       await walletProvider.addWallet(
         name: walletName,
         title: title,
         letterCode: letterCode,
+        isImportedSeed: prefs.getBool('importedSeed') == true,
       );
 
       //add to order list

@@ -128,6 +128,7 @@ class WalletProvider with ChangeNotifier {
     required String name,
     required String title,
     required String letterCode,
+    required bool isImportedSeed,
   }) async {
     var box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
@@ -147,7 +148,7 @@ class WalletProvider with ChangeNotifier {
         title,
         letterCode,
         nOfWalletOfLetterCode,
-        true,
+        isImportedSeed,
       ),
     );
     notifyListeners();
