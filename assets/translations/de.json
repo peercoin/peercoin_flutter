@@ -222,7 +222,6 @@
     "setup_save_title": "Wallet erstellen",
     "setup_save_text1": "Die nachfolgende Wortliste nennt sich Seed. Es ist ein komplexes Passwort das volle Kontrolle über deine Wallet und Münzen erlaubt.",
     "app_settings_notifications": "Benachrichtigungen",
-    "app_settings_notifications_open_button": "Benachrichtungseinstellungen öffnen",
     "app_settings_notifications_alert_content": "Dies wird unsere datenschutzfreundlichen Benachrichtigungen aktivieren.\nSie können jederzeit deaktiviert werden.",
     "app_settings_notifications_hint_sync_2": "Die Benachrichtigungen können, abhängig davon wie dein Betriebssystem Hintergrundaufgaben behandelt, signifikant verzögert sein. iOS-Geräte können längere Intervalle erwarten.",
     "setup_bg_sync_description": "Dies wird Hintergrundbenachrichtigungen für deine Wallets aktivieren.",
@@ -340,5 +339,19 @@
     "send_address_already_exists": "Adresse existiert bereits",
     "tx_recipients": "Empfänger",
     "send_errors_cant_pay_fees": "Kann nicht für Gebühren bezahlen. $feesMissing $letter_code fehlen derzeit. Bedenke Adressen zu entfernen oder den Betrag zu verringern.",
-    "wallet_scan_notice_bg_notifications": "Aktivierung der Hintergrundbenachrichtungen in den App Einstellungen kann die Zuverlässigkeit signifikant erhöhen."
+    "wallet_scan_notice_bg_notifications": "Aktivierung der Hintergrundbenachrichtungen in den App Einstellungen kann die Zuverlässigkeit signifikant erhöhen.",
+    "verify_enter_message": "Bitte geben Sie eine Nachricht ein",
+    "verify_enter_signature": "Bitte geben Sie eine Signatur ein",
+    "wallet_pop_menu_verification": "Nachrichten Überprüfen",
+    "verify_step_1": "Adresse Eingeben",
+    "verify_input_label_message": "Nachricht zur Überprüfung",
+    "wallet_pop_menu_change_title": "Ändere den Titel",
+    "wallet_title_edit": "Bearbeiten Sie den Wallet-Titel",
+    "wallet_title_edit_new_title": "Neuer Titel",
+    "verify_step_3": "Signatur Eingeben",
+    "verify_step_3_button": "Verifizieren",
+    "verify_input_label_address": "Zu überprüfende Adresse",
+    "verify_input_label_signature": "Unterschrift zur Überprüfung",
+    "verify_success": "Nachricht bestätigt.",
+    "verify_fail": "Die Nachricht konnte nicht überprüft werden."
 }

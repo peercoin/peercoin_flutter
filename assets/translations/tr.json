@@ -238,7 +238,7 @@
     "app_settings_shareseed": "Seed'i Paylaş",
     "import_seed_error_2": "Geçersiz seed",
     "import_wif_hint": "Cüzdan seed vasıtasıyla geri yüklendiğinde anahtarın tekrar içe aktarılması gerekir. Anahtar seed'e bağlı değildir.",
-    "send_dust": "Dust: -$amount $letter_code",
+    "send_dust": "Tozu: -$amount $letter_code",
     "send_to": " adres ",
     "server_add_no_port": "Bir bağlantı noktası içermelidir, örnek: 50004",
     "server_add_server_wrong_genesis": "Genesis hash eşleşmiyor.\nBu sunucu bu kripto parayı desteklemiyor.",

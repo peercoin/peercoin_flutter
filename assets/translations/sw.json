@@ -178,7 +178,7 @@
     "send_amount_small": "Kiasi ni kidogo sana",
     "send_confirm_send": "Thibitisha & Tuma",
     "send_confirm_transaction": "Tafadhali thibitisha muamala",
-    "send_dust": "Dust: -$amount $letter_code",
+    "send_dust": "Vumbi: -$amount $letter_code",
     "send_enter_address": "Tafadhali ingiza anuani",
     "send_enter_amount": "Tafadhali ingiza kiasi",
     "send_empty": "Fanya wallet iwe tupu",
