@@ -93,16 +93,19 @@ class AppLocalizations {
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
   final Locale fallbackLocale = const Locale('en');
-  Locale? locale;
+  Locale locale;
   late Map<String, String> _localizedStrings;
   late Map<String, String> _fallbackLocalizedStrings;
 
   AppLocalizations(this.locale);
-  AppLocalizations._init(this.locale) {
-    instance = this;
+  // make factory
+  factory AppLocalizations._init(Locale locale) {
+    instance = AppLocalizations(locale);
+    return instance;
   }
+
   Future<void> load() async {
-    _localizedStrings = await _loadLocalizedStrings(locale!);
+    _localizedStrings = await _loadLocalizedStrings(locale);
     _fallbackLocalizedStrings = {};
 
     if (locale != fallbackLocale) {

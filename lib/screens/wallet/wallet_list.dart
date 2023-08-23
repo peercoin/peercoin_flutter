@@ -355,6 +355,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 ),
                               if (_importedSeed)
                                 PeerButtonBorder(
+                                  key: const Key('scanForWalletsButton'),
                                   text: AppLocalizations.instance.translate(
                                     'scan_for_wallets',
                                   ),

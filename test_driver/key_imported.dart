@@ -67,7 +67,6 @@ void main() {
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
           await driver.scrollIntoView(find.text('Finish Setup'));
           await driver.tap(find.text('Finish Setup'));
-          await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
               expect(
@@ -83,35 +82,29 @@ void main() {
         timeout: Timeout.none,
       );
 
-      test(
-        'Setup, tap into imported peercoin testnet wallet',
-        () async {
-          await driver.runUnsynchronized(
-            () async {
-              await driver.tap(find.byValueKey('newWalletIconButton'));
-              await driver.tap(find.text('Peercoin Testnet'));
-              await driver.tap(
-                find.text('Okay'),
-                timeout: const Duration(minutes: 15),
-              );
-              await driver.tap(
-                find.text('Peercoin Testnet'),
-                timeout: const Duration(minutes: 15),
-              ); //tap into wallet
-              expect(await driver.getText(find.text('connected')), 'connected');
-            },
-            timeout: const Duration(
-              minutes: 15,
-            ),
+      test('Scan for used wallets in this seed', () async {
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey('scanForWalletsButton'));
+          await driver.waitFor(find.text('2 new wallets found'));
+          await driver.tap(find.text('Close'));
+          expect(
+            await driver.getText(find.text('Peercoin Testnet')),
+            'Peercoin Testnet',
           );
-        },
-        retry: 2,
-        timeout: const Timeout.factor(2),
-      );
+          expect(
+            await driver.getText(find.text('Peercoin')),
+            'Peercoin',
+          );
+        });
+      });
 
       test(
           'Message signing, tap into sign message, select address and sign message',
           () async {
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.text('Peercoin Testnet'));
+        });
+        await driver.getText(find.text('Scanning this Wallet'));
         await driver.tap(find.byTooltip('Show menu'));
         await driver.runUnsynchronized(
           () async {
@@ -289,6 +282,9 @@ void main() {
         await driver.tap(find.text('Deutsch'));
         await driver.scrollIntoView(find.text('Sprachen'));
       });
+      //TODO changelog
+      //TODO test reset
+      //TODO test import paper wallet, go back and see if still connected
     },
   );
 }
