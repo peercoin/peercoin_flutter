@@ -133,7 +133,7 @@ class SettingsAuth extends StatelessWidget {
         PeerButton(
           action: () => changePIN(context, _settings.biometricsAllowed),
           text: AppLocalizations.instance.translate('app_settings_changeCode'),
-        )
+        ),
       ],
     );
   }

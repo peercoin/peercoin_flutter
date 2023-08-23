@@ -103,7 +103,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
                   ),
                 ],
               ),
-            )
+            ),
         ],
       ),
     );

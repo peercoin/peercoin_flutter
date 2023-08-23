@@ -123,7 +123,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                             ),
                             const SizedBox(
                               height: 10,
-                            )
+                            ),
                           ],
                         ),
                       ),

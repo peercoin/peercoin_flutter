@@ -46,7 +46,7 @@ class TransactionDetails extends StatelessWidget {
                     AppLocalizations.instance.translate('id'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(tx.txid)
+                  SelectableText(tx.txid),
                 ],
               ),
               const Divider(),
@@ -65,7 +65,7 @@ class TransactionDetails extends StatelessWidget {
                             ),
                           )
                         : AppLocalizations.instance.translate('unconfirmed'),
-                  )
+                  ),
                 ],
               ),
               const Divider(),
@@ -78,7 +78,7 @@ class TransactionDetails extends StatelessWidget {
                   ),
                   SelectableText(
                     '${tx.value / decimalProduct} ${coinWallet.letterCode}',
-                  )
+                  ),
                 ],
               ),
               tx.direction == 'out'
@@ -92,7 +92,7 @@ class TransactionDetails extends StatelessWidget {
                         ),
                         SelectableText(
                           '${tx.fee / decimalProduct} ${coinWallet.letterCode}',
-                        )
+                        ),
                       ],
                     )
                   : Container(),
@@ -108,7 +108,7 @@ class TransactionDetails extends StatelessWidget {
                     tx: tx,
                     letterCode: coinWallet.letterCode,
                     decimalProduct: decimalProduct,
-                  )
+                  ),
                 ],
               ),
               const Divider(),
@@ -119,7 +119,7 @@ class TransactionDetails extends StatelessWidget {
                     AppLocalizations.instance.translate('tx_direction'),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SelectableText(tx.direction)
+                  SelectableText(tx.direction),
                 ],
               ),
               const Divider(),
@@ -134,7 +134,7 @@ class TransactionDetails extends StatelessWidget {
                     tx.confirmations == -1
                         ? AppLocalizations.instance.translate('tx_rejected')
                         : tx.confirmations.toString(),
-                  )
+                  ),
                 ],
               ),
               tx.opReturn.isNotEmpty
@@ -148,7 +148,7 @@ class TransactionDetails extends StatelessWidget {
                           ),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SelectableText(tx.opReturn)
+                        SelectableText(tx.opReturn),
                       ],
                     )
                   : const SizedBox(),
@@ -168,7 +168,7 @@ class TransactionDetails extends StatelessWidget {
                           child: Text(
                             tx.broadcastHex,
                           ),
-                        )
+                        ),
                       ],
                     )
                   : const SizedBox(),
@@ -209,7 +209,7 @@ class TransactionDetails extends StatelessWidget {
                           'tx_view_in_explorer',
                         ),
                       ),
-                    )
+                    ),
             ],
           ),
         ),

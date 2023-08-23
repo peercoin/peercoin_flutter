@@ -115,7 +115,7 @@ class _WaleltMessagesVerificationScreenState
                 _verificationResult = false;
               });
             },
-          )
+          ),
         ],
       ),
       body: Column(
@@ -309,7 +309,7 @@ class _WaleltMessagesVerificationScreenState
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

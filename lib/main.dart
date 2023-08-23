@@ -153,7 +153,7 @@ void main() async {
         LogLevel.INFO,
         LogLevel.WARNING,
         LogLevel.ERROR,
-        LogLevel.SEVERE
+        LogLevel.SEVERE,
       ],
       timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
       directoryStructure: DirectoryStructure.FOR_DATE,
@@ -230,7 +230,7 @@ class PeercoinApp extends StatelessWidget {
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate
+                GlobalCupertinoLocalizations.delegate,
               ],
               locale: _locale == const Locale('und') ? null : _locale,
               themeMode: themeMode,

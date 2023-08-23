@@ -123,7 +123,7 @@ class _SendTabState extends State<SendTab> {
                                   if (triggerFormValidation())
                                     {
                                       _currentAddressIndex = newIndex - 1,
-                                    }
+                                    },
                                 },
                               ),
                             )
@@ -628,7 +628,7 @@ class _SendTabState extends State<SendTab> {
                 {
                   'feesMissing':
                       (exception.feesMissing / _decimalProduct).toString(),
-                  'letter_code': widget.wallet.letterCode
+                  'letter_code': widget.wallet.letterCode,
                 },
               ),
             ),

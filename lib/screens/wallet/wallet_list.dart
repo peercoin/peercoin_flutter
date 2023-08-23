@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'dart:io';
 
@@ -146,7 +144,9 @@ class _WalletListScreenState extends State<WalletListScreen>
           const Duration(minutes: 10),
           (timer) async {
             if (await checkSessionExpired()) {
-              Navigator.of(context).pop();
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
               LogoutDialog.reloadWindow();
             }
           },
@@ -161,11 +161,13 @@ class _WalletListScreenState extends State<WalletListScreen>
       }
       if (widget.fromColdStart == true &&
           _appSettings.authenticationOptions!['walletList']!) {
-        await Auth.requireAuth(
-          context: context,
-          biometricsAllowed: _appSettings.biometricsAllowed,
-          canCancel: false,
-        );
+        if (mounted) {
+          await Auth.requireAuth(
+            context: context,
+            biometricsAllowed: _appSettings.biometricsAllowed,
+            canCancel: false,
+          );
+        }
       } else if (fromScan == false) {
         //init background tasks
         if (_appSettings.notificationInterval > 0) {
@@ -191,7 +193,9 @@ class _WalletListScreenState extends State<WalletListScreen>
             widget.walletToOpenDirectly.isEmpty) {
           //only one wallet available, pushing to that one (no walletToOpenDirectly set)
           if (!kIsWeb) {
-            context.loaderOverlay.show();
+            if (mounted) {
+              context.loaderOverlay.show();
+            }
             await navigator.pushNamed(
               Routes.walletHome,
               arguments: {
@@ -202,7 +206,9 @@ class _WalletListScreenState extends State<WalletListScreen>
         } else if (_activeWalletsOrdered.length > 1 ||
             widget.walletToOpenDirectly.isNotEmpty) {
           if (defaultWallet != null) {
-            context.loaderOverlay.show();
+            if (mounted) {
+              context.loaderOverlay.show();
+            }
             if (!kIsWeb) {
               await navigator.pushNamed(
                 Routes.walletHome,
@@ -269,7 +275,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                 }
               },
               icon: const Icon(Icons.logout_rounded),
-            )
+            ),
         ],
       ),
       body: _initial
@@ -372,7 +378,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                   'add_new_wallet',
                                 ),
                                 action: () => showWalletDialog(context),
-                              )
+                              ),
                             ],
                           ),
                         )
@@ -484,7 +490,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                               },
                             ),
                           ),
-                        )
+                        ),
                 ],
               ),
             ),

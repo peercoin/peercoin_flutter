@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -149,7 +151,6 @@ class Auth {
     retriesLeft = (maxRetries - failedAuthAttempts);
     if (retriesLeft <= 0) retriesLeft = 1;
 
-    // ignore: use_build_context_synchronously
     await screenLock(
       context: context,
       correctString: await encryptedBox.passCode as String,
@@ -171,7 +172,7 @@ class Auth {
                 {'retriesLeft': retriesLeft.toString()},
               )}',
               style: const TextStyle(fontSize: 14),
-            )
+            ),
           ],
         ),
       ),

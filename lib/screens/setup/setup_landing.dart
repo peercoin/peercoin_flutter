@@ -121,7 +121,7 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               Positioned(

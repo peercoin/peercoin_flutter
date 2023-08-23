@@ -70,7 +70,7 @@ class WalletScanner {
                 'wallet_scanner_message_new_wallet_found',
                 {
                   'coinName': coinName,
-                  'accountNumber': accountNumber.toString()
+                  'accountNumber': accountNumber.toString(),
                 },
               ),
               task: (coinName, accountNumber),

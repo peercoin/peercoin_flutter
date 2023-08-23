@@ -274,7 +274,7 @@ class _AddressTabState extends State<AddressTab> {
                 AppLocalizations.instance
                     .translate('addressbook_export_dialog_button'),
               ),
-            )
+            ),
           ],
         );
       },
@@ -555,7 +555,7 @@ class _AddressTabState extends State<AddressTab> {
                             ),
                           );
                         },
-                      )
+                      ),
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
@@ -867,9 +867,9 @@ class _AddressTabState extends State<AddressTab> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20)
+              const SizedBox(height: 20),
             ],
-          )
+          ),
         ],
       ),
     );

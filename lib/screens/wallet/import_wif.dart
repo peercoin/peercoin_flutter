@@ -124,44 +124,46 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         ),
       );
     } else {
-      // ignore: use_build_context_synchronously
-      await showDialog(
-        context: ctx,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              AppLocalizations.instance.translate('paperwallet_confirm_import'),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              AppLocalizations.instance.translate(
-                'import_wif_alert_content',
-                {'address': publicAddress},
+      if (mounted) {
+        await showDialog(
+          context: ctx,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                AppLocalizations.instance
+                    .translate('paperwallet_confirm_import'),
+                textAlign: TextAlign.center,
               ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  AppLocalizations.instance
-                      .translate('server_settings_alert_cancel'),
+              content: Text(
+                AppLocalizations.instance.translate(
+                  'import_wif_alert_content',
+                  {'address': publicAddress},
                 ),
               ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await performImport(privKey, publicAddress);
-                },
-                child: Text(
-                  AppLocalizations.instance.translate('import_button'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    AppLocalizations.instance
+                        .translate('server_settings_alert_cancel'),
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
-      );
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await performImport(privKey, publicAddress);
+                  },
+                  child: Text(
+                    AppLocalizations.instance.translate('import_button'),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -276,7 +278,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

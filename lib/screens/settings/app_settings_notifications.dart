@@ -105,7 +105,7 @@ class _AppSettingsNotificationsScreenState
           action: () async {
             await enableNotifications(context);
           },
-        )
+        ),
       ],
     );
   }
@@ -203,7 +203,7 @@ class _AppSettingsNotificationsScreenState
             _appSettings.setNotificationInterval(0);
             _appSettings.setNotificationActiveWallets([]);
           },
-        )
+        ),
       ],
     );
   }
@@ -229,7 +229,7 @@ class _AppSettingsNotificationsScreenState
                 children: [
                   _appSettings.notificationInterval == 0
                       ? enableBlock()
-                      : manageBlock()
+                      : manageBlock(),
                 ],
               ),
             ),

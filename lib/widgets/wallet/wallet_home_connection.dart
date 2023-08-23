@@ -44,7 +44,7 @@ class WalletHomeConnection extends StatelessWidget {
         const SizedBox(
           width: 10,
         ),
-        widget
+        widget,
       ],
     );
   }

@@ -174,7 +174,7 @@ class _TransactionListState extends State<TransactionList> {
                                   Routes.transaction,
                                   arguments: {
                                     'tx': filteredTx[i - 1],
-                                    'wallet': widget.wallet
+                                    'wallet': widget.wallet,
                                   },
                                 ),
                                 leading: Column(
@@ -206,7 +206,7 @@ class _TransactionListState extends State<TransactionList> {
                                                 : FontWeight.w300,
                                       ),
                                       textScaleFactor: 0.8,
-                                    )
+                                    ),
                                   ],
                                 ),
                                 title: Center(
@@ -263,7 +263,7 @@ class _TransactionListState extends State<TransactionList> {
                                           )
                                         : const SizedBox(
                                             height: 0,
-                                          )
+                                          ),
                                   ],
                                 ),
                               ),
@@ -359,7 +359,7 @@ class _TransactionListState extends State<TransactionList> {
                               Container(
                                 height: 10,
                                 color: Theme.of(context).primaryColor,
-                              )
+                              ),
                             ],
                           );
                         } else {

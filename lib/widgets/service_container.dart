@@ -31,7 +31,7 @@ class PeerServiceTitle extends StatelessWidget {
                 thickness: 3,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

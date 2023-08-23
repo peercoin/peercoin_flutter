@@ -69,7 +69,7 @@ class _WalletMessageSigningScreenState
       Routes.addressSelector,
       arguments: {
         'addresses': await _walletProvider.getWalletAddresses(_walletName),
-        'selectedAddress': _signingAddress
+        'selectedAddress': _signingAddress,
       },
     );
     setState(() {
@@ -334,13 +334,13 @@ class _WalletMessageSigningScreenState
                               small: true,
                               action: () async => await _performReset(context),
                             )
-                          : Container()
+                          : Container(),
                     ],
                   ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

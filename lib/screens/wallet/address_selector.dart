@@ -136,7 +136,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                         _searchActive = true;
                       }),
                       icon: const Icon(Icons.search),
-                    )
+                    ),
                   ],
                 )
               : Form(

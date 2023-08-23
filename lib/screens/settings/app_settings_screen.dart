@@ -102,16 +102,17 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   void revealSeedPhrase(bool biometricsAllowed) async {
     final seed = await context.read<WalletProvider>().seedPhrase;
-    // ignore: use_build_context_synchronously
-    await Auth.requireAuth(
-      context: context,
-      biometricsAllowed: biometricsAllowed,
-      callback: () => setState(
-        () {
-          _seedPhrase = seed;
-        },
-      ),
-    );
+    if (mounted) {
+      await Auth.requireAuth(
+        context: context,
+        biometricsAllowed: biometricsAllowed,
+        callback: () => setState(
+          () {
+            _seedPhrase = seed;
+          },
+        ),
+      );
+    }
   }
 
   @override
@@ -197,9 +198,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                   ),
                                   text: AppLocalizations.instance
                                       .translate('app_settings_shareseed'),
-                                )
+                                ),
                             ],
-                          )
+                          ),
                   ],
                 ),
                 if (!kIsWeb)
@@ -220,7 +221,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         text: AppLocalizations.instance
                             .translate('app_settings_logs_export'),
                         action: () => FlutterLogs.exportLogs(),
-                      )
+                      ),
                     ],
                   ),
                 if (!kIsWeb)

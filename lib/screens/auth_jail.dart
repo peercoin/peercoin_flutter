@@ -45,23 +45,24 @@ class _AuthJailState extends State<AuthJailScreen> {
   void onTimerEnd() async {
     final appSettings = context.read<AppSettingsProvider>();
     await appSettings.init();
-    // ignore: use_build_context_synchronously
-    await Auth.requireAuth(
-      context: context,
-      biometricsAllowed: appSettings.biometricsAllowed,
-      callback: () async {
-        final encryptedStorage = context.read<EncryptedBoxProvider>();
-        final navigator = Navigator.of(context);
-        await encryptedStorage.setFailedAuths(0);
-        if (widget.jailedFromHome == true || _jailedFromRoute == true) {
-          await navigator.pushReplacementNamed(Routes.walletList);
-        } else {
-          navigator.popUntil((route) => route.isFirst);
-        }
-      },
-      canCancel: false,
-      jailedFromHome: widget.jailedFromHome,
-    );
+    if (mounted) {
+      await Auth.requireAuth(
+        context: context,
+        biometricsAllowed: appSettings.biometricsAllowed,
+        callback: () async {
+          final encryptedStorage = context.read<EncryptedBoxProvider>();
+          final navigator = Navigator.of(context);
+          await encryptedStorage.setFailedAuths(0);
+          if (widget.jailedFromHome == true || _jailedFromRoute == true) {
+            await navigator.pushReplacementNamed(Routes.walletList);
+          } else {
+            navigator.popUntil((route) => route.isFirst);
+          }
+        },
+        canCancel: false,
+        jailedFromHome: widget.jailedFromHome,
+      );
+    }
   }
 
   @override
@@ -132,7 +133,7 @@ class _AuthJailState extends State<AuthJailScreen> {
                 const SizedBox(height: 20),
                 const LinearProgressIndicator(
                   backgroundColor: Colors.white,
-                )
+                ),
               ],
             ),
           ),

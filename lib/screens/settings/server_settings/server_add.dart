@@ -228,7 +228,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
               },
               icon: const Icon(Icons.save),
             ),
-          )
+          ),
         ],
       ),
       body: Align(
@@ -279,7 +279,7 @@ class _ServerAddScreenState extends State<ServerAddScreen> {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 30),
                       child: LoadingIndicator(),
-                    )
+                    ),
                 ],
               ),
             ),

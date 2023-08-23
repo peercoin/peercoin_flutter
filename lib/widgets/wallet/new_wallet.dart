@@ -57,17 +57,19 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
       navigator.pop();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _coin == ''
-                ? AppLocalizations.instance.translate('select_coin')
-                : AppLocalizations.instance.translate('add_coin_failed'),
-            textAlign: TextAlign.center,
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _coin == ''
+                  ? AppLocalizations.instance.translate('select_coin')
+                  : AppLocalizations.instance.translate('add_coin_failed'),
+              textAlign: TextAlign.center,
+            ),
+            duration: const Duration(seconds: 2),
           ),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+        );
+      }
     }
   }
 

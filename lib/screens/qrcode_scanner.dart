@@ -49,10 +49,10 @@ class _QRScannerState extends State<QRScanner> {
                       color: Colors.white,
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

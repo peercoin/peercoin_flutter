@@ -101,7 +101,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
               },
               icon: const Icon(Icons.add),
             ),
-          )
+          ),
         ],
       ),
       body: Align(

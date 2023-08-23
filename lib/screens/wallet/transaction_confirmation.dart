@@ -146,7 +146,7 @@ class _TransactionConfirmationScreenState
                                   '${((buildResult.fee / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                       if (buildResult.destroyedChange > 0) const Divider(),
@@ -208,7 +208,7 @@ class _TransactionConfirmationScreenState
                                   '${((totalAmountWithFeesAndDust / decimalProduct) * arguments.fiatPricePerCoin).toStringAsFixed(4)} ${arguments.fiatCode}',
                                 ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                       const Divider(),
@@ -224,7 +224,7 @@ class _TransactionConfirmationScreenState
                             recipients: buildResult.recipients,
                             letterCode: coinLetterCode,
                             decimalProduct: decimalProduct,
-                          )
+                          ),
                         ],
                       ),
                       buildResult.opReturn.isNotEmpty
@@ -239,7 +239,7 @@ class _TransactionConfirmationScreenState
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SelectableText(buildResult.opReturn)
+                                SelectableText(buildResult.opReturn),
                               ],
                             )
                           : const SizedBox(),
@@ -315,16 +315,19 @@ class _TransactionConfirmationScreenState
                                         'showTransactionConfirmation',
                                         e.toString(),
                                       );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            AppLocalizations.instance.translate(
-                                              'send_oops',
+                                      if (mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              AppLocalizations.instance
+                                                  .translate(
+                                                'send_oops',
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      }
                                     }
                                   },
                                 ),

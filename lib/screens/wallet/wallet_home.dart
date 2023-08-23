@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -138,7 +136,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
 
     // pop bottom sheet
-    Navigator.pop(context);
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _checkOpenRepliesEmptyLongerThanFiveSeconds() async {
@@ -185,11 +185,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
 
     if (_appSettings.authenticationOptions!['walletHome']!) {
-      await Auth.requireAuth(
-        context: context,
-        biometricsAllowed: _appSettings.biometricsAllowed,
-        canCancel: false,
-      );
+      if (mounted) {
+        await Auth.requireAuth(
+          context: context,
+          biometricsAllowed: _appSettings.biometricsAllowed,
+          canCancel: false,
+        );
+      }
     }
 
     if (!kIsWeb) {
@@ -201,7 +203,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
 
     checkPendingNotifications();
-    context.loaderOverlay.hide();
+    if (mounted) {
+      context.loaderOverlay.hide();
+    }
 
     if (arguments.containsKey('pushedAddress')) {
       changeIndex(Tabs.send, arguments['pushedAddress']);
@@ -322,35 +326,38 @@ class _WalletHomeState extends State<WalletHomeScreen>
               ) >=
               1000) {
         //Coins worth 1000 USD or more
-        await showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text(
-              AppLocalizations.instance.translate('wallet_value_alert_title'),
-            ),
-            content: Text(
-              AppLocalizations.instance.translate('wallet_value_alert_content'),
-            ),
-            actions: <Widget>[
-              TextButton.icon(
-                label: Text(AppLocalizations.instance.translate('not_again')),
-                icon: const Icon(Icons.cancel),
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  await prefs.setBool('highValueNotice', true);
-                  navigator.pop();
-                },
+        if (mounted) {
+          await showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text(
+                AppLocalizations.instance.translate('wallet_value_alert_title'),
               ),
-              TextButton.icon(
-                label: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
+              content: Text(
+                AppLocalizations.instance
+                    .translate('wallet_value_alert_content'),
+              ),
+              actions: <Widget>[
+                TextButton.icon(
+                  label: Text(AppLocalizations.instance.translate('not_again')),
+                  icon: const Icon(Icons.cancel),
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    await prefs.setBool('highValueNotice', true);
+                    navigator.pop();
+                  },
                 ),
-                icon: const Icon(Icons.check),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
+                TextButton.icon(
+                  label: Text(
+                    AppLocalizations.instance.translate('jail_dialog_button'),
+                  ),
+                  icon: const Icon(Icons.check),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        }
       }
     }
   }
@@ -477,9 +484,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
               identifier: _wallet.name,
               newState: false,
             );
-            context.loaderOverlay.hide();
 
-            Navigator.of(context).pop(); // pops modal bottom sheet
+            if (mounted) {
+              context.loaderOverlay.hide();
+              Navigator.of(context).pop(); // pops modal bottom sheet
+            }
           },
         );
       },
@@ -580,7 +589,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             ),
           ];
         },
-      )
+      ),
     ];
   }
 
@@ -612,7 +621,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           icon: const Icon(Icons.upload_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           backgroundColor: back,
-        )
+        ),
       ],
     );
   }

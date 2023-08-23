@@ -36,18 +36,18 @@ class _AppSettingsAuthenticationScreenState
       if (_biometricsAvailable == false) {
         _settings.setBiometricsAllowed(false);
       }
-
-      // ignore: use_build_context_synchronously
-      await Auth.requireAuth(
-        context: context,
-        canCancel: false,
-        biometricsAllowed: _settings.biometricsAllowed,
-        callback: () => setState(
-          () {
-            _initial = false;
-          },
-        ),
-      );
+      if (mounted) {
+        await Auth.requireAuth(
+          context: context,
+          canCancel: false,
+          biometricsAllowed: _settings.biometricsAllowed,
+          callback: () => setState(
+            () {
+              _initial = false;
+            },
+          ),
+        );
+      }
     }
 
     super.didChangeDependencies();

@@ -44,15 +44,17 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
         'createWallet',
         e.toString(),
       );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.instance.translate('setup_securebox_fail'),
-            textAlign: TextAlign.center,
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance.translate('setup_securebox_fail'),
+              textAlign: TextAlign.center,
+            ),
+            duration: const Duration(seconds: 10),
           ),
-          duration: const Duration(seconds: 10),
-        ),
-      );
+        );
+      }
     }
     await walletProvider.createPhrase(_controller.text);
     var prefs = await SharedPreferences.getInstance();
