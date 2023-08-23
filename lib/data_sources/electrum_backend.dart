@@ -215,7 +215,7 @@ class ElectrumBackend extends DataSource {
         await _connection!.sink.close();
       }
     }
-    if (intentional) {
+    if (intentional == true) {
       _closedIntentionally = true;
       _connectionAttempt = 0;
       if (_reconnectTimer != null) _reconnectTimer!.cancel();

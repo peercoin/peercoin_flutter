@@ -122,6 +122,26 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
 
     // check if _connectionProvider.openReplies has been empty for longer than 5 seconds
+    await _checkOpenRepliesEmptyLongerThanFiveSeconds();
+
+    // scan done
+    LoggerWrapper.logInfo(
+      'WalletHome',
+      '_triggerRescanBottomSheet',
+      'scan done, removing bottom sheet',
+    );
+
+    // remove flag
+    await _walletProvider.updateDueForRescan(
+      identifier: _wallet.name,
+      newState: false,
+    );
+
+    // pop bottom sheet
+    Navigator.pop(context);
+  }
+
+  Future<void> _checkOpenRepliesEmptyLongerThanFiveSeconds() async {
     bool isEmptyForFiveSeconds = false;
     Duration emptyDuration = const Duration(seconds: 0);
 
@@ -138,22 +158,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
         await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
       }
     }
-
-    // scan done
-    LoggerWrapper.logInfo(
-      'WalletHome',
-      '_triggerRescanBottomSheet',
-      'scan done, removing bottom sheet',
-    );
-
-    // pop bottom sheet
-    Navigator.pop(context);
-
-    // remove flag
-    await _walletProvider.updateDueForRescan(
-      identifier: _wallet.name,
-      newState: false,
-    );
   }
 
   Future<void> _performInit() async {
@@ -452,18 +456,24 @@ class _WalletHomeState extends State<WalletHomeScreen>
       builder: (BuildContext context) {
         return WalletResetBottomSheet(
           action: () async {
+            context.loaderOverlay.show();
+
             await _walletProvider.prepareForRescan(
               _wallet.name,
             );
+            final allAddr =
+                await _walletProvider.getAllWalletScriptHashes(_wallet.name);
+            _connectionProvider.subscribeToScriptHashes(allAddr);
+
+            await _checkOpenRepliesEmptyLongerThanFiveSeconds();
+
+            await _walletProvider.updateDueForRescan(
+              identifier: _wallet.name,
+              newState: false,
+            );
+            context.loaderOverlay.hide();
 
             Navigator.of(context).pop(); // pops modal bottom sheet
-            Navigator.of(context).pushReplacementNamed(
-              // pushes wallet again to trigger rescan
-              Routes.walletHome,
-              arguments: {
-                'wallet': _wallet,
-              },
-            );
           },
         );
       },
