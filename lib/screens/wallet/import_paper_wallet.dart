@@ -299,7 +299,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
     }
 
     return await _walletProvider.buildTransaction(
-      identifier: _activeCoin.name,
+      identifier: _walletName,
       recipients: {_walletProvider.getUnusedAddress(_walletName): _balanceInt},
       fee: 0,
       paperWalletPrivkey: _privKey,
@@ -417,4 +417,5 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       ),
     );
   }
+  //TODO unit test with mocked camera
 }
