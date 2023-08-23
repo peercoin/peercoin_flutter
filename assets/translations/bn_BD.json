@@ -56,7 +56,6 @@
     "app_settings_logs_export": "এক্সপোর্ট ডিবাগ লগ",
     "app_settings_newWallet": "নতুন ওয়ালেট যোগ করতে হবে",
     "app_settings_notifications": "নোটিফিকেশন",
-    "app_settings_notifications_open_button": "নোটিফিকেশন সেটিংস খুলুন",
     "app_settings_notifications_enable_button": "নোটিফিকেশন সক্রিয় করুন",
     "app_settings_description": "এই লগগুলিতে সংবেদনশীল তথ্য রয়েছে৷\nপ্রাইভেট কী অন্তর্ভুক্ত না করার পাশাপাশি, আপনি কার সাথে এই লগগুলি শেয়ার করছেন তা মনে রাখবেন৷",
     "app_settings_notifications_alert_content": "এটি আমাদের গোপনীয়তায় বন্ধুত্বপূর্ণ ব্যাকগ্রাউন্ড নোটিফিকেশন সক্রিয় করবে৷\nতাদের যে কোনো সময় নিষ্ক্রিয় করা যাবে।",
@@ -351,5 +350,8 @@
     "currency_SEK": "সুয়েডিশ ক্রোনা",
     "currency_THB": "থাই বাত",
     "currency_TZS": "তাঞ্জানিয়ান শিলিং",
-    "currency_UAH": "ইউক্রেনীয় হ্রিবনিয়া"
+    "currency_UAH": "ইউক্রেনীয় হ্রিবনিয়া",
+    "wallet_pop_menu_change_title": "শিরোনাম পরিবর্তন করুন",
+    "wallet_title_edit": "ওয়ালেট শিরোনাম সম্পাদনা করুন",
+    "wallet_title_edit_new_title": "নতুন শিরোনাম"
 }

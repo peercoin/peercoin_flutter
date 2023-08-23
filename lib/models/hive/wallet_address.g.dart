@@ -18,10 +18,10 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
     };
     return WalletAddress(
       address: fields[0] as String,
-      addressBookName: fields[1] as String?,
+      addressBookName: fields[1] == null ? '' : fields[1] as String,
       used: fields[3] as bool,
       status: fields[2] as String?,
-      isOurs: fields[4] as bool?,
+      isOurs: fields[4] == null ? true : fields[4] as bool,
       wif: fields[5] == null ? '' : fields[5] as String,
     )
       .._isChangeAddr = fields[6] as bool?

@@ -6,15 +6,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 
 import '../models/hive/app_options.dart';
-import 'encrypted_box.dart';
+import 'encrypted_box_provider.dart';
 
-class AppSettings with ChangeNotifier {
+class AppSettingsProvider with ChangeNotifier {
   late AppOptionsStore _appOptions;
-  final EncryptedBox _encryptedBox;
+  final EncryptedBoxProvider _encryptedBox;
   late SharedPreferences _sharedPrefs;
   String? _selectedLang;
   bool camerasAvailble = false;
-  AppSettings(this._encryptedBox);
+  AppSettingsProvider(this._encryptedBox);
 
   Future<void> init([bool fromSetup = false]) async {
     if (fromSetup == false) {
@@ -136,6 +136,15 @@ class AppSettings with ChangeNotifier {
 
   void setPeriodicReminterItemsNextView(Map<String, DateTime> newMap) {
     _appOptions.periodicReminterItemsNextView = newMap;
+    notifyListeners();
+  }
+
+  List<String> get walletOrder {
+    return _appOptions.walletOrder;
+  }
+
+  void setWalletOrder(List<String> newOrder) {
+    _appOptions.walletOrder = newOrder;
     notifyListeners();
   }
 }

@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 1.1.8+129
+version: 1.1.9+130
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^6.1.4
   flutter_local_notifications: ^13.0.0
   flutter_screen_lock: ^9.0.1
-  local_auth: ^2.1.2
+  local_auth: ^2.1.6
   local_auth_android: any
   package_info_plus: ^3.0.1
   mailto: ^2.0.0
@@ -56,6 +56,7 @@ dependencies:
   mockito: ^5.3.2
   cryptography_flutter: ^2.0.2
   loader_overlay: ^2.1.0
+  app_bar_with_search_switch: ^1.5.4
 
 dev_dependencies:
   integration_test:

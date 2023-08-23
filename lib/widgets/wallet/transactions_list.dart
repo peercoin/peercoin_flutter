@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '/../tools/app_localizations.dart';
 import '/../models/hive/wallet_transaction.dart';
@@ -16,7 +16,7 @@ import '/../widgets/service_container.dart';
 class TransactionList extends StatefulWidget {
   final List<WalletTransaction> walletTransactions;
   final CoinWallet wallet;
-  final ElectrumConnectionState connectionState;
+  final BackendConnectionState connectionState;
 
   const TransactionList({
     required this.walletTransactions,
@@ -48,9 +48,10 @@ class _TransactionListState extends State<TransactionList> {
   }
 
   String resolveAddressDisplayName(String address) {
-    final result = context
-        .read<WalletProvider>()
-        .getLabelForAddress(widget.wallet.name, address);
+    final result = context.read<WalletProvider>().getLabelForAddress(
+          widget.wallet.name,
+          address,
+        );
     if (result != '') return result;
     return address;
   }
@@ -168,12 +169,12 @@ class _TransactionListState extends State<TransactionList> {
                             child: Card(
                               elevation: 0,
                               child: ListTile(
-                                horizontalTitleGap: 32.0,
+                                horizontalTitleGap: 16,
                                 onTap: () => Navigator.of(context).pushNamed(
                                   Routes.transaction,
                                   arguments: {
                                     'tx': filteredTx[i - 1],
-                                    'wallet': widget.wallet
+                                    'wallet': widget.wallet,
                                   },
                                 ),
                                 leading: Column(
@@ -193,7 +194,7 @@ class _TransactionListState extends State<TransactionList> {
                                         filteredTx[i - 1].timestamp != 0
                                             ? DateTime
                                                 .fromMillisecondsSinceEpoch(
-                                                filteredTx[i - 1].timestamp! *
+                                                filteredTx[i - 1].timestamp *
                                                     1000,
                                               )
                                             : DateTime.now(),
@@ -205,7 +206,7 @@ class _TransactionListState extends State<TransactionList> {
                                                 : FontWeight.w300,
                                       ),
                                       textScaleFactor: 0.8,
-                                    )
+                                    ),
                                   ],
                                 ),
                                 title: Center(
@@ -262,7 +263,7 @@ class _TransactionListState extends State<TransactionList> {
                                           )
                                         : const SizedBox(
                                             height: 0,
-                                          )
+                                          ),
                                   ],
                                 ),
                               ),
@@ -277,19 +278,7 @@ class _TransactionListState extends State<TransactionList> {
                                     ? 125
                                     : 110,
                               ),
-                              Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      BottomAppBarTheme.of(context).color!,
-                                      Theme.of(context).primaryColor,
-                                    ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                  ),
-                                ),
-                              ),
+                              const GradientContainer(),
                               Container(
                                 color: Theme.of(context).primaryColor,
                                 width: MediaQuery.of(context).size.width,
@@ -370,7 +359,7 @@ class _TransactionListState extends State<TransactionList> {
                               Container(
                                 height: 10,
                                 color: Theme.of(context).primaryColor,
-                              )
+                              ),
                             ],
                           );
                         } else {

@@ -25,12 +25,12 @@ import '../tools/notification.dart';
 import '../models/hive/wallet_address.dart';
 import '../models/hive/wallet_transaction.dart';
 import '../models/hive/wallet_utxo.dart';
-import 'encrypted_box.dart';
+import 'encrypted_box_provider.dart';
 
 class WalletProvider with ChangeNotifier {
   WalletProvider(this._encryptedBox);
 
-  final EncryptedBox _encryptedBox;
+  final EncryptedBoxProvider _encryptedBox;
   final Map<String, CoinWallet> _coinWalletCache = {};
   final Map<String, HDWallet> _hdWalletCache = {};
   final Map<String, String> _unusedAddressCache = {};
@@ -128,6 +128,7 @@ class WalletProvider with ChangeNotifier {
     required String name,
     required String title,
     required String letterCode,
+    required bool isImportedSeed,
   }) async {
     var box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
@@ -147,12 +148,23 @@ class WalletProvider with ChangeNotifier {
         title,
         letterCode,
         nOfWalletOfLetterCode,
+        isImportedSeed,
       ),
     );
     notifyListeners();
   }
 
-  Future<String?> getAddressFromDerivationPath({
+  Future<void> updateDueForRescan({
+    required String identifier,
+    required bool newState,
+  }) async {
+    var openWallet = getSpecificCoinWallet(identifier);
+    openWallet.dueForRescan = newState;
+
+    await openWallet.save();
+  }
+
+  Future<String> getAddressFromDerivationPath({
     required String identifier,
     required int account,
     required int chain,
@@ -392,7 +404,7 @@ class WalletProvider with ChangeNotifier {
       if (walletTx.txid == tx['txid']) {
         isInWallet = true;
         if (isInWallet == true) {
-          if (walletTx.timestamp == 0 || walletTx.timestamp == null) {
+          if (walletTx.timestamp == 0) {
             //did the tx confirm?
             walletTx.newTimestamp = tx['blocktime'] ?? 0;
           }
@@ -571,8 +583,9 @@ class WalletProvider with ChangeNotifier {
   Future<void> prepareForRescan(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
     openWallet.utxos.removeRange(0, openWallet.utxos.length);
-    openWallet.transactions
-        .removeWhere((element) => element.broadCasted == false);
+    openWallet.transactions.removeWhere(
+      (element) => element.broadCasted == false,
+    );
 
     for (var element in openWallet.addresses) {
       element.newStatus = null;
@@ -580,6 +593,7 @@ class WalletProvider with ChangeNotifier {
     }
 
     await updateWalletBalance(identifier);
+    await updateDueForRescan(identifier: identifier, newState: true);
     await openWallet.save();
   }
 
@@ -946,7 +960,7 @@ class WalletProvider with ChangeNotifier {
     return txAmount;
   }
 
-  Future<Map> getWalletScriptHashes(
+  Future<Map> getWatchedWalletScriptHashes(
     String identifier, [
     String? address,
   ]) async {
@@ -957,11 +971,11 @@ class WalletProvider with ChangeNotifier {
       var utxos = await getWalletUtxos(identifier);
       addresses = await getWalletAddresses(identifier);
       for (var addr in addresses) {
-        if (addr.isOurs == true || addr.isOurs == null) {
-          // == null for backwards compatability
+        if (addr.isOurs == true) {
           //does addr have a balance?
-          var utxoRes = utxos
-              .firstWhereOrNull((element) => element.address == addr.address);
+          var utxoRes = utxos.firstWhereOrNull(
+            (element) => element.address == addr.address,
+          );
 
           if (addr.isWatched ||
               utxoRes != null && utxoRes.value > 0 ||
@@ -978,7 +992,28 @@ class WalletProvider with ChangeNotifier {
     return answerMap;
   }
 
+  Future<Map> getAllWalletScriptHashes(String identifier) async {
+    List<WalletAddress>? addresses;
+    var answerMap = {};
+    //get all
+    addresses = await getWalletAddresses(identifier);
+    for (var addr in addresses) {
+      if (addr.isOurs == true) {
+        if (addr.status == null) {
+          answerMap[addr.address] = getScriptHash(identifier, addr.address);
+        }
+      }
+    }
+    return answerMap;
+  }
+
   String getScriptHash(String identifier, String address) {
+    LoggerWrapper.logInfo(
+      'WalletProvider',
+      'getScriptHash',
+      'getting script hash for $address in $identifier',
+    );
+
     var network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var script = addressToOutputScript(address, network);
     var hash = sha256.convert(script).toString();
@@ -1103,7 +1138,7 @@ class WalletProvider with ChangeNotifier {
       (element) => element.address == address,
     );
     if (addr == null) return '';
-    return addr.addressBookName ?? '';
+    return addr.addressBookName;
   }
 
   String reverseString(String input) {

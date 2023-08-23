@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
@@ -26,7 +26,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   late String _walletName;
   bool _initial = true;
   late WalletProvider _walletProvider;
-  late ElectrumConnection _electrumConnection;
+  late ConnectionProvider _electrumConnection;
   final _wifGlobalKey = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
   final _wifController = TextEditingController();
@@ -38,7 +38,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _walletProvider = Provider.of<WalletProvider>(context);
-        _electrumConnection = Provider.of<ElectrumConnection>(context);
+        _electrumConnection = Provider.of<ConnectionProvider>(context);
         _initial = false;
       });
     }
@@ -124,44 +124,46 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         ),
       );
     } else {
-      // ignore: use_build_context_synchronously
-      await showDialog(
-        context: ctx,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              AppLocalizations.instance.translate('paperwallet_confirm_import'),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              AppLocalizations.instance.translate(
-                'import_wif_alert_content',
-                {'address': publicAddress},
+      if (mounted) {
+        await showDialog(
+          context: ctx,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                AppLocalizations.instance
+                    .translate('paperwallet_confirm_import'),
+                textAlign: TextAlign.center,
               ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  AppLocalizations.instance
-                      .translate('server_settings_alert_cancel'),
+              content: Text(
+                AppLocalizations.instance.translate(
+                  'import_wif_alert_content',
+                  {'address': publicAddress},
                 ),
               ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await performImport(privKey, publicAddress);
-                },
-                child: Text(
-                  AppLocalizations.instance.translate('import_button'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    AppLocalizations.instance
+                        .translate('server_settings_alert_cancel'),
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
-      );
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await performImport(privKey, publicAddress);
+                  },
+                  child: Text(
+                    AppLocalizations.instance.translate('import_button'),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -276,7 +278,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

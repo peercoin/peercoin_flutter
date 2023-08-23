@@ -42,7 +42,6 @@
     "app_settings_logs_export": "Eksporter feilsøkingslogger",
     "app_settings_newWallet": "Krev for å legge til ny lommebok",
     "app_settings_notifications": "Varsler",
-    "app_settings_notifications_open_button": "Åpne varslingsinnstillinger",
     "app_settings_notifications_enable_button": "Aktiver Varsler",
     "app_settings_notifications_alert_content": "Dette vil aktivere våre personvernvennlige bakgrunnsvarsler.\nDe kan deaktiveres når som helst.",
     "app_settings_notifications_disable_button": "Deaktiver Varsler",
@@ -303,7 +302,7 @@
     "sign_step_1_description": "Velg adressen som skal signere meldingen",
     "sign_step_1_button": "Velg",
     "sign_step_1_button_alt": "Endre",
-    "sign_step_2": "Skriv inn melding",
+    "sign_step_2": "Skriv Inn Melding",
     "sign_step_3": "Signer melding",
     "sign_step_3_description": "Dette er din signatur. Du kan dobbelttrykke for å kopiere den til utklippstavlen.",
     "sign_step_3_button": "Signer",
@@ -351,5 +350,8 @@
     "verify_step_3_button": "Verifiser",
     "verify_input_label_signature": "Signatur å verifisere",
     "verify_success": "Melding verifisert.",
-    "verify_fail": "Meldingen kunne ikke verifiseres."
+    "verify_fail": "Meldingen kunne ikke verifiseres.",
+    "wallet_pop_menu_change_title": "Endre Navn",
+    "wallet_title_edit": "Rediger Navn På Lommebok",
+    "wallet_title_edit_new_title": "Nytt Navn"
 }

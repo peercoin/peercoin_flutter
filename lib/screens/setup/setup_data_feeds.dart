@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../widgets/buttons.dart';
@@ -29,13 +30,20 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
   bool _dataFeedAllowed = false;
   bool _bgSyncdAllowed = false;
   bool _initial = true;
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      _settings = context.read<AppSettings>();
+      _settings = context.read<AppSettingsProvider>();
       await _settings.init();
+
+      //populate build identifier if not on web
+      if (!kIsWeb) {
+        var packageInfo = await PackageInfo.fromPlatform();
+        _settings.setBuildIdentifier(packageInfo.buildNumber);
+      }
+
       setState(() {
         _initial = false;
       });

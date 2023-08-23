@@ -3,7 +3,7 @@ import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/hive/coin_wallet.dart';
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../widgets/service_container.dart';
@@ -23,13 +23,13 @@ class _AppSettingsDefaultWalletScreenState
   List<CoinWallet> _availableWallets = [];
   late WalletProvider _activeWallets;
 
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
       _activeWallets = Provider.of<WalletProvider>(context);
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
       _availableWallets = _activeWallets.availableWalletValues;
 
       setState(() {
@@ -73,7 +73,7 @@ class _AppSettingsDefaultWalletScreenState
           fontSize: 12,
           color: Theme.of(context).colorScheme.secondary,
         ),
-      )
+      ),
     ];
   }
 

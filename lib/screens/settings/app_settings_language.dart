@@ -1,7 +1,8 @@
+import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../widgets/service_container.dart';
 
@@ -15,13 +16,16 @@ class AppSettingsLanguageScreen extends StatefulWidget {
 
 class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
   bool _initial = true;
+  String _searchString = '';
+  List<String> _filteredLanguages = [];
   late String _lang = '';
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
+      updateFilteredList();
       setState(() {
         _initial = false;
       });
@@ -47,6 +51,17 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
     );
   }
 
+  void updateFilteredList() {
+    _filteredLanguages = AppLocalizations.availableLocales.keys.where((lang) {
+      return lang.toLowerCase().contains(
+                _searchString.toLowerCase(),
+              ) ||
+          AppLocalizations.availableLocales[lang]!.$2.toLowerCase().contains(
+                _searchString.toLowerCase(),
+              );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_initial == true) {
@@ -61,18 +76,37 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
         _settings.selectedLang ?? AppLocalizations.instance.locale.toString();
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.instance.translate('app_settings_language'),
-        ),
+      appBar: AppBarWithSearchSwitch(
+        closeOnSubmit: true,
+        clearOnClose: true,
+        fieldHintText:
+            AppLocalizations.instance.translate('app_settings_language_search'),
+        onChanged: (text) {
+          setState(() {
+            _searchString = text;
+          });
+          updateFilteredList();
+        },
+        onCleared: () => setState(() {
+          _searchString = '';
+        }),
+        appBarBuilder: (context) {
+          return AppBar(
+            title: Text(
+              AppLocalizations.instance.translate('app_settings_language'),
+            ),
+            actions: const [
+              AppBarSearchButton(),
+            ],
+          );
+        },
       ),
       body: SingleChildScrollView(
         child: Align(
           child: PeerContainer(
             noSpacers: true,
             child: Column(
-              children: AppLocalizations.availableLocales.keys.map((lang) {
+              children: _filteredLanguages.map((lang) {
                 final (locale, langTitle) =
                     AppLocalizations.availableLocales[lang]!;
                 final countryCode = locale.countryCode ?? '';

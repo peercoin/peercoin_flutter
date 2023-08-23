@@ -20,8 +20,8 @@ import '/../models/coin.dart';
 import '/../models/hive/coin_wallet.dart';
 import '/../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
-import '/../providers/app_settings.dart';
-import '/../providers/electrum_connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '/../screens/wallet/wallet_home.dart';
 import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
@@ -38,7 +38,7 @@ class SendTab extends StatefulWidget {
   final Function changeIndex;
   final String? address;
   final String? label;
-  final ElectrumConnectionState connectionState;
+  final BackendConnectionState connectionState;
   final CoinWallet wallet;
   const SendTab({
     required this.changeIndex,
@@ -68,7 +68,7 @@ class _SendTabState extends State<SendTab> {
   late WalletProvider _walletProvider;
   late List<WalletAddress> _availableAddresses = [];
   bool _expertMode = false;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late final int _decimalProduct;
   bool _fiatEnabled = false;
   bool _fiatInputEnabled = false;
@@ -123,7 +123,7 @@ class _SendTabState extends State<SendTab> {
                                   if (triggerFormValidation())
                                     {
                                       _currentAddressIndex = newIndex - 1,
-                                    }
+                                    },
                                 },
                               ),
                             )
@@ -495,7 +495,7 @@ class _SendTabState extends State<SendTab> {
     if (_initial == true) {
       _availableCoin = AvailableCoins.getSpecificCoin(widget.wallet.name);
       _walletProvider = Provider.of<WalletProvider>(context);
-      _appSettings = context.read<AppSettings>();
+      _appSettings = context.read<AppSettingsProvider>();
 
       _availableAddresses =
           await _walletProvider.getWalletAddresses(widget.wallet.name);
@@ -628,7 +628,7 @@ class _SendTabState extends State<SendTab> {
                 {
                   'feesMissing':
                       (exception.feesMissing / _decimalProduct).toString(),
-                  'letter_code': widget.wallet.letterCode
+                  'letter_code': widget.wallet.letterCode,
                 },
               ),
             ),
@@ -686,8 +686,7 @@ class _SendTabState extends State<SendTab> {
       if (element.isOurs == false && element.address.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
-          element.addressBookName != null &&
-          element.addressBookName!.contains(pattern)) {
+          element.addressBookName.contains(pattern)) {
         return true;
       }
       return false;

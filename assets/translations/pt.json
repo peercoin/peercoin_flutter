@@ -13,7 +13,6 @@
     "app_settings_language_restart": "É necessario reiniciar a aplicação.",
     "app_settings_newWallet": "Necessario adicionar nova carteira",
     "app_settings_notifications": "Notificações",
-    "app_settings_notifications_open_button": "Abrir configurações de notificações",
     "app_settings_notifications_enable_button": "Habilitar Notificações",
     "app_settings_notifications_heading_interval": "Intervalo de sincronização",
     "app_settings_notifications_not_enabled": "As notificações de segundo plano estão atualmente desativadas.",
@@ -86,7 +85,7 @@
     "tx_rejected": "Transferência rejeitada pela rede. Por favor tente outra vez.",
     "app_settings_notifications_alert_content": "Isto irá permitir notificações de segundo plano que respeitam a privacidade.\nPodem ser desativadas a qualquer momento.",
     "app_settings_revealSeedButton": "Revelar a frase de seed",
-    "app_settings_seed": "Frase de seed",
+    "app_settings_seed": "Frase de Seed",
     "app_settings_sendTransaction": "Requisito antes de enviar a transação",
     "app_settings_shareseed": "Partilhar seed",
     "app_settings_theme": "Tema da Aplicação",
@@ -351,5 +350,8 @@
     "currency_KRW": "Won sul-coreano",
     "currency_NOK": "Coroa norueguesa",
     "currency_PKR": "Rupia paquistanesa",
-    "currency_TRY": "Lira turca"
+    "currency_TRY": "Lira turca",
+    "wallet_title_edit": "Editar Título da Carteira",
+    "wallet_title_edit_new_title": "Novo Título",
+    "wallet_pop_menu_change_title": "Alterar Título"
 }

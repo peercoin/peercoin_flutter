@@ -153,7 +153,7 @@ class MyTheme {
         brightness: Brightness.dark,
       ).copyWith(background: DarkColors.green).copyWith(error: DarkColors.red),
       bottomAppBarTheme: const BottomAppBarTheme(color: Color(0x000D1821)),
-    )
+    ),
   };
 
   static ThemeData getTheme(ThemeMode mode) {

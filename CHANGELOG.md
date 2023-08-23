@@ -1,3 +1,11 @@
+### **1.1.9** (2023-08-23)
+* You may now add multiple wallets of the same type
+* Complete redesign of rescan process, check "Wallet Scan" in app settings and "Reset" in the respective wallet
+* A multitude of currencies is now available and losely corresponds with the languages added in 1.1.8
+* Items in "Language" and "Price Feed & Currency" settings can now be searched
+* Fixed a bug where some devices would have issues when setting up an app that was locked before
+* Changelog will no longer be displayed on first startup for new wallets
+
 ### **1.1.8** (2023-08-02)
 * Server Settings have been moved from inside the wallets to application settings
 * Wallet titles may now be edited from within the wallet

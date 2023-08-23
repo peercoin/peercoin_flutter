@@ -54,10 +54,10 @@ class WalletHomeQr extends StatelessWidget {
                       ),
                       text:
                           AppLocalizations.instance.translate('receive_share'),
-                    )
+                    ),
                 ],
               ),
-            )
+            ),
           ],
         );
       },

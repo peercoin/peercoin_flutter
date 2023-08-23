@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
@@ -30,14 +30,14 @@ class AppSettingsScreen extends StatefulWidget {
 class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _initial = true;
   String _seedPhrase = '';
-  late AppSettings _settings;
+  late AppSettingsProvider _settings;
   late WalletProvider _activeWallets;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
       _activeWallets = Provider.of<WalletProvider>(context);
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
@@ -102,16 +102,17 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   void revealSeedPhrase(bool biometricsAllowed) async {
     final seed = await context.read<WalletProvider>().seedPhrase;
-    // ignore: use_build_context_synchronously
-    await Auth.requireAuth(
-      context: context,
-      biometricsAllowed: biometricsAllowed,
-      callback: () => setState(
-        () {
-          _seedPhrase = seed;
-        },
-      ),
-    );
+    if (mounted) {
+      await Auth.requireAuth(
+        context: context,
+        biometricsAllowed: biometricsAllowed,
+        callback: () => setState(
+          () {
+            _seedPhrase = seed;
+          },
+        ),
+      );
+    }
   }
 
   @override
@@ -128,6 +129,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
+              key: const Key('aboutButton'),
               icon: const Icon(Icons.info_rounded),
               onPressed: () {
                 Navigator.push(
@@ -196,9 +198,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                                   ),
                                   text: AppLocalizations.instance
                                       .translate('app_settings_shareseed'),
-                                )
+                                ),
                             ],
-                          )
+                          ),
                   ],
                 ),
                 if (!kIsWeb)
@@ -219,7 +221,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         text: AppLocalizations.instance
                             .translate('app_settings_logs_export'),
                         action: () => FlutterLogs.exportLogs(),
-                      )
+                      ),
                     ],
                   ),
                 if (!kIsWeb)

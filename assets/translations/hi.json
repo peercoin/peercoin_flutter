@@ -44,7 +44,6 @@
     "app_settings_logs_export": "डिबग लॉग्स एक्सपोर्ट करें",
     "app_settings_newWallet": "नया वालेट जोड़ना आवश्यक है",
     "app_settings_notifications": "सूचनाएँ",
-    "app_settings_notifications_open_button": "सूचना की सेटिंग्स खोलें",
     "app_settings_notifications_enable_button": "सूचनाएँ चालू करें",
     "app_settings_notifications_disable_button": "सूचनाएँ बंद करें",
     "app_settings_notifications_heading_interval": "सिंक का अंतराल",
@@ -351,5 +350,8 @@
     "currency_VND": "वियतनामी डोंग",
     "periodic_reminder_backup_title": "बैकअप याद दिलाने वाला",
     "periodic_reminder_backup_body": "अपने वॉलेट सीड का एक बैकअप सुरक्षित स्थान पर रखें ताकि आपके सिक्के के पहुंच खोने से बचा रहें।",
-    "periodic_reminder_backup_button": "पीरकॉइन फाउंडेशन वेबसाइट खोलें"
+    "periodic_reminder_backup_button": "पीरकॉइन फाउंडेशन वेबसाइट खोलें",
+    "wallet_pop_menu_change_title": "शीर्षक बदलें",
+    "wallet_title_edit": "वॉलेट शीर्षक संपादित करें",
+    "wallet_title_edit_new_title": "नया शीर्षक"
 }

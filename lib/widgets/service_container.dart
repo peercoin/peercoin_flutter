@@ -31,7 +31,7 @@ class PeerServiceTitle extends StatelessWidget {
                 thickness: 3,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -66,6 +66,50 @@ class PeerContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,
+    );
+  }
+}
+
+class ModalBottomSheetContainer extends StatelessWidget {
+  final Widget child;
+
+  const ModalBottomSheetContainer({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: child,
+    );
+  }
+}
+
+class GradientContainer extends StatelessWidget {
+  const GradientContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 30,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            BottomAppBarTheme.of(context).color!,
+            Theme.of(context).primaryColor,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
     );
   }
 }

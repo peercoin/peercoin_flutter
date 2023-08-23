@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/encrypted_box.dart';
+import '../providers/encrypted_box_provider.dart';
 import 'app_localizations.dart';
 import 'app_routes.dart';
 
@@ -20,7 +22,7 @@ class Auth {
     Function? callback,
   ) async {
     //reset unsuccesful login and attempt counter
-    final encryptedBox = context.read<EncryptedBox>();
+    final encryptedBox = context.read<EncryptedBoxProvider>();
     final navigator = Navigator.of(context);
 
     await encryptedBox.setFailedAuths(0);
@@ -38,7 +40,7 @@ class Auth {
   }
 
   static void errorHandler(BuildContext context, int retries) async {
-    final encryptedBox = context.read<EncryptedBox>();
+    final encryptedBox = context.read<EncryptedBoxProvider>();
 
     if (retries == retriesLeft - 1) {
       await showDialog(
@@ -144,12 +146,11 @@ class Auth {
     bool canCancel = true,
     bool jailedFromHome = false,
   }) async {
-    final encryptedBox = context.read<EncryptedBox>();
+    final encryptedBox = context.read<EncryptedBoxProvider>();
     failedAuthAttempts = await encryptedBox.failedAuthAttempts;
     retriesLeft = (maxRetries - failedAuthAttempts);
     if (retriesLeft <= 0) retriesLeft = 1;
 
-    // ignore: use_build_context_synchronously
     await screenLock(
       context: context,
       correctString: await encryptedBox.passCode as String,
@@ -171,7 +172,7 @@ class Auth {
                 {'retriesLeft': retriesLeft.toString()},
               )}',
               style: const TextStyle(fontSize: 14),
-            )
+            ),
           ],
         ),
       ),

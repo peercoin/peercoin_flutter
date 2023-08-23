@@ -1,8 +1,9 @@
+import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/app_settings.dart';
+import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../widgets/service_container.dart';
 import '../../widgets/settings/settings_price_ticker.dart';
@@ -18,12 +19,13 @@ class AppSettingsPriceFeedScreen extends StatefulWidget {
 class _AppSettingsPriceFeedScreenState
     extends State<AppSettingsPriceFeedScreen> {
   bool _initial = true;
-  late AppSettings _settings;
+  String _searchString = '';
+  late AppSettingsProvider _settings;
 
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
-      _settings = Provider.of<AppSettings>(context);
+      _settings = Provider.of<AppSettingsProvider>(context);
 
       setState(() {
         _initial = false;
@@ -44,11 +46,30 @@ class _AppSettingsPriceFeedScreenState
     }
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.instance.translate('app_settings_price_feed'),
+      appBar: AppBarWithSearchSwitch(
+        closeOnSubmit: true,
+        clearOnClose: true,
+        fieldHintText: AppLocalizations.instance.translate(
+          'app_settings_price_feed_search',
         ),
+        onChanged: (text) {
+          setState(() {
+            _searchString = text;
+          });
+        },
+        onCleared: () => setState(() {
+          _searchString = '';
+        }),
+        appBarBuilder: (context) {
+          return AppBar(
+            title: Text(
+              AppLocalizations.instance.translate('app_settings_price_feed'),
+            ),
+            actions: const [
+              AppBarSearchButton(),
+            ],
+          );
+        },
       ),
       body: SingleChildScrollView(
         child: Align(
@@ -60,6 +81,7 @@ class _AppSettingsPriceFeedScreenState
                 SettingsPriceTicker(
                   _settings,
                   saveSnack,
+                  _searchString,
                 ),
               ],
             ),

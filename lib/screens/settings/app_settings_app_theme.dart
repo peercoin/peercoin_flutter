@@ -44,8 +44,9 @@ class _AppSettingsAppThemeScreenState extends State<AppSettingsAppThemeScreen> {
       _selectedTheme = label;
     });
     //show notification
-    // ignore: use_build_context_synchronously
-    saveSnack(context);
+    if (mounted) {
+      saveSnack(context);
+    }
   }
 
   @override

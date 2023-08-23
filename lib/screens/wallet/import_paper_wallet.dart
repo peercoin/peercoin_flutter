@@ -7,7 +7,7 @@ import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/hive/wallet_utxo.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/logger_wrapper.dart';
@@ -32,7 +32,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
   late String _walletName;
   bool _initial = true;
   bool _balanceLoading = false;
-  late ElectrumConnection _connectionProvider;
+  late ConnectionProvider _connectionProvider;
   late WalletProvider _walletProvider;
   late Map<String, List?> _paperWalletUtxos = {};
   late final int _decimalProduct;
@@ -43,7 +43,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       setState(() {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
-        _connectionProvider = Provider.of<ElectrumConnection>(context);
+        _connectionProvider = Provider.of<ConnectionProvider>(context);
         _walletProvider = Provider.of<WalletProvider>(context);
         _decimalProduct = AvailableCoins.getDecimalProduct(
           identifier: _walletName,
@@ -180,104 +180,105 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
       var buildResult = await buildImportTx();
       var txFee = buildResult.fee;
 
-      // ignore: use_build_context_synchronously
-      await showDialog(
-        context: context,
-        builder: (_) {
-          return SimpleDialog(
-            title: Text(
-              AppLocalizations.instance.translate('send_confirm_transaction'),
-              textAlign: TextAlign.center,
-            ),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                child: Column(
+      if (mounted) {
+        await showDialog(
+          context: context,
+          builder: (_) {
+            return SimpleDialog(
+              title: Text(
+                AppLocalizations.instance.translate('send_confirm_transaction'),
+                textAlign: TextAlign.center,
+              ),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Importing $_balance',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Importing $_balance',
+                      AppLocalizations.instance.translate(
+                        'send_fee',
+                        {
+                          'amount': '${txFee / _decimalProduct}',
+                          'letter_code': _activeCoin.letterCode,
+                        },
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.instance.translate(
+                        'send_total',
+                        {
+                          'amount': '${_balanceInt / _decimalProduct}',
+                          'letter_code': _activeCoin.letterCode,
+                        },
+                      ),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppLocalizations.instance.translate(
-                      'send_fee',
-                      {
-                        'amount': '${txFee / _decimalProduct}',
-                        'letter_code': _activeCoin.letterCode
-                      },
-                    ),
-                  ),
-                  Text(
-                    AppLocalizations.instance.translate(
-                      'send_total',
-                      {
-                        'amount': '${_balanceInt / _decimalProduct}',
-                        'letter_code': _activeCoin.letterCode
-                      },
-                    ),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                child: PeerButton(
-                  text: AppLocalizations.instance
-                      .translate('paperwallet_confirm_import'),
-                  action: () async {
-                    if (firstPress == false) return; //prevent double tap
-                    try {
-                      firstPress = false;
-                      //broadcast
-                      _connectionProvider.broadcastTransaction(
-                        buildResult.hex,
-                        buildResult.id,
-                      );
-                      //pop message
-                      Navigator.of(context).pop();
-                      //pop again to close import screen
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.instance
-                                .translate('paperwallet_success'),
-                            textAlign: TextAlign.center,
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: PeerButton(
+                    text: AppLocalizations.instance
+                        .translate('paperwallet_confirm_import'),
+                    action: () async {
+                      if (firstPress == false) return; //prevent double tap
+                      try {
+                        firstPress = false;
+                        //broadcast
+                        _connectionProvider.broadcastTransaction(
+                          buildResult.hex,
+                          buildResult.id,
+                        );
+                        //pop message
+                        Navigator.of(context).pop();
+                        //pop again to close import screen
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.instance
+                                  .translate('paperwallet_success'),
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: const Duration(seconds: 5),
                           ),
-                          duration: const Duration(seconds: 5),
-                        ),
-                      );
-                      Navigator.of(context).pop();
-                    } catch (e) {
-                      LoggerWrapper.logError(
-                        'ImportPaperWallet',
-                        'emptyWallet',
-                        e.toString(),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.instance.translate(
-                              'send_oops',
+                        );
+                        Navigator.of(context).pop();
+                      } catch (e) {
+                        LoggerWrapper.logError(
+                          'ImportPaperWallet',
+                          'emptyWallet',
+                          e.toString(),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.instance.translate(
+                                'send_oops',
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }
-                  },
+                        );
+                      }
+                    },
+                  ),
                 ),
-              )
-            ],
-          );
-        },
-      );
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -406,12 +407,12 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
                       ],
                     ),
                     const SizedBox(height: 30),
-                    const Divider()
+                    const Divider(),
                   ],
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

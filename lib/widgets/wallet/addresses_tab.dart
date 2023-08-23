@@ -9,8 +9,8 @@ import '../../models/available_coins.dart';
 import '../../models/coin.dart';
 import '../../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '../../screens/wallet/wallet_home.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
@@ -55,7 +55,7 @@ class _AddressTabState extends State<AddressTab> {
   final Map _addressBalanceMap = {};
   final Map _isWatchedMap = {};
   late WalletProvider _walletProvider;
-  late ElectrumConnection _connection;
+  late ConnectionProvider _connection;
   late Map _listenedAddresses;
   late final int _decimalProduct;
 
@@ -65,7 +65,7 @@ class _AddressTabState extends State<AddressTab> {
       applyFilter();
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
       _walletProvider = Provider.of<WalletProvider>(context);
-      _connection = Provider.of<ElectrumConnection>(context);
+      _connection = Provider.of<ConnectionProvider>(context);
       _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget.walletName,
@@ -99,7 +99,7 @@ class _AddressTabState extends State<AddressTab> {
     var filteredListSend = <WalletAddress>[];
 
     for (var e in widget.walletAddresses) {
-      if (e.isOurs == true || e.isOurs == null) {
+      if (e.isOurs == true) {
         filteredListReceive.add(e);
         //fake watch change address and addresses with balance
         if (_addressBalanceMap[e.address] != null ||
@@ -147,13 +147,11 @@ class _AddressTabState extends State<AddressTab> {
     if (searchedKey != null) {
       filteredListReceive = filteredListReceive.where((element) {
         return element.address.contains(searchedKey) ||
-            element.addressBookName != null &&
-                element.addressBookName!.contains(searchedKey);
+            element.addressBookName.contains(searchedKey);
       }).toList();
       filteredListSend = filteredListSend.where((element) {
         return element.address.contains(searchedKey) ||
-            element.addressBookName != null &&
-                element.addressBookName!.contains(searchedKey);
+            element.addressBookName.contains(searchedKey);
       }).toList();
     }
 
@@ -168,7 +166,7 @@ class _AddressTabState extends State<AddressTab> {
     WalletAddress address,
   ) async {
     var textFieldController = TextEditingController();
-    textFieldController.text = address.addressBookName ?? '';
+    textFieldController.text = address.addressBookName;
     return showDialog(
       context: context,
       builder: (context) {
@@ -276,7 +274,7 @@ class _AddressTabState extends State<AddressTab> {
                 AppLocalizations.instance
                     .translate('addressbook_export_dialog_button'),
               ),
-            )
+            ),
           ],
         );
       },
@@ -311,7 +309,7 @@ class _AddressTabState extends State<AddressTab> {
       );
 
       applyFilter();
-      if (_connection.connectionState == ElectrumConnectionState.connected) {
+      if (_connection.connectionState == BackendConnectionState.connected) {
         if (!_listenedAddresses.containsKey(addr.address) &&
             addr.isWatched == true) {
           //subscribe
@@ -321,7 +319,7 @@ class _AddressTabState extends State<AddressTab> {
             'watched and subscribed ${addr.address}',
           );
           _connection.subscribeToScriptHashes(
-            await _walletProvider.getWalletScriptHashes(
+            await _walletProvider.getWatchedWalletScriptHashes(
               widget.walletName,
               addr.address,
             ),
@@ -435,7 +433,7 @@ class _AddressTabState extends State<AddressTab> {
 
   String _renderLabel(WalletAddress addr) {
     if (_showLabel) {
-      return addr.addressBookName ?? '-';
+      return addr.addressBookName;
     }
     var number = _addressBalanceMap[addr.address] ?? 0;
     return '${(number / _decimalProduct)} ${_availableCoin.letterCode}';
@@ -557,7 +555,7 @@ class _AddressTabState extends State<AddressTab> {
                             ),
                           );
                         },
-                      )
+                      ),
                     ],
                     actionExtentRatio: 0.25,
                     child: ListTile(
@@ -575,7 +573,7 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                       title: Center(
                         child: Text(
-                          addr.addressBookName ?? '-',
+                          addr.addressBookName,
                           style: const TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
@@ -652,8 +650,9 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                         onTap: () => Auth.requireAuth(
                           context: context,
-                          biometricsAllowed:
-                              context.read<AppSettings>().biometricsAllowed,
+                          biometricsAllowed: context
+                              .read<AppSettingsProvider>()
+                              .biometricsAllowed,
                           callback: () =>
                               _showAddressExportDialog(context, addr),
                         ),
@@ -868,9 +867,9 @@ class _AddressTabState extends State<AddressTab> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20)
+              const SizedBox(height: 20),
             ],
-          )
+          ),
         ],
       ),
     );

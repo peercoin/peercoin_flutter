@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:peercoin/data_sources/electrum_backend.dart';
+import 'package:peercoin/providers/server_provider.dart';
+import 'package:peercoin/widgets/wallet/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,8 +13,8 @@ import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
 import '../../models/hive/wallet_transaction.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings.dart';
-import '../../providers/electrum_connection.dart';
+import '../../providers/app_settings_provider.dart';
+import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -22,6 +25,7 @@ import '../../widgets/wallet/addresses_tab.dart';
 import '../../widgets/wallet/receive_tab.dart';
 import '../../widgets/wallet/send_tab.dart';
 import '../../widgets/wallet/transactions_list.dart';
+import '../../widgets/wallet/wallet_rescan_bottom_sheet.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   const WalletHomeScreen({Key? key}) : super(key: key);
@@ -33,18 +37,17 @@ class WalletHomeScreen extends StatefulWidget {
 class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
-  bool _rescanInProgress = false;
   String _unusedAddress = '';
-  late CoinWallet _wallet;
   int _pageIndex = 1;
-  late ElectrumConnectionState _connectionState =
-      ElectrumConnectionState.waiting;
-  ElectrumConnection? _connectionProvider;
+  int _latestBlock = 0;
+  late CoinWallet _wallet;
+  late BackendConnectionState _connectionState = BackendConnectionState.waiting;
+  late ConnectionProvider _connectionProvider;
   late WalletProvider _walletProvider;
-  late AppSettings _appSettings;
+  late AppSettingsProvider _appSettings;
   late Iterable _listenedAddresses;
   late List<WalletTransaction> _walletTransactions = [];
-  int _latestBlock = 0;
+  late ServerProvider _servers;
   String? _address;
   String? _label;
 
@@ -64,7 +67,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       await Future.delayed(
         const Duration(seconds: 2),
         () {
-          if (_connectionProvider!.openReplies.isEmpty) {
+          if (_connectionProvider.openReplies.isEmpty) {
             _wallet.clearPendingTransactionNotifications();
           } else {
             checkPendingNotifications();
@@ -90,7 +93,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      await _connectionProvider!.init(
+      await _connectionProvider.init(
         _wallet.name,
         requestedFromWalletHome: true,
         fromConnectivityChangeOrLifeCycle: true,
@@ -102,6 +105,118 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
   }
 
+  void _triggerRescanBottomSheet() async {
+    // show bottom sheet
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return const WalletRescanBottomSheet();
+      },
+      context: context,
+    );
+
+    // check if _connectionProvider.openReplies has been empty for longer than 5 seconds
+    await _checkOpenRepliesEmptyLongerThanFiveSeconds();
+
+    // scan done
+    LoggerWrapper.logInfo(
+      'WalletHome',
+      '_triggerRescanBottomSheet',
+      'scan done, removing bottom sheet',
+    );
+
+    // remove flag
+    await _walletProvider.updateDueForRescan(
+      identifier: _wallet.name,
+      newState: false,
+    );
+
+    // pop bottom sheet
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> _checkOpenRepliesEmptyLongerThanFiveSeconds() async {
+    bool isEmptyForFiveSeconds = false;
+    Duration emptyDuration = const Duration(seconds: 0);
+
+    while (!isEmptyForFiveSeconds) {
+      if (_connectionProvider.openReplies.isEmpty) {
+        await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
+        emptyDuration += const Duration(seconds: 1);
+
+        if (emptyDuration >= const Duration(seconds: 5)) {
+          isEmptyForFiveSeconds = true;
+        }
+      } else {
+        emptyDuration = const Duration(seconds: 0); // Reset the duration
+        await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
+      }
+    }
+  }
+
+  Future<void> _performInit() async {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    _wallet = arguments['wallet'];
+
+    _connectionProvider = Provider.of<ConnectionProvider>(context);
+    _walletProvider = Provider.of<WalletProvider>(context);
+    _appSettings = context.read<AppSettingsProvider>();
+    _servers = Provider.of<ServerProvider>(context);
+
+    _connectionProvider.setDataSource(
+      ElectrumBackend(
+        _walletProvider,
+        _servers,
+      ),
+    );
+
+    await _walletProvider.generateUnusedAddress(_wallet.name);
+    _walletTransactions =
+        await _walletProvider.getWalletTransactions(_wallet.name);
+    await _connectionProvider.init(
+      _wallet.name,
+      requestedFromWalletHome: true,
+    );
+
+    if (_appSettings.authenticationOptions!['walletHome']!) {
+      if (mounted) {
+        await Auth.requireAuth(
+          context: context,
+          biometricsAllowed: _appSettings.biometricsAllowed,
+          canCancel: false,
+        );
+      }
+    }
+
+    if (!kIsWeb) {
+      if (Platform.isIOS || Platform.isAndroid) {
+        if (_wallet.letterCode != 'tPPC') {
+          triggerHighValueAlert();
+        }
+      }
+    }
+
+    checkPendingNotifications();
+    if (mounted) {
+      context.loaderOverlay.hide();
+    }
+
+    if (arguments.containsKey('pushedAddress')) {
+      changeIndex(Tabs.send, arguments['pushedAddress']);
+    }
+
+    //check if wallet is due for rescan
+    if (_wallet.dueForRescan == true) {
+      _triggerRescanBottomSheet();
+    }
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial == true) {
@@ -109,83 +224,59 @@ class _WalletHomeState extends State<WalletHomeScreen>
         _initial = false;
       });
 
-      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _wallet = arguments['wallet'];
-
-      _connectionProvider = Provider.of<ElectrumConnection>(context);
-      _walletProvider = Provider.of<WalletProvider>(context);
-      _appSettings = context.read<AppSettings>();
-
-      await _walletProvider.generateUnusedAddress(_wallet.name);
-      _walletTransactions =
-          await _walletProvider.getWalletTransactions(_wallet.name);
-      await _connectionProvider!.init(
-        _wallet.name,
-        requestedFromWalletHome: true,
-      );
-
-      if (_appSettings.authenticationOptions!['walletHome']!) {
-        // ignore: use_build_context_synchronously
-        await Auth.requireAuth(
-          context: context,
-          biometricsAllowed: _appSettings.biometricsAllowed,
-          canCancel: false,
-        );
-      }
-
-      if (!kIsWeb) {
-        if (Platform.isIOS || Platform.isAndroid) {
-          if (_wallet.letterCode != 'tPPC') {
-            triggerHighValueAlert();
-          }
-        }
-      }
-
-      checkPendingNotifications();
-      // ignore: use_build_context_synchronously
-      context.loaderOverlay.hide();
-
-      if (arguments.containsKey('pushedAddress')) {
-        changeIndex(Tabs.send, arguments['pushedAddress']);
-      }
-    } else if (_connectionProvider != null) {
-      _connectionState = _connectionProvider!.connectionState;
+      await _performInit();
+    } else {
+      _connectionState = _connectionProvider.connectionState;
       _unusedAddress = _walletProvider.getUnusedAddress(_wallet.name);
 
-      _listenedAddresses = _connectionProvider!.listenedAddresses.keys;
-      if (_connectionState == ElectrumConnectionState.connected) {
+      _listenedAddresses = _connectionProvider.listenedAddresses.keys;
+      if (_connectionState == BackendConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
-          //listenedAddresses not populated after reconnect - resubscribe
-          _connectionProvider!.subscribeToScriptHashes(
-            await _walletProvider.getWalletScriptHashes(_wallet.name),
-          );
+          //listenedAddresses not populated after reconnect - resubscribe or initial subscribe
+
+          if (_wallet.dueForRescan == true) {
+            //watch all addresses with status null as well
+            _connectionProvider.subscribeToScriptHashes(
+              await _walletProvider.getAllWalletScriptHashes(_wallet.name),
+            );
+          } else {
+            //only subscribe to watched addresses
+            _connectionProvider.subscribeToScriptHashes(
+              await _walletProvider.getWatchedWalletScriptHashes(_wallet.name),
+            );
+          }
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
-          _connectionProvider!.subscribeToScriptHashes(
-            await _walletProvider.getWalletScriptHashes(
+          LoggerWrapper.logInfo(
+            'WalletHome',
+            'didChangeDependencies',
+            'subscribing to $_unusedAddress (unusedAddress))',
+          );
+
+          _connectionProvider.subscribeToScriptHashes(
+            await _walletProvider.getWatchedWalletScriptHashes(
               _wallet.name,
               _unusedAddress,
             ),
           );
         }
       }
-      if (_connectionProvider!.latestBlock > _latestBlock) {
+      if (_connectionProvider.latestBlock > _latestBlock) {
         //new block
         LoggerWrapper.logInfo(
           'WalletHome',
           'didChangeDependencies',
-          'new block ${_connectionProvider!.latestBlock}',
+          'new block ${_connectionProvider.latestBlock}',
         );
-        _latestBlock = _connectionProvider!.latestBlock;
+        _latestBlock = _connectionProvider.latestBlock;
 
         var unconfirmedTx = _walletTransactions.where(
           (element) =>
               element.confirmations < 6 &&
-                  element.confirmations != -1 &&
-                  element.timestamp != -1 ||
-              element.timestamp == null,
+              element.confirmations != -1 &&
+              element.timestamp != -1,
         );
         for (var element in unconfirmedTx) {
           LoggerWrapper.logInfo(
@@ -193,7 +284,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             'didChangeDependencies',
             'requesting update for ${element.txid}',
           );
-          _connectionProvider!.requestTxUpdate(element.txid);
+          _connectionProvider.requestTxUpdate(element.txid);
         }
 
         //unconfirmed balance? update balance
@@ -211,7 +302,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
       (element) => element.broadCasted == false && element.confirmations == 0,
     );
     for (var element in nonBroadcastedTx) {
-      _connectionProvider!.broadcastTransaction(
+      _connectionProvider.broadcastTransaction(
         element.broadcastHex,
         element.txid,
       );
@@ -235,45 +326,46 @@ class _WalletHomeState extends State<WalletHomeScreen>
               ) >=
               1000) {
         //Coins worth 1000 USD or more
-        // ignore: use_build_context_synchronously
-        await showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text(
-              AppLocalizations.instance.translate('wallet_value_alert_title'),
-            ),
-            content: Text(
-              AppLocalizations.instance.translate('wallet_value_alert_content'),
-            ),
-            actions: <Widget>[
-              TextButton.icon(
-                label: Text(AppLocalizations.instance.translate('not_again')),
-                icon: const Icon(Icons.cancel),
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  await prefs.setBool('highValueNotice', true);
-                  navigator.pop();
-                },
+        if (mounted) {
+          await showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text(
+                AppLocalizations.instance.translate('wallet_value_alert_title'),
               ),
-              TextButton.icon(
-                label: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
+              content: Text(
+                AppLocalizations.instance
+                    .translate('wallet_value_alert_content'),
+              ),
+              actions: <Widget>[
+                TextButton.icon(
+                  label: Text(AppLocalizations.instance.translate('not_again')),
+                  icon: const Icon(Icons.cancel),
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    await prefs.setBool('highValueNotice', true);
+                    navigator.pop();
+                  },
                 ),
-                icon: const Icon(Icons.check),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
+                TextButton.icon(
+                  label: Text(
+                    AppLocalizations.instance.translate('jail_dialog_button'),
+                  ),
+                  icon: const Icon(Icons.check),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        }
       }
     }
   }
 
   @override
   void deactivate() async {
-    if (_rescanInProgress == false &&
-        ModalRoute.of(context)!.settings.arguments != null) {
-      await _connectionProvider!.closeConnection();
+    if (ModalRoute.of(context)!.settings.arguments != null) {
+      await _connectionProvider.closeConnection();
     }
     super.deactivate();
   }
@@ -298,8 +390,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
             controller: textFieldController,
             maxLength: 20,
             decoration: InputDecoration(
-              hintText: AppLocalizations.instance
-                  .translate('wallet_title_edit_new_title'),
+              hintText: AppLocalizations.instance.translate(
+                'wallet_title_edit_new_title',
+              ),
             ),
           ),
           actions: <Widget>[
@@ -359,51 +452,48 @@ class _WalletHomeState extends State<WalletHomeScreen>
       case 'change_title':
         _titleEditDialog(context, _wallet);
         break;
-      case 'rescan':
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text(
-              AppLocalizations.instance.translate('wallet_rescan_title'),
-            ),
-            content: Text(
-              AppLocalizations.instance.translate('wallet_rescan_content'),
-            ),
-            actions: <Widget>[
-              TextButton.icon(
-                label: Text(
-                  AppLocalizations.instance
-                      .translate('server_settings_alert_cancel'),
-                ),
-                icon: const Icon(Icons.cancel),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton.icon(
-                label: Text(
-                  AppLocalizations.instance.translate('jail_dialog_button'),
-                ),
-                icon: const Icon(Icons.check),
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  //close connection
-                  await _connectionProvider!.closeConnection();
-                  _rescanInProgress = true;
-                  //init rescan
-                  await navigator.pushNamedAndRemoveUntil(
-                    Routes.walletImportScan,
-                    (_) => false,
-                    arguments: _wallet.name,
-                  );
-                },
-              ),
-            ],
-          ),
-        );
+      case 'reset_wallet':
+        _triggerResetBottomSheet();
         break;
       default:
     }
+  }
+
+  void _triggerResetBottomSheet() async {
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return WalletResetBottomSheet(
+          action: () async {
+            context.loaderOverlay.show();
+
+            await _walletProvider.prepareForRescan(
+              _wallet.name,
+            );
+            final allAddr =
+                await _walletProvider.getAllWalletScriptHashes(_wallet.name);
+            _connectionProvider.subscribeToScriptHashes(allAddr);
+
+            await _checkOpenRepliesEmptyLongerThanFiveSeconds();
+
+            await _walletProvider.updateDueForRescan(
+              identifier: _wallet.name,
+              newState: false,
+            );
+
+            if (mounted) {
+              context.loaderOverlay.hide();
+              Navigator.of(context).pop(); // pops modal bottom sheet
+            }
+          },
+        );
+      },
+      context: context,
+    );
   }
 
   List<Widget> _calcPopupMenuItems(BuildContext context) {
@@ -421,8 +511,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                   title: Text(
-                    AppLocalizations.instance
-                        .translate('wallet_pop_menu_paperwallet'),
+                    AppLocalizations.instance.translate(
+                      'wallet_pop_menu_paperwallet',
+                    ),
                   ),
                 ),
               ),
@@ -434,19 +525,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance.translate('wallet_pop_menu_wif'),
-                ),
-              ),
-            ),
-            PopupMenuItem(
-              value: 'rescan',
-              child: ListTile(
-                leading: Icon(
-                  Icons.sync_problem,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                title: Text(
-                  AppLocalizations.instance.translate('wallet_pop_menu_rescan'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_wif',
+                  ),
                 ),
               ),
             ),
@@ -458,8 +539,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_signing'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_signing',
+                  ),
                 ),
               ),
             ),
@@ -471,8 +553,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_verification'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_verification',
+                  ),
                 ),
               ),
             ),
@@ -484,14 +567,29 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_change_title'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_change_title',
+                  ),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'reset_wallet',
+              child: ListTile(
+                leading: Icon(
+                  Icons.restore,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'sign_reset_button',
+                  ),
                 ),
               ),
             ),
           ];
         },
-      )
+      ),
     ];
   }
 
@@ -523,7 +621,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           icon: const Icon(Icons.upload_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
           backgroundColor: back,
-        )
+        ),
       ],
     );
   }
@@ -601,6 +699,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
             ),
     );
   }
+
+  // TODO check cursive roboto on iOS
+  // TODO wallet list: make larger list prettier
 }
 
 class Tabs {

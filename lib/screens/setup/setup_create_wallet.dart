@@ -343,7 +343,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                                         .primaryContainer,
                                                   ),
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           ),
                                         ),

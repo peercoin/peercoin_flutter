@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/hive/server.dart';
-import '../../../providers/electrum_connection.dart';
+import '../../../providers/connection_provider.dart';
 import '../../../widgets/service_container.dart';
-import '../../../providers/servers.dart';
+import '../../../providers/server_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/app_routes.dart';
 
@@ -21,13 +21,13 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   String _walletName = '';
   List<Server> _servers = [];
   final Map _indexCache = {};
-  late Servers _serversProvider;
+  late ServerProvider _serversProvider;
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
-      _serversProvider = Provider.of<Servers>(context);
+      _serversProvider = Provider.of<ServerProvider>(context);
       await _serversProvider.init(_walletName);
       await loadServers();
       setState(() {
@@ -47,7 +47,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   Future<void> savePriorities(String? serverUrl, int newIndex) async {
     if (_indexCache[serverUrl] != null) {
-      await context.read<ElectrumConnection>().closeConnection();
+      await context.read<ConnectionProvider>().closeConnection();
     }
     if (newIndex != _indexCache[serverUrl]) {
       _indexCache[serverUrl] = newIndex;
@@ -70,7 +70,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   @override
   void deactivate() {
-    Provider.of<ElectrumConnection>(context).init(
+    Provider.of<ConnectionProvider>(context).init(
       _walletName,
       fromConnectivityChangeOrLifeCycle: true,
     );
@@ -101,7 +101,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
               },
               icon: const Icon(Icons.add),
             ),
-          )
+          ),
         ],
       ),
       body: Align(

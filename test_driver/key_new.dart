@@ -72,7 +72,6 @@ void main() {
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
           await driver.scrollIntoView(find.text('Finish Setup'));
           await driver.tap(find.text('Finish Setup'));
-          await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
               expect(
@@ -102,17 +101,58 @@ void main() {
         timeout: const Timeout.factor(2),
       );
 
+      test('Change wallet title', () async {
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.tap(find.text('Change Title'));
+        await driver.tap(find.byType('TextField'));
+        await driver.enterText('Wallet Test');
+        await driver.tap(find.text('Okay'));
+      });
+
       test(
-        'try to add an ssl server and see if it persists',
+        'tap into new peercoin mainnet wallet',
         () async {
+          await driver.runUnsynchronized(
+            () async {
+              await driver.tap(find.pageBack());
+              await driver.tap(find.byValueKey('newWalletIconButton'));
+              await driver.tap(find.text('Peercoin'));
+              await driver.tap(find.text('Peercoin')); //tap into wallet
+              expect(await driver.getText(find.text('connected')), 'connected');
+            },
+          );
+        },
+      );
+
+      test('change currency and see if it persists', () async {
+        await driver.runUnsynchronized(() async {
           await driver.tap(find.pageBack());
+          await driver.tap(find.byValueKey('appSettingsButton'));
+        });
+        await driver.scrollIntoView(find.text('Price Feed & Currency'));
+        await driver.tap(find.text('Price Feed & Currency'));
+        await driver.tap(find.byTooltip('Click here to start search'));
+        await driver.tap(find.byType('TextField'));
+        await driver.enterText('EUR');
+        await driver.tap(find.text('Euro'));
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
+        await driver.runUnsynchronized(() async {
+          await driver.waitFor(find.text('0.00 EUR'));
+        });
+      });
+
+      test(
+        'find wallet with edited title and try to add an ssl server and see if it persists',
+        () async {
           await driver.runUnsynchronized(
             () async {
               await driver.tap(find.byValueKey('appSettingsButton'));
             },
           );
           await driver.tap(find.text('Server Settings'));
-          await driver.tap(find.text('Peercoin Testnet'));
+          await driver.tap(find.text('Wallet Test'));
           await driver.tap(find.byValueKey('serverSettingsAddServer'));
           await driver.tap(find.byType('TextFormField'));
           await driver.enterText(
@@ -134,7 +174,7 @@ void main() {
           await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
-              await driver.tap(find.text('Peercoin Testnet'));
+              await driver.tap(find.text('Wallet Test'));
             },
           );
           expect(

@@ -14,8 +14,8 @@ import 'package:theme_mode_handler/theme_mode_handler.dart';
 import 'models/hive/app_options.dart';
 import 'models/hive/pending_notifications.dart';
 import 'models/hive/server.dart';
-import 'providers/app_settings.dart';
-import 'providers/servers.dart';
+import 'providers/app_settings_provider.dart';
+import 'providers/server_provider.dart';
 import 'screens/auth_jail.dart';
 import 'screens/secure_storage_error_screen.dart';
 import 'tools/logger_wrapper.dart';
@@ -25,8 +25,8 @@ import 'models/hive/wallet_address.dart';
 import 'models/hive/wallet_transaction.dart';
 import 'models/hive/wallet_utxo.dart';
 import 'providers/wallet_provider.dart';
-import 'providers/electrum_connection.dart';
-import 'providers/encrypted_box.dart';
+import 'providers/connection_provider.dart';
+import 'providers/encrypted_box_provider.dart';
 import 'screens/setup/setup_landing.dart';
 import 'screens/wallet/wallet_list.dart';
 import 'tools/app_localizations.dart';
@@ -45,6 +45,16 @@ void main() async {
   var prefs = await SharedPreferences.getInstance();
   setupFinished = prefs.getBool('setupFinished') ?? false;
   _locale = Locale(prefs.getString('language_code') ?? 'und');
+
+  //clear storage if setup is not finished
+  if (!setupFinished) {
+    await prefs.clear();
+    LoggerWrapper.logInfo(
+      'main',
+      'SharedPreferences',
+      'SharedPreferences flushed',
+    );
+  }
 
   //init hive
   await Hive.initFlutter();
@@ -99,6 +109,16 @@ void main() async {
 
   try {
     const secureStorage = FlutterSecureStorage();
+    //clear secureStorage if setup is not finished
+    if (!setupFinished) {
+      await secureStorage.deleteAll();
+      LoggerWrapper.logInfo(
+        'main',
+        'secureStorage',
+        'secureStorage flushed',
+      );
+    }
+
     failedAuths =
         int.parse(await secureStorage.read(key: 'failedAuths') ?? '0');
   } catch (e) {
@@ -133,7 +153,7 @@ void main() async {
         LogLevel.INFO,
         LogLevel.WARNING,
         LogLevel.ERROR,
-        LogLevel.SEVERE
+        LogLevel.SEVERE,
       ],
       timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
       directoryStructure: DirectoryStructure.FOR_DATE,
@@ -165,36 +185,29 @@ class PeercoinApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: EncryptedBox()),
+        ChangeNotifierProvider.value(value: EncryptedBoxProvider()),
         ChangeNotifierProvider(
           create: (context) {
             return WalletProvider(
-              Provider.of<EncryptedBox>(context, listen: false),
+              Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return AppSettings(
-              Provider.of<EncryptedBox>(context, listen: false),
+            return AppSettingsProvider(
+              Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return Servers(
-              Provider.of<EncryptedBox>(context, listen: false),
+            return ServerProvider(
+              Provider.of<EncryptedBoxProvider>(context, listen: false),
             );
           },
         ),
-        ChangeNotifierProvider(
-          create: (context) {
-            return ElectrumConnection(
-              Provider.of<WalletProvider>(context, listen: false),
-              Provider.of<Servers>(context, listen: false),
-            );
-          },
-        ),
+        ChangeNotifierProvider.value(value: ConnectionProvider()),
       ],
       child: ThemeModeHandler(
         manager: ThemeManager(),
@@ -217,7 +230,7 @@ class PeercoinApp extends StatelessWidget {
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate
+                GlobalCupertinoLocalizations.delegate,
               ],
               locale: _locale == const Locale('und') ? null : _locale,
               themeMode: themeMode,
