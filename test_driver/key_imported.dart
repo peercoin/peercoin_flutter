@@ -281,17 +281,22 @@ void main() {
         timeout: const Timeout.factor(2),
       );
 
-      test('Settings, change language', () async {
-        //creates a peercoin testnet wallet from an imported seed and checks if it connects
+      test('Settings, change language from EN to DE and back', () async {
         await driver.tap(find.text('Language'));
-        await driver.scrollIntoView(find.text('Deutsch'));
+        await driver.tap(find.byTooltip('Click here to start search'));
+        await driver.tap(find.byType('TextField'));
+        await driver.enterText('Deut');
         await driver.tap(find.text('Deutsch'));
-        await driver.scrollIntoView(find.text('Sprachen'));
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.pageBack());
+          await driver.tap(find.pageBack());
+          await driver.tap(find.text('Sprachen'));
+        });
+        await driver.scrollIntoView(find.text('English'));
+        await driver.tap(find.text('English'));
       });
 
       test('Settings, check changelog', () async {
-        await driver.scrollIntoView(find.text('English'));
-        await driver.tap(find.text('English'));
         await driver.tap(find.pageBack());
         await driver.tap(find.byValueKey('aboutButton'));
         await driver.tap(find.text('Changelog'));

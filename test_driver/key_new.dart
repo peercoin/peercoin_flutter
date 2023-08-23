@@ -110,6 +110,41 @@ void main() {
       });
 
       test(
+        'tap into new peercoin mainnet wallet',
+        () async {
+          await driver.runUnsynchronized(
+            () async {
+              await driver.tap(find.pageBack());
+              await driver.tap(find.byValueKey('newWalletIconButton'));
+              await driver.tap(find.text('Peercoin'));
+              await driver.tap(find.text('Peercoin')); //tap into wallet
+              expect(await driver.getText(find.text('connected')), 'connected');
+            },
+          );
+        },
+      );
+
+      test('change currency and see if it persists', () async {
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.pageBack());
+          await driver.tap(find.byValueKey('appSettingsButton'));
+        });
+        await driver.scrollIntoView(find.text('Price Feed & Currency'));
+        await driver.tap(find.text('Price Feed & Currency'));
+        await driver.tap(find.byTooltip('Click here to start search'));
+        await driver.tap(find.byType('TextField'));
+        await driver.enterText('EUR');
+        await driver.tap(find.text('Euro'));
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.pageBack());
+          await driver.tap(find.pageBack());
+          await driver.tap(find.pageBack());
+          await driver.tap(find.text('Peercoin'));
+        });
+        await driver.waitFor(find.text('0.00 EUR'));
+      });
+
+      test(
         'find wallet with edited title and try to add an ssl server and see if it persists',
         () async {
           await driver.tap(find.pageBack());
