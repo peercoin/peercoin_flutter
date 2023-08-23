@@ -278,7 +278,7 @@ class _TransactionListState extends State<TransactionList> {
                                     ? 125
                                     : 110,
                               ),
-                              GradientContainer(),
+                              const GradientContainer(),
                               Container(
                                 color: Theme.of(context).primaryColor,
                                 width: MediaQuery.of(context).size.width,
