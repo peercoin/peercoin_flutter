@@ -1008,6 +1008,12 @@ class WalletProvider with ChangeNotifier {
   }
 
   String getScriptHash(String identifier, String address) {
+    LoggerWrapper.logInfo(
+      'WalletProvider',
+      'getScriptHash',
+      'getting script hash for $address in $identifier',
+    );
+
     var network = AvailableCoins.getSpecificCoin(identifier).networkType;
     var script = addressToOutputScript(address, network);
     var hash = sha256.convert(script).toString();

@@ -245,6 +245,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
+          LoggerWrapper.logInfo(
+            'WalletHome',
+            'didChangeDependencies',
+            'subscribing to $_unusedAddress (unusedAddress))',
+          );
+
           _connectionProvider.subscribeToScriptHashes(
             await _walletProvider.getWatchedWalletScriptHashes(
               _wallet.name,

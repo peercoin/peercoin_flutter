@@ -128,6 +128,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
+              key: const Key('aboutButton'),
               icon: const Icon(Icons.info_rounded),
               onPressed: () {
                 Navigator.push(
