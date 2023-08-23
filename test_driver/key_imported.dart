@@ -282,9 +282,43 @@ void main() {
         await driver.tap(find.text('Deutsch'));
         await driver.scrollIntoView(find.text('Sprachen'));
       });
-      //TODO changelog
-      //TODO test reset
-      //TODO test import paper wallet, go back and see if still connected
+
+      test('Settings, check changelog', () async {
+        await driver.scrollIntoView(find.text('English'));
+        await driver.tap(find.text('English'));
+        await driver.tap(find.pageBack());
+        await driver.tap(find.byValueKey('aboutButton'));
+        await driver.tap(find.text('Changelog'));
+        await driver.waitFor(find.text("What's new?"));
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
+      });
+
+      test('Wallets, try reset', () async {
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.text('Peercoin Testnet'));
+        });
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.tap(find.text('Reset'));
+        await driver.tap(find.text('Reset'));
+        await driver.tap(find.pageBack());
+        await driver.runUnsynchronized(() async {
+          await driver.waitFor(find.text('Peercoin Wallet'));
+        });
+      });
+
+      test(
+          'Wallets, try opening sweep paper wallets, closing, and see if wallet is still connected',
+          () async {
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.text('Peercoin Testnet'));
+          await driver.tap(find.byTooltip('Show menu'));
+          await driver.tap(find.text('Sweep Paper Wallet'));
+        });
+        await driver.tap(find.pageBack());
+        await driver.waitFor(find.text('connected'));
+      });
     },
   );
 }
