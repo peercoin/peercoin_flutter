@@ -289,6 +289,7 @@ void main() {
       );
 
       test('Settings, change language from EN to DE', () async {
+        await driver.scrollIntoView(find.text('Language'));
         await driver.tap(find.text('Language'));
         await driver.tap(find.byTooltip('Click here to start search'));
         await driver.tap(find.byType('TextField'));
