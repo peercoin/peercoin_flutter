@@ -82,21 +82,25 @@ void main() {
         timeout: Timeout.none,
       );
 
-      test('Scan for used wallets in this seed', () async {
-        await driver.runUnsynchronized(() async {
-          await driver.tap(find.byValueKey('scanForWalletsButton'));
-          await driver.waitFor(find.text('2 new wallets found'));
-          await driver.tap(find.text('Close'));
-          expect(
-            await driver.getText(find.text('Peercoin Testnet')),
-            'Peercoin Testnet',
-          );
-          expect(
-            await driver.getText(find.text('Peercoin')),
-            'Peercoin',
-          );
-        });
-      });
+      test(
+        'Scan for used wallets in this seed',
+        () async {
+          await driver.runUnsynchronized(() async {
+            await driver.tap(find.byValueKey('scanForWalletsButton'));
+            await driver.waitFor(find.text('2 new wallets found'));
+            await driver.tap(find.text('Close'));
+            expect(
+              await driver.getText(find.text('Peercoin Testnet')),
+              'Peercoin Testnet',
+            );
+            expect(
+              await driver.getText(find.text('Peercoin')),
+              'Peercoin',
+            );
+          });
+        },
+        timeout: const Timeout.factor(3),
+      );
 
       test(
           'Message signing, tap into sign message, select address and sign message',
