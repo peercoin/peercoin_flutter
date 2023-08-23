@@ -140,15 +140,15 @@ void main() {
           await driver.tap(find.pageBack());
           await driver.tap(find.pageBack());
           await driver.tap(find.pageBack());
-          await driver.tap(find.text('Peercoin'));
         });
-        await driver.waitFor(find.text('0.00 EUR'));
+        await driver.runUnsynchronized(() async {
+          await driver.waitFor(find.text('0.00 EUR'));
+        });
       });
 
       test(
         'find wallet with edited title and try to add an ssl server and see if it persists',
         () async {
-          await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
               await driver.tap(find.byValueKey('appSettingsButton'));
