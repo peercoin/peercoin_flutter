@@ -184,9 +184,9 @@ void main() {
       });
 
       test('Settings, test lock into auth jail', () async {
+        await driver.tap(find.pageBack());
         await driver.runUnsynchronized(
           () async {
-            await driver.tap(find.pageBack());
             await driver.tap(find.pageBack());
             await driver.tap(find.byValueKey('appSettingsButton'));
           },
@@ -200,10 +200,13 @@ void main() {
         }
         //tap okay for warning to go away
         await driver.tap(find.text('Okay'));
-        for (var i = 1; i <= 6; i++) {
-          await driver.tap(find.text('1'));
-        }
-
+        await driver.runUnsynchronized(
+          () async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('1'));
+            }
+          },
+        );
         await driver.tap(find.text('Okay'));
         //auth jail open now
         await driver.runUnsynchronized(
