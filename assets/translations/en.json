@@ -454,5 +454,6 @@
     "wallet_scanner_message_scan_finished": "scan finished for $coinName at $accountNumber",
     "wallet_scanner_message_scan_failed": "scan failed for $coinName at $accountNumber ($e))",
     "wallet_scanner_message_scan_connection_failed": "scan failed for $coinName at $accountNumber (Connection failed)",
-    "scan_modal_title": "Scanning this Wallet"
+    "scan_modal_title": "Scanning this Wallet",
+    "reset_modal_title": "Resetting this Wallet"
 }

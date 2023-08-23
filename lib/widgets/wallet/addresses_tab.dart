@@ -319,7 +319,7 @@ class _AddressTabState extends State<AddressTab> {
             'watched and subscribed ${addr.address}',
           );
           _connection.subscribeToScriptHashes(
-            await _walletProvider.getWalletScriptHashes(
+            await _walletProvider.getWatchedWalletScriptHashes(
               widget.walletName,
               addr.address,
             ),

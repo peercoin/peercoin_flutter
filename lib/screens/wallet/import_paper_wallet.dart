@@ -44,6 +44,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
         _walletName = ModalRoute.of(context)!.settings.arguments as String;
         _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
         _connectionProvider = Provider.of<ConnectionProvider>(context);
+        //TODO FIX! broken
         _walletProvider = Provider.of<WalletProvider>(context);
         _decimalProduct = AvailableCoins.getDecimalProduct(
           identifier: _walletName,

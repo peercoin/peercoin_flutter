@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/server_provider.dart';
+import 'package:peercoin/widgets/wallet/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -144,11 +147,13 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
 
     // pop bottom sheet
-    // ignore: use_build_context_synchronously
     Navigator.pop(context);
 
     // remove flag
-    _walletProvider.updateDueForRescan(_wallet.name, false);
+    await _walletProvider.updateDueForRescan(
+      identifier: _wallet.name,
+      newState: false,
+    );
   }
 
   Future<void> _performInit() async {
@@ -176,7 +181,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
 
     if (_appSettings.authenticationOptions!['walletHome']!) {
-      // ignore: use_build_context_synchronously
       await Auth.requireAuth(
         context: context,
         biometricsAllowed: _appSettings.biometricsAllowed,
@@ -193,7 +197,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
 
     checkPendingNotifications();
-    // ignore: use_build_context_synchronously
     context.loaderOverlay.hide();
 
     if (arguments.containsKey('pushedAddress')) {
@@ -221,16 +224,25 @@ class _WalletHomeState extends State<WalletHomeScreen>
       _listenedAddresses = _connectionProvider.listenedAddresses.keys;
       if (_connectionState == BackendConnectionState.connected) {
         if (_listenedAddresses.isEmpty) {
-          //listenedAddresses not populated after reconnect - resubscribe
-          _connectionProvider.subscribeToScriptHashes(
-            await _walletProvider.getWalletScriptHashes(_wallet.name),
-          );
+          //listenedAddresses not populated after reconnect - resubscribe or initial subscribe
+
+          if (_wallet.dueForRescan == true) {
+            //watch all addresses with status null as well
+            _connectionProvider.subscribeToScriptHashes(
+              await _walletProvider.getAllWalletScriptHashes(_wallet.name),
+            );
+          } else {
+            //only subscribe to watched addresses
+            _connectionProvider.subscribeToScriptHashes(
+              await _walletProvider.getWatchedWalletScriptHashes(_wallet.name),
+            );
+          }
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false) {
           //subscribe to newly created addresses
           _connectionProvider.subscribeToScriptHashes(
-            await _walletProvider.getWalletScriptHashes(
+            await _walletProvider.getWatchedWalletScriptHashes(
               _wallet.name,
               _unusedAddress,
             ),
@@ -300,7 +312,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
               ) >=
               1000) {
         //Coins worth 1000 USD or more
-        // ignore: use_build_context_synchronously
         await showDialog(
           context: context,
           builder: (_) => AlertDialog(
@@ -424,8 +435,40 @@ class _WalletHomeState extends State<WalletHomeScreen>
       case 'change_title':
         _titleEditDialog(context, _wallet);
         break;
+      case 'reset_wallet':
+        _triggerResetBottomSheet();
+        break;
       default:
     }
+  }
+
+  void _triggerResetBottomSheet() async {
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return WalletResetBottomSheet(
+          action: () async {
+            await _walletProvider.prepareForRescan(
+              _wallet.name,
+            );
+
+            Navigator.of(context).pop(); // pops modal bottom sheet
+            Navigator.of(context).pushReplacementNamed(
+              // pushes wallet again to trigger rescan
+              Routes.walletHome,
+              arguments: {
+                'wallet': _wallet,
+              },
+            );
+          },
+        );
+      },
+      context: context,
+    );
   }
 
   List<Widget> _calcPopupMenuItems(BuildContext context) {
@@ -443,8 +486,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                   title: Text(
-                    AppLocalizations.instance
-                        .translate('wallet_pop_menu_paperwallet'),
+                    AppLocalizations.instance.translate(
+                      'wallet_pop_menu_paperwallet',
+                    ),
                   ),
                 ),
               ),
@@ -456,7 +500,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance.translate('wallet_pop_menu_wif'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_wif',
+                  ),
                 ),
               ),
             ),
@@ -468,8 +514,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_signing'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_signing',
+                  ),
                 ),
               ),
             ),
@@ -481,8 +528,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_verification'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_verification',
+                  ),
                 ),
               ),
             ),
@@ -494,8 +542,23 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
-                  AppLocalizations.instance
-                      .translate('wallet_pop_menu_change_title'),
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_change_title',
+                  ),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'reset_wallet',
+              child: ListTile(
+                leading: Icon(
+                  Icons.restore,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'sign_reset_button',
+                  ),
                 ),
               ),
             ),

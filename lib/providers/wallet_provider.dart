@@ -154,7 +154,10 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateDueForRescan(String identifier, bool newState) async {
+  Future<void> updateDueForRescan({
+    required String identifier,
+    required bool newState,
+  }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     openWallet.dueForRescan = newState;
 
@@ -580,8 +583,9 @@ class WalletProvider with ChangeNotifier {
   Future<void> prepareForRescan(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
     openWallet.utxos.removeRange(0, openWallet.utxos.length);
-    openWallet.transactions
-        .removeWhere((element) => element.broadCasted == false);
+    openWallet.transactions.removeWhere(
+      (element) => element.broadCasted == false,
+    );
 
     for (var element in openWallet.addresses) {
       element.newStatus = null;
@@ -589,9 +593,8 @@ class WalletProvider with ChangeNotifier {
     }
 
     await updateWalletBalance(identifier);
+    await updateDueForRescan(identifier: identifier, newState: true);
     await openWallet.save();
-
-    //TODO reimplement this
   }
 
   Future<void> updateAddressStatus(
@@ -957,7 +960,7 @@ class WalletProvider with ChangeNotifier {
     return txAmount;
   }
 
-  Future<Map> getWalletScriptHashes(
+  Future<Map> getWatchedWalletScriptHashes(
     String identifier, [
     String? address,
   ]) async {
@@ -970,8 +973,9 @@ class WalletProvider with ChangeNotifier {
       for (var addr in addresses) {
         if (addr.isOurs == true) {
           //does addr have a balance?
-          var utxoRes = utxos
-              .firstWhereOrNull((element) => element.address == addr.address);
+          var utxoRes = utxos.firstWhereOrNull(
+            (element) => element.address == addr.address,
+          );
 
           if (addr.isWatched ||
               utxoRes != null && utxoRes.value > 0 ||
@@ -984,6 +988,21 @@ class WalletProvider with ChangeNotifier {
     } else {
       //get just one
       answerMap[address] = getScriptHash(identifier, address);
+    }
+    return answerMap;
+  }
+
+  Future<Map> getAllWalletScriptHashes(String identifier) async {
+    List<WalletAddress>? addresses;
+    var answerMap = {};
+    //get all
+    addresses = await getWalletAddresses(identifier);
+    for (var addr in addresses) {
+      if (addr.isOurs == true) {
+        if (addr.status == null) {
+          answerMap[addr.address] = getScriptHash(identifier, addr.address);
+        }
+      }
     }
     return answerMap;
   }
