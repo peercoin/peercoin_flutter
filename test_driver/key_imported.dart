@@ -252,12 +252,16 @@ void main() {
             },
           );
           await driver.tap(find.text('Change PIN'));
-          for (var i = 1; i <= 6; i++) {
-            await driver.tap(find.text('0'));
-          }
-          for (var i = 1; i <= 12; i++) {
-            await driver.tap(find.text('1'));
-          }
+          await driver.runUnsynchronized(() async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('0'));
+            }
+          });
+          await driver.runUnsynchronized(() async {
+            for (var i = 1; i <= 12; i++) {
+              await driver.tap(find.text('1'));
+            }
+          });
           // final pixels = await driver.screenshot();
           // final file = File('shot.png');
           // await file.writeAsBytes(pixels);
@@ -268,9 +272,11 @@ void main() {
           });
           await driver.tap(find.text('Seed Phrase'));
           await driver.tap(find.text('Reveal seed phrase'));
-          for (var i = 1; i <= 6; i++) {
-            await driver.tap(find.text('1'));
-          }
+          await driver.runUnsynchronized(() async {
+            for (var i = 1; i <= 6; i++) {
+              await driver.tap(find.text('1'));
+            }
+          });
         },
         timeout: const Timeout.factor(2),
       );
@@ -302,22 +308,19 @@ void main() {
         await driver.tap(find.byTooltip('Show menu'));
         await driver.tap(find.text('Reset'));
         await driver.tap(find.text('Reset'));
-        await driver.tap(find.pageBack());
-        await driver.runUnsynchronized(() async {
-          await driver.waitFor(find.text('Peercoin Wallet'));
-        });
-      });
 
-      test(
-          'Wallets, try opening sweep paper wallets, closing, and see if wallet is still connected',
-          () async {
+        //Wallets, try opening sweep paper wallets, closing, and see if wallet is still connected',
         await driver.runUnsynchronized(() async {
-          await driver.tap(find.text('Peercoin Testnet'));
           await driver.tap(find.byTooltip('Show menu'));
           await driver.tap(find.text('Sweep Paper Wallet'));
         });
         await driver.tap(find.pageBack());
         await driver.waitFor(find.text('connected'));
+
+        await driver.tap(find.pageBack());
+        await driver.runUnsynchronized(() async {
+          await driver.waitFor(find.text('Peercoin Wallet'));
+        });
       });
     },
   );

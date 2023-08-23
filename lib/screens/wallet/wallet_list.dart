@@ -339,8 +339,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                AppLocalizations.instance
-                                    .translate('wallets_none'),
+                                AppLocalizations.instance.translate(
+                                  'wallets_none',
+                                ),
                                 key: const Key('noActiveWallets'),
                                 style: TextStyle(
                                   fontSize: 16,

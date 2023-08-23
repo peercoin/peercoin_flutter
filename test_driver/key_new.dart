@@ -72,7 +72,6 @@ void main() {
           await driver.tap(find.byValueKey('setupLegalConsentKey'));
           await driver.scrollIntoView(find.text('Finish Setup'));
           await driver.tap(find.text('Finish Setup'));
-          await driver.tap(find.pageBack());
           await driver.runUnsynchronized(
             () async {
               expect(
