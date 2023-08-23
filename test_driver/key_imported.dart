@@ -288,7 +288,7 @@ void main() {
         timeout: const Timeout.factor(2),
       );
 
-      test('Settings, change language from EN to DE and back', () async {
+      test('Settings, change language from EN to DE', () async {
         await driver.tap(find.text('Language'));
         await driver.tap(find.byTooltip('Click here to start search'));
         await driver.tap(find.byType('TextField'));
@@ -297,8 +297,12 @@ void main() {
         await driver.runUnsynchronized(() async {
           await driver.tap(find.pageBack());
           await driver.tap(find.pageBack());
-          await driver.tap(find.text('Sprachen'));
         });
+      });
+
+      test('Settings, change language back to EN', () async {
+        await driver.scrollIntoView(find.text('Sprachen'));
+        await driver.tap(find.text('Sprachen'));
         await driver.scrollIntoView(find.text('English'));
         await driver.tap(find.text('English'));
       });
@@ -335,7 +339,6 @@ void main() {
         });
       });
     },
-    retry: 2,
     onPlatform: {
       'android': const Timeout.factor(2),
     },
