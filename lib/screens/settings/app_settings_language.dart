@@ -79,6 +79,8 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
       appBar: AppBarWithSearchSwitch(
         closeOnSubmit: true,
         clearOnClose: true,
+        fieldHintText:
+            AppLocalizations.instance.translate('app_settings_language_search'),
         onChanged: (text) {
           setState(() {
             _searchString = text;

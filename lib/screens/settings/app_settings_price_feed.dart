@@ -47,13 +47,19 @@ class _AppSettingsPriceFeedScreenState
 
     return Scaffold(
       appBar: AppBarWithSearchSwitch(
-        fieldHintText: AppLocalizations.instance
-            .translate('app_settings_price_feed_search'),
+        closeOnSubmit: true,
+        clearOnClose: true,
+        fieldHintText: AppLocalizations.instance.translate(
+          'app_settings_price_feed_search',
+        ),
         onChanged: (text) {
           setState(() {
             _searchString = text;
           });
         },
+        onCleared: () => setState(() {
+          _searchString = '';
+        }),
         appBarBuilder: (context) {
           return AppBar(
             title: Text(
