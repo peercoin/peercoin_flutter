@@ -233,6 +233,7 @@ void main() {
             await driver.tap(find.byValueKey('appSettingsButton'));
           },
         );
+        await driver.scrollIntoView(find.text('Seed Phrase'));
         await driver.tap(find.text('Seed Phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
         await driver.runUnsynchronized(
@@ -275,6 +276,7 @@ void main() {
             await driver.tap(find.pageBack());
             await driver.tap(find.byValueKey('appSettingsButton'));
           });
+          await driver.scrollIntoView(find.text('Seed Phrase'));
           await driver.tap(find.text('Seed Phrase'));
           await driver.tap(find.text('Reveal seed phrase'));
           await driver.runUnsynchronized(() async {
