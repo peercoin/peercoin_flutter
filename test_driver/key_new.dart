@@ -139,6 +139,7 @@ void main() {
           await driver.tap(find.pageBack());
           await driver.tap(find.pageBack());
           await driver.tap(find.pageBack());
+          await driver.tap(find.pageBack());
           await driver.tap(find.text('Peercoin'));
         });
         await driver.waitFor(find.text('0.00 EUR'));
