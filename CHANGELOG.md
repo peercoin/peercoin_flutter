@@ -1,3 +1,6 @@
+### **1.2.0** (2023-xx-xx)
+*
+
 ### **1.1.9** (2023-08-23)
 * You may now add multiple wallets of the same type
 * Complete redesign of rescan process, check "Wallet Scan" in app settings and "Reset" in the respective wallet
