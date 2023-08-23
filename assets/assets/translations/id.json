@@ -178,7 +178,6 @@
     "app_settings_logs_export": "Ekspor log debug",
     "app_settings_newWallet": "Diperlukan untuk menambah dompet baru",
     "app_settings_notifications": "Notifikasi",
-    "app_settings_notifications_open_button": "Buka pengaturan notifikasi",
     "app_settings_notifications_enable_button": "Aktifkan Notifikasi",
     "app_settings_notifications_alert_content": "Ini akan mengaktifkan pemberitahuan latar belakang yang ramah privasi kami.\nMereka dapat dinonaktifkan kapan saja.",
     "app_settings_notifications_disable_button": "Matikan Notifikasi",
@@ -187,7 +186,7 @@
     "app_settings_notifications_not_enabled": "Pemberitahuan latar belakang saat ini dinonaktifkan.",
     "app_settings_revealAuthButton": "Buka opsi autentikasi",
     "app_settings_revealSeedButton": "Ungkapkan frase benih",
-    "app_settings_seed": "Frase benih",
+    "app_settings_seed": "Frase Benih",
     "app_settings_sendTransaction": "Diperlukan sebelum mengirim transaksi",
     "app_settings_shareseed": "Bagikan benih",
     "app_settings_theme": "Tema Aplikasi",
@@ -351,5 +350,8 @@
     "logout_content": "Apakah Anda yakin ingin keluar?\nAnda harus memasukkan frasa benih Anda untuk masuk kembali.",
     "periodic_reminder_backup_body": "Simpan cadangan frasa benih dompet Anda di tempat yang aman untuk menghindari kehilangan akses ke koin Anda.",
     "periodic_reminder_backup_button": "Buka Situs Web Foundation",
-    "send_fiat_switch": "Jumlah dalam $currency uang"
+    "send_fiat_switch": "Jumlah dalam $currency uang",
+    "wallet_pop_menu_change_title": "Ubah Judul",
+    "wallet_title_edit": "Edit Judul Dompet",
+    "wallet_title_edit_new_title": "Judul Baru"
 }

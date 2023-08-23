@@ -211,7 +211,7 @@
     "verify_enter_message": "Ju lutemi shkruani një mesazh",
     "verify_enter_signature": "Ju lutemi shkruani një nënshkrim",
     "send_enter_amount": "Ju lutemi shkruani një shumë",
-    "send_errors_solve": "Ju lutemi zgjidhni gabimet ...",
+    "send_errors_solve": "Ju lutemi zgjidhni gabimet …",
     "send_errors_cant_pay_fees": "Nuk mund të paguani për komisionet. Mungojnë $feesMissing $letter_code tani. Konsideroni heqjen e adresave ose zvogëlimin e shumës së transaksionit të tyre.",
     "send_import_csv": "Importo nga CSV",
     "send_fee": "Komisioni: -$amount $letter_code",
@@ -243,7 +243,7 @@
     "server_settings_alert_hardcoded_content": "Serverët e koduar me forcé nuk mund të fshihen, vetëm mund të çaktivizohen.",
     "server_settings_error_no_server_left": "Të paktën një server i lidhshëm është i nevojshëm!",
     "setup_continue_alert_title": "Para se të vazhdoni",
-    "setup_continue_alert_content": "Sigurohuni që keni ruajtur fjalën tuaj të farës. Mund ta aksesoni më vonë në cilësimet e aplikacionit.",
+    "setup_continue_alert_content": "Sigurohuni që keni ruajtur fjalën tuaj të farës.\nMund ta aksesoni më vonë në cilësimet e aplikacionit.",
     "setup_create_pin": "Krijo PIN",
     "setup_import_title": "Importo Farën",
     "setup_finish": "Përfundo Cilësimin",
@@ -319,7 +319,7 @@
     "secure_storage_app_bar_title": "Gabim",
     "secure_storage_body": "Leximi nga ruajtja e sigurt dështoi.\nJu lutemi fshini të dhënat e aplikacionit dhe memorien e përkohshme të këtij aplikacioni dhe riprovoni.",
     "wallet_value_alert_content": "Ruajtja e kësaj vlerës së monedhave në një xhep celular është e rrezikshme.\nKonsideroni zhvendosjen e monedhave në Stakebox, xhepin e palëve Ledger ose një xhep të ftohtë.",
-    "store_description": "Dërgoni dhe merrni Peercoin, pionier i Proof-of-Stake, në telefonin tuaj.\n\nMbajeni farën e xhepit tuaj të mbrojtur. Ky aplikacion nuk ka asnjë garanci. Përdorni me rrezikun tuaj.\n\nKarakteristikat:\n- Bazuara në protokollin electrum.\n- Dërgoni dhe merrni peercoin.\n- Gati për t'i transaksionuar pas instalimit (pa pritur).\n- Xhepat e peercoin dhe xhepat e provës peercoin.\n- Menaxhimi i librit të adresave.\n- Importo xhepat në fletë.\n- Importo dhe eksporto çelësat privatë (WIF).\n- Menaxhimi i serverëve.\n- Mbështetje për shumë gjuhë.\n- Njoftime në sfond.\n\nKufizimet e njohura mund të gjenden në repozitorin Github.",
+    "store_description": "Dërgoni dhe merrni Peercoin, pionier i Proof-of-Stake, në telefonin tuaj.\n\nMbajeni farën e xhepit tuaj të mbrojtur. \nKy aplikacion nuk ka asnjë garanci. \nPërdorni me rrezikun tuaj.\n\nKarakteristikat:\n- Bazuara në protokollin electrum.\n- Dërgoni dhe merrni peercoin.\n- Gati për t'i transaksionuar pas instalimit (pa pritur).\n- Xhepat e peercoin dhe xhepat e provës peercoin.\n- Menaxhimi i librit të adresave.\n- Importo xhepat në fletë.\n- Importo dhe eksporto çelësat privatë (WIF).\n- Menaxhimi i serverëve.\n- Mbështetje për shumë gjuhë.\n- Njoftime në sfond.\n\nKufizimet e njohura mund të gjenden në repozitorin Github.",
     "store_short": "Xhepi juaj celular për Peercoin dhe xhepin e provës peercoin.",
     "sign_step_1": "Zgjidh Adresën",
     "verify_step_1": "Shkruani Adresën",
@@ -353,5 +353,5 @@
     "setup_auth_hint": "Do të duhet të shkruani farën tuaj përsëri pasi të skadojë sesioni.",
     "about_donate_button": "Dhuroni PPC tani",
     "app_settings_delete": "Fshij llogarinë",
-    "app_settings_delete_description": "Meqë ende nuk keni krijuar një llogari në këtë aplikacion, nuk ka asgjë për të fshirë. Keni krijuar një farë të xhepit, që është një veprim kriptografik. Farat tuaja janë matematikë. Mund të përdoren në çdo aplikacion që mbështet fraza të farës. Ju gjithashtu nuk keni asnjë llogari me njoftime në sfond ose shërbime të çmimeve. Ky aplikacion vlerëson privatësinë tuaj dhe është privat sipas dizajnit."
+    "app_settings_delete_description": "Meqë ende nuk keni krijuar një llogari në këtë aplikacion, nuk ka asgjë për të fshirë. Keni krijuar një \"farë të xhepit\", që është një veprim kriptografik. Farat tuaja janë matematikë. Mund të përdoren në çdo aplikacion që mbështet fraza të farës. Ju gjithashtu nuk keni asnjë llogari me njoftime në sfond ose shërbime të çmimeve. Ky aplikacion vlerëson privatësinë tuaj dhe është privat sipas dizajnit."
 }

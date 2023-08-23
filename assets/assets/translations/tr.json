@@ -45,7 +45,6 @@
     "app_settings_default_description": "Varsayılan cüzdan, uygulama başlatıldığında otomatik olarak açılacaktır.",
     "app_settings_language_restart": "Uygulamanın tekrar başlatılması gerekiyor.",
     "app_settings_notifications": "Bildirimler",
-    "app_settings_notifications_open_button": "Bildirim ayarlarını aç",
     "app_settings_notifications_enable_button": "Bildirimleri Etkinleştir",
     "app_settings_newWallet": "Yeni cüzdan eklemek için gerektir",
     "app_settings_notifications_disable_button": "Bildirimleri Kapat",
@@ -235,11 +234,11 @@
     "receive_website_description": "Peercoin'i doğrudan kredi kartıyla (yalnızca ABD dışındaki müşteriler için geçerlidir) veya çeşitli borsa ve hizmetlerden satın alabilirsiniz.",
     "server_add_no_wss": "wss:// ile başlamalı\nŞu anda diğer protokoller desteklenmiyor",
     "wallet_value_alert_title": "Kripto değeri yüksek",
-    "app_settings_seed": "Kurtarma cümlesi (seed phrase)",
+    "app_settings_seed": "Kurtarma Cümlesi (seed phrase)",
     "app_settings_shareseed": "Seed'i Paylaş",
     "import_seed_error_2": "Geçersiz seed",
     "import_wif_hint": "Cüzdan seed vasıtasıyla geri yüklendiğinde anahtarın tekrar içe aktarılması gerekir. Anahtar seed'e bağlı değildir.",
-    "send_dust": "Dust: -$amount $letter_code",
+    "send_dust": "Tozu: -$amount $letter_code",
     "send_to": " adres ",
     "server_add_no_port": "Bir bağlantı noktası içermelidir, örnek: 50004",
     "server_add_server_wrong_genesis": "Genesis hash eşleşmiyor.\nBu sunucu bu kripto parayı desteklemiyor.",
@@ -351,5 +350,8 @@
     "currency_SEK": "İsveç Kronu",
     "currency_TZS": "Tanzanya Şilini",
     "currency_UAH": "Ukrayna Grivnası",
-    "currency_UGX": "Uganda Şilini"
+    "currency_UGX": "Uganda Şilini",
+    "wallet_pop_menu_change_title": "Başlığı Değiştir",
+    "wallet_title_edit": "Cüzdan Başlığını Düzenle",
+    "wallet_title_edit_new_title": "Yeni Başlık"
 }

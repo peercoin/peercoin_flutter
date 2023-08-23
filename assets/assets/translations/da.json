@@ -55,7 +55,6 @@
     "app_settings_logs_export": "Eksporter fejlretningslogfiler",
     "app_settings_logs": "Fejlretningslogfiler",
     "app_settings_newWallet": "Kræv at tilføje ny tegnebog",
-    "app_settings_notifications_open_button": "Åbn meddelelsesindstillinger",
     "app_settings_notifications": "Meddelelser",
     "app_settings_notifications_enable_button": "Aktiver Meddelelser",
     "app_settings_notifications_alert_content": "Dette vil aktivere vores privatlivsvenlige baggrundsmeddelelser.\nDe kan til enhver tid deaktiveres.",
@@ -303,7 +302,7 @@
     "sign_step_1_description": "Vælg den adresse der skal underskrive beskeden",
     "sign_step_1_button": "Vælg",
     "sign_step_1_button_alt": "Lave om",
-    "sign_step_2": "Indtast besked",
+    "sign_step_2": "Indtast Besked",
     "sign_step_3": "Underskriv besked",
     "sign_step_3_description": "Dette er din signatur. Du kan trykke to gange for at kopiere den til udklipsholderen.",
     "sign_step_3_button": "Underskriv",
@@ -351,5 +350,8 @@
     "verify_input_label_address": "Adresse for at verificere",
     "verify_input_label_signature": "Signatur for at verificere",
     "verify_success": "Besked verificeret.",
-    "verify_fail": "Besked kunne ikke verificeres."
+    "verify_fail": "Besked kunne ikke verificeres.",
+    "wallet_pop_menu_change_title": "Ændre Navn",
+    "wallet_title_edit": "Rediger Tegnebogsnavn",
+    "wallet_title_edit_new_title": "Nyt Navn"
 }

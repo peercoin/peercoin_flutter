@@ -211,7 +211,7 @@
     "verify_enter_message": "אנא הזן הודעה",
     "verify_enter_signature": "אנא הזן חתימה",
     "send_enter_amount": "אנא הזן סכום",
-    "send_errors_solve": "אנא פתור שגיאות...",
+    "send_errors_solve": "אנא פתור שגיאות …",
     "send_errors_cant_pay_fees": "לא ניתן לשלם עבור העמלות. כעת חסרים $feesMissing $letter_code. שקול להסיר כתובות או להפחית את סכום העסקה שלהם.",
     "send_import_csv": "יבוא מ-CSV",
     "send_fee": "עמלה: -$amount $letter_code",
