@@ -234,6 +234,12 @@ class ElectrumBackend extends DataSource {
     openReplies = [];
     _resetAttempt = 1;
 
+    LoggerWrapper.logInfo(
+      'ElectrumConnection',
+      'cleanUpOnDone',
+      'cleaned up (intentional $_closedIntentionally)',
+    );
+
     if (_closedIntentionally == false) {
       _reconnectTimer = Timer(
         const Duration(seconds: 5),
