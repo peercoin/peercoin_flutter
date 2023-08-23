@@ -169,7 +169,7 @@ class _TransactionListState extends State<TransactionList> {
                             child: Card(
                               elevation: 0,
                               child: ListTile(
-                                horizontalTitleGap: 32.0,
+                                horizontalTitleGap: 16,
                                 onTap: () => Navigator.of(context).pushNamed(
                                   Routes.transaction,
                                   arguments: {
@@ -278,19 +278,7 @@ class _TransactionListState extends State<TransactionList> {
                                     ? 125
                                     : 110,
                               ),
-                              Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      BottomAppBarTheme.of(context).color!,
-                                      Theme.of(context).primaryColor,
-                                    ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                  ),
-                                ),
-                              ),
+                              GradientContainer(),
                               Container(
                                 color: Theme.of(context).primaryColor,
                                 width: MediaQuery.of(context).size.width,

@@ -12,8 +12,11 @@ import 'wallet_balance_price.dart';
 class WalletBalanceHeader extends StatelessWidget {
   final BackendConnectionState _connectionState;
   final CoinWallet _wallet;
-  const WalletBalanceHeader(this._connectionState, this._wallet, {Key? key})
-      : super(key: key);
+  const WalletBalanceHeader(
+    this._connectionState,
+    this._wallet, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -92,3 +92,22 @@ class ModalBottomSheetContainer extends StatelessWidget {
     );
   }
 }
+
+class GradientContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 30,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            BottomAppBarTheme.of(context).color!,
+            Theme.of(context).primaryColor,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+    );
+  }
+}
