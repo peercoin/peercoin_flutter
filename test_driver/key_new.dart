@@ -135,12 +135,9 @@ void main() {
         await driver.tap(find.byType('TextField'));
         await driver.enterText('EUR');
         await driver.tap(find.text('Euro'));
-        await driver.runUnsynchronized(() async {
-          await driver.tap(find.pageBack());
-          await driver.tap(find.pageBack());
-          await driver.tap(find.pageBack());
-          await driver.tap(find.pageBack());
-        });
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
         await driver.runUnsynchronized(() async {
           await driver.waitFor(find.text('0.00 EUR'));
         });
