@@ -45,7 +45,7 @@ class WalletScanner {
           type: WalletScannerMessageType.scanStarted,
           message: AppLocalizations.instance.translate(
             'wallet_scanner_message_init',
-            {'coin': coinName, 'account': accountNumber.toString()},
+            {'coinName': coinName, 'account': accountNumber.toString()},
           ),
           task: (coinName, accountNumber),
         );
