@@ -69,3 +69,26 @@ class PeerContainer extends StatelessWidget {
     );
   }
 }
+
+class ModalBottomSheetContainer extends StatelessWidget {
+  final Widget child;
+
+  const ModalBottomSheetContainer({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: child,
+    );
+  }
+}

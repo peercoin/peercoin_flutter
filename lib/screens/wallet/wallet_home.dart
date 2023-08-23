@@ -107,6 +107,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
   void _triggerRescanBottomSheet() async {
     // show bottom sheet
     showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
       isDismissible: false,
       enableDrag: false,
       builder: (BuildContext context) {

@@ -8,7 +8,7 @@ class WalletRescanBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PeerContainer(
+    return ModalBottomSheetContainer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
