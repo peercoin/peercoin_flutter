@@ -32,7 +32,16 @@ class WalletResetBottomSheet extends StatelessWidget {
           ),
           Text(
             AppLocalizations.instance.translate(
-              'wallet_scan_notice_new', // TODO will remove non broadcasted tx, will reset balance
+              'reset_modal_description',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            AppLocalizations.instance.translate(
+              'wallet_scan_notice_new',
             ),
           ),
           const SizedBox(

@@ -18,6 +18,8 @@ import 'data_source.dart';
 enum ElectrumServerType { ssl, wss }
 
 class ElectrumBackend extends DataSource {
+  //TODO auto reconnect broken
+
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   StreamSubscription? _offlineSubscription;

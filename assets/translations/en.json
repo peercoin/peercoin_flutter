@@ -455,5 +455,6 @@
     "wallet_scanner_message_scan_failed": "scan failed for $coinName at $accountNumber ($e))",
     "wallet_scanner_message_scan_connection_failed": "scan failed for $coinName at $accountNumber (Connection failed)",
     "scan_modal_title": "Scanning this Wallet",
-    "reset_modal_title": "Resetting this Wallet"
+    "reset_modal_title": "Resetting this Wallet",
+    "reset_modal_description": "This will reset the wallet balance and will check all addresses for UTXOs.\nNon-broadcasted transactions will be removed."
 }
