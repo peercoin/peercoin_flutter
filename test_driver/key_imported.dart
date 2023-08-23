@@ -195,6 +195,7 @@ void main() {
             await driver.tap(find.byValueKey('appSettingsButton'));
           },
         );
+        await driver.scrollIntoView(find.text('Seed Phrase'));
         await driver.tap(find.text('Seed Phrase'));
         await driver.tap(find.text('Reveal seed phrase'));
 
@@ -333,5 +334,8 @@ void main() {
       });
     },
     retry: 2,
+    onPlatform: {
+      'android': const Timeout.factor(2),
+    },
   );
 }
