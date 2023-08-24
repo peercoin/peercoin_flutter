@@ -14,7 +14,6 @@
     "wallet_pop_menu_servers": "Ayusin ang mga Server",
     "wallet_receive": "Tumanggap",
     "wallet_receive_label_hint": "Ang pagpindot sa Share button ay mag-i-save ng label ng address.",
-    "wallet_rescan_content": "Ini-scan muli ang wallet. Kung nagkakaproblema ka sa mga transaksyon o halaga, maaari itong makatulong.\nMaaari itong tumagal ng ilang sandali.",
     "wallet_scan_appBar_title": "Ini-scan ang iyong in-import na seed",
     "wallet_send": "Magpadala",
     "wallet_transactions": "Mga transaksyon",

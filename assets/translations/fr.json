@@ -197,7 +197,6 @@
     "server_settings_error_no_server_left": "Au minimum un serveur connectable est requis !",
     "setup_continue_alert_title": "Avant de continuer",
     "setup_continue_alert_content": "Vérifiez que vous avez sauvé votre phrase de départ.\nVous pouvez la consulter plus tard dans les préférences de l'app.",
-    "wallet_send_label_hint_scan": "Conseil : Scanner le code QR vous fera gagner du temps",
     "wallet_send": "Envoyer",
     "wallet_transactions": "Transactions",
     "wallets_list": "Vos portefeuilles",

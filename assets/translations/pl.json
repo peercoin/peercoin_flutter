@@ -311,7 +311,6 @@
     "wallet_pop_menu_change_title": "Zmień Tytuł",
     "wallet_title_edit": "Edytuj Tytuł Portfela",
     "wallet_title_edit_new_title": "Nowy Tytuł",
-    "wallet_send_label_hint_scan": "Zeskanowanie kodu QR pozwoli Ci zaoszczędzić trochę czasu",
     "wallet_send_label_hint_metadata": "Metadane są niezaszyfrowane i będą publicznie widoczne w łańcuchu bloków.",
     "wallet_transactions": "Transakcje",
     "wallets_list": "Twoje portfele",

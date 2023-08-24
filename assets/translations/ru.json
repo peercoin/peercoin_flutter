@@ -96,7 +96,6 @@
     "authenticate_change_pin_success": "PIN успешно изменен",
     "authenticate_retry_warning_title": "Внимание! У вас осталась только одна попытка.",
     "authenticate_retry_warning_text": "Приложение будет заблокировано, и можно будет разблокировать только при успешной аутентификации.",
-    "wallet_scan_notice": "Это может занять некоторое время. Не закрывайте этот экран!",
     "wallet_bottom_nav_receive": "Получить",
     "wallet_bottom_nav_tx": "Транзакции",
     "wallet_bottom_nav_send": "Отправить",

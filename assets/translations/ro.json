@@ -96,7 +96,6 @@
     "authenticate_change_pin_success": "PIN-ul a fost schimbat",
     "authenticate_retry_warning_title": "Atenţie! V-a mai rămas o singură încercare.",
     "authenticate_retry_warning_text": "Aplicația va fi blocată și va putea fi deblocată doar cu autentificare corectă.",
-    "wallet_scan_notice": "Acest lucru poate dura ceva timp. Nu închideți acest ecran!",
     "wallet_bottom_nav_receive": "Primiți",
     "wallet_bottom_nav_tx": "Tranzacții",
     "wallet_bottom_nav_send": "Trimiteți",

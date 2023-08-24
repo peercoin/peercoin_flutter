@@ -253,7 +253,6 @@
     "wallet_pop_menu_servers": "Điều Chỉnh Máy Chủ",
     "wallet_receive": "Nhận",
     "wallet_receive_label_hint": "Nhấn nút Chia Sẻ sẽ lưu nhãn địa chỉ.",
-    "wallet_rescan_content": "Quét lại ví lần nữa. Nếu bạn đang gặp sự cố với các giao dịch hoặc số tiền, điều này sẽ hữu ích.\nQuá trình này có thể mất đôi chút thời gian.",
     "wallet_scan_appBar_title": "Quét seed đã nhập của bạn",
     "wallet_send": "Gửi",
     "wallet_transactions": "Giao Dịch",
