@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
@@ -36,6 +37,10 @@ class MockHiveBox extends Mock implements EncryptedBoxProvider {
 void main() async {
   const walletName = 'peercoin';
   const testnetWalletName = 'peercoinTestnet';
+
+  //init coinlib
+  await loadCoinlib();
+
   final WalletProvider wallet = WalletProvider(MockHiveBox());
   TestWidgetsFlutterBinding.ensureInitialized();
 
