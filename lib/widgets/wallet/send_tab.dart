@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:coinslib/coinslib.dart';
+import 'package:decimal/decimal.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -597,10 +598,11 @@ class _SendTabState extends State<SendTab> {
     Map<String, int> recipients = {};
     double totalCoins = 0;
     _amountControllerList.asMap().forEach((key, value) {
-      var coins = _requestedAmountInCoinsList[key];
+      var coins = Decimal.parse(_requestedAmountInCoinsList[key].toString());
+      var decimalProduct = Decimal.parse(_decimalProduct.toString());
       recipients[_addressControllerList[key].text.trim()] =
-          (coins! * _decimalProduct).toInt();
-      totalCoins += coins;
+          int.parse((coins * decimalProduct).toString());
+      totalCoins += coins.toDouble();
     });
 
     setState(() {
