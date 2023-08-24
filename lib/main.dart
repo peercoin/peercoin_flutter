@@ -1,3 +1,4 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -65,6 +66,9 @@ void main() async {
   Hive.registerAdapter(AppOptionsStoreAdapter());
   Hive.registerAdapter(ServerAdapter());
   Hive.registerAdapter(PendingNotificationAdapter());
+
+  //init coinlib
+  await loadCoinlib();
 
   //init notifications
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();

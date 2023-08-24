@@ -4,15 +4,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:coinslib/coinslib.dart';
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:coinslib/src/utils/script.dart';
-import 'package:coinslib/src/utils/constants/op.dart';
 import 'package:hex/hex.dart';
 import 'package:peercoin/models/buildresult.dart';
 
@@ -32,7 +30,7 @@ class WalletProvider with ChangeNotifier {
 
   final EncryptedBoxProvider _encryptedBox;
   final Map<String, CoinWallet> _coinWalletCache = {};
-  final Map<String, HDWallet> _hdWalletCache = {};
+  final Map<String, HDPrivateKey> _hdWalletCache = {};
   final Map<String, String> _unusedAddressCache = {};
   final Map<String, String> _wifs = {};
   late String _seedPhrase;
@@ -164,6 +162,17 @@ class WalletProvider with ChangeNotifier {
     await openWallet.save();
   }
 
+  String getAddressFromHDPrivateKey(
+    String identifier,
+    HDPrivateKey hdPrivateKey,
+  ) {
+    return P2PKHAddress.fromPublicKey(
+      hdPrivateKey.publicKey,
+      version:
+          AvailableCoins.getSpecificCoin(identifier).networkType.p2pkhPrefix,
+    ).toString();
+  }
+
   Future<String> getAddressFromDerivationPath({
     required String identifier,
     required int account,
@@ -174,7 +183,10 @@ class WalletProvider with ChangeNotifier {
     var hdWallet = await getHdWallet(identifier);
 
     if (isMaster == true) {
-      return hdWallet.address;
+      return getAddressFromHDPrivateKey(
+        identifier,
+        hdWallet,
+      );
     } else {
       var derivePath = "m/$account'/$chain/$address";
       LoggerWrapper.logInfo(
@@ -183,7 +195,10 @@ class WalletProvider with ChangeNotifier {
         derivePath,
       );
 
-      return hdWallet.derivePath(derivePath).address;
+      return getAddressFromHDPrivateKey(
+        identifier,
+        hdWallet.derivePath(derivePath),
+      );
     }
   }
 
@@ -206,17 +221,22 @@ class WalletProvider with ChangeNotifier {
     await openWallet.save();
   }
 
-  Future<HDWallet> getHdWallet(String identifier) async {
+  Future<HDPrivateKey> getHdWallet(String identifier) async {
     if (_hdWalletCache.containsKey(identifier)) {
       return _hdWalletCache[identifier]!;
     } else {
-      final network = AvailableCoins.getSpecificCoin(identifier).networkType;
-      _hdWalletCache[identifier] = HDWallet.fromSeed(
+      _hdWalletCache[identifier] = HDPrivateKey.fromSeed(
         seedPhraseUint8List(await seedPhrase),
-        network: network,
       );
       return _hdWalletCache[identifier]!;
     }
+  }
+
+  String getWifFromHDPrivateKey(String identifier, HDPrivateKey hdWallet) {
+    return WIF(
+      privkey: hdWallet.privateKey,
+      version: AvailableCoins.getSpecificCoin(identifier).networkType.wifPrefix,
+    ).toString();
   }
 
   Future<void> generateUnusedAddress(String identifier) async {
@@ -226,16 +246,22 @@ class WalletProvider with ChangeNotifier {
     if (openWallet.addresses.isEmpty && openWallet.walletIndex == 0) {
       //generate new address from master at wallet index 0
       openWallet.addNewAddress = WalletAddress(
-        address: hdWallet.address,
+        address: getAddressFromHDPrivateKey(
+          identifier,
+          hdWallet,
+        ),
         addressBookName: '',
         used: false,
         status: null,
         isOurs: true,
-        wif: hdWallet.wif ?? '',
+        wif: getWifFromHDPrivateKey(identifier, hdWallet),
       );
       setUnusedAddress(
         identifier: identifier,
-        address: hdWallet.address,
+        address: getAddressFromHDPrivateKey(
+          identifier,
+          hdWallet,
+        ),
       );
     } else {
       //lets find an unused address
@@ -258,8 +284,12 @@ class WalletProvider with ChangeNotifier {
             .length;
         var derivePath = "m/${openWallet.walletIndex}'/$numberOfOurAddr/0";
         var newHdWallet = hdWallet.derivePath(derivePath);
+        final newHdWalletAddress = getAddressFromHDPrivateKey(
+          identifier,
+          newHdWallet,
+        );
         var newAddrResult = openWallet.addresses.firstWhereOrNull(
-          (element) => element.address == newHdWallet.address,
+          (element) => element.address == newHdWalletAddress,
         );
 
         while (newAddrResult != null) {
@@ -269,22 +299,22 @@ class WalletProvider with ChangeNotifier {
           newHdWallet = hdWallet.derivePath(derivePath);
 
           newAddrResult = openWallet.addresses.firstWhereOrNull(
-            (element) => element.address == newHdWallet.address,
+            (element) => element.address == newHdWalletAddress,
           );
         }
 
         openWallet.addNewAddress = WalletAddress(
-          address: newHdWallet.address,
+          address: newHdWalletAddress,
           addressBookName: '',
           used: false,
           status: null,
           isOurs: true,
-          wif: newHdWallet.wif ?? '',
+          wif: getWifFromHDPrivateKey(identifier, newHdWallet),
         );
 
         setUnusedAddress(
           identifier: identifier,
-          address: newHdWallet.address,
+          address: newHdWalletAddress,
         );
       }
     }
@@ -475,19 +505,19 @@ class WalletProvider with ChangeNotifier {
         //scan for OP_RETURN messages
         //obtain transaction object
         final txData = Uint8List.fromList(HEX.decode(tx['hex']));
-        final txFromBuffer = Transaction.fromBuffer(txData);
+        final txFromBuffer = Transaction.fromBytes(txData);
 
         //loop through outputs to find OP_RETURN outputs
-        for (final out in txFromBuffer.outs) {
-          final script = decompile(out.script)!;
+        for (final out in txFromBuffer.outputs) {
+          final script = Script.decompile(out.scriptPubKey);
           // Find OP_RETURN + push data
           if (script.length == 2 &&
-              script[0] == ops['OP_RETURN'] &&
+              script[0] == ScriptOpCode.fromName('OP_RETURN') &&
               script[1] is Uint8List) {
             String? parsedMessage;
 
             try {
-              parsedMessage = utf8.decode(script[1]);
+              parsedMessage = utf8.decode(script.asm.codeUnits);
             } catch (e) {
               LoggerWrapper.logError(
                 'WalletProvider',
@@ -673,9 +703,11 @@ class WalletProvider with ChangeNotifier {
 
     for (var i = 0; i <= maxValue + 1; i++) {
       final child = hdWallet.derivePath("m/$walletNumber'/$i/0");
-      _wifs[child.address] = child.wif!;
+      _wifs[getWifFromHDPrivateKey(identifier, child)] =
+          getWifFromHDPrivateKey(identifier, child);
     }
-    _wifs[hdWallet.address] = hdWallet.wif!;
+    _wifs[getWifFromHDPrivateKey(identifier, hdWallet)] =
+        getWifFromHDPrivateKey(identifier, hdWallet);
   }
 
   Future<BuildResult> buildTransaction({
@@ -767,8 +799,9 @@ class WalletProvider with ChangeNotifier {
         var network = coinParams.networkType;
 
         //start building tx
-        final tx = TransactionBuilder(network: network);
-        tx.setVersion(coinParams.txVersion);
+        final List<Input> txInputs = [];
+        final List<Output> txOutputs = [];
+
         var changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
         bool feesHaveBeenDeductedFromRecipient = false;
 
@@ -798,9 +831,11 @@ class WalletProvider with ChangeNotifier {
             }
           } else {
             //add change output to unused address
-            tx.addOutput(
-              getUnusedAddress(identifier),
-              BigInt.from(changeAmount),
+            txOutputs.add(
+              Output.fromAddress(
+                BigInt.from(changeAmount),
+                Address.fromString(getUnusedAddress(identifier), network),
+              ),
             );
           }
         } else if (txAmount + fee > totalInputValue) {
@@ -827,7 +862,12 @@ class WalletProvider with ChangeNotifier {
             'buildTransaction',
             'adding output $amount for $address',
           );
-          tx.addOutput(address, BigInt.from(amount));
+          txOutputs.add(
+            Output.fromAddress(
+              BigInt.from(amount),
+              Address.fromString(address, network),
+            ),
+          );
         });
 
         //safety check of totalInputValue
@@ -846,13 +886,15 @@ class WalletProvider with ChangeNotifier {
 
         //add OP_RETURN if exists
         if (opReturn.isNotEmpty) {
-          tx.addNullOutput(opReturn);
+          // tx.addNullOutput(opReturn);
+          // txOutputs.add(Output.blank())
+          // TODO
         }
 
         //generate keyMap
         Future<Map<int, Map>> generateKeyMap() async {
           var keyMap = <int, Map>{};
-          for (var inputUtxo in inputTx) {
+          for (final inputUtxo in inputTx) {
             var inputKey = inputTx.indexOf(inputUtxo);
             //find key to that utxo
             for (var walletAddr in openWallet.addresses) {
@@ -864,12 +906,27 @@ class WalletProvider with ChangeNotifier {
                         address: walletAddr.address,
                       );
                 keyMap[inputKey] = {'wif': wif, 'addr': inputUtxo.address};
-                tx.addInput(inputUtxo.hash, inputUtxo.txPos);
+                txInputs.add(
+                  P2PKHInput(
+                    prevOut: OutPoint(
+                      hexToBytes(inputUtxo.hash),
+                      inputUtxo.txPos,
+                    ),
+                    publicKey: ECPublicKey.fromHex(inputUtxo.address),
+                  ),
+                );
               }
             }
           }
           return keyMap;
         }
+
+        //form transaction
+        final tx = Transaction(
+          inputs: txInputs,
+          outputs: txOutputs,
+          version: coinParams.txVersion,
+        );
 
         var keyMap = await generateKeyMap();
         //sign
@@ -880,18 +937,16 @@ class WalletProvider with ChangeNotifier {
               'buildTransaction',
               "signing - ${value["addr"]} at vin $key",
             );
+
             tx.sign(
-              vin: key,
-              keyPair: ECPair.fromWIF(
-                value['wif'],
-                network: network,
-              ),
+              inputN: key,
+              key: WIF.fromString(value['wif']).privkey,
             );
           },
         );
 
-        final intermediate = tx.build();
-        var number = (intermediate.txSize / 1000 * coin.fixedFeePerKb)
+        final intermediate = tx;
+        var number = (intermediate.size / 1000 * coin.fixedFeePerKb)
             .toStringAsFixed(coin.fractions);
         var asDouble = double.parse(number) * decimalProduct;
         var requiredFeeInSatoshis = asDouble.round();
@@ -899,22 +954,22 @@ class WalletProvider with ChangeNotifier {
         LoggerWrapper.logInfo(
           'WalletProvider',
           'buildTransaction',
-          'fee $requiredFeeInSatoshis, size: ${intermediate.txSize}',
+          'fee $requiredFeeInSatoshis, size: ${intermediate.size}',
         );
 
         LoggerWrapper.logInfo(
           'WalletProvider',
           'buildTransaction',
-          'sizeBefore: $sizeBefore - size now: ${intermediate.txSize}',
+          'sizeBefore: $sizeBefore - size now: ${intermediate.size}',
         );
 
-        if (firstPass == true || intermediate.txSize > sizeBefore) {
+        if (firstPass == true || intermediate.size > sizeBefore) {
           return await buildTransaction(
             identifier: identifier,
             recipients: recipients,
             opReturn: opReturn,
             fee: requiredFeeInSatoshis,
-            sizeBefore: intermediate.txSize,
+            sizeBefore: intermediate.size,
             firstPass: false,
             paperWalletPrivkey: paperWalletPrivkey,
             paperWalletUtxos: paperWalletUtxos,
@@ -924,7 +979,7 @@ class WalletProvider with ChangeNotifier {
           LoggerWrapper.logInfo(
             'WalletProvider',
             'buildTransaction',
-            'intermediate size: ${intermediate.txSize}',
+            'intermediate size: ${intermediate.size}',
           );
           hex = intermediate.toHex();
           return BuildResult(
@@ -932,7 +987,7 @@ class WalletProvider with ChangeNotifier {
             hex: hex,
             recipients: recipients,
             totalAmount: txAmount,
-            id: intermediate.getId(),
+            id: intermediate.txid,
             destroyedChange: destroyedChange,
             opReturn: opReturn,
             neededChange: needsChange,
@@ -1015,7 +1070,8 @@ class WalletProvider with ChangeNotifier {
     );
 
     var network = AvailableCoins.getSpecificCoin(identifier).networkType;
-    var script = addressToOutputScript(address, network);
+    // var script = addressToOutputScript(address, network);
+    var script = Address.fromString(address, network).program.script.compiled;
     var hash = sha256.convert(script).toString();
     return (reverseString(hash));
   }

@@ -89,14 +89,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  bs58check:
-    dependency: transitive
-    description:
-      name: bs58check
-      sha256: c4a164d42b25c2f6bc88a8beccb9fc7d01440f3c60ba23663a20a70faf484ea9
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   build:
     dependency: transitive
     description:
@@ -241,14 +233,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.0"
-  coinslib:
-    dependency: "direct main"
+  coinlib:
+    dependency: transitive
     description:
-      name: coinslib
-      sha256: "82b08ec7904c5f8f668195c6305d327777b1a1998376609bd4e814beca0c71df"
+      name: coinlib
+      sha256: "8e34a642e9013a90f1191bf61bdbb8f76170a9c8c0abf60b67468432ad96bfdc"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.8"
+    version: "1.0.0-rc.1"
+  coinlib_flutter:
+    dependency: "direct main"
+    description:
+      name: coinlib_flutter
+      sha256: e6ee064089a216c1743c79adb954a77fa9f8014f641fc447b0d586927c2ee02a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-rc.1"
   collection:
     dependency: "direct main"
     description:
@@ -329,6 +329,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  dart_base_x:
+    dependency: transitive
+    description:
+      name: dart_base_x
+      sha256: c8af4f6a6518daab4aa85bb27ee148221644e80446bb44117052b6f4674cdb23
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -365,10 +373,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: ed5337a5660c506388a9f012be0288fb38b49020ce2b45fe1f8b8323fe429f99
+      sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.0"
   file:
     dependency: transitive
     description:
@@ -1473,6 +1481,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "11.7.1"
+  wasm_interop:
+    dependency: transitive
+    description:
+      name: wasm_interop
+      sha256: b1b378f07a4cf0103c25faf34d9a64d2c3312135b9efb47e0ec116ec3b14e48f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   watcher:
     dependency: transitive
     description:

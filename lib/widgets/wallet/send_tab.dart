@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:coinslib/coinslib.dart';
 import 'package:fast_csv/fast_csv.dart' as fast_csv;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/exceptions/exceptions.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/tools/validate_address.dart';
 import 'package:peercoin/widgets/wallet/send_tab_management.dart';
 import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
 import 'package:provider/provider.dart';
@@ -272,7 +272,7 @@ class _SendTabState extends State<SendTab> {
                           key: _opReturnKey,
                           controller: _opReturnController,
                           autocorrect: false,
-                          maxLength: _availableCoin.networkType.opreturnSize,
+                          maxLength: _availableCoin.opreturnSize,
                           minLines: 1,
                           maxLines: 5,
                           buildCounter: (
@@ -290,7 +290,7 @@ class _SendTabState extends State<SendTab> {
                           },
                           inputFormatters: [
                             Utf8LengthLimitingTextInputFormatter(
-                              _availableCoin.networkType.opreturnSize,
+                              _availableCoin.opreturnSize,
                             ),
                           ],
                           decoration: InputDecoration(
