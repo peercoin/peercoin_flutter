@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,21 +91,21 @@ class _WalletMessageSigningScreenState
         identifier: _walletName,
         address: _signingAddress,
       );
-      var result = Wallet.fromWIF(
-        wif,
-        _activeCoin.networkType,
-      ).sign(_messageInputController.text);
+      // var result = Wallet.fromWIF(
+      //   wif,
+      //   _activeCoin.networkType,
+      // ).sign(_messageInputController.text); TODO
 
-      setState(() {
-        _signature = base64.encode(result);
-        _signingDone = true;
-      });
+      // setState(() {
+      //   _signature = base64.encode(result);
+      //   _signingDone = true;
+      // });
 
-      LoggerWrapper.logInfo(
-        'WalletSigning',
-        'handleSign',
-        'signature produced $_signature',
-      );
+      // LoggerWrapper.logInfo(
+      //   'WalletSigning',
+      //   'handleSign',
+      //   'signature produced $_signature',
+      // ); TODO
     } catch (e) {
       LoggerWrapper.logError('WalletSigning', 'handleSign', e.toString());
     }

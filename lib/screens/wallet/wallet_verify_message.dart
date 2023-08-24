@@ -1,9 +1,7 @@
-import 'dart:convert';
-
-import 'package:coinslib/coinslib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peercoin/tools/validate_address.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';
@@ -64,23 +62,23 @@ class _WaleltMessagesVerificationScreenState
     );
 
     try {
-      final verificationResult = verifySignedMessageForAddress(
-        address: address,
-        message: message,
-        signature: base64.decode(signature),
-        network: _activeCoin.networkType,
-      );
+      // final verificationResult = MessageSignature(
+      //   address: address,
+      //   message: message,
+      //   signature: base64.decode(signature),
+      //   network: _activeCoin.networkType,
+      // );
 
-      setState(() {
-        _verificationPerformed = true;
-        _verificationResult = verificationResult;
-      });
+      // setState(() {
+      //   _verificationPerformed = true;
+      //   _verificationResult = verificationResult;
+      // }); TODO
 
-      LoggerWrapper.logInfo(
-        'WalletSigning',
-        'handleSign',
-        'signature valid: $verificationResult',
-      );
+      // LoggerWrapper.logInfo(
+      //   'WalletSigning',
+      //   'handleSign',
+      //   'signature valid: $verificationResult',
+      // ); TODO
     } catch (e) {
       setState(() {
         _verificationPerformed = true;

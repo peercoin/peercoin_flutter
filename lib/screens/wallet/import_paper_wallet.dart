@@ -1,6 +1,7 @@
-import 'package:coinslib/coinslib.dart';
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/tools/validate_address.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -121,23 +122,23 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePrivKey(String privKey) {
     String newKey;
-    late Wallet wallet;
+    late HDPrivateKey wallet;
     var error = false;
     try {
-      wallet = Wallet.fromWIF(privKey, _activeCoin.networkType);
+      // wallet = Wallet.fromWIF(privKey, _activeCoin.networkType); TODO
     } catch (e) {
       error = true;
     }
 
-    if (error == false && wallet.address == _pubKey) {
-      newKey = privKey;
-      moveStep(3);
-    } else {
-      newKey = 'Invalid private key';
-    }
-    setState(() {
-      _privKey = newKey;
-    });
+    // if (error == false && wallet.hdPublicKey.publicKey.hex == _pubKey) {
+    //   newKey = privKey;
+    //   moveStep(3);
+    // } else {
+    //   newKey = 'Invalid private key';
+    // }
+    // setState(() {
+    //   _privKey = newKey;
+    // }); TODO
   }
 
   void requestUtxos() async {

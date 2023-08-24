@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:coinslib/coinslib.dart';
+import 'package:coinlib_flutter/coinlib_flutter.dart';
+
 import 'coin.dart';
 
 class AvailableCoins {
@@ -12,18 +13,8 @@ class AvailableCoins {
       letterCode: 'PPC',
       iconPath: 'assets/icon/ppc-icon-48.png',
       iconPathTransparent: 'assets/icon/ppc-icon-white-48.png',
-      networkType: NetworkType(
-        messagePrefix: 'Peercoin Signed Message:\n',
-        bech32: 'pc',
-        bip32: Bip32Type(
-          public: 0x0488b21e,
-          private: 0x0488ade4,
-        ),
-        pubKeyHash: 0x37,
-        scriptHash: 0x75,
-        wif: 0xb7,
-        opreturnSize: 256,
-      ),
+      networkType: NetworkParams.mainnet,
+      opreturnSize: 256,
       fractions: 6,
       minimumTxValue: 10000,
       fixedFee: true,
@@ -48,18 +39,8 @@ class AvailableCoins {
       letterCode: 'tPPC',
       iconPath: 'assets/icon/ppc-icon-48-grey.png',
       iconPathTransparent: 'assets/icon/ppc-icon-48-grey.png',
-      networkType: NetworkType(
-        messagePrefix: 'Peercoin Signed Message:\n',
-        bech32: 'tpc',
-        bip32: Bip32Type(
-          public: 0x043587cf,
-          private: 0x04358394,
-        ),
-        pubKeyHash: 0x6f,
-        scriptHash: 0xc4,
-        wif: 0xef,
-        opreturnSize: 256,
-      ),
+      networkType: NetworkParams.testnet,
+      opreturnSize: 256,
       fixedFee: true,
       fractions: 6,
       minimumTxValue: 10000,
