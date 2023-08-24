@@ -164,7 +164,6 @@ class PriceTicker {
     'KPW': '₩',
     'KYD': '\$',
     'MMK': 'K',
-    'MRO': 'UM',
     'NIO': 'C\$',
     'NPR': '₨',
     'PAB': 'B/.',
