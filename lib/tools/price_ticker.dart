@@ -181,6 +181,8 @@ class PriceTicker {
     'VUV': 'Vt',
     'WST': 'WS\$',
     'XCD': '\$',
+    'FJD': 'FJ\$',
+    'PGK': 'K',
   };
 
   static double renderPrice(
