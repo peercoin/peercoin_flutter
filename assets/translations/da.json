@@ -9,7 +9,6 @@
     "tx_confirmations": "Bekræftelser",
     "tx_rejected": "Transaktionen blev afvist af netværket. Prøv igen.",
     "wallet_pop_menu_wif": "Importer Privat Nøgle",
-    "wallet_scan_notice": "Dette kan tage noget tid. Luk ikke denne skærm!",
     "wallet_value_alert_content": "Det er risikabelt at opbevare mønter på så høj værdi i en mobiltegnebog.\nOvervej at flytte dine mønter til en hardwaretegnebok eller andet kold opbevaring.",
     "about": "Om",
     "about_developers": "© $year peercoin_flutter udviklerne",
@@ -223,7 +222,6 @@
     "wallet_pop_menu_servers": "Juster Servere",
     "wallet_receive": "Modtage",
     "wallet_receive_label_hint": "Et tryk på Del-knappen gemmer etiketten til adressen.",
-    "wallet_send_label_hint_scan": "Hvis du scanner din QR-kode, sparer du noget tid",
     "wallet_send": "Send",
     "wallet_transactions": "Transaktioner",
     "wallets_list": "Dine tegnebøger",
@@ -349,5 +347,8 @@
     "verify_fail": "Besked kunne ikke verificeres.",
     "wallet_pop_menu_change_title": "Ændre Navn",
     "wallet_title_edit": "Rediger Tegnebogsnavn",
-    "wallet_title_edit_new_title": "Nyt Navn"
+    "wallet_title_edit_new_title": "Nyt Navn",
+    "app_settings_wallet_order": "Rækkefølge af Tegnebøger",
+    "app_settings_price_feed_search": "Søg efter valutakode",
+    "app_settings_language_search": "Søg efter sprog"
 }
