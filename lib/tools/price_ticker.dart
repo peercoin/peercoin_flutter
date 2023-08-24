@@ -88,7 +88,6 @@ class PriceTicker {
     'GYD': '\$',
     'HKD': '\$',
     'HNL': 'L',
-    'HRK': 'kn',
     'HUF': 'Ft',
     'ILS': '₪',
     'IQD': 'ع.د',
