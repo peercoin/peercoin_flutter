@@ -196,7 +196,6 @@
     "wallet_pop_menu_servers": "Justera Servrar",
     "wallet_receive": "Motta",
     "wallet_receive_label_hint": "Genom att trycka på Dela-knappen sparas etiketten till adressen.",
-    "wallet_send_label_hint_scan": "Genom att skanna din QR-kod sparar du lite tid",
     "wallet_scan_notice": "Detta kan ta lite tid. Stäng inte den här skärmen!",
     "wallet_send": "Skicka",
     "wallet_transactions": "Transaktioner",
@@ -349,5 +348,8 @@
     "verify_fail": "Meddelandet kunde inte verifieras.",
     "wallet_title_edit_new_title": "Nytt Namn",
     "wallet_pop_menu_change_title": "Byt Namn",
-    "wallet_title_edit": "Redigera Plånbokens Namn"
+    "wallet_title_edit": "Redigera Plånbokens Namn",
+    "app_settings_wallet_order": "Ordning av Plånböcker",
+    "app_settings_price_feed_search": "Sök efter valutakod",
+    "app_settings_language_search": "Sök efter språk"
 }
