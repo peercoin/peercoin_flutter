@@ -141,7 +141,6 @@ class PriceTicker {
     'XOF': 'CFA',
     'XPF': '₣',
     'ZAR': 'R',
-    'ZMK': 'ZK',
     'AFN': '؋',
     'ANG': 'ƒ',
     'AWG': 'ƒ',
