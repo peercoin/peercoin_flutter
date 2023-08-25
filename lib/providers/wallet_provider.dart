@@ -799,8 +799,11 @@ class WalletProvider with ChangeNotifier {
         var network = coinParams.networkType;
 
         //start building tx
-        final List<Input> txInputs = [];
-        final List<Output> txOutputs = [];
+        var tx = Transaction(
+          inputs: [],
+          outputs: [],
+          version: coinParams.txVersion,
+        );
 
         var changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
         bool feesHaveBeenDeductedFromRecipient = false;
@@ -831,7 +834,7 @@ class WalletProvider with ChangeNotifier {
             }
           } else {
             //add change output to unused address
-            txOutputs.add(
+            tx = tx.addOutput(
               Output.fromAddress(
                 BigInt.from(changeAmount),
                 Address.fromString(getUnusedAddress(identifier), network),
@@ -862,7 +865,7 @@ class WalletProvider with ChangeNotifier {
             'buildTransaction',
             'adding output $amount for $address',
           );
-          txOutputs.add(
+          tx = tx.addOutput(
             Output.fromAddress(
               BigInt.from(amount),
               Address.fromString(address, network),
@@ -906,13 +909,14 @@ class WalletProvider with ChangeNotifier {
                         address: walletAddr.address,
                       );
                 keyMap[inputKey] = {'wif': wif, 'addr': inputUtxo.address};
-                txInputs.add(
+
+                tx = tx.addInput(
                   P2PKHInput(
                     prevOut: OutPoint(
                       hexToBytes(inputUtxo.hash),
                       inputUtxo.txPos,
                     ),
-                    publicKey: ECPublicKey.fromHex(inputUtxo.address),
+                    publicKey: WIF.fromString(wif).privkey.pubkey,
                   ),
                 );
               }
@@ -921,14 +925,8 @@ class WalletProvider with ChangeNotifier {
           return keyMap;
         }
 
-        //form transaction
-        final tx = Transaction(
-          inputs: txInputs,
-          outputs: txOutputs,
-          version: coinParams.txVersion,
-        );
-
         var keyMap = await generateKeyMap();
+
         //sign
         keyMap.forEach(
           (key, value) {
@@ -938,12 +936,15 @@ class WalletProvider with ChangeNotifier {
               "signing - ${value["addr"]} at vin $key",
             );
 
-            tx.sign(
+            tx = tx.sign(
               inputN: key,
               key: WIF.fromString(value['wif']).privkey,
             );
           },
         );
+
+        //FIXME
+        // I/PLogger ( 4236): {ElectrumConnection}  {replyHandler}  {{"jsonrpc": "2.0", "error": {"code": 1, "message": "the transaction was rejected by network rules.\n\nbad-txns-inputs-missingorspent\n[03000000010196463241a8a0277b227a7e4fb0918987b06b2c195ce041005a93b517ec1da3010000006a47304402200c70433390e0b2ffb16cb91e4981d62e584dc7a2b9b950da5897cc3be628e335022045962eeca39e80888461b69ed5f4fc3b9cbee07fb64db2a88f060ad29d76a76c012102c91535de6b83969abd2b891701345b988a8a4b00130184cc0fc0ac5d8ade1002ffffffff02bc560100000000001976a9148330bee5a893fc0fd07f066278cf3b693a1da7d588ac10270000000000001976a914ff9296d92c5efc397d0e0b9ebe94d95a532270c488ac00000000]"}, "id": "broadcast_ce4eaa9ba20278764a4a5ac59022b3f00a3e0b589ea7ee8858d9f97b8545910d"}}  {25 August 2023 03:01:38 PM}  {INFO}
 
         final intermediate = tx;
         var number = (intermediate.size / 1000 * coin.fixedFeePerKb)
