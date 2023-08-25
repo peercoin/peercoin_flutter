@@ -1125,8 +1125,10 @@ class WalletProvider with ChangeNotifier {
       (element) => element.address == address,
     );
     if (addr != null) {
+      //user address
       addr.newAddressBookName = label;
     } else {
+      //foreign address
       openWallet.addNewAddress = WalletAddress(
         address: address,
         addressBookName: label,
