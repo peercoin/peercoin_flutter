@@ -439,7 +439,7 @@
     "currency_ZAR": "Sørafrikansk rand",
     "currency_ZMK": "Zambisk kwacha",
     "wallet_scan_notice_new": "Dette kan ta en stund.\nDenne skjermen lukkes automatisk!",
-    "wallet_scan": "Lommebokskanning",
+    "wallet_scan": "Skann Lommebok",
     "scan_for_wallets": "Skann etter Lommebøker",
     "wallet_scan_finished": "Skanning Fullført",
     "wallet_scan_create_success": "lommebok $title opprettet",
