@@ -131,7 +131,6 @@ class PriceTicker {
     'SDG': 'ج.س.',
     'SGD': '\$',
     'SLL': 'Le',
-    'STD': 'Db',
     'SZL': 'L',
     'TJS': 'SM',
     'TND': 'د.ت',
@@ -142,7 +141,12 @@ class PriceTicker {
     'XOF': 'CFA',
     'XPF': '₣',
     'ZAR': 'R',
-    'ZMK': 'ZK',
+    'CLF': 'UF',
+    'MRU': 'UM',
+    'YER': '﷼',
+    'ZWL': 'Z\$',
+    'STN': 'Db',
+    'ZMW': 'ZK',
   };
 
   static double renderPrice(
