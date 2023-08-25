@@ -53,7 +53,6 @@
     "app_settings_description": "이 로그에는 민감한 정보가 포함되어 있습니다.\n개인 키가 포함되어 있지는 않지만 이 로그를 함부로 공유하지 마십시오.",
     "app_settings_notifications_not_enabled": "현재 백그라운드 알림이 차단되어 있습니다.",
     "app_settings_notifications_hint_sync_2": "운영 체제가 백그라운드 작업을 조절하는 방식이나 여부에 따라 알림이 크게 지연될 수 있습니다. iOS 기기는 간격이 더 길어질 수 있습니다.",
-    "wallet_scan_notice": "시간이 다소 걸릴 수 있습니다. 이 화면을 닫지 마십시오!",
     "wallet_send": "보내기",
     "wallet_transactions": "거래",
     "wallets_list": "내 지갑",

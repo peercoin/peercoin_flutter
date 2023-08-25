@@ -227,7 +227,6 @@
     "wallet_connected": "підключено",
     "wallet_offline": "офлайн",
     "wallet_pop_menu_wif": "Імпорт персонального ключа",
-    "wallet_scan_notice": "Це може зайняти деякий час. Не закривайте цей екран!",
     "wallet_send": "Надіслати",
     "wallet_transactions": "Транзакції",
     "wallets_list": "Ваші гаманці",
