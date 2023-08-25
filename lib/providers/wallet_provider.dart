@@ -735,7 +735,7 @@ class WalletProvider with ChangeNotifier {
     LoggerWrapper.logInfo(
       'WalletProvider',
       'buildTransaction',
-      'firstPass: $firstPass',
+      'started - firstPass: $firstPass',
     );
 
     //check if tx needs change
@@ -967,6 +967,7 @@ class WalletProvider with ChangeNotifier {
         );
 
         if (firstPass == true || intermediate.size > sizeBefore) {
+          // dump hexes
           return await buildTransaction(
             identifier: identifier,
             recipients: recipients,
@@ -1073,7 +1074,6 @@ class WalletProvider with ChangeNotifier {
     );
 
     var network = AvailableCoins.getSpecificCoin(identifier).networkType;
-    // var script = addressToOutputScript(address, network);
     var script = Address.fromString(address, network).program.script.compiled;
     var hash = sha256.convert(script).toString();
     return (reverseString(hash));
