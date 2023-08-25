@@ -834,6 +834,11 @@ class WalletProvider with ChangeNotifier {
             }
           } else {
             //add change output to unused address
+            LoggerWrapper.logInfo(
+              'WalletProvider',
+              'buildTransaction',
+              'change output added for ${recipients.keys.last} $changeAmount',
+            );
             tx = tx.addOutput(
               Output.fromAddress(
                 BigInt.from(changeAmount),
@@ -863,7 +868,7 @@ class WalletProvider with ChangeNotifier {
           LoggerWrapper.logInfo(
             'WalletProvider',
             'buildTransaction',
-            'adding output $amount for $address',
+            'adding output $amount for recipient $address',
           );
           tx = tx.addOutput(
             Output.fromAddress(
@@ -912,8 +917,8 @@ class WalletProvider with ChangeNotifier {
 
                 tx = tx.addInput(
                   P2PKHInput(
-                    prevOut: OutPoint(
-                      hexToBytes(inputUtxo.hash),
+                    prevOut: OutPoint.fromHex(
+                      inputUtxo.hash,
                       inputUtxo.txPos,
                     ),
                     publicKey: WIF.fromString(wif).privkey.pubkey,
