@@ -618,6 +618,11 @@ class _SendTabState extends State<SendTab> {
         opReturn: _opReturnKey.currentState?.value ?? '',
       );
     } catch (e) {
+      LoggerWrapper.logError(
+        'SendTab',
+        'buildTx',
+        'error building tx: ${e.toString()}',
+      );
       if (e.runtimeType == CantPayForFeesException) {
         final exception = e as CantPayForFeesException;
         ScaffoldMessenger.of(context).showSnackBar(
