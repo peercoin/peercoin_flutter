@@ -455,5 +455,11 @@
     "wallet_scanner_message_scan_finished": "scanning udført for $coinName på $accountNumber",
     "scan_modal_title": "Scanner denne Tegnebog",
     "reset_modal_title": "Nulstiller denne Tegnebog",
-    "reset_modal_description": "Dette vil nulstille tegnebogens saldo og kontrollere alle adresser for UTXO'er.\nIkke-udsendte transaktioner vil blive fjernet."
+    "reset_modal_description": "Dette vil nulstille tegnebogens saldo og kontrollere alle adresser for UTXO'er.\nIkke-udsendte transaktioner vil blive fjernet.",
+    "currency_MRU": "Mauretansk ouguiya",
+    "currency_YER": "Yemenitisk rial",
+    "currency_ZWL": "Zimbabwe dollar",
+    "currency_STN": "Sao Tomesiansk dobra",
+    "currency_ZMW": "Zambisk kwacha",
+    "currency_CLF": "Unidades de Fomento"
 }
