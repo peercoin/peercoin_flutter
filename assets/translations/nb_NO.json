@@ -455,5 +455,11 @@
     "wallet_scanner_message_scan_connection_failed": "skanning mislyktes for $coinName på $accountNumber (Tilkobling mislyktes)",
     "scan_modal_title": "Skanner denne Lommeboken",
     "reset_modal_title": "Tilbakestiller denne Lommeboken",
-    "reset_modal_description": "Dette vil tilbakestille lommeboksaldoen og vil sjekke alle adresser for UTXO-er.\nIkke-kringkastede transaksjoner vil bli fjernet."
+    "reset_modal_description": "Dette vil tilbakestille lommeboksaldoen og vil sjekke alle adresser for UTXO-er.\nIkke-kringkastede transaksjoner vil bli fjernet.",
+    "currency_CLF": "Unidades de Fomento",
+    "currency_MRU": "Mauritansk ouguiya",
+    "currency_YER": "Jemenittisk rial",
+    "currency_ZWL": "Zimbabwisk dollar",
+    "currency_STN": "Saotomesisk dobra",
+    "currency_ZMW": "Zambisk kwacha"
 }
