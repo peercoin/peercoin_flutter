@@ -455,5 +455,11 @@
     "wallet_scanner_message_scan_failed": "skanningen misslyckades för $coinName på $accountNumber ($e))",
     "scan_modal_title": "Skanna den här Plånboken",
     "reset_modal_title": "Återställer denna Plånbok",
-    "reset_modal_description": "Detta kommer att återställa plånboksbalansen och kontrollera alla adresser för UTXO:er.\nIcke-sända transaktioner kommer att tas bort."
+    "reset_modal_description": "Detta kommer att återställa plånboksbalansen och kontrollera alla adresser för UTXO:er.\nIcke-sända transaktioner kommer att tas bort.",
+    "currency_CLF": "Unidades de Fomento",
+    "currency_MRU": "Mauretanska ouguiya",
+    "currency_YER": "Jemenitiska rial",
+    "currency_ZWL": "Zimbabwe dollar",
+    "currency_STN": "Sao Tomesiska dobra",
+    "currency_ZMW": "Zambiska kwacha"
 }
