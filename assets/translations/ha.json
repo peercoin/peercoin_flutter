@@ -55,9 +55,9 @@
     "setup_save_text1": "Wadannan kalmomi masu zuwa su ake kira Seed. kalmar sirri wacce za ta ba da cikakkiyar dama ga walet ɗin ku da duk coins dinku.",
     "tx_direction": "Hanya",
     "tx_rejected": ".Hanyar sadarwa ta katse cinikin. Da fatan za a sake gwadawa.",
-    "wallet_receive_label_hint": "Alamomi: Danna wannan maɓallin zai adana alamar adireshin",
+    "wallet_receive_label_hint": "Danna maɓallin Share zai adana alamar adireshin.",
     "wallet_send": "Tura",
-    "store_description": "Turawa da karɓar Peercoin akan wayarka.\nA kiyaye tsaron walet.\nWannan manhajar bata zuwa da garanti\nKuyi amfani da ita a haɗarin ku..\nSiffofi:\n- Based on electrum protocol.\n- Aikawa da karɓar peercoin.\n- A shiye take don fara mu’amala bayan an saita ta (ba jira).\n- Peercoin da Peercoin testnet walat.\n- Address book management.\n- Shigo da paper wallets.\n- Import - Import & export private keys (WIF).\n- Server management.\n- Tallafin harsuna da yawa.\n- Sanarwar bayan fage.\nAna iya samun iyakokin a ma'ajiyar Github.",
+    "store_description": "Aika da karɓar Peercoin, majagaba na Hujja-na-Stake, akan wayarka.\n\nA kiyaye irin walat ɗin ku.\nWannan app yana zuwa ba tare da cikakken garanti ba.\nYi amfani da haɗarin kansa.\n\nSiffofin:\n- Dangane da ka'idar electrum.\n- Aika da karɓar peercoin.\n- Shirye don yin ma'amala bayan shigarwa (ba jira).\n- Peercoin da Peercoin testnet walat.\n- Gudanar da littafin adireshi.\n- Shigo da wallet ɗin takarda.\n- Shigo da fitarwa maɓallan sirri (WIF).\n- Gudanarwar uwar garke.\n- Tallafin harsuna da yawa.\n- Sanarwa na bango.\n\nAna iya samun iyakokin da aka sani a ma'ajiyar Github.",
     "about_developers": "© $year The peercoin_flutter Developers",
     "addressbook_title": "$coin Adireshi",
     "app_navigation": "Navigation",
@@ -211,7 +211,7 @@
     "send_total": "Duka $amount $letter_code",
     "server_add_input_empty": "Shigar da URL",
     "server_add_no_wss": "//:Dole ne a fara da wss\nSauran protocol basayi a halin yanzu",
-    "server_settings_alert_hardcoded_content": "Ba'a  iya goge hard coded serves , saidai ka kashe su.",
+    "server_settings_alert_hardcoded_content": "Ba'a iya goge hard coded serves , saidai ka kashe su.",
     "setup_continue_alert_content": "A tabbatar an adana seed phrase.\nKuna iya samun sa daga baya a cikin saitin manhaja.",
     "app_settings_notifications_heading_interval": "Daidaita Tazara",
     "import_seed_error_2": "Seed mara inganci",
@@ -235,5 +235,7 @@
     "wallet_value_alert_title": "Babban Darajar Coins",
     "wallet_value_alert_content": "Adana adadin coins dinnan a walet din wayar hannu na da hatsari.\n Zai fi ku kwashe coins dinku zuwa Stakebox, ko Ledger hardware wallet ko cold wallet.",
     "store_short": "Walet din hannu don Peercoin da Peercoin testnets.",
-    "send_op_return": "Sakon Metadata"
+    "send_op_return": "Sakon Metadata",
+    "send_dust": "Kura: -$amount $letter_code",
+    "send_dust_hint": "Za a lalata ƙurar ma'amala kuma za a ƙidaya zuwa kudade."
 }
