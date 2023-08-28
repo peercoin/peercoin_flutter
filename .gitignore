@@ -41,3 +41,4 @@ app.*.map.json
 .vscode/launch.json
 .vscode/settings.json
 ios/build
+test.dart

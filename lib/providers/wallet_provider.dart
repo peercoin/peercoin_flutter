@@ -504,21 +504,26 @@ class WalletProvider with ChangeNotifier {
 
         //scan for OP_RETURN messages
         //obtain transaction object
-        final txData = Uint8List.fromList(HEX.decode(tx['hex']));
-        final txFromBuffer = Transaction.fromBytes(txData);
+        final txFromBuffer = Transaction.fromHex(tx['hex']);
 
         //loop through outputs to find OP_RETURN outputs
         for (final out in txFromBuffer.outputs) {
           final script = Script.decompile(out.scriptPubKey);
+          final code = script[0] as ScriptOpCode;
+
           // Find OP_RETURN + push data
           if (script.length == 2 &&
-              script[0] == ScriptOpCode.fromName('OP_RETURN') &&
-              script[1] is Uint8List) {
+              code.asm == 'OP_RETURN' &&
+              script[1] is ScriptPushData) {
             String? parsedMessage;
 
+            final op = script[1];
             try {
-              parsedMessage = utf8.decode(script.asm.codeUnits);
+              if (op is ScriptPushData) {
+                parsedMessage = utf8.decode(op.data);
+              }
             } catch (e) {
+              //decoding failed
               LoggerWrapper.logError(
                 'WalletProvider',
                 'putTx',
