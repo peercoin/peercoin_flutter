@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:hex/hex.dart';
 import 'package:peercoin/models/buildresult.dart';
 
 import '../exceptions/exceptions.dart';
@@ -899,9 +898,22 @@ class WalletProvider with ChangeNotifier {
 
         //add OP_RETURN if exists
         if (opReturn.isNotEmpty) {
-          // tx.addNullOutput(opReturn);
-          // txOutputs.add(Output.blank())
-          // TODO
+          LoggerWrapper.logInfo(
+            'WalletProvider',
+            'buildTransaction',
+            'adding opReturn $opReturn',
+          );
+
+          final script = Script([
+            ScriptOpCode.fromName('RETURN'),
+            ScriptPushData(Uint8List.fromList(opReturn.codeUnits)),
+          ]);
+          final output = Output.fromProgram(
+            BigInt.zero,
+            Program.match(script),
+          );
+
+          tx = tx.addOutput(output);
         }
 
         //generate keyMap
