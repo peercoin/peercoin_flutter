@@ -224,6 +224,23 @@ void main() async {
         assert(getUtxos[0].value == 10000000);
       });
 
+      test('Send OP_RETURN message from 0 Output', () async {
+        final result = await wallet.buildTransaction(
+          identifier: testnetWalletName,
+          fee: 0,
+          recipients: {
+            'n4pJDAqsagWbouT7G7xRH8548s9pZpQwtG': 0,
+          },
+          opReturn: 'test',
+        );
+
+        assert(result.fee == 2400);
+        assert(
+          result.hex ==
+              '0300000001fd9ea98d289c171e9ab855cac718fba1585bd20cc3b92b7e77c8bda2d2780e6c010000006a473044022028e708ad44770ab13b1e56a33c9d21f7eb24ad842dd061aa13a86ba4d4ee61dc02206edee3860f96121ad4f53d94eb75fa3ff45c4e9ec128b327662c2b59533e0c5b0121022036646b3fd79dee41351f727f0a6e10d0e7f98585961bc14e7aadaf5f4b66abffffffff03168d9800000000001976a914f82d58dd8487044d8d0879c15a2a3516a425de2a88ac00000000000000001976a914ff9296d92c5efc397d0e0b9ebe94d95a532270c488ac0000000000000000066a047465737400000000',
+        );
+      });
+
       test(
           'Import 1000 addresses from CSV, only have 10 PPC utxo and expect exception',
           () async {
