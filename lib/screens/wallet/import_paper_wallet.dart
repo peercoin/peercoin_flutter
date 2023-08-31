@@ -303,7 +303,9 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
     return await _walletProvider.buildTransaction(
       identifier: _walletName,
-      recipients: {_walletProvider.getUnusedAddress(_walletName): _balanceInt},
+      recipients: {
+        _walletProvider.getUnusedAddress(_walletName): _balanceInt,
+      },
       fee: 0,
       paperWalletPrivkey: _privKey,
       paperWalletUtxos: parsedWalletUtxos,
