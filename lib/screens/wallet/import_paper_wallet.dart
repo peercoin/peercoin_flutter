@@ -122,23 +122,25 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePrivKey(String privKey) {
     String newKey;
-    late HDPrivateKey wallet;
     var error = false;
     try {
-      // wallet = Wallet.fromWIF(privKey, _activeCoin.networkType); TODO
+      WIF.fromString(
+        privKey,
+      );
     } catch (e) {
       error = true;
     }
 
-    // if (error == false && wallet.hdPublicKey.publicKey.hex == _pubKey) {
-    //   newKey = privKey;
-    //   moveStep(3);
-    // } else {
-    //   newKey = 'Invalid private key';
-    // }
-    // setState(() {
-    //   _privKey = newKey;
-    // }); TODO
+    if (error == false) {
+      newKey = privKey;
+      moveStep(3);
+    } else {
+      newKey = 'Invalid private key';
+    }
+
+    setState(() {
+      _privKey = newKey;
+    });
   }
 
   void requestUtxos() async {
