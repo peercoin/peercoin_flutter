@@ -1,3 +1,4 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,7 +58,9 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
   bool validatePrivKey(String privKey) {
     var error = false;
     try {
-      // Wallet.fromWIF(privKey, _activeCoin.networkType); TODO
+      WIF.fromString(
+        privKey,
+      );
     } catch (e) {
       error = true;
     }
@@ -100,20 +103,21 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
     final scaffoldMessenger = ScaffoldMessenger.of(ctx);
-    // final publicAddress = Wallet.fromWIF(privKey, _activeCoin.networkType)
-    // .address; //TODO won't return a bech32 addr
-    // TODO
+    final publicAddress = P2PKHAddress.fromPublicKey(
+      WIF.fromString(privKey).privkey.pubkey,
+      version: _activeCoin.networkType.p2pkhPrefix,
+    ).toString();
+    //TODO won't return a bech32 addr, but a P2PKH address
 
     //check if that address is already in the list
-    // final walletAddresses = await _walletProvider.getWalletAddresses(
-    //   _walletName,
-    // );
-    // final specificAddressResult = walletAddresses.where(
-    //   (element) => element.address == publicAddress,
-    // ); TODO
+    final walletAddresses = await _walletProvider.getWalletAddresses(
+      _walletName,
+    );
+    final specificAddressResult = walletAddresses.where(
+      (element) => element.address == publicAddress,
+    );
 
-    // if (specificAddressResult.isNotEmpty) { TODO
-    if (true) {
+    if (specificAddressResult.isNotEmpty) {
       //we have that address already
       scaffoldMessenger.showSnackBar(
         SnackBar(
@@ -138,7 +142,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
               content: Text(
                 AppLocalizations.instance.translate(
                   'import_wif_alert_content',
-                  // {'address': publicAddress}, TODO
+                  {'address': publicAddress},
                 ),
               ),
               actions: <Widget>[
@@ -154,7 +158,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                 TextButton(
                   onPressed: () async {
                     Navigator.pop(context);
-                    // await performImport(privKey, publicAddress); TODO
+                    await performImport(privKey, publicAddress);
                   },
                   child: Text(
                     AppLocalizations.instance.translate('import_button'),
