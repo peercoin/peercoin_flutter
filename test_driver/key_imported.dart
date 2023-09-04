@@ -125,7 +125,7 @@ void main() {
         await driver.tap(find.text('Sign'));
         await driver.waitFor(
           find.text(
-            'Hyd9cBXuT9CMgE8sK7YNeLQF1qaLxjQCMQv3pwKXCGdpOurIceSiuHfgXCnEtAhExq6iP/+vMn6sYC5OfpSBhRc=',
+            'H3MNJlX9KH1WRGRRAikVRFBfXRDkjslmz95fCwngYdfvDLn8rJ2D1JWIKxQ1OatvvngjhCCZbF6Elt47CaTg24w=',
           ),
         );
       });
@@ -149,7 +149,7 @@ void main() {
         );
         await driver.tap(find.byValueKey('verifSignatureInput'));
         await driver.enterText(
-          'Hyd9cBXuT9CMgE8sK7YNeLQF1qaLxjQCMQv3pwKXCGdpOurIceSiuHfgXCnEtAhExq6iP/+vMn6sYC5OfpSBhRc=',
+          'H3MNJlX9KH1WRGRRAikVRFBfXRDkjslmz95fCwngYdfvDLn8rJ2D1JWIKxQ1OatvvngjhCCZbF6Elt47CaTg24w=',
         );
         await driver.tap(find.text('Verify'));
         await driver.waitFor(
