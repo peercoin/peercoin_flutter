@@ -39,8 +39,11 @@ You can also sign up for our open beta testing here:
 - will not mint
 
 ## Development
-This repository currently relies on 
-[Vesta-wallet/coinslib](https://github.com/Vesta-wallet/coinslib "github.com/Vesta-wallet/coinslib")
+**Build coinlib**  
+This repository relies on 
+[coinlib.](https://github.com/peercoin/coinlib "/github.com/peercoin/coinlib")  
+Please follow the build instructions for your OS here:
+[README](https://github.com/peercoin/coinlib/blob/master/coinlib/README.md)
 
 **Update icons**  
 `dart run flutter_launcher_icons:main`
@@ -60,6 +63,6 @@ This repository currently relies on
 Web files are now on the production branch and ready to be deployed.  
 This will use the html renderer by default. Add *--web-renderer canvas* to peanut if you want to switch to the canvas renderer.
 
-## Basic e2e testing
+## Run e2e tests
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart`  
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart`
