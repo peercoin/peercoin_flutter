@@ -21,6 +21,8 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     - run: flutter analyze
+    - run: brew install autoconf automake libtool
+    - run: dart run coinlib:build_macos
     - run: flutter test -r expanded
 
   e2e-test:
@@ -39,6 +41,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - name: install coinlib dependencies
+        run: brew install autoconf automake libtool
+      - name: build coinlib
+        run: dart run coinlib:build_macos
       - name: run tests
         uses: ReactiveCircus/android-emulator-runner@v2.27.0
         with:
