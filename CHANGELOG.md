@@ -1,5 +1,5 @@
-### **1.2.0** (2023-xx-xx)
-*
+### **1.2.0** (2023-09-07)
+* This app now uses coinlib to deal with the hard stuff behind the scenes.
 
 ### **1.1.9** (2023-08-23)
 * You may now add multiple wallets of the same type
