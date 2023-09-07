@@ -57,7 +57,7 @@ dependencies:
   loader_overlay: ^2.1.0
   app_bar_with_search_switch: ^1.5.4
   decimal: ^2.3.3
-  coinlib_flutter: ^1.0.0-rc.1
+  coinlib_flutter: ^1.0.0-rc.2
 
 dev_dependencies:
   integration_test:
