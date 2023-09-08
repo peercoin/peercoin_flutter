@@ -515,11 +515,12 @@ packages:
   flutter_logs:
     dependency: "direct main"
     description:
-      name: flutter_logs
-      sha256: dd037783f0f22fe03f359b65f913af275aeac4a1474c18c41b2ed9fdbd4f83f1
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.10"
+      path: "."
+      ref: "upgrade_dep_to_1.0.20_and_version_bump"
+      resolved-ref: "845be4e2cbb82de57376d490e54ce1fd8094cc90"
+      url: "https://github.com/neiljaywarner/flutter_logs.git"
+    source: git
+    version: "2.1.11"
   flutter_markdown:
     dependency: "direct main"
     description:
