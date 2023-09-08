@@ -23,7 +23,7 @@ jobs:
     - run: flutter analyze
     - run: brew install autoconf automake libtool
     - run: dart run coinlib:build_macos
-    - run: flutter test -r expanded
+    - run: flutter test web -r expanded
 
   e2e-test:
     runs-on: macos-latest
