@@ -515,11 +515,10 @@ packages:
   flutter_logs:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "upgrade_dep_to_1.0.20_and_version_bump"
-      resolved-ref: "845be4e2cbb82de57376d490e54ce1fd8094cc90"
-      url: "https://github.com/neiljaywarner/flutter_logs.git"
-    source: git
+      name: flutter_logs
+      sha256: "0fb84868b02e5880a1488f5282a4e193a1293280b85be7a56e58f29c0d1e6bea"
+      url: "https://pub.dev"
+    source: hosted
     version: "2.1.11"
   flutter_markdown:
     dependency: "direct main"
