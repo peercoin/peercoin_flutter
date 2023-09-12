@@ -244,10 +244,7 @@ class WalletProvider with ChangeNotifier {
     if (openWallet.addresses.isEmpty && openWallet.walletIndex == 0) {
       //generate new address from master at wallet index 0
       openWallet.addNewAddress = WalletAddress(
-        address: getAddressFromHDPrivateKey(
-          identifier,
-          hdWallet,
-        ),
+        address: getAddressFromHDPrivateKey(identifier, hdWallet),
         addressBookName: '',
         used: false,
         status: null,
