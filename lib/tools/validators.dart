@@ -8,3 +8,15 @@ bool validateAddress(String address, NetworkParams network) {
     return false;
   }
 }
+
+bool validateWIFPrivKey(String privKey) {
+  var error = false;
+  try {
+    WIF.fromString(
+      privKey,
+    );
+  } catch (e) {
+    error = true;
+  }
+  return error;
+}

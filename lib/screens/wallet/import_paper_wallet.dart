@@ -1,7 +1,6 @@
-import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/buildresult.dart';
-import 'package:peercoin/tools/validate_address.dart';
+import 'package:peercoin/tools/validators.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
@@ -122,14 +121,7 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePrivKey(String privKey) {
     String newKey;
-    var error = false;
-    try {
-      WIF.fromString(
-        privKey,
-      );
-    } catch (e) {
-      error = true;
-    }
+    final error = validateWIFPrivKey(privKey);
 
     if (error == false) {
       newKey = privKey;

@@ -2,7 +2,7 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peercoin/tools/validate_address.dart';
+import 'package:peercoin/tools/validators.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/coin.dart';

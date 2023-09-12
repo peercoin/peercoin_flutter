@@ -11,6 +11,7 @@ import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
+import '../../tools/validators.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/service_container.dart';
 
@@ -53,18 +54,6 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     if (result != null) {
       _wifController.text = (result as String).trim();
     }
-  }
-
-  bool validatePrivKey(String privKey) {
-    var error = false;
-    try {
-      WIF.fromString(
-        privKey,
-      );
-    } catch (e) {
-      error = true;
-    }
-    return error;
   }
 
   Future<void> performImport(String wif, String address) async {
@@ -210,7 +199,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                                 return AppLocalizations.instance
                                     .translate('import_wif_error_empty');
                               }
-                              if (validatePrivKey(value)) {
+                              if (validateWIFPrivKey(value)) {
                                 return AppLocalizations.instance
                                     .translate('import_wif_error_failed_parse');
                               }

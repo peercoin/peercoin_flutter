@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/exceptions/exceptions.dart';
 import 'package:peercoin/models/buildresult.dart';
-import 'package:peercoin/tools/validate_address.dart';
+import 'package:peercoin/tools/validators.dart';
 import 'package:peercoin/widgets/wallet/send_tab_management.dart';
 import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
 import 'package:provider/provider.dart';

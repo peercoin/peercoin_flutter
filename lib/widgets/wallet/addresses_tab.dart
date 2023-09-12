@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:peercoin/tools/validate_address.dart';
+import 'package:peercoin/tools/validators.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/available_coins.dart';
