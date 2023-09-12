@@ -121,9 +121,8 @@ class _ImportPaperWalletScreenState extends State<ImportPaperWalletScreen> {
 
   void validatePrivKey(String privKey) {
     String newKey;
-    final error = validateWIFPrivKey(privKey);
 
-    if (error == false) {
+    if (validateWIFPrivKey(privKey) == true) {
       newKey = privKey;
       moveStep(3);
     } else {

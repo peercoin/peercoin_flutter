@@ -1,5 +1,6 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 
+/// Returns true if the address is valid for the given network.
 bool validateAddress(String address, NetworkParams network) {
   try {
     Address.fromString(address, network);
@@ -9,12 +10,13 @@ bool validateAddress(String address, NetworkParams network) {
   }
 }
 
+/// Returns true if the WIF private key is valid.
 bool validateWIFPrivKey(String privKey) {
-  var error = false;
+  var valid = true;
   try {
     WIF.fromString(privKey);
   } catch (e) {
-    error = true;
+    valid = false;
   }
-  return error;
+  return valid;
 }

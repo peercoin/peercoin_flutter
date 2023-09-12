@@ -203,7 +203,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                                 return AppLocalizations.instance
                                     .translate('import_wif_error_empty');
                               }
-                              if (validateWIFPrivKey(value)) {
+                              if (validateWIFPrivKey(value) == false) {
                                 return AppLocalizations.instance
                                     .translate('import_wif_error_failed_parse');
                               }
