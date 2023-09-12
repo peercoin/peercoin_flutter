@@ -696,10 +696,10 @@ class WalletProvider with ChangeNotifier {
 
     for (var i = 0; i <= maxValue + 1; i++) {
       final child = hdWallet.derivePath("m/$walletNumber'/$i/0");
-      _wifs[getWifFromHDPrivateKey(identifier, child)] =
+      _wifs[getAddressFromHDPrivateKey(identifier, child)] =
           getWifFromHDPrivateKey(identifier, child);
     }
-    _wifs[getWifFromHDPrivateKey(identifier, hdWallet)] =
+    _wifs[getAddressFromHDPrivateKey(identifier, hdWallet)] =
         getWifFromHDPrivateKey(identifier, hdWallet);
   }
 
