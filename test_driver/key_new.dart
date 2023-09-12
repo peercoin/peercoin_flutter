@@ -19,8 +19,9 @@ void main() {
           try {
             await driver.waitUntilFirstFrameRasterized();
             connected = true;
-            // ignore: empty_catches
-          } catch (error) {}
+          } catch (error) {
+            throw Exception('Driver not connected, ${error.toString()}');
+          }
         }
         return driver;
       }
