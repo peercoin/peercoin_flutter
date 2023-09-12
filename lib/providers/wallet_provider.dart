@@ -339,23 +339,6 @@ class WalletProvider with ChangeNotifier {
     return targetWallet?.status;
   }
 
-  Future<List> getUnkownTxFromList(String identifier, List newTxList) async {
-    final storedTransactions = await getWalletTransactions(identifier);
-    final unkownTx = [];
-    for (final newTx in newTxList) {
-      bool found = false;
-      for (final storedTx in storedTransactions) {
-        if (storedTx.txid == newTx['tx_hash']) {
-          found = true;
-        }
-      }
-      if (found == false) {
-        unkownTx.add(newTx['tx_hash']);
-      }
-    }
-    return unkownTx;
-  }
-
   Future<void> updateWalletBalance(String identifier) async {
     final openWallet = getSpecificCoinWallet(identifier);
 
