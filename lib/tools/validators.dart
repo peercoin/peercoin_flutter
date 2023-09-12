@@ -12,9 +12,7 @@ bool validateAddress(String address, NetworkParams network) {
 bool validateWIFPrivKey(String privKey) {
   var error = false;
   try {
-    WIF.fromString(
-      privKey,
-    );
+    WIF.fromString(privKey);
   } catch (e) {
     error = true;
   }
