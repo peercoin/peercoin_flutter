@@ -793,11 +793,8 @@ class WalletProvider with ChangeNotifier {
         final network = coinParams.networkType;
 
         //start building tx
-        Transaction tx = Transaction(
-          inputs: [],
-          outputs: [],
-          version: coinParams.txVersion,
-        );
+        List<Input> txInputs = [];
+        List<Output> txOutputs = [];
 
         final changeAmount = needsChange ? totalInputValue - txAmount - fee : 0;
         bool feesHaveBeenDeductedFromRecipient = false;
@@ -833,7 +830,7 @@ class WalletProvider with ChangeNotifier {
               'buildTransaction',
               'change output added for ${recipients.keys.last} $changeAmount',
             );
-            tx = tx.addOutput(
+            txOutputs.add(
               Output.fromAddress(
                 BigInt.from(changeAmount),
                 Address.fromString(getUnusedAddress(identifier), network),
@@ -864,7 +861,7 @@ class WalletProvider with ChangeNotifier {
             'buildTransaction',
             'adding output $amount for recipient $address',
           );
-          tx = tx.addOutput(
+          txOutputs.add(
             Output.fromAddress(
               BigInt.from(amount),
               Address.fromString(address, network),
@@ -903,7 +900,7 @@ class WalletProvider with ChangeNotifier {
             RawProgram(script),
           );
 
-          tx = tx.addOutput(output);
+          txOutputs.add(output);
         }
 
         //generate keyMap
@@ -921,7 +918,7 @@ class WalletProvider with ChangeNotifier {
                     );
               keyMap[inputN] = {'wif': wif, 'addr': inputUtxo.address};
 
-              tx = tx.addInput(
+              txInputs.add(
                 P2PKHInput(
                   prevOut: OutPoint.fromHex(
                     inputUtxo.hash,
@@ -933,6 +930,12 @@ class WalletProvider with ChangeNotifier {
             }
           }
         }
+
+        Transaction tx = Transaction(
+          inputs: txInputs,
+          outputs: txOutputs,
+          version: coinParams.txVersion,
+        );
 
         //sign
         keyMap.forEach(
