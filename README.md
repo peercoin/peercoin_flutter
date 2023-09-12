@@ -41,7 +41,7 @@ You can also sign up for our open beta testing here:
 ## Development
 **Build coinlib**  
 This repository relies on 
-[coinlib.](https://github.com/peercoin/coinlib "/github.com/peercoin/coinlib")  
+[coinlib.](https://github.com/peercoin/coinlib "https://github.com/peercoin/coinlib")  
 Please follow the build instructions for your OS here:
 [README](https://github.com/peercoin/coinlib/blob/master/coinlib/README.md)
 
