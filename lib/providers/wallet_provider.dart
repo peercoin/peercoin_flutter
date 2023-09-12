@@ -409,6 +409,7 @@ class WalletProvider with ChangeNotifier {
     required String identifier,
     required String address,
     required Map tx,
+    bool notify = true,
   }) async {
     var openWallet = getSpecificCoinWallet(identifier);
     LoggerWrapper.logInfo('WalletProvider', 'putTx', '$address puttx: $tx');
@@ -536,19 +537,21 @@ class WalletProvider with ChangeNotifier {
         }
       }
       // trigger notification
-      var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      if (notify == true) {
+        var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-      if (direction == 'in') {
-        await flutterLocalNotificationsPlugin.show(
-          DateTime.now().millisecondsSinceEpoch ~/ 10000,
-          AppLocalizations.instance.translate(
-            'notification_title',
-            {'walletTitle': openWallet.title},
-          ),
-          tx['txid'],
-          LocalNotificationSettings.platformChannelSpecifics,
-          payload: identifier,
-        );
+        if (direction == 'in') {
+          await flutterLocalNotificationsPlugin.show(
+            DateTime.now().millisecondsSinceEpoch ~/ 10000,
+            AppLocalizations.instance.translate(
+              'notification_title',
+              {'walletTitle': openWallet.title},
+            ),
+            tx['txid'],
+            LocalNotificationSettings.platformChannelSpecifics,
+            payload: identifier,
+          );
+        }
       }
     }
 

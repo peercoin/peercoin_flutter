@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -241,6 +242,94 @@ void main() async {
           result.hex ==
               '0300000001fd9ea98d289c171e9ab855cac718fba1585bd20cc3b92b7e77c8bda2d2780e6c010000006a47304402207b90e7910dcf86a6b6dc3f7a99109cdbe9b8a11a894a56633c5ea384abe44a6f02206052da8d5d2de4ff7a17ef18e3efadefbe7b3125ccb2440e4d509e192689a17b0121022036646b3fd79dee41351f727f0a6e10d0e7f98585961bc14e7aadaf5f4b66abffffffff03208d9800000000001976a914f82d58dd8487044d8d0879c15a2a3516a425de2a88ac00000000000000001976a914ff9296d92c5efc397d0e0b9ebe94d95a532270c488ac0000000000000000066a047465737400000000',
         );
+      });
+
+      test('Find OP_RETURN message in Tx', () async {
+        const tx = '''
+        {
+          "txid": "93b625d6d3c34d84a5f81c9aea1f509090d64c39b5b12da926e55122416f6cdd",
+          "hash": "93b625d6d3c34d84a5f81c9aea1f509090d64c39b5b12da926e55122416f6cdd",
+          "version": 3,
+          "time": 0,
+          "size": 238,
+          "vsize": 238,
+          "weight": 952,
+          "locktime": 0,
+          "vin": [
+            {
+              "txid": "c67d874de945d10ab7da1d85de0681e53359559d14e80b2114d8ffbf68839c49",
+              "vout": 0,
+              "scriptSig": {
+                "asm": "3044022032ae74d15ba45916b8183748e20317d1d84347fd27d458c7c0f296f1837347d802205e5df2aa058fb6b88452b80843f05c5cbb9848c98e73919218fca5fa831daa21[ALL] 025bfb039e390283e1682c53aa19087725b63039f9f18d32a3ff3be444669b31df",
+                "hex": "473044022032ae74d15ba45916b8183748e20317d1d84347fd27d458c7c0f296f1837347d802205e5df2aa058fb6b88452b80843f05c5cbb9848c98e73919218fca5fa831daa210121025bfb039e390283e1682c53aa19087725b63039f9f18d32a3ff3be444669b31df"
+              },
+              "sequence": 4294967295
+            }
+          ],
+          "vout": [
+            {
+              "value": 9.500994,
+              "n": 0,
+              "scriptPubKey": {
+                "asm": "OP_DUP OP_HASH160 e6cf69bef993f88d547cd0a6fca17a4a4ed3e0c5 OP_EQUALVERIFY OP_CHECKSIG",
+                "desc": "addr(n2ZNBVFB9Rob6CBxUz4L7JhkkRsohddptN)#vwhka9fn",
+                "hex": "76a914e6cf69bef993f88d547cd0a6fca17a4a4ed3e0c588ac",
+                "address": "n2ZNBVFB9Rob6CBxUz4L7JhkkRsohddptN",
+                "type": "pubkeyhash"
+              }
+            },
+            {
+              "value": 0,
+              "n": 1,
+              "scriptPubKey": {
+                "asm": "OP_DUP OP_HASH160 e611a8894f845a0a99e8f87d16850ef1bbfea819 OP_EQUALVERIFY OP_CHECKSIG",
+                "desc": "addr(n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7)#2l0s7aqf",
+                "hex": "76a914e611a8894f845a0a99e8f87d16850ef1bbfea81988ac",
+                "address": "n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7",
+                "type": "pubkeyhash"
+              }
+            },
+            {
+              "value": 0,
+              "n": 2,
+              "scriptPubKey": {
+                "asm": "OP_RETURN 26952",
+                "desc": "raw(6a024869)#nz6xdglz",
+                "hex": "6a024869",
+                "type": "nulldata"
+              }
+            }
+          ],
+          "hex": "0300000001499c8368bfffd814210be8149d555933e58106de851ddab70ad145e94d877dc6000000006a473044022032ae74d15ba45916b8183748e20317d1d84347fd27d458c7c0f296f1837347d802205e5df2aa058fb6b88452b80843f05c5cbb9848c98e73919218fca5fa831daa210121025bfb039e390283e1682c53aa19087725b63039f9f18d32a3ff3be444669b31dfffffffff0342f99000000000001976a914e6cf69bef993f88d547cd0a6fca17a4a4ed3e0c588ac00000000000000001976a914e611a8894f845a0a99e8f87d16850ef1bbfea81988ac0000000000000000046a02486900000000",
+          "blockhash": "d8f5dc9f9d403ab5313319d7c6c5c96db48cf44c5f1aa04927b74d8280184dbe",
+          "confirmations": 3,
+          "blocktime": 1694515176
+        }
+        ''';
+        await wallet.addAddressFromWif(
+          testnetWalletName,
+          '',
+          'n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7',
+        );
+
+        await wallet.putUtxos(
+          testnetWalletName,
+          'address',
+          json.decode(
+            '[{"tx_hash": "93b625d6d3c34d84a5f81c9aea1f509090d64c39b5b12da926e55122416f6cdd", "tx_pos": 1, "height": 546555, "value": 0}]',
+          ),
+        );
+
+        await wallet.putTx(
+          identifier: testnetWalletName,
+          address: 'n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7',
+          tx: json.decode(tx),
+          notify: false,
+        );
+
+        final txn = await wallet.getWalletTransactions(testnetWalletName);
+
+        assert(txn[1].opReturn == 'Hi');
       });
 
       test(
