@@ -882,12 +882,13 @@ class WalletProvider with ChangeNotifier {
             _opReturn,
             ScriptPushData(utf8.encode(opReturn) as Uint8List),
           ]);
-          final output = Output.fromProgram(
-            BigInt.zero,
-            RawProgram(script),
-          );
 
-          txOutputs.add(output);
+          txOutputs.add(
+            Output.fromProgram(
+              BigInt.zero,
+              RawProgram(script),
+            ),
+          );
         }
 
         //generate keyMap
