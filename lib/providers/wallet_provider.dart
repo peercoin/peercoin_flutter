@@ -894,12 +894,12 @@ class WalletProvider with ChangeNotifier {
           );
 
           final script = Script([
-            ScriptOpCode.fromName('RETURN'),
+            _opReturn,
             ScriptPushData(Uint8List.fromList(opReturn.codeUnits)),
           ]);
           final output = Output.fromProgram(
             BigInt.zero,
-            Program.match(script),
+            RawProgram(script),
           );
 
           tx = tx.addOutput(output);
