@@ -306,15 +306,18 @@ void main() async {
           "blocktime": 1694515176
         }
         ''';
+
+        const address = 'n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7';
+
         await wallet.addAddressFromWif(
           testnetWalletName,
           '',
-          'n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7',
+          address,
         );
 
         await wallet.putUtxos(
           testnetWalletName,
-          'address',
+          address,
           json.decode(
             '[{"tx_hash": "93b625d6d3c34d84a5f81c9aea1f509090d64c39b5b12da926e55122416f6cdd", "tx_pos": 1, "height": 546555, "value": 0}]',
           ),
@@ -322,7 +325,7 @@ void main() async {
 
         await wallet.putTx(
           identifier: testnetWalletName,
-          address: 'n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7',
+          address: address,
           tx: json.decode(tx),
           notify: false,
         );
