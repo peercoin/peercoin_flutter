@@ -757,7 +757,7 @@ class WalletProvider with ChangeNotifier {
       if (utxoPool.isNotEmpty) {
         //find eligible input utxos
         int totalInputValue = 0;
-        final inputTx = <WalletUtxo>[];
+        final inputUtxos = <WalletUtxo>[];
         final coin = AvailableCoins.getSpecificCoin(identifier);
 
         for (final utxo in utxoPool) {
@@ -772,7 +772,7 @@ class WalletProvider with ChangeNotifier {
                   (needsChange == false &&
                       totalInputValue < (txAmount + fee))) {
                 totalInputValue += utxo.value;
-                inputTx.add(utxo);
+                inputUtxos.add(utxo);
                 LoggerWrapper.logInfo(
                   'WalletProvider',
                   'buildTransaction',
@@ -907,49 +907,44 @@ class WalletProvider with ChangeNotifier {
         }
 
         //generate keyMap
-        Future<Map<int, Map>> generateKeyMap() async {
-          final keyMap = <int, Map>{};
-          for (final inputUtxo in inputTx) {
-            final inputKey = inputTx.indexOf(inputUtxo);
-            //find key to that utxo
-            for (final walletAddr in openWallet.addresses) {
-              if (walletAddr.address == inputUtxo.address) {
-                final wif = paperWalletUtxos != null
-                    ? paperWalletPrivkey
-                    : await getWif(
-                        identifier: identifier,
-                        address: walletAddr.address,
-                      );
-                keyMap[inputKey] = {'wif': wif, 'addr': inputUtxo.address};
+        final keyMap = <int, Map>{};
+        for (final inputUtxo in inputUtxos) {
+          final inputN = inputUtxos.indexOf(inputUtxo);
+          //find key to that utxo
+          for (final walletAddr in openWallet.addresses) {
+            if (walletAddr.address == inputUtxo.address) {
+              final wif = paperWalletUtxos != null
+                  ? paperWalletPrivkey
+                  : await getWif(
+                      identifier: identifier,
+                      address: walletAddr.address,
+                    );
+              keyMap[inputN] = {'wif': wif, 'addr': inputUtxo.address};
 
-                tx = tx.addInput(
-                  P2PKHInput(
-                    prevOut: OutPoint.fromHex(
-                      inputUtxo.hash,
-                      inputUtxo.txPos,
-                    ),
-                    publicKey: WIF.fromString(wif).privkey.pubkey,
+              tx = tx.addInput(
+                P2PKHInput(
+                  prevOut: OutPoint.fromHex(
+                    inputUtxo.hash,
+                    inputUtxo.txPos,
                   ),
-                );
-              }
+                  publicKey: WIF.fromString(wif).privkey.pubkey,
+                ),
+              );
             }
           }
-          return keyMap;
         }
-
-        final keyMap = await generateKeyMap();
 
         //sign
         keyMap.forEach(
-          (key, value) {
+          (i, value) {
             LoggerWrapper.logInfo(
               'WalletProvider',
               'buildTransaction',
-              "signing - ${value["addr"]} at vin $key",
+              "signing - ${value["addr"]} at vin $i",
             );
 
             tx = tx.sign(
-              inputN: key,
+              inputN: i,
               key: WIF.fromString(value['wif']).privkey,
             );
           },
@@ -1004,7 +999,7 @@ class WalletProvider with ChangeNotifier {
             allRecipientOutPutsAreZero: allRecipientOutPutsAreZero,
             feesHaveBeenDeductedFromRecipient:
                 feesHaveBeenDeductedFromRecipient,
-            inputTx: inputTx,
+            inputTx: inputUtxos,
           );
         }
       } else {
