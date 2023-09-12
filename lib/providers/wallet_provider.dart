@@ -164,13 +164,12 @@ class WalletProvider with ChangeNotifier {
   String getAddressFromHDPrivateKey(
     String identifier,
     HDPrivateKey hdPrivateKey,
-  ) {
-    return P2PKHAddress.fromPublicKey(
-      hdPrivateKey.publicKey,
-      version:
-          AvailableCoins.getSpecificCoin(identifier).networkType.p2pkhPrefix,
-    ).toString();
-  }
+  ) =>
+      P2PKHAddress.fromPublicKey(
+        hdPrivateKey.publicKey,
+        version:
+            AvailableCoins.getSpecificCoin(identifier).networkType.p2pkhPrefix,
+      ).toString();
 
   Future<String> getAddressFromDerivationPath({
     required String identifier,
@@ -231,12 +230,12 @@ class WalletProvider with ChangeNotifier {
     }
   }
 
-  String getWifFromHDPrivateKey(String identifier, HDPrivateKey hdWallet) {
-    return WIF(
-      privkey: hdWallet.privateKey,
-      version: AvailableCoins.getSpecificCoin(identifier).networkType.wifPrefix,
-    ).toString();
-  }
+  String getWifFromHDPrivateKey(String identifier, HDPrivateKey hdWallet) =>
+      WIF(
+        privkey: hdWallet.privateKey,
+        version:
+            AvailableCoins.getSpecificCoin(identifier).networkType.wifPrefix,
+      ).toString();
 
   Future<void> generateUnusedAddress(String identifier) async {
     var openWallet = getSpecificCoinWallet(identifier);
