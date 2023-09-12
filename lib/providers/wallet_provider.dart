@@ -955,8 +955,7 @@ class WalletProvider with ChangeNotifier {
           },
         );
 
-        final intermediate = tx;
-        final number = (intermediate.size / 1000 * coin.fixedFeePerKb)
+        final number = (tx.size / 1000 * coin.fixedFeePerKb)
             .toStringAsFixed(coin.fractions);
         final asDouble = double.parse(number) * decimalProduct;
         final requiredFeeInSatoshis = asDouble.round();
@@ -964,23 +963,23 @@ class WalletProvider with ChangeNotifier {
         LoggerWrapper.logInfo(
           'WalletProvider',
           'buildTransaction',
-          'fee $requiredFeeInSatoshis, size: ${intermediate.size}',
+          'fee $requiredFeeInSatoshis, size: ${tx.size}',
         );
 
         LoggerWrapper.logInfo(
           'WalletProvider',
           'buildTransaction',
-          'sizeBefore: $sizeBefore - size now: ${intermediate.size}',
+          'sizeBefore: $sizeBefore - size now: ${tx.size}',
         );
 
-        if (firstPass == true || intermediate.size > sizeBefore) {
+        if (firstPass == true || tx.size > sizeBefore) {
           // dump hexes
           return await buildTransaction(
             identifier: identifier,
             recipients: recipients,
             opReturn: opReturn,
             fee: requiredFeeInSatoshis,
-            sizeBefore: intermediate.size,
+            sizeBefore: tx.size,
             firstPass: false,
             paperWalletPrivkey: paperWalletPrivkey,
             paperWalletUtxos: paperWalletUtxos,
@@ -990,15 +989,15 @@ class WalletProvider with ChangeNotifier {
           LoggerWrapper.logInfo(
             'WalletProvider',
             'buildTransaction',
-            'intermediate size: ${intermediate.size}',
+            'intermediate size: ${tx.size}',
           );
-          hex = intermediate.toHex();
+          hex = tx.toHex();
           return BuildResult(
             fee: requiredFeeInSatoshis,
             hex: hex,
             recipients: recipients,
             totalAmount: txAmount,
-            id: intermediate.txid,
+            id: tx.txid,
             destroyedChange: destroyedChange,
             opReturn: opReturn,
             neededChange: needsChange,
