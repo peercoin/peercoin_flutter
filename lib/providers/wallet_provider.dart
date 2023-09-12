@@ -897,7 +897,7 @@ class WalletProvider with ChangeNotifier {
 
           final script = Script([
             _opReturn,
-            ScriptPushData(Uint8List.fromList(opReturn.codeUnits)),
+            ScriptPushData(utf8.encode(opReturn) as Uint8List),
           ]);
           final output = Output.fromProgram(
             BigInt.zero,
