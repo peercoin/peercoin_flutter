@@ -201,15 +201,15 @@ class WalletProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addAddressFromWif(
-    String identifier,
-    String wif,
-    String publicAddress,
-  ) async {
+  Future<void> addAddressFromWif({
+    required String identifier,
+    required String wif,
+    required String address,
+  }) async {
     final openWallet = getSpecificCoinWallet(identifier);
 
     openWallet.addNewAddress = WalletAddress(
-      address: publicAddress,
+      address: address,
       addressBookName: '',
       used: true,
       status: null,

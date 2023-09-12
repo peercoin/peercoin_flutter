@@ -310,9 +310,9 @@ void main() async {
         const address = 'n2VSs6f787ebhgRRnURdLtinCkPjDT4zZ7';
 
         await wallet.addAddressFromWif(
-          testnetWalletName,
-          '',
-          address,
+          identifier: testnetWalletName,
+          wif: '',
+          address: address,
         );
 
         await wallet.putUtxos(

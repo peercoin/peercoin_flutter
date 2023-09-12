@@ -60,7 +60,11 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     //write to wallet
-    await _walletProvider.addAddressFromWif(_walletName, wif, address);
+    await _walletProvider.addAddressFromWif(
+      identifier: _walletName,
+      wif: wif,
+      address: address,
+    );
 
     //subscribe
     _electrumConnection.subscribeToScriptHashes(
