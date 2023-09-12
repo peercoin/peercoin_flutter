@@ -218,7 +218,7 @@ class PeercoinApp extends StatelessWidget {
         builder: (ThemeMode themeMode) {
           return GlobalLoaderOverlay(
             useDefaultLoading: false,
-            overlayOpacity: 0.6,
+            overlayColor: Colors.grey.withOpacity(0.6),
             overlayWidget: const Center(
               child: SpinningPeercoinIcon(),
             ),
