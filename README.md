@@ -2,8 +2,8 @@
 <a href="https://weblate.ppc.lol/engage/peercoin-flutter/">
 <img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/svg-badge.svg" alt="Übersetzungsstatus" /></a>
 [![Codemagic build status](https://api.codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/status_badge.svg)](https://codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/latest_build)
-[![Analyze & Test](https://github.com/peercoin/peercoin_flutter/actions/workflows/analyze-test.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/analyze-test.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/peercoin/peercoin_flutter/badge/main)](https://www.codefactor.io/repository/github/peercoin/peercoin_flutter/overview/main)
+[![Static analysis and unit tests](https://github.com/peercoin/peercoin_flutter/actions/workflows/static_analysis_and_unit_test.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/static_analysis_and_unit_test.yml)
+[![E2E Tests](https://github.com/peercoin/peercoin_flutter/actions/workflows/e2e_tests.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/e2e_tests.yml)
 # peercoin_flutter
 Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.  
 **App in constant development**  
