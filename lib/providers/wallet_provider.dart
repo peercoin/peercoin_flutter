@@ -253,10 +253,7 @@ class WalletProvider with ChangeNotifier {
       );
       setUnusedAddress(
         identifier: identifier,
-        address: getAddressFromHDPrivateKey(
-          identifier,
-          hdWallet,
-        ),
+        address: getAddressFromHDPrivateKey(identifier, hdWallet),
       );
     } else {
       //lets find an unused address
@@ -268,10 +265,7 @@ class WalletProvider with ChangeNotifier {
       }
       if (unusedAddr != null) {
         //unused address available
-        setUnusedAddress(
-          identifier: identifier,
-          address: unusedAddr,
-        );
+        setUnusedAddress(identifier: identifier, address: unusedAddr);
       } else {
         //not empty, but all used -> create new one
         var numberOfOurAddr = openWallet.addresses
