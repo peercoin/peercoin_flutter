@@ -452,9 +452,9 @@ class ElectrumBackend extends DataSource {
   void handleUtxo(String id, List utxos) async {
     final txAddr = id.replaceFirst('utxo_', '');
     await walletProvider.putUtxos(
-      coinName,
-      txAddr,
-      utxos,
+      identifier: coinName,
+      address: txAddr,
+      utxos: utxos,
     );
 
     var walletTx = await walletProvider.getWalletTransactions(coinName);

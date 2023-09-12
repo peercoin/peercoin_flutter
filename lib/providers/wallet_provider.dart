@@ -381,7 +381,11 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> putUtxos(String identifier, String address, List utxos) async {
+  Future<void> putUtxos({
+    required String identifier,
+    required String address,
+    required List utxos,
+  }) async {
     final openWallet = getSpecificCoinWallet(identifier);
 
     //clear utxos for address

@@ -96,9 +96,9 @@ void main() async {
         'Add mainnet utxo',
         () async {
           await wallet.putUtxos(
-            walletName,
-            wallet.getUnusedAddress(walletName),
-            [
+            identifier: walletName,
+            address: wallet.getUnusedAddress(walletName),
+            utxos: [
               {
                 'tx_hash':
                     '6c0e78d2a2bdc8777e2bb9c30cd25b58a1fb18c7ca55b89a1e179c288da99efd',
@@ -206,9 +206,9 @@ void main() async {
 
       test('Add testnet UTXO', () async {
         await wallet.putUtxos(
-          testnetWalletName,
-          wallet.getUnusedAddress(testnetWalletName),
-          [
+          identifier: testnetWalletName,
+          address: wallet.getUnusedAddress(testnetWalletName),
+          utxos: [
             {
               'tx_hash':
                   '6c0e78d2a2bdc8777e2bb9c30cd25b58a1fb18c7ca55b89a1e179c288da99efd',
@@ -316,9 +316,9 @@ void main() async {
         );
 
         await wallet.putUtxos(
-          testnetWalletName,
-          address,
-          json.decode(
+          identifier: testnetWalletName,
+          address: address,
+          utxos: json.decode(
             '[{"tx_hash": "93b625d6d3c34d84a5f81c9aea1f509090d64c39b5b12da926e55122416f6cdd", "tx_pos": 1, "height": 546555, "value": 0}]',
           ),
         );
