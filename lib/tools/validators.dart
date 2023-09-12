@@ -12,11 +12,10 @@ bool validateAddress(String address, NetworkParams network) {
 
 /// Returns true if the WIF private key is valid.
 bool validateWIFPrivKey(String privKey) {
-  var valid = true;
   try {
     WIF.fromString(privKey);
+    return true;
   } catch (e) {
-    valid = false;
+    return false;
   }
-  return valid;
 }
