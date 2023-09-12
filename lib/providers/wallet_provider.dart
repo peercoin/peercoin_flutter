@@ -32,6 +32,7 @@ class WalletProvider with ChangeNotifier {
   final Map<String, HDPrivateKey> _hdWalletCache = {};
   final Map<String, String> _unusedAddressCache = {};
   final Map<String, String> _wifs = {};
+  final _opReturn = ScriptOpCode.fromName('RETURN');
   late String _seedPhrase;
   late Box<CoinWallet> _walletBox;
   late Box _vaultBox;
@@ -492,25 +493,20 @@ class WalletProvider with ChangeNotifier {
         }
 
         //scan for OP_RETURN messages
-        //obtain transaction object
-        final txFromBuffer = Transaction.fromHex(tx['hex']);
-
         //loop through outputs to find OP_RETURN outputs
-        for (final out in txFromBuffer.outputs) {
+
+        for (final out in Transaction.fromHex(tx['hex']).outputs) {
           final script = Script.decompile(out.scriptPubKey);
-          final code = script[0] as ScriptOpCode;
 
           // Find OP_RETURN + push data
           if (script.length == 2 &&
-              code.asm == 'OP_RETURN' &&
+              script[0].match(_opReturn) &&
               script[1] is ScriptPushData) {
             String? parsedMessage;
 
-            final op = script[1];
+            final op = script[1] as ScriptPushData;
             try {
-              if (op is ScriptPushData) {
-                parsedMessage = utf8.decode(op.data);
-              }
+              parsedMessage = utf8.decode(op.data);
             } catch (e) {
               //decoding failed
               LoggerWrapper.logError(
