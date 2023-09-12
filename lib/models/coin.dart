@@ -1,4 +1,4 @@
-import 'package:coinslib/coinslib.dart';
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 
 class Coin {
   final String name;
@@ -7,7 +7,7 @@ class Coin {
   final String iconPath;
   final String iconPathTransparent;
   final String uriCode;
-  final NetworkType networkType;
+  final NetworkParams networkType;
   final int fractions;
   final int minimumTxValue;
   final double fixedFeePerKb;
@@ -18,6 +18,7 @@ class Coin {
   final double electrumRequiredProtocol;
   final List electrumServers;
   final List<(String, int)> marismaServers;
+  final int opreturnSize;
 
   Coin({
     required this.name,
@@ -37,5 +38,6 @@ class Coin {
     required this.electrumRequiredProtocol,
     required this.electrumServers,
     required this.marismaServers,
+    required this.opreturnSize,
   });
 }

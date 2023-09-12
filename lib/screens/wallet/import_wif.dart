@@ -1,4 +1,4 @@
-import 'package:coinslib/coinslib.dart';
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +11,7 @@ import '../../providers/connection_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/background_sync.dart';
+import '../../tools/validators.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/service_container.dart';
 
@@ -55,21 +56,15 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
     }
   }
 
-  bool validatePrivKey(String privKey) {
-    var error = false;
-    try {
-      Wallet.fromWIF(privKey, _activeCoin.networkType);
-    } catch (e) {
-      error = true;
-    }
-    return error;
-  }
-
   Future<void> performImport(String wif, String address) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     //write to wallet
-    await _walletProvider.addAddressFromWif(_walletName, wif, address);
+    await _walletProvider.addAddressFromWif(
+      identifier: _walletName,
+      wif: wif,
+      address: address,
+    );
 
     //subscribe
     _electrumConnection.subscribeToScriptHashes(
@@ -101,8 +96,11 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
 
   Future<void> triggerConfirmMessage(BuildContext ctx, String privKey) async {
     final scaffoldMessenger = ScaffoldMessenger.of(ctx);
-    final publicAddress = Wallet.fromWIF(privKey, _activeCoin.networkType)
-        .address; //TODO won't return a bech32 addr
+    final publicAddress = P2PKHAddress.fromPublicKey(
+      WIF.fromString(privKey).privkey.pubkey,
+      version: _activeCoin.networkType.p2pkhPrefix,
+    ).toString();
+    //TODO won't return a bech32 addr, but a P2PKH address
 
     //check if that address is already in the list
     final walletAddresses = await _walletProvider.getWalletAddresses(
@@ -205,7 +203,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
                                 return AppLocalizations.instance
                                     .translate('import_wif_error_empty');
                               }
-                              if (validatePrivKey(value)) {
+                              if (validateWIFPrivKey(value) == false) {
                                 return AppLocalizations.instance
                                     .translate('import_wif_error_failed_parse');
                               }
@@ -285,4 +283,5 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       ),
     );
   }
+  //TODO add to e2e tests
 }
