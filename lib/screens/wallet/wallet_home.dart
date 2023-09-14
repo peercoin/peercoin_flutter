@@ -299,7 +299,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   void rebroadCastUnsendTx() {
     var nonBroadcastedTx = _walletTransactions.where(
-      (element) => element.broadCasted == false && element.confirmations == 0,
+      (element) =>
+          element.broadCasted == false &&
+          element.confirmations == 0 &&
+          element.direction == 'out',
     );
     for (var element in nonBroadcastedTx) {
       _connectionProvider.broadcastTransaction(

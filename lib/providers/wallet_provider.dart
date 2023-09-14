@@ -571,9 +571,47 @@ class WalletProvider with ChangeNotifier {
       ),
     );
 
+    //check recipients if one of them is our address but not the current change address (sending coins to oneself)
+    final changeAddress = getUnusedAddress(identifier);
+
+    for (final recipientAddr in buildResult.recipients.keys) {
+      if (recipientAddr != changeAddress) {
+        if (openWallet.addresses.firstWhereOrNull(
+              (element) => element.address == recipientAddr,
+            ) !=
+            null) {
+          //found recipient in the transaction that is not the changeAddress but our address
+          final value = buildResult.recipients[recipientAddr] ?? 0;
+
+          LoggerWrapper.logInfo(
+            'WalletProvider',
+            'putOutgoingTx',
+            'isSendingToSelf: $recipientAddr $value',
+          );
+
+          //write tx
+          openWallet.putTransaction(
+            WalletTransaction(
+              txid: buildResult.id,
+              timestamp: 0,
+              value: value,
+              fee: 0,
+              recipients: {recipientAddr: value},
+              address: recipientAddr,
+              direction: 'in',
+              broadCasted: false,
+              confirmations: 0,
+              broadcastHex: '',
+              opReturn: buildResult.opReturn,
+            ),
+          );
+        }
+      }
+    }
+
     //flag _unusedAddress as change addr
     final addrInWallet = openWallet.addresses.firstWhereOrNull(
-      (element) => element.address == getUnusedAddress(identifier),
+      (element) => element.address == changeAddress,
     );
     if (addrInWallet != null) {
       if (buildResult.neededChange == true) {
@@ -1076,13 +1114,13 @@ class WalletProvider with ChangeNotifier {
     String txId,
   ) async {
     final openWallet = getSpecificCoinWallet(identifier);
-    final tx = openWallet.transactions.firstWhereOrNull(
+    final tx = openWallet.transactions.where(
       (element) => element.txid == txId,
     );
-    if (tx != null) {
-      tx.broadCasted = true;
-      tx.resetBroadcastHex();
-      tx.confirmations = 0;
+    for (final element in tx) {
+      element.broadCasted = true;
+      element.resetBroadcastHex();
+      element.confirmations = 0;
       await openWallet.save();
     }
   }
