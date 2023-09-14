@@ -1,8 +1,11 @@
 PODS:
-  - background_fetch (1.2.0):
+  - background_fetch (1.2.1):
     - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
+  - coinlib_flutter (0.3.2):
+    - Flutter
+    - FlutterMacOS
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
@@ -84,6 +87,7 @@ PODS:
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - coinlib_flutter (from `.symlinks/plugins/coinlib_flutter/darwin`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - cryptography_flutter (from `.symlinks/plugins/cryptography_flutter/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -117,6 +121,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/background_fetch/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
+  coinlib_flutter:
+    :path: ".symlinks/plugins/coinlib_flutter/darwin"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   cryptography_flutter:
@@ -153,8 +159,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 79229f3677f19e1851b8e46d051720842e25a7fc
+  background_fetch: 896944864b038d2837fc750d470e9841e1e6a363
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
+  coinlib_flutter: 6abec900d67762a6e7ccfd567a3cd3ae00bbee35
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   cryptography_flutter: 381bdacc984abcfbe3ca45ef7c76566ff061614c
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
