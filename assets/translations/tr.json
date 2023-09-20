@@ -347,5 +347,8 @@
     "currency_UGX": "Uganda Şilini",
     "wallet_pop_menu_change_title": "Başlığı Değiştir",
     "wallet_title_edit": "Cüzdan Başlığını Düzenle",
-    "wallet_title_edit_new_title": "Yeni Başlık"
+    "wallet_title_edit_new_title": "Yeni Başlık",
+    "app_settings_wallet_order": "Cüzdan Siparişi",
+    "app_settings_price_feed_search": "Para birimi kodunu ara",
+    "app_settings_language_search": "Arama dili"
 }
