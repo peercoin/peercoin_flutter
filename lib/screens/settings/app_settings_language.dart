@@ -44,14 +44,6 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_initial == true) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
     return LanguageSelectorScreen(
       saveLang: saveLang,
       initialLang: _lang,
