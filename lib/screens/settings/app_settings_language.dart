@@ -46,7 +46,7 @@ class _AppSettingsLanguageScreenState extends State<AppSettingsLanguageScreen> {
   Widget build(BuildContext context) {
     return LanguageSelectorScreen(
       saveLang: saveLang,
-      initialLang: _lang,
+      selectedLang: _lang,
     );
   }
 }

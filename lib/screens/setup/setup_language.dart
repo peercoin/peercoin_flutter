@@ -41,7 +41,7 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
   Widget build(BuildContext context) {
     return LanguageSelectorScreen(
       saveLang: saveLang,
-      initialLang: _lang,
+      selectedLang: _lang,
     );
   }
 }

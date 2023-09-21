@@ -6,11 +6,11 @@ import '../../widgets/service_container.dart';
 
 class LanguageSelectorScreen extends StatefulWidget {
   final Function saveLang;
-  final String initialLang;
+  final String selectedLang;
   const LanguageSelectorScreen({
     super.key,
     required this.saveLang,
-    required this.initialLang,
+    required this.selectedLang,
   });
 
   @override
@@ -45,8 +45,8 @@ class _LanguageSelectorScreenState extends State<LanguageSelectorScreen> {
     }).toList();
   }
 
-  void _saveLang(String savedLang) async {
-    await widget.saveLang(savedLang);
+  void _saveLang(String langToSave) async {
+    await widget.saveLang(langToSave);
 
     if (mounted) {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -116,7 +116,7 @@ class _LanguageSelectorScreenState extends State<LanguageSelectorScreen> {
                     key: Key(lang),
                     leading: Radio(
                       value: lang,
-                      groupValue: widget.initialLang,
+                      groupValue: widget.selectedLang,
                       onChanged: (_) => _saveLang(lang),
                     ),
                   ),
