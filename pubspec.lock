@@ -194,7 +194,7 @@ packages:
     source: hosted
     version: "0.3.2+3"
   characters:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: characters
       sha256: "04a925763edad70e8443c99234dc3328f442e811f1d8fd1a72f1c8ad0f69a605"
@@ -305,22 +305,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  cryptography:
-    dependency: transitive
-    description:
-      name: cryptography
-      sha256: "11d083541666d80bba21190d35ff70b2497c81e064e82d1b8a07d801f7c7e282"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.0"
-  cryptography_flutter:
-    dependency: "direct main"
-    description:
-      name: cryptography_flutter
-      sha256: "423ac095bbc4650fe6c07c64632ddc5dda1d4851241367efa0f26ca24b0ce480"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.1"
   csslib:
     dependency: transitive
     description:
@@ -672,7 +656,7 @@ packages:
     source: hosted
     version: "3.2.4"
   hex:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: hex
       sha256: "4e7cd54e4b59ba026432a6be2dd9d96e4c5205725194997193bf871703b82c4a"
