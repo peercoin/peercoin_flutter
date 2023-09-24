@@ -102,15 +102,31 @@ class _WalletListScreenState extends State<WalletListScreen>
       final navigator = Navigator.of(context);
 
       final modalRoute = ModalRoute.of(context);
-      await _appSettings.init(); //only required in home widget
-      await _walletProvider.init();
-      await _orderWallets();
-      final prefs = await SharedPreferences.getInstance();
-      _importedSeed = prefs.getBool('importedSeed') == true;
-
-      setState(() {
-        _initial = false;
-      });
+      try {
+        await _appSettings.init(); //only required in home widget
+        await _walletProvider.init();
+        await _orderWallets();
+        final prefs = await SharedPreferences.getInstance();
+        _importedSeed = prefs.getBool('importedSeed') == true;
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.instance.translate(
+                  'secure_storage_app_bar_title',
+                ),
+                textAlign: TextAlign.center,
+              ),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      } finally {
+        setState(() {
+          _initial = false;
+        });
+      }
 
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {
