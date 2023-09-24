@@ -4,6 +4,15 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
+  Future<void> performWIFImport(FlutterDriver driver) async {
+    await driver.tap(find.byTooltip('Show menu'));
+    await driver.tap(find.text('Import Private Key'));
+    await driver.tap(find.byType('TextField'));
+    await driver.enterText(
+      'cTfaQHvae3MJYrZMWYiB6zWaDAMB23qbfo8vBZP2ZJNaUh3aa1p5',
+    );
+  }
+
   group(
     'Setup',
     () {
@@ -101,6 +110,20 @@ void main() {
         retry: 2,
         timeout: const Timeout.factor(2),
       );
+
+      test(
+        'Import WIF',
+        () async {
+          await performWIFImport(driver);
+          await driver.tap(find.text('Import'));
+          await driver.tap(find.text('Import'));
+        },
+      );
+
+      test('Check if WIF is in Address book', () async {
+        await driver.tap(find.byTooltip('Address Book'));
+        await driver.waitFor(find.text('mm5pM9sJzVjsafctQJJrJuhGsw1CTucZ2v'));
+      });
 
       test('Change wallet title', () async {
         await driver.tap(find.byTooltip('Show menu'));

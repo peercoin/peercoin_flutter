@@ -283,5 +283,4 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
       ),
     );
   }
-  //TODO add to e2e tests
 }

@@ -616,6 +616,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           backgroundColor: back,
         ),
         BottomNavigationBarItem(
+          tooltip: 'Address Book',
           icon: const Icon(Icons.menu_book_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
           backgroundColor: back,
