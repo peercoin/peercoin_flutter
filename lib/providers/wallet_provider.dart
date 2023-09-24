@@ -43,7 +43,7 @@ class WalletProvider with ChangeNotifier {
     if (vaultBoxRes != null) {
       _vaultBox = vaultBoxRes;
     } else {
-      throw Exception('Vault box not found'); //TODO toggle global snackbar ?
+      throw Exception('Vault box not found');
     }
 
     //set walletBox
