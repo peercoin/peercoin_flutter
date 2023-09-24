@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,8 +101,8 @@ class _WalletListScreenState extends State<WalletListScreen>
       _appSettings = Provider.of<AppSettingsProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       final navigator = Navigator.of(context);
-
       final modalRoute = ModalRoute.of(context);
+
       try {
         await _appSettings.init(); //only required in home widget
         await _walletProvider.init();
@@ -109,6 +110,12 @@ class _WalletListScreenState extends State<WalletListScreen>
         final prefs = await SharedPreferences.getInstance();
         _importedSeed = prefs.getBool('importedSeed') == true;
       } catch (e) {
+        LoggerWrapper.logError(
+          'WalletListScreen',
+          'didChangeDependencies',
+          e.toString(),
+        );
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
