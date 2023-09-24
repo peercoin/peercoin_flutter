@@ -1,3 +1,6 @@
+### **1.2.2** (2023-xx-xx)
+* 
+
 ### **1.2.1** (2023-09-24)
 * Minor improvements and bug hunting
 
