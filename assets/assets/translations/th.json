@@ -347,5 +347,8 @@
     "setup_auth_title": "เลือกเวลาที่เซสชันเว็บของคุณจะหมดอายุ:",
     "setup_auth_subtitle_singular": "เซสชันของคุณจะหมดอายุหลังจาก $days วัน",
     "about_donate_button": "บริจาค PPC ตอนนี้",
-    "app_settings_delete": "ลบบัญชี"
+    "app_settings_delete": "ลบบัญชี",
+    "app_settings_wallet_order": "สั่งซื้อกระเป๋าเงิน",
+    "app_settings_price_feed_search": "ค้นหารหัสสกุลเงิน",
+    "app_settings_language_search": "ค้นหาภาษา"
 }
