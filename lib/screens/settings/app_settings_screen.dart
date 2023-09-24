@@ -2,18 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_logs/flutter_logs.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
-import '../../tools/logger_wrapper.dart';
+import '../../tools/debug_log_handler.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/double_tab_to_clipboard.dart';
@@ -50,54 +48,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     }
 
     super.didChangeDependencies();
-  }
-
-  Future<void> initDebugLogHandler() async {
-    FlutterLogs.channel.setMethodCallHandler((call) async {
-      if (call.method == 'logsExported') {
-        var zipName = call.arguments.toString();
-        Directory? externalDirectory;
-
-        if (Platform.isIOS) {
-          externalDirectory = await getApplicationDocumentsDirectory();
-        } else {
-          externalDirectory = await getExternalStorageDirectory();
-        }
-
-        LoggerWrapper.logInfo(
-          'AppSettingsScreen',
-          'found',
-          'External Storage:$externalDirectory',
-        );
-
-        var file = File('${externalDirectory!.path}/$zipName');
-
-        LoggerWrapper.logInfo(
-          'AppSettingsScreen',
-          'path',
-          'Path: \n${file.path}',
-        );
-
-        if (file.existsSync()) {
-          LoggerWrapper.logInfo(
-            'AppSettingsScreen',
-            'existsSync',
-            'Logs zip found, opening Share overlay',
-          );
-          await Share.shareXFiles(
-            [
-              XFile(file.path),
-            ],
-          );
-        } else {
-          LoggerWrapper.logError(
-            'AppSettingsScreen',
-            'existsSync',
-            'File not found in storage.',
-          );
-        }
-      }
-    });
   }
 
   void revealSeedPhrase(bool biometricsAllowed) async {

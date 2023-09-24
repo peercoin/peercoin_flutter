@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_logs/flutter_logs.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +19,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
 import '../../tools/background_sync.dart';
+import '../../tools/debug_log_handler.dart';
 import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
 import '../../tools/share_wrapper.dart';
@@ -94,23 +97,53 @@ class _WalletListScreenState extends State<WalletListScreen>
     );
   }
 
+  Future<void> handleInitError(Object e) async {
+    LoggerWrapper.logError(
+      'WalletListScreen',
+      'didChangeDependencies',
+      e.toString(),
+    );
+
+    //automatically toggle exportLogs for this event, since it is very likely app settings can not be accessed
+    await initDebugLogHandler();
+    FlutterLogs.exportLogs();
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate(
+              'secure_storage_app_bar_title',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+
   @override
   void didChangeDependencies() async {
     if (_initial) {
       _appSettings = Provider.of<AppSettingsProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
       final navigator = Navigator.of(context);
-
       final modalRoute = ModalRoute.of(context);
-      await _appSettings.init(); //only required in home widget
-      await _walletProvider.init();
-      await _orderWallets();
-      final prefs = await SharedPreferences.getInstance();
-      _importedSeed = prefs.getBool('importedSeed') == true;
 
-      setState(() {
-        _initial = false;
-      });
+      try {
+        await _appSettings.init(); //only required in home widget
+        await _walletProvider.init();
+        await _orderWallets();
+        final prefs = await SharedPreferences.getInstance();
+        _importedSeed = prefs.getBool('importedSeed') == true;
+      } catch (e) {
+        await handleInitError(e);
+      } finally {
+        setState(() {
+          _initial = false;
+        });
+      }
 
       //toggle price ticker update if enabled in settings
       if (_appSettings.selectedCurrency.isNotEmpty) {

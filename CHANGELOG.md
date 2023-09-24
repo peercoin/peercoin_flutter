@@ -1,3 +1,6 @@
+### **1.2.1** (2023-09-24)
+* Minor improvements and bug hunting
+
 ### **1.2.0** (2023-09-12)
 * This app now uses coinlib to deal with the hard stuff behind the scenes.
 

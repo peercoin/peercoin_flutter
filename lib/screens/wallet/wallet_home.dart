@@ -299,7 +299,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   void rebroadCastUnsendTx() {
     var nonBroadcastedTx = _walletTransactions.where(
-      (element) => element.broadCasted == false && element.confirmations == 0,
+      (element) =>
+          element.broadCasted == false &&
+          element.confirmations == 0 &&
+          element.direction == 'out',
     );
     for (var element in nonBroadcastedTx) {
       _connectionProvider.broadcastTransaction(
@@ -613,6 +616,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           backgroundColor: back,
         ),
         BottomNavigationBarItem(
+          tooltip: 'Address Book',
           icon: const Icon(Icons.menu_book_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
           backgroundColor: back,

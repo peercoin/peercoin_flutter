@@ -12,14 +12,17 @@ void main() {
       late FlutterDriver driver;
 
       Future<FlutterDriver> setupAndGetDriver() async {
-        var driver = await FlutterDriver.connect();
+        var driver = await FlutterDriver.connect(
+          timeout: const Duration(minutes: 20),
+        );
         var connected = false;
         while (!connected) {
           try {
             await driver.waitUntilFirstFrameRasterized();
             connected = true;
-            // ignore: empty_catches
-          } catch (error) {}
+          } catch (error) {
+            throw Exception('Driver not connected, ${error.toString()}');
+          }
         }
         return driver;
       }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/screens/language_selector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../tools/app_localizations.dart';
@@ -29,58 +30,18 @@ class _SetupLanguageScreenState extends State<SetupLanguageScreen> {
   }
 
   void saveLang(String lang) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    await AppLocalizations.delegate.load(Locale(lang));
     await prefs.setString('language_code', lang);
+    await AppLocalizations.delegate.load(Locale(lang));
     setState(() {
       _lang = lang;
     });
-
-    //show notification
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          AppLocalizations.instance.translate('app_settings_saved_snack'),
-          textAlign: TextAlign.center,
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.instance.translate('app_settings_language'),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: AppLocalizations.availableLocales.keys.map((lang) {
-              final (locale, langTitle) =
-                  AppLocalizations.availableLocales[lang]!;
-              final countryCode = locale.countryCode ?? '';
-              return InkWell(
-                onTap: () => saveLang(lang),
-                child: ListTile(
-                  title: Text(langTitle),
-                  subtitle: Text('${locale.languageCode} $countryCode'),
-                  leading: Radio(
-                    value: _lang,
-                    groupValue: lang,
-                    onChanged: (dynamic _) => saveLang(lang),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ),
+    return LanguageSelectorScreen(
+      saveLang: saveLang,
+      selectedLang: _lang,
     );
   }
 }
