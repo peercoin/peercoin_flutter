@@ -1,3 +1,6 @@
+### **1.2.2** (2023-09-27)
+* Change the options for purchasing Peercoin on some devices
+
 ### **1.2.1** (2023-09-24)
 * Minor improvements and bug hunting
 
