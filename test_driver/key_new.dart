@@ -136,9 +136,10 @@ void main() {
       test(
         'tap into new peercoin mainnet wallet',
         () async {
+          await driver.tap(find.pageBack());
+          await Future.delayed(const Duration(seconds: 1));
           await driver.runUnsynchronized(
             () async {
-              await driver.tap(find.pageBack());
               await driver.tap(find.byValueKey('newWalletIconButton'));
               await driver.tap(find.text('Peercoin'));
               await driver.tap(find.text('Peercoin')); //tap into wallet
