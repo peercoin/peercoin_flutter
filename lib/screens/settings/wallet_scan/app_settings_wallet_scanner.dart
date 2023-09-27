@@ -276,4 +276,5 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
     });
     context.loaderOverlay.hide();
   }
+  //TODO won't find new wallets if one in the gap has not been used
 }

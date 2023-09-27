@@ -177,5 +177,4 @@ class WalletScanner {
 
     return knownAddresses;
   }
-  //TODO won't find new wallets if one in the gap has not been used
 }
