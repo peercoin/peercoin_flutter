@@ -459,7 +459,7 @@
     "wallet_scan": "錢包掃描",
     "wallet_scan_no_new_found": "沒有找到新的錢包",
     "wallet_scanner_message_newAddressFound": "找到新地址",
-    "wallet_scanner_message_scan_failed": "掃描 $accountNumber ($e)) 處的 $coinName 失敗",
+    "wallet_scanner_message_scan_failed": "掃描 $accountNumber ($e) 處的 $coinName 失敗",
     "reset_modal_description": "這將重置錢包餘額並檢查所有地址的 UTXO。\n非廣播交易將被刪除。",
     "currency_AFN": "阿富汗阿富汗尼",
     "currency_ANG": "荷屬安的列斯盾",
