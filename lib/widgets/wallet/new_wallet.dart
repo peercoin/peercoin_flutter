@@ -47,6 +47,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         title: title,
         letterCode: letterCode,
         isImportedSeed: prefs.getBool('importedSeed') == true,
+        watchOnly: _watchOnly,
       );
 
       //add to order list

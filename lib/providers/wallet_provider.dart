@@ -127,10 +127,14 @@ class WalletProvider with ChangeNotifier {
     required String title,
     required String letterCode,
     required bool isImportedSeed,
+    required bool watchOnly,
   }) async {
     final box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
-        .where((element) => element.letterCode == letterCode)
+        .where(
+          (element) =>
+              element.letterCode == letterCode && element.watchOnly == false,
+        )
         .length;
 
     LoggerWrapper.logInfo(
@@ -147,6 +151,7 @@ class WalletProvider with ChangeNotifier {
         letterCode,
         nOfWalletOfLetterCode,
         isImportedSeed,
+        watchOnly,
       ),
     );
     notifyListeners();
