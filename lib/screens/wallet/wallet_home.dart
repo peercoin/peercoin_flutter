@@ -597,34 +597,43 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   BottomNavigationBar _calcBottomNavBar(BuildContext context) {
-    final back = Theme.of(context).primaryColor;
+    final bgColor = Theme.of(context).primaryColor;
     return BottomNavigationBar(
       unselectedItemColor: Theme.of(context).disabledColor,
       selectedItemColor: Colors.white,
-      onTap: (index) => changeTab(WalletTab.values[index]),
+      onTap: (index) {
+        if (_wallet.watchOnly == true && index == 0 || index == 3) {
+          return;
+        }
+        changeTab(WalletTab.values[index]);
+      },
       currentIndex: _selectedTab.index,
       items: [
         BottomNavigationBarItem(
-          icon: const Icon(Icons.download_rounded),
+          icon: _wallet.watchOnly
+              ? const SizedBox()
+              : const Icon(Icons.download_rounded),
           label:
               AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           tooltip: 'Address Book',
           icon: const Icon(Icons.menu_book_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.upload_rounded),
+          icon: _wallet.watchOnly
+              ? const SizedBox()
+              : const Icon(Icons.upload_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
       ],
     );
