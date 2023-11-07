@@ -94,6 +94,7 @@
     "app_settings_experimental_feature_watchOnlyWallets": "Watch only wallets",
     "app_settings_price_alert_content": "This will enable our privacy friendly price data feed.\nIt can be disabled anytime.",
     "app_wallets": "Wallets",
+    "watch_only": "Watch only",
     "authenticate_biometric_hint": "Verify identity",
     "authenticate_biometric_reason": "Please authenticate.",
     "authenticate_biometric_title": "Authentication required",
