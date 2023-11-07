@@ -45,12 +45,16 @@ class CoinWallet extends HiveObject {
   @HiveField(10, defaultValue: false)
   bool _dueForRescan = false;
 
+  @HiveField(11, defaultValue: false)
+  bool _watchOnly = false;
+
   CoinWallet(
     this._name,
     this._title,
     this._letterCode,
     this._walletIndex,
     this._dueForRescan,
+    this._watchOnly,
   );
 
   set addNewAddress(WalletAddress newAddress) {
@@ -68,6 +72,10 @@ class CoinWallet extends HiveObject {
 
   int get balance {
     return _balance;
+  }
+
+  bool get watchOnly {
+    return _watchOnly;
   }
 
   set balance(int newBalance) {
