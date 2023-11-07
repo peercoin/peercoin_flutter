@@ -22,13 +22,13 @@ class AddressTab extends StatefulWidget {
   final String walletName;
   final String title;
   final List<WalletAddress> walletAddresses;
-  final Function changeIndex;
+  final Function changeTab;
 
   const AddressTab({
     required this.walletName,
     required this.title,
     required this.walletAddresses,
-    required this.changeIndex,
+    required this.changeTab,
     Key? key,
   }) : super(key: key);
 
@@ -487,8 +487,8 @@ class _AddressTabState extends State<AddressTab> {
                           Icons.send,
                           color: Theme.of(context).colorScheme.background,
                         ),
-                        onTap: () => widget.changeIndex(
-                          Tabs.send,
+                        onTap: () => widget.changeTab(
+                          WalletTab.send,
                           addr.address,
                           addr.addressBookName,
                         ),

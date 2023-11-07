@@ -38,7 +38,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   String _unusedAddress = '';
-  int _pageIndex = 1;
+  WalletTab _selectedTab = WalletTab.transactions;
   int _latestBlock = 0;
   late CoinWallet _wallet;
   late BackendConnectionState _connectionState = BackendConnectionState.waiting;
@@ -51,10 +51,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
   String? _address;
   String? _label;
 
-  void changeIndex(int i, [String? addr, String? lab]) {
+  void changeTab(WalletTab t, [String? addr, String? lab]) {
     setState(() {
-      _pageIndex = i;
-      if (i == Tabs.send) {
+      _selectedTab = t;
+      if (_selectedTab == WalletTab.send) {
         //Passes address from addresses_tab to send_tab (send to)
         _address = addr;
         _label = lab;
@@ -208,7 +208,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
 
     if (arguments.containsKey('pushedAddress')) {
-      changeIndex(Tabs.send, arguments['pushedAddress']);
+      changeTab(WalletTab.send, arguments['pushedAddress']);
     }
 
     //check if wallet is due for rescan
@@ -601,8 +601,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return BottomNavigationBar(
       unselectedItemColor: Theme.of(context).disabledColor,
       selectedItemColor: Colors.white,
-      onTap: (index) => changeIndex(index),
-      currentIndex: _pageIndex,
+      onTap: (index) => changeTab(WalletTab.values[index]),
+      currentIndex: _selectedTab.index,
       items: [
         BottomNavigationBarItem(
           icon: const Icon(Icons.download_rounded),
@@ -632,8 +632,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   Widget _calcBody() {
     Widget body;
-    switch (_pageIndex) {
-      case Tabs.receive:
+    switch (_selectedTab) {
+      case WalletTab.receive:
         body = Expanded(
           child: ReceiveTab(
             connectionState: _connectionState,
@@ -642,7 +642,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
         );
         break;
-      case Tabs.transactions:
+      case WalletTab.transactions:
         body = Expanded(
           child: TransactionList(
             walletTransactions: _walletTransactions,
@@ -651,24 +651,24 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
         );
         break;
-      case Tabs.addresses:
+      case WalletTab.addresses:
         body = Expanded(
           child: AddressTab(
             walletName: _wallet.name,
             title: _wallet.title,
             walletAddresses: _wallet.addresses,
-            changeIndex: changeIndex,
+            changeTab: changeTab,
           ),
         );
         break;
-      case Tabs.send:
+      case WalletTab.send:
         body = Expanded(
           child: SendTab(
             address: _address,
             label: _label,
             wallet: _wallet,
             connectionState: _connectionState,
-            changeIndex: changeIndex,
+            changeTab: changeTab,
           ),
         );
         break;
@@ -708,10 +708,9 @@ class _WalletHomeState extends State<WalletHomeScreen>
   // TODO wallet list: make larger list prettier
 }
 
-class Tabs {
-  Tabs._();
-  static const int receive = 0;
-  static const int transactions = 1;
-  static const int addresses = 2;
-  static const int send = 3;
+enum WalletTab {
+  receive,
+  transactions,
+  addresses,
+  send,
 }

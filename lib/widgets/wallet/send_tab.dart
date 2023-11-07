@@ -36,13 +36,13 @@ import '../../tools/logger_wrapper.dart';
 import '../../tools/price_ticker.dart';
 
 class SendTab extends StatefulWidget {
-  final Function changeIndex;
+  final Function changeTab;
   final String? address;
   final String? label;
   final BackendConnectionState connectionState;
   final CoinWallet wallet;
   const SendTab({
-    required this.changeIndex,
+    required this.changeTab,
     this.address,
     this.label,
     required this.wallet,
@@ -760,7 +760,7 @@ class _SendTabState extends State<SendTab> {
           decimalProduct: _decimalProduct,
           coinLetterCode: widget.wallet.letterCode,
           coinIdentifier: widget.wallet.name,
-          callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
+          callBackAfterSend: () => widget.changeTab(WalletTab.transactions),
           fiatPricePerCoin: _coinValue,
           fiatCode: _appSettings.selectedCurrency,
         ),
