@@ -62,12 +62,14 @@ void main() async {
       title: walletName,
       letterCode: 'PPC',
       isImportedSeed: false,
+      watchOnly: false,
     );
     wallet.addWallet(
       name: testnetWalletName,
       title: testnetWalletName,
       letterCode: 'tPPC',
       isImportedSeed: false,
+      watchOnly: false,
     );
   });
 
