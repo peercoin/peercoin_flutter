@@ -706,6 +706,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             title: _wallet.title,
             walletAddresses: _wallet.addresses,
             changeTab: changeTab,
+            watchOnly: _wallet.watchOnly,
           ),
         );
         break;

@@ -23,12 +23,14 @@ class AddressTab extends StatefulWidget {
   final String title;
   final List<WalletAddress> walletAddresses;
   final Function changeTab;
+  final bool watchOnly;
 
   const AddressTab({
     required this.walletName,
     required this.title,
     required this.walletAddresses,
     required this.changeTab,
+    required this.watchOnly,
     Key? key,
   }) : super(key: key);
 
@@ -995,34 +997,35 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                 ),
               ),
-              SliverAppBar(
-                centerTitle: false,
-                automaticallyImplyLeading: false,
-                title: Text(
-                  AppLocalizations.instance.translate(
-                    'addressbook_bottom_bar_sending_addresses',
+              if (widget.watchOnly == false)
+                SliverAppBar(
+                  centerTitle: false,
+                  automaticallyImplyLeading: false,
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'addressbook_bottom_bar_sending_addresses',
+                    ),
+                    style: kIsWeb
+                        ? TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          )
+                        : const TextStyle(),
                   ),
-                  style: kIsWeb
-                      ? TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        )
-                      : const TextStyle(),
+                  actions: [
+                    IconButton(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      onPressed: () => _toggleSendingAddressesVisilibity(),
+                      icon: Icon(
+                        _showSendingAddresses
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
+                  ],
                 ),
-                actions: [
-                  IconButton(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ),
-                    onPressed: () => _toggleSendingAddressesVisilibity(),
-                    icon: Icon(
-                      _showSendingAddresses
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-                ],
-              ),
               SliverList(
                 delegate: SliverChildListDelegate(
                   _showSendingAddresses ? listSend : [const SizedBox()],
