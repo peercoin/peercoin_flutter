@@ -247,6 +247,10 @@ class WalletProvider with ChangeNotifier {
     final openWallet = getSpecificCoinWallet(identifier);
     final hdWallet = await getHdWallet(identifier);
 
+    if (openWallet.watchOnly == true) {
+      return;
+    }
+
     if (openWallet.addresses.isEmpty && openWallet.walletIndex == 0) {
       //generate new address from master at wallet index 0
       openWallet.addNewAddress = WalletAddress(
