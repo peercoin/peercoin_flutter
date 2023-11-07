@@ -500,6 +500,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   List<Widget> _calcPopupMenuItems(BuildContext context) {
+    if (_wallet.watchOnly == true) {
+      return [
+        PopupMenuButton(
+          onSelected: (dynamic value) => selectPopUpMenuItem(value),
+          itemBuilder: (_) {
+            return [
+              PopupMenuItem(
+                value: 'change_title',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'wallet_pop_menu_change_title',
+                    ),
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'reset_wallet',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.restore,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'sign_reset_button',
+                    ),
+                  ),
+                ),
+              ),
+            ];
+          },
+        ),
+      ];
+    }
     return [
       PopupMenuButton(
         onSelected: (dynamic value) => selectPopUpMenuItem(value),

@@ -64,8 +64,8 @@ class _AddressTabState extends State<AddressTab> {
     if (_initial) {
       applyFilter();
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
-      _walletProvider = Provider.of<WalletProvider>(context);
       _connection = Provider.of<ConnectionProvider>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget.walletName,
