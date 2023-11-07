@@ -42,6 +42,9 @@ class AppOptionsStore extends HiveObject {
   @HiveField(10, defaultValue: [])
   List<String> _walletOrder = [];
 
+  @HiveField(11, defaultValue: [])
+  List<String> _activatedExperimentalFeatures = [];
+
   AppOptionsStore(this._allowBiometrics);
 
   bool get allowBiometrics {
@@ -141,5 +144,14 @@ class AppOptionsStore extends HiveObject {
 
   List<String> get walletOrder {
     return _walletOrder;
+  }
+
+  set activatedExperimentalFeatures(List<String> newFeatures) {
+    _activatedExperimentalFeatures = newFeatures;
+    save();
+  }
+
+  List<String> get activatedExperimentalFeatures {
+    return _activatedExperimentalFeatures;
   }
 }
