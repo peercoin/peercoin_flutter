@@ -14,6 +14,7 @@ const Map<String, String> availableSettings = {
   'app_settings_price_feed': Routes.appSettingsPriceFeed,
   'app_settings_theme': Routes.appSettingsAppTheme,
   'server_settings_title': Routes.serverSettingsHome,
+  'app_settings_experimental_features': Routes.appSettingsExperimentalFeatures,
 };
 
 void saveSnack(context) {
