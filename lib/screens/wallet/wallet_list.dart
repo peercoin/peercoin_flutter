@@ -452,14 +452,28 @@ class _WalletListScreenState extends State<WalletListScreen>
                                           );
                                         },
                                         child: ListTile(
-                                          leading: CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            child: Image.asset(
-                                              AvailableCoins.getSpecificCoin(
-                                                wallet.name,
-                                              ).iconPath,
-                                              width: 20,
-                                            ),
+                                          leading: Stack(
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundColor: Colors.white,
+                                                child: Image.asset(
+                                                  AvailableCoins
+                                                      .getSpecificCoin(
+                                                    wallet.name,
+                                                  ).iconPath,
+                                                  width: 20,
+                                                ),
+                                              ),
+                                              if (wallet.watchOnly)
+                                                const Positioned(
+                                                  right: 0,
+                                                  bottom: 0,
+                                                  child: Icon(
+                                                    Icons.visibility,
+                                                    size: 16,
+                                                  ),
+                                                ),
+                                            ],
                                           ),
                                           title: Text(
                                             wallet.title,

@@ -140,7 +140,7 @@ class WalletProvider with ChangeNotifier {
     LoggerWrapper.logInfo(
       'WalletProvider',
       'addWallet',
-      '$name $title $letterCode $nOfWalletOfLetterCode',
+      '$name - $title - $letterCode - $nOfWalletOfLetterCode',
     );
 
     await box.put(
