@@ -322,6 +322,7 @@
     "receive_website_faucet": "You can receive free testnet coins on this faucet.",
     "scan_qr": "Scan QR-Code",
     "search": "Search",
+    "search_address": "Search address",
     "select_coin": "Please select a coin",
     "send": "Send",
     "send_address": "Address",
