@@ -135,17 +135,22 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         .contains(ExperimentalFeatures.watchOnlyWallets.name)) {
       list.add(
         SimpleDialogOption(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Checkbox(
-                value: _watchOnly,
-                onChanged: (e) => setState(() {
-                  _watchOnly = e!;
-                }),
-              ),
-              Text(AppLocalizations.instance.translate('watch_only')),
-            ],
+          child: GestureDetector(
+            onTap: () => setState(() {
+              _watchOnly = !_watchOnly;
+            }),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  value: _watchOnly,
+                  onChanged: (e) => setState(() {
+                    _watchOnly = e!;
+                  }),
+                ),
+                Text(AppLocalizations.instance.translate('watch_only')),
+              ],
+            ),
           ),
         ),
       );
