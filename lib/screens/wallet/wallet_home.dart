@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -51,6 +52,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late ServerProvider _servers;
   String? _address;
   String? _label;
+  String _searchString = '';
 
   void changeTab(WalletTab t, [String? addr, String? lab]) {
     setState(() {
@@ -707,6 +709,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   walletName: _wallet.name,
                   walletAddresses: _wallet.addresses,
                   changeTab: changeTab,
+                  searchString: _searchString,
                 )
               : AddressTab(
                   walletName: _wallet.name,
@@ -733,16 +736,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return body;
   }
 
+  AppBarWithSearchSwitch addressTabWatchOnlySearchAppBar() {
+    return AppBarWithSearchSwitch(
+      closeOnSubmit: true,
+      clearOnClose: true,
+      fieldHintText: AppLocalizations.instance.translate('search_address'),
+      onChanged: (text) {
+        setState(() {
+          _searchString = text;
+        });
+      },
+      onCleared: () => setState(() {
+        _searchString = '';
+      }),
+      appBarBuilder: (context) {
+        return AppBar(
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.instance.translate('search_address'),
+          ),
+          actions: const [
+            AppBarSearchButton(),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _calcBottomNavBar(context),
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 1,
-        title: Text(_wallet.title),
-        actions: _calcPopupMenuItems(context),
-      ),
+      appBar: _selectedTab == WalletTab.addresses
+          ? addressTabWatchOnlySearchAppBar()
+          : AppBar(
+              centerTitle: true,
+              elevation: 1,
+              title: Text(_wallet.title),
+              actions: _calcPopupMenuItems(context),
+            ),
       body: _initial
           ? const Center(
               child: LoadingIndicator(),
