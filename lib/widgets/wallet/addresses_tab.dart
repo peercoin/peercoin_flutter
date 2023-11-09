@@ -193,10 +193,10 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () {
-                context.read<WalletProvider>().updateLabel(
-                      widget.walletName,
-                      address.address,
-                      textFieldController.text,
+                context.read<WalletProvider>().updateOrCreateAddressLabel(
+                      identifier: widget.walletName,
+                      address: address.address,
+                      label: textFieldController.text,
                     );
                 Navigator.pop(context);
               },
@@ -410,10 +410,12 @@ class _AddressTabState extends State<AddressTab> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
-                  context.read<WalletProvider>().updateLabel(
-                        widget.walletName,
-                        addressController.text,
-                        labelController.text == '' ? '' : labelController.text,
+                  context.read<WalletProvider>().updateOrCreateAddressLabel(
+                        identifier: widget.walletName,
+                        address: addressController.text,
+                        label: labelController.text == ''
+                            ? ''
+                            : labelController.text,
                       );
                   applyFilter();
                   Navigator.pop(context);

@@ -1158,7 +1158,11 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLabel(String identifier, String address, String label) {
+  void updateOrCreateAddressLabel({
+    required String identifier,
+    required String address,
+    required String label,
+  }) {
     final openWallet = getSpecificCoinWallet(identifier);
     final addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,
@@ -1177,6 +1181,26 @@ class WalletProvider with ChangeNotifier {
         wif: '',
       );
     }
+
+    openWallet.save();
+    notifyListeners();
+  }
+
+  void createWatchOnlyAddres({
+    required String identifier,
+    required String address,
+    required String label,
+  }) {
+    final openWallet = getSpecificCoinWallet(identifier);
+
+    openWallet.addNewAddress = WalletAddress(
+      address: address,
+      addressBookName: label,
+      used: false,
+      status: 'hasUtxo',
+      isOurs: true,
+      wif: '',
+    );
 
     openWallet.save();
     notifyListeners();

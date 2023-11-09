@@ -250,7 +250,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
           }
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
-        } else if (_listenedAddresses.contains(_unusedAddress) == false) {
+        } else if (_listenedAddresses.contains(_unusedAddress) == false &&
+            _wallet.watchOnly == false) {
           //subscribe to newly created addresses
           LoggerWrapper.logInfo(
             'WalletHome',

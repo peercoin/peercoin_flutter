@@ -770,10 +770,10 @@ class _SendTabState extends State<SendTab> {
       _labelControllerList.asMap().forEach(
         (index, controller) {
           if (controller.text != '') {
-            _walletProvider.updateLabel(
-              widget.wallet.name,
-              _addressControllerList[index].text,
-              controller.text,
+            _walletProvider.updateOrCreateAddressLabel(
+              identifier: widget.wallet.name,
+              address: _addressControllerList[index].text,
+              label: controller.text,
             );
           }
         },
