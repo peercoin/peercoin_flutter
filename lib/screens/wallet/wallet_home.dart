@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/server_provider.dart';
-import 'package:peercoin/widgets/wallet/addresses_tab_watch_only.dart';
+import 'package:peercoin/widgets/wallet/address_book/addresses_tab_watch_only.dart';
 import 'package:peercoin/widgets/wallet/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
