@@ -1078,10 +1078,13 @@ class WalletProvider with ChangeNotifier {
             (element) => element.address == addr.address,
           );
 
-          if (addr.isWatched ||
+          bool isWatchedCheck = addr.isWatched ||
+              addr.isWatchOnly ||
               utxoRes != null && utxoRes.value > 0 ||
               addr.address == getUnusedAddress(identifier) ||
-              addr.status == 'hasUtxo') {
+              addr.status == 'hasUtxo';
+
+          if (isWatchedCheck == true) {
             answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }
         }
