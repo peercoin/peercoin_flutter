@@ -275,7 +275,8 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                                             label: Text(
                                               AppLocalizations.instance
                                                   .translate(
-                                                      'jail_dialog_button'),
+                                                'jail_dialog_button',
+                                              ),
                                             ),
                                             icon: const Icon(Icons.check),
                                             onPressed: () {

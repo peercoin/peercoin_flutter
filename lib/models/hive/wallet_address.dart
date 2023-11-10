@@ -21,6 +21,8 @@ class WalletAddress extends HiveObject {
   int notificationBackendCount = 0;
   @HiveField(8, defaultValue: false)
   bool isWatched = false;
+  @HiveField(9, defaultValue: false)
+  bool isWatchOnly = false;
 
   WalletAddress({
     required this.address,
@@ -29,6 +31,7 @@ class WalletAddress extends HiveObject {
     required this.status,
     required this.isOurs,
     required this.wif,
+    required this.isWatchOnly,
   });
 
   set newStatus(String? newStatus) {

@@ -220,6 +220,7 @@ class WalletProvider with ChangeNotifier {
       status: null,
       isOurs: true,
       wif: wif,
+      isWatchOnly: false,
     );
 
     await openWallet.save();
@@ -260,6 +261,7 @@ class WalletProvider with ChangeNotifier {
         status: null,
         isOurs: true,
         wif: getWifFromHDPrivateKey(identifier, hdWallet),
+        isWatchOnly: false,
       );
       setUnusedAddress(
         identifier: identifier,
@@ -309,6 +311,7 @@ class WalletProvider with ChangeNotifier {
           status: null,
           isOurs: true,
           wif: getWifFromHDPrivateKey(identifier, newHdWallet),
+          isWatchOnly: false,
         );
 
         setUnusedAddress(
@@ -1179,6 +1182,7 @@ class WalletProvider with ChangeNotifier {
         status: null,
         isOurs: false,
         wif: '',
+        isWatchOnly: false,
       );
     }
 
@@ -1197,9 +1201,10 @@ class WalletProvider with ChangeNotifier {
       address: address,
       addressBookName: label,
       used: false,
-      status: 'hasUtxo',
+      status: null,
       isOurs: true,
       wif: '',
+      isWatchOnly: true,
     );
 
     openWallet.save();
@@ -1226,6 +1231,7 @@ class WalletProvider with ChangeNotifier {
           identifier: identifier,
           address: address,
         ),
+        isWatchOnly: false,
       );
     } else {
       await updateAddressStatus(identifier, address, status);

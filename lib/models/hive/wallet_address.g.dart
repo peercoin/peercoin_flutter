@@ -23,6 +23,7 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       status: fields[2] as String?,
       isOurs: fields[4] == null ? true : fields[4] as bool,
       wif: fields[5] == null ? '' : fields[5] as String,
+      isWatchOnly: fields[9] == null ? false : fields[9] as bool,
     )
       .._isChangeAddr = fields[6] as bool?
       ..notificationBackendCount = fields[7] == null ? 0 : fields[7] as int
@@ -32,7 +33,7 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
   @override
   void write(BinaryWriter writer, WalletAddress obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.address)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       ..writeByte(7)
       ..write(obj.notificationBackendCount)
       ..writeByte(8)
-      ..write(obj.isWatched);
+      ..write(obj.isWatched)
+      ..writeByte(9)
+      ..write(obj.isWatchOnly);
   }
 
   @override
