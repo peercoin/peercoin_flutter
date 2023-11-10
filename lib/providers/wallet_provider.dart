@@ -1265,6 +1265,31 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removeWatchOnlyAddress(
+    String identifier,
+    WalletAddress addr,
+  ) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    openWallet.removeAddress(addr);
+
+    //clear utxos
+    openWallet.clearUtxo(addr.address);
+
+    //remove tx that are related to this address
+    final tx = List.from(
+      openWallet.transactions
+          .where((element) => element.address == addr.address),
+    );
+    for (final element in tx) {
+      openWallet.removeTransaction(element);
+    }
+
+    //update balance
+    await updateWalletBalance(identifier);
+
+    notifyListeners();
+  }
+
   String getLabelForAddress(String identifier, String address) {
     final openWallet = getSpecificCoinWallet(identifier);
     final addr = openWallet.addresses.firstWhereOrNull(

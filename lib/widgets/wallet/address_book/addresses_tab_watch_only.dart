@@ -206,6 +206,7 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                     walletAddress: addr,
                     walletName: widget.walletName,
                     type: AddressTabSlideableType.watchOnly,
+                    applyFilterCallback: _applyFilter,
                   ),
               ],
             ),

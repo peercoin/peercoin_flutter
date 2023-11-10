@@ -8,26 +8,19 @@ import '../../../tools/app_localizations.dart';
 import '../../double_tab_to_clipboard.dart';
 import '../wallet_home_qr.dart';
 
-enum AddressTabSlideableType { receive, send, watchOnly }
-
 class AddressTabSlideable extends StatelessWidget {
   final WalletAddress walletAddress;
   final String walletName;
   final AddressTabSlideableType type;
+  final Function applyFilterCallback;
 
   const AddressTabSlideable({
     super.key,
     required this.walletAddress,
     required this.walletName,
     required this.type,
+    required this.applyFilterCallback,
   });
-
-  void _addressEditDialog(BuildContext ctx, dynamic _) {}
-  String _renderLabel(dynamic _) {
-    return '';
-  }
-
-  void _applyFilter() {}
 
   @override
   Widget build(BuildContext context) {
@@ -103,26 +96,8 @@ class AddressTabSlideable extends StatelessWidget {
                                 ),
                               ),
                               icon: const Icon(Icons.check),
-                              onPressed: () {
-                                context.read<WalletProvider>().removeAddress(
-                                      walletName,
-                                      walletAddress,
-                                    );
-                                _applyFilter();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      AppLocalizations.instance.translate(
-                                        'addressbook_dialog_remove_snack',
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    duration: const Duration(
-                                      seconds: 5,
-                                    ),
-                                  ),
-                                );
-                                Navigator.of(context).pop();
+                              onPressed: () async {
+                                await _performAddressDelete(context);
                               },
                             ),
                           ],
@@ -162,4 +137,39 @@ class AddressTabSlideable extends StatelessWidget {
       ),
     );
   }
+
+  void _addressEditDialog(BuildContext ctx, dynamic _) {}
+
+  Future<void> _performAddressDelete(BuildContext context) async {
+    final WalletProvider walletProvider = context.read<WalletProvider>();
+
+    await walletProvider.removeWatchOnlyAddress(
+      walletName,
+      walletAddress,
+    );
+    if (!context.mounted) return;
+
+    applyFilterCallback();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.instance.translate(
+            'addressbook_dialog_remove_snack',
+          ),
+          textAlign: TextAlign.center,
+        ),
+        duration: const Duration(
+          seconds: 5,
+        ),
+      ),
+    );
+    Navigator.of(context).pop();
+  }
+
+  String _renderLabel(dynamic _) {
+    return '';
+  }
 }
+
+enum AddressTabSlideableType { receive, send, watchOnly }

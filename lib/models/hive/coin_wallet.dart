@@ -187,6 +187,11 @@ class CoinWallet extends HiveObject {
     save();
   }
 
+  void removeTransaction(WalletTransaction tx) {
+    _transactions.removeWhere((element) => element.txid == tx.txid);
+    save();
+  }
+
   void putUtxo(WalletUtxo newUtxo) {
     _utxos.add(newUtxo);
     save();
