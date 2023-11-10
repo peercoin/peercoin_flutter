@@ -43,8 +43,7 @@ class AddressTabSlideable extends StatelessWidget {
                         .translate('addressbook_swipe_edit'),
                     color: Theme.of(context).primaryColor,
                     icon: Icons.edit,
-                    onTap: () =>
-                        _addressEditDialog(context, walletAddress.address),
+                    onTap: () => _addressEditDialog(context, walletAddress),
                   ),
                   IconSlideAction(
                     caption: AppLocalizations.instance
@@ -138,7 +137,56 @@ class AddressTabSlideable extends StatelessWidget {
     );
   }
 
-  void _addressEditDialog(BuildContext ctx, dynamic _) {}
+  Future<void> _addressEditDialog(
+    BuildContext context,
+    WalletAddress address,
+  ) async {
+    var textFieldController = TextEditingController();
+    textFieldController.text = address.addressBookName;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            '${AppLocalizations.instance.translate('addressbook_edit_dialog_title')} ${address.address}',
+            textAlign: TextAlign.center,
+          ),
+          content: TextField(
+            controller: textFieldController,
+            maxLength: 32,
+            decoration: InputDecoration(
+              hintText: AppLocalizations.instance
+                  .translate('addressbook_edit_dialog_input'),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<WalletProvider>().updateOrCreateAddressLabel(
+                      identifier: walletName,
+                      address: address.address,
+                      label: textFieldController.text,
+                    );
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> _performAddressDelete(BuildContext context) async {
     final WalletProvider walletProvider = context.read<WalletProvider>();
@@ -167,9 +215,15 @@ class AddressTabSlideable extends StatelessWidget {
     Navigator.of(context).pop();
   }
 
-  String _renderLabel(dynamic _) {
+  String _renderLabel(WalletAddress addr) {
     return '';
+    // if (_showLabel) {
+    //   return addr.addressBookName;
+    // }
+    // var number = _addressBalanceMap[addr.address] ?? 0;
+    // return '${(number / _decimalProduct)} ${_availableCoin.letterCode}'; TODO
   }
 }
 
+//TODO migrate filter options
 enum AddressTabSlideableType { receive, send, watchOnly }

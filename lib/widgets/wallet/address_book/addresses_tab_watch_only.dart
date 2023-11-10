@@ -145,21 +145,6 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
     );
   }
 
-  List<Widget> renderSlidables() {
-    final list = <Widget>[];
-    for (var addr in _filteredWatchOnlyReceivingAddresses) {
-      list.add(
-        AddressTabSlideable(
-          walletAddress: addr,
-          walletName: widget.walletName,
-          type: AddressTabSlideableType.watchOnly,
-          applyFilterCallback: _applyFilter,
-        ),
-      );
-    }
-    return list;
-  }
-
   @override
   Widget build(BuildContext context) {
     _applyFilter();
@@ -217,21 +202,31 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                   ],
                 ),
                 if (_filteredWatchOnlyReceivingAddresses.isEmpty)
-                  Image.asset(
-                    'assets/img/list-empty.png',
-                    height: MediaQuery.of(context).size.height / 4,
+                  Column(
+                    children: [
+                      Image.asset(
+                        'assets/img/list-empty.png',
+                        height: MediaQuery.of(context).size.height / 4,
+                      ),
+                      Center(
+                        child: Text(
+                          AppLocalizations.instance.translate('addresses_none'),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            color: Theme.of(context).colorScheme.background,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                Center(
-                  child: Text(
-                    AppLocalizations.instance.translate('addresses_none'),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontStyle: FontStyle.italic,
-                      color: Theme.of(context).colorScheme.background,
-                    ),
+                for (var addr in _filteredWatchOnlyReceivingAddresses)
+                  AddressTabSlideable(
+                    walletAddress: addr,
+                    walletName: widget.walletName,
+                    type: AddressTabSlideableType.watchOnly,
+                    applyFilterCallback: _applyFilter,
                   ),
-                ),
-                ...renderSlidables(),
               ],
             ),
           ),
