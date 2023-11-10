@@ -7,7 +7,6 @@ import '../../../models/hive/wallet_address.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/validators.dart';
-import '../../service_container.dart';
 import '../addresses_tab.dart';
 import 'addresses_tab_slidable.dart';
 
@@ -151,48 +150,56 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
     _applyFilter();
 
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: SingleChildScrollView(
-        child: Align(
-          child: PeerContainer(
-            noSpacers: true,
+        child: Container(
+          color: Colors.green,
+          child: Align(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.background,
-                      backgroundColor: Theme.of(context).colorScheme.background,
-                      fixedSize: Size(
-                        MediaQuery.of(context).size.width > 1200
-                            ? MediaQuery.of(context).size.width / 5
-                            : MediaQuery.of(context).size.width / 3,
-                        40,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        //to set border radius to button
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(
-                          width: 2,
-                          color: Theme.of(context).primaryColor,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor:
+                              Theme.of(context).colorScheme.background,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
+                          fixedSize: Size(
+                            MediaQuery.of(context).size.width > 1200
+                                ? MediaQuery.of(context).size.width / 5
+                                : MediaQuery.of(context).size.width / 3,
+                            40,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            //to set border radius to button
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              width: 2,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          _addressAddDialog(context);
+                        },
+                        child: Text(
+                          AppLocalizations.instance
+                              .translate('addressbook_new_button'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.4,
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
                       ),
-                      elevation: 0,
                     ),
-                    onPressed: () {
-                      _addressAddDialog(context);
-                    },
-                    child: Text(
-                      AppLocalizations.instance
-                          .translate('addressbook_new_button'),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.4,
-                        fontSize: 16,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
                 for (var addr in _filteredWatchOnlyReceivingAddresses)
                   AddressTabSlideable(
