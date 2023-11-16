@@ -25,6 +25,10 @@ class MyTheme {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
+      appBarTheme: AppBarTheme(
+        color: LightColors.green,
+        foregroundColor: LightColors.white,
+      ),
       cardTheme: CardTheme(
         elevation: 2,
         shadowColor: LightColors.darkGreen,
