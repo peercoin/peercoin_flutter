@@ -234,4 +234,6 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
       ),
     );
   }
+  //TODO scan bottom sheet width (no longer full width)
+  //TODO Theming: Snack color
 }
