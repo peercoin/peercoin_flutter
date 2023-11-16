@@ -215,7 +215,7 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                             fontSize: 16,
                             fontStyle: FontStyle.italic,
                             color: Theme.of(context).colorScheme.background,
-                          ),
+                          ), //TODO looks horrible in dark mode
                         ),
                       ),
                     ],
