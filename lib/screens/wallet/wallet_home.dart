@@ -664,6 +664,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list_rounded),
+          tooltip: 'Transactions',
           label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
           backgroundColor: bgColor,
         ),
