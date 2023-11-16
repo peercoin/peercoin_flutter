@@ -13,7 +13,7 @@ import '../../widgets/buttons.dart';
 import 'setup_landing.dart';
 
 class SetupImportSeedScreen extends StatefulWidget {
-  const SetupImportSeedScreen({Key? key}) : super(key: key);
+  const SetupImportSeedScreen({super.key});
 
   @override
   State<SetupImportSeedScreen> createState() => _SetupImportSeedState();

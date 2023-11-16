@@ -8,7 +8,7 @@ import '../double_tab_to_clipboard.dart';
 
 class WalletHomeQr extends StatelessWidget {
   final String _unusedAddress;
-  const WalletHomeQr(this._unusedAddress, {Key? key}) : super(key: key);
+  const WalletHomeQr(this._unusedAddress, {super.key});
 
   static void showQrDialog(
     BuildContext context,

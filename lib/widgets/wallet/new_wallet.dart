@@ -11,7 +11,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 
 class NewWalletDialog extends StatefulWidget {
-  const NewWalletDialog({Key? key}) : super(key: key);
+  const NewWalletDialog({super.key});
 
   @override
   State<NewWalletDialog> createState() => _NewWalletDialogState();

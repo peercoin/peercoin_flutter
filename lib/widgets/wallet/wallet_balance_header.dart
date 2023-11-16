@@ -15,8 +15,8 @@ class WalletBalanceHeader extends StatelessWidget {
   const WalletBalanceHeader(
     this._connectionState,
     this._wallet, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

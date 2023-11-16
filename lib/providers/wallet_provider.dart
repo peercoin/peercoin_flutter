@@ -930,7 +930,7 @@ class WalletProvider with ChangeNotifier {
 
           final script = Script([
             _opReturn,
-            ScriptPushData(utf8.encode(opReturn) as Uint8List),
+            ScriptPushData(utf8.encode(opReturn)),
           ]);
 
           txOutputs.add(

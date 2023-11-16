@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 
-const Map<String, String> availableSettings = {
+final Map<String, String> _availableSettings = {
   'app_settings_language': Routes.appSettingsLanguage,
-  if (!kIsWeb) 'app_settings_default_wallet': Routes.appSettingsDefaultWallet,
-  if (!kIsWeb) 'app_settings_notifications': Routes.appSettingsNotifications,
+  'app_settings_default_wallet': Routes.appSettingsDefaultWallet,
+  'app_settings_notifications': Routes.appSettingsNotifications,
   'app_settings_wallet_order': Routes.appSettingsWalletOrder,
   'wallet_scan': Routes.appSettingsWalletScanner,
   'app_settings_auth_header': Routes.appSettingsAuthentication,
@@ -16,6 +16,15 @@ const Map<String, String> availableSettings = {
   'server_settings_title': Routes.serverSettingsHome,
   'app_settings_experimental_features': Routes.appSettingsExperimentalFeatures,
 };
+
+get availableSettings {
+  if (kIsWeb == true) {
+    //these settings are not available on web
+    _availableSettings.remove('app_settings_default_wallet');
+    _availableSettings.remove('app_settings_notifications');
+  }
+  return _availableSettings;
+}
 
 void saveSnack(context) {
   ScaffoldMessenger.of(context).showSnackBar(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class PeerServiceTitle extends StatelessWidget {
   final String title;
-  const PeerServiceTitle({Key? key, required this.title}) : super(key: key);
+  const PeerServiceTitle({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +44,11 @@ class PeerContainer extends StatelessWidget {
   final bool noSpacers;
 
   const PeerContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.isTransparent = false,
     this.noSpacers = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +74,9 @@ class ModalBottomSheetContainer extends StatelessWidget {
   final Widget child;
 
   const ModalBottomSheetContainer({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -3,11 +3,11 @@ import 'package:peercoin/tools/app_localizations.dart';
 
 class SendTabNavigator extends StatelessWidget {
   const SendTabNavigator({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.numberOfRecipients,
     required this.raiseNewindex,
-  }) : super(key: key);
+  });
   final int currentIndex;
   final int numberOfRecipients;
   final Function raiseNewindex;

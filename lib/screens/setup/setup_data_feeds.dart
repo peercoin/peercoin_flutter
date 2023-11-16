@@ -12,7 +12,7 @@ import '../../widgets/buttons.dart';
 import 'setup_landing.dart';
 
 class SetupDataFeedsScreen extends StatefulWidget {
-  const SetupDataFeedsScreen({Key? key}) : super(key: key);
+  const SetupDataFeedsScreen({super.key});
 
   @override
   State<SetupDataFeedsScreen> createState() => _SetupDataFeedsScreenState();

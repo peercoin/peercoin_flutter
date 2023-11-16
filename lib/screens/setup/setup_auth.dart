@@ -13,7 +13,7 @@ import '../../widgets/setup/session_slider.dart';
 import 'setup_landing.dart';
 
 class SetupAuthScreen extends StatefulWidget {
-  const SetupAuthScreen({Key? key}) : super(key: key);
+  const SetupAuthScreen({super.key});
 
   @override
   State<SetupAuthScreen> createState() => _SetupAuthScreenState();

@@ -15,7 +15,7 @@ import '../../widgets/double_tab_to_clipboard.dart';
 import '../../widgets/service_container.dart';
 
 class WalletMessageSigningScreen extends StatefulWidget {
-  const WalletMessageSigningScreen({Key? key}) : super(key: key);
+  const WalletMessageSigningScreen({super.key});
 
   @override
   State<WalletMessageSigningScreen> createState() =>

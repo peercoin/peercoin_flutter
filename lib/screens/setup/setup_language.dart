@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../tools/app_localizations.dart';
 
 class SetupLanguageScreen extends StatefulWidget {
-  const SetupLanguageScreen({Key? key}) : super(key: key);
+  const SetupLanguageScreen({super.key});
 
   @override
   State<SetupLanguageScreen> createState() => _SetupLanguageScreenState();

@@ -9,7 +9,7 @@ import '../../widgets/buttons.dart';
 import 'setup_landing.dart';
 
 class SetupLegalScreen extends StatefulWidget {
-  const SetupLegalScreen({Key? key}) : super(key: key);
+  const SetupLegalScreen({super.key});
 
   @override
   State<SetupLegalScreen> createState() => _SetupLegalScreenState();

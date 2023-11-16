@@ -5,7 +5,7 @@ import '../../models/hive/wallet_address.dart';
 import '../../tools/app_localizations.dart';
 
 class AddressSelectorScreen extends StatefulWidget {
-  const AddressSelectorScreen({Key? key}) : super(key: key);
+  const AddressSelectorScreen({super.key});
 
   @override
   State<AddressSelectorScreen> createState() => _AddressSelectorScreenState();
@@ -111,8 +111,8 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvoked: (_) => _onWillPop,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,

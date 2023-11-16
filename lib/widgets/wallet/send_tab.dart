@@ -47,8 +47,8 @@ class SendTab extends StatefulWidget {
     this.label,
     required this.wallet,
     required this.connectionState,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SendTab> createState() => _SendTabState();

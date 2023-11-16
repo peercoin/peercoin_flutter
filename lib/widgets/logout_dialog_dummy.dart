@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LogoutDialog extends StatelessWidget {
-  const LogoutDialog({Key? key}) : super(key: key);
+  const LogoutDialog({super.key});
 
   static Future<void> clearData() {
     return Future.delayed(const Duration(seconds: 0));

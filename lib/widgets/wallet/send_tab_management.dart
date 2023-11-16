@@ -4,11 +4,11 @@ import '../../tools/app_localizations.dart';
 
 class SendTabAddressManagement extends StatelessWidget {
   const SendTabAddressManagement({
-    Key? key,
+    super.key,
     required this.onAdd,
     required this.onDelete,
     required this.numberOfRecipients,
-  }) : super(key: key);
+  });
   final Function onAdd;
   final Function onDelete;
   final int numberOfRecipients;

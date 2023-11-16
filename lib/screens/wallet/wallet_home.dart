@@ -30,7 +30,7 @@ import '../../widgets/wallet/transactions_list.dart';
 import '../../widgets/wallet/wallet_rescan_bottom_sheet.dart';
 
 class WalletHomeScreen extends StatefulWidget {
-  const WalletHomeScreen({Key? key}) : super(key: key);
+  const WalletHomeScreen({super.key});
 
   @override
   State<WalletHomeScreen> createState() => _WalletHomeState();

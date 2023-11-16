@@ -18,7 +18,7 @@ import '../../widgets/logout_dialog_dummy.dart'
     if (dart.library.html) '../../widgets/logout_dialog.dart';
 
 class SetupCreateWalletScreen extends StatefulWidget {
-  const SetupCreateWalletScreen({Key? key}) : super(key: key);
+  const SetupCreateWalletScreen({super.key});
 
   @override
   State<SetupCreateWalletScreen> createState() =>

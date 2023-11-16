@@ -19,7 +19,7 @@ import '../../widgets/service_container.dart';
 import '../about.dart';
 
 class AppSettingsScreen extends StatefulWidget {
-  const AppSettingsScreen({Key? key}) : super(key: key);
+  const AppSettingsScreen({super.key});
 
   @override
   State<AppSettingsScreen> createState() => _AppSettingsScreenState();
@@ -114,7 +114,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       ),
                     );
                   },
-                ).toList(),
+                ),
                 ExpansionTile(
                   title: Text(
                     AppLocalizations.instance.translate('app_settings_seed'),

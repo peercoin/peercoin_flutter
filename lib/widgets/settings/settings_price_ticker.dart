@@ -15,8 +15,8 @@ class SettingsPriceTicker extends StatefulWidget {
     this._settings,
     this._saveSnack,
     this._searchString, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SettingsPriceTicker> createState() => _SettingsPriceTickerState();

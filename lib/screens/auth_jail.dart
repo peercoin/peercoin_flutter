@@ -15,9 +15,9 @@ class AuthJailScreen extends StatefulWidget {
 
   final bool jailedFromHome;
   const AuthJailScreen({
-    Key? key,
+    super.key,
     this.jailedFromHome = false,
-  }) : super(key: key);
+  });
 }
 
 class _AuthJailState extends State<AuthJailScreen> {
@@ -98,8 +98,8 @@ class _AuthJailState extends State<AuthJailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Container(
           color: Theme.of(context).primaryColor,

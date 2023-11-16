@@ -38,10 +38,10 @@ class WalletListScreen extends StatefulWidget {
   State<WalletListScreen> createState() => _WalletListScreenState();
 
   const WalletListScreen({
-    Key? key,
+    super.key,
     this.fromColdStart = false,
     this.walletToOpenDirectly = '',
-  }) : super(key: key);
+  });
 }
 
 class _WalletListScreenState extends State<WalletListScreen>

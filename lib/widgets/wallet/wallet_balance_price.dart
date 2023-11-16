@@ -6,10 +6,10 @@ class WalletBalancePrice extends StatefulWidget {
   final Text valueInFiat;
   final Text fiatCoinValue;
   const WalletBalancePrice({
-    Key? key,
+    super.key,
     required this.valueInFiat,
     required this.fiatCoinValue,
-  }) : super(key: key);
+  });
 
   @override
   State<WalletBalancePrice> createState() => _WalletBalancePriceState();

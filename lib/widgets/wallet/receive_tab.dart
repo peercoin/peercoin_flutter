@@ -26,8 +26,8 @@ class ReceiveTab extends StatefulWidget {
     required this.unusedAddress,
     required this.connectionState,
     required this.wallet,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ReceiveTab> createState() => _ReceiveTabState();

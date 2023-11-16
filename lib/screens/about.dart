@@ -14,7 +14,7 @@ import '../tools/app_localizations.dart';
 import '../tools/app_routes.dart';
 
 class AboutScreen extends StatefulWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   State<AboutScreen> createState() => _AboutScreenState();
