@@ -645,8 +645,10 @@ class _WalletHomeState extends State<WalletHomeScreen>
       unselectedItemColor: Theme.of(context).disabledColor,
       selectedItemColor: Colors.white,
       onTap: (index) {
-        if (_wallet.watchOnly == true && index == 0 || index == 3) {
-          return;
+        if (_wallet.watchOnly == true) {
+          if (index == 0 || index == 3) {
+            return;
+          }
         }
         changeTab(WalletTab.values[index]);
       },
