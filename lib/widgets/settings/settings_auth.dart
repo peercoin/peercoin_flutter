@@ -21,8 +21,8 @@ class SettingsAuth extends StatelessWidget {
     this._settings,
     this._saveSnack,
     this._authenticationOptions, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   void changePIN(BuildContext context, bool biometricsAllowed) async {
     await Auth.requireAuth(

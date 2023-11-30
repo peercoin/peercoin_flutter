@@ -26,8 +26,8 @@ class ReceiveTab extends StatefulWidget {
     required this.unusedAddress,
     required this.connectionState,
     required this.wallet,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ReceiveTab> createState() => _ReceiveTabState();
@@ -323,10 +323,12 @@ class _ReceiveTabState extends State<ReceiveTab> {
                             .translate('receive_share'),
                         action: () async {
                           if (labelController.text != '') {
-                            context.read<WalletProvider>().updateLabel(
-                                  widget.wallet.name,
-                                  widget.unusedAddress,
-                                  labelController.text,
+                            context
+                                .read<WalletProvider>()
+                                .updateOrCreateAddressLabel(
+                                  identifier: widget.wallet.name,
+                                  address: widget.unusedAddress,
+                                  label: labelController.text,
                                 );
                           }
                           await ShareWrapper.share(

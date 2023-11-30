@@ -22,8 +22,8 @@ class TransactionList extends StatefulWidget {
     required this.walletTransactions,
     required this.wallet,
     required this.connectionState,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<TransactionList> createState() => _TransactionListState();
@@ -60,14 +60,14 @@ class _TransactionListState extends State<TransactionList> {
     if (tx.confirmations == -1) {
       return const Text(
         'X',
-        textScaleFactor: 0.9,
+        textScaler: TextScaler.linear(0.9),
         style: TextStyle(color: Colors.red),
       );
     }
     return tx.broadCasted == false
         ? Text(
             '?',
-            textScaleFactor: 0.9,
+            textScaler: const TextScaler.linear(0.9),
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
             ),
@@ -205,7 +205,7 @@ class _TransactionListState extends State<TransactionList> {
                                                 ? FontWeight.w500
                                                 : FontWeight.w300,
                                       ),
-                                      textScaleFactor: 0.8,
+                                      textScaler: const TextScaler.linear(0.8),
                                     ),
                                   ],
                                 ),
@@ -213,7 +213,7 @@ class _TransactionListState extends State<TransactionList> {
                                   child: Text(
                                     filteredTx[i - 1].txid,
                                     overflow: TextOverflow.ellipsis,
-                                    textScaleFactor: 0.9,
+                                    textScaler: const TextScaler.linear(0.9),
                                   ),
                                 ),
                                 subtitle: Center(
@@ -222,7 +222,7 @@ class _TransactionListState extends State<TransactionList> {
                                       filteredTx[i - 1].address,
                                     ),
                                     overflow: TextOverflow.ellipsis,
-                                    textScaleFactor: 1,
+                                    textScaler: const TextScaler.linear(1),
                                   ),
                                 ),
                                 trailing: Column(

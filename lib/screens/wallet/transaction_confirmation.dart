@@ -52,8 +52,8 @@ class TransactionConfirmationArguments {
 
 class TransactionConfirmationScreen extends StatefulWidget {
   const TransactionConfirmationScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<TransactionConfirmationScreen> createState() =>

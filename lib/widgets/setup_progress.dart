@@ -9,9 +9,8 @@ class SetupProgressIndicator extends StatelessWidget
 
   const SetupProgressIndicator(
     this.step, {
-    Key? key,
-  })  : preferredSize = const Size.fromHeight(50.0),
-        super(key: key);
+    super.key,
+  }) : preferredSize = const Size.fromHeight(50.0);
   @override
   Widget build(BuildContext context) {
     return Container(

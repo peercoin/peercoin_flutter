@@ -6,8 +6,7 @@ import '/../widgets/loading_indicator.dart';
 
 class WalletHomeConnection extends StatelessWidget {
   final BackendConnectionState _connectionState;
-  const WalletHomeConnection(this._connectionState, {Key? key})
-      : super(key: key);
+  const WalletHomeConnection(this._connectionState, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../tools/app_localizations.dart';
 
 class LogoutDialog extends StatelessWidget {
-  const LogoutDialog({Key? key}) : super(key: key);
+  const LogoutDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

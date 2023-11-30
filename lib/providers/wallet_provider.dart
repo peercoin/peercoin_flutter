@@ -127,16 +127,20 @@ class WalletProvider with ChangeNotifier {
     required String title,
     required String letterCode,
     required bool isImportedSeed,
+    required bool watchOnly,
   }) async {
     final box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
-        .where((element) => element.letterCode == letterCode)
+        .where(
+          (element) =>
+              element.letterCode == letterCode && element.watchOnly == false,
+        )
         .length;
 
     LoggerWrapper.logInfo(
       'WalletProvider',
       'addWallet',
-      '$name $title $letterCode $nOfWalletOfLetterCode',
+      '$name - $title - $letterCode - $nOfWalletOfLetterCode',
     );
 
     await box.put(
@@ -147,6 +151,7 @@ class WalletProvider with ChangeNotifier {
         letterCode,
         nOfWalletOfLetterCode,
         isImportedSeed,
+        watchOnly,
       ),
     );
     notifyListeners();
@@ -215,6 +220,7 @@ class WalletProvider with ChangeNotifier {
       status: null,
       isOurs: true,
       wif: wif,
+      isWatchOnly: false,
     );
 
     await openWallet.save();
@@ -242,6 +248,10 @@ class WalletProvider with ChangeNotifier {
     final openWallet = getSpecificCoinWallet(identifier);
     final hdWallet = await getHdWallet(identifier);
 
+    if (openWallet.watchOnly == true) {
+      return;
+    }
+
     if (openWallet.addresses.isEmpty && openWallet.walletIndex == 0) {
       //generate new address from master at wallet index 0
       openWallet.addNewAddress = WalletAddress(
@@ -251,6 +261,7 @@ class WalletProvider with ChangeNotifier {
         status: null,
         isOurs: true,
         wif: getWifFromHDPrivateKey(identifier, hdWallet),
+        isWatchOnly: false,
       );
       setUnusedAddress(
         identifier: identifier,
@@ -300,6 +311,7 @@ class WalletProvider with ChangeNotifier {
           status: null,
           isOurs: true,
           wif: getWifFromHDPrivateKey(identifier, newHdWallet),
+          isWatchOnly: false,
         );
 
         setUnusedAddress(
@@ -918,7 +930,7 @@ class WalletProvider with ChangeNotifier {
 
           final script = Script([
             _opReturn,
-            ScriptPushData(utf8.encode(opReturn) as Uint8List),
+            ScriptPushData(utf8.encode(opReturn)),
           ]);
 
           txOutputs.add(
@@ -1066,10 +1078,13 @@ class WalletProvider with ChangeNotifier {
             (element) => element.address == addr.address,
           );
 
-          if (addr.isWatched ||
+          bool isWatchedCheck = addr.isWatched ||
+              addr.isWatchOnly ||
               utxoRes != null && utxoRes.value > 0 ||
               addr.address == getUnusedAddress(identifier) ||
-              addr.status == 'hasUtxo') {
+              addr.status == 'hasUtxo';
+
+          if (isWatchedCheck == true) {
             answerMap[addr.address] = getScriptHash(identifier, addr.address);
           }
         }
@@ -1149,7 +1164,11 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLabel(String identifier, String address, String label) {
+  void updateOrCreateAddressLabel({
+    required String identifier,
+    required String address,
+    required String label,
+  }) {
     final openWallet = getSpecificCoinWallet(identifier);
     final addr = openWallet.addresses.firstWhereOrNull(
       (element) => element.address == address,
@@ -1166,8 +1185,30 @@ class WalletProvider with ChangeNotifier {
         status: null,
         isOurs: false,
         wif: '',
+        isWatchOnly: false,
       );
     }
+
+    openWallet.save();
+    notifyListeners();
+  }
+
+  void createWatchOnlyAddres({
+    required String identifier,
+    required String address,
+    required String label,
+  }) {
+    final openWallet = getSpecificCoinWallet(identifier);
+
+    openWallet.addNewAddress = WalletAddress(
+      address: address,
+      addressBookName: label,
+      used: false,
+      status: null,
+      isOurs: true,
+      wif: '',
+      isWatchOnly: true,
+    );
 
     openWallet.save();
     notifyListeners();
@@ -1193,6 +1234,7 @@ class WalletProvider with ChangeNotifier {
           identifier: identifier,
           address: address,
         ),
+        isWatchOnly: false,
       );
     } else {
       await updateAddressStatus(identifier, address, status);
@@ -1220,6 +1262,31 @@ class WalletProvider with ChangeNotifier {
   void removeAddress(String identifier, WalletAddress addr) {
     final openWallet = getSpecificCoinWallet(identifier);
     openWallet.removeAddress(addr);
+    notifyListeners();
+  }
+
+  Future<void> removeWatchOnlyAddress(
+    String identifier,
+    WalletAddress addr,
+  ) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    openWallet.removeAddress(addr);
+
+    //clear utxos
+    openWallet.clearUtxo(addr.address);
+
+    //remove tx that are related to this address
+    final tx = List.from(
+      openWallet.transactions
+          .where((element) => element.address == addr.address),
+    );
+    for (final element in tx) {
+      openWallet.removeTransaction(element);
+    }
+
+    //update balance
+    await updateWalletBalance(identifier);
+
     notifyListeners();
   }
 

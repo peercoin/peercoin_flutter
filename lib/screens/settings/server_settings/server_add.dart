@@ -20,7 +20,7 @@ import '../../../widgets/loading_indicator.dart';
 import '../../../widgets/service_container.dart';
 
 class ServerAddScreen extends StatefulWidget {
-  const ServerAddScreen({Key? key}) : super(key: key);
+  const ServerAddScreen({super.key});
 
   @override
   State<ServerAddScreen> createState() => _ServerAddScreenState();

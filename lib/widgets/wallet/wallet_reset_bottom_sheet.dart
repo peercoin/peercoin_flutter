@@ -53,6 +53,15 @@ class WalletResetBottomSheet extends StatelessWidget {
             ),
             action: () => action(),
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          PeerButtonBorder(
+            text: AppLocalizations.instance.translate(
+              'server_settings_alert_cancel',
+            ),
+            action: () => Navigator.of(context).pop(),
+          ),
         ],
       ),
     );

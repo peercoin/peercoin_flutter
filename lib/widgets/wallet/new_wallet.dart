@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/experimental_features.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +11,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 
 class NewWalletDialog extends StatefulWidget {
-  const NewWalletDialog({Key? key}) : super(key: key);
+  const NewWalletDialog({super.key});
 
   @override
   State<NewWalletDialog> createState() => _NewWalletDialogState();
@@ -21,6 +22,7 @@ Map<String, Coin> _availableCoins = AvailableCoins.availableCoins;
 class _NewWalletDialogState extends State<NewWalletDialog> {
   String _coin = '';
   bool _initial = true;
+  bool _watchOnly = false;
   late AppSettingsProvider _appSettings;
 
   Future<void> addWallet() async {
@@ -45,6 +47,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         title: title,
         letterCode: letterCode,
         isImportedSeed: prefs.getBool('importedSeed') == true,
+        watchOnly: _watchOnly,
       );
 
       //add to order list
@@ -124,6 +127,31 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       list.add(
         Center(
           child: Text(AppLocalizations.instance.translate('no_new_wallet')),
+        ),
+      );
+    }
+
+    if (_appSettings.activatedExperimentalFeatures
+        .contains(ExperimentalFeatures.watchOnlyWallets.name)) {
+      list.add(
+        SimpleDialogOption(
+          child: GestureDetector(
+            onTap: () => setState(() {
+              _watchOnly = !_watchOnly;
+            }),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  value: _watchOnly,
+                  onChanged: (e) => setState(() {
+                    _watchOnly = e!;
+                  }),
+                ),
+                Text(AppLocalizations.instance.translate('watch_only')),
+              ],
+            ),
+          ),
         ),
       );
     }

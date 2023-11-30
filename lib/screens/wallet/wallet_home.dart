@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/server_provider.dart';
+import 'package:peercoin/widgets/wallet/address_book/addresses_tab_watch_only.dart';
 import 'package:peercoin/widgets/wallet/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +30,7 @@ import '../../widgets/wallet/transactions_list.dart';
 import '../../widgets/wallet/wallet_rescan_bottom_sheet.dart';
 
 class WalletHomeScreen extends StatefulWidget {
-  const WalletHomeScreen({Key? key}) : super(key: key);
+  const WalletHomeScreen({super.key});
 
   @override
   State<WalletHomeScreen> createState() => _WalletHomeState();
@@ -38,7 +40,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   String _unusedAddress = '';
-  int _pageIndex = 1;
+  WalletTab _selectedTab = WalletTab.transactions;
   int _latestBlock = 0;
   late CoinWallet _wallet;
   late BackendConnectionState _connectionState = BackendConnectionState.waiting;
@@ -50,11 +52,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
   late ServerProvider _servers;
   String? _address;
   String? _label;
+  String _searchString = '';
 
-  void changeIndex(int i, [String? addr, String? lab]) {
+  void changeTab(WalletTab t, [String? addr, String? lab]) {
     setState(() {
-      _pageIndex = i;
-      if (i == Tabs.send) {
+      _selectedTab = t;
+      if (_selectedTab == WalletTab.send) {
         //Passes address from addresses_tab to send_tab (send to)
         _address = addr;
         _label = lab;
@@ -208,7 +211,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
 
     if (arguments.containsKey('pushedAddress')) {
-      changeIndex(Tabs.send, arguments['pushedAddress']);
+      changeTab(WalletTab.send, arguments['pushedAddress']);
     }
 
     //check if wallet is due for rescan
@@ -247,7 +250,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
           }
           //try to rebroadcast pending tx
           rebroadCastUnsendTx();
-        } else if (_listenedAddresses.contains(_unusedAddress) == false) {
+        } else if (_listenedAddresses.contains(_unusedAddress) == false &&
+            _wallet.watchOnly == false) {
           //subscribe to newly created addresses
           LoggerWrapper.logInfo(
             'WalletHome',
@@ -500,6 +504,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   List<Widget> _calcPopupMenuItems(BuildContext context) {
+    if (_wallet.watchOnly == true) {
+      return [
+        PopupMenuButton(
+          onSelected: (dynamic value) => selectPopUpMenuItem(value),
+          itemBuilder: (_) {
+            return [
+              PopupMenuItem(
+                value: 'change_title',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'wallet_pop_menu_change_title',
+                    ),
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'reset_wallet',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.restore,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'sign_reset_button',
+                    ),
+                  ),
+                ),
+              ),
+            ];
+          },
+        ),
+      ];
+    }
     return [
       PopupMenuButton(
         onSelected: (dynamic value) => selectPopUpMenuItem(value),
@@ -597,34 +640,46 @@ class _WalletHomeState extends State<WalletHomeScreen>
   }
 
   BottomNavigationBar _calcBottomNavBar(BuildContext context) {
-    final back = Theme.of(context).primaryColor;
+    final bgColor = Theme.of(context).primaryColor;
     return BottomNavigationBar(
       unselectedItemColor: Theme.of(context).disabledColor,
       selectedItemColor: Colors.white,
-      onTap: (index) => changeIndex(index),
-      currentIndex: _pageIndex,
+      onTap: (index) {
+        if (_wallet.watchOnly == true) {
+          if (index == 0 || index == 3) {
+            return;
+          }
+        }
+        changeTab(WalletTab.values[index]);
+      },
+      currentIndex: _selectedTab.index,
       items: [
         BottomNavigationBarItem(
-          icon: const Icon(Icons.download_rounded),
+          icon: _wallet.watchOnly
+              ? const SizedBox()
+              : const Icon(Icons.download_rounded),
           label:
               AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list_rounded),
+          tooltip: 'Transactions',
           label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           tooltip: 'Address Book',
           icon: const Icon(Icons.menu_book_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.upload_rounded),
+          icon: _wallet.watchOnly
+              ? const SizedBox()
+              : const Icon(Icons.upload_rounded),
           label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
-          backgroundColor: back,
+          backgroundColor: bgColor,
         ),
       ],
     );
@@ -632,8 +687,8 @@ class _WalletHomeState extends State<WalletHomeScreen>
 
   Widget _calcBody() {
     Widget body;
-    switch (_pageIndex) {
-      case Tabs.receive:
+    switch (_selectedTab) {
+      case WalletTab.receive:
         body = Expanded(
           child: ReceiveTab(
             connectionState: _connectionState,
@@ -642,7 +697,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
         );
         break;
-      case Tabs.transactions:
+      case WalletTab.transactions:
         body = Expanded(
           child: TransactionList(
             walletTransactions: _walletTransactions,
@@ -651,24 +706,30 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
         );
         break;
-      case Tabs.addresses:
+      case WalletTab.addresses:
         body = Expanded(
-          child: AddressTab(
-            walletName: _wallet.name,
-            title: _wallet.title,
-            walletAddresses: _wallet.addresses,
-            changeIndex: changeIndex,
-          ),
+          child: _wallet.watchOnly
+              ? AddressesTabWatchOnly(
+                  walletName: _wallet.name,
+                  walletAddresses: _wallet.addresses,
+                  changeTab: changeTab,
+                  searchString: _searchString,
+                )
+              : AddressTab(
+                  walletName: _wallet.name,
+                  walletAddresses: _wallet.addresses,
+                  changeTab: changeTab,
+                ),
         );
         break;
-      case Tabs.send:
+      case WalletTab.send:
         body = Expanded(
           child: SendTab(
             address: _address,
             label: _label,
             wallet: _wallet,
             connectionState: _connectionState,
-            changeIndex: changeIndex,
+            changeTab: changeTab,
           ),
         );
         break;
@@ -679,16 +740,45 @@ class _WalletHomeState extends State<WalletHomeScreen>
     return body;
   }
 
+  AppBarWithSearchSwitch addressTabWatchOnlySearchAppBar() {
+    return AppBarWithSearchSwitch(
+      closeOnSubmit: true,
+      clearOnClose: true,
+      fieldHintText: AppLocalizations.instance.translate('search_address'),
+      onChanged: (text) {
+        setState(() {
+          _searchString = text;
+        });
+      },
+      onCleared: () => setState(() {
+        _searchString = '';
+      }),
+      appBarBuilder: (context) {
+        return AppBar(
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.instance.translate('search_address'),
+          ),
+          actions: const [
+            AppBarSearchButton(),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _calcBottomNavBar(context),
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 1,
-        title: Text(_wallet.title),
-        actions: _calcPopupMenuItems(context),
-      ),
+      appBar: _selectedTab == WalletTab.addresses
+          ? addressTabWatchOnlySearchAppBar()
+          : AppBar(
+              centerTitle: true,
+              elevation: 1,
+              title: Text(_wallet.title),
+              actions: _calcPopupMenuItems(context),
+            ),
       body: _initial
           ? const Center(
               child: LoadingIndicator(),
@@ -704,14 +794,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
   }
 
-  // TODO check cursive roboto on iOS
   // TODO wallet list: make larger list prettier
 }
 
-class Tabs {
-  Tabs._();
-  static const int receive = 0;
-  static const int transactions = 1;
-  static const int addresses = 2;
-  static const int send = 3;
+enum WalletTab {
+  receive,
+  transactions,
+  addresses,
+  send,
 }

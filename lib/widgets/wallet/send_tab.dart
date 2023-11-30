@@ -36,19 +36,19 @@ import '../../tools/logger_wrapper.dart';
 import '../../tools/price_ticker.dart';
 
 class SendTab extends StatefulWidget {
-  final Function changeIndex;
+  final Function changeTab;
   final String? address;
   final String? label;
   final BackendConnectionState connectionState;
   final CoinWallet wallet;
   const SendTab({
-    required this.changeIndex,
+    required this.changeTab,
     this.address,
     this.label,
     required this.wallet,
     required this.connectionState,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SendTab> createState() => _SendTabState();
@@ -760,7 +760,7 @@ class _SendTabState extends State<SendTab> {
           decimalProduct: _decimalProduct,
           coinLetterCode: widget.wallet.letterCode,
           coinIdentifier: widget.wallet.name,
-          callBackAfterSend: () => widget.changeIndex(Tabs.transactions),
+          callBackAfterSend: () => widget.changeTab(WalletTab.transactions),
           fiatPricePerCoin: _coinValue,
           fiatCode: _appSettings.selectedCurrency,
         ),
@@ -770,10 +770,10 @@ class _SendTabState extends State<SendTab> {
       _labelControllerList.asMap().forEach(
         (index, controller) {
           if (controller.text != '') {
-            _walletProvider.updateLabel(
-              widget.wallet.name,
-              _addressControllerList[index].text,
-              controller.text,
+            _walletProvider.updateOrCreateAddressLabel(
+              identifier: widget.wallet.name,
+              address: _addressControllerList[index].text,
+              label: controller.text,
             );
           }
         },

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../tools/app_localizations.dart';
 
 class SecureStorageFailedScreen extends StatelessWidget {
-  const SecureStorageFailedScreen({Key? key}) : super(key: key);
+  const SecureStorageFailedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

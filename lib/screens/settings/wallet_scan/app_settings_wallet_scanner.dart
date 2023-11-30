@@ -13,7 +13,7 @@ import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 
 class AppSettingsWalletScanner extends StatefulWidget {
-  const AppSettingsWalletScanner({Key? key}) : super(key: key);
+  const AppSettingsWalletScanner({super.key});
 
   @override
   State<AppSettingsWalletScanner> createState() =>
@@ -205,6 +205,7 @@ class _AppSettingsWalletScannerState extends State<AppSettingsWalletScanner> {
             title: title,
             letterCode: coin.letterCode,
             isImportedSeed: true,
+            watchOnly: false,
           );
           _addToLog(
             AppLocalizations.instance.translate(

@@ -1,0 +1,1 @@
+enum ExperimentalFeatures { watchOnlyWallets }

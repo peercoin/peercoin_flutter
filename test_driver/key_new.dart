@@ -126,6 +126,7 @@ void main() {
       });
 
       test('Change wallet title', () async {
+        await driver.tap(find.byTooltip('Transactions'));
         await driver.tap(find.byTooltip('Show menu'));
         await driver.tap(find.text('Change Title'));
         await driver.tap(find.byType('TextField'));

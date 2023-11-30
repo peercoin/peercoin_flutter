@@ -147,4 +147,15 @@ class AppSettingsProvider with ChangeNotifier {
     _appOptions.walletOrder = newOrder;
     notifyListeners();
   }
+
+  List<String> get activatedExperimentalFeatures {
+    return _appOptions.activatedExperimentalFeatures;
+  }
+
+  void setActivatedExperimentalFeatures(
+    List<String> newFeatures,
+  ) {
+    _appOptions.activatedExperimentalFeatures = newFeatures;
+    notifyListeners();
+  }
 }

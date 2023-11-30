@@ -8,7 +8,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/setup_progress.dart';
 
 class SetupLandingScreen extends StatefulWidget {
-  const SetupLandingScreen({Key? key}) : super(key: key);
+  const SetupLandingScreen({super.key});
 
   @override
   State<SetupLandingScreen> createState() => _SetupLandingScreenState();
@@ -153,10 +153,10 @@ class PeerExplanationText extends StatelessWidget {
   final int maxLines;
 
   const PeerExplanationText({
-    Key? key,
+    super.key,
     required this.text,
     this.maxLines = 1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +176,9 @@ class PeerExplanationText extends StatelessWidget {
 class PeerProgress extends StatelessWidget {
   final int step;
   const PeerProgress({
-    Key? key,
+    super.key,
     required this.step,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

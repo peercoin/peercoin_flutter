@@ -183,7 +183,7 @@ void main() async {
 }
 
 class PeercoinApp extends StatelessWidget {
-  const PeercoinApp({Key? key}) : super(key: key);
+  const PeercoinApp({super.key});
 
   @override
   Widget build(BuildContext context) {

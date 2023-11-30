@@ -20,17 +20,15 @@ import 'wallet_home_qr.dart';
 
 class AddressTab extends StatefulWidget {
   final String walletName;
-  final String title;
   final List<WalletAddress> walletAddresses;
-  final Function changeIndex;
+  final Function changeTab;
 
   const AddressTab({
     required this.walletName,
-    required this.title,
     required this.walletAddresses,
-    required this.changeIndex,
-    Key? key,
-  }) : super(key: key);
+    required this.changeTab,
+    super.key,
+  });
 
   @override
   State<AddressTab> createState() => _AddressTabState();
@@ -64,8 +62,8 @@ class _AddressTabState extends State<AddressTab> {
     if (_initial) {
       applyFilter();
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
-      _walletProvider = Provider.of<WalletProvider>(context);
       _connection = Provider.of<ConnectionProvider>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
       _listenedAddresses = _connection.listenedAddresses;
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget.walletName,
@@ -195,10 +193,10 @@ class _AddressTabState extends State<AddressTab> {
             ),
             TextButton(
               onPressed: () {
-                context.read<WalletProvider>().updateLabel(
-                      widget.walletName,
-                      address.address,
-                      textFieldController.text,
+                context.read<WalletProvider>().updateOrCreateAddressLabel(
+                      identifier: widget.walletName,
+                      address: address.address,
+                      label: textFieldController.text,
                     );
                 Navigator.pop(context);
               },
@@ -412,10 +410,12 @@ class _AddressTabState extends State<AddressTab> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
-                  context.read<WalletProvider>().updateLabel(
-                        widget.walletName,
-                        addressController.text,
-                        labelController.text == '' ? '' : labelController.text,
+                  context.read<WalletProvider>().updateOrCreateAddressLabel(
+                        identifier: widget.walletName,
+                        address: addressController.text,
+                        label: labelController.text == ''
+                            ? ''
+                            : labelController.text,
                       );
                   applyFilter();
                   Navigator.pop(context);
@@ -487,8 +487,8 @@ class _AddressTabState extends State<AddressTab> {
                           Icons.send,
                           color: Theme.of(context).colorScheme.background,
                         ),
-                        onTap: () => widget.changeIndex(
-                          Tabs.send,
+                        onTap: () => widget.changeTab(
+                          WalletTab.send,
                           addr.address,
                           addr.addressBookName,
                         ),

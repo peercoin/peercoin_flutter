@@ -12,7 +12,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/service_container.dart';
 
 class WaleltMessagesVerificationScreen extends StatefulWidget {
-  const WaleltMessagesVerificationScreen({Key? key}) : super(key: key);
+  const WaleltMessagesVerificationScreen({super.key});
 
   @override
   State<WaleltMessagesVerificationScreen> createState() =>

@@ -16,7 +16,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/service_container.dart';
 
 class ImportWifScreen extends StatefulWidget {
-  const ImportWifScreen({Key? key}) : super(key: key);
+  const ImportWifScreen({super.key});
 
   @override
   State<ImportWifScreen> createState() => _ImportWifScreenState();

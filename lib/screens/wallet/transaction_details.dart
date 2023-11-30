@@ -13,7 +13,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/service_container.dart';
 
 class TransactionDetails extends StatelessWidget {
-  const TransactionDetails({Key? key}) : super(key: key);
+  const TransactionDetails({super.key});
 
   @override
   Widget build(BuildContext context) {

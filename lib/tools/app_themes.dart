@@ -25,6 +25,10 @@ class MyTheme {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
+      appBarTheme: AppBarTheme(
+        color: LightColors.green,
+        foregroundColor: LightColors.white,
+      ),
       cardTheme: CardTheme(
         elevation: 2,
         shadowColor: LightColors.darkGreen,
@@ -34,6 +38,10 @@ class MyTheme {
           //to set border radius to button
           borderRadius: BorderRadius.circular(20),
         ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: LightColors.green,
+        contentTextStyle: TextStyle(color: LightColors.white),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -59,7 +67,7 @@ class MyTheme {
         error: LightColors.red,
         onPrimary: LightColors.white,
         onSecondary: LightColors.blackGreen,
-        onSurface: LightColors.green,
+        onSurface: LightColors.black,
         onBackground: LightColors.green,
         onError: LightColors.red,
         brightness: Brightness.light,
@@ -85,6 +93,9 @@ class MyTheme {
       ),
       sliderTheme: SliderThemeData(valueIndicatorColor: DarkColors.darkBlue),
       unselectedWidgetColor: DarkColors.white,
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.all(DarkColors.white),
+      ),
       textTheme: TextTheme(
         titleLarge: TextStyle(color: DarkColors.white),
         headlineSmall: TextStyle(color: DarkColors.white),
@@ -147,7 +158,7 @@ class MyTheme {
         error: DarkColors.red,
         onPrimary: DarkColors.green,
         onSecondary: DarkColors.green,
-        onSurface: DarkColors.green,
+        onSurface: DarkColors.white,
         onBackground: DarkColors.green,
         onError: DarkColors.red,
         brightness: Brightness.dark,

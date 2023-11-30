@@ -10,7 +10,7 @@ import '../../../tools/app_localizations.dart';
 import '../../../tools/app_routes.dart';
 
 class ServerSettingsScreen extends StatefulWidget {
-  const ServerSettingsScreen({Key? key}) : super(key: key);
+  const ServerSettingsScreen({super.key});
 
   @override
   State<ServerSettingsScreen> createState() => _ServerSettingsScreenState();

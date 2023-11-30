@@ -8,10 +8,10 @@ class DoubleTabToClipboard extends StatelessWidget {
   final String clipBoardData;
 
   const DoubleTabToClipboard({
-    Key? key,
+    super.key,
     required this.clipBoardData,
     required this.child,
-  }) : super(key: key);
+  });
 
   static void tapEvent(BuildContext context, String clipBoardData) {
     ScaffoldMessenger.of(context).showSnackBar(

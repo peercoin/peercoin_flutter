@@ -11,8 +11,11 @@ class RouterMaster extends StatefulWidget {
   final Widget widget;
   final RouteTypes routeType;
 
-  const RouterMaster({Key? key, required this.widget, required this.routeType})
-      : super(key: key);
+  const RouterMaster({
+    super.key,
+    required this.widget,
+    required this.routeType,
+  });
 
   @override
   State<RouterMaster> createState() => _RouterMasterState();

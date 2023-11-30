@@ -5,7 +5,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/logger_wrapper.dart';
 
 class SetupSessionSlider extends StatefulWidget {
-  const SetupSessionSlider({Key? key}) : super(key: key);
+  const SetupSessionSlider({super.key});
 
   @override
   State<SetupSessionSlider> createState() => _SetupSessionSliderState();

@@ -15,7 +15,7 @@ import '../../widgets/buttons.dart';
 import '../../widgets/loading_indicator.dart';
 
 class ImportPaperWalletScreen extends StatefulWidget {
-  const ImportPaperWalletScreen({Key? key}) : super(key: key);
+  const ImportPaperWalletScreen({super.key});
 
   @override
   State<ImportPaperWalletScreen> createState() =>

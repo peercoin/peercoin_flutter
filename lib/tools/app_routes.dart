@@ -5,6 +5,7 @@ import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 import '../screens/settings/app_settings_app_theme.dart';
 import '../screens/settings/app_settings_authentication.dart';
 import '../screens/settings/app_settings_default_wallet.dart';
+import '../screens/settings/app_settings_experimental_features.dart';
 import '../screens/settings/app_settings_language.dart';
 import '../screens/settings/app_settings_notifications.dart';
 import '../screens/settings/app_settings_price_feed.dart';
@@ -45,6 +46,8 @@ class Routes {
       '/app-settings-authentication';
   static const String appSettingsWalletOrder = '/app-settings-wallet-order';
   static const String appSettingsWalletScanner = '/settings-wallet-scanner';
+  static const String appSettingsExperimentalFeatures =
+      '/app-settings-experimental-features';
   static const String qrScan = '/qr-scan';
   static const String setupAuth = '/setup-auth';
   static const String setupCreateWallet = '/setup-create-wallet';
@@ -187,6 +190,10 @@ class Routes {
           ),
       Routes.appSettingsWalletOrder: (context) => const RouterMaster(
             widget: AppSettingsWalletOrderScreen(),
+            routeType: RouteTypes.requiresSetupFinished,
+          ),
+      Routes.appSettingsExperimentalFeatures: (context) => const RouterMaster(
+            widget: AppSettingsExperimentalFeaturesScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
     };

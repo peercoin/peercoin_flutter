@@ -10,7 +10,7 @@ import '../../tools/background_sync.dart';
 import '../../widgets/buttons.dart';
 
 class AppSettingsNotificationsScreen extends StatefulWidget {
-  const AppSettingsNotificationsScreen({Key? key}) : super(key: key);
+  const AppSettingsNotificationsScreen({super.key});
 
   @override
   State<AppSettingsNotificationsScreen> createState() =>

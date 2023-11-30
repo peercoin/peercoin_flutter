@@ -8,7 +8,7 @@ import '../../../widgets/service_container.dart';
 import '../../../tools/app_localizations.dart';
 
 class AppSettingsWalletOrderScreen extends StatefulWidget {
-  const AppSettingsWalletOrderScreen({Key? key}) : super(key: key);
+  const AppSettingsWalletOrderScreen({super.key});
 
   @override
   State<AppSettingsWalletOrderScreen> createState() =>
