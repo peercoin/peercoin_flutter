@@ -471,6 +471,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                                   child: Icon(
                                                     Icons.visibility,
                                                     size: 16,
+                                                    color: Colors.black,
                                                   ),
                                                 ),
                                             ],
