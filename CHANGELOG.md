@@ -1,3 +1,6 @@
+### **1.2.4** (2023-xx-xx)
+*
+
 ### **1.2.3** (2023-11-30)
 * Experimental features are now available in Settings
 * "Watch only" wallets are the first available feature that can be enabled. These wallets can only monitor the balance of an address and cannot spend coins.
