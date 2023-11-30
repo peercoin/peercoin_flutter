@@ -152,83 +152,80 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SingleChildScrollView(
-        child: Container(
-          color: Colors.green,
-          child: Align(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor:
-                              Theme.of(context).colorScheme.background,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
-                          fixedSize: Size(
-                            MediaQuery.of(context).size.width > 1200
-                                ? MediaQuery.of(context).size.width / 5
-                                : MediaQuery.of(context).size.width / 3,
-                            40,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            //to set border radius to button
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              width: 2,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          elevation: 0,
+        child: Align(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor:
+                            Theme.of(context).colorScheme.background,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
+                        fixedSize: Size(
+                          MediaQuery.of(context).size.width > 1200
+                              ? MediaQuery.of(context).size.width / 5
+                              : MediaQuery.of(context).size.width / 3,
+                          40,
                         ),
-                        onPressed: () {
-                          _addressAddDialog(context);
-                        },
-                        child: Text(
-                          AppLocalizations.instance
-                              .translate('addressbook_new_button'),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.4,
-                            fontSize: 16,
+                        shape: RoundedRectangleBorder(
+                          //to set border radius to button
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            width: 2,
                             color: Theme.of(context).primaryColor,
                           ),
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        _addressAddDialog(context);
+                      },
+                      child: Text(
+                        AppLocalizations.instance
+                            .translate('addressbook_new_button'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.4,
+                          fontSize: 16,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              if (_filteredWatchOnlyReceivingAddresses.isEmpty)
+                Column(
+                  children: [
+                    Image.asset(
+                      'assets/img/list-empty.png',
+                      height: MediaQuery.of(context).size.height / 4,
+                    ),
+                    Center(
+                      child: Text(
+                        AppLocalizations.instance.translate('addresses_none'),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                       ),
                     ),
                   ],
                 ),
-                if (_filteredWatchOnlyReceivingAddresses.isEmpty)
-                  Column(
-                    children: [
-                      Image.asset(
-                        'assets/img/list-empty.png',
-                        height: MediaQuery.of(context).size.height / 4,
-                      ),
-                      Center(
-                        child: Text(
-                          AppLocalizations.instance.translate('addresses_none'),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            color: Theme.of(context).colorScheme.background,
-                          ), //TODO looks horrible in dark mode
-                        ),
-                      ),
-                    ],
-                  ),
-                for (var addr in _filteredWatchOnlyReceivingAddresses)
-                  AddressTabSlideable(
-                    walletAddress: addr,
-                    walletName: widget.walletName,
-                    type: AddressTabSlideableType.watchOnly,
-                    applyFilterCallback: _applyFilter,
-                  ),
-              ],
-            ),
+              for (var addr in _filteredWatchOnlyReceivingAddresses)
+                AddressTabSlideable(
+                  walletAddress: addr,
+                  walletName: widget.walletName,
+                  type: AddressTabSlideableType.watchOnly,
+                  applyFilterCallback: _applyFilter,
+                ),
+            ],
           ),
         ),
       ),
