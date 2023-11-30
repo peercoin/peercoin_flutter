@@ -794,7 +794,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
   }
 
-  // TODO check cursive roboto on iOS
   // TODO wallet list: make larger list prettier
 }
 
