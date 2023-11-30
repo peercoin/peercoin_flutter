@@ -444,7 +444,7 @@
     "wallet_scanner_message_init": "扫描在 $account 处初始化为 $coinName",
     "wallet_scanner_message_new_wallet_found": "在 $accountNumber 处找到 $coinName 的新钱包",
     "wallet_scanner_message_scan_finished": "已完成 $accountNumber 处的 $coinName 扫描",
-    "wallet_scanner_message_scan_failed": "扫描 $accountNumber ($e)) 处的 $coinName 失败",
+    "wallet_scanner_message_scan_failed": "扫描 $accountNumber ($e) 处的 $coinName 失败",
     "scan_modal_title": "扫描此钱包",
     "currency_BAM": "波斯尼亚可兑换马克",
     "currency_BYN": "白俄罗斯卢布",
