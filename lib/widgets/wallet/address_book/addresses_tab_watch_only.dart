@@ -8,7 +8,7 @@ import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/validators.dart';
 import '../addresses_tab.dart';
-import 'addresses_tab_slidable.dart';
+import 'addresses_tab_expandable.dart';
 
 class AddressesTabWatchOnly extends AddressTab {
   final String searchString;
@@ -29,17 +29,43 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
   bool _initial = true;
   List<WalletAddress> _filteredWatchOnlyReceivingAddresses = [];
   late Coin _availableCoin;
+  late WalletProvider _walletProvider;
+  final Map _addressBalanceMap = {};
+  late int _decimalProduct;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_initial == true) {
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
+      _walletProvider = Provider.of<WalletProvider>(context);
+
+      await _fillAddressBalanceMap();
+
+      _decimalProduct = AvailableCoins.getDecimalProduct(
+        identifier: widget.walletName,
+      );
 
       setState(() {
         _initial = false;
       });
     }
     super.didChangeDependencies();
+  }
+
+  Future<void> _fillAddressBalanceMap() async {
+    final utxos = await _walletProvider.getWalletUtxos(widget.walletName);
+    if (_addressBalanceMap.isNotEmpty) {
+      _addressBalanceMap.clear();
+    }
+    for (var tx in utxos) {
+      if (tx.value > 0) {
+        if (_addressBalanceMap[tx.address] != null) {
+          _addressBalanceMap[tx.address] += tx.value;
+        } else {
+          _addressBalanceMap[tx.address] = tx.value;
+        }
+      }
+    }
   }
 
   void _applyFilter() {
@@ -148,6 +174,7 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
   @override
   Widget build(BuildContext context) {
     _applyFilter();
+    _fillAddressBalanceMap();
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -219,11 +246,15 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                   ],
                 ),
               for (var addr in _filteredWatchOnlyReceivingAddresses)
-                AddressTabSlideable(
+                AddressTabExpandable(
                   walletAddress: addr,
                   walletName: widget.walletName,
                   type: AddressTabSlideableType.watchOnly,
                   applyFilterCallback: _applyFilter,
+                  balance: _addressBalanceMap.containsKey(addr.address)
+                      ? _addressBalanceMap[addr.address] / _decimalProduct
+                      : 0,
+                  balanceUnit: _availableCoin.letterCode,
                 ),
             ],
           ),

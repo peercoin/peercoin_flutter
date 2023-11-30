@@ -8,18 +8,22 @@ import '../../../tools/app_localizations.dart';
 import '../../double_tab_to_clipboard.dart';
 import '../wallet_home_qr.dart';
 
-class AddressTabSlideable extends StatelessWidget {
+class AddressTabExpandable extends StatelessWidget {
   final WalletAddress walletAddress;
   final String walletName;
   final AddressTabSlideableType type;
   final Function applyFilterCallback;
+  final double balance;
+  final String balanceUnit;
 
-  const AddressTabSlideable({
+  const AddressTabExpandable({
     super.key,
     required this.walletAddress,
     required this.walletName,
     required this.type,
+    required this.balance,
     required this.applyFilterCallback,
+    required this.balanceUnit,
   });
 
   @override
@@ -34,10 +38,31 @@ class AddressTabSlideable extends StatelessWidget {
           child: Card(
             elevation: 0,
             child: ClipRect(
-              child: Slidable(
+              child: ExpansionTile(
+                title: Text(
+                  walletAddress.address,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                subtitle: Text(
+                  walletAddress.addressBookName.isEmpty
+                      ? AppLocalizations.instance
+                          .translate('addressbook_no_label')
+                      : walletAddress.addressBookName,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 12,
+                  ),
+                ),
                 key: Key(walletAddress.address),
-                actionPane: const SlidableScrollActionPane(),
-                secondaryActions: <Widget>[
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Text('Balance: $balance $balanceUnit'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   IconSlideAction(
                     caption: AppLocalizations.instance
                         .translate('addressbook_swipe_edit'),
@@ -105,30 +130,6 @@ class AddressTabSlideable extends StatelessWidget {
                     },
                   ),
                 ],
-                actionExtentRatio: 0.25,
-                child: ListTile(
-                  leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.swipe_left),
-                    ],
-                  ),
-                  subtitle: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Center(
-                      child: Text(walletAddress.address),
-                    ),
-                  ),
-                  title: Center(
-                    child: Text(
-                      _renderLabel(walletAddress),
-                      style: const TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
               ),
             ),
           ),
@@ -221,7 +222,7 @@ class AddressTabSlideable extends StatelessWidget {
     //   return addr.addressBookName;
     // }
     // var number = _addressBalanceMap[addr.address] ?? 0;
-    // return '${(number / _decimalProduct)} ${_availableCoin.letterCode}'; TODO
+    // return '${(number / _decimalProduct)} ${_availableCoin.letterCode}';
   }
 }
 
