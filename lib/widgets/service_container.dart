@@ -81,6 +81,9 @@ class ModalBottomSheetContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width > 1200
+          ? MediaQuery.of(context).size.width / 2
+          : MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         borderRadius: const BorderRadius.vertical(
