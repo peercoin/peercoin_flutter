@@ -183,7 +183,7 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20),

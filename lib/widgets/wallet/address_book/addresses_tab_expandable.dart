@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/hive/wallet_address.dart';
@@ -7,6 +6,7 @@ import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../double_tab_to_clipboard.dart';
 import '../wallet_home_qr.dart';
+import 'addresses_tab_expandable_icon.dart';
 
 class AddressTabExpandable extends StatelessWidget {
   final WalletAddress walletAddress;
@@ -41,7 +41,11 @@ class AddressTabExpandable extends StatelessWidget {
               child: ExpansionTile(
                 title: Text(
                   walletAddress.address,
-                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 subtitle: Text(
                   walletAddress.addressBookName.isEmpty
@@ -57,83 +61,124 @@ class AddressTabExpandable extends StatelessWidget {
                 children: <Widget>[
                   Column(
                     children: [
-                      Text('Balance: $balance $balanceUnit'),
+                      Text(
+                        '$balance $balanceUnit',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_edit'),
-                    color: Theme.of(context).primaryColor,
-                    icon: Icons.edit,
-                    onTap: () => _addressEditDialog(context, walletAddress),
-                  ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_share'),
-                    color: Theme.of(context).colorScheme.background,
-                    iconWidget: Icon(
-                      Icons.share,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    onTap: () => WalletHomeQr.showQrDialog(
-                      context,
-                      walletAddress.address,
-                    ),
-                  ),
-                  IconSlideAction(
-                    caption: AppLocalizations.instance
-                        .translate('addressbook_swipe_delete'),
-                    color: Theme.of(context).colorScheme.error,
-                    iconWidget: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                    onTap: () async {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: Text(
-                            AppLocalizations.instance.translate(
-                              'addressbook_dialog_remove_title',
-                            ),
-                          ),
-                          content: Text(walletAddress.address),
-                          actions: <Widget>[
-                            TextButton.icon(
-                              label: Text(
-                                AppLocalizations.instance.translate(
-                                  'server_settings_alert_cancel',
-                                ),
-                              ),
-                              icon: const Icon(Icons.cancel),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton.icon(
-                              label: Text(
-                                AppLocalizations.instance.translate(
-                                  'jail_dialog_button',
-                                ),
-                              ),
-                              icon: const Icon(Icons.check),
-                              onPressed: () async {
-                                await _performAddressDelete(context);
-                              },
-                            ),
-                          ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AddressesTabExpandableIcon(
+                        action: () =>
+                            _addressEditDialog(context, walletAddress),
+                        icon: Icon(
+                          Icons.edit,
+                          color: Theme.of(context).primaryColor,
                         ),
-                      );
-                    },
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_edit'),
+                      ),
+                      AddressesTabExpandableIcon(
+                        action: () => WalletHomeQr.showQrDialog(
+                          context,
+                          walletAddress.address,
+                        ),
+                        icon: Icon(
+                          Icons.share,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_share'),
+                      ),
+                      AddressesTabExpandableIcon(
+                        action: () async => await _showDeleteDialog(context),
+                        icon: Icon(
+                          Icons.delete,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                        caption: AppLocalizations.instance
+                            .translate('addressbook_swipe_delete'),
+                      ),
+                    ],
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // IconSlideAction(
+                  //   caption: AppLocalizations.instance
+                  //       .translate('addressbook_swipe_edit'),
+                  //   color: Theme.of(context).primaryColor,
+                  //   icon: Icons.edit,
+                  //   onTap:
+                  // ),
+                  // IconSlideAction(
+                  //   caption: AppLocalizations.instance
+                  //       .translate('addressbook_swipe_share'),
+                  //   color: Theme.of(context).colorScheme.background,
+                  //   iconWidget: Icon(
+                  //     Icons.share,
+                  //     color: Theme.of(context).colorScheme.secondary,
+                  //   ),
+                  //   onTap:
+                  // ),
+                  // IconSlideAction(
+                  //   caption: AppLocalizations.instance
+                  //       .translate('addressbook_swipe_delete'),
+                  //   color: Theme.of(context).colorScheme.error,
+                  //   iconWidget: const Icon(
+                  //     Icons.delete,
+                  //     color: Colors.white,
+                  //   ),
+                  //   onTap: () async {},
+                  // ),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _showDeleteDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          AppLocalizations.instance.translate(
+            'addressbook_dialog_remove_title',
+          ),
+        ),
+        content: Text(walletAddress.address),
+        actions: <Widget>[
+          TextButton.icon(
+            label: Text(
+              AppLocalizations.instance.translate(
+                'server_settings_alert_cancel',
+              ),
+            ),
+            icon: const Icon(Icons.cancel),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton.icon(
+            label: Text(
+              AppLocalizations.instance.translate(
+                'jail_dialog_button',
+              ),
+            ),
+            icon: const Icon(Icons.check),
+            onPressed: () async {
+              await _performAddressDelete(context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -215,16 +260,6 @@ class AddressTabExpandable extends StatelessWidget {
     );
     Navigator.of(context).pop();
   }
-
-  String _renderLabel(WalletAddress addr) {
-    return '';
-    // if (_showLabel) {
-    //   return addr.addressBookName;
-    // }
-    // var number = _addressBalanceMap[addr.address] ?? 0;
-    // return '${(number / _decimalProduct)} ${_availableCoin.letterCode}';
-  }
 }
 
-//TODO migrate filter options
 enum AddressTabSlideableType { receive, send, watchOnly }
