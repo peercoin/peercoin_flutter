@@ -39,6 +39,10 @@ class MyTheme {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: LightColors.green,
+        contentTextStyle: TextStyle(color: LightColors.white),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           foregroundColor: LightColors.green,
@@ -89,6 +93,9 @@ class MyTheme {
       ),
       sliderTheme: SliderThemeData(valueIndicatorColor: DarkColors.darkBlue),
       unselectedWidgetColor: DarkColors.white,
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.all(DarkColors.white),
+      ),
       textTheme: TextTheme(
         titleLarge: TextStyle(color: DarkColors.white),
         headlineSmall: TextStyle(color: DarkColors.white),
