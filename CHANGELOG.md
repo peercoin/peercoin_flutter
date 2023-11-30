@@ -1,6 +1,7 @@
-### **1.2.3** (2023-11-17)
+### **1.2.3** (2023-11-30)
 * Experimental features are now available in Settings
 * "Watch only" wallets are the first available feature that can be enabled. These wallets can only monitor the balance of an address and cannot spend coins.
+* App now uses Material 3 design language
 
 ### **1.2.2** (2023-09-27)
 * Change the options for purchasing Peercoin on some devices
