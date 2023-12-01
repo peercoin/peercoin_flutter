@@ -496,5 +496,10 @@
     "currency_BBD": "Barbadiska dollar",
     "currency_KHR": "Kambodjanska riel",
     "currency_SHP": "Sankt Helena pund",
-    "currency_XCD": "Östkaribiska dollar"
+    "currency_XCD": "Östkaribiska dollar",
+    "app_settings_experimental_features": "Experimentella Funktioner",
+    "search_address": "Sök adress",
+    "app_settings_experimental_feature_watchOnlyWallets": "Observationsplånböcker",
+    "watch_only": "Observera",
+    "addresses_none": "Inga adresser hittades"
 }
