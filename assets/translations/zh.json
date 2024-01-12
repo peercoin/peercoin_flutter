@@ -1,14 +1,14 @@
 {
     "about": "关于",
     "about_developers": "© $year The peercoin_flutter Developers",
-    "about_license": "已被AGPL-3.0许可",
+    "about_license": "AGPL-3.0 许可协议",
     "about_free": "这是一个免费开源的软件，不附带任何保证。\n请自行承担使用风险。",
     "about_view_source": "查看源代码",
     "about_data_protection": "该软件尽其所能保护您的数据和隐私。\n此应用程序将所有必要的数据存储在本地设备上。 \n里面没有分析或广告软件。",
     "about_data_declaration": "查看隐私和数据保护声明",
     "about_foundation": "该项目由点点币基金会资助。 \n请考虑向基金会捐款，以进一步支持开发该应用程序。",
     "about_foundation_button": "了解更多有关点点币基金会的事",
-    "about_help_or_feedback": "您是需要帮助还是想要提供反馈？",
+    "about_help_or_feedback": "您是否需要帮助或者提供反馈？",
     "about_send_mail": "发一封邮件",
     "add_coin_failed": "添加钱包失败!",
     "add_new_wallet": "添加新钱包",
@@ -496,5 +496,10 @@
     "currency_ERN": "厄立特里亚纳克法",
     "currency_NIO": "尼加拉瓜科多巴",
     "currency_SVC": "萨尔瓦多科朗",
-    "currency_WST": "萨摩亚塔拉"
+    "currency_WST": "萨摩亚塔拉",
+    "watch_only": "仅观察",
+    "addresses_none": "地址没有找到",
+    "app_settings_experimental_features": "实验功能",
+    "app_settings_experimental_feature_watchOnlyWallets": "观察钱包",
+    "search_address": "查找地址"
 }
