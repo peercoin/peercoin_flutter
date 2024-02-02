@@ -496,5 +496,10 @@
     "currency_FJD": "斐濟元",
     "currency_PGK": "巴布亞新幾內亞基那",
     "currency_HTG": "海地古德",
-    "currency_SBD": "所羅門群島元"
+    "currency_SBD": "所羅門群島元",
+    "app_settings_experimental_feature_watchOnlyWallets": "觀察錢包",
+    "watch_only": "僅觀察",
+    "addresses_none": "地址沒有找到",
+    "app_settings_experimental_features": "實驗功能",
+    "search_address": "查找地址"
 }
