@@ -347,8 +347,5 @@
     "setup_auth_hint": "Hauràs de tornar a introduir la teva frase de recuperació després que la sessió hagi expirat.",
     "about_donate_button": "Dona PPC ara",
     "app_settings_delete": "Eliminar compte",
-    "app_settings_delete_description": "Com que no has creat un compte en aquesta aplicació, no hi ha res per eliminar. Has creat una \"frase de recuperació\", que és una operació criptogràfica. La teva frase és matemàtica. Es pot utilitzar en qualsevol aplicació que accepti frases de recuperació. Tampoc no tens cap compte amb les API de notificació en segon pla o de preus. Aquesta aplicació valora la teva privadesa i està dissenyada amb privadesa.",
-    "app_settings_wallet_order": "Comanda de Cartera",
-    "app_settings_price_feed_search": "Cerca el codi de moneda",
-    "app_settings_language_search": "Cerca l'idioma"
+    "app_settings_delete_description": "Com que no has creat un compte en aquesta aplicació, no hi ha res per eliminar. Has creat una \"frase de recuperació\", que és una operació criptogràfica. La teva frase és matemàtica. Es pot utilitzar en qualsevol aplicació que accepti frases de recuperació. Tampoc no tens cap compte amb les API de notificació en segon pla o de preus. Aquesta aplicació valora la teva privadesa i està dissenyada amb privadesa."
 }

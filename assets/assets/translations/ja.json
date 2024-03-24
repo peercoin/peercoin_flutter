@@ -486,7 +486,7 @@
     "wallet_scanner_message_init": "$account で $coinName のスキャンが初期化されました",
     "wallet_scanner_message_newAddressFound": "新しい住所が見つかりました",
     "wallet_scanner_message_scan_finished": "$accountNumber の $coinName のスキャンが終了しました",
-    "wallet_scanner_message_scan_failed": "$accountNumber ($e) で $coinName のスキャンに失敗しました)",
+    "wallet_scanner_message_scan_failed": "$accountNumber ($e)) で $coinName のスキャンに失敗しました)",
     "scan_modal_title": "このウォレットをスキャンしています",
     "reset_modal_title": "このウォレットをリセットする",
     "app_settings_wallet_order": "ウォレット注文",

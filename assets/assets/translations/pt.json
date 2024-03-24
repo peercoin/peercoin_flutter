@@ -125,7 +125,7 @@
     "paperwallet_step_1": "Passo 1",
     "paperwallet_step_3_text": "Verificar saldo",
     "paperwallet_step_4": "Passo 4",
-    "paperwallet_step_4_text": "Carteira de papel varrer",
+    "paperwallet_step_4_text": "Carteira de Papel Varrer",
     "paperwallet_success": "A carteira fria (paper wallet) foi importada com sucesso.\nA transferência irá surgir em breve.",
     "notification_title": "$walletTitle - Nova transferência recebida",
     "notification_body": "Abrir aplicação para ver transferência",
@@ -385,7 +385,7 @@
     "wallet_scan_finished": "Digitalização Concluída",
     "wallet_scan_create_success": "carteira $title criada com sucesso",
     "wallet_scanner_message_init": "scan inicializado para $coinName em $account",
-    "wallet_scanner_message_scan_failed": "falha na verificação de $coinName em $accountNumber ($e)",
+    "wallet_scanner_message_scan_failed": "falha na verificação de $coinName em $accountNumber ($e))",
     "reset_modal_description": "Isso redefinirá o saldo da carteira e verificará todos os endereços em busca de UTXOs.\nAs transações não transmitidas serão removidas.",
     "currency_MZN": "Metical Moçambicano",
     "currency_NAD": "Dólar Namibiano",
@@ -494,7 +494,7 @@
     "wallet_scanner_message_newAddressFound": "novo endereço encontrado",
     "wallet_scanner_message_new_wallet_found": "nova carteira encontrada para $coinName em $accountNumber",
     "wallet_scanner_message_scan_finished": "verificação concluída para $coinName em $accountNumber",
-    "wallet_scanner_message_scan_connection_failed": "falha na verificação de $coinName em $accountNumber (falha na conexão)",
+    "wallet_scanner_message_scan_connection_failed": "falha na verificação de $coinName em $accountNumber (Falha na conexão)",
     "scan_modal_title": "Digitalizando esta Carteira",
     "reset_modal_title": "Redefinindo esta Carteira"
 }

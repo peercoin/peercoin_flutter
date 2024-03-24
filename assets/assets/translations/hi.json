@@ -392,7 +392,7 @@
     "wallet_scan_scanning_finished": "स्कैनिंग समाप्त हो गई",
     "wallet_scan_create_error": "वॉलेट बनाना विफल: $error",
     "wallet_scanner_message_new_wallet_found": "$accountNumber पर $coinName के लिए नया वॉलेट मिला",
-    "wallet_scanner_message_scan_failed": "$accountNumber ($e) पर $coinName के लिए स्कैन विफल रहा",
+    "wallet_scanner_message_scan_failed": "$accountNumber ($e)) पर $coinName के लिए स्कैन विफल रहा",
     "reset_modal_description": "यह वॉलेट बैलेंस को रीसेट कर देगा और UTXOs के लिए सभी पतों की जांच करेगा।\nगैर-प्रसारित लेनदेन हटा दिए जाएंगे.",
     "currency_MAD": "मोरक्कन दिरहम",
     "app_settings_wallet_order": "वॉलेट ऑर्डर",
