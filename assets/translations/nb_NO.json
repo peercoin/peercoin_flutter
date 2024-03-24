@@ -496,5 +496,10 @@
     "currency_VUV": "Vanuatisk vatu",
     "currency_WST": "Samoansk tala",
     "currency_XCD": "Østkaribisk dollar",
-    "currency_PGK": "Papuansk kina"
+    "currency_PGK": "Papuansk kina",
+    "app_settings_experimental_features": "Eksperimentelle Funksjoner",
+    "search_address": "Søk adresse",
+    "app_settings_experimental_feature_watchOnlyWallets": "Observasjonslommebøker",
+    "watch_only": "Observer",
+    "addresses_none": "Finner ingen adresser"
 }

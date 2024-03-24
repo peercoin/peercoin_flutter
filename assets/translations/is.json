@@ -496,5 +496,10 @@
     "currency_MGA": "Madagaskar ariary",
     "currency_MKD": "Makedónsk denari",
     "currency_MOP": "Makaó-pataka",
-    "currency_MUR": "Máritísk rúpía"
+    "currency_MUR": "Máritísk rúpía",
+    "search_address": "Leita að heimilisfangi",
+    "app_settings_experimental_features": "Tilraunaeiginleikar",
+    "app_settings_experimental_feature_watchOnlyWallets": "Athugunarveski",
+    "watch_only": "Fylgstu með",
+    "addresses_none": "Engin heimilisföng fundust"
 }
