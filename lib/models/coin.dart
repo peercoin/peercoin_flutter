@@ -7,7 +7,7 @@ class Coin {
   final String iconPath;
   final String iconPathTransparent;
   final String uriCode;
-  final NetworkParams networkType;
+  final Network networkType;
   final int fractions;
   final int minimumTxValue;
   final double fixedFeePerKb;
