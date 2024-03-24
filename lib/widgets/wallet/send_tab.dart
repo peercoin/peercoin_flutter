@@ -120,11 +120,10 @@ class _SendTabState extends State<SendTab> {
                               currentIndex: _currentAddressIndex + 1,
                               numberOfRecipients: _numberOfRecipients,
                               raiseNewindex: (int newIndex) => setState(
-                                () => {
-                                  if (triggerFormValidation())
-                                    {
-                                      _currentAddressIndex = newIndex - 1,
-                                    },
+                                () {
+                                  if (triggerFormValidation()) {
+                                    _currentAddressIndex = newIndex - 1;
+                                  }
                                 },
                               ),
                             )

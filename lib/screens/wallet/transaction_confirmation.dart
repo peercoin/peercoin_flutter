@@ -315,7 +315,7 @@ class _TransactionConfirmationScreenState
                                         'showTransactionConfirmation',
                                         e.toString(),
                                       );
-                                      if (mounted) {
+                                      if (context.mounted) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
