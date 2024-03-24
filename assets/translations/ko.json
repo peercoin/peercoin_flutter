@@ -453,7 +453,7 @@
     "wallet_scanner_message_newAddressFound": "새 주소가 발견되었습니다",
     "wallet_scanner_message_new_wallet_found": "$accountNumber에서 $coinName의 새 지갑이 발견되었습니다",
     "wallet_scanner_message_scan_finished": "$accountNumber의 $coinName 스캔이 완료되었습니다",
-    "wallet_scanner_message_scan_failed": "$accountNumber($e))의 $coinName 스캔에 실패했습니다",
+    "wallet_scanner_message_scan_failed": "$accountNumber($e)의 $coinName 스캔에 실패했습니다",
     "scan_modal_title": "이 지갑을 스캔하는 중",
     "reset_modal_title": "이 지갑 재설정 중",
     "wallet_scan_scanning_finished": "스캔 완료",
