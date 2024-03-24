@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -163,41 +164,43 @@ class _ReceiveTabState extends State<ReceiveTab> {
           ),
         ),
       );
-    } else if (widget.wallet.letterCode == 'PPC' && Platform.isIOS == false) {
-      return Align(
-        child: PeerContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              PeerServiceTitle(
-                title: AppLocalizations.instance.translate('buy_peercoin'),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                AppLocalizations.instance
-                    .translate('receive_website_description'),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              PeerButton(
-                text: AppLocalizations.instance
-                    .translate('receive_website_credit'),
-                action: () {
-                  launchURL('https://ppc.lol/buy');
-                },
-              ),
-              const SizedBox(height: 20),
-              PeerButton(
-                text: AppLocalizations.instance
-                    .translate('receive_website_exchandes'),
-                action: () {
-                  launchURL('https://ppc.lol/exchanges');
-                },
-              ),
-            ],
+    } else if (!kIsWeb) {
+      if (widget.wallet.letterCode == 'PPC' && Platform.isIOS == false) {
+        return Align(
+          child: PeerContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                PeerServiceTitle(
+                  title: AppLocalizations.instance.translate('buy_peercoin'),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.instance
+                      .translate('receive_website_description'),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                PeerButton(
+                  text: AppLocalizations.instance
+                      .translate('receive_website_credit'),
+                  action: () {
+                    launchURL('https://ppc.lol/buy');
+                  },
+                ),
+                const SizedBox(height: 20),
+                PeerButton(
+                  text: AppLocalizations.instance
+                      .translate('receive_website_exchandes'),
+                  action: () {
+                    launchURL('https://ppc.lol/exchanges');
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
     return const SizedBox();
   }

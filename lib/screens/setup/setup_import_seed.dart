@@ -44,7 +44,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
         'createWallet',
         e.toString(),
       );
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

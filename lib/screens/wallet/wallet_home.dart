@@ -492,7 +492,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               newState: false,
             );
 
-            if (mounted) {
+            if (context.mounted) {
               context.loaderOverlay.hide();
               Navigator.of(context).pop(); // pops modal bottom sheet
             }
