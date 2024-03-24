@@ -122,7 +122,7 @@ class _ImportWifScreenState extends State<ImportWifScreen> {
         ),
       );
     } else {
-      if (mounted) {
+      if (context.mounted) {
         await showDialog(
           context: ctx,
           builder: (BuildContext context) {
