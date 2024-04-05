@@ -790,6 +790,15 @@ class WalletProvider with ChangeNotifier {
     //define utxo pool
     final utxoPool = paperWalletUtxos ?? openWallet.utxos;
 
+    // CoinSelection.optimal(
+    //   candidates: [InputCandidate(input: Input(), value: BigInt())],
+    //   recipients: recipients,
+    //   changeProgram: changeProgram,
+    //   feePerKb: fee,
+    //   minFee: minFee,
+    //   minChange: minChange,
+    // ); TODO
+
     if (txAmount <= openWallet.balance || paperWalletUtxos != null) {
       if (utxoPool.isNotEmpty) {
         //find eligible input utxos

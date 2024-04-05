@@ -79,49 +79,57 @@ class _AppSettingsWalletOrderScreenState
           AppLocalizations.instance.translate('app_settings_wallet_order'),
         ),
       ),
-      body: _walletOrder.isEmpty
+      body: _initial
           ? const Center(
               child: LoadingIndicator(),
             )
-          : Align(
-              child: PeerContainer(
-                noSpacers: true,
-                child: ReorderableListView.builder(
-                  onReorder: (oldIndex, newIndex) async {
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
+          : _walletOrder.isEmpty
+              ? Center(
+                  child: Text(
+                    AppLocalizations.instance.translate(
+                      'wallets_none',
+                    ),
+                  ),
+                )
+              : Align(
+                  child: PeerContainer(
+                    noSpacers: true,
+                    child: ReorderableListView.builder(
+                      onReorder: (oldIndex, newIndex) async {
+                        if (oldIndex < newIndex) {
+                          newIndex -= 1;
+                        }
 
-                    setState(() {
-                      final item = _walletOrder.removeAt(oldIndex);
-                      _walletOrder.insert(newIndex, item);
-                    });
+                        setState(() {
+                          final item = _walletOrder.removeAt(oldIndex);
+                          _walletOrder.insert(newIndex, item);
+                        });
 
-                    await saveOrder();
-                  },
-                  itemCount: _walletOrder.length,
-                  itemBuilder: (ctx, index) {
-                    return Card(
-                      key: Key(_walletOrder.elementAt(index)),
-                      clipBehavior: Clip.antiAlias,
-                      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                      child: ListTile(
-                        leading: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Icon(Icons.toc)],
-                        ),
-                        tileColor: _calculateTileColor(
-                          index,
-                        ),
-                        title: Text(
-                          _walletTitles[_walletOrder.elementAt(index)]!,
-                        ),
-                      ),
-                    );
-                  },
+                        await saveOrder();
+                      },
+                      itemCount: _walletOrder.length,
+                      itemBuilder: (ctx, index) {
+                        return Card(
+                          key: Key(_walletOrder.elementAt(index)),
+                          clipBehavior: Clip.antiAlias,
+                          margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                          child: ListTile(
+                            leading: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Icon(Icons.toc)],
+                            ),
+                            tileColor: _calculateTileColor(
+                              index,
+                            ),
+                            title: Text(
+                              _walletTitles[_walletOrder.elementAt(index)]!,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ),
     );
   }
 }

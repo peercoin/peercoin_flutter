@@ -2,43 +2,40 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peercoin/providers/wallet_provider.dart';
+import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
+import 'package:peercoin/widgets/buttons.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
+import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/available_coins.dart';
-import '../../models/coin.dart';
-import '../../providers/wallet_provider.dart';
-import '../../tools/app_localizations.dart';
-import '../../tools/app_routes.dart';
-import '../../tools/logger_wrapper.dart';
-import '../../widgets/buttons.dart';
-import '../../widgets/double_tab_to_clipboard.dart';
-import '../../widgets/service_container.dart';
-
-class WalletMessageSigningScreen extends StatefulWidget {
-  const WalletMessageSigningScreen({super.key});
+class WalletSignTransactionScreen extends StatefulWidget {
+  const WalletSignTransactionScreen({super.key});
 
   @override
-  State<WalletMessageSigningScreen> createState() =>
-      _WalletMessageSigningScreenState();
+  State<WalletSignTransactionScreen> createState() =>
+      _WalletSignTransactionScreenState();
 }
 
-class _WalletMessageSigningScreenState
-    extends State<WalletMessageSigningScreen> {
+class _WalletSignTransactionScreenState
+    extends State<WalletSignTransactionScreen> {
   late String _walletName;
   late WalletProvider _walletProvider;
   bool _initial = true;
-  late Coin _activeCoin;
   bool _signingDone = false;
-  String _signature = '';
+  bool _signingError = false;
+  String _signedTx = '';
   String _signingAddress = '';
-  final TextEditingController _messageInputController = TextEditingController();
+  final TextEditingController _txInputController = TextEditingController();
+  final Map<int, bool> _checkedInputs = {};
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
       _walletName = ModalRoute.of(context)!.settings.arguments as String;
       _walletProvider = Provider.of<WalletProvider>(context);
-      _activeCoin = AvailableCoins.getSpecificCoin(_walletName);
       setState(() {
         _initial = false;
       });
@@ -78,11 +75,91 @@ class _WalletMessageSigningScreenState
     }
   }
 
+  Future<bool> _showInputSelector(int inputN) async {
+    return await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      context: context,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return ModalBottomSheetContainer(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'sign_transaction_input_selector_title',
+                    ),
+                    style: TextStyle(
+                      letterSpacing: 1.4,
+                      fontSize: 24,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (ctx, n) => CheckboxListTile(
+                        title: Text('Input $n'),
+                        value: _checkedInputs[n] ?? false,
+                        onChanged: (value) {
+                          setState(() {
+                            _checkedInputs[n] = value!;
+                          });
+                        },
+                      ),
+                      itemCount: inputN,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton.icon(
+                        label: Text(
+                          AppLocalizations.instance
+                              .translate('server_settings_alert_cancel'),
+                        ),
+                        icon: const Icon(Icons.cancel),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                      TextButton.icon(
+                        label: Text(
+                          AppLocalizations.instance
+                              .translate('jail_dialog_button'),
+                        ),
+                        icon: const Icon(Icons.check),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _handleSign() async {
     LoggerWrapper.logInfo(
-      'WalletMessageSigning',
+      'WalletTransactionSigning',
       'handleSign',
-      'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}',
+      'signing tx with $_signingAddress on $_walletName, tx: ${_txInputController.text}',
     );
 
     try {
@@ -91,28 +168,41 @@ class _WalletMessageSigningScreenState
         address: _signingAddress,
       );
 
-      var result = MessageSignature.sign(
-        key: WIF.fromString(wif).privkey,
-        message: _messageInputController.text,
-        prefix: _activeCoin.networkType.messagePrefix,
-      );
+      final tx = Transaction.fromHex(_txInputController.text);
+      final selectedInputResult = await _showInputSelector(tx.inputs.length);
+      if (selectedInputResult == false) return;
+      if (_checkedInputs.values.every((element) => element == false)) return;
+
+      Transaction txToSign = tx;
+      _checkedInputs.forEach((key, value) {
+        if (value) {
+          txToSign = tx.sign(
+            inputN: key,
+            key: WIF.fromString(wif).privkey,
+          );
+        }
+      });
+      final signedTx = txToSign.toHex();
 
       setState(() {
-        _signature = result.toString();
+        _signedTx = signedTx;
         _signingDone = true;
       });
 
       LoggerWrapper.logInfo(
-        'WalletMessageSigning',
+        'WalletTransactionSigning',
         'handleSign',
-        'signature produced $_signature',
+        'tx produced $signedTx',
       );
     } catch (e) {
       LoggerWrapper.logError(
-        'WalletMessageSigning',
+        'WalletTransactionSigning',
         'handleSign',
         e.toString(),
       );
+      setState(() {
+        _signingError = true;
+      });
     }
   }
 
@@ -143,12 +233,12 @@ class _WalletMessageSigningScreenState
             icon: const Icon(Icons.check),
             onPressed: () async {
               LoggerWrapper.logInfo(
-                'WalletMessageSigning',
+                'WalletTransactionSigning',
                 '_performReset',
                 'reset performed',
               );
               await Navigator.of(ctx).pushNamedAndRemoveUntil(
-                Routes.walletMessageSigning,
+                Routes.walletTransactionSigning,
                 (route) {
                   if (route.settings.name == '/wallet-home') {
                     return true;
@@ -170,7 +260,9 @@ class _WalletMessageSigningScreenState
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          AppLocalizations.instance.translate('wallet_pop_menu_signing'),
+          AppLocalizations.instance.translate(
+            'wallet_pop_menu_signing_transactions',
+          ),
         ),
       ),
       body: Column(
@@ -198,8 +290,9 @@ class _WalletMessageSigningScreenState
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: _signingAddress == ''
                                 ? Text(
-                                    AppLocalizations.instance
-                                        .translate('sign_step_1_description'),
+                                    AppLocalizations.instance.translate(
+                                      'sign_transaction_step_1_description',
+                                    ),
                                   )
                                 : DoubleTabToClipboard(
                                     clipBoardData: _signingAddress,
@@ -227,15 +320,16 @@ class _WalletMessageSigningScreenState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AppLocalizations.instance.translate('sign_step_2'),
+                            AppLocalizations.instance
+                                .translate('sign_transaction_step_2'),
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: const Key('signMessageInput'),
-                        controller: _messageInputController,
+                        key: const Key('transactionHexInput'),
+                        controller: _txInputController,
                         autocorrect: false,
                         readOnly: _signingDone,
                         minLines: 5,
@@ -247,10 +341,10 @@ class _WalletMessageSigningScreenState
                           suffixIcon: IconButton(
                             onPressed: () async {
                               if (_signingDone) return;
-                              var data = await Clipboard.getData('text/plain');
+                              final data =
+                                  await Clipboard.getData('text/plain');
                               setState(() {
-                                _messageInputController.text =
-                                    data!.text!.trim();
+                                _txInputController.text = data!.text!.trim();
                               });
                             },
                             icon: Icon(
@@ -265,7 +359,7 @@ class _WalletMessageSigningScreenState
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance
-                              .translate('sign_input_label'),
+                              .translate('sign_transaction_input_label'),
                         ),
                       ),
                       const Divider(),
@@ -273,7 +367,8 @@ class _WalletMessageSigningScreenState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            AppLocalizations.instance.translate('sign_step_3'),
+                            AppLocalizations.instance
+                                .translate('sign_transaction_step_3'),
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
@@ -281,13 +376,13 @@ class _WalletMessageSigningScreenState
                       const SizedBox(
                         height: 10,
                       ),
-                      _signature.isNotEmpty
+                      _signedTx.isNotEmpty
                           ? Column(
                               children: [
                                 DoubleTabToClipboard(
-                                  clipBoardData: _signature,
+                                  clipBoardData: _signedTx,
                                   child: SelectableText(
-                                    _signature,
+                                    _signedTx,
                                     key: const Key('signature'),
                                   ),
                                 ),
@@ -295,8 +390,9 @@ class _WalletMessageSigningScreenState
                                   height: 10,
                                 ),
                                 Text(
-                                  AppLocalizations.instance
-                                      .translate('sign_step_3_description'),
+                                  AppLocalizations.instance.translate(
+                                    'sign_transaction_step_3_description',
+                                  ),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 12,
@@ -310,17 +406,18 @@ class _WalletMessageSigningScreenState
                       const SizedBox(
                         height: 10,
                       ),
-                      _signature.isNotEmpty
+                      _signedTx.isNotEmpty
                           ? PeerButton(
                               action: () => DoubleTabToClipboard.tapEvent(
                                 context,
-                                _signature,
+                                _signedTx,
                               ),
-                              text: AppLocalizations.instance
-                                  .translate('sign_step_3_button_alt'),
+                              text: AppLocalizations.instance.translate(
+                                'sign_transaction_step_3_button_alt',
+                              ),
                               small: true,
                               active: _signingAddress.isNotEmpty &&
-                                  _messageInputController.text.isNotEmpty,
+                                  _txInputController.text.isNotEmpty,
                             )
                           : PeerButton(
                               action: () => _handleSign(),
@@ -328,8 +425,22 @@ class _WalletMessageSigningScreenState
                                   .translate('sign_step_3_button'),
                               small: true,
                               active: _signingAddress.isNotEmpty &&
-                                  _messageInputController.text.isNotEmpty,
+                                  _txInputController.text.isNotEmpty,
                             ),
+                      _signingError
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                key: const Key('signingError'),
+                                AppLocalizations.instance.translate(
+                                  'sign_transaction_signing_failed',
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                            )
+                          : Container(),
                       if (kIsWeb)
                         const SizedBox(
                           height: 20,

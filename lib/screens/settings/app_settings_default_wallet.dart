@@ -100,7 +100,15 @@ class _AppSettingsDefaultWalletScreenState
           child: PeerContainer(
             noSpacers: true,
             child: Column(
-              children: generateDefaultWallets(),
+              children: _availableWallets.isEmpty
+                  ? [
+                      Text(
+                        AppLocalizations.instance.translate(
+                          'wallets_none',
+                        ),
+                      ),
+                    ]
+                  : generateDefaultWallets(),
             ),
           ),
         ),

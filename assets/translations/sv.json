@@ -244,7 +244,7 @@
     "notification_body": "Öppna appen för att se transaktionen",
     "paperwallet_step_1": "Steg 1",
     "paperwallet_step_3_text": "Kontrollera balansen",
-    "paperwallet_step_4_text": "Svep Pappersplånbok",
+    "paperwallet_step_4_text": "Svep pappersplånbok",
     "receive_website": "Öppna webbplatsen",
     "receive_website_description": "Du kan köpa Peercoin direkt med kreditkort (icke-amerikanska kunder) eller från olika börser och tjänster.",
     "receive_website_faucet": "Du kan få gratis testnätmynt från denna myntkran.",
@@ -369,7 +369,7 @@
     "wallet_scan_n_new_found": "$n nya plånböcker hittades",
     "wallet_scan_wallet_already_exists": "plånbok finns redan: $walletName",
     "wallet_scanner_message_new_wallet_found": "ny plånbok hittades för $coinName på $accountNumber",
-    "wallet_scanner_message_scan_connection_failed": "skanningen misslyckades för $coinName på $accountNumber (Anslutning misslyckades)",
+    "wallet_scanner_message_scan_connection_failed": "skanningen misslyckades för $coinName på $accountNumber (anslutning misslyckades)",
     "currency_AED": "Förenade Arabemiratens dirham",
     "currency_ALL": "Albanska lek",
     "currency_AMD": "Armeniska dram",
@@ -451,7 +451,7 @@
     "wallet_scanner_message_init": "skanningen startade för $coinName på $account",
     "wallet_scanner_message_newAddressFound": "ny adress hittades",
     "wallet_scanner_message_scan_finished": "skanning slutförd för $coinName på $accountNumber",
-    "wallet_scanner_message_scan_failed": "skanningen misslyckades för $coinName på $accountNumber ($e))",
+    "wallet_scanner_message_scan_failed": "skanningen misslyckades för $coinName på $accountNumber ($e)",
     "scan_modal_title": "Skanna den här Plånboken",
     "reset_modal_title": "Återställer denna Plånbok",
     "reset_modal_description": "Detta kommer att återställa plånboksbalansen och kontrollera alla adresser för UTXO:er.\nIcke-sända transaktioner kommer att tas bort.",
@@ -496,5 +496,10 @@
     "currency_BBD": "Barbadiska dollar",
     "currency_KHR": "Kambodjanska riel",
     "currency_SHP": "Sankt Helena pund",
-    "currency_XCD": "Östkaribiska dollar"
+    "currency_XCD": "Östkaribiska dollar",
+    "app_settings_experimental_features": "Experimentella Funktioner",
+    "search_address": "Sök adress",
+    "app_settings_experimental_feature_watchOnlyWallets": "Observationsplånböcker",
+    "watch_only": "Observera",
+    "addresses_none": "Inga adresser hittades"
 }
