@@ -248,7 +248,10 @@ class _WalletMessageSigningScreenState
                             onPressed: () async {
                               if (_signingDone) return;
                               var data = await Clipboard.getData('text/plain');
-                              _messageInputController.text = data!.text!.trim();
+                              setState(() {
+                                _messageInputController.text =
+                                    data!.text!.trim();
+                              });
                             },
                             icon: Icon(
                               Icons.paste_rounded,

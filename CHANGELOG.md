@@ -1,5 +1,6 @@
-### **1.2.4** (2023-03-24)
+### **1.2.4** (2023-04-05)
 
+- Add transaction signing from wallet home
 - Fix for some devices not being able to see the wallet receive tab
 - Dependency upgrades, e. g. now using coinlib 2.0.0
 
