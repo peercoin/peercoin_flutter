@@ -431,6 +431,7 @@ class _WalletSignTransactionScreenState
                           ? Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
+                                key: const Key('signingError'),
                                 AppLocalizations.instance.translate(
                                   'sign_transaction_signing_failed',
                                 ),
