@@ -127,9 +127,10 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    AutoSizeText(
                       AppLocalizations.instance
                           .translate('address_selector_title'),
+                      maxFontSize: 17,
                     ),
                     IconButton(
                       onPressed: () => setState(() {

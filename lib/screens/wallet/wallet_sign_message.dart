@@ -80,7 +80,7 @@ class _WalletMessageSigningScreenState
 
   Future<void> _handleSign() async {
     LoggerWrapper.logInfo(
-      'WalletSigning',
+      'WalletMessageSigning',
       'handleSign',
       'signing message with $_signingAddress on $_walletName, message: ${_messageInputController.text}',
     );
@@ -103,12 +103,16 @@ class _WalletMessageSigningScreenState
       });
 
       LoggerWrapper.logInfo(
-        'WalletSigning',
+        'WalletMessageSigning',
         'handleSign',
         'signature produced $_signature',
       );
     } catch (e) {
-      LoggerWrapper.logError('WalletSigning', 'handleSign', e.toString());
+      LoggerWrapper.logError(
+        'WalletMessageSigning',
+        'handleSign',
+        e.toString(),
+      );
     }
   }
 
@@ -139,7 +143,7 @@ class _WalletMessageSigningScreenState
             icon: const Icon(Icons.check),
             onPressed: () async {
               LoggerWrapper.logInfo(
-                'WalletSigning',
+                'WalletMessageSigning',
                 '_performReset',
                 'reset performed',
               );
