@@ -152,6 +152,9 @@ class MyTheme {
         thumbColor: MaterialStateProperty.all(DarkColors.white),
         trackColor: MaterialStateProperty.all(DarkColors.grey),
       ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.all(DarkColors.white),
+      ),
       colorScheme: ColorScheme(
         primary: DarkColors.green,
         primaryContainer: DarkColors.white,

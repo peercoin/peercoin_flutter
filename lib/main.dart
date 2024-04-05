@@ -248,7 +248,6 @@ class PeercoinApp extends StatelessWidget {
       ),
     );
   }
-  //TODO themeing problem with dark mode checkboxes when activated
   //TODO themeing problem with dark mode expandable icon when activated
   //TODO add e2e tests for watch only wallet
 }
