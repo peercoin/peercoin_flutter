@@ -444,7 +444,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
           arguments: _wallet.name,
         );
         break;
-      case 'signing':
+      case 'message_signing':
         Navigator.of(context).pushNamed(
           Routes.walletMessageSigning,
           arguments: _wallet.name,
@@ -461,6 +461,12 @@ class _WalletHomeState extends State<WalletHomeScreen>
         break;
       case 'reset_wallet':
         _triggerResetBottomSheet();
+        break;
+      case 'transaction_signing':
+        Navigator.of(context).pushNamed(
+          Routes.walletTransactionSigning,
+          arguments: _wallet.name,
+        );
         break;
       default:
     }
@@ -578,7 +584,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
               ),
             ),
             PopupMenuItem(
-              value: 'signing',
+              value: 'message_signing',
               child: ListTile(
                 leading: Icon(
                   Icons.key,
@@ -601,6 +607,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 title: Text(
                   AppLocalizations.instance.translate(
                     'wallet_pop_menu_verification',
+                  ),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'transaction_signing',
+              child: ListTile(
+                leading: Icon(
+                  Icons.key,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'wallet_pop_menu_signing_transactions',
                   ),
                 ),
               ),
