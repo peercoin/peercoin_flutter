@@ -125,7 +125,33 @@ void main() {
         await driver.waitFor(find.text('mm5pM9sJzVjsafctQJJrJuhGsw1CTucZ2v'));
       });
 
+      test('Transaction signing', () async {
+        await driver.tap(find.byTooltip('Transactions'));
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Sign Transaction'));
+          },
+        );
+        await driver.tap(find.text('Select'));
+        await driver.tap(find.text('mm5pM9sJzVjsafctQJJrJuhGsw1CTucZ2v'));
+        await driver.tap(find.pageBack());
+        await driver.tap(find.byValueKey('transactionHexInput'));
+        await driver.enterText(
+          '0300000001d8af09713b116ecce194add86bd6def0e2dc3abe99c53bfbcd34576061baca9f000000002221022ef8df0bfd68434e2db934e88a7e30b06b88507dac60fa7cc2b732a1b5147ef7ffffffff010a8f9800000000001976a914ff9296d92c5efc397d0e0b9ebe94d95a532270c488ac00000000',
+        );
+        await driver.tap(find.text('Sign'));
+        await driver.tap(find.text('Input 0'));
+        await driver.tap(find.text('Okay'));
+        await driver.waitFor(
+          find.text(
+            '0300000001d8af09713b116ecce194add86bd6def0e2dc3abe99c53bfbcd34576061baca9f000000006a47304402200455cf81bde046213814387da5bde30e657fe7977c4c35ffe78edd3fe5cada7b0220186524598ac87de9b944f61e819b29c8a9a331c8a52b1694b8559cd9ec3395800121022ef8df0bfd68434e2db934e88a7e30b06b88507dac60fa7cc2b732a1b5147ef7ffffffff010a8f9800000000001976a914ff9296d92c5efc397d0e0b9ebe94d95a532270c488ac00000000',
+          ),
+        );
+      });
+
       test('Change wallet title', () async {
+        await driver.tap(find.pageBack());
         await driver.tap(find.byTooltip('Transactions'));
         await driver.tap(find.byTooltip('Show menu'));
         await driver.tap(find.text('Change Title'));

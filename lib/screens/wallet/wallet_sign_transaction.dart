@@ -324,7 +324,7 @@ class _WalletSignTransactionScreenState
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
-                        key: const Key('signMessageInput'),
+                        key: const Key('transactionHexInput'),
                         controller: _txInputController,
                         autocorrect: false,
                         readOnly: _signingDone,
