@@ -148,6 +148,10 @@ class MyTheme {
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: DarkColors.white,
       ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(DarkColors.white),
+        trackColor: MaterialStateProperty.all(DarkColors.grey),
+      ),
       colorScheme: ColorScheme(
         primary: DarkColors.green,
         primaryContainer: DarkColors.white,
