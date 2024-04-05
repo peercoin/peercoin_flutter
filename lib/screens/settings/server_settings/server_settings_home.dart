@@ -55,25 +55,33 @@ class _AppSettingsServerHomeState extends State<AppSettingsServerHome> {
           child: PeerContainer(
             noSpacers: true,
             child: Column(
-              children: _availableWallets.map(
-                (wallet) {
-                  return ListTile(
-                    onTap: () => Navigator.of(context).pushNamed(
-                      Routes.serverSettingsDetail,
-                      arguments: wallet.name,
-                    ),
-                    title: Text(
-                      wallet.title,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  );
-                },
-              ).toList(),
+              children: _availableWallets.isEmpty
+                  ? [
+                      Text(
+                        AppLocalizations.instance.translate(
+                          'wallets_none',
+                        ),
+                      ),
+                    ]
+                  : _availableWallets.map(
+                      (wallet) {
+                        return ListTile(
+                          onTap: () => Navigator.of(context).pushNamed(
+                            Routes.serverSettingsDetail,
+                            arguments: wallet.name,
+                          ),
+                          title: Text(
+                            wallet.title,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        );
+                      },
+                    ).toList(),
             ),
           ),
         ),
