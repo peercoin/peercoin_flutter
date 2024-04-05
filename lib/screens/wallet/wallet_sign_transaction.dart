@@ -25,6 +25,7 @@ class _WalletSignTransactionScreenState
   late WalletProvider _walletProvider;
   bool _initial = true;
   bool _signingDone = false;
+  bool _signingError = false;
   String _signedTx = '';
   String _signingAddress = '';
   final TextEditingController _txInputController = TextEditingController();
@@ -199,6 +200,9 @@ class _WalletSignTransactionScreenState
         'handleSign',
         e.toString(),
       );
+      setState(() {
+        _signingError = true;
+      });
     }
   }
 
@@ -423,6 +427,19 @@ class _WalletSignTransactionScreenState
                               active: _signingAddress.isNotEmpty &&
                                   _txInputController.text.isNotEmpty,
                             ),
+                      _signingError
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                AppLocalizations.instance.translate(
+                                  'sign_transaction_signing_failed',
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                            )
+                          : Container(),
                       if (kIsWeb)
                         const SizedBox(
                           height: 20,
