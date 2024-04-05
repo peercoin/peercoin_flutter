@@ -135,7 +135,7 @@
     "paperwallet_step_1_text": "Scan offentlig nøgle",
     "paperwallet_step_2_text": "Scan privat nøgle",
     "paperwallet_step_3_text": "Tjek balancen",
-    "paperwallet_step_4_text": "Swipe Papirtegnebogen",
+    "paperwallet_step_4_text": "Swipe papirtegnebogen",
     "peercoin": "Peercoin",
     "peercoinC": "Peercoin",
     "receive_enter_amount": "Indtast venligst et beløb",
@@ -367,8 +367,8 @@
     "wallet_scan_notice_new": "Dette kan tage et stykke tid.\nDenne skærm lukker automatisk!",
     "wallet_scan_no_new_found": "Ingen nye tegnebøger fundet",
     "wallet_scanner_message_new_wallet_found": "ny tegnebog fundet til $coinName på $accountNumber",
-    "wallet_scanner_message_scan_failed": "scanning mislykkedes for $coinName på $accountNumber ($e))",
-    "wallet_scanner_message_scan_connection_failed": "scanning mislykkedes for $coinName på $accountNumber (Forbindelsen mislykkedes)",
+    "wallet_scanner_message_scan_failed": "scanning mislykkedes for $coinName på $accountNumber ($e)",
+    "wallet_scanner_message_scan_connection_failed": "scanning mislykkedes for $coinName på $accountNumber (forbindelsen mislykkedes)",
     "currency_AED": "UAE-dirham",
     "currency_ALL": "Albansk lek",
     "currency_AMD": "Armenske dram",
@@ -496,5 +496,10 @@
     "currency_VUV": "Vanuatu vatu",
     "currency_WST": "Samoansk tala",
     "currency_XCD": "Østcaribisk dollar",
-    "currency_PGK": "Papua Ny-Guineansk kina"
+    "currency_PGK": "Papua Ny-Guineansk kina",
+    "app_settings_experimental_features": "Eksperimentelle Funktioner",
+    "app_settings_experimental_feature_watchOnlyWallets": "Observationstegnebøger",
+    "watch_only": "Observer",
+    "addresses_none": "Ingen adresser fundet",
+    "search_address": "Søg adresse"
 }
