@@ -695,7 +695,6 @@ class _AddressTabState extends State<AddressTab> {
       child: Column(
         children: [
           ExpansionTile(
-            collapsedIconColor: Theme.of(context).colorScheme.onPrimary,
             onExpansionChanged: (_) => setState(
               () {
                 _optionsExpanded = _;
@@ -703,167 +702,151 @@ class _AddressTabState extends State<AddressTab> {
             ),
             trailing: Icon(
               _optionsExpanded ? Icons.close : Icons.filter_alt,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.tertiary,
             ),
             title: Text(
               AppLocalizations.instance
                   .translate('addressbook_bottom_bar_your_addresses'),
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.tertiary,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Wrap(
+                direction: Axis.vertical,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 10,
                 children: [
-                  Column(
-                    children: [
-                      ChoiceChip(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.background,
-                        selectedColor: Theme.of(context).shadowColor,
-                        visualDensity: const VisualDensity(
-                          horizontal: 0.0,
-                          vertical: -4,
-                        ),
-                        label: AutoSizeText(
-                          AppLocalizations.instance
-                              .translate('addressbook_hide_change'),
-                          minFontSize: 10,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        selected: _showChangeAddresses,
-                        onSelected: (_) {
-                          setState(() {
-                            _showChangeAddresses = _;
-                          });
-                          applyFilter();
-                        },
+                  ChoiceChip(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    selectedColor: Theme.of(context).shadowColor,
+                    visualDensity: const VisualDensity(
+                      horizontal: 0.0,
+                      vertical: -4,
+                    ),
+                    label: AutoSizeText(
+                      AppLocalizations.instance
+                          .translate('addressbook_hide_change'),
+                      minFontSize: 10,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                      if (kIsWeb)
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ChoiceChip(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.background,
-                        selectedColor: Theme.of(context).shadowColor,
-                        visualDensity: const VisualDensity(
-                          horizontal: 0.0,
-                          vertical: -4,
-                        ),
-                        label: AutoSizeText(
-                          AppLocalizations.instance
-                              .translate('addressbook_hide_unwatched'),
-                          minFontSize: 10,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        selected: _showUnwatched,
-                        onSelected: (_) {
-                          setState(() {
-                            _showUnwatched = _;
-                          });
-                          applyFilter();
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
-                        child: ChoiceChip(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
-                          selectedColor: Theme.of(context).shadowColor,
-                          visualDensity: const VisualDensity(
-                            horizontal: 0.0,
-                            vertical: -4,
-                          ),
-                          label: AutoSizeText(
-                            _showLabel
-                                ? AppLocalizations.instance
-                                    .translate('addressbook_show_balance')
-                                : AppLocalizations.instance
-                                    .translate('addressbook_show_label'),
-                            textAlign: TextAlign.center,
-                            minFontSize: 10,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          selected: _showLabel,
-                          onSelected: (_) {
-                            setState(
-                              () {
-                                _showLabel = _;
-                              },
-                            );
-                            applyFilter();
-                          },
-                        ),
-                      ),
-                    ],
+                    ),
+                    selected: _showChangeAddresses,
+                    onSelected: (_) {
+                      setState(() {
+                        _showChangeAddresses = _;
+                      });
+                      applyFilter();
+                    },
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ChoiceChip(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.background,
-                        selectedColor: Theme.of(context).shadowColor,
-                        visualDensity: const VisualDensity(
-                          horizontal: 0.0,
-                          vertical: -4,
-                        ),
-                        label: AutoSizeText(
-                          AppLocalizations.instance
-                              .translate('addressbook_hide_used'),
-                          textAlign: TextAlign.center,
-                          minFontSize: 10,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        selected: _showUsed,
-                        onSelected: (_) {
-                          setState(() {
-                            _showUsed = _;
-                          });
-                          applyFilter();
-                        },
+                  ChoiceChip(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    selectedColor: Theme.of(context).shadowColor,
+                    visualDensity: const VisualDensity(
+                      horizontal: 0.0,
+                      vertical: -4,
+                    ),
+                    label: AutoSizeText(
+                      AppLocalizations.instance
+                          .translate('addressbook_hide_unwatched'),
+                      minFontSize: 10,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
-                        child: ChoiceChip(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
-                          selectedColor: Theme.of(context).shadowColor,
-                          visualDensity: const VisualDensity(
-                            horizontal: 0.0,
-                            vertical: -4,
-                          ),
-                          label: AutoSizeText(
-                            AppLocalizations.instance
-                                .translate('addressbook_hide_empty'),
-                            textAlign: TextAlign.center,
-                            minFontSize: 10,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                          selected: _showEmpty,
-                          onSelected: (_) {
-                            setState(() {
-                              _showEmpty = _;
-                            });
-                            applyFilter();
+                    ),
+                    selected: _showUnwatched,
+                    onSelected: (_) {
+                      setState(() {
+                        _showUnwatched = _;
+                      });
+                      applyFilter();
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
+                    child: ChoiceChip(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      selectedColor: Theme.of(context).shadowColor,
+                      visualDensity: const VisualDensity(
+                        horizontal: 0.0,
+                        vertical: -4,
+                      ),
+                      label: AutoSizeText(
+                        _showLabel
+                            ? AppLocalizations.instance
+                                .translate('addressbook_show_balance')
+                            : AppLocalizations.instance
+                                .translate('addressbook_show_label'),
+                        textAlign: TextAlign.center,
+                        minFontSize: 10,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      selected: _showLabel,
+                      onSelected: (_) {
+                        setState(
+                          () {
+                            _showLabel = _;
                           },
+                        );
+                        applyFilter();
+                      },
+                    ),
+                  ),
+                  ChoiceChip(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    selectedColor: Theme.of(context).shadowColor,
+                    visualDensity: const VisualDensity(
+                      horizontal: 0.0,
+                      vertical: -4,
+                    ),
+                    label: AutoSizeText(
+                      AppLocalizations.instance
+                          .translate('addressbook_hide_used'),
+                      textAlign: TextAlign.center,
+                      minFontSize: 10,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    selected: _showUsed,
+                    onSelected: (_) {
+                      setState(() {
+                        _showUsed = _;
+                      });
+                      applyFilter();
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
+                    child: ChoiceChip(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      selectedColor: Theme.of(context).shadowColor,
+                      visualDensity: const VisualDensity(
+                        horizontal: 0.0,
+                        vertical: -4,
+                      ),
+                      label: AutoSizeText(
+                        AppLocalizations.instance
+                            .translate('addressbook_hide_empty'),
+                        textAlign: TextAlign.center,
+                        minFontSize: 10,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                    ],
+                      selected: _showEmpty,
+                      onSelected: (_) {
+                        setState(() {
+                          _showEmpty = _;
+                        });
+                        applyFilter();
+                      },
+                    ),
                   ),
                 ],
               ),

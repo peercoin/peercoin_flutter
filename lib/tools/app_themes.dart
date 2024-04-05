@@ -71,6 +71,7 @@ class MyTheme {
         onBackground: LightColors.green,
         onError: LightColors.red,
         brightness: Brightness.light,
+        tertiary: LightColors.white,
       )
           .copyWith(background: LightColors.white)
           .copyWith(error: LightColors.red),
@@ -155,6 +156,9 @@ class MyTheme {
       checkboxTheme: CheckboxThemeData(
         fillColor: MaterialStateProperty.all(DarkColors.white),
       ),
+      expansionTileTheme: ExpansionTileThemeData(
+        iconColor: DarkColors.white,
+      ),
       colorScheme: ColorScheme(
         primary: DarkColors.green,
         primaryContainer: DarkColors.white,
@@ -169,6 +173,7 @@ class MyTheme {
         onBackground: DarkColors.green,
         onError: DarkColors.red,
         brightness: Brightness.dark,
+        tertiary: DarkColors.white,
       ).copyWith(background: DarkColors.green).copyWith(error: DarkColors.red),
       bottomAppBarTheme: const BottomAppBarTheme(color: Color(0x000D1821)),
     ),
