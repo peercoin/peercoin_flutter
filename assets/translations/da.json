@@ -501,5 +501,14 @@
     "app_settings_experimental_feature_watchOnlyWallets": "Observationstegnebøger",
     "watch_only": "Observer",
     "addresses_none": "Ingen adresser fundet",
-    "search_address": "Søg adresse"
+    "search_address": "Søg adresse",
+    "sign_transaction_step_2": "Indtast Transaktionshex",
+    "sign_transaction_input_label": "Transaktionshex",
+    "sign_transaction_step_3_button_alt": "Kopier hex til udklipsholderen",
+    "wallet_pop_menu_signing_transactions": "Underskriv Transaktion",
+    "sign_transaction_step_1_description": "Vælg den adresse, der skal underskrive transaktionen",
+    "sign_transaction_step_3": "Underskriv Transaktion",
+    "sign_transaction_step_3_description": "Dette er din underskrevne transaktionshex. Du kan trykke to gange for at kopiere det til udklipsholderen.",
+    "sign_transaction_input_selector_title": "Vælg hvilke input der skal signeres",
+    "sign_transaction_signing_failed": "Transaktionssignering mislykkedes."
 }
