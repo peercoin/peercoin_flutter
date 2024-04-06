@@ -501,5 +501,14 @@
     "search_address": "Sök adress",
     "app_settings_experimental_feature_watchOnlyWallets": "Observationsplånböcker",
     "watch_only": "Observera",
-    "addresses_none": "Inga adresser hittades"
+    "addresses_none": "Inga adresser hittades",
+    "sign_transaction_input_label": "Transaktionshex",
+    "sign_transaction_step_3_button_alt": "Kopiera hex till urklippet",
+    "sign_transaction_step_3": "Signera Transaktion",
+    "sign_transaction_input_selector_title": "Välj vilka ingångar som ska signeras",
+    "sign_transaction_signing_failed": "Transaktionssignering misslyckades.",
+    "wallet_pop_menu_signing_transactions": "Signera Transaktion",
+    "sign_transaction_step_1_description": "Välj adressen som ska signera transaktionen",
+    "sign_transaction_step_2": "Ange Transaktionshex",
+    "sign_transaction_step_3_description": "Detta är din undertecknade transaktionshex. Du kan dubbeltrycka för att kopiera den till urklipp."
 }
