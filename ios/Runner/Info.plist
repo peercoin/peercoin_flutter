@@ -25,7 +25,7 @@
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSCameraUsageDescription</key>
-		<string>Can we access your camera in order to scan barcodes?</string>
+		<string>We would like to access your camera to scan QR codes.</string>
 		<key>NSFaceIDUsageDescription</key>
 		<string>FaceID protects your wallet from unauthorized use.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
