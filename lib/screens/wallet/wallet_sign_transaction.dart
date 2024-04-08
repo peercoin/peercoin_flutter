@@ -206,6 +206,29 @@ class _WalletSignTransactionScreenState
     }
   }
 
+  void _copyPubKeyToClipboard(String address) async {
+    final wif = await _walletProvider.getWif(
+      identifier: _walletName,
+      address: _signingAddress,
+    );
+    final pubKey = WIF.fromString(wif).privkey.pubkey.hex;
+
+    Clipboard.setData(ClipboardData(text: pubKey));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate(
+              'snack_copied',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   Future<void> _performReset(BuildContext ctx) async {
     return await showDialog(
       context: context,
@@ -310,6 +333,18 @@ class _WalletSignTransactionScreenState
                             small: true,
                             active: !_signingDone,
                           ),
+                          _signingAddress.isNotEmpty && !_signingDone
+                              ? PeerButton(
+                                  action: () => _copyPubKeyToClipboard(
+                                    _signingAddress,
+                                  ),
+                                  text: AppLocalizations.instance.translate(
+                                    'sign_transaction_step_1_copy_pubkey',
+                                  ),
+                                  small: true,
+                                  active: !_signingDone,
+                                )
+                              : Container(),
                           const SizedBox(
                             height: 20,
                           ),
