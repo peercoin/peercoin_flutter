@@ -821,32 +821,29 @@ class _AddressTabState extends State<AddressTab> {
                       applyFilter();
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
-                    child: ChoiceChip(
-                      backgroundColor: Theme.of(context).colorScheme.background,
-                      selectedColor: Theme.of(context).shadowColor,
-                      visualDensity: const VisualDensity(
-                        horizontal: 0.0,
-                        vertical: -4,
-                      ),
-                      label: AutoSizeText(
-                        AppLocalizations.instance
-                            .translate('addressbook_hide_empty'),
-                        textAlign: TextAlign.center,
-                        minFontSize: 10,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                      selected: _showEmpty,
-                      onSelected: (_) {
-                        setState(() {
-                          _showEmpty = _;
-                        });
-                        applyFilter();
-                      },
+                  ChoiceChip(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    selectedColor: Theme.of(context).shadowColor,
+                    visualDensity: const VisualDensity(
+                      horizontal: 0.0,
+                      vertical: -4,
                     ),
+                    label: AutoSizeText(
+                      AppLocalizations.instance
+                          .translate('addressbook_hide_empty'),
+                      textAlign: TextAlign.center,
+                      minFontSize: 10,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    selected: _showEmpty,
+                    onSelected: (_) {
+                      setState(() {
+                        _showEmpty = _;
+                      });
+                      applyFilter();
+                    },
                   ),
                 ],
               ),

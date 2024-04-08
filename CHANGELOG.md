@@ -1,3 +1,7 @@
+### **1.2.5** (2023-04-08)
+
+- Address public keys can now be exported during transaction signing
+
 ### **1.2.4** (2023-04-05)
 
 - Add transaction signing from wallet home

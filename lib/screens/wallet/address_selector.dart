@@ -104,15 +104,10 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
     ];
   }
 
-  Future<bool> _onWillPop() async {
-    Navigator.pop(context, _selectedAddress);
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (_) => _onWillPop,
+      canPop: false,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
