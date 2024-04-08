@@ -504,6 +504,7 @@
   "reset_modal_title": "Resetting this Wallet",
   "reset_modal_description": "This will reset the wallet balance and will check all addresses for UTXOs.\nNon-broadcasted transactions will be removed.",
   "sign_transaction_step_1_description": "Select the address which should sign the transaction",
+  "sign_transaction_step_1_copy_pubkey": "Copy public key to clipboard",
   "sign_transaction_step_2": "Enter Transaction Hex",
   "sign_transaction_input_label": "Transaction Hex",
   "sign_transaction_step_3": "Sign Transaction",
