@@ -510,5 +510,6 @@
     "sign_transaction_step_3": "Skrifaðu Undir Viðskipti",
     "wallet_pop_menu_signing_transactions": "Skrifaðu Undir Viðskipti",
     "sign_transaction_step_1_description": "Veldu heimilisfangið sem mun skrifa undir viðskiptin",
-    "sign_transaction_step_3_description": "Þetta er undirritaður viðskipta hex. Þú getur tvípikkað til að afrita það á klemmuspjaldið."
+    "sign_transaction_step_3_description": "Þetta er undirritaður viðskipta hex. Þú getur tvípikkað til að afrita það á klemmuspjaldið.",
+    "sign_transaction_step_1_copy_pubkey": "Afritaðu opinberan lykil á klemmuspjald"
 }
