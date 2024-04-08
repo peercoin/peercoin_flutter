@@ -510,5 +510,6 @@
     "sign_transaction_step_3": "Underskriv Transaktion",
     "sign_transaction_step_3_description": "Dette er din underskrevne transaktionshex. Du kan trykke to gange for at kopiere det til udklipsholderen.",
     "sign_transaction_input_selector_title": "Vælg hvilke input der skal signeres",
-    "sign_transaction_signing_failed": "Transaktionssignering mislykkedes."
+    "sign_transaction_signing_failed": "Transaktionssignering mislykkedes.",
+    "sign_transaction_step_1_copy_pubkey": "Kopier den offentlige nøgle til udklipsholderen"
 }
