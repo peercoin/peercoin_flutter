@@ -168,7 +168,38 @@ class _WalletSignTransactionScreenState
         address: _signingAddress,
       );
 
-      final tx = Transaction.fromHex(_txInputController.text);
+      Transaction tx = Transaction.fromHex(_txInputController.text);
+
+      // conversion step for cointoolkit start
+      tx = Transaction(
+        inputs: tx.inputs.map((input) {
+          // Determine program from CTK input script data
+          final program = Program.decompile(input.scriptSig);
+
+          if (program is P2PKH) {
+            return P2PKHInput(
+              prevOut: input.prevOut,
+              // Coinlib requires the public key in the input to identify it as a
+              // P2PKH input so find the public key from the hash.
+              publicKey: WIF.fromString(wif).privkey.pubkey,
+            );
+          }
+
+          if (program is MultisigProgram) {
+            return P2SHMultisigInput(
+              prevOut: input.prevOut,
+              program: program,
+            );
+          }
+
+          return input;
+        }),
+        outputs: tx.outputs,
+        version: tx.version,
+        locktime: tx.locktime,
+      );
+      // conversion step for cointoolkit end
+
       final selectedInputResult = await _showInputSelector(tx.inputs.length);
       if (selectedInputResult == false) return;
       if (_checkedInputs.values.every((element) => element == false)) return;
