@@ -203,7 +203,6 @@
     "send_op_return": "ข้อความเมทาดาตา",
     "receive_show_qr": "แสดงคิวอาร์โค้ด",
     "scan_qr": "สแกนคิวอาร์โค้ด",
-    "send_qr": "คิวอาร์โค้ด",
     "send_to": " ไปยัง ",
     "send_transferring": "กำลังโอน ",
     "server_add_title": "เพิ่มเซิร์ฟเวอร์ใหม่",

@@ -157,7 +157,6 @@
     "send_invalid_address": "Endereço inválido",
     "send_label": "Identificação (opcional)",
     "send_dust": "Areia (dust): -$amount $letter_code",
-    "send_qr": "Código QR",
     "send_to": " para ",
     "send_transferring": "A transferir ",
     "server_add_title": "Adicionar novo servidor",

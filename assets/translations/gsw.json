@@ -219,7 +219,6 @@
     "send_label": "Bezeichnung (optional)",
     "send_oops": "Etwas ist schiefgelaufen, bitte versuchen Sie es erneut",
     "send_op_return": "Metadaten-Nachricht",
-    "send_qr": "QR-Code",
     "send_to": " an ",
     "send_total": "Gesamt $amount $letter_code",
     "send_total_amount": "Gesamtsumme",

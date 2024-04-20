@@ -137,7 +137,6 @@
     "send_invalid_address": "Adresse invalide",
     "send_label": "Titre (facultatif)",
     "send_oops": "Quelque chose a mal fonctionné, veuillez réessayer",
-    "send_qr": "Code QR",
     "send_to": " à ",
     "send_total": "Total $amount $letter_code",
     "send_transferring": "Transfert en cours ",

@@ -219,7 +219,6 @@
     "send_label": "תווית (אופציונלי)",
     "send_oops": "משהו השתבש, אנא נסה שוב",
     "send_op_return": "הודעת מטה-נתונים",
-    "send_qr": "קוד QR",
     "send_to": " אל ",
     "send_total": "סה״כ $amount $letter_code",
     "send_total_amount": "סכום כולל",

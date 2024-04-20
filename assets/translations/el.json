@@ -219,7 +219,6 @@
     "send_label": "Ετικέτα (προαιρετικό)",
     "send_oops": "Κάτι πήγε στραβά, παρακαλώ προσπαθήστε ξανά",
     "send_op_return": "Μεταδεδομένα Μήνυμα",
-    "send_qr": "Κωδικός QR",
     "send_to": " σε ",
     "send_total": "Σύνολο $amount $letter_code",
     "send_total_amount": "Συνολικό ποσό",
