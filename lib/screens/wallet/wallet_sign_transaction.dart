@@ -25,7 +25,7 @@ class _WalletSignTransactionScreenState
   late WalletProvider _walletProvider;
   bool _initial = true;
   bool _signingDone = false;
-  bool _signingError = false;
+  String _signingError = '';
   String _signedTx = '';
   String _signingAddress = '';
   final TextEditingController _txInputController = TextEditingController();
@@ -167,7 +167,7 @@ class _WalletSignTransactionScreenState
         identifier: _walletName,
         address: _signingAddress,
       );
-      final convertedWif = WIF.fromString(wif).privkey;
+      final privKey = WIF.fromString(wif).privkey;
 
       Transaction tx = Transaction.fromHex(_txInputController.text);
 
@@ -180,7 +180,7 @@ class _WalletSignTransactionScreenState
           if (program is P2PKH) {
             return P2PKHInput(
               prevOut: input.prevOut,
-              publicKey: convertedWif.pubkey,
+              publicKey: privKey.pubkey,
             );
           }
 
@@ -208,7 +208,7 @@ class _WalletSignTransactionScreenState
         if (value) {
           txToSign = tx.sign(
             inputN: key,
-            key: convertedWif,
+            key: privKey,
           );
         }
       });
@@ -231,7 +231,7 @@ class _WalletSignTransactionScreenState
         e.toString(),
       );
       setState(() {
-        _signingError = true;
+        _signingError = e.toString();
       });
     }
   }
@@ -492,14 +492,15 @@ class _WalletSignTransactionScreenState
                               active: _signingAddress.isNotEmpty &&
                                   _txInputController.text.isNotEmpty,
                             ),
-                      _signingError
+                      _signingError.isNotEmpty
                           ? Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
                                 key: const Key('signingError'),
-                                AppLocalizations.instance.translate(
+                                '${AppLocalizations.instance.translate(
                                   'sign_transaction_signing_failed',
-                                ),
+                                )}\n$_signingError',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.error,
                                 ),
