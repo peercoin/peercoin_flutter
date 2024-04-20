@@ -167,6 +167,7 @@ class _WalletSignTransactionScreenState
         identifier: _walletName,
         address: _signingAddress,
       );
+      final convertedWif = WIF.fromString(wif).privkey;
 
       Transaction tx = Transaction.fromHex(_txInputController.text);
 
@@ -179,9 +180,7 @@ class _WalletSignTransactionScreenState
           if (program is P2PKH) {
             return P2PKHInput(
               prevOut: input.prevOut,
-              // Coinlib requires the public key in the input to identify it as a
-              // P2PKH input so find the public key from the hash.
-              publicKey: WIF.fromString(wif).privkey.pubkey,
+              publicKey: convertedWif.pubkey,
             );
           }
 
@@ -209,7 +208,7 @@ class _WalletSignTransactionScreenState
         if (value) {
           txToSign = tx.sign(
             inputN: key,
-            key: WIF.fromString(wif).privkey,
+            key: convertedWif,
           );
         }
       });
