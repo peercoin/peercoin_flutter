@@ -496,5 +496,9 @@
     "wallet_scan_finished": "Escaneo Finalizado",
     "wallet_scan_scanning_finished": "escaneo terminado",
     "wallet_scan_n_new_found": "$n carteras nuevas encontradas",
-    "wallet_scan_no_new_found": "No se encontraron nuevas carteras"
+    "wallet_scan_no_new_found": "No se encontraron nuevas carteras",
+    "app_settings_experimental_features": "Funciones Experimentales",
+    "search_address": "Buscar dirección",
+    "sign_transaction_signing_failed": "Error al firmar la transacción.",
+    "sign_transaction_step_1_copy_pubkey": "Copiar clave pública al portapapeles"
 }

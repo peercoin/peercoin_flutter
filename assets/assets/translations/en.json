@@ -353,7 +353,6 @@
   "send_label": "Label (optional)",
   "send_oops": "Something went wrong, please try again",
   "send_op_return": "Metadata Message",
-  "send_qr": "QR-Code",
   "send_to": " to ",
   "send_total": "Total $amount $letter_code",
   "send_total_amount": "Total amount",
