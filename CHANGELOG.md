@@ -1,3 +1,7 @@
+### **1.2.6** (2023-04-20)
+
+- Improved transaction signing handling and error messages
+
 ### **1.2.5** (2023-04-08)
 
 - Address public keys can now be exported during transaction signing

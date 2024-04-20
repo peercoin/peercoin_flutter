@@ -501,5 +501,15 @@
     "app_settings_experimental_features": "Tilraunaeiginleikar",
     "app_settings_experimental_feature_watchOnlyWallets": "Athugunarveski",
     "watch_only": "Fylgstu með",
-    "addresses_none": "Engin heimilisföng fundust"
+    "addresses_none": "Engin heimilisföng fundust",
+    "sign_transaction_step_3_button_alt": "Afritaðu hex á klemmuspjald",
+    "sign_transaction_input_selector_title": "Veldu hvaða inntak á að undirrita",
+    "sign_transaction_signing_failed": "Undirritun færslu mistókst.",
+    "sign_transaction_step_2": "Sláðu Inn Viðskipta Hex",
+    "sign_transaction_input_label": "Viðskipta Hex",
+    "sign_transaction_step_3": "Skrifaðu Undir Viðskipti",
+    "wallet_pop_menu_signing_transactions": "Skrifaðu Undir Viðskipti",
+    "sign_transaction_step_1_description": "Veldu heimilisfangið sem mun skrifa undir viðskiptin",
+    "sign_transaction_step_3_description": "Þetta er undirritaður viðskipta hex. Þú getur tvípikkað til að afrita það á klemmuspjaldið.",
+    "sign_transaction_step_1_copy_pubkey": "Afritaðu opinberan lykil á klemmuspjald"
 }

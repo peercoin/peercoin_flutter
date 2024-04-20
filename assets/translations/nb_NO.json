@@ -501,5 +501,15 @@
     "search_address": "Søk adresse",
     "app_settings_experimental_feature_watchOnlyWallets": "Observasjonslommebøker",
     "watch_only": "Observer",
-    "addresses_none": "Finner ingen adresser"
+    "addresses_none": "Finner ingen adresser",
+    "sign_transaction_step_3": "Signer Transaksjon",
+    "sign_transaction_step_3_button_alt": "Kopier hex til utklippstavlen",
+    "sign_transaction_step_2": "Angi Transaksjonshex",
+    "sign_transaction_input_label": "Transaksjonshex",
+    "sign_transaction_signing_failed": "Transaksjonssignering mislyktes.",
+    "sign_transaction_input_selector_title": "Velg hvilke inputs som skal signeres",
+    "wallet_pop_menu_signing_transactions": "Signer Transaksjon",
+    "sign_transaction_step_1_description": "Velg adressen som skal signere transaksjonen",
+    "sign_transaction_step_3_description": "Dette er din signerte transaksjonshex. Du kan dobbelttrykke for å kopiere den til utklippstavlen.",
+    "sign_transaction_step_1_copy_pubkey": "Kopier offentlig nøkkel til utklippstavlen"
 }

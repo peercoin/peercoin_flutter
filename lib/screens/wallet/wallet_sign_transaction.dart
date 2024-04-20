@@ -1,4 +1,5 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,7 @@ class _WalletSignTransactionScreenState
   late WalletProvider _walletProvider;
   bool _initial = true;
   bool _signingDone = false;
-  bool _signingError = false;
+  String _signingError = '';
   String _signedTx = '';
   String _signingAddress = '';
   final TextEditingController _txInputController = TextEditingController();
@@ -167,18 +168,52 @@ class _WalletSignTransactionScreenState
         identifier: _walletName,
         address: _signingAddress,
       );
+      final privKey = WIF.fromString(wif).privkey;
 
-      final tx = Transaction.fromHex(_txInputController.text);
+      Transaction tx = Transaction.fromHex(_txInputController.text);
       final selectedInputResult = await _showInputSelector(tx.inputs.length);
       if (selectedInputResult == false) return;
       if (_checkedInputs.values.every((element) => element == false)) return;
+
+      // conversion step for cointoolkit start
+      tx = Transaction(
+        inputs: tx.inputs.mapIndexed((i, input) {
+          if (!_checkedInputs.containsKey(i) || _checkedInputs[i]! == false) {
+            //don't convert this unselected input, return as is
+            return input;
+          }
+
+          // Determine program from cointoolkit input script data
+          final program = Program.decompile(input.scriptSig);
+
+          if (program is P2PKH) {
+            return P2PKHInput(
+              prevOut: input.prevOut,
+              publicKey: privKey.pubkey,
+            );
+          }
+
+          if (program is MultisigProgram) {
+            return P2SHMultisigInput(
+              prevOut: input.prevOut,
+              program: program,
+            );
+          }
+
+          return input;
+        }),
+        outputs: tx.outputs,
+        version: tx.version,
+        locktime: tx.locktime,
+      );
+      // conversion step for cointoolkit end
 
       Transaction txToSign = tx;
       _checkedInputs.forEach((key, value) {
         if (value) {
           txToSign = tx.sign(
             inputN: key,
-            key: WIF.fromString(wif).privkey,
+            key: privKey,
           );
         }
       });
@@ -201,7 +236,7 @@ class _WalletSignTransactionScreenState
         e.toString(),
       );
       setState(() {
-        _signingError = true;
+        _signingError = e.toString();
       });
     }
   }
@@ -462,14 +497,15 @@ class _WalletSignTransactionScreenState
                               active: _signingAddress.isNotEmpty &&
                                   _txInputController.text.isNotEmpty,
                             ),
-                      _signingError
+                      _signingError.isNotEmpty
                           ? Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
                                 key: const Key('signingError'),
-                                AppLocalizations.instance.translate(
+                                '${AppLocalizations.instance.translate(
                                   'sign_transaction_signing_failed',
-                                ),
+                                )}\n$_signingError',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.error,
                                 ),
