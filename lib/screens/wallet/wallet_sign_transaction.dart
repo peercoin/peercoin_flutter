@@ -178,7 +178,7 @@ class _WalletSignTransactionScreenState
       // conversion step for cointoolkit start
       tx = Transaction(
         inputs: tx.inputs.mapIndexed((i, input) {
-          if (!_checkedInputs.containsKey(i)) {
+          if (!_checkedInputs.containsKey(i) || !_checkedInputs[i]!) {
             //don't convert this unselected input, return as is
             return input;
           }
