@@ -1,4 +1,5 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -170,11 +171,19 @@ class _WalletSignTransactionScreenState
       final privKey = WIF.fromString(wif).privkey;
 
       Transaction tx = Transaction.fromHex(_txInputController.text);
+      final selectedInputResult = await _showInputSelector(tx.inputs.length);
+      if (selectedInputResult == false) return;
+      if (_checkedInputs.values.every((element) => element == false)) return;
 
       // conversion step for cointoolkit start
       tx = Transaction(
-        inputs: tx.inputs.map((input) {
-          // Determine program from CTK input script data
+        inputs: tx.inputs.mapIndexed((i, input) {
+          if (!_checkedInputs.containsKey(i)) {
+            //don't convert this unselected input, return as is
+            return input;
+          }
+
+          // Determine program from cointoolkit input script data
           final program = Program.decompile(input.scriptSig);
 
           if (program is P2PKH) {
@@ -198,10 +207,6 @@ class _WalletSignTransactionScreenState
         locktime: tx.locktime,
       );
       // conversion step for cointoolkit end
-
-      final selectedInputResult = await _showInputSelector(tx.inputs.length);
-      if (selectedInputResult == false) return;
-      if (_checkedInputs.values.every((element) => element == false)) return;
 
       Transaction txToSign = tx;
       _checkedInputs.forEach((key, value) {
