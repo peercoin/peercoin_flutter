@@ -219,7 +219,6 @@
     "send_label": "Етикет (опционално)",
     "send_oops": "Нещо се обърка, моля, опитайте отново",
     "send_op_return": "Метаданни",
-    "send_qr": "QR-код",
     "send_to": " на ",
     "send_total": "Общо $amount $letter_code",
     "send_total_amount": "Обща сума",

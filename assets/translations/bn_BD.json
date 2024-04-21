@@ -133,7 +133,6 @@
     "import_wif_error_snack": "এই ঠিকানাটি ইতিমধ্যেই ইম্পোর্ট করা হয়েছে",
     "send_oops": "কিছু ভুল হয়েছে দয়া করে আবার চেষ্টা করুন",
     "send_op_return": "মেটাডেটা মেসেজ",
-    "send_qr": "QR-কোড",
     "server_settings_alert_generated_title": "আপনি কি সত্যিই এই সার্ভার অপসারণ করতে চান?",
     "server_settings_alert_cancel": "বাতিল",
     "server_settings_alert_hardcoded_title": "হার্ড কোডেড সার্ভার",

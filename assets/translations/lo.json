@@ -219,7 +219,6 @@
     "send_label": "ປ້ອນຊື່ (ເລື່ອງໃດໜຶ່ງ)",
     "send_oops": "ມີບາງສ່ວນທີ່ຜິດພາດ, ກະລຸນາລອງອີກຄວາມພໍ່ໄປ",
     "send_op_return": "ການສົ່ງຂໍ້ຄວາມຈໍາໂທດຂອງຄຳເວົ້າ",
-    "send_qr": "QR-Code",
     "send_to": " ຈາກ ",
     "send_total": "ຈໍານວນທັງຫມົດ $amount $letter_code",
     "send_total_amount": "ຈໍານວນທັງຫມົດ",

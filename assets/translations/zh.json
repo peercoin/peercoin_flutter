@@ -253,7 +253,6 @@
     "receive_obtain": "获取tPPC",
     "send_empty": "空钱包",
     "send_label": "标签（可选）",
-    "send_qr": "二维码",
     "setup_bg_sync_description": "这将为您的钱包启用后台通知。",
     "wallet_pop_menu_wif": "导入私钥",
     "wallet_receive_label_hint": "点击分享按钮保存地址标签。",

@@ -135,7 +135,6 @@
     "send_fee": "Gebyr: -$amount $letter_code",
     "send_invalid_address": "Ugyldig adresse",
     "send_label": "Etikett (valgfritt)",
-    "send_qr": "Skann QR-kode",
     "send_to": " til ",
     "send_transferring": "Overfører ",
     "server_add_title": "Legg til ny server",

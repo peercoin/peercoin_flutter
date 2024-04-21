@@ -141,7 +141,6 @@
     "send_fee": "Avgift: -$amount $letter_code",
     "send_invalid_address": "Ogiltig adress",
     "send_op_return": "Metadatameddelande",
-    "send_qr": "QR-kod",
     "send_to": " till ",
     "send_total": "Totalt $amount $letter_code",
     "send_transferring": "Överför ",

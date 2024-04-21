@@ -6,7 +6,6 @@
     "send_label": "태그 (선택 사항)",
     "send_oops": "오류가 발생하였습니다. 다시 시도해 주시기 바랍니다",
     "send_op_return": "메타데이터 메시지",
-    "send_qr": "QR 코드",
     "send_to": " 받는이 ",
     "server_add_title": "새 서버 추가하기",
     "server_add_input_label": "서버 URL",

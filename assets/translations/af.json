@@ -219,7 +219,6 @@
     "send_label": "Etiket (opsioneel)",
     "send_oops": "Iets het verkeerd gegaan, probeer asseblief weer",
     "send_op_return": "Metadata Boodskap",
-    "send_qr": "QR-kode",
     "send_to": " aan ",
     "send_total": "Totaal $amount $letter_code",
     "send_total_amount": "Totaal bedrag",

@@ -219,7 +219,6 @@
     "send_label": "Знак (неабавязкова)",
     "send_oops": "Нешта пайшло не так, калі ласка, паспрабуйце зноў",
     "send_op_return": "Метаданыя для транзакцыі",
-    "send_qr": "QR-код",
     "send_to": " да ",
     "send_total": "Усяго $amount $letter_code",
     "send_total_amount": "Загальная сума",

@@ -219,7 +219,6 @@
     "send_label": "Etiketė (neprivaloma)",
     "send_oops": "Kažkas nutiko negerai, bandykite dar kartą",
     "send_op_return": "Metaduomenų žinutė",
-    "send_qr": "QR kodas",
     "send_to": " į ",
     "send_total": "Iš viso $amount $letter_code",
     "send_total_amount": "Iš viso suma",

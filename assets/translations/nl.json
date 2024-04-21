@@ -198,7 +198,6 @@
     "server_settings_alert_cancel": "Annuleren",
     "server_settings_alert_hardcoded_title": "Hard gecodeerde server",
     "server_settings_error_no_server_left": "Tenminste één aansluitbare server is vereist!",
-    "send_qr": "QR-Code",
     "send_op_return": "Metadata-bericht",
     "setup_continue_alert_content": "Bewaar uw zaad zin op een veilige plek.\nJe kan het later opzoeken in de applicatiesettings.",
     "setup_pin_no_biometrics": "Je toestel ondersteunt geen biometrische autentificatie.",

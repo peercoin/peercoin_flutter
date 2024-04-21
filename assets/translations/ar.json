@@ -126,7 +126,6 @@
     "send_invalid_address": "عنوان خاطئ",
     "send_label": "التسمية (اختياري)",
     "send_op_return": "رسالة البيانات الوصفية",
-    "send_qr": "كود QR",
     "send_to": " إلى ",
     "send_total": "الاجمالي $amount $letter_code",
     "send_transferring": "جارِ التحويل ",
