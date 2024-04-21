@@ -219,7 +219,6 @@
     "send_label": "Merkimiði (valfrjálst)",
     "send_oops": "Eitthvað fór úrskeiðis, vinsamlegast reyndu aftur",
     "send_op_return": "Lýsing um gögn",
-    "send_qr": "QR-kóði",
     "send_to": " til ",
     "send_total": "Samtals $amount $letter_code",
     "send_total_amount": "Samtals upphæð",

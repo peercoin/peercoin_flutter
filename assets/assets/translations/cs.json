@@ -219,7 +219,6 @@
     "send_label": "Popisek (volitelně)",
     "send_oops": "Něco se pokazilo, zkuste to znovu",
     "send_op_return": "Metadata zpráva",
-    "send_qr": "QR kód",
     "send_to": " na ",
     "send_total": "Celkem $amount $letter_code",
     "send_total_amount": "Celková částka",

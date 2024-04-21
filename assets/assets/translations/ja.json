@@ -205,7 +205,6 @@
     "send_invalid_address": "無効な住所",
     "send_label": "ラベル（任意）",
     "send_op_return": "メタデータのメッセージ",
-    "send_qr": "QRコード",
     "send_to": " XXへ ",
     "send_total": "合計金額 $amount $letter_code",
     "send_transferring": "転送する ",

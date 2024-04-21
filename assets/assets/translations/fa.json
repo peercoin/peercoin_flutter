@@ -136,7 +136,6 @@
     "send_fee": "کارمزد: -$amount $letter_code",
     "send_oops": "مشکلی رخ داده است، لطفا دوباره تلاش کنید",
     "send_op_return": "پیام فراداده",
-    "send_qr": "QR کد",
     "send_to": " به ",
     "send_total": "مجموع $amount $letter_code",
     "send_transferring": "در حال ارسال و انتقال ",

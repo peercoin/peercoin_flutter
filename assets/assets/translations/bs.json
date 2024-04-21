@@ -219,7 +219,6 @@
     "send_label": "Oznaka (opciono)",
     "send_oops": "Došlo je do greške, molimo pokušajte ponovo",
     "send_op_return": "Metapodaci",
-    "send_qr": "QR kod",
     "send_to": " na ",
     "send_total": "Ukupno $amount $letter_code",
     "send_total_amount": "Ukupan iznos",

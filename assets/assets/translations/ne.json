@@ -219,7 +219,6 @@
     "send_label": "लेबल (वैकल्पिक)",
     "send_oops": "केहि गल्ती भयो, कृपया पुन: प्रयास गर्नुहोस्",
     "send_op_return": "मेटाडाटा सन्देश",
-    "send_qr": "क्यूआर-कोड",
     "send_to": " मा ",
     "send_total": "कुल $amount $letter_code",
     "send_total_amount": "कुल रकम",
