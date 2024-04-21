@@ -182,7 +182,6 @@
     "send_invalid_address": "Dirección inválida",
     "send_label": "Etiqueta (opcional)",
     "send_op_return": "Mensaje de Metadatos",
-    "send_qr": "Código QR",
     "send_total": "Cantidad total $amount $letter_code",
     "server_settings_title": "Ajustes del servidor",
     "server_settings_alert_generated_title": "¿Estás seguro de que quieres eliminar este servidor?",

@@ -219,7 +219,6 @@
     "send_label": "ಲೇಬಲ್ (ಐಚ್ಛಿಕ)",
     "send_oops": "ಏನೋ ತಪ್ಪಾಗಿಹೋಯಿತು, ದಯವಿಟ್ಟು ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ",
     "send_op_return": "ಮೇಟಾಡೇಟಾ ಸಂದೇಶ",
-    "send_qr": "QR ಕೋಡ್",
     "send_to": " ಗೆ ಕಳುಹಿಸಿ ",
     "send_total": "ಒಟ್ಟು $amount $letter_code",
     "send_total_amount": "ಒಟ್ಟು ಮೊತ್ತ",

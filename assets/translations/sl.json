@@ -219,7 +219,6 @@
     "send_label": "Oznaka (neobvezno)",
     "send_oops": "Nekaj je šlo narobe, poskusite znova",
     "send_op_return": "Metapodatki sporočila",
-    "send_qr": "QR-koda",
     "send_to": " na ",
     "send_total": "Skupaj $amount $letter_code",
     "send_total_amount": "Skupen znesek",

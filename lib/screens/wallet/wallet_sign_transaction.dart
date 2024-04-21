@@ -211,7 +211,7 @@ class _WalletSignTransactionScreenState
       Transaction txToSign = tx;
       _checkedInputs.forEach((key, value) {
         if (value) {
-          txToSign = tx.sign(
+          txToSign = txToSign.sign(
             inputN: key,
             key: privKey,
           );

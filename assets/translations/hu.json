@@ -219,7 +219,6 @@
     "send_label": "Címke (opcionális)",
     "send_oops": "Valami hiba történt, kérlek próbáld újra",
     "send_op_return": "Metaadat üzenet",
-    "send_qr": "QR-kód",
     "send_to": " címre ",
     "send_total": "Összesen $amount $letter_code",
     "send_total_amount": "Összesen összeg",

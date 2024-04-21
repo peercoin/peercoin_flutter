@@ -200,7 +200,6 @@
     "send_label": "标签（可选）",
     "send_oops": "出了点问题，请重试",
     "send_op_return": "元数据消息",
-    "send_qr": "二维码",
     "send_to": " 发送到 ",
     "send_total": "总计 $amount $letter_code",
     "send_total_amount": "总金额",

@@ -177,7 +177,6 @@
     "send_invalid_address": "Неправильна адреса",
     "send_label": "Мітка (необов'язково)",
     "send_op_return": "Блок метаданих",
-    "send_qr": "QR-код",
     "send_to": " для ",
     "send_total": "Всього $amount $letter_code",
     "send_transferring": "Відправлення ",

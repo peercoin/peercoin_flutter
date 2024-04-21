@@ -219,7 +219,6 @@
     "send_label": "Tunniste (valinnainen)",
     "send_oops": "Jokin meni pieleen, yritä uudelleen",
     "send_op_return": "Metadatan viesti",
-    "send_qr": "QR-koodi",
     "send_to": " osoitteeseen ",
     "send_total": "Yhteensä $amount $letter_code",
     "send_total_amount": "Kokonaismäärä",

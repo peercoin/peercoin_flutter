@@ -246,7 +246,6 @@
     "send_invalid_address": "မှားနေပါက လိပ်စာထည့်ပါ",
     "send_label": "တိုက်ချစ်နှုန်း (ရေးသားမည်)",
     "send_op_return": "အခွင့်အရေးကို ပေးပို့ရန်",
-    "send_qr": "QR ကုဒ်",
     "send_to": " သို့ ",
     "send_total": "စုစုပေါင်း $amount $letter_code",
     "send_transferring": "လက်ခံရေးဆွဲခြင်း ",
