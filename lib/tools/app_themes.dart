@@ -172,8 +172,24 @@ class MyTheme {
         cursorColor: DarkColors.white,
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.all(DarkColors.white),
-        trackColor: WidgetStateProperty.all(DarkColors.grey),
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return DarkColors.white;
+          }
+          return DarkColors.grey;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return DarkColors.grey;
+          }
+          return DarkColors.white;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return DarkColors.white;
+          }
+          return DarkColors.grey;
+        }),
       ),
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.all(DarkColors.white),
@@ -190,7 +206,7 @@ class MyTheme {
         error: DarkColors.red,
         onPrimary: DarkColors.green,
         onSecondary: DarkColors.green,
-        onSurface: DarkColors.green,
+        onSurface: DarkColors.black,
         onError: DarkColors.red,
         brightness: Brightness.dark,
         tertiary: DarkColors.white,
