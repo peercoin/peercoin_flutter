@@ -152,7 +152,7 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                   formKey.currentState!.save();
                   context.read<WalletProvider>().createWatchOnlyAddres(
                         identifier: widget.walletName,
-                        address: addressController.text,
+                        address: addressController.text.trim(),
                         label: labelController.text == ''
                             ? ''
                             : labelController.text,
@@ -189,10 +189,8 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                     padding: const EdgeInsets.all(20),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        foregroundColor:
-                            Theme.of(context).colorScheme.surface,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.surface,
+                        foregroundColor: Theme.of(context).colorScheme.surface,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
                         fixedSize: Size(
                           MediaQuery.of(context).size.width > 1200
                               ? MediaQuery.of(context).size.width / 5
