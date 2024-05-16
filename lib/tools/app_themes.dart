@@ -57,24 +57,46 @@ class MyTheme {
           foregroundColor: LightColors.green,
         ),
       ),
+      sliderTheme: SliderThemeData(
+        valueIndicatorTextStyle: TextStyle(
+          color: LightColors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return LightColors.white;
+          }
+          return LightColors.green;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return LightColors.green;
+          }
+          return LightColors.white;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return LightColors.white;
+          }
+          return LightColors.green;
+        }),
+      ),
       colorScheme: ColorScheme(
         primary: LightColors.green,
         primaryContainer: LightColors.darkGreen,
         secondary: LightColors.grey,
         secondaryContainer: LightColors.lightGrey,
         surface: LightColors.white,
-        background: LightColors.grey,
         error: LightColors.red,
         onPrimary: LightColors.white,
         onSecondary: LightColors.blackGreen,
         onSurface: LightColors.black,
-        onBackground: LightColors.green,
         onError: LightColors.red,
         brightness: Brightness.light,
         tertiary: LightColors.white,
-      )
-          .copyWith(background: LightColors.white)
-          .copyWith(error: LightColors.red),
+      ).copyWith(surface: LightColors.white).copyWith(error: LightColors.red),
       bottomAppBarTheme: const BottomAppBarTheme(color: Color(0x003cb054)),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
@@ -95,7 +117,7 @@ class MyTheme {
       sliderTheme: SliderThemeData(valueIndicatorColor: DarkColors.darkBlue),
       unselectedWidgetColor: DarkColors.white,
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.all(DarkColors.white),
+        fillColor: WidgetStateProperty.all(DarkColors.white),
       ),
       textTheme: TextTheme(
         titleLarge: TextStyle(color: DarkColors.white),
@@ -150,11 +172,11 @@ class MyTheme {
         cursorColor: DarkColors.white,
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.all(DarkColors.white),
-        trackColor: MaterialStateProperty.all(DarkColors.grey),
+        thumbColor: WidgetStateProperty.all(DarkColors.white),
+        trackColor: WidgetStateProperty.all(DarkColors.grey),
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.all(DarkColors.white),
+        fillColor: WidgetStateProperty.all(DarkColors.white),
       ),
       expansionTileTheme: ExpansionTileThemeData(
         iconColor: DarkColors.white,
@@ -164,17 +186,15 @@ class MyTheme {
         primaryContainer: DarkColors.white,
         secondary: DarkColors.white,
         secondaryContainer: DarkColors.grey,
-        surface: DarkColors.black,
-        background: DarkColors.green,
+        surface: DarkColors.green,
         error: DarkColors.red,
         onPrimary: DarkColors.green,
         onSecondary: DarkColors.green,
-        onSurface: DarkColors.white,
-        onBackground: DarkColors.green,
+        onSurface: DarkColors.green,
         onError: DarkColors.red,
         brightness: Brightness.dark,
         tertiary: DarkColors.white,
-      ).copyWith(background: DarkColors.green).copyWith(error: DarkColors.red),
+      ).copyWith(surface: DarkColors.green).copyWith(error: DarkColors.red),
       bottomAppBarTheme: const BottomAppBarTheme(color: Color(0x000D1821)),
     ),
   };

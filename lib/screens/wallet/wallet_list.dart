@@ -335,7 +335,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(50.0)),
                             border: Border.all(
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                               width: 2,
                             ),
                           ),
@@ -365,7 +365,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                       style: TextStyle(
                         letterSpacing: 1.4,
                         fontSize: 24,
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                   ),
@@ -386,7 +386,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                   fontSize: 16,
                                   fontStyle: FontStyle.italic,
                                   color:
-                                      Theme.of(context).colorScheme.background,
+                                      Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                               if (_importedSeed)
@@ -438,7 +438,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                     horizontal: 16,
                                   ),
                                   color:
-                                      Theme.of(context).colorScheme.background,
+                                      Theme.of(context).colorScheme.surface,
                                   child: Column(
                                     children: [
                                       InkWell(

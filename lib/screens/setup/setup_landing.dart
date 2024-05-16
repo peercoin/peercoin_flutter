@@ -57,7 +57,7 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                             height: MediaQuery.of(context).size.height / 20,
                           ),
                           Image.asset(
-                            'assets/icon/ppc-icon-white.png',
+                            'assets/icon/ppc-icon-white-256.png',
                             height: MediaQuery.of(context).size.height / 5,
                           ),
                           Column(
@@ -135,7 +135,7 @@ class _SetupLandingScreenState extends State<SetupLandingScreen> {
                   },
                   icon: Icon(
                     Icons.language_rounded,
-                    color: Theme.of(context).colorScheme.background,
+                    color: Theme.of(context).colorScheme.surface,
                     size: 32,
                   ),
                 ),

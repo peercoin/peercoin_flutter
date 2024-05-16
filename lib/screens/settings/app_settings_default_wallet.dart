@@ -50,13 +50,13 @@ class _AppSettingsDefaultWalletScreenState
   List<Widget> generateDefaultWallets() {
     final inkwells = _availableWallets.map((wallet) {
       return InkWell(
-        onTap: () => saveDefaultWallet(wallet.letterCode),
+        onTap: () => saveDefaultWallet(wallet.name),
         child: ListTile(
           title: Text(wallet.title),
           leading: Radio(
-            value: wallet.letterCode,
+            value: wallet.name,
             groupValue: _defaultWallet,
-            onChanged: (dynamic _) => saveDefaultWallet(wallet.letterCode),
+            onChanged: (dynamic _) => saveDefaultWallet(wallet.name),
           ),
         ),
       );

@@ -190,9 +190,9 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.surface,
                         backgroundColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.surface,
                         fixedSize: Size(
                           MediaQuery.of(context).size.width > 1200
                               ? MediaQuery.of(context).size.width / 5
@@ -239,7 +239,7 @@ class _AddressesTabWatchOnlyState extends State<AddressesTabWatchOnly> {
                         style: TextStyle(
                           fontSize: 16,
                           fontStyle: FontStyle.italic,
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                       ),
                     ),

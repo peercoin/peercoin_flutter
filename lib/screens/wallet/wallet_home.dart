@@ -791,7 +791,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _calcBottomNavBar(context),
-      appBar: _selectedTab == WalletTab.addresses
+      appBar: _selectedTab == WalletTab.addresses && _wallet.watchOnly
           ? addressTabWatchOnlySearchAppBar()
           : AppBar(
               centerTitle: true,

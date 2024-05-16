@@ -176,7 +176,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
-                                color: Theme.of(context).colorScheme.background,
+                                color: Theme.of(context).colorScheme.surface,
                                 border: Border.all(
                                   width: 2,
                                   color: Theme.of(context).primaryColor,
@@ -223,7 +223,7 @@ class _SetupImportSeedState extends State<SetupImportSeedScreen> {
                                     filled: true,
                                     fillColor: Theme.of(context)
                                         .colorScheme
-                                        .background,
+                                        .surface,
                                     suffixIcon: IconButton(
                                       onPressed: () async {
                                         final focusScope =

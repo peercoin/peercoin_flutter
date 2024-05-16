@@ -457,107 +457,103 @@ class _AddressTabState extends State<AddressTab> {
                 child: ClipRect(
                   child: Slidable(
                     key: Key(addr.address),
-                    actionPane: const SlidableScrollActionPane(),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_edit'),
-                        color: Theme.of(context).primaryColor,
-                        icon: Icons.edit,
-                        onTap: () => _addressEditDialog(context, addr),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_share'),
-                        color: Theme.of(context).colorScheme.background,
-                        iconWidget: Icon(
-                          Icons.share,
-                          color: Theme.of(context).colorScheme.secondary,
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      extentRatio: 1,
+                      children: <Widget>[
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_edit'),
+                          backgroundColor: Theme.of(context).primaryColor,
+                          icon: Icons.edit,
+                          onPressed: (ctx) => _addressEditDialog(ctx, addr),
                         ),
-                        onTap: () => WalletHomeQr.showQrDialog(
-                          context,
-                          addr.address,
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_share'),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          icon: Icons.share,
+                          onPressed: (ctx) => WalletHomeQr.showQrDialog(
+                            ctx,
+                            addr.address,
+                          ),
                         ),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_send'),
-                        color: Theme.of(context).colorScheme.secondary,
-                        iconWidget: Icon(
-                          Icons.send,
-                          color: Theme.of(context).colorScheme.background,
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_send'),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          icon: Icons.send,
+                          onPressed: (_) => widget.changeTab(
+                            WalletTab.send,
+                            addr.address,
+                            addr.addressBookName,
+                          ),
                         ),
-                        onTap: () => widget.changeTab(
-                          WalletTab.send,
-                          addr.address,
-                          addr.addressBookName,
-                        ),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_delete'),
-                        color: Theme.of(context).colorScheme.error,
-                        iconWidget: const Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                        onTap: () async {
-                          await showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: Text(
-                                AppLocalizations.instance.translate(
-                                  'addressbook_dialog_remove_title',
-                                ),
-                              ),
-                              content: Text(addr.address),
-                              actions: <Widget>[
-                                TextButton.icon(
-                                  label: Text(
-                                    AppLocalizations.instance.translate(
-                                      'server_settings_alert_cancel',
-                                    ),
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_delete'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          icon: Icons.delete,
+                          onPressed: (ctx) async {
+                            await showDialog(
+                              context: ctx,
+                              builder: (_) => AlertDialog(
+                                title: Text(
+                                  AppLocalizations.instance.translate(
+                                    'addressbook_dialog_remove_title',
                                   ),
-                                  icon: const Icon(Icons.cancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
                                 ),
-                                TextButton.icon(
-                                  label: Text(
-                                    AppLocalizations.instance
-                                        .translate('jail_dialog_button'),
-                                  ),
-                                  icon: const Icon(Icons.check),
-                                  onPressed: () {
-                                    context
-                                        .read<WalletProvider>()
-                                        .removeAddress(
-                                          widget.walletName,
-                                          addr,
-                                        );
-                                    applyFilter();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          AppLocalizations.instance.translate(
-                                            'addressbook_dialog_remove_snack',
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 5),
+                                content: Text(addr.address),
+                                actions: <Widget>[
+                                  TextButton.icon(
+                                    label: Text(
+                                      AppLocalizations.instance.translate(
+                                        'server_settings_alert_cancel',
                                       ),
-                                    );
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                    actionExtentRatio: 0.25,
+                                    ),
+                                    icon: const Icon(Icons.cancel),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton.icon(
+                                    label: Text(
+                                      AppLocalizations.instance
+                                          .translate('jail_dialog_button'),
+                                    ),
+                                    icon: const Icon(Icons.check),
+                                    onPressed: () {
+                                      context
+                                          .read<WalletProvider>()
+                                          .removeAddress(
+                                            widget.walletName,
+                                            addr,
+                                          );
+                                      applyFilter();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            AppLocalizations.instance.translate(
+                                              'addressbook_dialog_remove_snack',
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          duration: const Duration(seconds: 5),
+                                        ),
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                     child: ListTile(
                       leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -603,62 +599,57 @@ class _AddressTabState extends State<AddressTab> {
                 child: ClipRect(
                   child: Slidable(
                     key: Key(addr.address),
-                    actionPane: const SlidableScrollActionPane(),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_edit'),
-                        color: Theme.of(context).primaryColor,
-                        icon: Icons.edit,
-                        onTap: () => _addressEditDialog(context, addr),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_share'),
-                        color: Theme.of(context).colorScheme.background,
-                        iconWidget: Icon(
-                          Icons.share,
-                          color: Theme.of(context).colorScheme.secondary,
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      extentRatio: 1,
+                      children: [
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_edit'),
+                          backgroundColor: Theme.of(context).primaryColor,
+                          icon: Icons.edit,
+                          onPressed: (ctx) => _addressEditDialog(ctx, addr),
                         ),
-                        onTap: () => WalletHomeQr.showQrDialog(
-                          context,
-                          addr.address,
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_share'),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          icon: Icons.share,
+                          onPressed: (ctx) => WalletHomeQr.showQrDialog(
+                            ctx,
+                            addr.address,
+                          ),
                         ),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance.translate(
-                          _isWatchedMap[addr.address] == true
-                              ? 'addressbook_swipe_unwatch'
-                              : 'addressbook_swipe_watch',
-                        ),
-                        color: Theme.of(context).colorScheme.secondary,
-                        iconWidget: Icon(
-                          _isWatchedMap[addr.address] == true
+                        SlidableAction(
+                          label: AppLocalizations.instance.translate(
+                            _isWatchedMap[addr.address] == true
+                                ? 'addressbook_swipe_unwatch'
+                                : 'addressbook_swipe_watch',
+                          ),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          icon: _isWatchedMap[addr.address] == true
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          color: Theme.of(context).colorScheme.background,
+                          onPressed: (_) => _toggleWatched(addr),
                         ),
-                        onTap: () => _toggleWatched(addr),
-                      ),
-                      IconSlideAction(
-                        caption: AppLocalizations.instance
-                            .translate('addressbook_swipe_export'),
-                        color: Theme.of(context).colorScheme.error,
-                        iconWidget: Icon(
-                          Icons.vpn_key,
-                          color: Theme.of(context).colorScheme.background,
+                        SlidableAction(
+                          label: AppLocalizations.instance
+                              .translate('addressbook_swipe_export'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          icon: Icons.vpn_key,
+                          onPressed: (ctx) => Auth.requireAuth(
+                            context: ctx,
+                            biometricsAllowed: context
+                                .read<AppSettingsProvider>()
+                                .biometricsAllowed,
+                            callback: () =>
+                                _showAddressExportDialog(context, addr),
+                          ),
                         ),
-                        onTap: () => Auth.requireAuth(
-                          context: context,
-                          biometricsAllowed: context
-                              .read<AppSettingsProvider>()
-                              .biometricsAllowed,
-                          callback: () =>
-                              _showAddressExportDialog(context, addr),
-                        ),
-                      ),
-                    ],
-                    actionExtentRatio: 0.25,
+                      ],
+                    ),
                     child: ListTile(
                       leading: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -720,7 +711,7 @@ class _AddressTabState extends State<AddressTab> {
                 spacing: 10,
                 children: [
                   ChoiceChip(
-                    backgroundColor: Theme.of(context).colorScheme.background,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     selectedColor: Theme.of(context).shadowColor,
                     visualDensity: const VisualDensity(
                       horizontal: 0.0,
@@ -743,7 +734,7 @@ class _AddressTabState extends State<AddressTab> {
                     },
                   ),
                   ChoiceChip(
-                    backgroundColor: Theme.of(context).colorScheme.background,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     selectedColor: Theme.of(context).shadowColor,
                     visualDensity: const VisualDensity(
                       horizontal: 0.0,
@@ -768,7 +759,7 @@ class _AddressTabState extends State<AddressTab> {
                   Padding(
                     padding: const EdgeInsets.all(kIsWeb ? 8.0 : 0),
                     child: ChoiceChip(
-                      backgroundColor: Theme.of(context).colorScheme.background,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       selectedColor: Theme.of(context).shadowColor,
                       visualDensity: const VisualDensity(
                         horizontal: 0.0,
@@ -798,7 +789,7 @@ class _AddressTabState extends State<AddressTab> {
                     ),
                   ),
                   ChoiceChip(
-                    backgroundColor: Theme.of(context).colorScheme.background,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     selectedColor: Theme.of(context).shadowColor,
                     visualDensity: const VisualDensity(
                       horizontal: 0.0,
@@ -822,7 +813,7 @@ class _AddressTabState extends State<AddressTab> {
                     },
                   ),
                   ChoiceChip(
-                    backgroundColor: Theme.of(context).colorScheme.background,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     selectedColor: Theme.of(context).shadowColor,
                     visualDensity: const VisualDensity(
                       horizontal: 0.0,
@@ -862,7 +853,7 @@ class _AddressTabState extends State<AddressTab> {
                 automaticallyImplyLeading: false,
                 floating: true,
                 backgroundColor: _search
-                    ? Theme.of(context).colorScheme.background
+                    ? Theme.of(context).colorScheme.surface
                     : Theme.of(context).primaryColor,
                 title: Container(
                   margin: const EdgeInsets.only(top: 8),
@@ -878,10 +869,11 @@ class _AddressTabState extends State<AddressTab> {
                               autocorrect: false,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
+                                focusColor: Colors.red,
                                 hintText: AppLocalizations.instance
                                     .translate('addressbook_search'),
                                 suffixIcon: IconButton(
-                                  icon: const Center(child: Icon(Icons.clear)),
+                                  icon: const Icon(Icons.clear),
                                   iconSize: 24,
                                   onPressed: () {
                                     _search = false;
@@ -899,9 +891,9 @@ class _AddressTabState extends State<AddressTab> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.secondary,
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.surface,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5
@@ -938,9 +930,9 @@ class _AddressTabState extends State<AddressTab> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.surface,
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.surface,
                                 fixedSize: Size(
                                   MediaQuery.of(context).size.width > 1200
                                       ? MediaQuery.of(context).size.width / 5
