@@ -13,6 +13,15 @@ import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
 
+class WalletSignTransactionArguments {
+  final String walletName;
+  final String coinLetterCode;
+  WalletSignTransactionArguments({
+    required this.walletName,
+    required this.coinLetterCode,
+  });
+}
+
 class WalletSignTransactionScreen extends StatefulWidget {
   const WalletSignTransactionScreen({super.key});
 
@@ -24,6 +33,7 @@ class WalletSignTransactionScreen extends StatefulWidget {
 class _WalletSignTransactionScreenState
     extends State<WalletSignTransactionScreen> {
   late String _walletName;
+  late String _coinLetterCode;
   late WalletProvider _walletProvider;
   bool _initial = true;
   String _signingError = '';
@@ -34,8 +44,12 @@ class _WalletSignTransactionScreenState
   @override
   void didChangeDependencies() {
     if (_initial == true) {
-      _walletName = ModalRoute.of(context)!.settings.arguments as String;
+      final args = ModalRoute.of(context)!.settings.arguments
+          as WalletSignTransactionArguments;
       _walletProvider = Provider.of<WalletProvider>(context);
+      _walletName = args.walletName;
+      _coinLetterCode = args.coinLetterCode;
+
       setState(() {
         _initial = false;
       });
@@ -153,7 +167,7 @@ class _WalletSignTransactionScreenState
           decimalProduct: AvailableCoins.getDecimalProduct(
             identifier: _walletName,
           ),
-          coinLetterCode: "ppc",
+          coinLetterCode: _coinLetterCode,
           selectedInputs: _successfullySignedInputs,
         ),
       );
