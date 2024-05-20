@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
+import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 
 import '../screens/settings/app_settings_app_theme.dart';
@@ -62,6 +63,8 @@ class Routes {
   static const String walletMessageVerification =
       '/wallet-message-verification';
   static const String walletTransactionSigning = '/wallet-transaction-signing';
+  static const String walletTransactionSigningConfirmation =
+      '/wallet-transaction-signing-confirmation';
   static const String importPaperWallet = '/import-paperwallet';
   static const String importWif = '/import-wif';
   static const String authJail = '/auth-jail';
@@ -200,6 +203,11 @@ class Routes {
           ),
       Routes.walletTransactionSigning: (context) => const RouterMaster(
             widget: WalletSignTransactionScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.walletTransactionSigningConfirmation: (context) =>
+          const RouterMaster(
+            widget: WalletSignTransactionConfirmationScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
     };
