@@ -2,6 +2,7 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/wallet/transaction_details.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
 class WalletSignTransactionConfirmationArguments {
@@ -45,6 +46,13 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments
             as WalletSignTransactionConfirmationArguments;
     final Transaction tx = arguments.tx;
+    print(tx.outputs.first.program!.script.asm);
+    // print(
+    //   Address.fromString(
+    //       hexToBytes("ff9296d92c5efc397d0e0b9ebe94d95a532270c4").toString(),
+    //       Network.testnet),
+    // );
+
     final totalAmount = tx.outputs.map((e) => e.value).reduce((a, b) => a + b);
     final decimalProduct = arguments.decimalProduct;
     final selectedInputs = arguments.selectedInputs;
@@ -124,10 +132,10 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [],
-                      ),
+                      DoubleTabToClipboard(
+                        clipBoardData: tx.toHex(),
+                        child: Text(tx.toHex()),
+                      )
                     ],
                   ),
                 ),
@@ -138,4 +146,5 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
       ),
     );
   }
+  //TODO Show signed transaction inputs
 }
