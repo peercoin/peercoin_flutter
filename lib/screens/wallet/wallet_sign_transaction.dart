@@ -135,13 +135,14 @@ class _WalletSignTransactionScreenState
 
       Transaction txToSign = tx;
       //try to sign all inputs
-      tx.inputs.mapIndexed((i, input) {
+      for (var i in tx.inputs) {
+        final index = tx.inputs.indexOf(i);
         try {
           txToSign = txToSign.sign(
-            inputN: i,
+            inputN: index,
             key: privKey,
           );
-          _successfullySignedInputs.add(i);
+          _successfullySignedInputs.add(index);
         } catch (e) {
           LoggerWrapper.logError(
             'WalletTransactionSigning',
@@ -149,7 +150,7 @@ class _WalletSignTransactionScreenState
             'failed to sign input $i: $e',
           );
         }
-      });
+      }
       final signedTx = txToSign.toHex();
 
       LoggerWrapper.logInfo(
@@ -163,7 +164,7 @@ class _WalletSignTransactionScreenState
       await Navigator.of(context).pushNamed(
         Routes.walletTransactionSigningConfirmation,
         arguments: WalletSignTransactionConfirmationArguments(
-          tx: tx,
+          tx: txToSign,
           decimalProduct: AvailableCoins.getDecimalProduct(
             identifier: _walletName,
           ),

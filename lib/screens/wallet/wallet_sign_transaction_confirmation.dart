@@ -43,6 +43,21 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
     return list;
   }
 
+  List<Widget> renderInputs({
+    required List<int> selectedInputs,
+    required String letterCode,
+    required int decimalProduct,
+  }) {
+    List<Widget> list = [];
+
+    for (var input in selectedInputs) {
+      list.add(
+        Text(input.toString()),
+      );
+    }
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     final WalletSignTransactionConfirmationArguments arguments =
@@ -119,6 +134,22 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                                 '${totalAmount.toInt() / decimalProduct} $coinLetterCode',
                               ),
                             ],
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.instance
+                                .translate('tx_recipients'),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...renderInputs(
+                            selectedInputs: selectedInputs,
+                            letterCode: coinLetterCode,
+                            decimalProduct: decimalProduct,
                           ),
                         ],
                       ),
