@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/wallet/transaction_details.dart';
@@ -47,12 +48,43 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
     required List<int> selectedInputs,
     required String letterCode,
     required int decimalProduct,
+    required Transaction tx,
+    required BuildContext context,
   }) {
     List<Widget> list = [];
 
     for (var input in selectedInputs) {
+      final inputTxId = bytesToHex(
+        Uint8List.fromList(tx.inputs[input].prevOut.hash.reversed.toList()),
+      );
       list.add(
-        Text(input.toString()),
+        Row(
+          key: Key(input.toString()),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 2,
+              child: Text(
+                inputTxId,
+                style: const TextStyle(
+                  fontSize: 13,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Flexible(
+              child: Text(
+                selectedInputs.contains(input) ? 'Signed' : 'Not signed',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: selectedInputs.contains(input)
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
     return list;
@@ -86,7 +118,8 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          AppLocalizations.instance.translate('send_confirm_transaction'),
+          AppLocalizations.instance
+              .translate('sign_transaction_confirmation_title'),
         ),
       ),
       body: Column(
@@ -98,25 +131,6 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocalizations.instance.translate('tx_value'),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SelectableText(
-                                '${totalAmount.toInt() / decimalProduct} $coinLetterCode',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -143,13 +157,15 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                         children: [
                           Text(
                             AppLocalizations.instance
-                                .translate('tx_recipients'),
+                                .translate('sign_transaction_inputs'),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           ...renderInputs(
                             selectedInputs: selectedInputs,
                             letterCode: coinLetterCode,
                             decimalProduct: decimalProduct,
+                            tx: tx,
+                            context: context,
                           ),
                         ],
                       ),
@@ -172,10 +188,19 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
+                      const Divider(),
+                      Text(
+                        AppLocalizations.instance
+                            .translate('sign_transaction_step_3_description'),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       DoubleTabToClipboard(
                         clipBoardData: tx.toHex(),
-                        child: Text(tx.toHex()),
-                      )
+                        child: SelectableText(tx.toHex()),
+                      ),
                     ],
                   ),
                 ),
@@ -186,6 +211,5 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
       ),
     );
   }
-  //TODO Show signed transaction inputs
   //TODO handle no signed inputs case
 }

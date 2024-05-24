@@ -510,5 +510,9 @@
   "sign_transaction_step_3_button_alt": "Copy hex to clipboard",
   "sign_transaction_step_3_description": "This is your signed transaction hex. You may double tap to copy it to the clipboard.",
   "sign_transaction_input_selector_title": "Select which inputs to sign",
-  "sign_transaction_signing_failed": "Transaction signing failed."
+  "sign_transaction_signing_failed": "Transaction signing failed.",
+  "sign_transaction_inputs": "Inputs",
+  "sign_transaction_confirmation_title": "Please review transaction",
+  "sign_transaction_confirmation_input_signed": "Signed",
+  "sign_transaction_confirmation_input_unsigned": "Not signed"
 }
