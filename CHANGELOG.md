@@ -1,3 +1,7 @@
+### **1.2.8** (2023-06-xx)
+
+-
+
 ### **1.2.7** (2023-05-24)
 
 - Various bug fixes and improvements related to flutter upgrade

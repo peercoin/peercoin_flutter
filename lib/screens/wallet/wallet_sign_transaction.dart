@@ -331,6 +331,10 @@ class _WalletSignTransactionScreenState
                             ),
                             small: true,
                           ),
+                          if (_signingAddress.isNotEmpty && kIsWeb)
+                            const SizedBox(
+                              height: 20,
+                            ),
                           _signingAddress.isNotEmpty
                               ? PeerButton(
                                   action: () => _copyPubKeyToClipboard(
