@@ -211,5 +211,4 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
       ),
     );
   }
-  //TODO handle no signed inputs case
 }

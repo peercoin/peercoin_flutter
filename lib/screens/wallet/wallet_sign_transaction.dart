@@ -1,5 +1,6 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peercoin/models/available_coins.dart';
@@ -135,6 +136,7 @@ class _WalletSignTransactionScreenState
 
       Transaction txToSign = tx;
       //try to sign all inputs
+      String errorMessage = '';
       for (var i in tx.inputs) {
         final index = tx.inputs.indexOf(i);
         try {
@@ -149,15 +151,23 @@ class _WalletSignTransactionScreenState
             'handleSign',
             'failed to sign input $i: $e',
           );
+          errorMessage = e.toString();
         }
       }
       final signedTx = txToSign.toHex();
-
       LoggerWrapper.logInfo(
         'WalletTransactionSigning',
         'handleSign',
         'tx produced $signedTx',
       );
+
+      //if no inputs were signed, show error
+      if (_successfullySignedInputs.isEmpty) {
+        setState(() {
+          _signingError = errorMessage;
+        });
+        return;
+      }
 
       //show confirmation
       if (!mounted) return;
@@ -175,6 +185,12 @@ class _WalletSignTransactionScreenState
           selectedInputs: _successfullySignedInputs,
         ),
       );
+
+      //reset state
+      setState(() {
+        _successfullySignedInputs.clear();
+        _signingError = '';
+      });
     } catch (e) {
       LoggerWrapper.logError(
         'WalletTransactionSigning',
@@ -249,7 +265,10 @@ class _WalletSignTransactionScreenState
                   }
                   return false;
                 },
-                arguments: _walletName,
+                arguments: WalletSignTransactionArguments(
+                  walletName: _walletName,
+                  coinLetterCode: _coinLetterCode,
+                ),
               );
             },
           ),
@@ -408,6 +427,16 @@ class _WalletSignTransactionScreenState
                               ),
                             )
                           : Container(),
+                      if (kIsWeb)
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      PeerButton(
+                        text: AppLocalizations.instance
+                            .translate('sign_reset_button'),
+                        small: true,
+                        action: () async => await _performReset(context),
+                      ),
                     ],
                   ),
                 ),
