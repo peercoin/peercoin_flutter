@@ -24,7 +24,9 @@ void main() {
     test('fromAsm - Unknown program type', () {
       const asm = 'OP_RETURN';
       expect(
-          () => GenericAddress.fromAsm(asm, Network.mainnet), throwsException);
+        () => GenericAddress.fromAsm(asm, Network.mainnet),
+        throwsException,
+      );
     });
 
     //TODO - Implement P2WPKH, P2WSH and P2TR
