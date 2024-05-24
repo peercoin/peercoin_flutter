@@ -1,6 +1,7 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/wallet/transaction_details.dart';
+import 'package:peercoin/tools/address_from_asm.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -10,12 +11,14 @@ class WalletSignTransactionConfirmationArguments {
   List<int> selectedInputs;
   int decimalProduct;
   String coinLetterCode;
+  Network network;
 
   WalletSignTransactionConfirmationArguments({
     required this.tx,
     required this.selectedInputs,
     required this.decimalProduct,
     required this.coinLetterCode,
+    required this.network,
   });
 }
 
@@ -46,12 +49,18 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments
             as WalletSignTransactionConfirmationArguments;
     final Transaction tx = arguments.tx;
-    print(tx.outputs.first.program!.script.asm);
-    // print(
-    //   Address.fromString(
-    //       hexToBytes("ff9296d92c5efc397d0e0b9ebe94d95a532270c4").toString(),
-    //       Network.testnet),
-    // );
+    final Map<String, int> recipients = tx.outputs
+        .map(
+      (e) => MapEntry(
+        GenericAddress.fromAsm(e.program!.script.asm, arguments.network)
+            .toString(),
+        e.value,
+      ),
+    )
+        .fold<Map<String, int>>({}, (prev, element) {
+      prev[element.key] = element.value.toInt();
+      return prev;
+    });
 
     final totalAmount = tx.outputs.map((e) => e.value).reduce((a, b) => a + b);
     final decimalProduct = arguments.decimalProduct;
@@ -123,7 +132,7 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           ...renderRecipients(
-                            recipients: {"asdf": 0},
+                            recipients: recipients,
                             letterCode: coinLetterCode,
                             decimalProduct: decimalProduct,
                           ),

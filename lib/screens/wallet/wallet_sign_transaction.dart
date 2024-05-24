@@ -167,6 +167,9 @@ class _WalletSignTransactionScreenState
           decimalProduct: AvailableCoins.getDecimalProduct(
             identifier: _walletName,
           ),
+          network: AvailableCoins.getSpecificCoin(
+            _walletName,
+          ).networkType,
           coinLetterCode: _coinLetterCode,
           selectedInputs: _successfullySignedInputs,
         ),
