@@ -165,7 +165,7 @@ class TransactionDetails extends StatelessWidget {
                       children: [
                         DoubleTabToClipboard(
                           clipBoardData: tx.broadcastHex,
-                          child: Text(
+                          child: SelectableText(
                             tx.broadcastHex,
                           ),
                         ),

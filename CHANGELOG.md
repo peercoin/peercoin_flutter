@@ -1,3 +1,8 @@
+### **1.2.7** (2023-05-24)
+
+- Various bug fixes and improvements related to flutter upgrade
+- Improved flow for transaction signing, now with confirmation and more feedback
+
 ### **1.2.6** (2023-04-20)
 
 - Improved transaction signing handling and error messages

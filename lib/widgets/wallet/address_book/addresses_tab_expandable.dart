@@ -109,33 +109,6 @@ class AddressTabExpandable extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  // IconSlideAction(
-                  //   caption: AppLocalizations.instance
-                  //       .translate('addressbook_swipe_edit'),
-                  //   color: Theme.of(context).primaryColor,
-                  //   icon: Icons.edit,
-                  //   onTap:
-                  // ),
-                  // IconSlideAction(
-                  //   caption: AppLocalizations.instance
-                  //       .translate('addressbook_swipe_share'),
-                  //   color: Theme.of(context).colorScheme.background,
-                  //   iconWidget: Icon(
-                  //     Icons.share,
-                  //     color: Theme.of(context).colorScheme.secondary,
-                  //   ),
-                  //   onTap:
-                  // ),
-                  // IconSlideAction(
-                  //   caption: AppLocalizations.instance
-                  //       .translate('addressbook_swipe_delete'),
-                  //   color: Theme.of(context).colorScheme.error,
-                  //   iconWidget: const Icon(
-                  //     Icons.delete,
-                  //     color: Colors.white,
-                  //   ),
-                  //   onTap: () async {},
-                  // ),
                 ],
               ),
             ),

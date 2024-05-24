@@ -306,7 +306,7 @@ class _SetupCreateWalletScreenState extends State<SetupCreateWalletScreen> {
                                             ),
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .background,
+                                                .surface,
                                             border: Border.all(
                                               width: 2,
                                               color: _sharedYet

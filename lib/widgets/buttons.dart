@@ -55,8 +55,8 @@ class PeerButtonBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Theme.of(context).colorScheme.background,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        foregroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4
@@ -103,7 +103,7 @@ class PeerButtonSetup extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor:
-            active ? Theme.of(context).colorScheme.background : Colors.grey,
+            active ? Theme.of(context).colorScheme.surface : Colors.grey,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4
@@ -148,7 +148,7 @@ class PeerButtonSetupLoading extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         foregroundColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         fixedSize: Size(
           MediaQuery.of(context).size.width > 768
               ? MediaQuery.of(context).size.width / 4

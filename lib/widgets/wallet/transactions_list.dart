@@ -132,7 +132,7 @@ class _TransactionListState extends State<TransactionList> {
                       style: TextStyle(
                         fontSize: 16,
                         fontStyle: FontStyle.italic,
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                   ),
@@ -289,7 +289,7 @@ class _TransactionListState extends State<TransactionList> {
                                       ChoiceChip(
                                         backgroundColor: Theme.of(context)
                                             .colorScheme
-                                            .background,
+                                            .surface,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
@@ -311,7 +311,7 @@ class _TransactionListState extends State<TransactionList> {
                                       ChoiceChip(
                                         backgroundColor: Theme.of(context)
                                             .colorScheme
-                                            .background,
+                                            .surface,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(
@@ -333,7 +333,7 @@ class _TransactionListState extends State<TransactionList> {
                                       ChoiceChip(
                                         backgroundColor: Theme.of(context)
                                             .colorScheme
-                                            .background,
+                                            .surface,
                                         selectedColor:
                                             Theme.of(context).shadowColor,
                                         visualDensity: const VisualDensity(

@@ -140,7 +140,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                   child: TextFormField(
                     autofocus: true,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     key: const Key('selectorSearchKey'),
                     textInputAction: TextInputAction.done,
@@ -149,7 +149,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                       hintText: AppLocalizations.instance
                           .translate('addressbook_search'),
                       hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                       suffixIcon: IconButton(
                         onPressed: () => setState(() {
@@ -157,7 +157,7 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
                         }),
                         icon: Icon(
                           Icons.close,
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                       ),
                     ),

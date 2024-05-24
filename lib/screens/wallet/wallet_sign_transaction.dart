@@ -3,7 +3,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
+import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
@@ -11,6 +13,15 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:provider/provider.dart';
+
+class WalletSignTransactionArguments {
+  final String walletName;
+  final String coinLetterCode;
+  WalletSignTransactionArguments({
+    required this.walletName,
+    required this.coinLetterCode,
+  });
+}
 
 class WalletSignTransactionScreen extends StatefulWidget {
   const WalletSignTransactionScreen({super.key});
@@ -23,20 +34,23 @@ class WalletSignTransactionScreen extends StatefulWidget {
 class _WalletSignTransactionScreenState
     extends State<WalletSignTransactionScreen> {
   late String _walletName;
+  late String _coinLetterCode;
   late WalletProvider _walletProvider;
   bool _initial = true;
-  bool _signingDone = false;
   String _signingError = '';
-  String _signedTx = '';
   String _signingAddress = '';
+  final List<int> _successfullySignedInputs = [];
   final TextEditingController _txInputController = TextEditingController();
-  final Map<int, bool> _checkedInputs = {};
 
   @override
   void didChangeDependencies() {
     if (_initial == true) {
-      _walletName = ModalRoute.of(context)!.settings.arguments as String;
+      final args = ModalRoute.of(context)!.settings.arguments
+          as WalletSignTransactionArguments;
       _walletProvider = Provider.of<WalletProvider>(context);
+      _walletName = args.walletName;
+      _coinLetterCode = args.coinLetterCode;
+
       setState(() {
         _initial = false;
       });
@@ -76,86 +90,6 @@ class _WalletSignTransactionScreenState
     }
   }
 
-  Future<bool> _showInputSelector(int inputN) async {
-    return await showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      isDismissible: false,
-      context: context,
-      enableDrag: false,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return ModalBottomSheetContainer(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    AppLocalizations.instance.translate(
-                      'sign_transaction_input_selector_title',
-                    ),
-                    style: TextStyle(
-                      letterSpacing: 1.4,
-                      fontSize: 24,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (ctx, n) => CheckboxListTile(
-                        title: Text('Input $n'),
-                        value: _checkedInputs[n] ?? false,
-                        onChanged: (value) {
-                          setState(() {
-                            _checkedInputs[n] = value!;
-                          });
-                        },
-                      ),
-                      itemCount: inputN,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton.icon(
-                        label: Text(
-                          AppLocalizations.instance
-                              .translate('server_settings_alert_cancel'),
-                        ),
-                        icon: const Icon(Icons.cancel),
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                      TextButton.icon(
-                        label: Text(
-                          AppLocalizations.instance
-                              .translate('jail_dialog_button'),
-                        ),
-                        icon: const Icon(Icons.check),
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
   Future<void> _handleSign() async {
     LoggerWrapper.logInfo(
       'WalletTransactionSigning',
@@ -171,18 +105,10 @@ class _WalletSignTransactionScreenState
       final privKey = WIF.fromString(wif).privkey;
 
       Transaction tx = Transaction.fromHex(_txInputController.text);
-      final selectedInputResult = await _showInputSelector(tx.inputs.length);
-      if (selectedInputResult == false) return;
-      if (_checkedInputs.values.every((element) => element == false)) return;
 
       // conversion step for cointoolkit start
       tx = Transaction(
         inputs: tx.inputs.mapIndexed((i, input) {
-          if (!_checkedInputs.containsKey(i) || _checkedInputs[i]! == false) {
-            //don't convert this unselected input, return as is
-            return input;
-          }
-
           // Determine program from cointoolkit input script data
           final program = Program.decompile(input.scriptSig);
 
@@ -209,26 +135,62 @@ class _WalletSignTransactionScreenState
       // conversion step for cointoolkit end
 
       Transaction txToSign = tx;
-      _checkedInputs.forEach((key, value) {
-        if (value) {
+      //try to sign all inputs
+      String errorMessage = '';
+      for (var i in tx.inputs) {
+        final index = tx.inputs.indexOf(i);
+        try {
           txToSign = txToSign.sign(
-            inputN: key,
+            inputN: index,
             key: privKey,
           );
+          _successfullySignedInputs.add(index);
+        } catch (e) {
+          LoggerWrapper.logError(
+            'WalletTransactionSigning',
+            'handleSign',
+            'failed to sign input $i: $e',
+          );
+          errorMessage = e.toString();
         }
-      });
+      }
       final signedTx = txToSign.toHex();
-
-      setState(() {
-        _signedTx = signedTx;
-        _signingDone = true;
-      });
-
       LoggerWrapper.logInfo(
         'WalletTransactionSigning',
         'handleSign',
         'tx produced $signedTx',
       );
+
+      //if no inputs were signed, show error
+      if (_successfullySignedInputs.isEmpty) {
+        setState(() {
+          _signingError = errorMessage;
+        });
+        return;
+      }
+
+      //show confirmation
+      if (!mounted) return;
+      await Navigator.of(context).pushNamed(
+        Routes.walletTransactionSigningConfirmation,
+        arguments: WalletSignTransactionConfirmationArguments(
+          tx: txToSign,
+          decimalProduct: AvailableCoins.getDecimalProduct(
+            identifier: _walletName,
+          ),
+          network: AvailableCoins.getSpecificCoin(
+            _walletName,
+          ).networkType,
+          coinLetterCode: _coinLetterCode,
+          selectedInputs: _successfullySignedInputs,
+        ),
+      );
+
+      //reset state
+      setState(() {
+        _successfullySignedInputs.clear();
+        _signingError = '';
+      });
     } catch (e) {
       LoggerWrapper.logError(
         'WalletTransactionSigning',
@@ -303,7 +265,10 @@ class _WalletSignTransactionScreenState
                   }
                   return false;
                 },
-                arguments: _walletName,
+                arguments: WalletSignTransactionArguments(
+                  walletName: _walletName,
+                  coinLetterCode: _coinLetterCode,
+                ),
               );
             },
           ),
@@ -358,17 +323,15 @@ class _WalletSignTransactionScreenState
                                   ),
                           ),
                           PeerButton(
-                            action: () =>
-                                _signingDone ? null : _showAddressSelector(),
+                            action: () => _showAddressSelector(),
                             text: AppLocalizations.instance.translate(
                               _signingAddress == ''
                                   ? 'sign_step_1_button'
                                   : 'sign_step_1_button_alt',
                             ),
                             small: true,
-                            active: !_signingDone,
                           ),
-                          _signingAddress.isNotEmpty && !_signingDone
+                          _signingAddress.isNotEmpty
                               ? PeerButton(
                                   action: () => _copyPubKeyToClipboard(
                                     _signingAddress,
@@ -377,7 +340,6 @@ class _WalletSignTransactionScreenState
                                     'sign_transaction_step_1_copy_pubkey',
                                   ),
                                   small: true,
-                                  active: !_signingDone,
                                 )
                               : Container(),
                           const SizedBox(
@@ -401,7 +363,6 @@ class _WalletSignTransactionScreenState
                         key: const Key('transactionHexInput'),
                         controller: _txInputController,
                         autocorrect: false,
-                        readOnly: _signingDone,
                         minLines: 5,
                         maxLines: 5,
                         onChanged: (_) => setState(
@@ -410,7 +371,6 @@ class _WalletSignTransactionScreenState
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                             onPressed: () async {
-                              if (_signingDone) return;
                               final data =
                                   await Clipboard.getData('text/plain');
                               setState(() {
@@ -419,9 +379,7 @@ class _WalletSignTransactionScreenState
                             },
                             icon: Icon(
                               Icons.paste_rounded,
-                              color: _signingDone
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).primaryColor,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                           icon: Icon(
@@ -446,57 +404,14 @@ class _WalletSignTransactionScreenState
                       const SizedBox(
                         height: 10,
                       ),
-                      _signedTx.isNotEmpty
-                          ? Column(
-                              children: [
-                                DoubleTabToClipboard(
-                                  clipBoardData: _signedTx,
-                                  child: SelectableText(
-                                    _signedTx,
-                                    key: const Key('signature'),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  AppLocalizations.instance.translate(
-                                    'sign_transaction_step_3_description',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      const SizedBox(
-                        height: 10,
+                      PeerButton(
+                        action: () => _handleSign(),
+                        text: AppLocalizations.instance
+                            .translate('sign_step_3_button'),
+                        small: true,
+                        active: _signingAddress.isNotEmpty &&
+                            _txInputController.text.isNotEmpty,
                       ),
-                      _signedTx.isNotEmpty
-                          ? PeerButton(
-                              action: () => DoubleTabToClipboard.tapEvent(
-                                context,
-                                _signedTx,
-                              ),
-                              text: AppLocalizations.instance.translate(
-                                'sign_transaction_step_3_button_alt',
-                              ),
-                              small: true,
-                              active: _signingAddress.isNotEmpty &&
-                                  _txInputController.text.isNotEmpty,
-                            )
-                          : PeerButton(
-                              action: () => _handleSign(),
-                              text: AppLocalizations.instance
-                                  .translate('sign_step_3_button'),
-                              small: true,
-                              active: _signingAddress.isNotEmpty &&
-                                  _txInputController.text.isNotEmpty,
-                            ),
                       _signingError.isNotEmpty
                           ? Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -516,14 +431,12 @@ class _WalletSignTransactionScreenState
                         const SizedBox(
                           height: 20,
                         ),
-                      _signingDone
-                          ? PeerButton(
-                              text: AppLocalizations.instance
-                                  .translate('sign_reset_button'),
-                              small: true,
-                              action: () async => await _performReset(context),
-                            )
-                          : Container(),
+                      PeerButton(
+                        text: AppLocalizations.instance
+                            .translate('sign_reset_button'),
+                        small: true,
+                        action: () async => await _performReset(context),
+                      ),
                     ],
                   ),
                 ),

@@ -62,7 +62,7 @@ class PeerContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: isTransparent
             ? Colors.transparent
-            : Theme.of(context).colorScheme.background,
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,
@@ -85,7 +85,7 @@ class ModalBottomSheetContainer extends StatelessWidget {
           ? MediaQuery.of(context).size.width / 2
           : MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(20),
         ),
