@@ -21,7 +21,10 @@ class GenericAddress {
     } else if (program is P2WSH) {
       return P2WSHAddress.fromHash(program.scriptHash, hrp: network.bech32Hrp);
     } else if (program is P2TR) {
-      throw Exception('P2TR not supported here');
+      return P2TRAddress.fromTweakedKey(
+        program.tweakedKey,
+        hrp: network.bech32Hrp,
+      );
     } else {
       throw Exception('Unknown program type');
     }
