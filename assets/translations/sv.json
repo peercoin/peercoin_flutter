@@ -510,5 +510,9 @@
     "sign_transaction_step_1_description": "Välj adressen som ska signera transaktionen",
     "sign_transaction_step_2": "Ange Transaktionshex",
     "sign_transaction_step_3_description": "Detta är din undertecknade transaktionshex. Du kan dubbeltrycka för att kopiera den till urklipp.",
-    "sign_transaction_step_1_copy_pubkey": "Kopiera den offentliga nyckeln till urklipp"
+    "sign_transaction_step_1_copy_pubkey": "Kopiera den offentliga nyckeln till urklipp",
+    "sign_transaction_inputs": "Ingångar",
+    "sign_transaction_confirmation_input_signed": "Signerad",
+    "sign_transaction_confirmation_input_unsigned": "Ej signerad",
+    "sign_transaction_confirmation_title": "Se över transaktionen"
 }
