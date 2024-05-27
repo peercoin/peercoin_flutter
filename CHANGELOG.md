@@ -1,3 +1,7 @@
+### **1.2.9** (2024-06-x)
+
+-
+
 ### **1.2.8** (2024-05-27)
 
 - Allow broadcast of signed transactions if all inputs are signed
