@@ -514,5 +514,9 @@
   "sign_transaction_inputs": "Inputs",
   "sign_transaction_confirmation_title": "Please review transaction",
   "sign_transaction_confirmation_input_signed": "Signed",
-  "sign_transaction_confirmation_input_unsigned": "Not signed"
+  "sign_transaction_confirmation_input_unsigned": "Not signed",
+  "sign_transaction_confirmation_broadcast": "Broadcast",
+  "sign_transaction_confirmation_broadcast_snack": "Transaction broadcast attempted",
+  "sign_transaction_confirmation_dialog_title": "Broadcast Transaction",
+  "sign_transaction_confirmation_dialog_content": "Please confirm that you want to broadcast this transaction."
 }

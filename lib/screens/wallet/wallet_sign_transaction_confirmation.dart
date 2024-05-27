@@ -1,11 +1,14 @@
 import 'dart:typed_data';
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:peercoin/providers/connection_provider.dart';
 import 'package:peercoin/screens/wallet/transaction_details.dart';
 import 'package:peercoin/tools/generic_address.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
+import 'package:provider/provider.dart';
 
 class WalletSignTransactionConfirmationArguments {
   Transaction tx;
@@ -90,6 +93,84 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
     return list;
   }
 
+  Future<void> broadcastTransaction({
+    required String hex,
+    required String txId,
+    required BuildContext context,
+  }) async {
+    final connectionProvider = context.read<ConnectionProvider>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance
+                .translate('sign_transaction_confirmation_dialog_title'),
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppLocalizations.instance
+                    .translate('sign_transaction_confirmation_dialog_content'),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                //broadcast transaction
+                connectionProvider.broadcastTransaction(
+                  hex,
+                  txId,
+                );
+
+                //show snack bar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.instance.translate(
+                        'sign_transaction_confirmation_broadcast_snack',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+
+                //close dialog
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('sign_transaction_confirmation_broadcast'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final WalletSignTransactionConfirmationArguments arguments =
@@ -113,6 +194,8 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
     final decimalProduct = arguments.decimalProduct;
     final selectedInputs = arguments.selectedInputs;
     final coinLetterCode = arguments.coinLetterCode;
+    final txReadyForBroadcast =
+        (selectedInputs.length == tx.inputs.length) && tx.complete;
 
     return Scaffold(
       appBar: AppBar(
@@ -201,6 +284,23 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                         clipBoardData: tx.toHex(),
                         child: SelectableText(tx.toHex()),
                       ),
+                      if (txReadyForBroadcast)
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      if (txReadyForBroadcast)
+                        Center(
+                          child: PeerButton(
+                            text: AppLocalizations.instance.translate(
+                              'sign_transaction_confirmation_broadcast',
+                            ),
+                            action: () => broadcastTransaction(
+                              hex: tx.toHex(),
+                              txId: tx.txid,
+                              context: context,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),

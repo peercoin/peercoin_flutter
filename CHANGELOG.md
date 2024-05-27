@@ -1,3 +1,7 @@
+### **1.2.8** (2023-05-27)
+
+- Allow broadcast of signed transactions if all inputs are signed
+
 ### **1.2.7** (2023-05-24)
 
 - Various bug fixes and improvements related to flutter upgrade
