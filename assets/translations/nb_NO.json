@@ -514,5 +514,9 @@
     "sign_transaction_confirmation_input_signed": "Signert",
     "sign_transaction_confirmation_input_unsigned": "Ikke signert",
     "sign_transaction_inputs": "Inputs",
-    "sign_transaction_confirmation_title": "Se gjennom transaksjonen"
+    "sign_transaction_confirmation_title": "Se gjennom transaksjonen",
+    "sign_transaction_confirmation_broadcast_snack": "Kringkasting av transaksjon forsøkt",
+    "sign_transaction_confirmation_dialog_title": "Kringkast Transaksjon",
+    "sign_transaction_confirmation_broadcast": "Kringkast",
+    "sign_transaction_confirmation_dialog_content": "Vennligst bekreft at du ønsker å kringkaste denne transaksjonen."
 }
