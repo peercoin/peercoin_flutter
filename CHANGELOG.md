@@ -1,6 +1,6 @@
-### **1.2.8** (2023-06-xx)
+### **1.2.8** (2023-05-27)
 
--
+- Allow broadcast of signed transactions if all inputs are signed
 
 ### **1.2.7** (2023-05-24)
 
