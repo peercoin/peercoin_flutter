@@ -49,7 +49,7 @@ class DoubleTabToClipboard extends StatelessWidget {
               fontSize: 12,
               color: Theme.of(context).colorScheme.secondary,
             ),
-          )
+          ),
       ],
     );
   }
