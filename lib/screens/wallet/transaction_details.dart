@@ -165,6 +165,7 @@ class TransactionDetails extends StatelessWidget {
                       children: [
                         DoubleTabToClipboard(
                           clipBoardData: tx.broadcastHex,
+                          withHintText: true,
                           child: SelectableText(
                             tx.broadcastHex,
                           ),
@@ -246,6 +247,7 @@ class TransactionDetails extends StatelessWidget {
           flex: 2,
           child: DoubleTabToClipboard(
             clipBoardData: addr,
+            withHintText: false,
             child: Text(
               addr,
               style: const TextStyle(

@@ -458,7 +458,7 @@
   "sign_step_1_button_alt": "Change",
   "sign_step_2": "Enter Message",
   "sign_step_3": "Sign Message",
-  "sign_step_3_description": "This is your signature. You may double tap to copy it to the clipboard.",
+  "sign_step_3_description": "This is your signature.",
   "sign_step_3_button": "Sign",
   "verify_step_3_button": "Verify",
   "sign_step_3_button_alt": "Copy signature to clipboard",
@@ -508,7 +508,7 @@
   "sign_transaction_input_label": "Transaction Hex",
   "sign_transaction_step_3": "Sign Transaction",
   "sign_transaction_step_3_button_alt": "Copy hex to clipboard",
-  "sign_transaction_step_3_description": "This is your signed transaction hex. You may double tap to copy it to the clipboard.",
+  "sign_transaction_step_3_description": "Signed transaction hex",
   "sign_transaction_input_selector_title": "Select which inputs to sign",
   "sign_transaction_signing_failed": "Transaction signing failed.",
   "sign_transaction_inputs": "Inputs",
@@ -518,5 +518,7 @@
   "sign_transaction_confirmation_broadcast": "Broadcast",
   "sign_transaction_confirmation_broadcast_snack": "Transaction broadcast attempted",
   "sign_transaction_confirmation_dialog_title": "Broadcast Transaction",
-  "sign_transaction_confirmation_dialog_content": "Please confirm that you want to broadcast this transaction."
+  "sign_transaction_confirmation_dialog_content": "Please confirm that you want to broadcast this transaction.",
+  "sign_transaction_confirmation_transaction_id": "Transaction id",
+  "double_tap_to_copy": "You may double tap to copy the text."
 }

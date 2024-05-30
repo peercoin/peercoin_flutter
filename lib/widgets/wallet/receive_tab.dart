@@ -252,6 +252,7 @@ class _ReceiveTabState extends State<ReceiveTab> {
                           padding: const EdgeInsets.all(8.0),
                           child: FittedBox(
                             child: DoubleTabToClipboard(
+                              withHintText: false,
                               clipBoardData: widget.unusedAddress,
                               child: SelectableText(
                                 widget.unusedAddress,
