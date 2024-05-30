@@ -514,5 +514,9 @@
     "sign_transaction_confirmation_input_signed": "Underskrevet",
     "sign_transaction_inputs": "Input",
     "sign_transaction_confirmation_title": "Gennemgå transaktionen",
-    "sign_transaction_confirmation_input_unsigned": "Ikke underskrevet"
+    "sign_transaction_confirmation_input_unsigned": "Ikke underskrevet",
+    "sign_transaction_confirmation_dialog_title": "Udsende Transaktion",
+    "sign_transaction_confirmation_dialog_content": "Bekræft venligst, at du ønsker at udsende denne transaktion.",
+    "sign_transaction_confirmation_broadcast": "Udsende",
+    "sign_transaction_confirmation_broadcast_snack": "Udsendelse af transaktion forsøgt"
 }

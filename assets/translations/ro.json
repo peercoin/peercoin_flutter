@@ -473,5 +473,12 @@
     "currency_UZS": "Som Uzbec",
     "currency_VUV": "Ni-Vanuatu Vatu",
     "currency_WST": "Tala Samoaneză",
-    "currency_XAF": "Franc din Africa Centrală"
+    "currency_XAF": "Franc din Africa Centrală",
+    "currency_XPF": "Franc CFP",
+    "currency_XCD": "Dolarul din Caraibe de Est",
+    "currency_XOF": "Franc CFA din Africa de Vest",
+    "currency_YER": "Rial Yemenit",
+    "currency_ZAR": "Rand Sud-African",
+    "currency_ZMW": "Kwacha din Zambia",
+    "currency_ZWL": "Dolarul din Zimbabwe"
 }

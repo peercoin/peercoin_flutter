@@ -514,5 +514,9 @@
     "sign_transaction_inputs": "Ingångar",
     "sign_transaction_confirmation_input_signed": "Signerad",
     "sign_transaction_confirmation_input_unsigned": "Ej signerad",
-    "sign_transaction_confirmation_title": "Se över transaktionen"
+    "sign_transaction_confirmation_title": "Se över transaktionen",
+    "sign_transaction_confirmation_dialog_title": "Utsänd Transaktion",
+    "sign_transaction_confirmation_broadcast": "Utsända",
+    "sign_transaction_confirmation_broadcast_snack": "Utsändning av transaktion försöktes",
+    "sign_transaction_confirmation_dialog_content": "Vänligen bekräfta att du vill utsända denna transaktion."
 }
