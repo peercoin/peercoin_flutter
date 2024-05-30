@@ -1,21 +1,26 @@
-### **1.2.8** (2023-05-27)
+### **1.2.9** (2024-05-30)
+
+- Show transaction id for finalized transactions in transaction signing flow
+- Improve user experience for double tab to clipboard with hint texts
+
+### **1.2.8** (2024-05-27)
 
 - Allow broadcast of signed transactions if all inputs are signed
 
-### **1.2.7** (2023-05-24)
+### **1.2.7** (2024-05-24)
 
 - Various bug fixes and improvements related to flutter upgrade
 - Improved flow for transaction signing, now with confirmation and more feedback
 
-### **1.2.6** (2023-04-20)
+### **1.2.6** (2024-04-20)
 
 - Improved transaction signing handling and error messages
 
-### **1.2.5** (2023-04-08)
+### **1.2.5** (2024-04-08)
 
 - Address public keys can now be exported during transaction signing
 
-### **1.2.4** (2023-04-05)
+### **1.2.4** (2024-04-05)
 
 - Add transaction signing from wallet home
 - Fix for some devices not being able to see the wallet receive tab
