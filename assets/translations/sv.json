@@ -298,7 +298,7 @@
     "sign_step_1_button_alt": "Förändra",
     "sign_step_2": "Ange Meddelande",
     "sign_step_3": "Signera Meddelande",
-    "sign_step_3_description": "Det här är din signatur. Du kan dubbelklicka för att kopiera den till urklipp.",
+    "sign_step_3_description": "Det här är din signatur.",
     "sign_step_3_button": "Signera",
     "sign_step_3_button_alt": "Kopiera signatur till urklipp",
     "sign_snack_text": "$address vald",
@@ -509,7 +509,7 @@
     "wallet_pop_menu_signing_transactions": "Signera Transaktion",
     "sign_transaction_step_1_description": "Välj adressen som ska signera transaktionen",
     "sign_transaction_step_2": "Ange Transaktionshex",
-    "sign_transaction_step_3_description": "Detta är din undertecknade transaktionshex. Du kan dubbeltrycka för att kopiera den till urklipp.",
+    "sign_transaction_step_3_description": "Undertecknad transaktionshex",
     "sign_transaction_step_1_copy_pubkey": "Kopiera den offentliga nyckeln till urklipp",
     "sign_transaction_inputs": "Ingångar",
     "sign_transaction_confirmation_input_signed": "Signerad",
@@ -518,5 +518,7 @@
     "sign_transaction_confirmation_dialog_title": "Utsänd Transaktion",
     "sign_transaction_confirmation_broadcast": "Utsända",
     "sign_transaction_confirmation_broadcast_snack": "Utsändning av transaktion försöktes",
-    "sign_transaction_confirmation_dialog_content": "Vänligen bekräfta att du vill utsända denna transaktion."
+    "sign_transaction_confirmation_dialog_content": "Vänligen bekräfta att du vill utsända denna transaktion.",
+    "sign_transaction_confirmation_transaction_id": "Transaktions ID",
+    "double_tap_to_copy": "Du kan dubbelklicka för att kopiera texten."
 }
