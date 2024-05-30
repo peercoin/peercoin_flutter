@@ -37,6 +37,7 @@ class WalletHomeQr extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: FittedBox(
                         child: DoubleTabToClipboard(
+                          withHintText: false,
                           clipBoardData: address,
                           child: SelectableText(
                             address,

@@ -1,3 +1,8 @@
+### **1.2.9** (2024-05-30)
+
+- Show transaction id for finalized transactions in transaction signing flow
+- Improve user experience for double tab to clipboard with hint texts
+
 ### **1.2.8** (2024-05-27)
 
 - Allow broadcast of signed transactions if all inputs are signed

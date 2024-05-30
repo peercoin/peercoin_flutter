@@ -203,6 +203,7 @@ class _WalletMessageSigningScreenState
                                   )
                                 : DoubleTabToClipboard(
                                     clipBoardData: _signingAddress,
+                                    withHintText: false,
                                     child: SelectableText(_signingAddress),
                                   ),
                           ),
@@ -286,6 +287,7 @@ class _WalletMessageSigningScreenState
                               children: [
                                 DoubleTabToClipboard(
                                   clipBoardData: _signature,
+                                  withHintText: true,
                                   child: SelectableText(
                                     _signature,
                                     key: const Key('signature'),

@@ -133,6 +133,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             children: [
                               const SizedBox(height: 20),
                               DoubleTabToClipboard(
+                                withHintText: true,
                                 clipBoardData: _seedPhrase,
                                 child: SelectableText(
                                   _seedPhrase,

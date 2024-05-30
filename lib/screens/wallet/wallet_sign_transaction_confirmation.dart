@@ -269,7 +269,7 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       const Divider(),
                       Text(
@@ -278,28 +278,49 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       DoubleTabToClipboard(
                         clipBoardData: tx.toHex(),
+                        withHintText: true,
                         child: SelectableText(tx.toHex()),
                       ),
                       if (txReadyForBroadcast)
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      if (txReadyForBroadcast)
-                        Center(
-                          child: PeerButton(
-                            text: AppLocalizations.instance.translate(
-                              'sign_transaction_confirmation_broadcast',
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Divider(),
+                            Text(
+                              AppLocalizations.instance.translate(
+                                'sign_transaction_confirmation_transaction_id',
+                              ),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            action: () => broadcastTransaction(
-                              hex: tx.toHex(),
-                              txId: tx.txid,
-                              context: context,
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
+                            DoubleTabToClipboard(
+                              clipBoardData: tx.txid,
+                              withHintText: true,
+                              child: Text(tx.txid),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: PeerButton(
+                                text: AppLocalizations.instance.translate(
+                                  'sign_transaction_confirmation_broadcast',
+                                ),
+                                action: () => broadcastTransaction(
+                                  hex: tx.toHex(),
+                                  txId: tx.txid,
+                                  context: context,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                     ],
                   ),

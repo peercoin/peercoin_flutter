@@ -318,6 +318,7 @@ class _WalletSignTransactionScreenState
                                     ),
                                   )
                                 : DoubleTabToClipboard(
+                                    withHintText: false,
                                     clipBoardData: _signingAddress,
                                     child: SelectableText(_signingAddress),
                                   ),

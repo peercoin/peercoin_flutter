@@ -34,6 +34,7 @@ class AddressTabExpandable extends StatelessWidget {
             ? MediaQuery.of(context).size.width / 3
             : MediaQuery.of(context).size.width,
         child: DoubleTabToClipboard(
+          withHintText: false,
           clipBoardData: walletAddress.address,
           child: Card(
             elevation: 0,

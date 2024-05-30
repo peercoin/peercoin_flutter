@@ -510,5 +510,9 @@
     "wallet_pop_menu_signing_transactions": "Signer Transaksjon",
     "sign_transaction_step_1_description": "Velg adressen som skal signere transaksjonen",
     "sign_transaction_step_3_description": "Dette er din signerte transaksjonshex. Du kan dobbelttrykke for å kopiere den til utklippstavlen.",
-    "sign_transaction_step_1_copy_pubkey": "Kopier offentlig nøkkel til utklippstavlen"
+    "sign_transaction_step_1_copy_pubkey": "Kopier offentlig nøkkel til utklippstavlen",
+    "sign_transaction_confirmation_input_signed": "Signert",
+    "sign_transaction_confirmation_input_unsigned": "Ikke signert",
+    "sign_transaction_inputs": "Inputs",
+    "sign_transaction_confirmation_title": "Se gjennom transaksjonen"
 }

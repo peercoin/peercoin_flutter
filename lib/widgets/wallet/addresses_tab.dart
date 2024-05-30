@@ -451,6 +451,7 @@ class _AddressTabState extends State<AddressTab> {
                 ? MediaQuery.of(context).size.width / 3
                 : MediaQuery.of(context).size.width,
             child: DoubleTabToClipboard(
+              withHintText: false,
               clipBoardData: addr.address,
               child: Card(
                 elevation: 0,
@@ -593,6 +594,7 @@ class _AddressTabState extends State<AddressTab> {
                 ? MediaQuery.of(context).size.width / 3
                 : MediaQuery.of(context).size.width,
             child: DoubleTabToClipboard(
+              withHintText: false,
               clipBoardData: addr.address,
               child: Card(
                 elevation: 0,
