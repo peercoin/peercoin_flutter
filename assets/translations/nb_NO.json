@@ -297,7 +297,7 @@
     "sign_step_1_button_alt": "Endre",
     "sign_step_2": "Skriv Inn Melding",
     "sign_step_3": "Signer Melding",
-    "sign_step_3_description": "Dette er din signatur. Du kan dobbelttrykke for å kopiere den til utklippstavlen.",
+    "sign_step_3_description": "Dette er din signatur.",
     "sign_step_3_button": "Signer",
     "sign_step_3_button_alt": "Kopier signaturen til utklippstavlen",
     "sign_snack_text": "$address valgt",
@@ -509,7 +509,7 @@
     "sign_transaction_input_selector_title": "Velg hvilke inputs som skal signeres",
     "wallet_pop_menu_signing_transactions": "Signer Transaksjon",
     "sign_transaction_step_1_description": "Velg adressen som skal signere transaksjonen",
-    "sign_transaction_step_3_description": "Dette er din signerte transaksjonshex. Du kan dobbelttrykke for å kopiere den til utklippstavlen.",
+    "sign_transaction_step_3_description": "Signert transaksjonshex",
     "sign_transaction_step_1_copy_pubkey": "Kopier offentlig nøkkel til utklippstavlen",
     "sign_transaction_confirmation_input_signed": "Signert",
     "sign_transaction_confirmation_input_unsigned": "Ikke signert",
@@ -518,5 +518,7 @@
     "sign_transaction_confirmation_broadcast_snack": "Kringkasting av transaksjon forsøkt",
     "sign_transaction_confirmation_dialog_title": "Kringkast Transaksjon",
     "sign_transaction_confirmation_broadcast": "Kringkast",
-    "sign_transaction_confirmation_dialog_content": "Vennligst bekreft at du ønsker å kringkaste denne transaksjonen."
+    "sign_transaction_confirmation_dialog_content": "Vennligst bekreft at du ønsker å kringkaste denne transaksjonen.",
+    "double_tap_to_copy": "Du kan dobbelttrykke for å kopiere teksten.",
+    "sign_transaction_confirmation_transaction_id": "Transaksjons-ID"
 }
