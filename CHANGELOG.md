@@ -1,6 +1,6 @@
-### **1.3.0** (2024-06-xx)
+### **1.3.0** (2024-06-08)
 
--
+- Show transaction confirmation: fix bug where some outputs where not displayed correctly
 
 ### **1.2.9** (2024-05-30)
 
