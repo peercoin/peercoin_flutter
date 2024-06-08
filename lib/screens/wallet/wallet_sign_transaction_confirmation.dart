@@ -29,21 +29,22 @@ class WalletSignTransactionConfirmationArguments {
 class WalletSignTransactionConfirmationScreen extends StatelessWidget {
   const WalletSignTransactionConfirmationScreen({super.key});
   List<Widget> renderRecipients({
-    required Map<String, int> recipients,
+    required List<(String, int)> recipients,
     required String letterCode,
     required int decimalProduct,
   }) {
     List<Widget> list = [];
 
-    recipients.forEach(
-      (addr, value) => list.add(
+    for (final e in recipients) {
+      list.add(
         const TransactionDetails().renderRow(
-          addr,
-          value / decimalProduct,
+          e.$1,
+          e.$2 / decimalProduct,
           letterCode,
         ),
-      ),
-    );
+      );
+    }
+
     return list;
   }
 
@@ -177,18 +178,15 @@ class WalletSignTransactionConfirmationScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments
             as WalletSignTransactionConfirmationArguments;
     final Transaction tx = arguments.tx;
-    final Map<String, int> recipients = tx.outputs
+    final List<(String, int)> recipients = tx.outputs
         .map(
-      (e) => MapEntry(
-        GenericAddress.fromAsm(e.program!.script.asm, arguments.network)
-            .toString(),
-        e.value,
-      ),
-    )
-        .fold<Map<String, int>>({}, (prev, element) {
-      prev[element.key] = element.value.toInt();
-      return prev;
-    });
+          (e) => (
+            GenericAddress.fromAsm(e.program!.script.asm, arguments.network)
+                .toString(),
+            e.value.toInt()
+          ),
+        )
+        .toList();
 
     final totalAmount = tx.outputs.map((e) => e.value).reduce((a, b) => a + b);
     final decimalProduct = arguments.decimalProduct;
