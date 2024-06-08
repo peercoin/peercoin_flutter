@@ -472,6 +472,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
         );
         break;
+      case 'hide_wallet':
+        //TODO: implement hide wallet bottom sheet
+        // _walletProvider.hideWallet(_wallet.name);
+        //Navigator.of(context).pop();
+        break;
       default:
     }
   }
@@ -653,6 +658,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
                 title: Text(
                   AppLocalizations.instance.translate(
                     'sign_reset_button',
+                  ),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'hide_wallet',
+              child: ListTile(
+                leading: Icon(
+                  Icons.visibility_off,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'hide_wallet',
                   ),
                 ),
               ),

@@ -520,5 +520,6 @@
   "sign_transaction_confirmation_dialog_title": "Broadcast Transaction",
   "sign_transaction_confirmation_dialog_content": "Please confirm that you want to broadcast this transaction.",
   "sign_transaction_confirmation_transaction_id": "Transaction id",
-  "double_tap_to_copy": "You may double tap to copy the text."
+  "double_tap_to_copy": "You may double tap to copy the text.",
+  "hide_wallet": "Hide Wallet"
 }
