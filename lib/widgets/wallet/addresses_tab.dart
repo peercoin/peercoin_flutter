@@ -16,7 +16,7 @@ import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
 import '../double_tab_to_clipboard.dart';
-import 'wallet_home_qr.dart';
+import 'wallet_home/wallet_home_qr.dart';
 
 class AddressTab extends StatefulWidget {
   final String walletName;

@@ -8,7 +8,8 @@ import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/server_provider.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/widgets/wallet/address_book/addresses_tab_watch_only.dart';
-import 'package:peercoin/widgets/wallet/wallet_reset_bottom_sheet.dart';
+import 'package:peercoin/widgets/wallet/wallet_home/wallet_hide_bottom_sheet.dart';
+import 'package:peercoin/widgets/wallet/wallet_home/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +29,7 @@ import '../../widgets/wallet/addresses_tab.dart';
 import '../../widgets/wallet/receive_tab.dart';
 import '../../widgets/wallet/send_tab.dart';
 import '../../widgets/wallet/transactions_list.dart';
-import '../../widgets/wallet/wallet_rescan_bottom_sheet.dart';
+import '../../widgets/wallet/wallet_home/wallet_rescan_bottom_sheet.dart';
 
 class WalletHomeScreen extends StatefulWidget {
   const WalletHomeScreen({super.key});
@@ -473,12 +474,33 @@ class _WalletHomeState extends State<WalletHomeScreen>
         );
         break;
       case 'hide_wallet':
-        //TODO: implement hide wallet bottom sheet
-        // _walletProvider.hideWallet(_wallet.name);
-        //Navigator.of(context).pop();
+        _triggerHideBottomSheet();
         break;
       default:
     }
+  }
+
+  void _triggerHideBottomSheet() async {
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return WalletHideBottomSheet(
+          hidden: _wallet.hidden,
+          action: () async {
+            await _walletProvider.setHideWallet(_wallet.name, !_wallet.hidden);
+
+            if (context.mounted) {
+              Navigator.of(context).pop(); // pops modal bottom sheet
+            }
+          },
+        );
+      },
+      context: context,
+    );
   }
 
   void _triggerResetBottomSheet() async {
@@ -666,12 +688,14 @@ class _WalletHomeState extends State<WalletHomeScreen>
               value: 'hide_wallet',
               child: ListTile(
                 leading: Icon(
-                  Icons.visibility_off,
+                  _wallet.hidden == false
+                      ? Icons.visibility_off
+                      : Icons.visibility,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 title: Text(
                   AppLocalizations.instance.translate(
-                    'hide_wallet',
+                    _wallet.hidden ? 'unhide_wallet' : 'hide_wallet',
                   ),
                 ),
               ),

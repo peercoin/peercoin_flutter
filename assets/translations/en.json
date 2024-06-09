@@ -521,5 +521,10 @@
   "sign_transaction_confirmation_dialog_content": "Please confirm that you want to broadcast this transaction.",
   "sign_transaction_confirmation_transaction_id": "Transaction id",
   "double_tap_to_copy": "You may double tap to copy the text.",
-  "hide_wallet": "Hide Wallet"
+  "hide_wallet": "Hide Wallet",
+  "hide_wallet_action": "Hide",
+  "unhide_wallet": "Unhide Wallet",
+  "unhide_wallet_action": "Unhide",
+  "hide_wallet_description": "This will hide the wallet from the wallet list. Hidden wallets available on the bottom of the list. You can unhide it anytime.",
+  "unhide_wallet_description": "This will unhide the wallet and show it in the wallet list again."
 }

@@ -17,7 +17,7 @@ import '/../widgets/buttons.dart';
 import '/../widgets/double_tab_to_clipboard.dart';
 import '/../widgets/service_container.dart';
 import '/../widgets/wallet/wallet_balance_header.dart';
-import '/../widgets/wallet/wallet_home_qr.dart';
+import 'wallet_home/wallet_home_qr.dart';
 
 class ReceiveTab extends StatefulWidget {
   final String unusedAddress;
