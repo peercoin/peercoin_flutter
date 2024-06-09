@@ -322,7 +322,7 @@
     "sign_step_1_button_alt": "Breyta",
     "sign_step_2": "Sláðu inn skilaboð",
     "sign_step_3": "Undirrita skilaboð",
-    "sign_step_3_description": "Þetta er undirskriftin þín. Þú getur tvöfalt ýtt til að afrita hana í skyndiminnið.",
+    "sign_step_3_description": "Þetta er undirskriftin þín.",
     "sign_step_3_button": "Undirrita",
     "verify_step_3_button": "Staðfesta",
     "sign_step_3_button_alt": "Afrita undirskrift í skyndiminnið",
@@ -509,10 +509,16 @@
     "sign_transaction_step_3": "Skrifaðu Undir Viðskipti",
     "wallet_pop_menu_signing_transactions": "Skrifaðu Undir Viðskipti",
     "sign_transaction_step_1_description": "Veldu heimilisfangið sem mun skrifa undir viðskiptin",
-    "sign_transaction_step_3_description": "Þetta er undirritaður viðskipta hex. Þú getur tvípikkað til að afrita það á klemmuspjaldið.",
+    "sign_transaction_step_3_description": "Undirritaður viðskiptasex",
     "sign_transaction_step_1_copy_pubkey": "Afritaðu opinberan lykil á klemmuspjald",
     "sign_transaction_confirmation_input_signed": "Undirritaður",
     "sign_transaction_confirmation_input_unsigned": "Ekki undirritaður",
     "sign_transaction_inputs": "Inntak",
-    "sign_transaction_confirmation_title": "Vinsamlegast skoðaðu viðskiptin"
+    "sign_transaction_confirmation_title": "Vinsamlegast skoðaðu viðskiptin",
+    "sign_transaction_confirmation_dialog_title": "Útvarpsviðskipti",
+    "sign_transaction_confirmation_dialog_content": "Vinsamlegast staðfestu að þú viljir senda þessa færslu.",
+    "sign_transaction_confirmation_broadcast": "Útsending",
+    "sign_transaction_confirmation_broadcast_snack": "Reynt var að senda útsendingu",
+    "sign_transaction_confirmation_transaction_id": "Auðkenni viðskipta",
+    "double_tap_to_copy": "Þú getur tvípikkað til að afrita textann."
 }

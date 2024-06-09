@@ -346,5 +346,20 @@
     "verify_input_label_address": "Zu überprüfende Adresse",
     "verify_input_label_signature": "Unterschrift zur Überprüfung",
     "verify_success": "Nachricht bestätigt.",
-    "verify_fail": "Die Nachricht konnte nicht überprüft werden."
+    "verify_fail": "Die Nachricht konnte nicht überprüft werden.",
+    "sign_transaction_confirmation_input_signed": "signiert",
+    "sign_transaction_confirmation_input_unsigned": "nicht signiert",
+    "search_address": "Adresse suchen",
+    "wallet_scan_notice_new": "Dies könnte eine Weile dauern.\nDieses Fenster schliesst sich automatisch!",
+    "app_settings_experimental_features": "Experimentelle Funktionen",
+    "app_settings_experimental_feature_watchOnlyWallets": "Nur beobachtbare Wallets",
+    "watch_only": "nur beobachten",
+    "addresses_none": "keine Adressen gefunden",
+    "currency_AED": "Vereinigte Arabische Emirate Dirham",
+    "currency_AFN": "Afghanischer Afghani",
+    "currency_CHF": "Schweizer Franken",
+    "app_settings_language_search": "Suche Sprache",
+    "app_settings_wallet_order": "Wallet Reihenfolge",
+    "app_settings_price_feed_search": "Sprachcode suchen",
+    "wallet_pop_menu_signing_transactions": "Transaktion signieren"
 }
