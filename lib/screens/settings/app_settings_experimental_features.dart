@@ -73,6 +73,7 @@ class _AppSettingsExperimentalFeaturesScreenState
               children: ExperimentalFeatures.values
                   .map(
                     (e) => SwitchListTile(
+                      key: Key(e.name),
                       title: Text(
                         AppLocalizations.instance.translate(
                           'app_settings_experimental_feature_${e.name}',

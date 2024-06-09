@@ -248,5 +248,4 @@ class PeercoinApp extends StatelessWidget {
       ),
     );
   }
-  //TODO add e2e tests for watch only wallet
 }
