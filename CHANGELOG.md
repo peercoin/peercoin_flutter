@@ -1,6 +1,8 @@
-### **1.3.0** (2024-06-08)
+### **1.3.0** (2024-06-09)
 
-- Show transaction confirmation: fix bug where some outputs where not displayed correctly
+- Show transaction confirmation: fix bug where some outputs were not displayed correctly
+- Allow hiding of wallets in wallet list
+- Allow watch-only wallets to be deleted
 
 ### **1.2.9** (2024-05-30)
 
