@@ -13,8 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
-import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings_provider.dart';
+import '../../providers/wallet_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
@@ -22,31 +22,33 @@ import '../../tools/background_sync.dart';
 import '../../tools/debug_log_handler.dart';
 import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
-import '../../tools/share_wrapper.dart';
-import '../../widgets/spinning_peercoin_icon.dart';
-import '../../widgets/wallet/new_wallet.dart';
 import '../../tools/session_checker.dart';
+import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/logout_dialog_dummy.dart'
     if (dart.library.html) '../../widgets/logout_dialog.dart';
+import '../../widgets/spinning_peercoin_icon.dart';
+import '../../widgets/wallet/new_wallet.dart';
 
 class WalletListScreen extends StatefulWidget {
   final bool fromColdStart;
   final String walletToOpenDirectly;
-
-  @override
-  State<WalletListScreen> createState() => _WalletListScreenState();
 
   const WalletListScreen({
     super.key,
     this.fromColdStart = false,
     this.walletToOpenDirectly = '',
   });
+
+  @override
+  State<WalletListScreen> createState() => _WalletListScreenState();
 }
 
 class _WalletListScreenState extends State<WalletListScreen>
     with SingleTickerProviderStateMixin {
   bool _initial = true;
+  bool _showHiddenWallets = false;
+  int _nOfHiddenWallets = 0;
   late bool _importedSeed;
   late WalletProvider _walletProvider;
   late Animation<double> _animation;
@@ -55,221 +57,6 @@ class _WalletListScreenState extends State<WalletListScreen>
   late Timer _sessionTimer;
   late AppSettingsProvider _appSettings;
   late List<CoinWallet> _activeWalletsOrdered;
-
-  @override
-  void initState() {
-    //init animation controller
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    );
-    _animation = Tween(begin: 88.0, end: 92.0).animate(_controller);
-    _controller.repeat(reverse: true);
-    super.initState();
-  }
-
-  Future<void> _orderWallets() async {
-    final values = _walletProvider.availableWalletValues;
-    final order = _appSettings.walletOrder;
-    values.sort(
-      (a, b) => order.indexOf(a.name).compareTo(
-            order.indexOf(b.name),
-          ),
-    );
-    _activeWalletsOrdered = values;
-  }
-
-  void _triggerChangeLogCheck(
-    NavigatorState navigator,
-    String identifierInSettings,
-  ) async {
-    var packageInfo = await PackageInfo.fromPlatform();
-    if (packageInfo.buildNumber != identifierInSettings) {
-      await navigator.pushNamed(Routes.changeLog);
-      _appSettings.setBuildIdentifier(packageInfo.buildNumber);
-    }
-  }
-
-  Future<bool> checkReminder() async {
-    return await PeriodicReminders.checkReminder(
-      _appSettings,
-      context,
-    );
-  }
-
-  Future<void> handleInitError(Object e) async {
-    LoggerWrapper.logError(
-      'WalletListScreen',
-      'didChangeDependencies',
-      e.toString(),
-    );
-
-    //automatically toggle exportLogs for this event, since it is very likely app settings can not be accessed
-    await initDebugLogHandler();
-    FlutterLogs.exportLogs();
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.instance.translate(
-              'secure_storage_app_bar_title',
-            ),
-            textAlign: TextAlign.center,
-          ),
-          duration: const Duration(seconds: 5),
-        ),
-      );
-    }
-  }
-
-  @override
-  void didChangeDependencies() async {
-    if (_initial) {
-      _appSettings = Provider.of<AppSettingsProvider>(context);
-      _walletProvider = Provider.of<WalletProvider>(context);
-      final navigator = Navigator.of(context);
-      final modalRoute = ModalRoute.of(context);
-
-      try {
-        await _appSettings.init(); //only required in home widget
-        await _walletProvider.init();
-        await _orderWallets();
-        final prefs = await SharedPreferences.getInstance();
-        _importedSeed = prefs.getBool('importedSeed') == true;
-      } catch (e) {
-        await handleInitError(e);
-      } finally {
-        setState(() {
-          _initial = false;
-        });
-      }
-
-      //toggle price ticker update if enabled in settings
-      if (_appSettings.selectedCurrency.isNotEmpty) {
-        PriceTicker.checkUpdate(_appSettings);
-        //start timer to update data hourly
-        _priceTimer = Timer.periodic(
-          const Duration(hours: 1),
-          (_) {
-            PriceTicker.checkUpdate(_appSettings);
-          },
-        );
-      }
-
-      if (!kIsWeb) {
-        //toggle check for "whats new" changelog
-        _triggerChangeLogCheck(
-          navigator,
-          _appSettings.buildIdentifier,
-        );
-
-        //toggle periodic reminders
-        if (_activeWalletsOrdered.isNotEmpty) {
-          //don't show for users with no wallets
-          if (await checkReminder() == true) {
-            return; //don't execute code below this line if checkReminder returned true
-          }
-        }
-      } else {
-        //start session checker timer on web
-        _sessionTimer = Timer.periodic(
-          const Duration(minutes: 10),
-          (timer) async {
-            if (await checkSessionExpired()) {
-              if (mounted) {
-                Navigator.of(context).pop();
-              }
-              LogoutDialog.reloadWindow();
-            }
-          },
-        );
-      }
-
-      //check if we just finished a scan
-      var fromScan = false;
-      if (modalRoute?.settings.arguments != null) {
-        var map = modalRoute!.settings.arguments as Map;
-        fromScan = map['fromScan'] ?? false;
-      }
-      if (widget.fromColdStart == true &&
-          _appSettings.authenticationOptions!['walletList']!) {
-        if (mounted) {
-          await Auth.requireAuth(
-            context: context,
-            biometricsAllowed: _appSettings.biometricsAllowed,
-            canCancel: false,
-          );
-        }
-      } else if (fromScan == false) {
-        //init background tasks
-        if (_appSettings.notificationInterval > 0) {
-          await BackgroundSync.init(
-            notificationInterval: _appSettings.notificationInterval,
-          );
-        }
-        //find default wallet
-
-        CoinWallet? defaultWallet;
-        //push to wallet directly (from notification) or to default wallet
-        if (widget.walletToOpenDirectly.isNotEmpty) {
-          defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
-            (elem) => elem.name == widget.walletToOpenDirectly,
-          );
-        } else {
-          defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
-            (elem) => elem.letterCode == _appSettings.defaultWallet,
-          );
-        }
-        //push to default wallet
-        if (_activeWalletsOrdered.length == 1 &&
-            widget.walletToOpenDirectly.isEmpty) {
-          //only one wallet available, pushing to that one (no walletToOpenDirectly set)
-          if (!kIsWeb) {
-            if (mounted) {
-              context.loaderOverlay.show();
-            }
-            await navigator.pushNamed(
-              Routes.walletHome,
-              arguments: {
-                'wallet': _activeWalletsOrdered.first,
-              },
-            );
-          }
-        } else if (_activeWalletsOrdered.length > 1 ||
-            widget.walletToOpenDirectly.isNotEmpty) {
-          if (defaultWallet != null) {
-            if (mounted) {
-              context.loaderOverlay.show();
-            }
-            if (!kIsWeb) {
-              await navigator.pushNamed(
-                Routes.walletHome,
-                arguments: {'wallet': defaultWallet},
-              );
-            }
-          }
-        }
-      }
-    }
-
-    //always on didChangeDependencies
-    await _orderWallets();
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    if (_appSettings.selectedCurrency.isNotEmpty) {
-      _priceTimer.cancel();
-    }
-    if (kIsWeb) {
-      _sessionTimer.cancel();
-    }
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -290,7 +77,7 @@ class _WalletListScreenState extends State<WalletListScreen>
           IconButton(
             key: const Key('newWalletIconButton'),
             onPressed: () {
-              showWalletDialog(context);
+              _showWalletDialog(context);
             },
             icon: const Icon(Icons.add_rounded),
           ),
@@ -385,8 +172,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontStyle: FontStyle.italic,
-                                  color:
-                                      Theme.of(context).colorScheme.surface,
+                                  color: Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                               if (_importedSeed)
@@ -410,7 +196,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                 text: AppLocalizations.instance.translate(
                                   'add_new_wallet',
                                 ),
-                                action: () => showWalletDialog(context),
+                                action: () => _showWalletDialog(context),
                               ),
                             ],
                           ),
@@ -437,8 +223,7 @@ class _WalletListScreenState extends State<WalletListScreen>
                                     vertical: 8,
                                     horizontal: 16,
                                   ),
-                                  color:
-                                      Theme.of(context).colorScheme.surface,
+                                  color: Theme.of(context).colorScheme.surface,
                                   child: Column(
                                     children: [
                                       InkWell(
@@ -539,13 +324,230 @@ class _WalletListScreenState extends State<WalletListScreen>
                             ),
                           ),
                         ),
+                  if (_nOfHiddenWallets > 0)
+                    PeerButton(
+                      action: _toggleHiddenWallets,
+                      text: AppLocalizations.instance.translate(
+                          _showHiddenWallets
+                              ? 'hide_hidden_wallets_list'
+                              : 'show_hidden_wallets_list',
+                          {
+                            'nOfHiddenWallets': _nOfHiddenWallets.toString(),
+                          }),
+                    ),
                 ],
               ),
             ),
     );
   }
 
-  void showWalletDialog(BuildContext context) {
+  @override
+  void didChangeDependencies() async {
+    if (_initial) {
+      _appSettings = Provider.of<AppSettingsProvider>(context);
+      _walletProvider = Provider.of<WalletProvider>(context);
+      final navigator = Navigator.of(context);
+      final modalRoute = ModalRoute.of(context);
+
+      try {
+        await _appSettings.init(); //only required in home widget
+        await _walletProvider.init();
+        await _orderWallets();
+        final prefs = await SharedPreferences.getInstance();
+        _importedSeed = prefs.getBool('importedSeed') == true;
+      } catch (e) {
+        await _handleInitError(e);
+      } finally {
+        setState(() {
+          _initial = false;
+        });
+      }
+
+      //toggle price ticker update if enabled in settings
+      if (_appSettings.selectedCurrency.isNotEmpty) {
+        PriceTicker.checkUpdate(_appSettings);
+        //start timer to update data hourly
+        _priceTimer = Timer.periodic(
+          const Duration(hours: 1),
+          (_) {
+            PriceTicker.checkUpdate(_appSettings);
+          },
+        );
+      }
+
+      if (!kIsWeb) {
+        //toggle check for "whats new" changelog
+        _triggerChangeLogCheck(
+          navigator,
+          _appSettings.buildIdentifier,
+        );
+
+        //toggle periodic reminders
+        if (_activeWalletsOrdered.isNotEmpty) {
+          //don't show for users with no wallets
+          if (await _checkReminder() == true) {
+            return; //don't execute code below this line if checkReminder returned true
+          }
+        }
+      } else {
+        //start session checker timer on web
+        _sessionTimer = Timer.periodic(
+          const Duration(minutes: 10),
+          (timer) async {
+            if (await checkSessionExpired()) {
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
+              LogoutDialog.reloadWindow();
+            }
+          },
+        );
+      }
+
+      //check if we just finished a scan
+      var fromScan = false;
+      if (modalRoute?.settings.arguments != null) {
+        var map = modalRoute!.settings.arguments as Map;
+        fromScan = map['fromScan'] ?? false;
+      }
+      if (widget.fromColdStart == true &&
+          _appSettings.authenticationOptions!['walletList']!) {
+        if (mounted) {
+          await Auth.requireAuth(
+            context: context,
+            biometricsAllowed: _appSettings.biometricsAllowed,
+            canCancel: false,
+          );
+        }
+      } else if (fromScan == false) {
+        //init background tasks
+        if (_appSettings.notificationInterval > 0) {
+          await BackgroundSync.init(
+            notificationInterval: _appSettings.notificationInterval,
+          );
+        }
+        //find default wallet
+
+        CoinWallet? defaultWallet;
+        //push to wallet directly (from notification) or to default wallet
+        if (widget.walletToOpenDirectly.isNotEmpty) {
+          defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
+            (elem) => elem.name == widget.walletToOpenDirectly,
+          );
+        } else {
+          defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
+            (elem) => elem.letterCode == _appSettings.defaultWallet,
+          );
+        }
+        //push to default wallet
+        if (_activeWalletsOrdered.length == 1 &&
+            widget.walletToOpenDirectly.isEmpty) {
+          //only one wallet available, pushing to that one (no walletToOpenDirectly set)
+          if (!kIsWeb) {
+            if (mounted) {
+              context.loaderOverlay.show();
+            }
+            await navigator.pushNamed(
+              Routes.walletHome,
+              arguments: {
+                'wallet': _activeWalletsOrdered.first,
+              },
+            );
+          }
+        } else if (_activeWalletsOrdered.length > 1 ||
+            widget.walletToOpenDirectly.isNotEmpty) {
+          if (defaultWallet != null) {
+            if (mounted) {
+              context.loaderOverlay.show();
+            }
+            if (!kIsWeb) {
+              await navigator.pushNamed(
+                Routes.walletHome,
+                arguments: {'wallet': defaultWallet},
+              );
+            }
+          }
+        }
+      }
+    }
+    //always on didChangeDependencies
+    await _orderWallets();
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    if (_appSettings.selectedCurrency.isNotEmpty) {
+      _priceTimer.cancel();
+    }
+    if (kIsWeb) {
+      _sessionTimer.cancel();
+    }
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    //init animation controller
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    _animation = Tween(begin: 88.0, end: 92.0).animate(_controller);
+    _controller.repeat(reverse: true);
+    super.initState();
+  }
+
+  Future<bool> _checkReminder() async {
+    return await PeriodicReminders.checkReminder(
+      _appSettings,
+      context,
+    );
+  }
+
+  Future<void> _handleInitError(Object e) async {
+    LoggerWrapper.logError(
+      'WalletListScreen',
+      'didChangeDependencies',
+      e.toString(),
+    );
+
+    //automatically toggle exportLogs for this event, since it is very likely app settings can not be accessed
+    await initDebugLogHandler();
+    FlutterLogs.exportLogs();
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate(
+              'secure_storage_app_bar_title',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+
+  Future<void> _orderWallets() async {
+    final values = _walletProvider.availableWalletValues;
+    final order = _appSettings.walletOrder;
+    values.sort(
+      (a, b) => order.indexOf(a.name).compareTo(
+            order.indexOf(b.name),
+          ),
+    );
+    _activeWalletsOrdered = _showHiddenWallets
+        ? values
+        : values.where((wallet) => !wallet.hidden).toList();
+    _nOfHiddenWallets = values.where((wallet) => wallet.hidden).length;
+  }
+
+  void _showWalletDialog(BuildContext context) {
     if (_initial == false) {
       showDialog(
         context: context,
@@ -553,6 +555,24 @@ class _WalletListScreenState extends State<WalletListScreen>
           return const NewWalletDialog();
         },
       );
+    }
+  }
+
+  void _toggleHiddenWallets() {
+    setState(() {
+      _showHiddenWallets = !_showHiddenWallets;
+    });
+    _orderWallets();
+  }
+
+  void _triggerChangeLogCheck(
+    NavigatorState navigator,
+    String identifierInSettings,
+  ) async {
+    var packageInfo = await PackageInfo.fromPlatform();
+    if (packageInfo.buildNumber != identifierInSettings) {
+      await navigator.pushNamed(Routes.changeLog);
+      _appSettings.setBuildIdentifier(packageInfo.buildNumber);
     }
   }
 }
