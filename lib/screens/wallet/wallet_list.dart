@@ -259,6 +259,16 @@ class _WalletListScreenState extends State<WalletListScreen>
                                                     color: Colors.black,
                                                   ),
                                                 ),
+                                              if (wallet.hidden)
+                                                const Positioned(
+                                                  right: 0,
+                                                  top: 0,
+                                                  child: Icon(
+                                                    Icons.visibility_off,
+                                                    size: 16,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
                                             ],
                                           ),
                                           title: Text(
