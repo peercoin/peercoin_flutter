@@ -6,7 +6,7 @@ import '/../models/hive/coin_wallet.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../providers/connection_provider.dart';
 import '/../tools/price_ticker.dart';
-import '/../widgets/wallet/wallet_home_connection.dart';
+import 'wallet_home/wallet_home_connection.dart';
 import 'wallet_balance_price.dart';
 
 class WalletBalanceHeader extends StatelessWidget {

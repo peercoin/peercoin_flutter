@@ -146,6 +146,7 @@ void main() {
             '0300000001d8af09713b116ecce194add86bd6def0e2dc3abe99c53bfbcd34576061baca9f000000006a47304402200455cf81bde046213814387da5bde30e657fe7977c4c35ffe78edd3fe5cada7b0220186524598ac87de9b944f61e819b29c8a9a331c8a52b1694b8559cd9ec3395800121022ef8df0bfd68434e2db934e88a7e30b06b88507dac60fa7cc2b732a1b5147ef7ffffffff010a8f9800000000001976a914ff9296d92c5efc397d0e0b9ebe94d95a532270c488ac00000000',
           ),
         );
+        await driver.scrollIntoView(find.text('Broadcast'));
         await driver.tap(find.text('Broadcast'));
         await driver.tap(find.text('Cancel'));
       });
@@ -193,9 +194,143 @@ void main() {
         },
       );
 
-      test('change currency and see if it persists', () async {
+      test('create new peercoin mainnet watch-only wallet and delete it again',
+          () async {
+        await Future.delayed(const Duration(seconds: 1));
         await driver.runUnsynchronized(() async {
           await driver.tap(find.pageBack());
+          await driver.tap(find.byValueKey('appSettingsButton'));
+        });
+        await driver.tap(find.text('Experimental Features'));
+        await driver.tap(find.byValueKey('watchOnlyWallets'));
+        await driver.tap(find.pageBack());
+        await driver.tap(find.pageBack());
+
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey('newWalletIconButton'));
+          await driver.tap(find.text('Watch only'));
+          await driver
+              .tap(find.text('Peercoin')); //create peercoin watch-only wallet
+          await driver
+              .tap(find.text('Peercoin 2')); //tap into watch-only wallet
+        });
+
+        expect(await driver.getText(find.text('connected')), 'connected');
+        //wallet created succesfully, now delete
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Delete Wallet'));
+            await driver.tap(find.text('Delete'));
+          },
+        );
+        //expect to not find "Peercoin 2"
+        await driver.runUnsynchronized(
+          () async {
+            try {
+              await driver.getText(find.text('Peercoin 2'));
+              fail('Expected to not find "Peercoin 2"');
+            } catch (e) {
+              // Expected not to find "Peercoin 2", so we swallow the exception
+            }
+          },
+        );
+      });
+
+      test('hide wallet and unhide again', () async {
+        await Future.delayed(const Duration(seconds: 1));
+        await driver.runUnsynchronized(
+          () async => await driver.tap(
+            find.text('Wallet Test'),
+          ),
+        );
+        await driver.tap(find.byTooltip('Show menu'));
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Hide Wallet'));
+            await driver.tap(find.text('Hide'));
+          },
+        );
+
+        //expect to not find "Wallet Test"
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.pageBack());
+
+            try {
+              await driver.getText(find.text('Wallet Test'));
+              fail('Expected to not find "Wallet Test"');
+            } catch (e) {
+              // Expected not to find "Wallet Test", so we swallow the exception
+            } finally {
+              expect(
+                await driver.getText(find.text('Show 1 Hidden Wallets')),
+                'Show 1 Hidden Wallets',
+              );
+            }
+          },
+        );
+
+        //press show button in wallet list
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Show 1 Hidden Wallets'));
+          },
+        );
+
+        //press hide button in wallet list
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Hide 1 Hidden Wallets'));
+          },
+        );
+
+        await driver.runUnsynchronized(
+          () async {
+            try {
+              await driver.getText(find.text('Wallet Test'));
+              fail('Expected to not find "Wallet Test"');
+            } catch (e) {
+              // Expected not to find "Wallet Test", so we swallow the exception
+            }
+          },
+        );
+
+        //unhide wallet
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Show 1 Hidden Wallets'));
+          },
+        );
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Wallet Test'));
+            await driver.tap(find.byTooltip('Show menu'));
+          },
+        );
+
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.text('Unhide Wallet'));
+            await driver.tap(find.text('Unhide'));
+          },
+        );
+
+        //expect to find "Wallet Test"
+        await driver.runUnsynchronized(
+          () async {
+            await driver.tap(find.pageBack());
+          },
+        );
+
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.text('Wallet Test'));
+          await driver.tap(find.pageBack());
+        });
+      });
+
+      test('change currency and see if it persists', () async {
+        await driver.runUnsynchronized(() async {
           await driver.tap(find.byValueKey('appSettingsButton'));
         });
         await driver.scrollIntoView(find.text('Price Feed & Currency'));

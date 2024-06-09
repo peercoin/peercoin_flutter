@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../tools/app_localizations.dart';
-import '../../tools/share_wrapper.dart';
-import '../buttons.dart';
-import '../double_tab_to_clipboard.dart';
+import '../../../tools/app_localizations.dart';
+import '../../../tools/share_wrapper.dart';
+import '../../buttons.dart';
+import '../../double_tab_to_clipboard.dart';
 
 class WalletHomeQr extends StatelessWidget {
   final String _unusedAddress;

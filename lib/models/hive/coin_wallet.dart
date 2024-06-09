@@ -48,6 +48,9 @@ class CoinWallet extends HiveObject {
   @HiveField(11, defaultValue: false)
   bool _watchOnly = false;
 
+  @HiveField(12, defaultValue: false)
+  bool _hidden = false;
+
   CoinWallet(
     this._name,
     this._title,
@@ -200,6 +203,15 @@ class CoinWallet extends HiveObject {
   void removeAddress(WalletAddress walletAddress) {
     _addresses
         .removeWhere((element) => element.address == walletAddress.address);
+    save();
+  }
+
+  bool get hidden {
+    return _hidden;
+  }
+
+  set hidden(bool value) {
+    _hidden = value;
     save();
   }
 }
