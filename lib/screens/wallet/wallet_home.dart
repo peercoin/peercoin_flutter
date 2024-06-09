@@ -8,6 +8,7 @@ import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/server_provider.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/widgets/wallet/address_book/addresses_tab_watch_only.dart';
+import 'package:peercoin/widgets/wallet/wallet_home/wallet_delete_watch_only_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_hide_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -202,7 +203,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     if (!kIsWeb) {
       if (Platform.isIOS || Platform.isAndroid) {
         if (_wallet.letterCode != 'tPPC') {
-          triggerHighValueAlert();
+          _triggerHighValueAlert();
         }
       }
     }
@@ -251,7 +252,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
             );
           }
           //try to rebroadcast pending tx
-          rebroadCastUnsendTx();
+          _rebroadCastUnsendTx();
         } else if (_listenedAddresses.contains(_unusedAddress) == false &&
             _wallet.watchOnly == false) {
           //subscribe to newly created addresses
@@ -303,7 +304,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     super.didChangeDependencies();
   }
 
-  void rebroadCastUnsendTx() {
+  void _rebroadCastUnsendTx() {
     var nonBroadcastedTx = _walletTransactions.where(
       (element) =>
           element.broadCasted == false &&
@@ -318,7 +319,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
   }
 
-  void triggerHighValueAlert() async {
+  void _triggerHighValueAlert() async {
     if (_appSettings.selectedCurrency.isNotEmpty) {
       //price feed enabled
       var prefs = await SharedPreferences.getInstance();
@@ -432,7 +433,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     );
   }
 
-  void selectPopUpMenuItem(String value) {
+  void _selectPopUpMenuItem(String value) {
     switch (value) {
       case 'import_wallet':
         Navigator.of(context).pushNamed(
@@ -476,8 +477,32 @@ class _WalletHomeState extends State<WalletHomeScreen>
       case 'hide_wallet':
         _triggerHideBottomSheet();
         break;
+      case 'delete_watchonly_wallet':
+        _triggerDeleteWatchOnlyBottomSheet();
+        break;
       default:
     }
+  }
+
+  void _triggerDeleteWatchOnlyBottomSheet() async {
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return WalletDeleteWatchOnlyBottomSheet(
+          action: () async {
+            await _walletProvider.deleteWatchOnlyWallet(_wallet.name);
+            if (context.mounted) {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            }
+          },
+        );
+      },
+      context: context,
+    );
   }
 
   void _triggerHideBottomSheet() async {
@@ -544,7 +569,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     if (_wallet.watchOnly == true) {
       return [
         PopupMenuButton(
-          onSelected: (dynamic value) => selectPopUpMenuItem(value),
+          onSelected: (dynamic value) => _selectPopUpMenuItem(value),
           itemBuilder: (_) {
             return [
               PopupMenuItem(
@@ -575,6 +600,20 @@ class _WalletHomeState extends State<WalletHomeScreen>
                   ),
                 ),
               ),
+              PopupMenuItem(
+                value: 'delete_watchonly_wallet',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.delete_forever,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'delete_wallet',
+                    ),
+                  ),
+                ),
+              ),
             ];
           },
         ),
@@ -582,7 +621,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
     }
     return [
       PopupMenuButton(
-        onSelected: (dynamic value) => selectPopUpMenuItem(value),
+        onSelected: (dynamic value) => _selectPopUpMenuItem(value),
         itemBuilder: (_) {
           return [
             if (_appSettings.camerasAvailble)

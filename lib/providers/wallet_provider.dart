@@ -1334,4 +1334,16 @@ class WalletProvider with ChangeNotifier {
     wallet.title = newTitle;
     notifyListeners();
   }
+
+  Future<void> deleteWatchOnlyWallet(String identifier) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    if (openWallet.watchOnly == false) {
+      throw Exception('Wallet is not watch only');
+    }
+
+    await _walletBox.delete(identifier);
+
+    closeWallet(identifier);
+    notifyListeners();
+  }
 }
