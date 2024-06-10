@@ -520,5 +520,15 @@
     "sign_transaction_confirmation_broadcast": "Udsende",
     "sign_transaction_confirmation_broadcast_snack": "Udsendelse af transaktion forsøgt",
     "sign_transaction_confirmation_transaction_id": "Transaktions ID",
-    "double_tap_to_copy": "Du kan trykke to gange for at kopiere teksten."
+    "double_tap_to_copy": "Du kan trykke to gange for at kopiere teksten.",
+    "hide_wallet_action": "Skjul",
+    "unhide_wallet_action": "Vis",
+    "unhide_wallet_description": "Dette vil vise tegnebogen, og du vil se den på tegnebogens liste igen.",
+    "hide_hidden_wallets_list": "Skjule $nOfHiddenWallets Skjulte Tegnebøger",
+    "show_hidden_wallets_list": "Vis $nOfHiddenWallets Skjulte Tegnebøger",
+    "delete_wallet": "Slet Tegnebog",
+    "hide_wallet": "Skjul Tegnebog",
+    "unhide_wallet": "Vis Tegnebog",
+    "hide_wallet_description": "Dette vil skjule tegnebogen fra tegnebogens liste. Skjulte tegnebøger findes nederst på listen. Du kan se den til enhver tid.",
+    "delte_wallet_description": "Dette vil slette tegnebogen og alle dens data. Du kan ikke fortryde denne handling."
 }
