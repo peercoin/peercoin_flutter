@@ -230,7 +230,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         onTap: () async {
                                           context.loaderOverlay.show();
                                           await Navigator.of(context).pushNamed(
-                                            Routes.walletHome,
+                                            Routes
+                                                .stantardAndWatchOnlyWalletHome,
                                             arguments: {
                                               'wallet': wallet,
                                             },
@@ -458,7 +459,7 @@ class _WalletListScreenState extends State<WalletListScreen>
               context.loaderOverlay.show();
             }
             await navigator.pushNamed(
-              Routes.walletHome,
+              Routes.stantardAndWatchOnlyWalletHome,
               arguments: {
                 'wallet': _activeWalletsOrdered.first,
               },
@@ -472,7 +473,7 @@ class _WalletListScreenState extends State<WalletListScreen>
             }
             if (!kIsWeb) {
               await navigator.pushNamed(
-                Routes.walletHome,
+                Routes.stantardAndWatchOnlyWalletHome,
                 arguments: {'wallet': defaultWallet},
               );
             }
