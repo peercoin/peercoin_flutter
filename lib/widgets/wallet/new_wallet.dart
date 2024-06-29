@@ -121,6 +121,30 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             ),
           ),
         );
+        if (_appSettings.activatedExperimentalFeatures.contains('frost')) {
+          list.add(
+            SimpleDialogOption(
+              onPressed: () {
+                _coin = wallet; //TODO
+                addWallet();
+              },
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Image.asset(
+                    AvailableCoins.getSpecificCoin(
+                      _availableCoins[wallet]!.name,
+                    ).iconPath,
+                    width: 16,
+                  ),
+                ),
+                title: Text(
+                  '${_availableCoins[wallet]!.letterCode == "tPPC" ? "Testnet " : ""}FROST Group',
+                ),
+              ),
+            ),
+          );
+        }
       }
     } else {
       list.add(
@@ -129,7 +153,6 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         ),
       );
     }
-
     list.add(
       SimpleDialogOption(
         child: GestureDetector(
