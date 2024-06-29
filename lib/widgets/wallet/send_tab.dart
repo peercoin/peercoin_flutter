@@ -23,7 +23,7 @@ import '/../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../providers/connection_provider.dart';
-import '/../screens/wallet/wallet_home.dart';
+import '../../screens/wallet/standard_and_watch_only_wallet_home.dart';
 import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
 import '/../tools/auth.dart';

@@ -30,7 +30,7 @@ import '../screens/wallet/address_selector.dart';
 import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
 import '../screens/wallet/transaction_details.dart';
-import '../screens/wallet/wallet_home.dart';
+import '../screens/wallet/standard_and_watch_only_wallet_home.dart';
 import '../screens/settings/wallet_scan/app_settings_wallet_scanner.dart';
 import '../screens/wallet/wallet_list.dart';
 import '../screens/wallet/wallet_sign_message.dart';
@@ -58,7 +58,7 @@ class Routes {
   static const String setupDataFeeds = '/setup-feeds';
   static const String setupLegal = '/setup-legal';
   static const String transaction = '/tx-detail';
-  static const String walletHome = '/wallet-home';
+  static const String stantardAndWatchOnlyWalletHome = '/standard-wallet-home';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -93,8 +93,8 @@ class Routes {
             widget: WalletListScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
-      Routes.walletHome: (context) => const RouterMaster(
-            widget: WalletHomeScreen(),
+      Routes.stantardAndWatchOnlyWalletHome: (context) => const RouterMaster(
+            widget: StandardAndWatchOnlyWalletHomeScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
       Routes.qrScan: (context) => const RouterMaster(

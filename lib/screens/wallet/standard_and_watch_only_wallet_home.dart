@@ -32,14 +32,15 @@ import '../../widgets/wallet/send_tab.dart';
 import '../../widgets/wallet/transactions_list.dart';
 import '../../widgets/wallet/wallet_home/wallet_rescan_bottom_sheet.dart';
 
-class WalletHomeScreen extends StatefulWidget {
-  const WalletHomeScreen({super.key});
+class StandardAndWatchOnlyWalletHomeScreen extends StatefulWidget {
+  const StandardAndWatchOnlyWalletHomeScreen({super.key});
 
   @override
-  State<WalletHomeScreen> createState() => _WalletHomeState();
+  State<StandardAndWatchOnlyWalletHomeScreen> createState() =>
+      _WalletHomeState();
 }
 
-class _WalletHomeState extends State<WalletHomeScreen>
+class _WalletHomeState extends State<StandardAndWatchOnlyWalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   String _unusedAddress = '';
