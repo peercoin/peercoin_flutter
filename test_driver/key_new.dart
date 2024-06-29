@@ -199,12 +199,7 @@ void main() {
         await Future.delayed(const Duration(seconds: 1));
         await driver.runUnsynchronized(() async {
           await driver.tap(find.pageBack());
-          await driver.tap(find.byValueKey('appSettingsButton'));
         });
-        await driver.tap(find.text('Experimental Features'));
-        await driver.tap(find.byValueKey('watchOnlyWallets'));
-        await driver.tap(find.pageBack());
-        await driver.tap(find.pageBack());
 
         await driver.runUnsynchronized(() async {
           await driver.tap(find.byValueKey('newWalletIconButton'));
