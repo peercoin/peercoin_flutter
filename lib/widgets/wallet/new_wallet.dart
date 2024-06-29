@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/experimental_features.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -131,30 +130,27 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       );
     }
 
-    if (_appSettings.activatedExperimentalFeatures
-        .contains(ExperimentalFeatures.watchOnlyWallets.name)) {
-      list.add(
-        SimpleDialogOption(
-          child: GestureDetector(
-            onTap: () => setState(() {
-              _watchOnly = !_watchOnly;
-            }),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Checkbox(
-                  value: _watchOnly,
-                  onChanged: (e) => setState(() {
-                    _watchOnly = e!;
-                  }),
-                ),
-                Text(AppLocalizations.instance.translate('watch_only')),
-              ],
-            ),
+    list.add(
+      SimpleDialogOption(
+        child: GestureDetector(
+          onTap: () => setState(() {
+            _watchOnly = !_watchOnly;
+          }),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Checkbox(
+                value: _watchOnly,
+                onChanged: (e) => setState(() {
+                  _watchOnly = e!;
+                }),
+              ),
+              Text(AppLocalizations.instance.translate('watch_only')),
+            ],
           ),
         ),
-      );
-    }
+      ),
+    );
 
     return SimpleDialog(
       title: Text(AppLocalizations.instance.translate('add_new_wallet')),
