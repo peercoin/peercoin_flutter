@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-IOS.md -->
+<!--
+   PrivacyInfo.xcprivacy
+   Runner
+
+   Created by Peercoin Foundation on 29.06.24.
+   Copyright (c) 2024 . All rights reserved.
+-->
+<plist version="1.0">
+<dict>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+        <!-- [1] background_fetch: UserDefaults -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>CA92.1</string>
+            </array>
+        </dict>        
+    </array>
+</dict>
+</plist>
