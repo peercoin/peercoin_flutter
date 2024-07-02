@@ -102,6 +102,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
     if (actualAvailableWallets.isNotEmpty) {
       for (var wallet in actualAvailableWallets) {
+        bool isTestnet = _availableCoins[wallet]!.letterCode == 'tPPC';
         list.add(
           SimpleDialogOption(
             onPressed: () {
@@ -121,6 +122,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             ),
           ),
         );
+        // inject FROST
         if (_appSettings.activatedExperimentalFeatures.contains('frost')) {
           list.add(
             SimpleDialogOption(
@@ -132,14 +134,14 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
                 leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Image.asset(
-                    AvailableCoins.getSpecificCoin(
-                      _availableCoins[wallet]!.name,
-                    ).iconPath,
+                    isTestnet
+                        ? 'assets/icon/frost-icon-64-grey.png'
+                        : 'assets/icon/frost-icon-64.png',
                     width: 16,
                   ),
                 ),
                 title: Text(
-                  '${_availableCoins[wallet]!.letterCode == "tPPC" ? "Testnet " : ""}FROST Group',
+                  '${isTestnet ? "Testnet " : ""}FROST Group',
                 ),
               ),
             ),
