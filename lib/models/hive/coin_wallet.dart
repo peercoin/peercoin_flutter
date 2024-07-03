@@ -51,6 +51,9 @@ class CoinWallet extends HiveObject {
   @HiveField(12, defaultValue: false)
   bool _hidden = false;
 
+  @HiveField(13, defaultValue: false)
+  bool _isFROST = false;
+
   CoinWallet(
     this._name,
     this._title,
@@ -58,6 +61,7 @@ class CoinWallet extends HiveObject {
     this._walletIndex,
     this._dueForRescan,
     this._watchOnly,
+    this._isFROST,
   );
 
   set addNewAddress(WalletAddress newAddress) {
@@ -212,6 +216,15 @@ class CoinWallet extends HiveObject {
 
   set hidden(bool value) {
     _hidden = value;
+    save();
+  }
+
+  bool get isFROST {
+    return _isFROST;
+  }
+
+  set isFROST(bool value) {
+    _isFROST = value;
     save();
   }
 }
