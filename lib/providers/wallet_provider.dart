@@ -105,6 +105,7 @@ class WalletProvider with ChangeNotifier {
     required String letterCode,
     required bool isImportedSeed,
     required bool watchOnly,
+    required bool isFROST,
   }) async {
     final box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
@@ -129,6 +130,7 @@ class WalletProvider with ChangeNotifier {
         nOfWalletOfLetterCode,
         isImportedSeed,
         watchOnly,
+        isFROST,
       ),
     );
     notifyListeners();

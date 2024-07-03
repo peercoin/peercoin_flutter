@@ -24,7 +24,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   bool _watchOnly = false;
   late AppSettingsProvider _appSettings;
 
-  Future<void> addWallet() async {
+  Future<void> addWallet({required isFROST}) async {
     try {
       var appSettings = context.read<AppSettingsProvider>();
       final navigator = Navigator.of(context);
@@ -33,12 +33,27 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       final nOfWalletOfLetterCode = walletProvider.availableWalletValues
           .where((element) => element.letterCode == letterCode)
           .length;
-      final walletName = '${_coin}_$nOfWalletOfLetterCode';
+      final nOfWalletOfLetterCodeFROST = walletProvider.availableWalletValues
+          .where(
+            (element) => element.letterCode == letterCode && element.isFROST,
+          )
+          .length;
 
+      // generate identifier
+      final walletName = isFROST
+          ? '${_coin}_frost_group_$nOfWalletOfLetterCodeFROST'
+          : '${_coin}_$nOfWalletOfLetterCode';
+
+      // generate title
       String title = _availableCoins[_coin]!.displayName;
       if (nOfWalletOfLetterCode > 0) {
         title = '$title ${nOfWalletOfLetterCode + 1}';
       }
+      if (isFROST) {
+        title =
+            'FROST Group ${nOfWalletOfLetterCodeFROST == 0 ? "" : nOfWalletOfLetterCodeFROST + 1}';
+      }
+
       final prefs = await SharedPreferences.getInstance();
 
       await walletProvider.addWallet(
@@ -47,6 +62,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         letterCode: letterCode,
         isImportedSeed: prefs.getBool('importedSeed') == true,
         watchOnly: _watchOnly,
+        isFROST: isFROST,
       );
 
       //add to order list
@@ -107,7 +123,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           SimpleDialogOption(
             onPressed: () {
               _coin = wallet;
-              addWallet();
+              addWallet(isFROST: false);
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -127,16 +143,14 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           list.add(
             SimpleDialogOption(
               onPressed: () {
-                _coin = wallet; //TODO
-                addWallet();
+                _coin = wallet;
+                addWallet(isFROST: true);
               },
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Image.asset(
-                    isTestnet
-                        ? 'assets/icon/frost-icon-64-grey.png'
-                        : 'assets/icon/frost-icon-64.png',
+                    AvailableCoins.getFROSTIconPath(wallet),
                     width: 16,
                   ),
                 ),

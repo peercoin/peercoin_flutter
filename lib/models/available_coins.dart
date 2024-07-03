@@ -64,6 +64,16 @@ class AvailableCoins {
     return _availableCoinList;
   }
 
+  static final Map<String, String> _frostIconPaths = {
+    'peercoin': 'assets/icon/frost-icon-64.png',
+    'peercoinTestnet': 'assets/icon/frost-icon-64-grey.png',
+  };
+
+  static String getFROSTIconPath(String identifier) {
+    final coin = identifier.split('_').first;
+    return _frostIconPaths[coin]!;
+  }
+
   static Coin getSpecificCoin(String identifier) {
     final coin = identifier.split('_').first;
     if (_availableCoinList.containsKey(coin)) {

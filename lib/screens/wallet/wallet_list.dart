@@ -243,10 +243,15 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               CircleAvatar(
                                                 backgroundColor: Colors.white,
                                                 child: Image.asset(
-                                                  AvailableCoins
-                                                      .getSpecificCoin(
-                                                    wallet.name,
-                                                  ).iconPath,
+                                                  wallet.isFROST
+                                                      ? AvailableCoins
+                                                          .getFROSTIconPath(
+                                                          wallet.name,
+                                                        )
+                                                      : AvailableCoins
+                                                          .getSpecificCoin(
+                                                          wallet.name,
+                                                        ).iconPath,
                                                   width: 20,
                                                 ),
                                               ),
