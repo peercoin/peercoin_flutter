@@ -171,7 +171,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                   );
 
                                   navigator.pushNamed(
-                                    Routes.stantardAndWatchOnlyWalletHome,
+                                    Routes.standardAndWatchOnlyWalletHome,
                                     arguments: {
                                       'wallet': ppcWallet,
                                       'pushedAddress':
