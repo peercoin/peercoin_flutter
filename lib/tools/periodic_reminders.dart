@@ -60,7 +60,7 @@ class PeriodicReminders {
                         );
 
                         await navigator.popAndPushNamed(
-                          Routes.stantardAndWatchOnlyWalletHome,
+                          Routes.standardAndWatchOnlyWalletHome,
                           arguments: {
                             'wallet': ppcWallet,
                             'pushedAddress':

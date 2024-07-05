@@ -1,9 +1,14 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/frost_wallet_home.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_verify_message.dart';
 
+import '../screens/auth_jail.dart';
+import '../screens/changelog.dart';
+import '../screens/qrcode_scanner.dart';
+import '../screens/router_master.dart';
 import '../screens/settings/app_settings_app_theme.dart';
 import '../screens/settings/app_settings_authentication.dart';
 import '../screens/settings/app_settings_default_wallet.dart';
@@ -12,26 +17,22 @@ import '../screens/settings/app_settings_language.dart';
 import '../screens/settings/app_settings_notifications.dart';
 import '../screens/settings/app_settings_price_feed.dart';
 import '../screens/settings/app_settings_screen.dart';
-import '../screens/auth_jail.dart';
-import '../screens/changelog.dart';
-import '../screens/qrcode_scanner.dart';
 import '../screens/settings/app_settings_wallet_order.dart';
 import '../screens/settings/server_settings/server_add.dart';
 import '../screens/settings/server_settings/server_settings.dart';
 import '../screens/settings/server_settings/server_settings_home.dart';
+import '../screens/settings/wallet_scan/app_settings_wallet_scanner.dart';
+import '../screens/setup/setup_auth.dart';
 import '../screens/setup/setup_create_wallet.dart';
 import '../screens/setup/setup_data_feeds.dart';
 import '../screens/setup/setup_import_seed.dart';
 import '../screens/setup/setup_language.dart';
-import '../screens/router_master.dart';
-import '../screens/setup/setup_auth.dart';
 import '../screens/setup/setup_legal.dart';
 import '../screens/wallet/address_selector.dart';
 import '../screens/wallet/import_paper_wallet.dart';
 import '../screens/wallet/import_wif.dart';
-import '../screens/wallet/transaction_details.dart';
 import '../screens/wallet/standard_and_watch_only_wallet_home.dart';
-import '../screens/settings/wallet_scan/app_settings_wallet_scanner.dart';
+import '../screens/wallet/transaction_details.dart';
 import '../screens/wallet/wallet_list.dart';
 import '../screens/wallet/wallet_sign_message.dart';
 
@@ -58,7 +59,8 @@ class Routes {
   static const String setupDataFeeds = '/setup-feeds';
   static const String setupLegal = '/setup-legal';
   static const String transaction = '/tx-detail';
-  static const String stantardAndWatchOnlyWalletHome = '/standard-wallet-home';
+  static const String standardAndWatchOnlyWalletHome = '/standard-wallet-home';
+  static const String frostWalletHome = '/frost-wallet-home';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -93,7 +95,7 @@ class Routes {
             widget: WalletListScreen(),
             routeType: RouteTypes.requiresSetupFinished,
           ),
-      Routes.stantardAndWatchOnlyWalletHome: (context) => const RouterMaster(
+      Routes.standardAndWatchOnlyWalletHome: (context) => const RouterMaster(
             widget: StandardAndWatchOnlyWalletHomeScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
@@ -208,6 +210,10 @@ class Routes {
       Routes.walletTransactionSigningConfirmation: (context) =>
           const RouterMaster(
             widget: WalletSignTransactionConfirmationScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.frostWalletHome: (context) => const RouterMaster(
+            widget: FrostWalletHomeScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
     };
