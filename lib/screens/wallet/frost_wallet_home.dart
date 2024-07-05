@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:peercoin/models/hive/coin_wallet.dart';
 
 class FrostWalletHomeScreen extends StatefulWidget {
   const FrostWalletHomeScreen({super.key});
@@ -10,10 +11,14 @@ class FrostWalletHomeScreen extends StatefulWidget {
 
 class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
   bool _initial = true;
+  late CoinWallet _wallet;
 
   @override
   void didChangeDependencies() {
     if (_initial) {
+      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      _wallet = arguments['wallet'];
+
       context.loaderOverlay.hide();
       setState(() {
         _initial = false;
@@ -25,6 +30,14 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 1,
+          title: Text(_wallet.title),
+        ),
+        body: Center(
+          child: Text('FROST Wallet Home'),
+        ));
   }
 }
