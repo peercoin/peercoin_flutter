@@ -102,6 +102,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  build_cli_annotations:
+    dependency: transitive
+    description:
+      name: build_cli_annotations
+      sha256: b59d2769769efd6c9ff6d4c4cede0be115a566afc591705c2040b707534b1172
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   build_config:
     dependency: transitive
     description:
@@ -243,6 +251,7 @@ packages:
     description:
       name: coinlib
       sha256: cd0b36d2230d602e00ba24cfe06b70ef67deac9e03a4044fb4ddfbcaa4d992e3
+      sha256: "7de0ddee701ebc97d68e6e0d177beb9bc8afd4c8f857f5b24fd771bb39047f6c"
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
@@ -615,6 +624,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: f9f6597ac43cc262fa7d7f2e65259a6060c23a560525d1f2631be374540f2a9b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.3"
   frontend_server_client:
     dependency: transitive
     description:
