@@ -20,19 +20,22 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
       fields[0] as String,
       fields[1] as bool,
       fields[2] as ClientConfig,
+      fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, FrostGroup obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj._name)
       ..writeByte(1)
       ..write(obj._isCompleted)
       ..writeByte(2)
-      ..write(obj._clientConfig);
+      ..write(obj._clientConfig)
+      ..writeByte(3)
+      ..write(obj._serverUrl);
   }
 
   @override
