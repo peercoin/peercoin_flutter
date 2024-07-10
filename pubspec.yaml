@@ -56,6 +56,12 @@ dependencies:
   decimal: ^2.3.3
   characters: ^1.2.0
   coinlib_flutter: ^2.0.0
+  frosty:
+    path: ../frosty/frosty
+    # TODO move to git
+  frost_noosphere:
+    path: ../frost-noosphere/frost_noosphere
+    # TODO move to git
 
 dev_dependencies:
   integration_test:

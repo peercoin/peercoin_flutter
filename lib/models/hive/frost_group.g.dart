@@ -12,12 +12,27 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
 
   @override
   FrostGroup read(BinaryReader reader) {
-    return FrostGroup();
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FrostGroup(
+      fields[0] as String,
+      fields[1] as bool,
+      fields[2] as ClientConfig,
+    );
   }
 
   @override
   void write(BinaryWriter writer, FrostGroup obj) {
-    writer.writeByte(0);
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj._name)
+      ..writeByte(1)
+      ..write(obj._isCompleted)
+      ..writeByte(2)
+      ..write(obj._clientConfig);
   }
 
   @override
