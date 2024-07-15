@@ -19,9 +19,9 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
     return FrostGroup(
       fields[0] as String,
       fields[1] as bool,
-      fields[2] as ClientConfig,
-      fields[3] as String,
-    );
+    )
+      .._clientConfig = fields[2] as ClientConfig?
+      .._serverUrl = fields[3] as String?;
   }
 
   @override
