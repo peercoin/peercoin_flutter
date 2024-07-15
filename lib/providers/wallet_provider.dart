@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/models/hive/frost_group.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
@@ -118,7 +119,7 @@ class WalletProvider with ChangeNotifier {
     LoggerWrapper.logInfo(
       'WalletProvider',
       'addWallet',
-      '$name - $title - $letterCode - $nOfWalletOfLetterCode',
+      'writing $name - $title - $letterCode - $nOfWalletOfLetterCode ',
     );
 
     await box.put(
@@ -133,6 +134,21 @@ class WalletProvider with ChangeNotifier {
         isFROST,
       ),
     );
+
+    if (isFROST) {
+      LoggerWrapper.logInfo(
+        'WalletProvider',
+        'addWallet',
+        'writing $name - FROST Group',
+      );
+      await _vaultBox.put(
+        name,
+        FrostGroup(
+          name,
+          false,
+        ),
+      );
+    }
     notifyListeners();
   }
 

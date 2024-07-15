@@ -10,6 +10,7 @@ import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/available_coins.dart';
+import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/marisma.pbgrpc.dart';
@@ -121,6 +122,7 @@ class BackgroundSync {
       Hive.registerAdapter(AppOptionsStoreAdapter());
       Hive.registerAdapter(ServerAdapter());
       Hive.registerAdapter(PendingNotificationAdapter());
+      Hive.registerAdapter(FrostGroupAdapter());
     }
 
     //open wallet box

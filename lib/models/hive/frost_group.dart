@@ -11,16 +11,14 @@ class FrostGroup extends HiveObject {
   bool _isCompleted = false;
 
   @HiveField(2)
-  ClientConfig _clientConfig;
+  ClientConfig? _clientConfig;
 
   @HiveField(3)
-  String _serverUrl;
+  String? _serverUrl;
 
   FrostGroup(
     this._name,
     this._isCompleted,
-    this._clientConfig,
-    this._serverUrl,
   );
 
   String get name => _name;
@@ -31,13 +29,19 @@ class FrostGroup extends HiveObject {
     save();
   }
 
-  ClientConfig get clientConfig => _clientConfig;
+  ClientConfig get clientConfig {
+    if (_clientConfig == null) {
+      throw Exception('ClientConfig is null');
+    }
+    return _clientConfig!;
+  }
+
   set clientConfig(ClientConfig value) {
     _clientConfig = value;
     save();
   }
 
-  String get serverUrl => _serverUrl;
+  String get serverUrl => _serverUrl ?? '';
   set serverUrl(String value) {
     _serverUrl = value;
     save();

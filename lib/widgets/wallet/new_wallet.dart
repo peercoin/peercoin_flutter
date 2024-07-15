@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,6 +76,11 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
       navigator.pop();
     } catch (e) {
+      LoggerWrapper.logError(
+        'NewWalletScreen',
+        'addWallet',
+        'Error adding wallet: $e',
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
