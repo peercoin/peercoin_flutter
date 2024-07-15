@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
+import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/providers/wallet_provider.dart';
+import 'package:provider/provider.dart';
 
 class FrostWalletHomeScreen extends StatefulWidget {
   const FrostWalletHomeScreen({super.key});
@@ -12,14 +15,20 @@ class FrostWalletHomeScreen extends StatefulWidget {
 class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
   bool _initial = true;
   late CoinWallet _wallet;
+  late FrostGroup _frostGroup;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_initial) {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _wallet = arguments['wallet'];
 
-      context.loaderOverlay.hide();
+      final walletProvider =
+          Provider.of<WalletProvider>(context, listen: false);
+      _frostGroup = await walletProvider.getFrostGroup(_wallet.name);
+      if (mounted) {
+        context.loaderOverlay.hide();
+      }
       setState(() {
         _initial = false;
       });
@@ -31,13 +40,22 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 1,
-          title: Text(_wallet.title),
-        ),
-        body: Center(
-          child: Text('FROST Wallet Home'),
-        ));
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 1,
+        title: Text(_wallet.title),
+      ),
+      body: _initial
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(
+              child: Text(
+                _frostGroup.isCompleted
+                    ? 'FROST Group is completed'
+                    : 'FROST Group is not completed',
+              ),
+            ),
+    );
   }
 }

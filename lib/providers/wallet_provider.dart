@@ -513,6 +513,18 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteWatchOnlyWallet(String identifier) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    if (openWallet.watchOnly == false) {
+      throw Exception('Wallet is not watch only');
+    }
+
+    await _walletBox.delete(identifier);
+
+    closeWallet(identifier);
+    notifyListeners();
+  }
+
   Future<void> generateUnusedAddress(String identifier) async {
     final openWallet = getSpecificCoinWallet(identifier);
     final hdWallet = await getHdWallet(identifier);
@@ -654,6 +666,14 @@ class WalletProvider with ChangeNotifier {
       }
     }
     return answerMap;
+  }
+
+  Future<FrostGroup> getFrostGroup(String identifier) async {
+    final res = _vaultBox.get(identifier);
+    if (res == null) {
+      throw Exception('FrostGroup not found');
+    }
+    return res;
   }
 
   Future<HDPrivateKey> getHdWallet(String identifier) async {
@@ -1179,18 +1199,18 @@ class WalletProvider with ChangeNotifier {
     return bip39.mnemonicToSeed(words);
   }
 
+  Future<void> setHideWallet(String identifier, bool newState) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    openWallet.hidden = newState;
+    await openWallet.save();
+    notifyListeners();
+  }
+
   void setUnusedAddress({
     required String identifier,
     required String address,
   }) {
     _unusedAddressCache[identifier] = address;
-    notifyListeners();
-  }
-
-  Future<void> setHideWallet(String identifier, bool newState) async {
-    final openWallet = getSpecificCoinWallet(identifier);
-    openWallet.hidden = newState;
-    await openWallet.save();
     notifyListeners();
   }
 
@@ -1350,18 +1370,6 @@ class WalletProvider with ChangeNotifier {
   }) {
     final wallet = getSpecificCoinWallet(identifier);
     wallet.title = newTitle;
-    notifyListeners();
-  }
-
-  Future<void> deleteWatchOnlyWallet(String identifier) async {
-    final openWallet = getSpecificCoinWallet(identifier);
-    if (openWallet.watchOnly == false) {
-      throw Exception('Wallet is not watch only');
-    }
-
-    await _walletBox.delete(identifier);
-
-    closeWallet(identifier);
     notifyListeners();
   }
 }
