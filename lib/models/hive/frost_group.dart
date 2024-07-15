@@ -17,7 +17,11 @@ class FrostGroup extends HiveObject {
   String _serverUrl;
 
   FrostGroup(
-      this._name, this._isCompleted, this._clientConfig, this._serverUrl);
+    this._name,
+    this._isCompleted,
+    this._clientConfig,
+    this._serverUrl,
+  );
 
   String get name => _name;
 
