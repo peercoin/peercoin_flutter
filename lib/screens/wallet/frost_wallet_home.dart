@@ -3,6 +3,8 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
+import 'package:peercoin/widgets/wallet/frost_group/landing_configured.dart';
+import 'package:peercoin/widgets/wallet/frost_group/landing_setup.dart';
 import 'package:provider/provider.dart';
 
 class FrostWalletHomeScreen extends StatefulWidget {
@@ -26,12 +28,14 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
       final walletProvider =
           Provider.of<WalletProvider>(context, listen: false);
       _frostGroup = await walletProvider.getFrostGroup(_wallet.name);
-      if (mounted) {
-        context.loaderOverlay.hide();
-      }
+
       setState(() {
         _initial = false;
       });
+
+      if (mounted) {
+        context.loaderOverlay.hide();
+      }
     }
 
     super.didChangeDependencies();
@@ -49,13 +53,9 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Center(
-              child: Text(
-                _frostGroup.isCompleted
-                    ? 'FROST Group is completed'
-                    : 'FROST Group is not completed',
-              ),
-            ),
+          : _frostGroup.isCompleted
+              ? const FrostGroupLandingConfigured()
+              : const FrostGroupLandingSetup(),
     );
   }
 }
