@@ -39,7 +39,7 @@ class _FrostGroupLandingSetupState extends State<FrostGroupLandingSetup> {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
