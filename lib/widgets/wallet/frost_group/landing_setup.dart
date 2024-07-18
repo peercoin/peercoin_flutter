@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/widgets/service_container.dart';
 
 class FrostGroupLandingSetup extends StatefulWidget {
   const FrostGroupLandingSetup({super.key});
@@ -10,6 +11,33 @@ class FrostGroupLandingSetup extends StatefulWidget {
 class _FrostGroupLandingSetupState extends State<FrostGroupLandingSetup> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Align(
+              child: PeerContainer(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('FROST Group Setup'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
+
+// 1. User clicks "+". Option for "FROST Group".
+// 2. User can set a name for new group after which it is created and displayed on the wallet screen. This could be set to the group ID unless it is desired to allow users to set a separate name.
+// 3. If the configuration is not complete, there will be a configuration page that displays a public key for the participant for them to share.
+// 4. On this page a list of other participants is shown with: 1. Name. 2. Identifier and 3. Public key. This list will have a "+" or "Add" button to add a new participant with the ability to edit or remove other participant details.
+// 5. There will also be an ID field for the group that can be any string. Should we limit to alphanumeric and possibly underscores?
+// 6. After details are updated a new potential GroupConfig will be created and the fingerprint will be shown so that it can be compared against other participant's config to ensure it is the same.
+// 7. If a user navigates away from the screen, the current configuration settings will be saved in an incomplete state.
+// 7. A "Finish" button will move the state to a completed configuration. An ability to download the configuration details for use on a coordination server will be needed.
+// 8. Perhaps the next page should have the options: 1. Connect to server (which will present the full DKG and signing options later). 2. Download configuration (for use on a server). 3. Modify configuration (if configuration is later changed, it goes back to the previous screen).
