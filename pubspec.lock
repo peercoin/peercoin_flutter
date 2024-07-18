@@ -673,10 +673,10 @@ packages:
     dependency: "direct main"
     description:
       name: grpc
-      sha256: e93ee3bce45c134bf44e9728119102358c7cd69de7832d9a874e2e74eb8cab40
+      sha256: "7b2bee509ea2750028fe15f5a530bdc8664e7e62e97abf0bb7b0fc65b6d7d2b3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.4"
+    version: "4.0.0"
   hex:
     dependency: transitive
     description:
