@@ -4,7 +4,7 @@ import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/widgets/wallet/frost_group/landing_configured.dart';
-import 'package:peercoin/widgets/wallet/frost_group/landing_setup.dart';
+import 'package:peercoin/widgets/wallet/frost_group/setup_landing.dart';
 import 'package:provider/provider.dart';
 
 class FrostWalletHomeScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
             )
           : _frostGroup.isCompleted
               ? const FrostGroupLandingConfigured()
-              : const FrostGroupLandingSetup(),
+              : const FrostGroupSetupLanding(),
     );
   }
 }

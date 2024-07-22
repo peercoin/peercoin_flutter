@@ -530,5 +530,13 @@
   "hide_hidden_wallets_list": "Hide $nOfHiddenWallets Hidden Wallets",
   "show_hidden_wallets_list": "Show $nOfHiddenWallets Hidden Wallets",
   "delete_wallet": "Delete Wallet",
-  "delte_wallet_description": "This will delete the wallet and all its data. You can't undo this action."
+  "delte_wallet_description": "This will delete the wallet and all its data. You can't undo this action.",
+  "frost_setup_landing_title": "Add a new FROST Group",
+  "frost_setup_landing_description": "FROST is a multisignature scheme that allows you to create a group of signers. You can then create a multisignature address that requires a certain number of signers to sign a transaction. This is a more secure way to store your coins.",
+  "frost_setup_landing_group_id_input": "Group ID",
+  "frost_setup_landing_group_id_input_hint: ": "Enter a name for the group (Attention: this has to be the same for all signers!)",
+  "frost_setup_landing_server_url_input": "Server URL",
+  "frost_setup_landing_server_url_input_hint": "Enter the URL of the FROST server",
+  "frost_setup_landing_server_url_input_error": "Please enter a valid URL",
+  "frost_setup_landing_cta": "Save & Try to Connect"
 }
