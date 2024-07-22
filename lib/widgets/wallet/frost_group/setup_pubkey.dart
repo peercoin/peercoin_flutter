@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
-class FrostGroupLandingSetup extends StatefulWidget {
-  const FrostGroupLandingSetup({super.key});
+class FrostGroupSetupPubkey extends StatefulWidget {
+  const FrostGroupSetupPubkey({super.key});
 
   @override
-  State<FrostGroupLandingSetup> createState() => _FrostGroupLandingSetupState();
+  State<FrostGroupSetupPubkey> createState() => _FrostGroupSetupPubkeyState();
 }
 
-class _FrostGroupLandingSetupState extends State<FrostGroupLandingSetup> {
+class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
-class FrostGroupLandingSetup extends StatefulWidget {
-  const FrostGroupLandingSetup({super.key});
+class FrostGroupSetupLanding extends StatefulWidget {
+  const FrostGroupSetupLanding({super.key});
 
   @override
-  State<FrostGroupLandingSetup> createState() => _FrostGroupLandingSetupState();
+  State<FrostGroupSetupLanding> createState() => _FrostGroupSetupLandingState();
 }
 
-class _FrostGroupLandingSetupState extends State<FrostGroupLandingSetup> {
+class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,3 +52,5 @@ class _FrostGroupLandingSetupState extends State<FrostGroupLandingSetup> {
 // 7. If a user navigates away from the screen, the current configuration settings will be saved in an incomplete state.
 // 7. A "Finish" button will move the state to a completed configuration. An ability to download the configuration details for use on a coordination server will be needed.
 // 8. Perhaps the next page should have the options: 1. Connect to server (which will present the full DKG and signing options later). 2. Download configuration (for use on a server). 3. Modify configuration (if configuration is later changed, it goes back to the previous screen).
+
+// TODO group name can be changed later through context menu to avoid confusion between group name and group id 
