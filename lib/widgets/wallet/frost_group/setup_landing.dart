@@ -11,6 +11,11 @@ class FrostGroupSetupLanding extends StatefulWidget {
 }
 
 class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
+  Future<void> _save() async {
+    // TODO Implement save
+    // TODO try calling server url to see if it is valid
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,78 +25,81 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
             child: Align(
               child: PeerContainer(
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        AppLocalizations.instance
-                            .translate('frost_setup_landing_title'),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      AppLocalizations.instance
+                          .translate('frost_setup_landing_title'),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
                       ),
-                      const SizedBox(
-                        height: 20,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      AppLocalizations.instance
+                          .translate('frost_setup_landing_description'),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Form(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.group),
+                              labelText: AppLocalizations.instance.translate(
+                                  'frost_setup_landing_group_id_input'),
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'frost_setup_landing_group_id_input_hint',
+                            ),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.outbond),
+                              labelText: AppLocalizations.instance.translate(
+                                'frost_setup_landing_server_url_input',
+                              ),
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'frost_setup_landing_server_url_input_hint',
+                            ),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          PeerButton(
+                            text: AppLocalizations.instance
+                                .translate('frost_setup_landing_cta'),
+                            action: () => _save(),
+                          ),
+                        ],
                       ),
-                      Text(
-                        AppLocalizations.instance
-                            .translate('frost_setup_landing_description'),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            TextFormField(
-                              decoration: InputDecoration(
-                                icon: const Icon(Icons.group),
-                                labelText: AppLocalizations.instance.translate(
-                                    'frost_setup_landing_group_id_input'),
-                              ),
-                            ),
-                            Text(
-                              AppLocalizations.instance.translate(
-                                'frost_setup_landing_group_id_input_hint',
-                              ),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                icon: const Icon(Icons.outbond),
-                                labelText: AppLocalizations.instance.translate(
-                                  'frost_setup_landing_server_url_input',
-                                ),
-                              ),
-                            ),
-                            Text(
-                              AppLocalizations.instance.translate(
-                                'frost_setup_landing_server_url_input_hint',
-                              ),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            PeerButton(
-                                text: 'Save & Try connection',
-                                action: () => print('Save')),
-                          ],
-                        ),
-                      ),
-                    ]),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -102,8 +110,7 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
 }
 
 // TODO On success you will be taken to the next page where the public keys of the participants will be shown
-// TODO group name can be changed later through context menu to avoid confusion between group name and group id 
-                  
+// TODO group name can be changed later through context menu to avoid confusion between group name and group id
 
 // 3. If the configuration is not complete, there will be a configuration page that displays a public key for the participant for them to share.
 // 4. On this page a list of other participants is shown with: 1. Name. 2. Identifier and 3. Public key. This list will have a "+" or "Add" button to add a new participant with the ability to edit or remove other participant details.
