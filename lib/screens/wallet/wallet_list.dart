@@ -459,7 +459,8 @@ class _WalletListScreenState extends State<WalletListScreen>
         }
         //push to default wallet
         if (_activeWalletsOrdered.length == 1 &&
-            widget.walletToOpenDirectly.isEmpty) {
+            widget.walletToOpenDirectly.isEmpty &&
+            _activeWalletsOrdered.first.isFROST == false) {
           //only one wallet available, pushing to that one (no walletToOpenDirectly set)
           if (!kIsWeb) {
             if (mounted) {

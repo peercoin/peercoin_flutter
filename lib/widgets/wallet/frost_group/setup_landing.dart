@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
@@ -21,7 +22,10 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('I am the setup page title'),
+                    Text(
+                      AppLocalizations.instance
+                          .translate('frost_setup_landing_title'),
+                    ),
                     Text(
                         'I am the description of the setup page and will tell you what is going on'),
                     Text(
