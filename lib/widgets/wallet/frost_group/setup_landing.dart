@@ -20,34 +20,90 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
             child: Align(
               child: PeerContainer(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      AppLocalizations.instance
-                          .translate('frost_setup_landing_title'),
-                    ),
-                    Text(
-                        'I am the description of the setup page and will tell you what is going on'),
-                    Text(
-                        'I am the form Input for the group name (name it what you want)'),
-                    Text(
-                        'I am the form Input for the group id (carefull, this has to match the other participants)'),
-                    Text('I am the server url input'),
-                    PeerButton(
-                        text: 'Save & Try connection',
-                        action: () => print('Save')),
-                    Text(
-                        'On success you will be taken to the next page where the public keys of the participants will be shown'),
-                  ],
-                ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        AppLocalizations.instance
+                            .translate('frost_setup_landing_title'),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        AppLocalizations.instance
+                            .translate('frost_setup_landing_description'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Form(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            TextFormField(
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.group),
+                                labelText: AppLocalizations.instance.translate(
+                                    'frost_setup_landing_group_id_input'),
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.instance.translate(
+                                'frost_setup_landing_group_id_input_hint',
+                              ),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.outbond),
+                                labelText: AppLocalizations.instance.translate(
+                                  'frost_setup_landing_server_url_input',
+                                ),
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.instance.translate(
+                                'frost_setup_landing_server_url_input_hint',
+                              ),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            PeerButton(
+                                text: 'Save & Try connection',
+                                action: () => print('Save')),
+                          ],
+                        ),
+                      ),
+                    ]),
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
 }
+
+// TODO On success you will be taken to the next page where the public keys of the participants will be shown
+// TODO group name can be changed later through context menu to avoid confusion between group name and group id 
+                  
 
 // 3. If the configuration is not complete, there will be a configuration page that displays a public key for the participant for them to share.
 // 4. On this page a list of other participants is shown with: 1. Name. 2. Identifier and 3. Public key. This list will have a "+" or "Add" button to add a new participant with the ability to edit or remove other participant details.
@@ -56,5 +112,3 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
 // 7. If a user navigates away from the screen, the current configuration settings will be saved in an incomplete state.
 // 7. A "Finish" button will move the state to a completed configuration. An ability to download the configuration details for use on a coordination server will be needed.
 // 8. Perhaps the next page should have the options: 1. Connect to server (which will present the full DKG and signing options later). 2. Download configuration (for use on a server). 3. Modify configuration (if configuration is later changed, it goes back to the previous screen).
-
-// TODO group name can be changed later through context menu to avoid confusion between group name and group id 
