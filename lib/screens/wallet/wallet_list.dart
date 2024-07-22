@@ -454,24 +454,30 @@ class _WalletListScreenState extends State<WalletListScreen>
           );
         } else {
           defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
-            (elem) => elem.letterCode == _appSettings.defaultWallet,
+            (elem) => elem.name == _appSettings.defaultWallet,
           );
         }
         //push to default wallet
         if (_activeWalletsOrdered.length == 1 &&
-            widget.walletToOpenDirectly.isEmpty &&
-            _activeWalletsOrdered.first.isFROST == false) {
+            widget.walletToOpenDirectly.isEmpty) {
           //only one wallet available, pushing to that one (no walletToOpenDirectly set)
           if (!kIsWeb) {
             if (mounted) {
               context.loaderOverlay.show();
             }
-            await navigator.pushNamed(
-              Routes.standardAndWatchOnlyWalletHome,
-              arguments: {
-                'wallet': _activeWalletsOrdered.first,
-              },
-            );
+            _activeWalletsOrdered.first.isFROST
+                ? await navigator.pushNamed(
+                    Routes.frostWalletHome,
+                    arguments: {
+                      'wallet': _activeWalletsOrdered.first,
+                    },
+                  )
+                : await navigator.pushNamed(
+                    Routes.standardAndWatchOnlyWalletHome,
+                    arguments: {
+                      'wallet': _activeWalletsOrdered.first,
+                    },
+                  );
           }
         } else if (_activeWalletsOrdered.length > 1 ||
             widget.walletToOpenDirectly.isNotEmpty) {
@@ -480,10 +486,15 @@ class _WalletListScreenState extends State<WalletListScreen>
               context.loaderOverlay.show();
             }
             if (!kIsWeb) {
-              await navigator.pushNamed(
-                Routes.standardAndWatchOnlyWalletHome,
-                arguments: {'wallet': defaultWallet},
-              );
+              defaultWallet.isFROST
+                  ? await navigator.pushNamed(
+                      Routes.frostWalletHome,
+                      arguments: {'wallet': defaultWallet},
+                    )
+                  : await navigator.pushNamed(
+                      Routes.standardAndWatchOnlyWalletHome,
+                      arguments: {'wallet': defaultWallet},
+                    );
             }
           }
         }
