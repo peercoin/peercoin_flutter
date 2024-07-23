@@ -532,7 +532,7 @@
   "delete_wallet": "Delete Wallet",
   "delte_wallet_description": "This will delete the wallet and all its data. You can't undo this action.",
   "frost_setup_landing_title": "Add a new FROST Group",
-  "frost_setup_landing_description": "FROST is a multisignature scheme that allows you to create a group of signers. You can then create a multisignature address that requires a certain number of signers to sign a transaction. This is a more secure way to store your coins.",
+  "frost_setup_landing_description": "The FROST multisignature scheme allows a group of users to collectively sign a transaction with their individual keys, ensuring that the transaction is only valid if a predefined number of them agree.  This method enhances security and efficiency by reducing the risk of a single point of failure and minimizing the computational load compared to traditional multisignature setups.",
   "frost_setup_landing_group_id_input": "Group ID",
   "frost_setup_landing_group_id_input_hint": "Enter an ID for the group (Attention: this has to be the same for all signers!)",
   "frost_setup_landing_server_url_input": "Server URL",
