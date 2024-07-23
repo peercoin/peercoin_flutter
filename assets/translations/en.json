@@ -536,7 +536,7 @@
   "frost_setup_landing_group_id_input": "Group ID",
   "frost_setup_landing_group_id_input_hint": "Enter an ID for the group (Attention: this has to be the same for all signers!)",
   "frost_setup_landing_server_url_input": "Server URL",
-  "frost_setup_landing_server_url_input_hint": "Enter the URL of the FROST server",
+  "frost_setup_landing_server_url_input_hint": "Enter the URL of the FROST coordinator server",
   "frost_setup_landing_server_url_input_error": "Please enter a valid URL",
   "frost_setup_landing_cta": "Save & Try to Connect"
 }
