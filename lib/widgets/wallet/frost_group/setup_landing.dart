@@ -70,6 +70,10 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                             key: _groupIdKey,
                             autocorrect: false,
                             controller: _groupIdController,
+                            validator: (value) {
+                              //TODO validate group id
+                              return null;
+                            },
                             decoration: InputDecoration(
                               icon: const Icon(Icons.group),
                               labelText: AppLocalizations.instance.translate(
@@ -93,6 +97,10 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                             textInputAction: TextInputAction.done,
                             key: _serverKey,
                             autocorrect: false,
+                            validator: (value) {
+                              //TODO validate server url
+                              return null;
+                            },
                             controller: _serverController,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.outbond),
