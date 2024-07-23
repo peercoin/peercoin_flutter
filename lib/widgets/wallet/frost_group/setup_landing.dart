@@ -15,6 +15,11 @@ enum FrostSetupStep { group, pubkey }
 
 class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
   FrostSetupStep _step = FrostSetupStep.group;
+  final _groupIdKey = GlobalKey<FormFieldState>();
+  final _groupIdController = TextEditingController();
+  final _serverKey = GlobalKey<FormFieldState>();
+  final _serverController = TextEditingController();
+
   Future<void> _save() async {
     // TODO Implement save
     // TODO try calling server url to see if it is valid
@@ -61,6 +66,10 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           TextFormField(
+                            textInputAction: TextInputAction.done,
+                            key: _groupIdKey,
+                            autocorrect: false,
+                            controller: _groupIdController,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.group),
                               labelText: AppLocalizations.instance.translate(
@@ -81,6 +90,10 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                             height: 20,
                           ),
                           TextFormField(
+                            textInputAction: TextInputAction.done,
+                            key: _serverKey,
+                            autocorrect: false,
+                            controller: _serverController,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.outbond),
                               labelText: AppLocalizations.instance.translate(
