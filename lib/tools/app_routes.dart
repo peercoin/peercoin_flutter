@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/wallet/frost_wallet_home.dart';
+import 'package:peercoin/screens/wallet/frost/frost_wallet_home.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';

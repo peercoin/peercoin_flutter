@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
+import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey.dart';
 
 class FrostGroupSetupLanding extends StatefulWidget {
   const FrostGroupSetupLanding({super.key});
@@ -10,14 +11,24 @@ class FrostGroupSetupLanding extends StatefulWidget {
   State<FrostGroupSetupLanding> createState() => _FrostGroupSetupLandingState();
 }
 
+enum FrostSetupStep { group, pubkey }
+
 class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
+  FrostSetupStep _step = FrostSetupStep.group;
   Future<void> _save() async {
     // TODO Implement save
     // TODO try calling server url to see if it is valid
+
+    setState(() {
+      _step = FrostSetupStep.pubkey;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_step == FrostSetupStep.pubkey) {
+      return const FrostGroupSetupPubkey();
+    }
     return Column(
       children: [
         Expanded(
