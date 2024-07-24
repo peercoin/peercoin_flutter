@@ -55,7 +55,9 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
             )
           : _frostGroup.isCompleted
               ? const FrostGroupLandingConfigured()
-              : const FrostGroupSetupLanding(),
+              : FrostGroupSetupLanding(
+                  frostGroup: _frostGroup,
+                ),
     );
   }
 }

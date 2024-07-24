@@ -535,8 +535,10 @@
   "frost_setup_landing_description": "The FROST multisignature scheme allows a group of users to collectively sign a transaction with their individual keys, ensuring that the transaction is only valid if a predefined number of them agree.  This method enhances security and efficiency by reducing the risk of a single point of failure and minimizing the computational load compared to traditional multisignature setups.",
   "frost_setup_landing_group_id_input": "Group ID",
   "frost_setup_landing_group_id_input_hint": "Enter an ID for the group (Attention: this has to be the same for all signers!)",
+  "frost_setup_landing_group_id_input_error": "Please enter a group ID",
   "frost_setup_landing_server_url_input": "Server URL",
   "frost_setup_landing_server_url_input_hint": "Enter the URL of the FROST coordinator server",
   "frost_setup_landing_server_url_input_error": "Please enter a valid URL",
+  "frost_setup_landing_server_url_input_empty": "Please enter a server URL",
   "frost_setup_landing_cta": "Save & Try to Connect"
 }
