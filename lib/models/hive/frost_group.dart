@@ -18,12 +18,21 @@ class FrostGroup extends HiveObject {
   @HiveField(3)
   String? _serverUrl;
 
+  @HiveField(4)
+  String? _groupId;
+
   FrostGroup(
     this._name,
     this._isCompleted,
   );
 
   String get name => _name;
+
+  String get groupId => _groupId ?? '';
+  set groupId(String value) {
+    _groupId = value;
+    save();
+  }
 
   bool get isCompleted => _isCompleted;
   set isCompleted(bool value) {

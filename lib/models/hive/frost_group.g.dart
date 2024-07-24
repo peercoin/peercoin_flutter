@@ -21,13 +21,14 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
       fields[1] as bool,
     )
       .._clientConfig = fields[2] as ClientConfig?
-      .._serverUrl = fields[3] as String?;
+      .._serverUrl = fields[3] as String?
+      .._groupId = fields[4] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FrostGroup obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj._name)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
       ..writeByte(2)
       ..write(obj._clientConfig)
       ..writeByte(3)
-      ..write(obj._serverUrl);
+      ..write(obj._serverUrl)
+      ..writeByte(4)
+      ..write(obj._groupId);
   }
 
   @override

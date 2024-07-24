@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey.dart';
 
 class FrostGroupSetupLanding extends StatefulWidget {
-  const FrostGroupSetupLanding({super.key});
+  final FrostGroup frostGroup;
+  const FrostGroupSetupLanding({required this.frostGroup, super.key});
 
   @override
   State<FrostGroupSetupLanding> createState() => _FrostGroupSetupLandingState();
@@ -14,19 +16,36 @@ class FrostGroupSetupLanding extends StatefulWidget {
 enum FrostSetupStep { group, pubkey }
 
 class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
+  bool _initial = false;
   FrostSetupStep _step = FrostSetupStep.group;
   final _groupIdKey = GlobalKey<FormFieldState>();
   final _groupIdController = TextEditingController();
   final _serverKey = GlobalKey<FormFieldState>();
   final _serverController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void didChangeDependencies() {
+    if (!_initial) {
+      _groupIdController.text = widget.frostGroup.groupId;
+      _serverController.text = widget.frostGroup.serverUrl;
+      setState(() {
+        _initial = true;
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   Future<void> _save() async {
-    // TODO Implement save
     // TODO try calling server url to see if it is valid
+    if (_formKey.currentState!.validate()) {
+      widget.frostGroup.groupId = _groupIdController.text;
+      widget.frostGroup.serverUrl = _serverController.text;
 
-    setState(() {
-      _step = FrostSetupStep.pubkey;
-    });
+      setState(() {
+        _step = FrostSetupStep.pubkey;
+      });
+    }
   }
 
   @override
@@ -62,6 +81,7 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                       height: 20,
                     ),
                     Form(
+                      key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -69,15 +89,17 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                             textInputAction: TextInputAction.done,
                             key: _groupIdKey,
                             autocorrect: false,
+                            validator: (value) => value!.isEmpty
+                                ? AppLocalizations.instance.translate(
+                                    'frost_setup_landing_group_id_input_error',
+                                  )
+                                : null,
                             controller: _groupIdController,
-                            validator: (value) {
-                              //TODO validate group id
-                              return null;
-                            },
                             decoration: InputDecoration(
                               icon: const Icon(Icons.group),
                               labelText: AppLocalizations.instance.translate(
-                                  'frost_setup_landing_group_id_input'),
+                                'frost_setup_landing_group_id_input',
+                              ),
                             ),
                           ),
                           Text(
@@ -96,9 +118,17 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                           TextFormField(
                             textInputAction: TextInputAction.done,
                             key: _serverKey,
-                            autocorrect: false,
                             validator: (value) {
-                              //TODO validate server url
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.instance.translate(
+                                  'frost_setup_landing_server_url_input_empty',
+                                );
+                              }
+                              if (Uri.tryParse(value) == null) {
+                                return AppLocalizations.instance.translate(
+                                  'frost_setup_landing_server_url_input_error',
+                                );
+                              }
                               return null;
                             },
                             controller: _serverController,
@@ -141,7 +171,6 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
   }
 }
 
-// TODO On success you will be taken to the next page where the public keys of the participants will be shown
 // TODO group name can be changed later through context menu to avoid confusion between group name and group id
 
 // 3. If the configuration is not complete, there will be a configuration page that displays a public key for the participant for them to share.
