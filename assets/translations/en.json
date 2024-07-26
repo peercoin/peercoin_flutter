@@ -540,5 +540,15 @@
   "frost_setup_landing_server_url_input_hint": "Enter the URL of the FROST coordinator server",
   "frost_setup_landing_server_url_input_error": "Please enter a valid URL",
   "frost_setup_landing_server_url_input_empty": "Please enter a server URL",
-  "frost_setup_landing_cta": "Save & Try to Connect"
+  "frost_setup_landing_cta": "Save & Try to Connect",
+  "frost_setup_group_title": "FROST Group Members",
+  "frost_setup_group_description": "Please enter the public keys and identifiers of the group members. A fingerprint will be created once the list is complete.",
+  "frost_setup_group_hint": "Attention: The order of the members is important and has to be the same for all signers!",
+  "frost_setup_group_cta": "Show Fingerprint",
+  "frost_setup_group_member_input": "Public Key",
+  "frost_setup_group_member_input_hint": "Enter the public key of a group member",
+  "frost_setup_group_member_input_error": "Please enter a valid public key",
+  "frost_setup_group_member_input_empty": "Please enter a public key",
+  "frost_setup_group_member_add": "Add Member",
+  "frost_setup_group_member_remove": "Remove Member"
 }
