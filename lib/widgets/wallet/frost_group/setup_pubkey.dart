@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -6,7 +7,12 @@ import 'package:peercoin/widgets/wallet/frost_group/setup_landing.dart';
 
 class FrostGroupSetupPubkey extends StatefulWidget {
   final Function changeStep;
-  const FrostGroupSetupPubkey({required this.changeStep, super.key});
+  final FrostGroup frostGroup;
+  const FrostGroupSetupPubkey({
+    required this.changeStep,
+    required this.frostGroup,
+    super.key,
+  });
 
   @override
   State<FrostGroupSetupPubkey> createState() => _FrostGroupSetupPubkeyState();

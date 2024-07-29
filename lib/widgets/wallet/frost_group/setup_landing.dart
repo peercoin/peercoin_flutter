@@ -55,7 +55,10 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
   @override
   Widget build(BuildContext context) {
     if (_step == FrostSetupStep.pubkey) {
-      return FrostGroupSetupPubkey(changeStep: _changeStep);
+      return FrostGroupSetupPubkey(
+        frostGroup: widget.frostGroup,
+        changeStep: _changeStep,
+      );
     }
 
     return Column(
