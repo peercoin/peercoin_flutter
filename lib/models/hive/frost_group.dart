@@ -1,8 +1,11 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:hive/hive.dart';
 // import 'package:frost_noosphere/frost_noosphere.dart'; TODO Uncomment this line when the package is available
 part 'frost_group.g.dart';
 
-class ClientConfig {} // Placeholder for ClientConfig TODO Remove this line when the package is available
+class ClientConfig {
+  Map<String, ECPublicKey> participants = {};
+} // Placeholder for ClientConfig TODO Remove this line when the package is available
 
 @HiveType(typeId: 8)
 class FrostGroup extends HiveObject {
