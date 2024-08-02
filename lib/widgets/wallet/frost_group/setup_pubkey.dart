@@ -78,7 +78,51 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Text('cards'),
+                    Card(
+                      clipBehavior: Clip.antiAlias,
+                      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                      child: ListTile(
+                        leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
+                          ],
+                        ),
+                        trailing: IconButton(
+                          onPressed: () async {},
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                        tileColor: Theme.of(context).colorScheme.primary,
+                        title: Text(
+                          "Participant Name",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "ECPubkey",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    PeerButton(
+                      text: AppLocalizations.instance.translate(
+                        'frost_setup_group_member_add',
+                      ),
+                      action: () => _showFingerprint(),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
