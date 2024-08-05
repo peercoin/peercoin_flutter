@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/frost_group/setup_landing.dart';
+import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey_remove_participant_bottom_sheet.dart';
 
 class FrostGroupSetupPubkey extends StatefulWidget {
   final Function changeStep;
@@ -19,6 +21,35 @@ class FrostGroupSetupPubkey extends StatefulWidget {
 }
 
 class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
+  void _triggerRemoveParticipantBottomSheet() async {
+    // show bottom sheet
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return SetupPubkeyRemoveParticipantBottomSheet(
+          action: _removeParticipant,
+        );
+      },
+      context: context,
+    );
+
+    // participant added, remove bottom sheet
+    LoggerWrapper.logInfo(
+      'FrostGroupSetupPubkey',
+      '_triggerRemoveParticipantBottomSheet',
+      'participant added', // TODO log participant added
+    );
+  }
+
+  void _removeParticipant() {
+    // TODO remove participant
+    print('hello');
+  }
+
   void _showFingerprint() {
     // TODO show fingerprint
     print('hello');
@@ -92,7 +123,8 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                           ],
                         ),
                         trailing: IconButton(
-                          onPressed: () async {},
+                          onPressed: () =>
+                              _triggerRemoveParticipantBottomSheet(),
                           icon: Icon(
                             Icons.delete,
                             color: Theme.of(context).colorScheme.onPrimary,
@@ -121,7 +153,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                       text: AppLocalizations.instance.translate(
                         'frost_setup_group_member_add',
                       ),
-                      action: () => _showFingerprint(),
+                      action: () => _triggerRemoveParticipantBottomSheet(),
                     ),
                     const SizedBox(
                       height: 20,
