@@ -21,7 +21,17 @@ class FrostGroupSetupPubkey extends StatefulWidget {
 }
 
 class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
-  void _triggerRemoveParticipantBottomSheet() async {
+  final Map<String, String> mockedParticipants = {
+    'Participant Name': 'ECPubkey',
+  };
+
+  void _triggerRemoveParticipantBottomSheet(String participantPubKey) async {
+    LoggerWrapper.logInfo(
+      'FrostGroupSetupPubkey',
+      '_triggerRemoveParticipantBottomSheet',
+      'participant $participantPubKey delete bottom sheet opened',
+    );
+
     // show bottom sheet
     await showModalBottomSheet(
       shape: RoundedRectangleBorder(
@@ -31,23 +41,16 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
       enableDrag: false,
       builder: (BuildContext context) {
         return SetupPubkeyRemoveParticipantBottomSheet(
-          action: _removeParticipant,
+          action: () => _removeParticipant(participantPubKey),
         );
       },
       context: context,
     );
-
-    // participant added, remove bottom sheet
-    LoggerWrapper.logInfo(
-      'FrostGroupSetupPubkey',
-      '_triggerRemoveParticipantBottomSheet',
-      'participant added', // TODO log participant added
-    );
   }
 
-  void _removeParticipant() {
+  void _removeParticipant(String participantPubKey) {
     // TODO remove participant
-    print('hello');
+    print('away with you $participantPubKey');
   }
 
   void _showFingerprint() {
@@ -109,42 +112,51 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Card(
-                      clipBehavior: Clip.antiAlias,
-                      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                      child: ListTile(
-                        leading: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            )
-                          ],
-                        ),
-                        trailing: IconButton(
-                          onPressed: () =>
-                              _triggerRemoveParticipantBottomSheet(),
-                          icon: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).colorScheme.onPrimary,
+                    Column(
+                      children: mockedParticipants.entries.map((entry) {
+                        String participantName = entry.key;
+                        String ecPubkey = entry.value;
+                        return Card(
+                          clipBehavior: Clip.antiAlias,
+                          margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                          child: ListTile(
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                )
+                              ],
+                            ),
+                            trailing: IconButton(
+                              onPressed: () =>
+                                  _triggerRemoveParticipantBottomSheet(
+                                participantName,
+                              ),
+                              icon: Icon(
+                                Icons.delete,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
+                            tileColor: Theme.of(context).colorScheme.primary,
+                            title: Text(
+                              participantName,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
+                            subtitle: Text(
+                              ecPubkey,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            ),
                           ),
-                        ),
-                        tileColor: Theme.of(context).colorScheme.primary,
-                        title: Text(
-                          "Participant Name",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "ECPubkey",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     ),
                     const SizedBox(
                       height: 20,
@@ -153,7 +165,8 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                       text: AppLocalizations.instance.translate(
                         'frost_setup_group_member_add',
                       ),
-                      action: () => _triggerRemoveParticipantBottomSheet(),
+                      action: () =>
+                          print('add participant'), // TODO add participant
                     ),
                     const SizedBox(
                       height: 20,
