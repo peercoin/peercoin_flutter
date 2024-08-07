@@ -345,9 +345,9 @@ class _SendTabState extends State<SendTab> {
                       if (_fiatEnabled && _currentAddressIndex == 0)
                         SwitchListTile(
                           value: _fiatInputEnabled,
-                          onChanged: (_) => setState(
+                          onChanged: (newState) => setState(
                             () {
-                              _fiatInputEnabled = _;
+                              _fiatInputEnabled = newState;
                               _amountControllerList[_currentAddressIndex].text =
                                   '';
                               _amountControllerList[_currentAddressIndex]
@@ -383,8 +383,8 @@ class _SendTabState extends State<SendTab> {
                       _currentAddressIndex == 0
                           ? SwitchListTile(
                               value: _expertMode,
-                              onChanged: (_) => setState(() {
-                                _expertMode = _;
+                              onChanged: (newState) => setState(() {
+                                _expertMode = newState;
                                 _opReturnController.text = '';
                               }),
                               title: Text(

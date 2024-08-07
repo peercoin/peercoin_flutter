@@ -688,9 +688,9 @@ class _AddressTabState extends State<AddressTab> {
       child: Column(
         children: [
           ExpansionTile(
-            onExpansionChanged: (_) => setState(
+            onExpansionChanged: (newState) => setState(
               () {
-                _optionsExpanded = _;
+                _optionsExpanded = newState;
               },
             ),
             trailing: Icon(
@@ -728,9 +728,9 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                     ),
                     selected: _showChangeAddresses,
-                    onSelected: (_) {
+                    onSelected: (newState) {
                       setState(() {
-                        _showChangeAddresses = _;
+                        _showChangeAddresses = newState;
                       });
                       applyFilter();
                     },
@@ -751,9 +751,9 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                     ),
                     selected: _showUnwatched,
-                    onSelected: (_) {
+                    onSelected: (newState) {
                       setState(() {
-                        _showUnwatched = _;
+                        _showUnwatched = newState;
                       });
                       applyFilter();
                     },
@@ -780,10 +780,10 @@ class _AddressTabState extends State<AddressTab> {
                         ),
                       ),
                       selected: _showLabel,
-                      onSelected: (_) {
+                      onSelected: (newState) {
                         setState(
                           () {
-                            _showLabel = _;
+                            _showLabel = newState;
                           },
                         );
                         applyFilter();
@@ -807,9 +807,9 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                     ),
                     selected: _showUsed,
-                    onSelected: (_) {
+                    onSelected: (newState) {
                       setState(() {
-                        _showUsed = _;
+                        _showUsed = newState;
                       });
                       applyFilter();
                     },
@@ -831,9 +831,9 @@ class _AddressTabState extends State<AddressTab> {
                       ),
                     ),
                     selected: _showEmpty,
-                    onSelected: (_) {
+                    onSelected: (newState) {
                       setState(() {
-                        _showEmpty = _;
+                        _showEmpty = newState;
                       });
                       applyFilter();
                     },

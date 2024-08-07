@@ -127,7 +127,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                                   Icons.person,
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
-                                )
+                                ),
                               ],
                             ),
                             trailing: IconButton(
