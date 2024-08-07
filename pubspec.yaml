@@ -61,6 +61,7 @@ dependencies:
     # TODO move to git
   frost_noosphere:
     path: ../frost-noosphere/frost_noosphere
+  web: ^1.0.0
     # TODO move to git
 
 dev_dependencies:

@@ -1,13 +1,12 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../tools/logger_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web/web.dart' show window;
 
 import '../tools/app_localizations.dart';
+import '../tools/logger_wrapper.dart';
 
 class LogoutDialog extends StatelessWidget {
   const LogoutDialog({super.key});
@@ -67,11 +66,11 @@ class LogoutDialog extends StatelessWidget {
     );
 
     //clear hive
-    window.indexedDB?.deleteDatabase('vaultbox');
-    window.indexedDB?.deleteDatabase('wallets');
-    window.indexedDB?.deleteDatabase('optionsbox');
-    window.indexedDB?.deleteDatabase('serverbox-peercoin');
-    window.indexedDB?.deleteDatabase('serverbox-peercointestnet');
+    window.indexedDB.deleteDatabase('vaultbox');
+    window.indexedDB.deleteDatabase('wallets');
+    window.indexedDB.deleteDatabase('optionsbox');
+    window.indexedDB.deleteDatabase('serverbox-peercoin');
+    window.indexedDB.deleteDatabase('serverbox-peercointestnet');
     await Future.delayed(const Duration(seconds: 1));
 
     LoggerWrapper.logInfo('Logout', 'clearData', 'Hive Storage cleared');
