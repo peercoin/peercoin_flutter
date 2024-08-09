@@ -5,9 +5,12 @@ import 'package:peercoin/widgets/service_container.dart';
 
 class SetupPubkeyRemoveParticipantBottomSheet extends StatelessWidget {
   final Function action;
+  final String participantName;
+
   const SetupPubkeyRemoveParticipantBottomSheet({
     super.key,
     required this.action,
+    required this.participantName,
   });
 
   @override
@@ -32,17 +35,17 @@ class SetupPubkeyRemoveParticipantBottomSheet extends StatelessWidget {
           ),
           Text(
             AppLocalizations.instance.translate(
-              'frost_setup_group_member_remove_alert_description',
-            ),
+                'frost_setup_group_member_remove_alert_description', {
+              'member': participantName,
+            }),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
             height: 30,
           ),
           PeerButtonBorder(
-            text: AppLocalizations.instance.translate(
-              'frost_setup_group_member_remove',
-            ),
+            text: AppLocalizations.instance
+                .translate('frost_setup_group_member_remove'),
             action: () => action(),
           ),
           const SizedBox(

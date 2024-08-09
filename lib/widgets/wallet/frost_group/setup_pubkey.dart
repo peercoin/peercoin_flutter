@@ -25,11 +25,12 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
     'Participant Name': 'ECPubkey',
   };
 
-  void _triggerRemoveParticipantBottomSheet(String participantPubKey) async {
+  void _triggerRemoveParticipantBottomSheet(
+      String participantName, String participantPubKey) async {
     LoggerWrapper.logInfo(
       'FrostGroupSetupPubkey',
       '_triggerRemoveParticipantBottomSheet',
-      'participant $participantPubKey delete bottom sheet opened',
+      'participant $participantName delete bottom sheet opened',
     );
 
     // show bottom sheet
@@ -41,6 +42,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
       enableDrag: false,
       builder: (BuildContext context) {
         return SetupPubkeyRemoveParticipantBottomSheet(
+          participantName: participantName,
           action: () => _removeParticipant(participantPubKey),
         );
       },
@@ -134,6 +136,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                               onPressed: () =>
                                   _triggerRemoveParticipantBottomSheet(
                                 participantName,
+                                ecPubkey,
                               ),
                               icon: Icon(
                                 Icons.delete,
