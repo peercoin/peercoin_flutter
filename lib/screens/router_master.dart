@@ -34,25 +34,25 @@ class _RouterMasterState extends State<RouterMaster> {
 
       if (widget.routeType == RouteTypes.setupOnly && setupFinished) {
         //setup is finished and setupOnly screen has been called
-        Future.delayed(
-          const Duration(seconds: 0),
-          () => Navigator.of(context).pushReplacementNamed(Routes.walletList),
-        );
+        Future.delayed(const Duration(seconds: 0), () {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacementNamed(Routes.walletList);
+        });
       } else if (!setupFinished &&
           widget.routeType == RouteTypes.requiresSetupFinished) {
-        Future.delayed(
-          const Duration(seconds: 0),
-          () => Navigator.of(context).pushReplacementNamed('/'),
-        );
+        Future.delayed(const Duration(seconds: 0), () {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacementNamed('/');
+        });
       } else if (!setupFinished && widget.routeType == RouteTypes.setupOnly) {
         widgetToRender = widget.widget;
         //TODO don't allow unordered access to setup widgets if setup is not finished
       } else if (widget.routeType == RouteTypes.requiresArguments &&
           modalRoute.settings.arguments == null) {
-        Future.delayed(
-          const Duration(seconds: 0),
-          () => Navigator.of(context).pushReplacementNamed('/'),
-        );
+        Future.delayed(const Duration(seconds: 0), () {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacementNamed('/');
+        });
       } else {
         widgetToRender = widget.widget;
       }
