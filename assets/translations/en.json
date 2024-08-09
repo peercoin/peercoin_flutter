@@ -551,5 +551,5 @@
   "frost_setup_group_member_input_empty": "Please enter a public key",
   "frost_setup_group_member_add": "Add Member",
   "frost_setup_group_member_remove": "Remove Member",
-  "frost_setup_group_member_remove_alert_description": "Are you sure you want to remove this member?"
+  "frost_setup_group_member_remove_alert_description": "Are you sure you want to remove $member?"
 }
