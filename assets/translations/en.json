@@ -550,6 +550,9 @@
   "frost_setup_group_member_input_error": "Please enter a valid public key",
   "frost_setup_group_member_input_empty": "Please enter a public key",
   "frost_setup_group_member_add": "Add Member",
+  "frost_setup_group_member_add_description": "Please enter the name and public key of the new group member.",
+  "frost_setup_group_member_name_input": "Participant name",
+  "frost_setup_group_member_pub_key_input": "Particpant public key",
   "frost_setup_group_member_remove": "Remove Member",
   "frost_setup_group_member_remove_alert_description": "Are you sure you want to remove $member?"
 }
