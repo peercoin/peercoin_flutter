@@ -41,8 +41,12 @@ dependencies:
   http: ^0.13.3
   collection: ^1.15.0-nullsafety.4
   flutter_markdown: ^0.6.6
-  background_fetch: ^1.3.4
-  flutter_logs: ^2.1.11
+  background_fetch: ^1.3.5
+  flutter_logs: 
+    git: 
+      url: https://github.com/ced1check/flutter_logs
+      refh: master
+    # TODO move back once  https://github.com/umair13adil/flutter_logs/issues/69 or 73 is fixed
   auto_size_text: ^3.0.0
   camera: ^0.10.0+4
   path_provider: ^2.0.11
