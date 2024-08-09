@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -44,10 +45,22 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
 
   Future<void> _save() async {
     // TODO try calling server url to see if it is valid
-    if (_formKey.currentState!.validate()) {
-      widget.frostGroup.groupId = _groupIdController.text;
-      widget.frostGroup.serverUrl = _serverController.text;
 
+    if (_formKey.currentState!.validate()) {
+      // see if ClientConfig is already set
+      if (widget.frostGroup.clientConfig == null) {
+        // if not, create a new one
+        widget.frostGroup.clientConfig = ClientConfig(
+          id: Identifier.fromString(_groupIdController.text),
+          group: GroupConfig(
+            id: widget.frostGroup.groupId,
+            participants: {},
+          ),
+        );
+      } else {
+        // if it is, update the server url
+        widget.frostGroup.serverUrl = _serverController.text;
+      }
       _changeStep(FrostSetupStep.pubkey);
     }
   }
@@ -95,6 +108,7 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                         children: [
                           TextFormField(
                             textInputAction: TextInputAction.done,
+                            enabled: widget.frostGroup.clientConfig == null,
                             key: _groupIdKey,
                             autocorrect: false,
                             validator: (value) => value!.isEmpty

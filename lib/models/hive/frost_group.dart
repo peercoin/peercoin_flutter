@@ -1,11 +1,6 @@
-import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:hive/hive.dart';
-// import 'package:frost_noosphere/frost_noosphere.dart'; TODO Uncomment this line when the package is available
+import 'package:frost_noosphere/frost_noosphere.dart';
 part 'frost_group.g.dart';
-
-class ClientConfig {
-  Map<String, ECPublicKey> participants = {};
-} // Placeholder for ClientConfig TODO Remove this line when the package is available
 
 @HiveType(typeId: 8)
 class FrostGroup extends HiveObject {
@@ -43,14 +38,15 @@ class FrostGroup extends HiveObject {
     save();
   }
 
-  ClientConfig get clientConfig {
-    if (_clientConfig == null) {
-      throw Exception('ClientConfig is null');
-    }
-    return _clientConfig!;
+  ClientConfig? get clientConfig {
+    return _clientConfig;
   }
 
-  set clientConfig(ClientConfig value) {
+  set clientConfig(ClientConfig? value) {
+    if (value == null) {
+      return;
+    }
+
     _clientConfig = value;
     save();
   }

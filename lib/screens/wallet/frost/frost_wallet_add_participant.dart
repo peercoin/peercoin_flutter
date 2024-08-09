@@ -2,6 +2,7 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frosty/frosty.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -55,7 +56,8 @@ class _FrostWalletAddParticipantScreenState
               onPressed: () {
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.validate()) {
-                  _frostGroup.clientConfig.participants[_nameController.text] =
+                  _frostGroup.clientConfig!.group.participants[
+                          Identifier.fromString(_nameController.text)] =
                       ECPublicKey(
                     Uint8List.fromList(_ecPubKeyController.text.codeUnits),
                   );
