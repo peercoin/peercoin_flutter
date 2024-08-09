@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -48,6 +49,16 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
       },
       context: context,
     );
+  }
+
+  void _addParticipant() async {
+    final res = await Navigator.of(context).pushNamed(
+      Routes.frostWalletAddParticipant,
+      arguments: {
+        'frostGroup': widget.frostGroup,
+      },
+    );
+    print(res);
   }
 
   void _removeParticipant(String participantPubKey) {
@@ -168,8 +179,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                       text: AppLocalizations.instance.translate(
                         'frost_setup_group_member_add',
                       ),
-                      action: () =>
-                          print('add participant'), // TODO add participant
+                      action: () => _addParticipant(),
                     ),
                     const SizedBox(
                       height: 20,

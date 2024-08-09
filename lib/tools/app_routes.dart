@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/frost/frost_wallet_add_participant.dart';
 import 'package:peercoin/screens/wallet/frost/frost_wallet_home.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
@@ -61,6 +62,8 @@ class Routes {
   static const String transaction = '/tx-detail';
   static const String standardAndWatchOnlyWalletHome = '/standard-wallet-home';
   static const String frostWalletHome = '/frost-wallet-home';
+  static const String frostWalletAddParticipant =
+      '/frost-wallet-add-participant';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -214,6 +217,10 @@ class Routes {
           ),
       Routes.frostWalletHome: (context) => const RouterMaster(
             widget: FrostWalletHomeScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.frostWalletAddParticipant: (context) => const RouterMaster(
+            widget: FrostWalletAddParticipantScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
     };
