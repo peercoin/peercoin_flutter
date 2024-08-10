@@ -1,5 +1,8 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/hive_frost_client_config.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
@@ -22,9 +25,23 @@ class FrostGroupSetupPubkey extends StatefulWidget {
 }
 
 class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
-  final Map<String, String> mockedParticipants = {
-    'Participant Name': 'ECPubkey',
+  final Map<Identifier, ECPublicKey> _participants = {
+    Identifier.fromString('Participant Name'): ECPublicKey.fromHex(
+        '02606ab93e1ce10476ce420a49b69b18da4c1c06f1372c23aebd5d70e724bb457e'),
   };
+
+  // TODO when there is more than 1 particpant, write the clientConfig (it can not be written empty)
+  // create a new ClientConfig
+  // widget.frostGroup.clientConfig = HiveFrostClientConfig(
+  //   id: Identifier.fromString(widget.frostGroup.groupId),
+  //   group: GroupConfig(
+  //     id: widget.frostGroup.groupId,
+  //     participants: {
+  //       Identifier.fromString('Participant Name'): ECPublicKey.fromHex(
+  //           '02606ab93e1ce10476ce420a49b69b18da4c1c06f1372c23aebd5d70e724bb457e',),
+  //     },
+  //   ),
+  // );
 
   void _triggerRemoveParticipantBottomSheet(
       String participantName, String participantPubKey) async {
@@ -67,7 +84,13 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
   }
 
   void _showFingerprint() {
-    // TODO show fingerprint
+    widget.frostGroup.clientConfig = HiveFrostClientConfig(
+      id: Identifier.fromString(widget.frostGroup.groupId),
+      group: GroupConfig(
+        id: widget.frostGroup.groupId,
+        participants: _participants,
+      ),
+    );
     print('hello');
   }
 
@@ -126,9 +149,9 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                       height: 20,
                     ),
                     Column(
-                      children: mockedParticipants.entries.map((entry) {
-                        String participantName = entry.key;
-                        String ecPubkey = entry.value;
+                      children: _participants.entries.map((entry) {
+                        String participantName = entry.key.toString();
+                        String ecPubkey = entry.value.hex;
                         return Card(
                           clipBehavior: Clip.antiAlias,
                           margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
