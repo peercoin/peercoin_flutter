@@ -1,8 +1,7 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frosty/frosty.dart';
+import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -38,6 +37,33 @@ class _FrostWalletAddParticipantScreenState
     super.didChangeDependencies();
   }
 
+  void _save() {
+    _formKey.currentState!.save();
+    if (_formKey.currentState!.validate()) {
+      if (_frostGroup.clientConfig == null) {
+        _frostGroup.clientConfig = ClientConfig(
+          id: Identifier.fromString(_frostGroup.groupId),
+          group: GroupConfig(
+            id: _frostGroup.groupId,
+            participants: {
+              Identifier.fromString(_nameController.text): ECPublicKey.fromHex(
+                _ecPubKeyController.text,
+              ),
+            },
+          ),
+        );
+      } else {
+        _frostGroup.clientConfig!.group
+                .participants[Identifier.fromString(_nameController.text)] =
+            ECPublicKey.fromHex(
+          _ecPubKeyController.text,
+        );
+      }
+
+      Navigator.of(context).pop(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,17 +79,7 @@ class _FrostWalletAddParticipantScreenState
             key: const Key('saveServerButton'),
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: IconButton(
-              onPressed: () {
-                _formKey.currentState!.save();
-                if (_formKey.currentState!.validate()) {
-                  _frostGroup.clientConfig!.group.participants[
-                          Identifier.fromString(_nameController.text)] =
-                      ECPublicKey(
-                    Uint8List.fromList(_ecPubKeyController.text.codeUnits),
-                  );
-                  Navigator.of(context).pop(true);
-                }
-              },
+              onPressed: () => _save(),
               icon: const Icon(Icons.save),
             ),
           ),

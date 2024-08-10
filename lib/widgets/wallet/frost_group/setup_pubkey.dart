@@ -2,7 +2,6 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
-import 'package:peercoin/models/hive/hive_frost_client_config.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
@@ -25,23 +24,22 @@ class FrostGroupSetupPubkey extends StatefulWidget {
 }
 
 class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
-  final Map<Identifier, ECPublicKey> _participants = {
-    Identifier.fromString('Participant Name'): ECPublicKey.fromHex(
-        '02606ab93e1ce10476ce420a49b69b18da4c1c06f1372c23aebd5d70e724bb457e'),
-  };
+  bool _initial = true;
+  final Map<Identifier, ECPublicKey> _participants = {};
 
-  // TODO when there is more than 1 particpant, write the clientConfig (it can not be written empty)
-  // create a new ClientConfig
-  // widget.frostGroup.clientConfig = HiveFrostClientConfig(
-  //   id: Identifier.fromString(widget.frostGroup.groupId),
-  //   group: GroupConfig(
-  //     id: widget.frostGroup.groupId,
-  //     participants: {
-  //       Identifier.fromString('Participant Name'): ECPublicKey.fromHex(
-  //           '02606ab93e1ce10476ce420a49b69b18da4c1c06f1372c23aebd5d70e724bb457e',),
-  //     },
-  //   ),
-  // );
+  @override
+  void didChangeDependencies() {
+    if (_initial) {
+      if (widget.frostGroup.clientConfig != null) {
+        _participants
+            .addAll(widget.frostGroup.clientConfig!.group.participants);
+      }
+      setState(() {
+        _initial = false;
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   void _triggerRemoveParticipantBottomSheet(
       String participantName, String participantPubKey) async {
@@ -75,7 +73,13 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
         'frostGroup': widget.frostGroup,
       },
     );
-    print(res);
+    if (res == true) {
+      setState(() {
+        _participants.clear();
+        _participants
+            .addAll(widget.frostGroup.clientConfig!.group.participants);
+      });
+    }
   }
 
   void _removeParticipant(String participantPubKey) {
@@ -84,7 +88,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
   }
 
   void _showFingerprint() {
-    widget.frostGroup.clientConfig = HiveFrostClientConfig(
+    widget.frostGroup.clientConfig = ClientConfig(
       id: Identifier.fromString(widget.frostGroup.groupId),
       group: GroupConfig(
         id: widget.frostGroup.groupId,

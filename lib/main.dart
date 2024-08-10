@@ -10,7 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/models/hive/frost_group.dart';
-import 'package:peercoin/models/hive/hive_frost_client_config_hive_adapter.dart';
+import 'package:peercoin/models/hive/client_config_hive_adapter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';

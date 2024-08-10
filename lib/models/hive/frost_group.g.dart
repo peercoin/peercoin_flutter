@@ -20,7 +20,7 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
       fields[0] as String,
       fields[1] as bool,
     )
-      .._clientConfig = fields[2] as HiveFrostClientConfig?
+      .._clientConfig = fields[2] as ClientConfig?
       .._serverUrl = fields[3] as String?
       .._groupId = fields[4] as String?;
   }
