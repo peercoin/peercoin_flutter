@@ -74,6 +74,11 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
       },
     );
     if (res == true) {
+      LoggerWrapper.logInfo(
+        'FrostGroupSetupPubkey',
+        '_addParticipant',
+        'participant added',
+      );
       setState(() {
         _participants.clear();
         _participants
@@ -83,8 +88,15 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
   }
 
   void _removeParticipant(String participantPubKey) {
-    // TODO remove participant
-    print('away with you $participantPubKey');
+    Navigator.of(context).pop();
+    setState(() {
+      _participants.removeWhere((key, value) => value.hex == participantPubKey);
+    });
+    LoggerWrapper.logInfo(
+      'FrostGroupSetupPubkey',
+      '_removeParticipant',
+      'participant removed',
+    );
   }
 
   void _showFingerprint() {
