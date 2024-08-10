@@ -42,7 +42,9 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
   }
 
   void _triggerRemoveParticipantBottomSheet(
-      String participantName, String participantPubKey) async {
+    String participantName,
+    String participantPubKey,
+  ) async {
     LoggerWrapper.logInfo(
       'FrostGroupSetupPubkey',
       '_triggerRemoveParticipantBottomSheet',
@@ -100,14 +102,17 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
   }
 
   void _showFingerprint() {
-    widget.frostGroup.clientConfig = ClientConfig(
-      id: Identifier.fromString(widget.frostGroup.groupId),
-      group: GroupConfig(
-        id: widget.frostGroup.groupId,
-        participants: _participants,
-      ),
+    if (widget.frostGroup.clientConfig == null) {
+      return;
+    }
+    final fingerPrint = widget.frostGroup.clientConfig!.group.fingerprint;
+    LoggerWrapper.logInfo(
+      'FrostGroupSetupPubkey',
+      '_showFingerprint',
+      bytesToHex(fingerPrint),
     );
-    print('hello');
+
+    // TODO show fingerprint in a dialog
   }
 
   @override
