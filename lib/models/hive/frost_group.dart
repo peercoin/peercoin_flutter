@@ -1,5 +1,5 @@
+import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive/hive.dart';
-import 'package:peercoin/models/hive/hive_frost_client_config.dart';
 part 'frost_group.g.dart';
 
 @HiveType(typeId: 8)
@@ -11,7 +11,7 @@ class FrostGroup extends HiveObject {
   bool _isCompleted = false;
 
   @HiveField(2)
-  HiveFrostClientConfig? _clientConfig;
+  ClientConfig? _clientConfig;
 
   @HiveField(3)
   String? _serverUrl;
@@ -38,11 +38,11 @@ class FrostGroup extends HiveObject {
     save();
   }
 
-  HiveFrostClientConfig? get clientConfig {
+  ClientConfig? get clientConfig {
     return _clientConfig;
   }
 
-  set clientConfig(HiveFrostClientConfig? value) {
+  set clientConfig(ClientConfig? value) {
     if (value == null) {
       return;
     }
