@@ -19,6 +19,9 @@ class FrostGroup extends HiveObject {
   @HiveField(4)
   String? _groupId;
 
+  @HiveField(5, defaultValue: {})
+  Map<String, String> _participantNames = {};
+
   FrostGroup(
     this._name,
     this._isCompleted,
@@ -54,6 +57,13 @@ class FrostGroup extends HiveObject {
   String get serverUrl => _serverUrl ?? '';
   set serverUrl(String value) {
     _serverUrl = value;
+    save();
+  }
+
+  Map<String, String> get participantNames => _participantNames;
+
+  set participantNames(Map<String, String> value) {
+    _participantNames = value;
     save();
   }
 }

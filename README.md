@@ -4,12 +4,13 @@
 [![Codemagic build status](https://api.codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/status_badge.svg)](https://codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/latest_build)
 [![Static analysis and unit tests](https://github.com/peercoin/peercoin_flutter/actions/workflows/static_analysis_and_unit_test.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/static_analysis_and_unit_test.yml)
 [![E2E Tests](https://github.com/peercoin/peercoin_flutter/actions/workflows/e2e_tests.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/e2e_tests.yml)
+
 # peercoin_flutter
+
 Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.  
-**App in constant development**  
+**App in constant development**
 
-**Use at own risk.**  
-
+**Use at own risk.**
 
 <p align="center">
      <a href="https://f-droid.org/packages/com.coinerella.peercoin/">
@@ -21,26 +22,29 @@ Wallet for Peercoin and Peercoin Testnet using Electrumx as backend.
 </p>
 <p align="center">
      <a href="https://apps.apple.com/app/peercoin-wallet/id1571755170?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1626912000&h=8e86ea0b88a4e8559b76592c43b3fe60" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
-</p> 
+</p>
 
 You can also sign up for our open beta testing here:
 
-* [Android](https://play.google.com/apps/testing/com.coinerella.peercoin)
-* [iOS](https://testflight.apple.com/join/iilc4SvQ)
+- [Android](https://play.google.com/apps/testing/com.coinerella.peercoin)
+- [iOS](https://testflight.apple.com/join/iilc4SvQ)
 
 ![Screenshot_small](https://user-images.githubusercontent.com/11148913/124509449-470f7c80-ddd2-11eb-9daf-56de7eb83594.png)
 
 ## Help Translate
+
 <a href="https://weblate.ppc.lol/engage/peercoin-flutter/">
 <img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/multi-auto.svg" alt="Translation status" />
 </a>
 
 ## Known Limitations
+
 - will not mint
 
 ## Development
+
 **Build coinlib**  
-This repository relies on 
+This repository relies on
 [coinlib.](https://github.com/peercoin/coinlib "https://github.com/peercoin/coinlib")  
 Please follow the build instructions for your OS here:
 [README](https://github.com/peercoin/coinlib/blob/master/coinlib/README.md)
@@ -61,8 +65,9 @@ Please follow the build instructions for your OS here:
 `flutter pub global activate peanut`  
 `flutter pub global run peanut -b production`  
 Web files are now on the production branch and ready to be deployed.  
-This will use the html renderer by default. Add *--web-renderer canvas* to peanut if you want to switch to the canvas renderer.
+This will use the html renderer by default. Add _--web-renderer canvas_ to peanut if you want to switch to the canvas renderer.
 
 ## Run e2e tests
+
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_new.dart`  
 `flutter drive --target=test_driver/app.dart --driver=test_driver/key_imported.dart`

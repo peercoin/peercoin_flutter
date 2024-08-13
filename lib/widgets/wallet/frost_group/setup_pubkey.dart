@@ -91,7 +91,13 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
 
   void _removeParticipant(String participantPubKey) {
     Navigator.of(context).pop();
+
+    // remove participant from group
+    widget.frostGroup.clientConfig!.group.participants
+        .removeWhere((key, value) => value.hex == participantPubKey);
+
     setState(() {
+      // remove copy of participant from local state
       _participants.removeWhere((key, value) => value.hex == participantPubKey);
     });
     LoggerWrapper.logInfo(
@@ -171,7 +177,9 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     ),
                     Column(
                       children: _participants.entries.map((entry) {
-                        String participantName = entry.key.toString();
+                        String participantName = widget.frostGroup
+                                .participantNames[entry.key.toString()] ??
+                            '';
                         String ecPubkey = entry.value.hex;
                         return Card(
                           clipBehavior: Clip.antiAlias,

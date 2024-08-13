@@ -40,13 +40,14 @@ class _FrostWalletAddParticipantScreenState
   void _save() {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
+      final id = Identifier.fromString(_nameController.text);
       if (_frostGroup.clientConfig == null) {
         _frostGroup.clientConfig = ClientConfig(
           id: Identifier.fromString(_frostGroup.groupId),
           group: GroupConfig(
             id: _frostGroup.groupId,
             participants: {
-              Identifier.fromString(_nameController.text): ECPublicKey.fromHex(
+              id: ECPublicKey.fromHex(
                 _ecPubKeyController.text,
               ),
             },
@@ -59,6 +60,9 @@ class _FrostWalletAddParticipantScreenState
           _ecPubKeyController.text,
         );
       }
+
+      // persist name
+      _frostGroup.participantNames[id.toString()] = _nameController.text;
 
       Navigator.of(context).pop(true);
     }
