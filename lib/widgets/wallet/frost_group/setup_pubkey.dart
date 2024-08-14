@@ -8,6 +8,7 @@ import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/frost_group/setup_landing.dart';
+import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey_finger_print_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey_remove_participant_bottom_sheet.dart';
 
 class FrostGroupSetupPubkey extends StatefulWidget {
@@ -107,18 +108,40 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
     );
   }
 
-  void _showFingerprint() {
+  void _completeFrostGroup() {
+    // save group
+    widget.frostGroup.isCompleted = true;
+    Navigator.of(context).pop();
+    // change step
+  }
+
+  void _showFingerprint() async {
     if (widget.frostGroup.clientConfig == null) {
       return;
     }
-    final fingerPrint = widget.frostGroup.clientConfig!.group.fingerprint;
+    final fingerPrint =
+        bytesToHex(widget.frostGroup.clientConfig!.group.fingerprint);
     LoggerWrapper.logInfo(
       'FrostGroupSetupPubkey',
       '_showFingerprint',
-      bytesToHex(fingerPrint),
+      fingerPrint,
     );
 
-    // TODO show fingerprint in a dialog
+    // show bottom sheet
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return SetupPubkeyFingerPrintBottomSheet(
+          fingerPrint: fingerPrint,
+          action: () => _completeFrostGroup(),
+        );
+      },
+      context: context,
+    );
   }
 
   @override

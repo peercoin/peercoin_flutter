@@ -554,5 +554,9 @@
   "frost_setup_group_member_name_input": "Participant name",
   "frost_setup_group_member_pub_key_input": "Particpant public key",
   "frost_setup_group_member_remove": "Remove Member",
-  "frost_setup_group_member_remove_alert_description": "Are you sure you want to remove $member?"
+  "frost_setup_group_member_remove_alert_description": "Are you sure you want to remove $member?",
+  "frost_setup_group_fingerprint_title": "Fingerprint",
+  "frost_setup_group_fingerprint_description": "Please verify the fingerprint with all group members to ensure that all public keys are correct.",
+  "frost_setup_group_fingerprint_cta": "Save Group",
+  "frost_setup_group_fingerprint_cta_hint": "This can not be undone."
 }
