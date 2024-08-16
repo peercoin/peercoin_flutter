@@ -186,5 +186,3 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
     );
   }
 }
-
-// TODO group name can be changed later through context menu to avoid confusion between group name and group id
