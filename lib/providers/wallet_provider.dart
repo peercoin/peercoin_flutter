@@ -525,6 +525,19 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteFROSTWallet(String identifier) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    if (openWallet.isFROST == false) {
+      throw Exception('Wallet is not FROST');
+    }
+
+    await _walletBox.delete(identifier);
+    await _vaultBox.delete(identifier);
+
+    closeWallet(identifier);
+    notifyListeners();
+  }
+
   Future<void> generateUnusedAddress(String identifier) async {
     final openWallet = getSpecificCoinWallet(identifier);
     final hdWallet = await getHdWallet(identifier);
