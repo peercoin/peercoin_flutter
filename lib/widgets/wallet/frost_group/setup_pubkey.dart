@@ -275,4 +275,3 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
     );
   }
 }
-// 8. Perhaps the next page should have the options: 1. Connect to server (which will present the full DKG and signing options later). 2. Download configuration (for use on a server). 3. Modify configuration (if configuration is later changed, it goes back to the previous screen).
