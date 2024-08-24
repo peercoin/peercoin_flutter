@@ -139,7 +139,9 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
               child: CircularProgressIndicator(),
             )
           : _frostGroup.isCompleted
-              ? const FrostGroupLandingConfigured()
+              ? FrostGroupLandingConfigured(
+                  frostGroup: _frostGroup,
+                )
               : FrostGroupSetupLanding(
                   frostGroup: _frostGroup,
                 ),
