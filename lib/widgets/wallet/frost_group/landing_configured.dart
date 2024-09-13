@@ -25,8 +25,11 @@ class _FrostGroupLandingConfiguredState
 
   void _exportConfiguration() {
     print('Export configuration');
-    Share.share(widget.frostGroup.clientConfig!.group
-        .toString()); //TODO check if this makes sense or we need to export to some binary format? yaml?
+    // final file = File
+    // TODO write something like file.json  from widget.frostGroup.clientConfig!.group.toBytes()
+    // right now only server-side implement for binary format
+    Share.share(
+        "file"); //TODO check if this makes sense or we need to export to some binary format? yaml?
   }
 
   @override
@@ -45,6 +48,9 @@ class _FrostGroupLandingConfiguredState
                       action: () => _tryConnectToServer(),
                     ),
                     const SizedBox(height: 20),
+                    // TODO login to server
+                    // TODO present DKG with details and stage (round1, round2)
+                    // TODO frost key with details has to be stored (ClientStorageInterface and its methods has to be implemented)
                     PeerButton(
                       text: 'Download configuration',
                       action: () => _exportConfiguration(),
@@ -64,6 +70,6 @@ class _FrostGroupLandingConfiguredState
     );
   }
 }
-// 1. Connect to server (which will present the full DKG and signing options later). 
-// 2. Download configuration (for use on a server). 
-// 3. Modify configuration (if configuration is later changed, it goes back to the previous screen).
+// 1. Connect to server (which will present the full DKG and signing options later). mock for now.
+// 2. Download configuration (for use on a server).
+// 3. Modify configuration (if configuration is later changed, it goes back to the previous screen). Only allow server url + nick names for participants to be changed.
