@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
-import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/wallet/frost_group/landing_configured.dart';
-import 'package:peercoin/widgets/wallet/frost_group/setup_landing.dart';
+import 'package:peercoin/widgets/wallet/roast_group/landing_configured.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_delete_watch_only_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class FrostWalletHomeScreen extends StatefulWidget {
 class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
   bool _initial = true;
   late CoinWallet _wallet;
-  late FrostGroup _frostGroup;
+  late ROASTGroup _roastGroup;
 
   @override
   void didChangeDependencies() async {
@@ -30,7 +30,7 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
 
       final walletProvider =
           Provider.of<WalletProvider>(context, listen: false);
-      _frostGroup = await walletProvider.getFrostGroup(_wallet.name);
+      _roastGroup = await walletProvider.getROASTGroup(_wallet.name);
 
       setState(() {
         _initial = false;
@@ -44,7 +44,7 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
     super.didChangeDependencies();
   }
 
-  void _triggerDeleteFrostGroupBottomSheet({
+  void _triggerDeleteROASTGroupBottomSheet({
     required BuildContext context,
     required WalletProvider walletProvider,
     required CoinWallet wallet,
@@ -58,7 +58,7 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
       builder: (BuildContext context) {
         return WalletDeleteWatchOnlyBottomSheet(
           action: () async {
-            await walletProvider.deleteFROSTWallet(_wallet.name);
+            await walletProvider.deleteROASTWallet(_wallet.name);
             if (context.mounted) {
               Navigator.of(context).popUntil((route) => route.isFirst);
             }
@@ -74,8 +74,8 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
       case 'change_title':
         titleEditDialog(context, _wallet);
         break;
-      case 'delete_frost_group':
-        _triggerDeleteFrostGroupBottomSheet(
+      case 'delete_roast_group':
+        _triggerDeleteROASTGroupBottomSheet(
           context: context,
           walletProvider: Provider.of<WalletProvider>(context, listen: false),
           wallet: _wallet,
@@ -106,7 +106,7 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
               ),
             ),
             PopupMenuItem(
-              value: 'delete_frost_group',
+              value: 'delete_roast_group',
               child: ListTile(
                 leading: Icon(
                   Icons.delete_forever,
@@ -138,12 +138,12 @@ class _FrostWalletHomeScreenState extends State<FrostWalletHomeScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _frostGroup.isCompleted
-              ? FrostGroupLandingConfigured(
-                  frostGroup: _frostGroup,
+          : _roastGroup.isCompleted
+              ? ROASTGroupLandingConfigured(
+                  roastGroup: _roastGroup,
                 )
-              : FrostGroupSetupLanding(
-                  frostGroup: _frostGroup,
+              : ROASTGroupSetupLanding(
+                  roastGroup: _roastGroup,
                 ),
     );
   }

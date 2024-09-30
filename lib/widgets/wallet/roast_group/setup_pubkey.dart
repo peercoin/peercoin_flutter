@@ -1,39 +1,39 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
-import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet/frost_group/setup_landing.dart';
-import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey_finger_print_bottom_sheet.dart';
-import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey_remove_participant_bottom_sheet.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_finger_print_bottom_sheet.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_participant_bottom_sheet.dart';
 
-class FrostGroupSetupPubkey extends StatefulWidget {
+class ROASTGroupSetupPubkey extends StatefulWidget {
   final Function changeStep;
-  final FrostGroup frostGroup;
-  const FrostGroupSetupPubkey({
+  final ROASTGroup roastGroup;
+  const ROASTGroupSetupPubkey({
     required this.changeStep,
-    required this.frostGroup,
+    required this.roastGroup,
     super.key,
   });
 
   @override
-  State<FrostGroupSetupPubkey> createState() => _FrostGroupSetupPubkeyState();
+  State<ROASTGroupSetupPubkey> createState() => _ROASTGroupSetupPubkeyState();
 }
 
-class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
+class _ROASTGroupSetupPubkeyState extends State<ROASTGroupSetupPubkey> {
   bool _initial = true;
   final Map<Identifier, ECPublicKey> _participants = {};
 
   @override
   void didChangeDependencies() {
     if (_initial) {
-      if (widget.frostGroup.clientConfig != null) {
+      if (widget.roastGroup.clientConfig != null) {
         _participants
-            .addAll(widget.frostGroup.clientConfig!.group.participants);
+            .addAll(widget.roastGroup.clientConfig!.group.participants);
       }
       setState(() {
         _initial = false;
@@ -47,7 +47,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
     String participantPubKey,
   ) async {
     LoggerWrapper.logInfo(
-      'FrostGroupSetupPubkey',
+      'ROASTGroupSetupPubkey',
       '_triggerRemoveParticipantBottomSheet',
       'participant $participantName delete bottom sheet opened',
     );
@@ -71,21 +71,21 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
 
   void _addParticipant() async {
     final res = await Navigator.of(context).pushNamed(
-      Routes.frostWalletAddParticipant,
+      Routes.roastWalletAddParticipant,
       arguments: {
-        'frostGroup': widget.frostGroup,
+        'roastGroup': widget.roastGroup,
       },
     );
     if (res == true) {
       LoggerWrapper.logInfo(
-        'FrostGroupSetupPubkey',
+        'ROASTGroupSetupPubkey',
         '_addParticipant',
         'participant added',
       );
       setState(() {
         _participants.clear();
         _participants
-            .addAll(widget.frostGroup.clientConfig!.group.participants);
+            .addAll(widget.roastGroup.clientConfig!.group.participants);
       });
     }
   }
@@ -94,7 +94,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
     Navigator.of(context).pop();
 
     // remove participant from group
-    widget.frostGroup.clientConfig!.group.participants
+    widget.roastGroup.clientConfig!.group.participants
         .removeWhere((key, value) => value.hex == participantPubKey);
 
     setState(() {
@@ -102,27 +102,27 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
       _participants.removeWhere((key, value) => value.hex == participantPubKey);
     });
     LoggerWrapper.logInfo(
-      'FrostGroupSetupPubkey',
+      'ROASTGroupSetupPubkey',
       '_removeParticipant',
       'participant removed',
     );
   }
 
-  void _completeFrostGroup() {
+  void _completeROASTGroup() {
     // save group
-    widget.frostGroup.isCompleted = true;
+    widget.roastGroup.isCompleted = true;
     Navigator.of(context).pop();
     // change step
   }
 
   void _showFingerprint() async {
-    if (widget.frostGroup.clientConfig == null) {
+    if (widget.roastGroup.clientConfig == null) {
       return;
     }
     final fingerPrint =
-        bytesToHex(widget.frostGroup.clientConfig!.group.fingerprint);
+        bytesToHex(widget.roastGroup.clientConfig!.group.fingerprint);
     LoggerWrapper.logInfo(
-      'FrostGroupSetupPubkey',
+      'ROASTGroupSetupPubkey',
       '_showFingerprint',
       fingerPrint,
     );
@@ -137,7 +137,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
       builder: (BuildContext context) {
         return SetupPubkeyFingerPrintBottomSheet(
           fingerPrint: fingerPrint,
-          action: () => _completeFrostGroup(),
+          action: () => _completeROASTGroup(),
         );
       },
       context: context,
@@ -168,7 +168,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                         ),
                         Text(
                           AppLocalizations.instance
-                              .translate('frost_setup_group_title'),
+                              .translate('roast_setup_group_title'),
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
@@ -181,14 +181,14 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     ),
                     Text(
                       AppLocalizations.instance
-                          .translate('frost_setup_group_description'),
+                          .translate('roast_setup_group_description'),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
                       AppLocalizations.instance
-                          .translate('frost_setup_group_hint'),
+                          .translate('roast_setup_group_hint'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
@@ -200,7 +200,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     ),
                     Column(
                       children: _participants.entries.map((entry) {
-                        String participantName = widget.frostGroup
+                        String participantName = widget.roastGroup
                                 .participantNames[entry.key.toString()] ??
                             '';
                         String ecPubkey = entry.value.hex;
@@ -252,7 +252,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     ),
                     PeerButton(
                       text: AppLocalizations.instance.translate(
-                        'frost_setup_group_member_add',
+                        'roast_setup_group_member_add',
                       ),
                       action: () => _addParticipant(),
                     ),
@@ -261,7 +261,7 @@ class _FrostGroupSetupPubkeyState extends State<FrostGroupSetupPubkey> {
                     ),
                     PeerButton(
                       text: AppLocalizations.instance.translate(
-                        'frost_setup_group_cta',
+                        'roast_setup_group_cta',
                       ),
                       action: () => _showFingerprint(),
                     ),

@@ -22,7 +22,7 @@ class SetupPubkeyRemoveParticipantBottomSheet extends StatelessWidget {
         children: <Widget>[
           Text(
             AppLocalizations.instance.translate(
-              'frost_setup_group_member_remove',
+              'roast_setup_group_member_remove',
             ),
             style: TextStyle(
               letterSpacing: 1.4,
@@ -35,7 +35,7 @@ class SetupPubkeyRemoveParticipantBottomSheet extends StatelessWidget {
           ),
           Text(
             AppLocalizations.instance.translate(
-                'frost_setup_group_member_remove_alert_description', {
+                'roast_setup_group_member_remove_alert_description', {
               'member': participantName,
             }),
             textAlign: TextAlign.center,
@@ -45,7 +45,7 @@ class SetupPubkeyRemoveParticipantBottomSheet extends StatelessWidget {
           ),
           PeerButtonBorder(
             text: AppLocalizations.instance
-                .translate('frost_setup_group_member_remove'),
+                .translate('roast_setup_group_member_remove'),
             action: () => action(),
           ),
           const SizedBox(

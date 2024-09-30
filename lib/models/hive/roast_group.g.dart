@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'frost_group.dart';
+part of 'roast_group.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
+class ROASTGroupAdapter extends TypeAdapter<ROASTGroup> {
   @override
   final int typeId = 8;
 
   @override
-  FrostGroup read(BinaryReader reader) {
+  ROASTGroup read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return FrostGroup(
+    return ROASTGroup(
       fields[0] as String,
       fields[1] as bool,
     )
@@ -28,7 +28,7 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
   }
 
   @override
-  void write(BinaryWriter writer, FrostGroup obj) {
+  void write(BinaryWriter writer, ROASTGroup obj) {
     writer
       ..writeByte(6)
       ..writeByte(0)
@@ -51,7 +51,7 @@ class FrostGroupAdapter extends TypeAdapter<FrostGroup> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FrostGroupAdapter &&
+      other is ROASTGroupAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

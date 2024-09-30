@@ -63,7 +63,7 @@ void main() async {
       letterCode: 'PPC',
       isImportedSeed: false,
       watchOnly: false,
-      isFROST: false,
+      isROAST: false,
     );
     wallet.addWallet(
       name: testnetWalletName,
@@ -71,7 +71,7 @@ void main() async {
       letterCode: 'tPPC',
       isImportedSeed: false,
       watchOnly: false,
-      isFROST: false,
+      isROAST: false,
     );
   });
 

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive/hive.dart';
 
-class HiveFrostClientConfigAdapter extends TypeAdapter<ClientConfig> {
+class HiveROASTClientConfigAdapter extends TypeAdapter<ClientConfig> {
   @override
   final typeId = 0;
 

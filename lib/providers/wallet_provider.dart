@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:peercoin/models/buildresult.dart';
-import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/roast_group.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
@@ -106,7 +106,7 @@ class WalletProvider with ChangeNotifier {
     required String letterCode,
     required bool isImportedSeed,
     required bool watchOnly,
-    required bool isFROST,
+    required bool isROAST,
   }) async {
     final box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
@@ -131,19 +131,19 @@ class WalletProvider with ChangeNotifier {
         nOfWalletOfLetterCode,
         isImportedSeed,
         watchOnly,
-        isFROST,
+        isROAST,
       ),
     );
 
-    if (isFROST) {
+    if (isROAST) {
       LoggerWrapper.logInfo(
         'WalletProvider',
         'addWallet',
-        'writing $name - FROST Group',
+        'writing $name - ROAST Group',
       );
       await _vaultBox.put(
         name,
-        FrostGroup(
+        ROASTGroup(
           name,
           false,
         ),
@@ -525,10 +525,10 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteFROSTWallet(String identifier) async {
+  Future<void> deleteROASTWallet(String identifier) async {
     final openWallet = getSpecificCoinWallet(identifier);
-    if (openWallet.isFROST == false) {
-      throw Exception('Wallet is not FROST');
+    if (openWallet.isROAST == false) {
+      throw Exception('Wallet is not ROAST');
     }
 
     await _walletBox.delete(identifier);
@@ -681,10 +681,10 @@ class WalletProvider with ChangeNotifier {
     return answerMap;
   }
 
-  Future<FrostGroup> getFrostGroup(String identifier) async {
+  Future<ROASTGroup> getROASTGroup(String identifier) async {
     final res = _vaultBox.get(identifier);
     if (res == null) {
-      throw Exception('FrostGroup not found');
+      throw Exception('ROASTGroup not found');
     }
     return res;
   }

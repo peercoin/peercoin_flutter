@@ -2,22 +2,22 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
-import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
-class FrostWalletAddParticipantScreen extends StatefulWidget {
-  const FrostWalletAddParticipantScreen({super.key});
+class ROASTWalletAddParticipantScreen extends StatefulWidget {
+  const ROASTWalletAddParticipantScreen({super.key});
 
   @override
-  State<FrostWalletAddParticipantScreen> createState() =>
-      _FrostWalletAddParticipantScreenState();
+  State<ROASTWalletAddParticipantScreen> createState() =>
+      _ROASTWalletAddParticipantScreenState();
 }
 
-class _FrostWalletAddParticipantScreenState
-    extends State<FrostWalletAddParticipantScreen> {
+class _ROASTWalletAddParticipantScreenState
+    extends State<ROASTWalletAddParticipantScreen> {
   bool _initial = true;
-  late FrostGroup _frostGroup;
+  late ROASTGroup _roastGroup;
   final _formKey = GlobalKey<FormState>();
   final _nameKey = GlobalKey<FormFieldState>();
   final _nameController = TextEditingController();
@@ -28,7 +28,7 @@ class _FrostWalletAddParticipantScreenState
   void didChangeDependencies() async {
     if (_initial) {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _frostGroup = arguments['frostGroup'];
+      _roastGroup = arguments['roastGroup'];
       setState(() {
         _initial = false;
       });
@@ -41,11 +41,11 @@ class _FrostWalletAddParticipantScreenState
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
       final id = Identifier.fromString(_nameController.text);
-      if (_frostGroup.clientConfig == null) {
-        _frostGroup.clientConfig = ClientConfig(
-          id: Identifier.fromString(_frostGroup.groupId),
+      if (_roastGroup.clientConfig == null) {
+        _roastGroup.clientConfig = ClientConfig(
+          id: Identifier.fromString(_roastGroup.groupId),
           group: GroupConfig(
-            id: _frostGroup.groupId,
+            id: _roastGroup.groupId,
             participants: {
               id: ECPublicKey.fromHex(
                 _ecPubKeyController.text,
@@ -54,7 +54,7 @@ class _FrostWalletAddParticipantScreenState
           ),
         );
       } else {
-        _frostGroup.clientConfig!.group
+        _roastGroup.clientConfig!.group
                 .participants[Identifier.fromString(_nameController.text)] =
             ECPublicKey.fromHex(
           _ecPubKeyController.text,
@@ -62,7 +62,7 @@ class _FrostWalletAddParticipantScreenState
       }
 
       // persist name
-      _frostGroup.participantNames[id.toString()] = _nameController.text;
+      _roastGroup.participantNames[id.toString()] = _nameController.text;
 
       Navigator.of(context).pop(true);
     }
@@ -75,7 +75,7 @@ class _FrostWalletAddParticipantScreenState
         centerTitle: true,
         title: Center(
           child: Text(
-            AppLocalizations.instance.translate('frost_setup_group_member_add'),
+            AppLocalizations.instance.translate('roast_setup_group_member_add'),
           ),
         ),
         actions: [
@@ -98,7 +98,7 @@ class _FrostWalletAddParticipantScreenState
                 children: [
                   Text(
                     AppLocalizations.instance
-                        .translate('frost_setup_group_member_add_description'),
+                        .translate('roast_setup_group_member_add_description'),
                   ),
                   const SizedBox(
                     height: 20,
@@ -111,7 +111,7 @@ class _FrostWalletAddParticipantScreenState
                     decoration: InputDecoration(
                       icon: const Icon(Icons.person),
                       labelText: AppLocalizations.instance
-                          .translate('frost_setup_group_member_name_input'),
+                          .translate('roast_setup_group_member_name_input'),
                     ),
                     maxLines: null,
                     onFieldSubmitted: (_) => _formKey.currentState!.validate(),
@@ -129,7 +129,7 @@ class _FrostWalletAddParticipantScreenState
                     decoration: InputDecoration(
                       icon: const Icon(Icons.key),
                       labelText: AppLocalizations.instance
-                          .translate('frost_setup_group_member_pub_key_input'),
+                          .translate('roast_setup_group_member_pub_key_input'),
                       suffixIcon: IconButton(
                         onPressed: () async {
                           var data = await Clipboard.getData('text/plain');
@@ -153,7 +153,7 @@ class _FrostWalletAddParticipantScreenState
                         );
                       } catch (e) {
                         return AppLocalizations.instance.translate(
-                          'frost_setup_group_member_input_error',
+                          'roast_setup_group_member_input_error',
                         );
                       }
                       return null;

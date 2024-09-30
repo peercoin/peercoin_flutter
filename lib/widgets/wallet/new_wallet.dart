@@ -25,7 +25,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   bool _watchOnly = false;
   late AppSettingsProvider _appSettings;
 
-  Future<void> addWallet({required isFROST}) async {
+  Future<void> addWallet({required isROAST}) async {
     try {
       var appSettings = context.read<AppSettingsProvider>();
       final navigator = Navigator.of(context);
@@ -34,15 +34,15 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       final nOfWalletOfLetterCode = walletProvider.availableWalletValues
           .where((element) => element.letterCode == letterCode)
           .length;
-      final nOfWalletOfLetterCodeFROST = walletProvider.availableWalletValues
+      final nOfWalletOfLetterCodeROAST = walletProvider.availableWalletValues
           .where(
-            (element) => element.letterCode == letterCode && element.isFROST,
+            (element) => element.letterCode == letterCode && element.isROAST,
           )
           .length;
 
       // generate identifier
-      final walletName = isFROST
-          ? '${_coin}_frost_group_$nOfWalletOfLetterCodeFROST'
+      final walletName = isROAST
+          ? '${_coin}_roast_group_$nOfWalletOfLetterCodeROAST'
           : '${_coin}_$nOfWalletOfLetterCode';
 
       // generate title
@@ -50,9 +50,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       if (nOfWalletOfLetterCode > 0) {
         title = '$title ${nOfWalletOfLetterCode + 1}';
       }
-      if (isFROST) {
+      if (isROAST) {
         title =
-            'FROST Group ${nOfWalletOfLetterCodeFROST == 0 ? "" : nOfWalletOfLetterCodeFROST + 1}';
+            'ROAST Group ${nOfWalletOfLetterCodeROAST == 0 ? "" : nOfWalletOfLetterCodeROAST + 1}';
       }
 
       final prefs = await SharedPreferences.getInstance();
@@ -63,7 +63,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         letterCode: letterCode,
         isImportedSeed: prefs.getBool('importedSeed') == true,
         watchOnly: _watchOnly,
-        isFROST: isFROST,
+        isROAST: isROAST,
       );
 
       //add to order list
@@ -129,7 +129,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           SimpleDialogOption(
             onPressed: () {
               _coin = wallet;
-              addWallet(isFROST: false);
+              addWallet(isROAST: false);
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -144,24 +144,24 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             ),
           ),
         );
-        // inject FROST
-        if (_appSettings.activatedExperimentalFeatures.contains('frost')) {
+        // inject ROAST
+        if (_appSettings.activatedExperimentalFeatures.contains('roast')) {
           list.add(
             SimpleDialogOption(
               onPressed: () {
                 _coin = wallet;
-                addWallet(isFROST: true);
+                addWallet(isROAST: true);
               },
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Image.asset(
-                    AvailableCoins.getFROSTIconPath(wallet),
+                    AvailableCoins.getROASTIconPath(wallet),
                     width: 16,
                   ),
                 ),
                 title: Text(
-                  '${isTestnet ? "Testnet " : ""}FROST Group',
+                  '${isTestnet ? "Testnet " : ""}ROAST Group',
                 ),
               ),
             ),

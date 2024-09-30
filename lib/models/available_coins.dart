@@ -64,14 +64,15 @@ class AvailableCoins {
     return _availableCoinList;
   }
 
-  static final Map<String, String> _frostIconPaths = {
-    'peercoin': 'assets/icon/frost-icon-64.png',
-    'peercoinTestnet': 'assets/icon/frost-icon-64-grey.png',
+  // ignore: non_constant_identifier_names
+  static final Map<String, String> _ROASTIconPaths = {
+    'peercoin': 'assets/icon/roast-icon-64.png',
+    'peercoinTestnet': 'assets/icon/roast-icon-64-grey.png',
   };
 
-  static String getFROSTIconPath(String identifier) {
+  static String getROASTIconPath(String identifier) {
     final coin = identifier.split('_').first;
-    return _frostIconPaths[coin]!;
+    return _ROASTIconPaths[coin]!;
   }
 
   static Coin getSpecificCoin(String identifier) {

@@ -66,7 +66,7 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       ..writeByte(12)
       ..write(obj._hidden)
       ..writeByte(13)
-      ..write(obj._isFROST);
+      ..write(obj._isROAST);
   }
 
   @override
