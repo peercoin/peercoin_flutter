@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:peercoin/screens/wallet/frost/frost_wallet_add_participant.dart';
-import 'package:peercoin/screens/wallet/frost/frost_wallet_home.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
@@ -61,9 +61,9 @@ class Routes {
   static const String setupLegal = '/setup-legal';
   static const String transaction = '/tx-detail';
   static const String standardAndWatchOnlyWalletHome = '/standard-wallet-home';
-  static const String frostWalletHome = '/frost-wallet-home';
-  static const String frostWalletAddParticipant =
-      '/frost-wallet-add-participant';
+  static const String roastWalletHome = '/roast-wallet-home';
+  static const String roastWalletAddParticipant =
+      '/roast-wallet-add-participant';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -215,12 +215,12 @@ class Routes {
             widget: WalletSignTransactionConfirmationScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.frostWalletHome: (context) => const RouterMaster(
-            widget: FrostWalletHomeScreen(),
+      Routes.roastWalletHome: (context) => const RouterMaster(
+            widget: ROASTWalletHomeScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
-      Routes.frostWalletAddParticipant: (context) => const RouterMaster(
-            widget: FrostWalletAddParticipantScreen(),
+      Routes.roastWalletAddParticipant: (context) => const RouterMaster(
+            widget: ROASTWalletAddParticipantScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
     };

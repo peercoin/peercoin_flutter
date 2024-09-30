@@ -230,8 +230,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         onTap: () async {
                                           context.loaderOverlay.show();
                                           await Navigator.of(context).pushNamed(
-                                            wallet.isFROST
-                                                ? Routes.frostWalletHome
+                                            wallet.isROAST
+                                                ? Routes.roastWalletHome
                                                 : Routes
                                                     .standardAndWatchOnlyWalletHome,
                                             arguments: {
@@ -245,9 +245,9 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               CircleAvatar(
                                                 backgroundColor: Colors.white,
                                                 child: Image.asset(
-                                                  wallet.isFROST
+                                                  wallet.isROAST
                                                       ? AvailableCoins
-                                                          .getFROSTIconPath(
+                                                          .getROASTIconPath(
                                                           wallet.name,
                                                         )
                                                       : AvailableCoins
@@ -465,9 +465,9 @@ class _WalletListScreenState extends State<WalletListScreen>
             if (mounted) {
               context.loaderOverlay.show();
             }
-            _activeWalletsOrdered.first.isFROST
+            _activeWalletsOrdered.first.isROAST
                 ? await navigator.pushNamed(
-                    Routes.frostWalletHome,
+                    Routes.roastWalletHome,
                     arguments: {
                       'wallet': _activeWalletsOrdered.first,
                     },
@@ -486,9 +486,9 @@ class _WalletListScreenState extends State<WalletListScreen>
               context.loaderOverlay.show();
             }
             if (!kIsWeb) {
-              defaultWallet.isFROST
+              defaultWallet.isROAST
                   ? await navigator.pushNamed(
-                      Routes.frostWalletHome,
+                      Routes.roastWalletHome,
                       arguments: {'wallet': defaultWallet},
                     )
                   : await navigator.pushNamed(

@@ -1,9 +1,9 @@
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive/hive.dart';
-part 'frost_group.g.dart';
+part 'roast_group.g.dart';
 
 @HiveType(typeId: 8)
-class FrostGroup extends HiveObject {
+class ROASTGroup extends HiveObject {
   @HiveField(0)
   final String _name;
 
@@ -22,7 +22,7 @@ class FrostGroup extends HiveObject {
   @HiveField(5, defaultValue: {})
   Map<String, String> _participantNames = {};
 
-  FrostGroup(
+  ROASTGroup(
     this._name,
     this._isCompleted,
   );

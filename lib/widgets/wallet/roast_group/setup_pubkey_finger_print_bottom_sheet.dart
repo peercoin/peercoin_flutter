@@ -24,7 +24,7 @@ class SetupPubkeyFingerPrintBottomSheet extends StatelessWidget {
           children: <Widget>[
             Text(
               AppLocalizations.instance.translate(
-                'frost_setup_group_fingerprint_title',
+                'roast_setup_group_fingerprint_title',
               ),
               style: TextStyle(
                 letterSpacing: 1.4,
@@ -50,7 +50,7 @@ class SetupPubkeyFingerPrintBottomSheet extends StatelessWidget {
             ),
             Text(
               AppLocalizations.instance.translate(
-                'frost_setup_group_fingerprint_description',
+                'roast_setup_group_fingerprint_description',
               ),
               textAlign: TextAlign.center,
             ),
@@ -59,12 +59,12 @@ class SetupPubkeyFingerPrintBottomSheet extends StatelessWidget {
             ),
             PeerButtonBorder(
               text: AppLocalizations.instance
-                  .translate('frost_setup_group_fingerprint_cta'),
+                  .translate('roast_setup_group_fingerprint_cta'),
               action: () => action(),
             ),
             Text(
               AppLocalizations.instance
-                  .translate('frost_setup_group_fingerprint_cta_hint'),
+                  .translate('roast_setup_group_fingerprint_cta_hint'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,

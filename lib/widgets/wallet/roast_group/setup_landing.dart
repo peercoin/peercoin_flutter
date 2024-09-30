@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet/frost_group/setup_pubkey.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey.dart';
 
-class FrostGroupSetupLanding extends StatefulWidget {
-  final FrostGroup frostGroup;
-  const FrostGroupSetupLanding({required this.frostGroup, super.key});
+class ROASTGroupSetupLanding extends StatefulWidget {
+  final ROASTGroup roastGroup;
+  const ROASTGroupSetupLanding({required this.roastGroup, super.key});
 
   @override
-  State<FrostGroupSetupLanding> createState() => _FrostGroupSetupLandingState();
+  State<ROASTGroupSetupLanding> createState() => _ROASTGroupSetupLandingState();
 }
 
 enum FrostSetupStep { group, pubkey }
 
-class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
+class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   bool _initial = false;
   FrostSetupStep _step = FrostSetupStep.group;
   final _groupIdKey = GlobalKey<FormFieldState>();
@@ -27,8 +27,8 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
   @override
   void didChangeDependencies() {
     if (!_initial) {
-      _groupIdController.text = widget.frostGroup.groupId;
-      _serverController.text = widget.frostGroup.serverUrl;
+      _groupIdController.text = widget.roastGroup.groupId;
+      _serverController.text = widget.roastGroup.serverUrl;
       setState(() {
         _initial = true;
       });
@@ -47,13 +47,13 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
 
     if (_formKey.currentState!.validate()) {
       // see if ClientConfig is already set
-      if (widget.frostGroup.clientConfig != null) {
+      if (widget.roastGroup.clientConfig != null) {
         // if yes, update the server url (id is readOnly at this point)
-        widget.frostGroup.serverUrl = _serverController.text;
+        widget.roastGroup.serverUrl = _serverController.text;
       } else {
         // if no, set the server url and create a new ClientConfig
-        widget.frostGroup.groupId = _groupIdController.text;
-        widget.frostGroup.serverUrl = _serverController.text;
+        widget.roastGroup.groupId = _groupIdController.text;
+        widget.roastGroup.serverUrl = _serverController.text;
       }
       _changeStep(FrostSetupStep.pubkey);
     }
@@ -62,8 +62,8 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
   @override
   Widget build(BuildContext context) {
     if (_step == FrostSetupStep.pubkey) {
-      return FrostGroupSetupPubkey(
-        frostGroup: widget.frostGroup,
+      return ROASTGroupSetupPubkey(
+        roastGroup: widget.roastGroup,
         changeStep: _changeStep,
       );
     }
@@ -79,7 +79,7 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                   children: [
                     Text(
                       AppLocalizations.instance
-                          .translate('frost_setup_landing_title'),
+                          .translate('roast_setup_landing_title'),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
@@ -90,7 +90,7 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                     ),
                     Text(
                       AppLocalizations.instance
-                          .translate('frost_setup_landing_description'),
+                          .translate('roast_setup_landing_description'),
                     ),
                     const SizedBox(
                       height: 20,
@@ -102,25 +102,25 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                         children: [
                           TextFormField(
                             textInputAction: TextInputAction.done,
-                            enabled: widget.frostGroup.clientConfig == null,
+                            enabled: widget.roastGroup.clientConfig == null,
                             key: _groupIdKey,
                             autocorrect: false,
                             validator: (value) => value!.isEmpty
                                 ? AppLocalizations.instance.translate(
-                                    'frost_setup_landing_group_id_input_error',
+                                    'roast_setup_landing_group_id_input_error',
                                   )
                                 : null,
                             controller: _groupIdController,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.group),
                               labelText: AppLocalizations.instance.translate(
-                                'frost_setup_landing_group_id_input',
+                                'roast_setup_landing_group_id_input',
                               ),
                             ),
                           ),
                           Text(
                             AppLocalizations.instance.translate(
-                              'frost_setup_landing_group_id_input_hint',
+                              'roast_setup_landing_group_id_input_hint',
                             ),
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -137,12 +137,12 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return AppLocalizations.instance.translate(
-                                  'frost_setup_landing_server_url_input_empty',
+                                  'roast_setup_landing_server_url_input_empty',
                                 );
                               }
                               if (Uri.tryParse(value) == null) {
                                 return AppLocalizations.instance.translate(
-                                  'frost_setup_landing_server_url_input_error',
+                                  'roast_setup_landing_server_url_input_error',
                                 );
                               }
                               return null;
@@ -151,13 +151,13 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                             decoration: InputDecoration(
                               icon: const Icon(Icons.outbond),
                               labelText: AppLocalizations.instance.translate(
-                                'frost_setup_landing_server_url_input',
+                                'roast_setup_landing_server_url_input',
                               ),
                             ),
                           ),
                           Text(
                             AppLocalizations.instance.translate(
-                              'frost_setup_landing_server_url_input_hint',
+                              'roast_setup_landing_server_url_input_hint',
                             ),
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -170,7 +170,7 @@ class _FrostGroupSetupLandingState extends State<FrostGroupSetupLanding> {
                           ),
                           PeerButton(
                             text: AppLocalizations.instance
-                                .translate('frost_setup_landing_cta'),
+                                .translate('roast_setup_landing_cta'),
                             action: () => _save(),
                           ),
                         ],

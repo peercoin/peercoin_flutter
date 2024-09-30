@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/hive/frost_group.dart';
+import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:share_plus/share_plus.dart';
 
-class FrostGroupLandingConfigured extends StatefulWidget {
-  final FrostGroup frostGroup;
-  const FrostGroupLandingConfigured({required this.frostGroup, super.key});
+class ROASTGroupLandingConfigured extends StatefulWidget {
+  final ROASTGroup roastGroup;
+  const ROASTGroupLandingConfigured({required this.roastGroup, super.key});
 
   @override
-  State<FrostGroupLandingConfigured> createState() =>
-      _FrostGroupLandingConfiguredState();
+  State<ROASTGroupLandingConfigured> createState() =>
+      _ROASTGroupLandingConfiguredState();
 }
 
-class _FrostGroupLandingConfiguredState
-    extends State<FrostGroupLandingConfigured> {
+class _ROASTGroupLandingConfiguredState
+    extends State<ROASTGroupLandingConfigured> {
   void _tryConnectToServer() {
     print('Try connect to server');
   }
@@ -26,10 +26,11 @@ class _FrostGroupLandingConfiguredState
   void _exportConfiguration() {
     print('Export configuration');
     // final file = File
-    // TODO write something like file.json  from widget.frostGroup.clientConfig!.group.toBytes()
+    // TODO write something like file.json  from widget.roastGroup.clientConfig!.group.toBytes()
     // right now only server-side implement for binary format
     Share.share(
-        "file"); //TODO check if this makes sense or we need to export to some binary format? yaml?
+      'file',
+    ); //TODO check if this makes sense or we need to export to some binary format? yaml?
   }
 
   @override
@@ -50,7 +51,7 @@ class _FrostGroupLandingConfiguredState
                     const SizedBox(height: 20),
                     // TODO login to server
                     // TODO present DKG with details and stage (round1, round2)
-                    // TODO frost key with details has to be stored (ClientStorageInterface and its methods has to be implemented)
+                    // TODO roast key with details has to be stored (ClientStorageInterface and its methods has to be implemented)
                     PeerButton(
                       text: 'Download configuration',
                       action: () => _exportConfiguration(),
@@ -65,7 +66,7 @@ class _FrostGroupLandingConfiguredState
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
