@@ -51,11 +51,25 @@ class _WalletSignTransactionScreenState
       _walletName = args.walletName;
       _coinLetterCode = args.coinLetterCode;
 
+      // Check the addresses list
+      _initializeSigningAddress();
+
       setState(() {
         _initial = false;
       });
     }
     super.didChangeDependencies();
+  }
+
+  Future<void> _initializeSigningAddress() async {
+    final addresses = await _walletProvider.getWalletAddresses(_walletName);
+
+    if (addresses.length == 1) {
+      // Automatically set the signing address if only one address exists
+      setState(() {
+        _signingAddress = addresses.first.address;
+      });
+    }
   }
 
   void _saveSnack() {
@@ -303,15 +317,18 @@ class _WalletSignTransactionScreenState
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                AppLocalizations.instance
-                                    .translate('sign_step_1'),
+                                _signingAddress.isEmpty
+                                    ? AppLocalizations.instance
+                                        .translate('sign_step_1')
+                                    : AppLocalizations.instance
+                                        .translate('send_address'),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: _signingAddress == ''
+                            child: _signingAddress.isEmpty
                                 ? Text(
                                     AppLocalizations.instance.translate(
                                       'sign_transaction_step_1_description',
@@ -323,15 +340,17 @@ class _WalletSignTransactionScreenState
                                     child: SelectableText(_signingAddress),
                                   ),
                           ),
-                          PeerButton(
-                            action: () => _showAddressSelector(),
-                            text: AppLocalizations.instance.translate(
-                              _signingAddress == ''
-                                  ? 'sign_step_1_button'
-                                  : 'sign_step_1_button_alt',
+                          if (_signingAddress.isEmpty)
+                            PeerButton(
+                              action: () => _showAddressSelector(),
+                              text: AppLocalizations.instance.translate(
+                                _signingAddress.isEmpty
+                                    ? 'sign_step_1_button'
+                                    : 'sign_step_1_button_alt',
+                              ),
+                              small: true,
                             ),
-                            small: true,
-                          ),
+                          // else just show address label
                           if (_signingAddress.isNotEmpty && kIsWeb)
                             const SizedBox(
                               height: 20,
