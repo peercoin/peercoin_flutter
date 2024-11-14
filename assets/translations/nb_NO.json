@@ -520,5 +520,15 @@
     "sign_transaction_confirmation_broadcast": "Kringkast",
     "sign_transaction_confirmation_dialog_content": "Vennligst bekreft at du ønsker å kringkaste denne transaksjonen.",
     "double_tap_to_copy": "Du kan dobbelttrykke for å kopiere teksten.",
-    "sign_transaction_confirmation_transaction_id": "Transaksjons-ID"
+    "sign_transaction_confirmation_transaction_id": "Transaksjons-ID",
+    "hide_wallet": "Skjul Lommebok",
+    "hide_wallet_action": "Skjul",
+    "unhide_wallet": "Vis Lommebok",
+    "unhide_wallet_action": "Vis",
+    "unhide_wallet_description": "Dette vil vise lommeboken og du vil se den i lommeboklisten igjen.",
+    "hide_hidden_wallets_list": "Skjul $nOfHiddenWallets Skjulte Lommebøker",
+    "show_hidden_wallets_list": "Vis $nOfHiddenWallets Skjulte Lommebøker",
+    "delete_wallet": "Slett Lommebok",
+    "delte_wallet_description": "Dette vil slette lommeboken og alle dens data. Du kan ikke angre denne handlingen.",
+    "hide_wallet_description": "Dette vil skjule lommeboken fra lommeboklisten. Skjulte lommebøker tilgjengelig nederst på listen. Du kan vise den når som helst."
 }
