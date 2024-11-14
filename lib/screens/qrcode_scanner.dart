@@ -91,6 +91,7 @@ class _QRScannerState extends State<QRScanner> {
     controller.scannedDataStream.listen(
       (scanData) async {
         controller.dispose();
+        if (!mounted) return;
         await Navigator.maybeOf(context)!.maybePop(scanData.code);
       },
     );

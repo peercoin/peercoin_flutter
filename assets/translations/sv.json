@@ -520,5 +520,15 @@
     "sign_transaction_confirmation_broadcast_snack": "Utsändning av transaktion försöktes",
     "sign_transaction_confirmation_dialog_content": "Vänligen bekräfta att du vill utsända denna transaktion.",
     "sign_transaction_confirmation_transaction_id": "Transaktions ID",
-    "double_tap_to_copy": "Du kan dubbelklicka för att kopiera texten."
+    "double_tap_to_copy": "Du kan dubbelklicka för att kopiera texten.",
+    "hide_wallet": "Dölj Plånbok",
+    "hide_wallet_action": "Dölj",
+    "unhide_wallet": "Visa Plånbok",
+    "unhide_wallet_action": "Visa",
+    "unhide_wallet_description": "Detta kommer att visa plånboken och du kommer att se den i plånbokslistan igen.",
+    "hide_hidden_wallets_list": "Dölj $nOfHiddenWallets Dolda Plånböcker",
+    "show_hidden_wallets_list": "Visa $nOfHiddenWallets Dolda Plånböcker",
+    "delete_wallet": "Radera Plånbok",
+    "hide_wallet_description": "Detta kommer att dölja plånboken från plånbokslistan. Dolda plånböcker finns längst ner på listan. Du kan se den när som helst.",
+    "delte_wallet_description": "Detta kommer att radera plånboken och all dess data. Du kan inte ångra den här åtgärden."
 }
