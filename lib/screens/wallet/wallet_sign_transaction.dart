@@ -69,7 +69,6 @@ class _WalletSignTransactionScreenState
       setState(() {
         _signingAddress = addresses.first.address;
       });
-      _saveSnack(); // Optionally show a snackbar
     }
   }
 
@@ -318,17 +317,18 @@ class _WalletSignTransactionScreenState
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                _signingAddress == ''
+                                _signingAddress.isEmpty
                                     ? AppLocalizations.instance
                                         .translate('sign_step_1')
-                                    : 'Address', // TODO: Add translation?
+                                    : AppLocalizations.instance
+                                        .translate('send_address'),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: _signingAddress == ''
+                            child: _signingAddress.isEmpty
                                 ? Text(
                                     AppLocalizations.instance.translate(
                                       'sign_transaction_step_1_description',
@@ -340,11 +340,11 @@ class _WalletSignTransactionScreenState
                                     child: SelectableText(_signingAddress),
                                   ),
                           ),
-                          if (_signingAddress == '')
+                          if (_signingAddress.isEmpty)
                             PeerButton(
                               action: () => _showAddressSelector(),
                               text: AppLocalizations.instance.translate(
-                                _signingAddress == ''
+                                _signingAddress.isEmpty
                                     ? 'sign_step_1_button'
                                     : 'sign_step_1_button_alt',
                               ),
