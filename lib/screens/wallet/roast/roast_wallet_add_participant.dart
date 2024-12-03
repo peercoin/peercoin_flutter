@@ -47,7 +47,7 @@ class _ROASTWalletAddParticipantScreenState
           group: GroupConfig(
             id: _roastGroup.groupId,
             participants: {
-              id: ECPublicKey.fromHex(
+              id: ECCompressedPublicKey.fromHex(
                 _ecPubKeyController.text,
               ),
             },
@@ -56,7 +56,7 @@ class _ROASTWalletAddParticipantScreenState
       } else {
         _roastGroup.clientConfig!.group
                 .participants[Identifier.fromString(_nameController.text)] =
-            ECPublicKey.fromHex(
+            ECCompressedPublicKey.fromHex(
           _ecPubKeyController.text,
         );
       }
