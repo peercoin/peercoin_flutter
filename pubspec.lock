@@ -42,10 +42,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
+      sha256: bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   async:
     dependency: transitive
     description:
@@ -74,10 +74,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_fetch
-      sha256: b5c298c911bc2ce41152668bc72eb0488f0665d75bc6d1e69e7d8367763eddcd
+      sha256: e9f26ae54d88310b7ac2a68f2f9fcee0081a4d5f11100f233a70702021e7ac4f
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.5"
+    version: "1.3.7"
   bip39:
     dependency: "direct main"
     description:
@@ -250,10 +250,10 @@ packages:
     dependency: transitive
     description:
       name: coinlib
-      sha256: "7de0ddee701ebc97d68e6e0d177beb9bc8afd4c8f857f5b24fd771bb39047f6c"
+      sha256: cd0b36d2230d602e00ba24cfe06b70ef67deac9e03a4044fb4ddfbcaa4d992e3
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   coinlib_flutter:
     dependency: "direct main"
     description:
@@ -546,10 +546,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_rust_bridge
-      sha256: fac14d2dd67eeba29a20e5d99fac0d4d9fcd552cdf6bf4f8945f7679c6b07b1d
+      sha256: fb9d3c9395eae3c71d4fe3ec343b9f30636c9988150c8bb33b60047549b34e3d
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.6.0"
   flutter_screen_lock:
     dependency: "direct main"
     description:
@@ -695,10 +695,10 @@ packages:
     dependency: "direct main"
     description:
       name: grpc
-      sha256: "7b2bee509ea2750028fe15f5a530bdc8664e7e62e97abf0bb7b0fc65b6d7d2b3"
+      sha256: "5b99b7a420937d4361ece68b798c9af8e04b5bc128a7859f2a4be87427694813"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   hex:
     dependency: transitive
     description:
@@ -1132,10 +1132,10 @@ packages:
     dependency: "direct main"
     description:
       name: protobuf
-      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
+      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "3.1.0"
   provider:
     dependency: "direct main"
     description:
@@ -1645,6 +1645,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  yaml_edit:
+    dependency: transitive
+    description:
+      name: yaml_edit
+      sha256: e9c1a3543d2da0db3e90270dbb1e4eebc985ee5e3ffe468d83224472b2194a5f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
 sdks:
   dart: ">=3.5.0 <4.0.0"
   flutter: ">=3.22.0"
