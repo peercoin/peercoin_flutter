@@ -520,5 +520,15 @@
     "sign_transaction_confirmation_broadcast": "Útsending",
     "sign_transaction_confirmation_broadcast_snack": "Reynt var að senda útsendingu",
     "sign_transaction_confirmation_transaction_id": "Auðkenni viðskipta",
-    "double_tap_to_copy": "Þú getur tvípikkað til að afrita textann."
+    "double_tap_to_copy": "Þú getur tvípikkað til að afrita textann.",
+    "hide_wallet_action": "Fela",
+    "unhide_wallet": "Sýna Veski",
+    "unhide_wallet_action": "Sýna",
+    "unhide_wallet_description": "Þetta mun sýna veskið og þú munt sjá það aftur á veskislistanum.",
+    "delete_wallet": "Eyða Veski",
+    "delte_wallet_description": "Þetta mun eyða veskinu og öllum gögnum þess. Þú getur ekki afturkallað þessa aðgerð.",
+    "hide_wallet": "Fela Veski",
+    "hide_wallet_description": "Þetta mun fela veskið frá veskislistanum. Falin veski í boði neðst á listanum. Þú getur skoðað það hvenær sem er.",
+    "hide_hidden_wallets_list": "Fela $nOfHiddenWallets Falin Veski",
+    "show_hidden_wallets_list": "Sýna $nOfHiddenWallets Falin Veski"
 }
