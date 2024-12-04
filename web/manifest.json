@@ -32,9 +32,7 @@
                 "*.js",
                 "*.png",
                 "*.svg",
-                "*.wasm",
-                "https://www.gstatic.com/flutter-canvaskit/*",
-                "https://fonts.gstatic.com/*"
+                "*.wasm"
             ],
             "matches": [
                 "<all_urls>"
