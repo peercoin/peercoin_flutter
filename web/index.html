@@ -1,40 +1,27 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+<html style="height: 600px; width: 450px">
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+<head>
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description" content="A Peercoin Web Wallet Browser Extension" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Peercoin Wallet" />
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-    <base href="$FLUTTER_BASE_HREF" />
+  <title>Peercoin Wallet</title>
 
-    <meta charset="UTF-8" />
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-    <meta name="description" content="A new Peercoin Web Wallet." />
+  <link rel="manifest" href="manifest.json" />
 
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="peercoin_flutter" />
-    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+  <script src="splash/splash.js"></script>
+  <link rel="stylesheet" type="text/css" href="splash/style.css" />
+</head>
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="favicon.ico" />
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
 
-    <title>Peercoin Wallet</title>
-    <link rel="manifest" href="manifest.json" />
-    <script src="splash/splash.js"></script>
-    <link rel="stylesheet" type="text/css" href="splash/style.css" />
-  </head>
-  <body>
-    <script src="flutter_bootstrap.js" async></script>
-  </body>
 </html>
