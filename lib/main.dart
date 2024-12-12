@@ -34,6 +34,7 @@ import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
 import 'tools/session_checker.dart';
+import 'tools/browser_extension_detector.dart';
 import 'widgets/spinning_peercoin_icon.dart';
 
 late bool setupFinished;
@@ -176,6 +177,10 @@ void main() async {
       'initLogs',
       'Version ${packageInfo.version} Build ${packageInfo.buildNumber}',
     );
+  }
+
+  if (kIsWeb && getChromeRuntimeId() != null) {
+    // TODO: do something with this revelation
   }
 
   //run
