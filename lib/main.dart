@@ -11,6 +11,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
+import 'package:chrome_extension/runtime.dart';
+import 'dart:js_interop';
 
 import 'models/hive/app_options.dart';
 import 'models/hive/pending_notifications.dart';
@@ -34,6 +36,7 @@ import 'tools/app_localizations.dart';
 import 'tools/app_routes.dart';
 import 'tools/app_themes.dart';
 import 'tools/session_checker.dart';
+import 'tools/browser_extension_detector.dart';
 import 'widgets/spinning_peercoin_icon.dart';
 
 late bool setupFinished;
@@ -176,6 +179,14 @@ void main() async {
       'initLogs',
       'Version ${packageInfo.version} Build ${packageInfo.buildNumber}',
     );
+  }
+
+  if (kIsWeb && getChromeRuntimeId() != null) {
+    // Test:
+    print(getChromeRuntimeId());
+    chrome.runtime.onMessage.listen((e) {
+      e.sendResponse.callAsFunction(null, {'the_response': 1}.jsify());
+    });
   }
 
   //run

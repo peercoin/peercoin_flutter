@@ -19,13 +19,21 @@
         }
     },
     "permissions": [
-        "storage",
-        "activeTab"
+        "activeTab",
+        "scripting"
     ],
     "host_permissions": [
         "*://*.peercoin.net/*"
     ],
     "web_accessible_resources": [
+        {
+            "resources": [
+                "page_script.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        },
         {
             "resources": [
                 "*.html",
@@ -42,5 +50,19 @@
     "optional_permissions": [
         "clipboardWrite",
         "clipboardRead"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content_script.js"
+            ],
+            "run_at": "document_start"
+        }
     ]
 }
