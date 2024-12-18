@@ -57,8 +57,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
   Color calculateTileColor(int index, bool connectable) {
     final colorScheme = Theme.of(context).colorScheme;
-    final oddItemColor = colorScheme.primary.withOpacity(0.10);
-    final evenItemColor = colorScheme.primary.withOpacity(0.3);
+    final oddItemColor = colorScheme.primary.withValues(alpha: 0.10);
+    final evenItemColor = colorScheme.primary.withValues(alpha: 0.3);
 
     if (!connectable) {
       return Theme.of(context).colorScheme.secondary;
