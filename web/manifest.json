@@ -19,8 +19,8 @@
         }
     },
     "permissions": [
-        "storage",
-        "activeTab"
+        "activeTab",
+        "scripting"
     ],
     "host_permissions": [
         "*://*.peercoin.net/*"

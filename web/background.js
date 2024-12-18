@@ -1,27 +1,27 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // Ensure we're handling Peercoin-specific messages
-    if (message.type === '$PEERCOIN_BROWSER_EXTENSION') {
-        console.log('Background script received Peercoin extesion message:', message);
+if (!chrome.runtime.onMessage.hasListener) {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        console.log('Background script received event:', message);
 
-        try {
-            // Example message processing logic
-            // You would replace this with your actual extension-specific logic
-            sendResponse({
-                success: true,
-                message: 'Message received and processed',
-                receivedPayload: message.payload
+        if (message.type === '$PEERCOIN_BROWSER_EXTENSION') {
+            console.log('Forwarding $PEERCOIN_BROWSER_EXTENSION to extension page:', message.detail);
+
+            chrome.runtime.sendMessage(message, (response) => {
+                if (chrome.runtime.lastError) {
+                    if (chrome.runtime.lastError.message === 'Could not establish connection. Receiving end does not exist.') {
+                        console.log('No active listener. Retrying or handling appropriately.');
+                    } else {
+                        console.error('Error forwarding message:', chrome.runtime.lastError.message);
+                    }
+                } else {
+                    console.log('Response from extension page:', response);
+                }
             });
-        } catch (error) {
-            console.error('Error in background script:', error);
-            sendResponse({
-                success: false,
-                error: error.message
-            });
+
+            sendResponse({ success: true, detail: 'Message forwarded to extension page' });
+            return true;
         }
 
-        // Critical: return true to enable asynchronous sendResponse
-        return true;
-    }
-});
-
-console.log('Extension background script initialized');
+        sendResponse({ success: true });
+    });
+    chrome.runtime.onMessage.hasListener = true;
+}

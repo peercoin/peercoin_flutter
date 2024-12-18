@@ -11,3 +11,8 @@ String? getChromeRuntimeId() {
     return null;
   }
 }
+
+bool isBrowserExtension() {
+  // Wrapper around both Chrome and Firefox detection (TODO)
+  return getChromeRuntimeId() != null;
+}
