@@ -13,6 +13,7 @@ import 'package:peercoin/widgets/wallet/wallet_home/wallet_hide_bottom_sheet.dar
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_reset_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../tools/browser_extension_detector.dart';
 
 import '../../models/available_coins.dart';
 import '../../models/hive/coin_wallet.dart';
@@ -206,6 +207,11 @@ class _WalletHomeState extends State<WalletHomeScreen>
           _triggerHighValueAlert();
         }
       }
+    }
+
+    if (kIsWeb && isBrowserExtension()) {
+      // TODO move the listener here
+      print("Setting up Chrome message listener!");
     }
 
     checkPendingNotifications();
