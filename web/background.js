@@ -1,27 +1,20 @@
-if (!chrome.runtime.onMessage.hasListener) {
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        console.log('Background script received event:', message);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('Message from website:', message);
 
-        if (message.type === '$PEERCOIN_BROWSER_EXTENSION') {
-            console.log('Forwarding $PEERCOIN_BROWSER_EXTENSION to extension page:', message.detail);
+    // Check if the message type matches "PEERCOIN_BROWSER_EXTENSION"
+    if (message.type === "PEERCOIN_BROWSER_EXTENSION") {
+        // Forward the message to Flutter and handle the response
+        chrome.runtime.sendMessage(message, (response) => {
+            console.log('Response from Flutter:', response);
 
-            chrome.runtime.sendMessage(message, (response) => {
-                if (chrome.runtime.lastError) {
-                    if (chrome.runtime.lastError.message === 'Could not establish connection. Receiving end does not exist.') {
-                        console.log('No active listener. Retrying or handling appropriately.');
-                    } else {
-                        console.error('Error forwarding message:', chrome.runtime.lastError.message);
-                    }
-                } else {
-                    console.log('Response from extension page:', response);
-                }
-            });
+            // Send the response back to the website
+            sendResponse(response);
+        });
 
-            sendResponse({ success: true, detail: 'Message forwarded to extension page' });
-            return true;
-        }
+        // Indicate sendResponse will be handled asynchronously
+        return true;
+    }
 
-        sendResponse({ success: true });
-    });
-    chrome.runtime.onMessage.hasListener = true;
-}
+    // Ignore messages that do not match the type
+    return false;
+});
