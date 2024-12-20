@@ -14,7 +14,7 @@ injectPageScript();
 // Listener for messages from the web page
 window.addEventListener('message', (event) => {
     // Validate the event source and ensure it's a Peercoin-specific message
-    if (event.source !== window || !event.data || event.data.type !== '$PEERCOIN_BROWSER_EXTENSION') return;
+    if (event.source !== window || !event.data || event.data.type !== 'PEERCOIN_BROWSER_EXTENSION') return;
 
     console.log('Content script received Peercoin extension event:', event.data);
 
