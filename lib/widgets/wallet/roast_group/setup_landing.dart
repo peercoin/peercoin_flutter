@@ -13,11 +13,11 @@ class ROASTGroupSetupLanding extends StatefulWidget {
   State<ROASTGroupSetupLanding> createState() => _ROASTGroupSetupLandingState();
 }
 
-enum FrostSetupStep { group, pubkey }
+enum ROASTSetupStep { group, pubkey }
 
 class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   bool _initial = false;
-  FrostSetupStep _step = FrostSetupStep.group;
+  ROASTSetupStep _step = ROASTSetupStep.group;
   final _groupIdKey = GlobalKey<FormFieldState>();
   final _groupIdController = TextEditingController();
   final _serverKey = GlobalKey<FormFieldState>();
@@ -36,7 +36,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
     super.didChangeDependencies();
   }
 
-  void _changeStep(FrostSetupStep step) {
+  void _changeStep(ROASTSetupStep step) {
     setState(() {
       _step = step;
     });
@@ -55,13 +55,13 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
         widget.roastGroup.groupId = _groupIdController.text;
         widget.roastGroup.serverUrl = _serverController.text;
       }
-      _changeStep(FrostSetupStep.pubkey);
+      _changeStep(ROASTSetupStep.pubkey);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_step == FrostSetupStep.pubkey) {
+    if (_step == ROASTSetupStep.pubkey) {
       return ROASTGroupSetupPubkey(
         roastGroup: widget.roastGroup,
         changeStep: _changeStep,

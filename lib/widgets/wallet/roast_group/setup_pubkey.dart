@@ -160,7 +160,7 @@ class _ROASTGroupSetupPubkeyState extends State<ROASTGroupSetupPubkey> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            widget.changeStep(FrostSetupStep.group);
+                            widget.changeStep(ROASTSetupStep.group);
                           },
                           icon: const Icon(
                             Icons.arrow_back_ios,
