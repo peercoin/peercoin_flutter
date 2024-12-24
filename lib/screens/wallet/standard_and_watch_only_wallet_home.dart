@@ -787,9 +787,6 @@ class _WalletHomeState extends State<StandardAndWatchOnlyWalletHomeScreen>
           ),
         );
         break;
-      default:
-        body = const SizedBox();
-        break;
     }
     return body;
   }
