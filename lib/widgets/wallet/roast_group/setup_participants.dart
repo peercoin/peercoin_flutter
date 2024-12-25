@@ -8,23 +8,25 @@ import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
-import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_finger_print_bottom_sheet.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_participants_finger_print_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_participant_bottom_sheet.dart';
 
-class ROASTGroupSetupPubkey extends StatefulWidget {
+class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
   final ROASTGroup roastGroup;
-  const ROASTGroupSetupPubkey({
+  const ROASTGroupSetupParticipants({
     required this.changeStep,
     required this.roastGroup,
     super.key,
   });
 
   @override
-  State<ROASTGroupSetupPubkey> createState() => _ROASTGroupSetupPubkeyState();
+  State<ROASTGroupSetupParticipants> createState() =>
+      _ROASTGroupSetupParticipantsState();
 }
 
-class _ROASTGroupSetupPubkeyState extends State<ROASTGroupSetupPubkey> {
+class _ROASTGroupSetupParticipantsState
+    extends State<ROASTGroupSetupParticipants> {
   bool _initial = true;
   final Map<Identifier, ECPublicKey> _participants = {};
 
@@ -135,7 +137,7 @@ class _ROASTGroupSetupPubkeyState extends State<ROASTGroupSetupPubkey> {
       isDismissible: false,
       enableDrag: false,
       builder: (BuildContext context) {
-        return SetupPubkeyFingerPrintBottomSheet(
+        return SetupParticipantsFingerPrintBottomSheet(
           fingerPrint: fingerPrint,
           action: () => _completeROASTGroup(),
         );

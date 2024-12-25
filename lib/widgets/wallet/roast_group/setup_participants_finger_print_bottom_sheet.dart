@@ -4,11 +4,11 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
-class SetupPubkeyFingerPrintBottomSheet extends StatelessWidget {
+class SetupParticipantsFingerPrintBottomSheet extends StatelessWidget {
   final Function action;
   final String fingerPrint;
 
-  const SetupPubkeyFingerPrintBottomSheet({
+  const SetupParticipantsFingerPrintBottomSheet({
     super.key,
     required this.action,
     required this.fingerPrint,

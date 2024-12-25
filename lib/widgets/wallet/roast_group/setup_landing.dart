@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
-import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
   final ROASTGroup roastGroup;
@@ -43,7 +45,28 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   }
 
   Future<void> _save() async {
-    // TODO try calling server url to see if it is valid
+    final uri = Uri.parse(_serverController.text);
+
+    try {
+      final request = await HttpClient().getUrl(uri);
+      final response = await request.close();
+
+      if (response.statusCode != 200) {
+        throw Exception('Server not responding: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate(
+              'roast_setup_landing_server_url_input_connection_failed',
+            ),
+          ),
+        ),
+      );
+      return;
+    }
 
     if (_formKey.currentState!.validate()) {
       // see if ClientConfig is already set
@@ -62,7 +85,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   @override
   Widget build(BuildContext context) {
     if (_step == ROASTSetupStep.pubkey) {
-      return ROASTGroupSetupPubkey(
+      return ROASTGroupSetupParticipants(
         roastGroup: widget.roastGroup,
         changeStep: _changeStep,
       );

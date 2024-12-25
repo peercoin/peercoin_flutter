@@ -539,6 +539,7 @@
   "roast_setup_landing_server_url_input": "Server URL",
   "roast_setup_landing_server_url_input_hint": "Enter the URL of the ROAST coordinator server",
   "roast_setup_landing_server_url_input_error": "Please enter a valid URL",
+  "roast_setup_landing_server_url_input_connection_failed": "Connection to server failed",
   "roast_setup_landing_server_url_input_empty": "Please enter a server URL",
   "roast_setup_landing_cta": "Save & Try to Connect",
   "roast_setup_group_title": "ROAST Group Members",
