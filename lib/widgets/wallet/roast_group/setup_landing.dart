@@ -65,7 +65,6 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
           ),
         ),
       );
-      return;
     }
 
     if (_formKey.currentState!.validate()) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -28,14 +29,17 @@ class _ROASTGroupLandingConfiguredState
     LoggerWrapper.logInfo(
       'ROASTGroupLandingConfigured',
       '_exportConfiguration',
-      'Exporting configuration',
+      'Exporting server configuration',
     );
 
-    if (widget.roastGroup.clientConfig == null) {
+    if (widget.roastGroup.clientConfig == null ||
+        widget.roastGroup.clientConfig?.group == null) {
       return;
     }
 
-    Share.share(widget.roastGroup.clientConfig!.yaml);
+    Share.share(
+      ServerConfig(group: widget.roastGroup.clientConfig!.group).yaml,
+    );
   }
 
   @override
@@ -58,7 +62,7 @@ class _ROASTGroupLandingConfiguredState
                     // TODO present DKG with details and stage (round1, round2)
                     // TODO roast key with details has to be stored (ClientStorageInterface and its methods has to be implemented)
                     PeerButton(
-                      text: 'Export configuration',
+                      text: 'Export server configuration',
                       action: () => _exportConfiguration(),
                     ),
                     const SizedBox(height: 20),
@@ -76,6 +80,8 @@ class _ROASTGroupLandingConfiguredState
     );
   }
 }
+
+// TODO i18n
 // 1. Connect to server (which will present the full DKG and signing options later). mock for now.
 // 2. Download configuration (for use on a server).
 // 3. Modify configuration (if configuration is later changed, it goes back to the previous screen). Only allow server url + nick names for participants to be changed.
