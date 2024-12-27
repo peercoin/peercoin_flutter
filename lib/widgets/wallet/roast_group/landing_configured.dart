@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:share_plus/share_plus.dart';
@@ -24,13 +25,17 @@ class _ROASTGroupLandingConfiguredState
   }
 
   void _exportConfiguration() {
-    print('Export configuration');
-    // final file = File
-    // TODO write something like file.json  from widget.roastGroup.clientConfig!.group.toBytes()
-    // right now only server-side implement for binary format
-    Share.share(
-      'file',
-    ); //TODO check if this makes sense or we need to export to some binary format? yaml?
+    LoggerWrapper.logInfo(
+      'ROASTGroupLandingConfigured',
+      '_exportConfiguration',
+      'Exporting configuration',
+    );
+
+    if (widget.roastGroup.clientConfig == null) {
+      return;
+    }
+
+    Share.share(widget.roastGroup.clientConfig!.yaml);
   }
 
   @override
