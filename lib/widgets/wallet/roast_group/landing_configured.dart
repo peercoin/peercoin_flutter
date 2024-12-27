@@ -58,7 +58,7 @@ class _ROASTGroupLandingConfiguredState
                     // TODO present DKG with details and stage (round1, round2)
                     // TODO roast key with details has to be stored (ClientStorageInterface and its methods has to be implemented)
                     PeerButton(
-                      text: 'Download configuration',
+                      text: 'Export configuration',
                       action: () => _exportConfiguration(),
                     ),
                     const SizedBox(height: 20),
