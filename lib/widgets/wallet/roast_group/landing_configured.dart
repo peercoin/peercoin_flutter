@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -23,8 +24,53 @@ class _ROASTGroupLandingConfiguredState
   }
 
   void _modifyConfiguration() {
-    // TODO: implement modifyConfiguration
-    print('Modify configuration');
+    serverURLEditDialog();
+  }
+
+  Future<void> serverURLEditDialog() async {
+    var textFieldController = TextEditingController();
+    textFieldController.text = widget.roastGroup.serverUrl;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate(
+              'roast_landing_configured_edit_server_url_title',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: TextField(
+            controller: textFieldController,
+            decoration: InputDecoration(
+              hintText: AppLocalizations.instance.translate(
+                'roast_landing_configured_edit_server_url_placeholder',
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                widget.roastGroup.setServerUrl = textFieldController.text;
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _exportConfiguration() {

@@ -60,6 +60,11 @@ class ROASTGroup extends HiveObject {
     save();
   }
 
+  set setServerUrl(String value) {
+    _serverUrl = value;
+    save();
+  }
+
   Map<String, String> get participantNames => _participantNames;
 
   set participantNames(Map<String, String> value) {
