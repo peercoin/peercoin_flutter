@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -22,6 +23,7 @@ class _ROASTGroupLandingConfiguredState
   }
 
   void _modifyConfiguration() {
+    // TODO: implement modifyConfiguration
     print('Modify configuration');
   }
 
@@ -67,7 +69,7 @@ class _ROASTGroupLandingConfiguredState
                     ),
                     const SizedBox(height: 20),
                     PeerButton(
-                      text: 'Modify configuration',
+                      text: 'Modify server URL',
                       action: () => _modifyConfiguration(),
                     ),
                   ],
