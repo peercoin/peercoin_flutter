@@ -100,3 +100,5 @@ class ROASTGroup extends HiveObject {
     save();
   }
 }
+
+// TODO probably have to write adapters for the maps (keys, sigNonces, sigsRejected)
