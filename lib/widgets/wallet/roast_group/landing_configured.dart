@@ -1,7 +1,9 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart' as frost;
-// import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/models/roast_storage.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -20,14 +22,16 @@ class ROASTGroupLandingConfigured extends StatefulWidget {
 class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
   void _tryLogin() {
-    //   frost.Client.login(config: widget.roastGroup.clientConfig!, api: frost.GrpcClientApi(
-    //     ClientChannel(
-    //       widget.roastGroup.serverUrl,
-    //     ),
-    //   ) , store: frost.ClientStorageInterface()
-
-    //   , getPrivateKey: getPrivateKey)
-    // }
+    frost.Client.login(
+      config: widget.roastGroup.clientConfig!,
+      api: frost.GrpcClientApi(
+        ClientChannel(
+          widget.roastGroup.serverUrl,
+        ),
+      ),
+      store: ROASTStorage(widget.roastGroup),
+      getPrivateKey: (_) async => ECPrivateKey.generate(), // TODO
+    );
   }
 
   void _modifyConfiguration() {

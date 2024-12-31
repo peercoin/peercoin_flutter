@@ -1,3 +1,4 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive/hive.dart';
 part 'roast_group.g.dart';
@@ -21,6 +22,15 @@ class ROASTGroup extends HiveObject {
 
   @HiveField(5, defaultValue: {})
   Map<String, String> _participantNames = {};
+
+  @HiveField(6, defaultValue: {})
+  Map<ECPublicKey, FrostKeyWithDetails> _keys = {};
+
+  @HiveField(7, defaultValue: {})
+  Map<SignaturesRequestId, SignaturesNonces> _sigNonces = {};
+
+  @HiveField(8, defaultValue: {})
+  Map<SignaturesRequestId, FinalExpirable> _sigsRejected = {};
 
   ROASTGroup(
     this._name,
@@ -69,6 +79,24 @@ class ROASTGroup extends HiveObject {
 
   set participantNames(Map<String, String> value) {
     _participantNames = value;
+    save();
+  }
+
+  Map<ECPublicKey, FrostKeyWithDetails> get keys => _keys;
+  set keys(Map<ECPublicKey, FrostKeyWithDetails> value) {
+    _keys = value;
+    save();
+  }
+
+  Map<SignaturesRequestId, SignaturesNonces> get sigNonces => _sigNonces;
+  set sigNonces(Map<SignaturesRequestId, SignaturesNonces> value) {
+    _sigNonces = value;
+    save();
+  }
+
+  Map<SignaturesRequestId, FinalExpirable> get sigsRejected => _sigsRejected;
+  set sigsRejected(Map<SignaturesRequestId, FinalExpirable> value) {
+    _sigsRejected = value;
     save();
   }
 }

@@ -24,13 +24,22 @@ class ROASTGroupAdapter extends TypeAdapter<ROASTGroup> {
       .._serverUrl = fields[3] as String?
       .._groupId = fields[4] as String?
       .._participantNames =
-          fields[5] == null ? {} : (fields[5] as Map).cast<String, String>();
+          fields[5] == null ? {} : (fields[5] as Map).cast<String, String>()
+      .._keys = fields[6] == null
+          ? {}
+          : (fields[6] as Map).cast<ECPublicKey, FrostKeyWithDetails>()
+      .._sigNonces = fields[7] == null
+          ? {}
+          : (fields[7] as Map).cast<SignaturesRequestId, SignaturesNonces>()
+      .._sigsRejected = fields[8] == null
+          ? {}
+          : (fields[8] as Map).cast<SignaturesRequestId, FinalExpirable>();
   }
 
   @override
   void write(BinaryWriter writer, ROASTGroup obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj._name)
       ..writeByte(1)
@@ -42,7 +51,13 @@ class ROASTGroupAdapter extends TypeAdapter<ROASTGroup> {
       ..writeByte(4)
       ..write(obj._groupId)
       ..writeByte(5)
-      ..write(obj._participantNames);
+      ..write(obj._participantNames)
+      ..writeByte(6)
+      ..write(obj._keys)
+      ..writeByte(7)
+      ..write(obj._sigNonces)
+      ..writeByte(8)
+      ..write(obj._sigsRejected);
   }
 
   @override
