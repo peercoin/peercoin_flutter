@@ -26,7 +26,7 @@ class _ROASTGroupLandingConfiguredState
       config: widget.roastGroup.clientConfig!,
       api: frost.GrpcClientApi(
         ClientChannel(
-          widget.roastGroup.serverUrl,
+          Uri.parse(widget.roastGroup.serverUrl).host,
         ),
       ),
       store: ROASTStorage(widget.roastGroup),
