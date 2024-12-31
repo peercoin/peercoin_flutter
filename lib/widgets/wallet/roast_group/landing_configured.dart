@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frost_noosphere/frost_noosphere.dart';
+import 'package:frost_noosphere/frost_noosphere.dart' as frost;
+// import 'package:grpc/grpc.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -19,8 +19,15 @@ class ROASTGroupLandingConfigured extends StatefulWidget {
 
 class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
-  void _tryConnectToServer() {
-    print('Try connect to server');
+  void _tryLogin() {
+    //   frost.Client.login(config: widget.roastGroup.clientConfig!, api: frost.GrpcClientApi(
+    //     ClientChannel(
+    //       widget.roastGroup.serverUrl,
+    //     ),
+    //   ) , store: frost.ClientStorageInterface()
+
+    //   , getPrivateKey: getPrivateKey)
+    // }
   }
 
   void _modifyConfiguration() {
@@ -86,7 +93,7 @@ class _ROASTGroupLandingConfiguredState
     }
 
     Share.share(
-      ServerConfig(group: widget.roastGroup.clientConfig!.group).yaml,
+      frost.ServerConfig(group: widget.roastGroup.clientConfig!.group).yaml,
     );
   }
 
@@ -102,8 +109,8 @@ class _ROASTGroupLandingConfiguredState
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     PeerButton(
-                      text: 'Connect to server',
-                      action: () => _tryConnectToServer(),
+                      text: 'Login to server',
+                      action: () => _tryLogin(),
                     ),
                     const SizedBox(height: 20),
                     // TODO login to server
