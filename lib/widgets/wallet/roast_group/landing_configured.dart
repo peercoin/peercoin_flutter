@@ -34,11 +34,7 @@ class _ROASTGroupLandingConfiguredState
     );
   }
 
-  void _modifyConfiguration() {
-    serverURLEditDialog();
-  }
-
-  Future<void> serverURLEditDialog() async {
+  Future<void> _serverURLEditDialog() async {
     var textFieldController = TextEditingController();
     textFieldController.text = widget.roastGroup.serverUrl;
     return showDialog(
@@ -127,7 +123,7 @@ class _ROASTGroupLandingConfiguredState
                     const SizedBox(height: 20),
                     PeerButton(
                       text: 'Modify server URL',
-                      action: () => _modifyConfiguration(),
+                      action: () => _serverURLEditDialog(),
                     ),
                   ],
                 ),
