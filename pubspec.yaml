@@ -50,7 +50,7 @@ dependencies:
   auto_size_text: ^3.0.0
   camera: ^0.10.0+4
   path_provider: ^2.0.11
-  file_picker: ^5.2.2
+  file_picker: ^5.2.2 # upgrading to fix warnings depends on web 1.0.0, see below
   fast_csv: ^0.1.44
   protobuf: ^3.1.0
   grpc: ^4.0.0
