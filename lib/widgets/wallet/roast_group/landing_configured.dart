@@ -22,11 +22,14 @@ class ROASTGroupLandingConfigured extends StatefulWidget {
 class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
   void _tryLogin() {
+    final uri = Uri.parse(widget.roastGroup.serverUrl);
+
     frost.Client.login(
       config: widget.roastGroup.clientConfig!,
       api: frost.GrpcClientApi(
         ClientChannel(
-          Uri.parse(widget.roastGroup.serverUrl).host,
+          uri.host,
+          port: uri.port,
         ),
       ),
       store: ROASTStorage(widget.roastGroup),
