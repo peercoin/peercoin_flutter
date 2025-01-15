@@ -23,6 +23,8 @@ class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
   void _tryLogin() {
     final uri = Uri.parse(widget.roastGroup.serverUrl);
+    print(bytesToHex(widget.roastGroup.clientConfig!.group.fingerprint));
+    print(widget.roastGroup.clientConfig!.group.yaml);
 
     frost.Client.login(
       config: widget.roastGroup.clientConfig!,
@@ -30,6 +32,9 @@ class _ROASTGroupLandingConfiguredState
         ClientChannel(
           uri.host,
           port: uri.port,
+          options: ChannelOptions(
+            credentials: ChannelCredentials.insecure(),
+          ),
         ),
       ),
       store: ROASTStorage(widget.roastGroup),

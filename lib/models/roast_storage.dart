@@ -35,7 +35,9 @@ class ROASTStorage implements ClientStorageInterface {
   Future<void> addSignaturesNonces(
     SignaturesRequestId id,
     SignaturesNonces nonces,
+    int capacity,
   ) async {
+    // TODO capacity?
     final sigNonces = roastGroup.sigNonces;
 
     if (sigNonces.containsKey(id)) {
@@ -56,4 +58,15 @@ class ROASTStorage implements ClientStorageInterface {
   @override
   Future<Map<SignaturesRequestId, SignaturesNonces>> loadSigNonces() async =>
       roastGroup.sigNonces;
+
+  @override
+  Future<void> removeRejectionOfSigsRequest(SignaturesRequestId id) async {
+    roastGroup.sigsRejected.remove(id);
+  }
+
+  @override
+  Future<void> removeSigsRequest(SignaturesRequestId id) async {
+    roastGroup.sigNonces.remove(id);
+    roastGroup.sigsRejected.remove(id);
+  }
 }
