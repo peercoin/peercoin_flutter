@@ -6,6 +6,16 @@ import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
+class ParticpantNavigatorPopDTO {
+  final Identifier identifier;
+  final ECCompressedPublicKey key;
+
+  ParticpantNavigatorPopDTO({
+    required this.identifier,
+    required this.key,
+  });
+}
+
 class ROASTWalletAddParticipantScreen extends StatefulWidget {
   const ROASTWalletAddParticipantScreen({super.key});
 
@@ -41,30 +51,16 @@ class _ROASTWalletAddParticipantScreenState
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
       final id = Identifier.fromString(_nameController.text);
-      if (_roastGroup.clientConfig == null) {
-        _roastGroup.clientConfig = ClientConfig(
-          id: Identifier.fromString(_roastGroup.groupId),
-          group: GroupConfig(
-            id: _roastGroup.groupId,
-            participants: {
-              id: ECCompressedPublicKey.fromHex(
-                _ecPubKeyController.text,
-              ),
-            },
-          ),
-        );
-      } else {
-        _roastGroup.clientConfig!.group
-                .participants[Identifier.fromString(_nameController.text)] =
-            ECCompressedPublicKey.fromHex(
-          _ecPubKeyController.text,
-        );
-      }
-
       // persist name
       _roastGroup.participantNames[id.toString()] = _nameController.text;
 
-      Navigator.of(context).pop(true);
+      // TODO type
+      Navigator.of(context).pop(
+        ParticpantNavigatorPopDTO(
+          identifier: id,
+          key: ECCompressedPublicKey.fromHex(_ecPubKeyController.text),
+        ),
+      );
     }
   }
 

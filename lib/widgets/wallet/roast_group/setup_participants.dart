@@ -2,6 +2,7 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
@@ -14,6 +15,7 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_particip
 class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
   final ROASTGroup roastGroup;
+
   const ROASTGroupSetupParticipants({
     required this.changeStep,
     required this.roastGroup,
@@ -28,7 +30,7 @@ class ROASTGroupSetupParticipants extends StatefulWidget {
 class _ROASTGroupSetupParticipantsState
     extends State<ROASTGroupSetupParticipants> {
   bool _initial = true;
-  final Map<Identifier, ECPublicKey> _participants = {};
+  final Map<Identifier, ECCompressedPublicKey> _participants = {};
 
   @override
   void didChangeDependencies() {
@@ -78,18 +80,19 @@ class _ROASTGroupSetupParticipantsState
         'roastGroup': widget.roastGroup,
       },
     );
-    if (res == true) {
-      LoggerWrapper.logInfo(
-        'ROASTGroupSetupPubkey',
-        '_addParticipant',
-        'participant added',
-      );
-      setState(() {
-        _participants.clear();
-        _participants
-            .addAll(widget.roastGroup.clientConfig!.group.participants);
-      });
+    if (res.runtimeType != ParticpantNavigatorPopDTO) {
+      return;
     }
+    final dto = res as ParticpantNavigatorPopDTO;
+
+    LoggerWrapper.logInfo(
+      'ROASTGroupSetupPubkey',
+      '_addParticipant',
+      'participant added',
+    );
+    setState(() {
+      _participants[dto.identifier] = dto.key;
+    });
   }
 
   void _removeParticipant(String participantPubKey) {
@@ -111,16 +114,21 @@ class _ROASTGroupSetupParticipantsState
   }
 
   void _completeROASTGroup() {
-    // save group
     widget.roastGroup.isCompleted = true;
     Navigator.of(context).pop();
     // change step
   }
 
   void _showFingerprint() async {
-    if (widget.roastGroup.clientConfig == null) {
-      return;
-    }
+    // save group
+    final res = widget.roastGroup.clientConfig = ClientConfig(
+      id: _participants.keys.first, // TODO who is who, implement in hive model
+      group: GroupConfig(
+        id: widget.roastGroup.groupId,
+        participants: _participants,
+      ),
+    );
+
     final fingerPrint =
         bytesToHex(widget.roastGroup.clientConfig!.group.fingerprint);
     LoggerWrapper.logInfo(
