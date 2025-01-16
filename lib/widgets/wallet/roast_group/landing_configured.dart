@@ -11,8 +11,8 @@ import 'package:peercoin/widgets/service_container.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ROASTGroupLandingConfigured extends StatefulWidget {
-  final ROASTClient roastGroup;
-  const ROASTGroupLandingConfigured({required this.roastGroup, super.key});
+  final ROASTClient roastClient;
+  const ROASTGroupLandingConfigured({required this.roastClient, super.key});
 
   @override
   State<ROASTGroupLandingConfigured> createState() =>
@@ -22,12 +22,12 @@ class ROASTGroupLandingConfigured extends StatefulWidget {
 class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
   void _tryLogin() {
-    final uri = Uri.parse(widget.roastGroup.serverUrl);
-    print(bytesToHex(widget.roastGroup.clientConfig!.group.toBytes()));
-    print(widget.roastGroup.clientConfig!.group.yaml);
+    final uri = Uri.parse(widget.roastClient.serverUrl);
+    print(bytesToHex(widget.roastClient.clientConfig!.group.toBytes()));
+    print(widget.roastClient.clientConfig!.group.yaml);
 
     frost.Client.login(
-      config: widget.roastGroup.clientConfig!,
+      config: widget.roastClient.clientConfig!,
       api: frost.GrpcClientApi(
         ClientChannel(
           uri.host,
@@ -37,14 +37,14 @@ class _ROASTGroupLandingConfiguredState
           ),
         ),
       ),
-      store: ROASTStorage(widget.roastGroup),
+      store: ROASTStorage(widget.roastClient),
       getPrivateKey: (_) async => ECPrivateKey.generate(), // TODO
     );
   }
 
   Future<void> _serverURLEditDialog() async {
     var textFieldController = TextEditingController();
-    textFieldController.text = widget.roastGroup.serverUrl;
+    textFieldController.text = widget.roastClient.serverUrl;
     return showDialog(
       context: context,
       builder: (context) {
@@ -75,7 +75,7 @@ class _ROASTGroupLandingConfiguredState
             ),
             TextButton(
               onPressed: () {
-                widget.roastGroup.setServerUrl = textFieldController.text;
+                widget.roastClient.setServerUrl = textFieldController.text;
                 Navigator.pop(context);
               },
               child: Text(
@@ -95,13 +95,13 @@ class _ROASTGroupLandingConfiguredState
       'Exporting server configuration',
     );
 
-    if (widget.roastGroup.clientConfig == null ||
-        widget.roastGroup.clientConfig?.group == null) {
+    if (widget.roastClient.clientConfig == null ||
+        widget.roastClient.clientConfig?.group == null) {
       return;
     }
 
     Share.share(
-      frost.ServerConfig(group: widget.roastGroup.clientConfig!.group).yaml,
+      frost.ServerConfig(group: widget.roastClient.clientConfig!.group).yaml,
     );
   }
 

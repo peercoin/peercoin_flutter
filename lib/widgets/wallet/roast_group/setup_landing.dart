@@ -6,8 +6,11 @@ import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
-  final ROASTClient roastGroup;
-  const ROASTGroupSetupLanding({required this.roastGroup, super.key});
+  final ROASTClient roastClient;
+  const ROASTGroupSetupLanding({
+    required this.roastClient,
+    super.key,
+  });
 
   @override
   State<ROASTGroupSetupLanding> createState() => _ROASTGroupSetupLandingState();
@@ -27,8 +30,8 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   @override
   void didChangeDependencies() {
     if (!_initial) {
-      _groupIdController.text = widget.roastGroup.groupId;
-      _nameController.text = widget.roastGroup.serverUrl;
+      _groupIdController.text = widget.roastClient.groupId;
+      _nameController.text = widget.roastClient.serverUrl;
       setState(() {
         _initial = true;
       });
@@ -44,7 +47,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
 
   Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
-      widget.roastGroup.groupId = _groupIdController.text;
+      widget.roastClient.groupId = _groupIdController.text;
       // TODO create pub key and private key
       _changeStep(ROASTSetupStep.pubkey);
     }
@@ -54,7 +57,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   Widget build(BuildContext context) {
     if (_step == ROASTSetupStep.pubkey) {
       return ROASTGroupSetupParticipants(
-        roastGroup: widget.roastGroup,
+        roastClient: widget.roastClient,
         changeStep: _changeStep,
       );
     }
@@ -93,7 +96,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                         children: [
                           TextFormField(
                             textInputAction: TextInputAction.done,
-                            enabled: widget.roastGroup.clientConfig == null,
+                            enabled: widget.roastClient.clientConfig == null,
                             key: _groupIdKey,
                             autocorrect: false,
                             validator: (value) => value!.isEmpty

@@ -2,15 +2,15 @@ import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 
 class ROASTStorage implements ClientStorageInterface {
-  final ROASTClient roastGroup;
-  ROASTStorage(this.roastGroup);
+  final ROASTClient roastClient;
+  ROASTStorage(this.roastClient);
 
   @override
   Future<void> addAck(SignedDkgAck ack) async {
     final groupKey = ack.signed.obj.groupKey;
-    final key = roastGroup.keys[groupKey]!;
+    final key = roastClient.keys[groupKey]!;
 
-    roastGroup.keys[groupKey] = FrostKeyWithDetails(
+    roastClient.keys[groupKey] = FrostKeyWithDetails(
       keyInfo: key.keyInfo,
       name: key.name,
       description: key.description,
@@ -20,7 +20,7 @@ class ROASTStorage implements ClientStorageInterface {
 
   @override
   Future<void> addNewFrostKey(FrostKeyWithDetails newKey) async {
-    roastGroup.keys[newKey.groupKey] = newKey;
+    roastClient.keys[newKey.groupKey] = newKey;
   }
 
   @override
@@ -28,7 +28,7 @@ class ROASTStorage implements ClientStorageInterface {
     SignaturesRequestId id,
     FinalExpirable expirable,
   ) async {
-    roastGroup.sigsRejected[id] = expirable;
+    roastClient.sigsRejected[id] = expirable;
   }
 
   @override
@@ -38,7 +38,7 @@ class ROASTStorage implements ClientStorageInterface {
     int capacity,
   ) async {
     // TODO capacity?
-    final sigNonces = roastGroup.sigNonces;
+    final sigNonces = roastClient.sigNonces;
 
     if (sigNonces.containsKey(id)) {
       sigNonces[id]!.map.addEntries(nonces.map.entries);
@@ -49,24 +49,24 @@ class ROASTStorage implements ClientStorageInterface {
 
   @override
   Future<Set<FrostKeyWithDetails>> loadKeys() async =>
-      roastGroup.keys.values.toSet();
+      roastClient.keys.values.toSet();
 
   @override
   Future<Map<SignaturesRequestId, FinalExpirable>>
-      loadRejectedSigsRequests() async => roastGroup.sigsRejected;
+      loadRejectedSigsRequests() async => roastClient.sigsRejected;
 
   @override
   Future<Map<SignaturesRequestId, SignaturesNonces>> loadSigNonces() async =>
-      roastGroup.sigNonces;
+      roastClient.sigNonces;
 
   @override
   Future<void> removeRejectionOfSigsRequest(SignaturesRequestId id) async {
-    roastGroup.sigsRejected.remove(id);
+    roastClient.sigsRejected.remove(id);
   }
 
   @override
   Future<void> removeSigsRequest(SignaturesRequestId id) async {
-    roastGroup.sigNonces.remove(id);
-    roastGroup.sigsRejected.remove(id);
+    roastClient.sigNonces.remove(id);
+    roastClient.sigsRejected.remove(id);
   }
 }

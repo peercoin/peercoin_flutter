@@ -20,7 +20,7 @@ class ROASTWalletHomeScreen extends StatefulWidget {
 class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   bool _initial = true;
   late CoinWallet _wallet;
-  late ROASTClient _roastGroup;
+  late ROASTClient _roastClient;
 
   @override
   void didChangeDependencies() async {
@@ -30,7 +30,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
       final walletProvider =
           Provider.of<WalletProvider>(context, listen: false);
-      _roastGroup = await walletProvider.getROASTGroup(_wallet.name);
+      _roastClient = await walletProvider.getROASTClient(_wallet.name);
 
       setState(() {
         _initial = false;
@@ -138,12 +138,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _roastGroup.isCompleted
+          : _roastClient.isCompleted
               ? ROASTGroupLandingConfigured(
-                  roastGroup: _roastGroup,
+                  roastClient: _roastClient,
                 )
               : ROASTGroupSetupLanding(
-                  roastGroup: _roastGroup,
+                  roastClient: _roastClient,
                 ),
     );
   }

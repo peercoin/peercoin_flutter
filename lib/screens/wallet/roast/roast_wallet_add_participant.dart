@@ -27,7 +27,7 @@ class ROASTWalletAddParticipantScreen extends StatefulWidget {
 class _ROASTWalletAddParticipantScreenState
     extends State<ROASTWalletAddParticipantScreen> {
   bool _initial = true;
-  late ROASTClient _roastGroup;
+  late ROASTClient _roastClient;
   final _formKey = GlobalKey<FormState>();
   final _nameKey = GlobalKey<FormFieldState>();
   final _nameController = TextEditingController();
@@ -38,7 +38,7 @@ class _ROASTWalletAddParticipantScreenState
   void didChangeDependencies() async {
     if (_initial) {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _roastGroup = arguments['roastGroup'];
+      _roastClient = arguments['roastClient'];
       setState(() {
         _initial = false;
       });
@@ -52,7 +52,7 @@ class _ROASTWalletAddParticipantScreenState
     if (_formKey.currentState!.validate()) {
       final id = Identifier.fromString(_nameController.text);
       // persist name
-      _roastGroup.participantNames[id.toString()] = _nameController.text;
+      _roastClient.participantNames[id.toString()] = _nameController.text;
 
       // TODO type
       Navigator.of(context).pop(

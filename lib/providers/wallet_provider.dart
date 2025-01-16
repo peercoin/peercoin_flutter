@@ -146,6 +146,7 @@ class WalletProvider with ChangeNotifier {
         ROASTClient(
           name,
           false,
+          ECPrivateKey.generate(),
         ),
       );
     }
@@ -681,10 +682,10 @@ class WalletProvider with ChangeNotifier {
     return answerMap;
   }
 
-  Future<ROASTClient> getROASTGroup(String identifier) async {
+  Future<ROASTClient> getROASTClient(String identifier) async {
     final res = _vaultBox.get(identifier);
     if (res == null) {
-      throw Exception('ROASTGroup not found');
+      throw Exception('ROASTClient not found');
     }
     return res;
   }

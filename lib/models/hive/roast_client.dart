@@ -6,7 +6,7 @@ part 'roast_client.g.dart';
 @HiveType(typeId: 8)
 class ROASTClient extends HiveObject {
   @HiveField(0)
-  final String _name;
+  final String _title;
 
   @HiveField(1)
   bool _isCompleted = false;
@@ -20,24 +20,39 @@ class ROASTClient extends HiveObject {
   @HiveField(4)
   String? _groupId;
 
-  @HiveField(5, defaultValue: {})
+  @HiveField(5)
   Map<String, String> _participantNames = {};
 
-  @HiveField(6, defaultValue: {})
+  @HiveField(6)
   Map<ECPublicKey, FrostKeyWithDetails> _keys = {};
 
-  @HiveField(7, defaultValue: {})
+  @HiveField(7)
   Map<SignaturesRequestId, SignaturesNonces> _sigNonces = {};
 
-  @HiveField(8, defaultValue: {})
+  @HiveField(8)
   Map<SignaturesRequestId, FinalExpirable> _sigsRejected = {};
 
+  @HiveField(9)
+  String? _ourName;
+
+  @HiveField(10)
+  final ECPrivateKey _ourKey;
+
   ROASTClient(
-    this._name,
+    this._title,
     this._isCompleted,
+    this._ourKey,
   );
 
-  String get name => _name;
+  String get title => _title;
+
+  String get ourName => _ourName ?? '';
+  set ourName(String value) {
+    _ourName = value;
+    save();
+  }
+
+  ECPrivateKey get ourKey => _ourKey;
 
   String get groupId => _groupId ?? '';
   set groupId(String value) {

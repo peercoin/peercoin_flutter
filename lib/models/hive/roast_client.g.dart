@@ -19,29 +19,26 @@ class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
     return ROASTClient(
       fields[0] as String,
       fields[1] as bool,
+      fields[10] as ECPrivateKey,
     )
       .._clientConfig = fields[2] as ClientConfig?
       .._serverUrl = fields[3] as String?
       .._groupId = fields[4] as String?
-      .._participantNames =
-          fields[5] == null ? {} : (fields[5] as Map).cast<String, String>()
-      .._keys = fields[6] == null
-          ? {}
-          : (fields[6] as Map).cast<ECPublicKey, FrostKeyWithDetails>()
-      .._sigNonces = fields[7] == null
-          ? {}
-          : (fields[7] as Map).cast<SignaturesRequestId, SignaturesNonces>()
-      .._sigsRejected = fields[8] == null
-          ? {}
-          : (fields[8] as Map).cast<SignaturesRequestId, FinalExpirable>();
+      .._participantNames = (fields[5] as Map).cast<String, String>()
+      .._keys = (fields[6] as Map).cast<ECPublicKey, FrostKeyWithDetails>()
+      .._sigNonces =
+          (fields[7] as Map).cast<SignaturesRequestId, SignaturesNonces>()
+      .._sigsRejected =
+          (fields[8] as Map).cast<SignaturesRequestId, FinalExpirable>()
+      .._ourName = fields[9] as String?;
   }
 
   @override
   void write(BinaryWriter writer, ROASTClient obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
-      ..write(obj._name)
+      ..write(obj._title)
       ..writeByte(1)
       ..write(obj._isCompleted)
       ..writeByte(2)
@@ -57,7 +54,11 @@ class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
       ..writeByte(7)
       ..write(obj._sigNonces)
       ..writeByte(8)
-      ..write(obj._sigsRejected);
+      ..write(obj._sigsRejected)
+      ..writeByte(9)
+      ..write(obj._ourName)
+      ..writeByte(10)
+      ..write(obj._ourKey);
   }
 
   @override

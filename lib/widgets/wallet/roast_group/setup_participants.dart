@@ -14,11 +14,11 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_particip
 
 class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
-  final ROASTClient roastGroup;
+  final ROASTClient roastClient;
 
   const ROASTGroupSetupParticipants({
     required this.changeStep,
-    required this.roastGroup,
+    required this.roastClient,
     super.key,
   });
 
@@ -35,9 +35,9 @@ class _ROASTGroupSetupParticipantsState
   @override
   void didChangeDependencies() {
     if (_initial) {
-      if (widget.roastGroup.clientConfig != null) {
+      if (widget.roastClient.clientConfig != null) {
         _participants
-            .addAll(widget.roastGroup.clientConfig!.group.participants);
+            .addAll(widget.roastClient.clientConfig!.group.participants);
       }
       setState(() {
         _initial = false;
@@ -51,7 +51,7 @@ class _ROASTGroupSetupParticipantsState
     String participantPubKey,
   ) async {
     LoggerWrapper.logInfo(
-      'ROASTGroupSetupPubkey',
+      'ROASTGroupSetupParticipants',
       '_triggerRemoveParticipantBottomSheet',
       'participant $participantName delete bottom sheet opened',
     );
@@ -77,7 +77,7 @@ class _ROASTGroupSetupParticipantsState
     final res = await Navigator.of(context).pushNamed(
       Routes.roastWalletAddParticipant,
       arguments: {
-        'roastGroup': widget.roastGroup,
+        'roastClient': widget.roastClient,
       },
     );
     if (res.runtimeType != ParticpantNavigatorPopDTO) {
@@ -86,7 +86,7 @@ class _ROASTGroupSetupParticipantsState
     final dto = res as ParticpantNavigatorPopDTO;
 
     LoggerWrapper.logInfo(
-      'ROASTGroupSetupPubkey',
+      'ROASTGroupSetupParticipants',
       '_addParticipant',
       'participant added',
     );
@@ -99,7 +99,7 @@ class _ROASTGroupSetupParticipantsState
     Navigator.of(context).pop();
 
     // remove participant from group
-    widget.roastGroup.clientConfig!.group.participants
+    widget.roastClient.clientConfig!.group.participants
         .removeWhere((key, value) => value.hex == participantPubKey);
 
     setState(() {
@@ -107,32 +107,32 @@ class _ROASTGroupSetupParticipantsState
       _participants.removeWhere((key, value) => value.hex == participantPubKey);
     });
     LoggerWrapper.logInfo(
-      'ROASTGroupSetupPubkey',
+      'ROASTGroupSetupParticipants',
       '_removeParticipant',
       'participant removed',
     );
   }
 
-  void _completeROASTGroup() {
-    widget.roastGroup.isCompleted = true;
+  void _completeROASTClient() {
+    widget.roastClient.isCompleted = true;
     Navigator.of(context).pop();
     // change step
   }
 
   void _showFingerprint() async {
     // save group
-    widget.roastGroup.clientConfig = ClientConfig(
+    widget.roastClient.clientConfig = ClientConfig(
       id: _participants.keys.first, // TODO who is who, implement in hive model
       group: GroupConfig(
-        id: widget.roastGroup.groupId,
+        id: widget.roastClient.groupId,
         participants: _participants,
       ),
     );
 
     final fingerPrint =
-        bytesToHex(widget.roastGroup.clientConfig!.group.fingerprint);
+        bytesToHex(widget.roastClient.clientConfig!.group.fingerprint);
     LoggerWrapper.logInfo(
-      'ROASTGroupSetupPubkey',
+      'ROASTGroupSetupParticipants',
       '_showFingerprint',
       fingerPrint,
     );
@@ -147,7 +147,7 @@ class _ROASTGroupSetupParticipantsState
       builder: (BuildContext context) {
         return SetupParticipantsFingerPrintBottomSheet(
           fingerPrint: fingerPrint,
-          action: () => _completeROASTGroup(),
+          action: () => _completeROASTClient(),
         );
       },
       context: context,
@@ -210,7 +210,7 @@ class _ROASTGroupSetupParticipantsState
                     ),
                     Column(
                       children: _participants.entries.map((entry) {
-                        String participantName = widget.roastGroup
+                        String participantName = widget.roastClient
                                 .participantNames[entry.key.toString()] ??
                             '';
                         String ecPubkey = entry.value.hex;
