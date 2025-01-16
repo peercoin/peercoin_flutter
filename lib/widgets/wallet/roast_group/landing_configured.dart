@@ -38,7 +38,7 @@ class _ROASTGroupLandingConfiguredState
         ),
       ),
       store: ROASTStorage(widget.roastClient),
-      getPrivateKey: (_) async => ECPrivateKey.generate(), // TODO
+      getPrivateKey: (_) async => widget.roastClient.ourKey,
     );
   }
 

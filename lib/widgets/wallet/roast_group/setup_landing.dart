@@ -31,7 +31,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   void didChangeDependencies() {
     if (!_initial) {
       _groupIdController.text = widget.roastClient.groupId;
-      _nameController.text = widget.roastClient.serverUrl;
+      _nameController.text = widget.roastClient.ourName;
       setState(() {
         _initial = true;
       });
@@ -48,7 +48,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
       widget.roastClient.groupId = _groupIdController.text;
-      // TODO create pub key and private key
+      widget.roastClient.ourName = _nameController.text;
       _changeStep(ROASTSetupStep.pubkey);
     }
   }

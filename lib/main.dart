@@ -9,6 +9,7 @@ import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/models/hive/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/models/hive/client_config_hive_adapter.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +72,7 @@ void main() async {
   Hive.registerAdapter(PendingNotificationAdapter());
   Hive.registerAdapter(ROASTClientAdapter());
   Hive.registerAdapter(HiveROASTClientConfigAdapter());
+  Hive.registerAdapter(HiveECPrivateKeyAdapter());
 
   //init coinlib
   await loadCoinlib();

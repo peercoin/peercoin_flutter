@@ -122,7 +122,7 @@ class _ROASTGroupSetupParticipantsState
   void _showFingerprint() async {
     // save group
     widget.roastClient.clientConfig = ClientConfig(
-      id: _participants.keys.first, // TODO who is who, implement in hive model
+      id: Identifier.fromHex(widget.roastClient.ourKey.pubkey.hex),
       group: GroupConfig(
         id: widget.roastClient.groupId,
         participants: _participants,
