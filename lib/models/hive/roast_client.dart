@@ -1,10 +1,10 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive/hive.dart';
-part 'roast_group.g.dart';
+part 'roast_client.g.dart';
 
 @HiveType(typeId: 8)
-class ROASTGroup extends HiveObject {
+class ROASTClient extends HiveObject {
   @HiveField(0)
   final String _name;
 
@@ -32,7 +32,7 @@ class ROASTGroup extends HiveObject {
   @HiveField(8, defaultValue: {})
   Map<SignaturesRequestId, FinalExpirable> _sigsRejected = {};
 
-  ROASTGroup(
+  ROASTClient(
     this._name,
     this._isCompleted,
   );

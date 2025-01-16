@@ -1,8 +1,8 @@
 import 'package:frost_noosphere/frost_noosphere.dart';
-import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/models/hive/roast_client.dart';
 
 class ROASTStorage implements ClientStorageInterface {
-  final ROASTGroup roastGroup;
+  final ROASTClient roastGroup;
   ROASTStorage(this.roastGroup);
 
   @override

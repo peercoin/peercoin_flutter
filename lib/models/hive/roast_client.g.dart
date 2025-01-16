@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'roast_group.dart';
+part of 'roast_client.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ROASTGroupAdapter extends TypeAdapter<ROASTGroup> {
+class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
   @override
   final int typeId = 8;
 
   @override
-  ROASTGroup read(BinaryReader reader) {
+  ROASTClient read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ROASTGroup(
+    return ROASTClient(
       fields[0] as String,
       fields[1] as bool,
     )
@@ -37,7 +37,7 @@ class ROASTGroupAdapter extends TypeAdapter<ROASTGroup> {
   }
 
   @override
-  void write(BinaryWriter writer, ROASTGroup obj) {
+  void write(BinaryWriter writer, ROASTClient obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
@@ -66,7 +66,7 @@ class ROASTGroupAdapter extends TypeAdapter<ROASTGroup> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ROASTGroupAdapter &&
+      other is ROASTClientAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

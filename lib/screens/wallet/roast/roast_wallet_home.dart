@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
-import 'package:peercoin/models/hive/roast_group.dart';
+import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -20,7 +20,7 @@ class ROASTWalletHomeScreen extends StatefulWidget {
 class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   bool _initial = true;
   late CoinWallet _wallet;
-  late ROASTGroup _roastGroup;
+  late ROASTClient _roastGroup;
 
   @override
   void didChangeDependencies() async {
