@@ -1,4 +1,3 @@
-import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:frost_noosphere/frost_noosphere.dart' as frost;
 import 'package:grpc/grpc.dart';
@@ -23,9 +22,6 @@ class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
   void _tryLogin() {
     final uri = Uri.parse(widget.roastClient.serverUrl);
-    print(bytesToHex(widget.roastClient.clientConfig!.group.toBytes()));
-    print(widget.roastClient.clientConfig!.group.yaml);
-
     frost.Client.login(
       config: widget.roastClient.clientConfig!,
       api: frost.GrpcClientApi(
@@ -123,7 +119,6 @@ class _ROASTGroupLandingConfiguredState
                     const SizedBox(height: 20),
                     // TODO login to server
                     // TODO present DKG with details and stage (round1, round2)
-                    // TODO roast key with details has to be stored (ClientStorageInterface and its methods has to be implemented)
                     PeerButton(
                       text: 'Export server configuration',
                       action: () => _exportConfiguration(),
