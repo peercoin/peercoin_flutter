@@ -33,7 +33,7 @@ class _ROASTGroupLandingConfiguredState
           uri.host,
           port: uri.port,
           options: ChannelOptions(
-            credentials: ChannelCredentials.insecure(),
+            credentials: ChannelCredentials.insecure(), // TODO remove
           ),
         ),
       ),
