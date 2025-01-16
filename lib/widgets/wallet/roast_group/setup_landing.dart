@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:peercoin/models/hive/roast_group.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -22,15 +20,15 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   ROASTSetupStep _step = ROASTSetupStep.group;
   final _groupIdKey = GlobalKey<FormFieldState>();
   final _groupIdController = TextEditingController();
-  final _serverKey = GlobalKey<FormFieldState>();
-  final _serverController = TextEditingController();
+  final _nameKey = GlobalKey<FormFieldState>();
+  final _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
     if (!_initial) {
       _groupIdController.text = widget.roastGroup.groupId;
-      _serverController.text = widget.roastGroup.serverUrl;
+      _nameController.text = widget.roastGroup.serverUrl;
       setState(() {
         _initial = true;
       });
@@ -45,38 +43,9 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   }
 
   Future<void> _save() async {
-    final uri = Uri.parse(_serverController.text);
-
-    try {
-      final request = await HttpClient().getUrl(uri);
-      final response = await request.close();
-
-      if (response.statusCode != 200) {
-        throw Exception('Server not responding: ${response.statusCode}');
-      }
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.instance.translate(
-              'roast_setup_landing_server_url_input_connection_failed',
-            ),
-          ),
-        ),
-      );
-    }
-
     if (_formKey.currentState!.validate()) {
-      // see if ClientConfig is already set
-      if (widget.roastGroup.clientConfig != null) {
-        // if yes, update the server url (id is readOnly at this point)
-        widget.roastGroup.serverUrl = _serverController.text;
-      } else {
-        // if no, set the server url and create a new ClientConfig
-        widget.roastGroup.groupId = _groupIdController.text;
-        widget.roastGroup.serverUrl = _serverController.text;
-      }
+      widget.roastGroup.groupId = _groupIdController.text;
+      // TODO create pub key and private key
       _changeStep(ROASTSetupStep.pubkey);
     }
   }
@@ -155,7 +124,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                           ),
                           TextFormField(
                             textInputAction: TextInputAction.done,
-                            key: _serverKey,
+                            key: _nameKey,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return AppLocalizations.instance.translate(
@@ -169,17 +138,17 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                               }
                               return null;
                             },
-                            controller: _serverController,
+                            controller: _nameController,
                             decoration: InputDecoration(
-                              icon: const Icon(Icons.outbond),
+                              icon: const Icon(Icons.person),
                               labelText: AppLocalizations.instance.translate(
-                                'roast_setup_landing_server_url_input',
+                                'roast_setup_landing_group_name_input',
                               ),
                             ),
                           ),
                           Text(
                             AppLocalizations.instance.translate(
-                              'roast_setup_landing_server_url_input_hint',
+                              'roast_setup_landing_group_name_input_hint',
                             ),
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -192,7 +161,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                           ),
                           PeerButton(
                             text: AppLocalizations.instance
-                                .translate('roast_setup_landing_cta'),
+                                .translate('roast_setup_landing_create_group'),
                             action: () => _save(),
                           ),
                         ],
