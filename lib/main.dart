@@ -10,6 +10,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/frost_key_with_details_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/signature_request_id_hive_adapter.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/models/hive/adapters/client_config_hive_adapter.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +76,9 @@ void main() async {
   Hive.registerAdapter(ROASTClientAdapter());
   Hive.registerAdapter(HiveROASTClientConfigAdapter());
   Hive.registerAdapter(HiveECPrivateKeyAdapter());
+  Hive.registerAdapter(HiveECPublicKeyAdapter());
+  Hive.registerAdapter(HiveFrostKeyWithDetailsAdapter());
+  Hive.registerAdapter(HiveSignaturesRequestIdAdapter());
 
   //init coinlib
   await loadCoinlib();
