@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive/hive.dart';
 
@@ -9,11 +7,11 @@ class HiveROASTClientConfigAdapter extends TypeAdapter<ClientConfig> {
 
   @override
   ClientConfig read(BinaryReader reader) {
-    return ClientConfig.fromBytes(Uint8List.fromList(reader.readIntList()));
+    return ClientConfig.fromBytes(reader.readByteList());
   }
 
   @override
   void write(BinaryWriter writer, ClientConfig obj) {
-    writer.writeIntList(obj.toBytes());
+    writer.writeByteList(obj.toBytes());
   }
 }
