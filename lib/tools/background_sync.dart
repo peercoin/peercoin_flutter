@@ -10,8 +10,8 @@ import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:peercoin/models/available_coins.dart';
-import 'package:peercoin/models/hive/client_config_hive_adapter.dart';
-import 'package:peercoin/models/hive/ec_private_key_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/client_config_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
