@@ -122,7 +122,7 @@ class _ROASTGroupSetupParticipantsState
   void _showFingerprint() async {
     // save group
     widget.roastClient.clientConfig = ClientConfig(
-      id: Identifier.fromHex(widget.roastClient.ourKey.pubkey.hex),
+      id: Identifier.fromString(widget.roastClient.ourName),
       group: GroupConfig(
         id: widget.roastClient.groupId,
         participants: _participants,
