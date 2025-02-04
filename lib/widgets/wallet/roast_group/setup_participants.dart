@@ -157,8 +157,10 @@ class _ROASTGroupSetupParticipantsState
   void _sharePubKey() {
     //TODO share pub key of ROASTClient.ourKey
     //TODO share name used in ROASTClient.ourName
+    //TODO share id derived from ROASTClient.ourName
     widget.roastClient.ourName;
     //TODO check if we enforce / hint unique names
+    //TODO add member form should probably discrimnate if name OR id is provided
   }
 
   @override
