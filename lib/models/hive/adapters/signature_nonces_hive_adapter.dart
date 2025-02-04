@@ -12,6 +12,6 @@
 
 //   @override
 //   void write(BinaryWriter writer, SignaturesNonces obj) {
-//     writer.writeByteList(obj.
+//     writer.writeByteList(
 //   }
 // }

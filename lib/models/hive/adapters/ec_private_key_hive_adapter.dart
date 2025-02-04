@@ -14,6 +14,6 @@ class HiveECPrivateKeyAdapter extends TypeAdapter<ECPrivateKey> {
 
   @override
   void write(BinaryWriter writer, ECPrivateKey obj) {
-    writer.writeIntList(obj.data);
+    writer.writeByteList(obj.data);
   }
 }
