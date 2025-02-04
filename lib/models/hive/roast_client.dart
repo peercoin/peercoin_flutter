@@ -24,13 +24,13 @@ class ROASTClient extends HiveObject {
   Map<String, String> _participantNames = {};
 
   @HiveField(6)
-  Map<ECPublicKey, FrostKeyWithDetails> _keys = {};
+  Map<ECPublicKey, FrostKeyWithDetails> keys = {};
 
   @HiveField(7)
-  Map<SignaturesRequestId, SignaturesNonces> _sigNonces = {};
+  Map<SignaturesRequestId, SignaturesNonces> sigNonces = {};
 
   @HiveField(8)
-  Map<SignaturesRequestId, FinalExpirable> _sigsRejected = {};
+  Map<SignaturesRequestId, FinalExpirable> sigsRejected = {};
 
   @HiveField(9)
   String? _ourName;
@@ -96,24 +96,4 @@ class ROASTClient extends HiveObject {
     _participantNames = value;
     save();
   }
-
-  Map<ECPublicKey, FrostKeyWithDetails> get keys => _keys;
-  set keys(Map<ECPublicKey, FrostKeyWithDetails> value) {
-    _keys = value;
-    save();
-  }
-
-  Map<SignaturesRequestId, SignaturesNonces> get sigNonces => _sigNonces;
-  set sigNonces(Map<SignaturesRequestId, SignaturesNonces> value) {
-    _sigNonces = value;
-    save();
-  }
-
-  Map<SignaturesRequestId, FinalExpirable> get sigsRejected => _sigsRejected;
-  set sigsRejected(Map<SignaturesRequestId, FinalExpirable> value) {
-    _sigsRejected = value;
-    save();
-  }
 }
-
-// TODO probably have to write adapters for the maps (keys, sigNonces, sigsRejected)
