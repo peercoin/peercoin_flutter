@@ -6,7 +6,7 @@ class ROASTStorage implements ClientStorageInterface {
   ROASTStorage(this.roastClient);
 
   @override
-  Future<void> addAck(SignedDkgAck ack) async {
+  Future<void> addOrReplaceAck(SignedDkgAck ack) async {
     final groupKey = ack.signed.obj.groupKey;
     final key = roastClient.keys[groupKey]!;
 
@@ -14,7 +14,10 @@ class ROASTStorage implements ClientStorageInterface {
       keyInfo: key.keyInfo,
       name: key.name,
       description: key.description,
-      acks: {...key.acks, ack},
+      acks: {
+        ...key.acks.where((existing) => existing != ack),
+        ack,
+      },
     );
   }
 
