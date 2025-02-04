@@ -154,6 +154,13 @@ class _ROASTGroupSetupParticipantsState
     );
   }
 
+  void _sharePubKey() {
+    //TODO share pub key of ROASTClient.ourKey
+    //TODO share name used in ROASTClient.ourName
+    widget.roastClient.ourName;
+    //TODO check if we enforce / hint unique names
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -275,6 +282,15 @@ class _ROASTGroupSetupParticipantsState
                       ),
                       action: () => _showFingerprint(),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    PeerButton(
+                      text: AppLocalizations.instance.translate(
+                        'roast_setup_group_cta',
+                      ),
+                      action: () => _sharePubKey(),
+                    ),
                   ],
                 ),
               ),
@@ -285,3 +301,5 @@ class _ROASTGroupSetupParticipantsState
     );
   }
 }
+
+// TODO add member: scan QR code
