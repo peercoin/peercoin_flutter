@@ -24,9 +24,12 @@ class ROASTWalletAddParticipantScreen extends StatefulWidget {
       _ROASTWalletAddParticipantScreenState();
 }
 
+enum ParticipantType { id, name }
+
 class _ROASTWalletAddParticipantScreenState
     extends State<ROASTWalletAddParticipantScreen> {
   bool _initial = true;
+  ParticipantType _type = ParticipantType.name;
   late ROASTClient _roastClient;
   final _formKey = GlobalKey<FormState>();
   final _nameKey = GlobalKey<FormFieldState>();
@@ -50,11 +53,13 @@ class _ROASTWalletAddParticipantScreenState
   void _save() {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
-      final id = Identifier.fromString(_nameController.text);
+      final id = _type == ParticipantType.id
+          ? Identifier.fromHex(_nameController.text)
+          : Identifier.fromString(_nameController.text);
+
       // persist name
       _roastClient.participantNames[id.toString()] = _nameController.text;
 
-      // TODO type
       Navigator.of(context).pop(
         ParticpantNavigatorPopDTO(
           identifier: id,
@@ -106,13 +111,47 @@ class _ROASTWalletAddParticipantScreenState
                     controller: _nameController,
                     decoration: InputDecoration(
                       icon: const Icon(Icons.person),
-                      labelText: AppLocalizations.instance
-                          .translate('roast_setup_group_member_name_input'),
+                      labelText: AppLocalizations.instance.translate(
+                        _type == ParticipantType.name
+                            ? 'roast_setup_group_member_name_input'
+                            : 'roast_setup_group_member_id_input',
+                      ),
                     ),
                     maxLines: null,
                     onFieldSubmitted: (_) => _formKey.currentState!.validate(),
                     validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.instance.translate(
+                          'roast_setup_group_member_input_name_empty_error',
+                        );
+                      }
+                      // TODO verify correct identfier in identifier mode (roast_setup_group_member_input_name_invalid_error)
                       return null;
+                    },
+                  ),
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'roast_setup_group_member_name_input_hint',
+                    ),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  SwitchListTile(
+                    title: Text(
+                      AppLocalizations.instance.translate(
+                        'roast_setup_group_member_switch_id_name_hint',
+                      ),
+                    ),
+                    value: _type == ParticipantType.id,
+                    onChanged: (newState) {
+                      setState(() {
+                        _type = newState
+                            ? ParticipantType.id
+                            : ParticipantType.name;
+                      });
                     },
                   ),
                   const SizedBox(
@@ -164,3 +203,5 @@ class _ROASTWalletAddParticipantScreenState
     );
   }
 }
+
+// TODO scan QR code
