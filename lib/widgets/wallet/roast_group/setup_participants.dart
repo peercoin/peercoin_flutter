@@ -289,7 +289,7 @@ class _ROASTGroupSetupParticipantsState
                     ),
                     PeerButton(
                       text: AppLocalizations.instance.translate(
-                        'roast_setup_group_cta',
+                        'roast_setup_share_public_key_cta',
                       ),
                       action: () => _sharePubKey(),
                     ),
