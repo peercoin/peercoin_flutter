@@ -116,6 +116,16 @@ class _ROASTWalletAddParticipantScreenState
                             ? 'roast_setup_group_member_name_input'
                             : 'roast_setup_group_member_id_input',
                       ),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          var data = await Clipboard.getData('text/plain');
+                          _nameController.text = data!.text!.trim();
+                        },
+                        icon: Icon(
+                          Icons.paste_rounded,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
                     ),
                     maxLines: null,
                     onFieldSubmitted: (_) => _formKey.currentState!.validate(),
@@ -124,8 +134,16 @@ class _ROASTWalletAddParticipantScreenState
                         return AppLocalizations.instance.translate(
                           'roast_setup_group_member_input_name_empty_error',
                         );
+                      } else if (_type == ParticipantType.id) {
+                        try {
+                          // try to convert input value to Identifier
+                          Identifier.fromHex(_nameController.text);
+                        } catch (e) {
+                          return AppLocalizations.instance.translate(
+                            'roast_setup_group_member_input_name_invalid_error',
+                          );
+                        }
                       }
-                      // TODO verify correct identfier in identifier mode (roast_setup_group_member_input_name_invalid_error)
                       return null;
                     },
                   ),
