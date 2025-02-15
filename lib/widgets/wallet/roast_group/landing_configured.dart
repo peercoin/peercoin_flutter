@@ -20,22 +20,25 @@ class ROASTGroupLandingConfigured extends StatefulWidget {
 
 class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
-  void _tryLogin() {
+  void _tryLogin() async {
     final uri = Uri.parse(widget.roastClient.serverUrl);
-    frost.Client.login(
+    final client = await frost.Client.login(
       config: widget.roastClient.clientConfig!,
       api: frost.GrpcClientApi(
         ClientChannel(
-          uri.host,
+          uri.host.trim(),
           port: uri.port,
-          options: ChannelOptions(
-            credentials: ChannelCredentials.insecure(), // TODO remove
+          options: const ChannelOptions(
+            credentials: ChannelCredentials.secure(),
           ),
         ),
       ),
       store: ROASTStorage(widget.roastClient),
       getPrivateKey: (_) async => widget.roastClient.ourKey,
     );
+
+    print(client.onlineParticipants);
+    print(widget.roastClient.participantNames);
   }
 
   Future<void> _serverURLEditDialog() async {
