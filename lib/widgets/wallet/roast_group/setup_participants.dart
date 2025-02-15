@@ -10,6 +10,7 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_finger_print_bottom_sheet.dart';
+import 'package:peercoin/widgets/wallet/roast_group/setup_participants_share_pubkey_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_participant_bottom_sheet.dart';
 
 class ROASTGroupSetupParticipants extends StatefulWidget {
@@ -154,13 +155,26 @@ class _ROASTGroupSetupParticipantsState
     );
   }
 
-  void _sharePubKey() {
-    //TODO share pub key of ROASTClient.ourKey
-    //TODO share name used in ROASTClient.ourName
-    //TODO share id derived from ROASTClient.ourName
-    widget.roastClient.ourName;
+  void _sharePubKey() async {
     //TODO check if we enforce / hint unique names
     //TODO add member form should probably discrimnate if name OR id is provided
+
+    // show bottom sheet
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return SetupParticipantsSharePubKeyBottomSheet(
+          pubKey: widget.roastClient.ourKey.pubkey.hex,
+          ourName: widget.roastClient.ourName,
+          action: () => _completeROASTClient(),
+        );
+      },
+      context: context,
+    );
   }
 
   @override

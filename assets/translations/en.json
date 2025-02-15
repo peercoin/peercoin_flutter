@@ -571,6 +571,8 @@
   "roast_setup_group_fingerprint_title": "Fingerprint",
   "roast_setup_group_fingerprint_description": "Please verify the fingerprint with all group members to ensure that all public keys are correct.",
   "roast_setup_group_fingerprint_cta": "Save Group",
+  "roast_setup_group_share_pubkey_key": "Share Public Key",
+  "roast_setup_group_share_pubkey_id": "Share Identifier",
   "roast_setup_group_fingerprint_cta_hint": "This can not be undone.",
   "roast_landing_configured_edit_server_url_title": "Edit Server URL",
   "roast_landing_configured_edit_server_url_placeholder": "Server URL"
