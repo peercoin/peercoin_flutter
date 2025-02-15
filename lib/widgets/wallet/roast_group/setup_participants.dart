@@ -37,9 +37,18 @@ class _ROASTGroupSetupParticipantsState
   void didChangeDependencies() {
     if (_initial) {
       if (widget.roastClient.clientConfig != null) {
+        // finalized group
         _participants
             .addAll(widget.roastClient.clientConfig!.group.participants);
+      } else {
+        // add self to uncompleted group
+        final id = Identifier.fromString(widget.roastClient.ourName);
+        _participants[id] =
+            ECCompressedPublicKey.fromPubkey(widget.roastClient.ourKey.pubkey);
+        widget.roastClient.participantNames[id.toString()] =
+            widget.roastClient.ourName;
       }
+
       setState(() {
         _initial = false;
       });
@@ -237,6 +246,7 @@ class _ROASTGroupSetupParticipantsState
                                 .participantNames[entry.key.toString()] ??
                             '';
                         String ecPubkey = entry.value.hex;
+
                         return Card(
                           clipBehavior: Clip.antiAlias,
                           margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -251,17 +261,22 @@ class _ROASTGroupSetupParticipantsState
                                 ),
                               ],
                             ),
-                            trailing: IconButton(
-                              onPressed: () =>
-                                  _triggerRemoveParticipantBottomSheet(
-                                participantName,
-                                ecPubkey,
-                              ),
-                              icon: Icon(
-                                Icons.delete,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
+                            trailing:
+                                participantName == widget.roastClient.ourName
+                                    ? const SizedBox()
+                                    : IconButton(
+                                        onPressed: () =>
+                                            _triggerRemoveParticipantBottomSheet(
+                                          participantName,
+                                          ecPubkey,
+                                        ),
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        ),
+                                      ),
                             tileColor: Theme.of(context).colorScheme.primary,
                             title: Text(
                               participantName,
