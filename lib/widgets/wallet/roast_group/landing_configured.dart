@@ -34,7 +34,8 @@ class _ROASTGroupLandingConfiguredState
         ),
       ),
       store: ROASTStorage(widget.roastClient),
-      getPrivateKey: (_) async => widget.roastClient.ourKey,
+      getPrivateKey: (_) async =>
+          widget.roastClient.ourKey, // TODO request interface for key
     );
 
     print(client.onlineParticipants);
