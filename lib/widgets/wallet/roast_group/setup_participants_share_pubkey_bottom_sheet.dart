@@ -28,32 +28,6 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
           children: <Widget>[
             Text(
               AppLocalizations.instance.translate(
-                'roast_setup_group_share_pubkey_key',
-              ),
-              style: TextStyle(
-                letterSpacing: 1.4,
-                fontSize: 24,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            DoubleTabToClipboard(
-              clipBoardData: pubKey,
-              withHintText: true,
-              child: Text(
-                pubKey,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              AppLocalizations.instance.translate(
                 'roast_setup_group_share_pubkey_id',
               ),
               style: TextStyle(
@@ -79,6 +53,32 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               height: 10,
             ),
             Text(ourName),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_group_share_pubkey_key',
+              ),
+              style: TextStyle(
+                letterSpacing: 1.4,
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            DoubleTabToClipboard(
+              clipBoardData: pubKey,
+              withHintText: true,
+              child: Text(
+                pubKey,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),
