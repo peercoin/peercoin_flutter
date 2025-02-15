@@ -140,6 +140,4 @@ class _ROASTGroupLandingConfiguredState
 }
 
 // TODO i18n
-// 1. Connect to server (which will present the full DKG and signing options later). mock for now.
-// 2. Download configuration (for use on a server).
-// 3. Modify configuration (if configuration is later changed, it goes back to the previous screen). Only allow server url + nick names for participants to be changed.
+// TODO allow ROAST key export and import, since the key is not derived from the seed
