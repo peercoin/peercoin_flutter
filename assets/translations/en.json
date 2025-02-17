@@ -575,5 +575,9 @@
   "roast_setup_group_share_pubkey_id": "Share Identifier",
   "roast_setup_group_fingerprint_cta_hint": "This can not be undone.",
   "roast_landing_configured_edit_server_url_title": "Edit Server URL",
-  "roast_landing_configured_edit_server_url_placeholder": "Server URL"
+  "roast_landing_configured_edit_server_url_placeholder": "Server URL",
+  "roast_landing_configured_login_failed_snack_fallback": "Login failed. Something went wrong.",
+  "roast_landing_configured_login_failed_snack_14": "Login failed. Could not look up host.",
+  "roast_landing_configured_edit_server_url_empty": "Please enter a server URL",
+  "roast_landing_configured_edit_server_url_error": "Please enter a valid URL with leading https://"
 }

@@ -22,29 +22,67 @@ class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
   void _tryLogin() async {
     final uri = Uri.parse(widget.roastClient.serverUrl);
-    final client = await frost.Client.login(
-      config: widget.roastClient.clientConfig!,
-      api: frost.GrpcClientApi(
-        ClientChannel(
-          uri.host.trim(),
-          port: uri.port,
-          options: const ChannelOptions(
-            credentials: ChannelCredentials.secure(),
+
+    try {
+      final client = await frost.Client.login(
+        config: widget.roastClient.clientConfig!,
+        api: frost.GrpcClientApi(
+          ClientChannel(
+            uri.host.trim(),
+            port: uri.port,
+            options: const ChannelOptions(
+              credentials: ChannelCredentials.secure(),
+            ),
           ),
         ),
-      ),
-      store: ROASTStorage(widget.roastClient),
-      getPrivateKey: (_) async =>
-          widget.roastClient.ourKey, // TODO request interface for key
-    );
+        store: ROASTStorage(widget.roastClient),
+        getPrivateKey: (_) async =>
+            widget.roastClient.ourKey, // TODO request interface for key
+      );
 
-    print(client.onlineParticipants);
-    print(widget.roastClient.participantNames);
+      // TODO Navgiate to dashboard (logged in) and push client
+    } catch (e) {
+      LoggerWrapper.logError(
+        'ROASTGroupLandingConfigured',
+        '_tryLogin',
+        'Failed to login to server: $e',
+      );
+
+      String errorMessageTranslationKey = '';
+
+      if (e is GrpcError) {
+        switch (e.code) {
+          case 14:
+            errorMessageTranslationKey =
+                'roast_landing_configured_login_failed_snack_14';
+            break;
+          default:
+            errorMessageTranslationKey =
+                'roast_landing_configured_login_failed_snack_fallback';
+          // TODO unauthorized
+          // TODO 404
+        }
+      }
+
+      // show snack bar
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate(errorMessageTranslationKey),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
   }
 
   Future<void> _serverURLEditDialog() async {
-    var textFieldController = TextEditingController();
+    final textFieldController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     textFieldController.text = widget.roastClient.serverUrl;
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -55,12 +93,29 @@ class _ROASTGroupLandingConfiguredState
             ),
             textAlign: TextAlign.center,
           ),
-          content: TextField(
-            controller: textFieldController,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.instance.translate(
-                'roast_landing_configured_edit_server_url_placeholder',
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              controller: textFieldController,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.instance.translate(
+                  'roast_landing_configured_edit_server_url_placeholder',
+                ),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.instance.translate(
+                    'roast_landing_configured_edit_server_url_empty',
+                  );
+                }
+                if (Uri.tryParse(value) == null ||
+                    !value.startsWith('https://')) {
+                  return AppLocalizations.instance.translate(
+                    'roast_landing_configured_edit_server_url_error',
+                  );
+                }
+                return null;
+              },
             ),
           ),
           actions: <Widget>[
@@ -75,6 +130,9 @@ class _ROASTGroupLandingConfiguredState
             ),
             TextButton(
               onPressed: () {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
                 widget.roastClient.setServerUrl = textFieldController.text;
                 Navigator.pop(context);
               },
