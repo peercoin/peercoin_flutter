@@ -4,6 +4,7 @@ import 'package:grpc/grpc.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/models/roast_storage.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -40,7 +41,13 @@ class _ROASTGroupLandingConfiguredState
             widget.roastClient.ourKey, // TODO request interface for key
       );
 
-      // TODO Navgiate to dashboard (logged in) and push client
+      if (!mounted) return;
+      Navigator.of(context).pushNamed(
+        Routes.roastWalletDashboard,
+        arguments: {
+          'roastClient': client,
+        },
+      );
     } catch (e) {
       LoggerWrapper.logError(
         'ROASTGroupLandingConfigured',
@@ -179,8 +186,6 @@ class _ROASTGroupLandingConfiguredState
                       action: () => _tryLogin(),
                     ),
                     const SizedBox(height: 20),
-                    // TODO login to server
-                    // TODO present DKG with details and stage (round1, round2)
                     PeerButton(
                       text: 'Export server configuration',
                       action: () => _exportConfiguration(),
