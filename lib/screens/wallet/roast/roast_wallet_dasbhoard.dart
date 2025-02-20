@@ -19,6 +19,11 @@ class _ROASTWalletDashboardScreenState
     if (_initial) {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _roastClient = arguments['roastClient'];
+
+      _roastClient.events.listen((event) {
+        print('Event: $event');
+      });
+
       setState(() {
         _initial = false;
       });
