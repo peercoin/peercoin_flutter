@@ -55,7 +55,8 @@ class _ROASTGroupLandingConfiguredState
         'Failed to login to server: $e',
       );
 
-      String errorMessageTranslationKey = '';
+      String errorMessageTranslationKey =
+          'roast_landing_configured_login_failed_snack_fallback';
 
       if (e is GrpcError) {
         switch (e.code) {
