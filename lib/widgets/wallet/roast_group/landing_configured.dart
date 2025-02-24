@@ -42,6 +42,12 @@ class _ROASTGroupLandingConfiguredState
       );
 
       if (!mounted) return;
+      LoggerWrapper.logInfo(
+        'ROASTGroupLandingConfigured',
+        '_tryLogin',
+        'Logged in to server',
+      );
+
       Navigator.of(context).pushNamed(
         Routes.roastWalletDashboard,
         arguments: {
