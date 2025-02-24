@@ -4,6 +4,7 @@ import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
   final Function action;
@@ -54,6 +55,15 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
             ),
             Text(ourName),
             const SizedBox(
+              height: 5,
+            ),
+            PeerButton(
+              text: AppLocalizations.instance.translate(
+                'addressbook_swipe_share',
+              ),
+              action: () => Share.share(id.toString()),
+            ),
+            const SizedBox(
               height: 20,
             ),
             Text(
@@ -78,6 +88,15 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            PeerButton(
+              text: AppLocalizations.instance.translate(
+                'addressbook_swipe_share',
+              ),
+              action: () => Share.share(pubKey),
             ),
             const SizedBox(
               height: 20,

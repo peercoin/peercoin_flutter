@@ -162,6 +162,8 @@ class _ROASTGroupSetupParticipantsState
       },
       context: context,
     );
+
+    // TODO intercept error and show error message (e. g. < 2 participants)
   }
 
   void _sharePubKey() async {
