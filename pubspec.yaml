@@ -60,12 +60,6 @@ dependencies:
   decimal: ^2.3.3
   characters: ^1.2.0
   coinlib_flutter: ^2.0.0
-  frosty:
-    path: ../frosty/frosty
-    # TODO move to git
-  frost_noosphere:
-    path: ../frost-noosphere/frost_noosphere
-    # TODO move to git
   web: ^0.5.0
    # TODO upgrade again to ^1.0.0, frosty dependency needs to be updated first (flutter_rust_bridge)
 
