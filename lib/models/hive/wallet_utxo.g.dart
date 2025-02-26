@@ -18,9 +18,9 @@ class WalletUtxoAdapter extends TypeAdapter<WalletUtxo> {
     };
     return WalletUtxo(
       hash: fields[0] as String,
-      txPos: fields[1] as int,
-      height: fields[2] as int,
-      value: fields[3] as int,
+      txPos: (fields[1] as num).toInt(),
+      height: (fields[2] as num).toInt(),
+      value: (fields[3] as num).toInt(),
       address: fields[4] as String,
     );
   }
