@@ -579,5 +579,6 @@
     "roast_setup_group_member_input_name_empty_error": "Vennligst skriv inn en verdi",
     "roast_setup_group_member_input_name_invalid_error": "Vennligst skriv inn en gyldig identifikator",
     "roast_setup_group_member_add_description": "Vennligst skriv inn navnet eller identifikatoren, samt den offentlige nøkkelen til det nye gruppemedlemmet.",
-    "roast_setup_group_fingerprint_description": "Vennligst bekreft fingeravtrykket med alle gruppemedlemmer for å sikre at alle offentlige nøkler er korrekte."
+    "roast_setup_group_fingerprint_description": "Vennligst bekreft fingeravtrykket med alle gruppemedlemmer for å sikre at alle offentlige nøkler er korrekte.",
+    "setup_legal_switch_tile_ack": "Jeg erkjenner og er enig"
 }
