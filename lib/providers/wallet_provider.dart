@@ -10,7 +10,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:peercoin/models/buildresult.dart';
 
 import '../exceptions/exceptions.dart';

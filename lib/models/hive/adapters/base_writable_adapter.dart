@@ -1,5 +1,5 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 abstract class BaseWritableAdapter extends TypeAdapter<Writable> {
   @override

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../models/available_coins.dart';
 import '../models/hive/server.dart';

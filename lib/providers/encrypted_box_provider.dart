@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/hive/coin_wallet.dart';
