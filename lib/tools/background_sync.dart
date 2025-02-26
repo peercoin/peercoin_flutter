@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/hive/adapters/client_config_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';

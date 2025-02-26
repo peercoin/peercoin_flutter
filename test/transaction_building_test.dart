@@ -5,7 +5,7 @@ import 'dart:typed_data';
 
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:mockito/mockito.dart';
 import 'package:peercoin/exceptions/exceptions.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
