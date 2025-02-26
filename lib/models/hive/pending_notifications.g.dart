@@ -18,7 +18,7 @@ class PendingNotificationAdapter extends TypeAdapter<PendingNotification> {
     };
     return PendingNotification(
       address: fields[0] as String,
-      tx: fields[1] as int,
+      tx: (fields[1] as num).toInt(),
     );
   }
 

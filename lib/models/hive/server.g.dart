@@ -18,7 +18,7 @@ class ServerAdapter extends TypeAdapter<Server> {
     };
     return Server(
       address: fields[1] as String,
-      priority: fields[8] as int,
+      priority: (fields[8] as num).toInt(),
       userGenerated: fields[3] as bool,
     )
       .._label = fields[0] as String?

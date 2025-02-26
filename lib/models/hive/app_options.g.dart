@@ -25,7 +25,7 @@ class AppOptionsStoreAdapter extends TypeAdapter<AppOptionsStore> {
       .._latestTickerUpdate = fields[4] as DateTime?
       .._exchangeRates = (fields[5] as Map?)?.cast<String, dynamic>()
       .._buildIdentifier = fields[6] as String?
-      .._notificationInterval = fields[7] as int?
+      .._notificationInterval = (fields[7] as num?)?.toInt()
       .._notificationActiveWallets = (fields[8] as List?)?.cast<String>()
       .._periodicReminterItemsNextView =
           fields[9] == null ? {} : (fields[9] as Map).cast<String, DateTime>()

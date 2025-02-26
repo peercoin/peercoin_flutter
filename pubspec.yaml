@@ -49,7 +49,7 @@ dependencies:
   auto_size_text: ^3.0.0
   camera: ^0.10.0+4
   path_provider: ^2.0.11
-  file_picker: ^5.2.2 # upgrading to fix warnings depends on web 1.0.0, see below
+  file_picker: ^9.0.1
   fast_csv: ^0.1.44
   protobuf: ^3.1.0
   grpc: ^4.0.0
@@ -65,9 +65,8 @@ dependencies:
   frost_noosphere:
     path: ../frost-noosphere/frost_noosphere
     # TODO move to git
-  web: ^0.5.0
-   # TODO upgrade again to ^1.0.0, frosty dependency needs to be updated first (flutter_rust_bridge)
-
+  web: ^1.1.0
+  
 dev_dependencies:
   integration_test:
     sdk: flutter
