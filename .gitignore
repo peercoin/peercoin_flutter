@@ -42,3 +42,4 @@ app.*.map.json
 .vscode/settings.json
 ios/build
 test.dart
+android/app/.cxx
