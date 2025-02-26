@@ -810,4 +810,5 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
   //TODO does not re-render when new address is generated
+  //TODO this is in dire need of a refactor
 }
