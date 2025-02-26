@@ -23,6 +23,9 @@ get availableSettings {
     _availableSettings.remove('app_settings_default_wallet');
     _availableSettings.remove('app_settings_notifications');
   }
+
+  _availableSettings
+      .remove('app_settings_experimental_features'); // TODO remove in 1.4.0
   return _availableSettings;
 }
 
