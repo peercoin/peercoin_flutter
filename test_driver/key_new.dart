@@ -389,3 +389,5 @@ void main() {
     },
   );
 }
+
+//TODO add test for address book filters (balance, watched etc)
