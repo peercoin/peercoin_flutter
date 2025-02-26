@@ -7,7 +7,7 @@ import '../../../models/hive/wallet_address.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/validators.dart';
-import '../addresses_tab.dart';
+import 'addresses_tab.dart';
 import 'addresses_tab_expandable.dart';
 
 class AddressesTabWatchOnly extends AddressTab {
