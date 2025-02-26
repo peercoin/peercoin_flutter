@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import 'pending_notifications.dart';
 import 'wallet_address.dart';

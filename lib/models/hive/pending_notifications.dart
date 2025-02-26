@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 part 'pending_notifications.g.dart';
 
 @HiveType(typeId: 7)
