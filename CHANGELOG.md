@@ -1,3 +1,7 @@
+### **1.3.3** (2025-02-28)
+
+- Fixes for badges i address book
+
 ### **1.3.2** (2025-02-27)
 
 - Fixes for private key export
