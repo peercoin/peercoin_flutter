@@ -507,7 +507,6 @@
     "hide_hidden_wallets_list": "Escondite de Billeteras Escondite de Billeteras",
     "show_hidden_wallets_list": "Mostrar $nOfHiddenWallets Billeteras Ocultas",
     "delete_wallet": "Borrar Billetera",
-    "app_settings_experimental_feature_watchOnlyWallets": "Monederos sólo para relojes",
     "wallet_pop_menu_signing_transactions": "Firmar transacción",
     "sign_transaction_step_3_button_alt": "Copiar hexadecimal al portapapeles",
     "sign_transaction_confirmation_broadcast_snack": "Intento de emisión de transacción",

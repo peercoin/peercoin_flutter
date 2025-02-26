@@ -511,7 +511,6 @@
     "hide_wallet": "Cüzdanı Gizle",
     "hide_wallet_description": "Bu, cüzdanı cüzdan listesinden gizleyecektir. Listenin en altında gizli cüzdanlar bulunur. İstediğiniz zaman onu gösterebilirsiniz.",
     "delte_wallet_description": "Bu, cüzdanı ve içindeki tüm verileri silecektir. Bu işlemi geri alamazsınız.",
-    "app_settings_experimental_feature_watchOnlyWallets": "yalnızca izleme cüzdanları",
     "watch_only": "Yalnızca izle",
     "addresses_none": "Adres bulunamadı",
     "wallet_pop_menu_signing_transactions": "İşlemi İmzala",
