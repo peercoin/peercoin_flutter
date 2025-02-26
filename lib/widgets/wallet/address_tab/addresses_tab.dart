@@ -513,10 +513,9 @@ class _AddressTabState extends State<AddressTab> {
                       horizontal: 0.0,
                       vertical: -4,
                     ),
-                    label: AutoSizeText(
+                    label: Text(
                       AppLocalizations.instance
                           .translate('addressbook_hide_change'),
-                      minFontSize: 10,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -536,10 +535,9 @@ class _AddressTabState extends State<AddressTab> {
                       horizontal: 0.0,
                       vertical: -4,
                     ),
-                    label: AutoSizeText(
+                    label: Text(
                       AppLocalizations.instance
                           .translate('addressbook_hide_unwatched'),
-                      minFontSize: 10,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -561,14 +559,13 @@ class _AddressTabState extends State<AddressTab> {
                         horizontal: 0.0,
                         vertical: -4,
                       ),
-                      label: AutoSizeText(
+                      label: Text(
                         _showLabel
                             ? AppLocalizations.instance
                                 .translate('addressbook_show_balance')
                             : AppLocalizations.instance
                                 .translate('addressbook_show_label'),
                         textAlign: TextAlign.center,
-                        minFontSize: 10,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
@@ -591,11 +588,10 @@ class _AddressTabState extends State<AddressTab> {
                       horizontal: 0.0,
                       vertical: -4,
                     ),
-                    label: AutoSizeText(
+                    label: Text(
                       AppLocalizations.instance
                           .translate('addressbook_hide_used'),
                       textAlign: TextAlign.center,
-                      minFontSize: 10,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -615,11 +611,10 @@ class _AddressTabState extends State<AddressTab> {
                       horizontal: 0.0,
                       vertical: -4,
                     ),
-                    label: AutoSizeText(
+                    label: Text(
                       AppLocalizations.instance
                           .translate('addressbook_hide_empty'),
                       textAlign: TextAlign.center,
-                      minFontSize: 10,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
