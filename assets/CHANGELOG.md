@@ -1,3 +1,7 @@
+### **1.3.2** (2025-02-27)
+
+- Fixes for private key export
+
 ### **1.3.1** (2025-02-26)
 
 - Watch only wallets are now considered stable and removed from experimental features
