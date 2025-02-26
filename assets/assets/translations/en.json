@@ -475,6 +475,7 @@
   "address_selector_title": "Select address to sign with",
   "setup_legal_title": "Legal Notice",
   "setup_legal_switch_tile": "I understand and acknowledge that only I hold the keys to my coins. No one can assist me in recovering them without my seed phrase. Neither the developers of this app nor the Peercoin Foundation provide any warranty. I will use this app at my own risk. I have read and understood the license above.",
+  "setup_legal_switch_tile_ack": "I acknowledge and agree",
   "setup_legal_license": "View License",
   "setup_auth_title": "Select when your web session should expire:",
   "setup_auth_subtitle_plural": "Your session will expire after $days days.",
