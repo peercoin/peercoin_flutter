@@ -32,14 +32,15 @@ import '../../widgets/wallet/send_tab.dart';
 import '../../widgets/wallet/transactions_list.dart';
 import '../../widgets/wallet/wallet_home/wallet_rescan_bottom_sheet.dart';
 
-class WalletHomeScreen extends StatefulWidget {
-  const WalletHomeScreen({super.key});
+class StandardAndWatchOnlyWalletHomeScreen extends StatefulWidget {
+  const StandardAndWatchOnlyWalletHomeScreen({super.key});
 
   @override
-  State<WalletHomeScreen> createState() => _WalletHomeState();
+  State<StandardAndWatchOnlyWalletHomeScreen> createState() =>
+      _WalletHomeState();
 }
 
-class _WalletHomeState extends State<WalletHomeScreen>
+class _WalletHomeState extends State<StandardAndWatchOnlyWalletHomeScreen>
     with WidgetsBindingObserver {
   bool _initial = true;
   String _unusedAddress = '';
@@ -380,59 +381,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
     super.deactivate();
   }
 
-  Future<void> _titleEditDialog(
-    BuildContext context,
-    CoinWallet wallet,
-  ) async {
-    var textFieldController = TextEditingController();
-    textFieldController.text = wallet.title;
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            AppLocalizations.instance.translate(
-              'wallet_title_edit',
-            ),
-            textAlign: TextAlign.center,
-          ),
-          content: TextField(
-            controller: textFieldController,
-            maxLength: 20,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.instance.translate(
-                'wallet_title_edit_new_title',
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                AppLocalizations.instance
-                    .translate('server_settings_alert_cancel'),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<WalletProvider>().updateWalletTitle(
-                      identifier: _wallet.name,
-                      newTitle: textFieldController.text,
-                    );
-                Navigator.pop(context);
-              },
-              child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _selectPopUpMenuItem(String value) {
     switch (value) {
       case 'import_wallet':
@@ -460,7 +408,7 @@ class _WalletHomeState extends State<WalletHomeScreen>
         );
         break;
       case 'change_title':
-        _titleEditDialog(context, _wallet);
+        titleEditDialog(context, _wallet);
         break;
       case 'reset_wallet':
         _triggerResetBottomSheet();
@@ -839,9 +787,6 @@ class _WalletHomeState extends State<WalletHomeScreen>
           ),
         );
         break;
-      default:
-        body = const SizedBox();
-        break;
     }
     return body;
   }
@@ -908,4 +853,57 @@ enum WalletTab {
   transactions,
   addresses,
   send,
+}
+
+Future<void> titleEditDialog(
+  BuildContext context,
+  CoinWallet wallet,
+) async {
+  var textFieldController = TextEditingController();
+  textFieldController.text = wallet.title;
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(
+          AppLocalizations.instance.translate(
+            'wallet_title_edit',
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: TextField(
+          controller: textFieldController,
+          maxLength: 20,
+          decoration: InputDecoration(
+            hintText: AppLocalizations.instance.translate(
+              'wallet_title_edit_new_title',
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              AppLocalizations.instance
+                  .translate('server_settings_alert_cancel'),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<WalletProvider>().updateWalletTitle(
+                    identifier: wallet.name,
+                    newTitle: textFieldController.text,
+                  );
+              Navigator.pop(context);
+            },
+            child: Text(
+              AppLocalizations.instance.translate('jail_dialog_button'),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

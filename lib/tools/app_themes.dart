@@ -4,7 +4,6 @@ class MyTheme {
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(
       cardColor: LightColors.white,
-      dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
       dividerColor: LightColors.darkGreen,
       focusColor: LightColors.green,
@@ -20,6 +19,7 @@ class MyTheme {
         ),
       ),
       dialogTheme: DialogTheme(
+        backgroundColor: LightColors.white,
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(20),
@@ -101,7 +101,6 @@ class MyTheme {
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
       cardColor: DarkColors.green,
-      dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
       dividerColor: DarkColors.lightGreen,
       focusColor: DarkColors.black,
@@ -137,6 +136,7 @@ class MyTheme {
         ),
       ),
       dialogTheme: DialogTheme(
+        backgroundColor: DarkColors.green,
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(10),
@@ -219,23 +219,24 @@ class MyTheme {
     return appThemes[mode] ?? appThemes[ThemeMode.light]!;
   }
 
-  static MaterialColor materialColor(Color color) {
-    return MaterialColor(
-      color.value,
-      <int, Color>{
-        50: color,
-        100: color,
-        200: color,
-        300: color,
-        400: color,
-        500: color,
-        600: color,
-        700: color,
-        800: color,
-        900: color,
-      },
-    );
-  }
+  // static MaterialColor materialColor(Color color) {
+  //   return MaterialColor(
+  //     color.value,
+  //     <int, Color>{
+  //       50: color,
+  //       100: color,
+  //       200: color,
+  //       300: color,
+  //       400: color,
+  //       500: color,
+  //       600: color,
+  //       700: color,
+  //       800: color,
+  //       900: color,
+  //     },
+  //   );
+  // }
+  // TODO unused code above with deprecation in color.value, remove if not needed
 }
 
 abstract class LightColors {

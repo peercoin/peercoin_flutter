@@ -61,8 +61,8 @@ class _AppSettingsWalletOrderScreenState
 
   Color _calculateTileColor(int index) {
     final colorScheme = Theme.of(context).colorScheme;
-    final oddItemColor = colorScheme.primary.withOpacity(0.10);
-    final evenItemColor = colorScheme.primary.withOpacity(0.3);
+    final oddItemColor = colorScheme.primary.withValues(alpha: 0.1);
+    final evenItemColor = colorScheme.primary.withValues(alpha: 0.3);
 
     if (index.isOdd) {
       return oddItemColor;

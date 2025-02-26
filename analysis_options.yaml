@@ -7,3 +7,4 @@ linter:
   rules:
     - require_trailing_commas
     - prefer_single_quotes
+    - invalid_runtime_check_with_js_interop_types

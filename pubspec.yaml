@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 1.3.0+143
+version: 1.3.1+144
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -34,28 +34,33 @@ dependencies:
   local_auth_android: any
   package_info_plus: ^4.1.0
   mailto: ^2.0.0
-  flutter_slidable: ^3.1.0
+  flutter_slidable: ^4.0.0
   flutter_typeahead: ^4.0.0
   connectivity_plus: ^3.0.2
   theme_mode_handler: ^3.0.0
   http: ^0.13.3
   collection: ^1.15.0-nullsafety.4
   flutter_markdown: ^0.6.6
-  background_fetch: ^1.3.4
-  flutter_logs: ^2.1.11
+  background_fetch: ^1.3.7
+  flutter_logs: 
+    git: 
+      url: https://github.com/ced1check/flutter_logs
+      refh: master
+    # TODO move back once  https://github.com/umair13adil/flutter_logs/issues/69 or 73 is fixed
   auto_size_text: ^3.0.0
   camera: ^0.10.0+4
   path_provider: ^2.0.11
-  file_picker: ^5.2.2
+  file_picker: ^9.0.1
   fast_csv: ^0.1.44
-  protobuf: ^3.0.0
-  grpc: ^3.1.0
+  protobuf: ^3.1.0
+  grpc: ^4.0.0
   mockito: ^5.3.2
   loader_overlay: ^2.1.0
   app_bar_with_search_switch: ^1.5.4
   decimal: ^2.3.3
   characters: ^1.2.0
   coinlib_flutter: ^2.0.0
+  web: ^1.0.0
 
 dev_dependencies:
   integration_test:
@@ -68,7 +73,7 @@ dev_dependencies:
   build_runner: ^2.0.4
   flutter_launcher_icons: ^0.11.0
   flutter_native_splash: ^2.2.7
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 flutter_icons:
   android: "launcher_icon"

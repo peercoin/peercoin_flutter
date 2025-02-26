@@ -1,3 +1,7 @@
+### **1.3.1** (2024-06-xx)
+
+- Watch only wallets are now considered stable and removed from experimental features
+
 ### **1.3.0** (2024-06-09)
 
 - Show transaction confirmation: fix bug where some outputs were not displayed correctly

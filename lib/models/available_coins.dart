@@ -64,6 +64,17 @@ class AvailableCoins {
     return _availableCoinList;
   }
 
+  // ignore: non_constant_identifier_names
+  static final Map<String, String> _ROASTIconPaths = {
+    'peercoin': 'assets/icon/roast-icon-64.png',
+    'peercoinTestnet': 'assets/icon/roast-icon-64-grey.png',
+  };
+
+  static String getROASTIconPath(String identifier) {
+    final coin = identifier.split('_').first;
+    return _ROASTIconPaths[coin]!;
+  }
+
   static Coin getSpecificCoin(String identifier) {
     final coin = identifier.split('_').first;
     if (_availableCoinList.containsKey(coin)) {

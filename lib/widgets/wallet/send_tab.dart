@@ -23,7 +23,7 @@ import '/../models/hive/wallet_address.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../providers/connection_provider.dart';
-import '/../screens/wallet/wallet_home.dart';
+import '../../screens/wallet/standard_and_watch_only_wallet_home.dart';
 import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
 import '/../tools/auth.dart';
@@ -345,9 +345,9 @@ class _SendTabState extends State<SendTab> {
                       if (_fiatEnabled && _currentAddressIndex == 0)
                         SwitchListTile(
                           value: _fiatInputEnabled,
-                          onChanged: (_) => setState(
+                          onChanged: (newState) => setState(
                             () {
-                              _fiatInputEnabled = _;
+                              _fiatInputEnabled = newState;
                               _amountControllerList[_currentAddressIndex].text =
                                   '';
                               _amountControllerList[_currentAddressIndex]
@@ -383,8 +383,8 @@ class _SendTabState extends State<SendTab> {
                       _currentAddressIndex == 0
                           ? SwitchListTile(
                               value: _expertMode,
-                              onChanged: (_) => setState(() {
-                                _expertMode = _;
+                              onChanged: (newState) => setState(() {
+                                _expertMode = newState;
                                 _opReturnController.text = '';
                               }),
                               title: Text(

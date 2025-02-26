@@ -105,6 +105,7 @@ class WalletProvider with ChangeNotifier {
     required String letterCode,
     required bool isImportedSeed,
     required bool watchOnly,
+    required bool isROAST,
   }) async {
     final box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
@@ -117,7 +118,7 @@ class WalletProvider with ChangeNotifier {
     LoggerWrapper.logInfo(
       'WalletProvider',
       'addWallet',
-      '$name - $title - $letterCode - $nOfWalletOfLetterCode',
+      'writing $name - $title - $letterCode - $nOfWalletOfLetterCode ',
     );
 
     await box.put(
@@ -129,8 +130,10 @@ class WalletProvider with ChangeNotifier {
         nOfWalletOfLetterCode,
         isImportedSeed,
         watchOnly,
+        isROAST,
       ),
     );
+
     notifyListeners();
   }
 
@@ -492,6 +495,31 @@ class WalletProvider with ChangeNotifier {
     );
 
     openWallet.save();
+    notifyListeners();
+  }
+
+  Future<void> deleteWatchOnlyWallet(String identifier) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    if (openWallet.watchOnly == false) {
+      throw Exception('Wallet is not watch only');
+    }
+
+    await _walletBox.delete(identifier);
+
+    closeWallet(identifier);
+    notifyListeners();
+  }
+
+  Future<void> deleteROASTWallet(String identifier) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    if (openWallet.isROAST == false) {
+      throw Exception('Wallet is not ROAST');
+    }
+
+    await _walletBox.delete(identifier);
+    await _vaultBox.delete(identifier);
+
+    closeWallet(identifier);
     notifyListeners();
   }
 
@@ -1161,18 +1189,18 @@ class WalletProvider with ChangeNotifier {
     return bip39.mnemonicToSeed(words);
   }
 
+  Future<void> setHideWallet(String identifier, bool newState) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    openWallet.hidden = newState;
+    await openWallet.save();
+    notifyListeners();
+  }
+
   void setUnusedAddress({
     required String identifier,
     required String address,
   }) {
     _unusedAddressCache[identifier] = address;
-    notifyListeners();
-  }
-
-  Future<void> setHideWallet(String identifier, bool newState) async {
-    final openWallet = getSpecificCoinWallet(identifier);
-    openWallet.hidden = newState;
-    await openWallet.save();
     notifyListeners();
   }
 
@@ -1332,18 +1360,6 @@ class WalletProvider with ChangeNotifier {
   }) {
     final wallet = getSpecificCoinWallet(identifier);
     wallet.title = newTitle;
-    notifyListeners();
-  }
-
-  Future<void> deleteWatchOnlyWallet(String identifier) async {
-    final openWallet = getSpecificCoinWallet(identifier);
-    if (openWallet.watchOnly == false) {
-      throw Exception('Wallet is not watch only');
-    }
-
-    await _walletBox.delete(identifier);
-
-    closeWallet(identifier);
     notifyListeners();
   }
 }

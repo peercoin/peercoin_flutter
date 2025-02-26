@@ -1,1 +1,1 @@
-enum ExperimentalFeatures { watchOnlyWallets }
+enum ExperimentalFeatures { roast }

@@ -8,6 +8,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
@@ -66,6 +68,8 @@ void main() async {
   Hive.registerAdapter(AppOptionsStoreAdapter());
   Hive.registerAdapter(ServerAdapter());
   Hive.registerAdapter(PendingNotificationAdapter());
+  Hive.registerAdapter(HiveECPrivateKeyAdapter());
+  Hive.registerAdapter(HiveECPublicKeyAdapter());
 
   //init coinlib
   await loadCoinlib();
@@ -218,7 +222,7 @@ class PeercoinApp extends StatelessWidget {
         builder: (ThemeMode themeMode) {
           return GlobalLoaderOverlay(
             useDefaultLoading: false,
-            overlayColor: Colors.grey.withOpacity(0.6),
+            overlayColor: Colors.grey.withValues(alpha: 0.6),
             overlayWidget: const Center(
               child: SpinningPeercoinIcon(),
             ),

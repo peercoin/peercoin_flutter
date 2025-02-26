@@ -230,7 +230,10 @@ class _WalletListScreenState extends State<WalletListScreen>
                                         onTap: () async {
                                           context.loaderOverlay.show();
                                           await Navigator.of(context).pushNamed(
-                                            Routes.walletHome,
+                                            wallet.isROAST
+                                                ? Routes.roastWalletHome
+                                                : Routes
+                                                    .standardAndWatchOnlyWalletHome,
                                             arguments: {
                                               'wallet': wallet,
                                             },
@@ -242,10 +245,15 @@ class _WalletListScreenState extends State<WalletListScreen>
                                               CircleAvatar(
                                                 backgroundColor: Colors.white,
                                                 child: Image.asset(
-                                                  AvailableCoins
-                                                      .getSpecificCoin(
-                                                    wallet.name,
-                                                  ).iconPath,
+                                                  wallet.isROAST
+                                                      ? AvailableCoins
+                                                          .getROASTIconPath(
+                                                          wallet.name,
+                                                        )
+                                                      : AvailableCoins
+                                                          .getSpecificCoin(
+                                                          wallet.name,
+                                                        ).iconPath,
                                                   width: 20,
                                                 ),
                                               ),
@@ -446,7 +454,7 @@ class _WalletListScreenState extends State<WalletListScreen>
           );
         } else {
           defaultWallet = _activeWalletsOrdered.firstWhereOrNull(
-            (elem) => elem.letterCode == _appSettings.defaultWallet,
+            (elem) => elem.name == _appSettings.defaultWallet,
           );
         }
         //push to default wallet
@@ -457,12 +465,19 @@ class _WalletListScreenState extends State<WalletListScreen>
             if (mounted) {
               context.loaderOverlay.show();
             }
-            await navigator.pushNamed(
-              Routes.walletHome,
-              arguments: {
-                'wallet': _activeWalletsOrdered.first,
-              },
-            );
+            _activeWalletsOrdered.first.isROAST
+                ? await navigator.pushNamed(
+                    Routes.roastWalletHome,
+                    arguments: {
+                      'wallet': _activeWalletsOrdered.first,
+                    },
+                  )
+                : await navigator.pushNamed(
+                    Routes.standardAndWatchOnlyWalletHome,
+                    arguments: {
+                      'wallet': _activeWalletsOrdered.first,
+                    },
+                  );
           }
         } else if (_activeWalletsOrdered.length > 1 ||
             widget.walletToOpenDirectly.isNotEmpty) {
@@ -471,10 +486,15 @@ class _WalletListScreenState extends State<WalletListScreen>
               context.loaderOverlay.show();
             }
             if (!kIsWeb) {
-              await navigator.pushNamed(
-                Routes.walletHome,
-                arguments: {'wallet': defaultWallet},
-              );
+              defaultWallet.isROAST
+                  ? await navigator.pushNamed(
+                      Routes.roastWalletHome,
+                      arguments: {'wallet': defaultWallet},
+                    )
+                  : await navigator.pushNamed(
+                      Routes.standardAndWatchOnlyWalletHome,
+                      arguments: {'wallet': defaultWallet},
+                    );
             }
           }
         }

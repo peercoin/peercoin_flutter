@@ -150,7 +150,8 @@ class _WalletMessageSigningScreenState
               await Navigator.of(ctx).pushNamedAndRemoveUntil(
                 Routes.walletMessageSigning,
                 (route) {
-                  if (route.settings.name == '/wallet-home') {
+                  if (route.settings.name ==
+                      Routes.standardAndWatchOnlyWalletHome) {
                     return true;
                   }
                   return false;

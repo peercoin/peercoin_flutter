@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/experimental_features.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +25,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   bool _watchOnly = false;
   late AppSettingsProvider _appSettings;
 
-  Future<void> addWallet() async {
+  Future<void> addWallet({required isROAST}) async {
     try {
       var appSettings = context.read<AppSettingsProvider>();
       final navigator = Navigator.of(context);
@@ -34,12 +34,27 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       final nOfWalletOfLetterCode = walletProvider.availableWalletValues
           .where((element) => element.letterCode == letterCode)
           .length;
-      final walletName = '${_coin}_$nOfWalletOfLetterCode';
+      final nOfWalletOfLetterCodeROAST = walletProvider.availableWalletValues
+          .where(
+            (element) => element.letterCode == letterCode && element.isROAST,
+          )
+          .length;
 
+      // generate identifier
+      final walletName = isROAST
+          ? '${_coin}_roast_group_$nOfWalletOfLetterCodeROAST'
+          : '${_coin}_$nOfWalletOfLetterCode';
+
+      // generate title
       String title = _availableCoins[_coin]!.displayName;
       if (nOfWalletOfLetterCode > 0) {
         title = '$title ${nOfWalletOfLetterCode + 1}';
       }
+      if (isROAST) {
+        title =
+            'ROAST Group ${nOfWalletOfLetterCodeROAST == 0 ? "" : nOfWalletOfLetterCodeROAST + 1}';
+      }
+
       final prefs = await SharedPreferences.getInstance();
 
       await walletProvider.addWallet(
@@ -48,6 +63,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         letterCode: letterCode,
         isImportedSeed: prefs.getBool('importedSeed') == true,
         watchOnly: _watchOnly,
+        isROAST: isROAST,
       );
 
       //add to order list
@@ -60,6 +76,11 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
       navigator.pop();
     } catch (e) {
+      LoggerWrapper.logError(
+        'NewWalletScreen',
+        'addWallet',
+        'Error adding wallet: $e',
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -103,11 +124,12 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
 
     if (actualAvailableWallets.isNotEmpty) {
       for (var wallet in actualAvailableWallets) {
+        bool isTestnet = _availableCoins[wallet]!.letterCode == 'tPPC';
         list.add(
           SimpleDialogOption(
             onPressed: () {
               _coin = wallet;
-              addWallet();
+              addWallet(isROAST: false);
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -122,6 +144,29 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             ),
           ),
         );
+        // inject ROAST
+        if (_appSettings.activatedExperimentalFeatures.contains('roast')) {
+          list.add(
+            SimpleDialogOption(
+              onPressed: () {
+                _coin = wallet;
+                addWallet(isROAST: true);
+              },
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Image.asset(
+                    AvailableCoins.getROASTIconPath(wallet),
+                    width: 16,
+                  ),
+                ),
+                title: Text(
+                  '${isTestnet ? "Testnet " : ""}ROAST Group',
+                ),
+              ),
+            ),
+          );
+        }
       }
     } else {
       list.add(
@@ -130,31 +175,27 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         ),
       );
     }
-
-    if (_appSettings.activatedExperimentalFeatures
-        .contains(ExperimentalFeatures.watchOnlyWallets.name)) {
-      list.add(
-        SimpleDialogOption(
-          child: GestureDetector(
-            onTap: () => setState(() {
-              _watchOnly = !_watchOnly;
-            }),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Checkbox(
-                  value: _watchOnly,
-                  onChanged: (e) => setState(() {
-                    _watchOnly = e!;
-                  }),
-                ),
-                Text(AppLocalizations.instance.translate('watch_only')),
-              ],
-            ),
+    list.add(
+      SimpleDialogOption(
+        child: GestureDetector(
+          onTap: () => setState(() {
+            _watchOnly = !_watchOnly;
+          }),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Checkbox(
+                value: _watchOnly,
+                onChanged: (e) => setState(() {
+                  _watchOnly = e!;
+                }),
+              ),
+              Text(AppLocalizations.instance.translate('watch_only')),
+            ],
           ),
         ),
-      );
-    }
+      ),
+    );
 
     return SimpleDialog(
       title: Text(AppLocalizations.instance.translate('add_new_wallet')),

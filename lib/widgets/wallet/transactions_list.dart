@@ -81,7 +81,7 @@ class _TransactionListState extends State<TransactionList> {
             height: 20,
             selectedColor: Theme.of(context).primaryColor,
             unselectedColor:
-                Theme.of(context).unselectedWidgetColor.withOpacity(0.5),
+                Theme.of(context).unselectedWidgetColor.withValues(alpha: 0.5),
             stepSize: 4,
             roundedCap: (_, __) => true,
           );
