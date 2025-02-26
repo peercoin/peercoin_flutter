@@ -102,6 +102,13 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                 'setup_legal_license',
                               ),
                             ),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('setup_legal_switch_tile'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
@@ -109,7 +116,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                 key: const Key('setupLegalConsentKey'),
                                 title: Text(
                                   AppLocalizations.instance
-                                      .translate('setup_legal_switch_tile'),
+                                      .translate('setup_legal_switch_tile_ack'),
                                   style: const TextStyle(
                                     color: Colors.white,
                                   ),
