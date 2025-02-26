@@ -2,21 +2,21 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:peercoin/tools/validators.dart';
+import 'package:peercoin/widgets/wallet/address_tab/dialogs.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/available_coins.dart';
-import '../../models/coin.dart';
-import '../../models/hive/wallet_address.dart';
-import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings_provider.dart';
-import '../../providers/connection_provider.dart';
-import '../../screens/wallet/standard_and_watch_only_wallet_home.dart';
-import '../../tools/app_localizations.dart';
-import '../../tools/auth.dart';
-import '../../tools/logger_wrapper.dart';
-import '../double_tab_to_clipboard.dart';
-import 'wallet_home/wallet_home_qr.dart';
+import '../../../models/available_coins.dart';
+import '../../../models/coin.dart';
+import '../../../models/hive/wallet_address.dart';
+import '../../../providers/wallet_provider.dart';
+import '../../../providers/app_settings_provider.dart';
+import '../../../providers/connection_provider.dart';
+import '../../../screens/wallet/standard_and_watch_only_wallet_home.dart';
+import '../../../tools/app_localizations.dart';
+import '../../../tools/auth.dart';
+import '../../../tools/logger_wrapper.dart';
+import '../../double_tab_to_clipboard.dart';
+import '../wallet_home/wallet_home_qr.dart';
 
 class AddressTab extends StatefulWidget {
   final String walletName;
@@ -60,7 +60,6 @@ class _AddressTabState extends State<AddressTab> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      applyFilter();
       _availableCoin = AvailableCoins.getSpecificCoin(widget.walletName);
       _connection = Provider.of<ConnectionProvider>(context);
       _walletProvider = Provider.of<WalletProvider>(context);
@@ -68,6 +67,7 @@ class _AddressTabState extends State<AddressTab> {
       _decimalProduct = AvailableCoins.getDecimalProduct(
         identifier: widget.walletName,
       );
+
       await fillAddressBalanceMap();
       setState(() {
         _initial = false;
@@ -159,126 +159,6 @@ class _AddressTabState extends State<AddressTab> {
     });
   }
 
-  Future<void> _addressEditDialog(
-    BuildContext context,
-    WalletAddress address,
-  ) async {
-    var textFieldController = TextEditingController();
-    textFieldController.text = address.addressBookName;
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            '${AppLocalizations.instance.translate('addressbook_edit_dialog_title')} ${address.address}',
-            textAlign: TextAlign.center,
-          ),
-          content: TextField(
-            controller: textFieldController,
-            maxLength: 32,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.instance
-                  .translate('addressbook_edit_dialog_input'),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                AppLocalizations.instance
-                    .translate('server_settings_alert_cancel'),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<WalletProvider>().updateOrCreateAddressLabel(
-                      identifier: widget.walletName,
-                      address: address.address,
-                      label: textFieldController.text,
-                    );
-                Navigator.pop(context);
-              },
-              child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showAddressExportDialog(
-    BuildContext context,
-    WalletAddress address,
-  ) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            AppLocalizations.instance
-                .translate('addressbook_export_dialog_title'),
-            textAlign: TextAlign.center,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                AppLocalizations.instance
-                    .translate('addressbook_export_dialog_description'),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  letterSpacing: 1.2,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                AppLocalizations.instance
-                    .translate('server_settings_alert_cancel'),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                String wif;
-                final navigator = Navigator.of(context);
-                void showQrDialog(wif) =>
-                    WalletHomeQr.showQrDialog(context, wif);
-
-                if (address.wif.isEmpty) {
-                  wif = await context.read<WalletProvider>().getWif(
-                        identifier: _availableCoin.name,
-                        address: address.address,
-                      );
-                } else {
-                  wif = address.wif;
-                }
-                navigator.pop();
-                showQrDialog(wif);
-              },
-              child: Text(
-                AppLocalizations.instance
-                    .translate('addressbook_export_dialog_button'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _toggleSendingAddressesVisilibity() {
     setState(() {
       _showSendingAddresses = !_showSendingAddresses;
@@ -340,97 +220,6 @@ class _AddressTabState extends State<AddressTab> {
     );
   }
 
-  Future<void> _addressAddDialog(BuildContext context) async {
-    var labelController = TextEditingController();
-    var addressController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            AppLocalizations.instance.translate('addressbook_add_new'),
-            textAlign: TextAlign.center,
-          ),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: addressController,
-                  decoration: InputDecoration(
-                    hintText:
-                        AppLocalizations.instance.translate('send_address'),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return AppLocalizations.instance
-                          .translate('send_enter_address');
-                    }
-                    var sanitized = value.trim();
-                    if (validateAddress(
-                          sanitized,
-                          _availableCoin.networkType,
-                        ) ==
-                        false) {
-                      return AppLocalizations.instance
-                          .translate('send_invalid_address');
-                    }
-                    //check if already exists
-                    if (widget.walletAddresses
-                        .any((element) => element.address == value)) {
-                      return 'Address already exists';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: labelController,
-                  maxLength: 32,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.instance.translate('send_label'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                AppLocalizations.instance
-                    .translate('server_settings_alert_cancel'),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-                  context.read<WalletProvider>().updateOrCreateAddressLabel(
-                        identifier: widget.walletName,
-                        address: addressController.text,
-                        label: labelController.text == ''
-                            ? ''
-                            : labelController.text,
-                      );
-                  applyFilter();
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(
-                AppLocalizations.instance.translate('jail_dialog_button'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   String _renderLabel(WalletAddress addr) {
     if (_showLabel) {
       return addr.addressBookName;
@@ -467,7 +256,8 @@ class _AddressTabState extends State<AddressTab> {
                               .translate('addressbook_swipe_edit'),
                           backgroundColor: Theme.of(context).primaryColor,
                           icon: Icons.edit,
-                          onPressed: (ctx) => _addressEditDialog(ctx, addr),
+                          onPressed: (ctx) =>
+                              addressEditDialog(ctx, addr, widget.walletName),
                         ),
                         SlidableAction(
                           label: AppLocalizations.instance
@@ -610,7 +400,8 @@ class _AddressTabState extends State<AddressTab> {
                               .translate('addressbook_swipe_edit'),
                           backgroundColor: Theme.of(context).primaryColor,
                           icon: Icons.edit,
-                          onPressed: (ctx) => _addressEditDialog(ctx, addr),
+                          onPressed: (ctx) =>
+                              addressEditDialog(ctx, addr, widget.walletName),
                         ),
                         SlidableAction(
                           label: AppLocalizations.instance
@@ -646,8 +437,11 @@ class _AddressTabState extends State<AddressTab> {
                             biometricsAllowed: context
                                 .read<AppSettingsProvider>()
                                 .biometricsAllowed,
-                            callback: () =>
-                                _showAddressExportDialog(context, addr),
+                            callback: () => addressExportDialog(
+                              context: context,
+                              address: addr,
+                              identifier: widget.walletName,
+                            ),
                           ),
                         ),
                       ],
@@ -684,7 +478,7 @@ class _AddressTabState extends State<AddressTab> {
       );
     }
 
-    var sliverToBoxAdapter = SliverToBoxAdapter(
+    SliverToBoxAdapter sliverToBoxAdapter = SliverToBoxAdapter(
       child: Column(
         children: [
           ExpansionTile(
@@ -951,8 +745,14 @@ class _AddressTabState extends State<AddressTab> {
                                 ),
                                 elevation: 0,
                               ),
-                              onPressed: () {
-                                _addressAddDialog(context);
+                              onPressed: () async {
+                                await addressAddDialog(
+                                  context: context,
+                                  walletAddresses: widget.walletAddresses,
+                                  walletName: widget.walletName,
+                                  applyFilter: applyFilter,
+                                  coin: _availableCoin.networkType,
+                                );
                               },
                               child: Text(
                                 AppLocalizations.instance
