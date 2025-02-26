@@ -24,6 +24,10 @@ class _ROASTWalletDashboardScreenState
 
       _roastClient.events.listen((event) {
         print('Event: $event');
+
+        if (event is ParticipantStatusClientEvent) {
+          //TODO
+        }
       });
 
       setState(() {
@@ -77,3 +81,5 @@ class _ROASTWalletDashboardScreenState
     );
   }
 }
+
+// TODO logout button
