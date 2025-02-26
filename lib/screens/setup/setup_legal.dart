@@ -64,9 +64,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                       'assets/img/setup-legal.png',
                       height: MediaQuery.of(context).size.height / 4,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 15,
-                    ),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -102,6 +100,13 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                 'setup_legal_license',
                               ),
                             ),
+                            Text(
+                              AppLocalizations.instance
+                                  .translate('setup_legal_switch_tile'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
@@ -109,7 +114,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                 key: const Key('setupLegalConsentKey'),
                                 title: Text(
                                   AppLocalizations.instance
-                                      .translate('setup_legal_switch_tile'),
+                                      .translate('setup_legal_switch_tile_ack'),
                                   style: const TextStyle(
                                     color: Colors.white,
                                   ),
