@@ -1,4 +1,4 @@
-### **1.3.1** (2024-06-xx)
+### **1.3.1** (2025-02-26)
 
 - Watch only wallets are now considered stable and removed from experimental features
 
