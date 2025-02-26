@@ -4,7 +4,6 @@ class MyTheme {
   static Map<ThemeMode, ThemeData> appThemes = {
     ThemeMode.light: ThemeData(
       cardColor: LightColors.white,
-      dialogBackgroundColor: LightColors.white,
       disabledColor: LightColors.lightGreen,
       dividerColor: LightColors.darkGreen,
       focusColor: LightColors.green,
@@ -20,6 +19,7 @@ class MyTheme {
         ),
       ),
       dialogTheme: DialogTheme(
+        backgroundColor: LightColors.white,
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(20),
@@ -101,7 +101,6 @@ class MyTheme {
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
       cardColor: DarkColors.green,
-      dialogBackgroundColor: DarkColors.green,
       disabledColor: DarkColors.darkBlue,
       dividerColor: DarkColors.lightGreen,
       focusColor: DarkColors.black,
@@ -137,6 +136,7 @@ class MyTheme {
         ),
       ),
       dialogTheme: DialogTheme(
+        backgroundColor: DarkColors.green,
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(10),
