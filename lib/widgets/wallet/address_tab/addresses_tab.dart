@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -8,9 +7,9 @@ import 'package:provider/provider.dart';
 import '../../../models/available_coins.dart';
 import '../../../models/coin.dart';
 import '../../../models/hive/wallet_address.dart';
-import '../../../providers/wallet_provider.dart';
 import '../../../providers/app_settings_provider.dart';
 import '../../../providers/connection_provider.dart';
+import '../../../providers/wallet_provider.dart';
 import '../../../screens/wallet/standard_and_watch_only_wallet_home.dart';
 import '../../../tools/app_localizations.dart';
 import '../../../tools/auth.dart';
