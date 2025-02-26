@@ -64,9 +64,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                       'assets/img/setup-legal.png',
                       height: MediaQuery.of(context).size.height / 4,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 15,
-                    ),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
