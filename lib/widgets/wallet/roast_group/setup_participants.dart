@@ -175,7 +175,6 @@ class _ROASTGroupSetupParticipantsState
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      isDismissible: false,
       enableDrag: false,
       builder: (BuildContext context) {
         return SetupParticipantsSharePubKeyBottomSheet(
