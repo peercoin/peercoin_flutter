@@ -1,6 +1,6 @@
 ### **1.3.4** (2025-03-02)
 
-- Fixes for badges in address book
+- Fix for some devices that experienced problems with message signing
 
 ### **1.3.3** (2025-02-28)
 
