@@ -14,6 +14,7 @@ class ROASTWalletDashboardScreen extends StatefulWidget {
 class _ROASTWalletDashboardScreenState
     extends State<ROASTWalletDashboardScreen> {
   bool _initial = true;
+  DateTime _lastUpdate = DateTime.now();
   late Client _roastClient;
 
   @override
@@ -25,10 +26,16 @@ class _ROASTWalletDashboardScreenState
       _roastClient.events.listen((event) {
         print('Event: $event');
 
-        if (event is ParticipantStatusClientEvent) {
-          //TODO
-        }
+        setState(() {
+          _lastUpdate = DateTime.now();
+        });
       });
+
+      print(_roastClient.signaturesRequests);
+      print('requests:');
+      print(_roastClient.dkgRequests);
+      print('accepted:');
+      print(_roastClient.acceptedDkgs);
 
       setState(() {
         _initial = false;
@@ -60,22 +67,52 @@ class _ROASTWalletDashboardScreenState
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       PeerButton(
-                        text: 'click',
-                        action: () => _roastClient.requestDkg(
-                          NewDkgDetails(
-                            name: 'test',
-                            description: 'test',
-                            threshold: 1,
-                            expiry: Expiry(const Duration(days: 1)),
-                          ),
-                        ),
+                        text: 'Request DKG',
+                        action: () async {
+                          await _roastClient.requestDkg(
+                            NewDkgDetails(
+                              name: 'test${DateTime.now()}',
+                              description: 'test',
+                              threshold: 2,
+                              expiry: Expiry(const Duration(days: 1)),
+                            ),
+                          );
+                          setState(() {
+                            _lastUpdate = DateTime.now();
+                          });
+                        },
                       ),
+                      ..._roastClient.dkgRequests.map((request) {
+                        return Column(
+                          children: [
+                            Text(
+                              request.completed.length <
+                                      request.details.threshold
+                                  ? 'Pending'
+                                  : 'Completed',
+                            ),
+                            Text('Name: ${request.details.name}'),
+                            Text(
+                              'Description: ${request.details.description}',
+                            ),
+                            Text('Threshold: ${request.details.threshold}'),
+                            PeerButton(
+                              text: 'Ack',
+                              action: () async {
+                                await _roastClient
+                                    .acceptDkg(request.details.name);
+                              },
+                            ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+          Text(_lastUpdate.toIso8601String())
         ],
       ),
     );

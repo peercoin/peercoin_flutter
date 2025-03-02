@@ -32,7 +32,7 @@ class _ROASTGroupLandingConfiguredState
             uri.host.trim(),
             port: uri.port,
             options: const ChannelOptions(
-              credentials: ChannelCredentials.secure(),
+              credentials: ChannelCredentials.insecure(),
             ),
           ),
         ),
@@ -123,7 +123,7 @@ class _ROASTGroupLandingConfiguredState
                   );
                 }
                 if (Uri.tryParse(value) == null ||
-                    !value.startsWith('https://')) {
+                    !value.startsWith('http://')) {
                   return AppLocalizations.instance.translate(
                     'roast_landing_configured_edit_server_url_error',
                   );
