@@ -782,9 +782,9 @@ class _SendTabState extends State<SendTab> {
 
   Future<void> importCsv() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-        // type: FileType.custom,
-        // allowedExtensions: ['csv'], TODO re-enable when fixed in flutter_file_picker
-        );
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
     String csv;
     if (result != null) {
       if (kIsWeb) {
