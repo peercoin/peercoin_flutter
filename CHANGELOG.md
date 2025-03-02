@@ -1,3 +1,7 @@
+### **1.3.4** (2025-03-02)
+
+- Fixes for badges in address book
+
 ### **1.3.3** (2025-02-28)
 
 - Fixes for badges in address book
