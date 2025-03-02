@@ -58,7 +58,7 @@ dependencies:
   app_bar_with_search_switch: ^1.5.4
   decimal: ^2.3.3
   characters: ^1.2.0
-  coinlib_flutter: ^2.0.0
+  coinlib_flutter: ^2.2.0
   frosty:
     path: ../frosty/frosty
     # TODO move to git

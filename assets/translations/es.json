@@ -43,7 +43,7 @@
     "app_settings_notifications_hint_sync_1": "Establece el intervalo en el que la aplicación buscará nuevas transacciones en segundo plano.\nIntervalo activo: $minutes minutos.",
     "app_settings_theme_system": "Predeterminado",
     "app_settings_notifications_disable_button": "Desactivar las notificaciones",
-    "app_settings_notifications_heading_manage_wallets": "Gestionar las notificaciones para las billetera",
+    "app_settings_notifications_heading_manage_wallets": "Gestionar las notificaciones para las billeteras",
     "app_settings_notifications_heading_interval": "Intervalo de sincronización",
     "app_settings_notifications_not_enabled": "Las notificaciones en segundo plano están actualmente desactivadas.",
     "app_settings_notifications_hint_sync_2": "Las notificaciones pueden retrasarse significativamente dependiendo de cómo tu sistema operativo gestiona las tareas en segundo plano. Los dispositivos iOS pueden esperar intervalos más largos.",
