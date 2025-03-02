@@ -1,6 +1,7 @@
 ### **1.3.4** (2025-03-02)
 
 - Fix for some devices that experienced problems with message signing
+- reenable CSV file selection for import
 
 ### **1.3.3** (2025-02-28)
 
