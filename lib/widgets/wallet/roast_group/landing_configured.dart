@@ -21,10 +21,15 @@ class ROASTGroupLandingConfigured extends StatefulWidget {
 
 class _ROASTGroupLandingConfiguredState
     extends State<ROASTGroupLandingConfigured> {
+  bool _loginInProgress = false;
+
   void _tryLogin() async {
     final uri = Uri.parse(widget.roastClient.serverUrl);
 
     try {
+      setState(() {
+        _loginInProgress = true;
+      });
       final client = await frost.Client.login(
         config: widget.roastClient.clientConfig!,
         api: frost.GrpcClientApi(
@@ -54,6 +59,10 @@ class _ROASTGroupLandingConfiguredState
           'roastClient': client,
         },
       );
+
+      setState(() {
+        _loginInProgress = false;
+      });
     } catch (e) {
       LoggerWrapper.logError(
         'ROASTGroupLandingConfigured',
@@ -190,7 +199,7 @@ class _ROASTGroupLandingConfiguredState
                   children: [
                     PeerButton(
                       text: 'Login to server',
-                      action: () => _tryLogin(),
+                      action: () => _loginInProgress ? null : _tryLogin(),
                     ),
                     const SizedBox(height: 20),
                     PeerButton(
