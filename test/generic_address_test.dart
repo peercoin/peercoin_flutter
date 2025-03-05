@@ -21,6 +21,13 @@ void main() {
       expect(address.toString(), 'p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre');
     });
 
+    test('fromASM - P2WPKH', () {
+      const asm = '0 2ea1d5637bf5b26fc442df1adca762ddd0479b45';
+      final address = GenericAddress.fromAsm(asm, Network.mainnet);
+      expect(address is P2WPKHAddress, true);
+      expect(address.toString(), 'pc1q96sa2cmm7kexl3zzmuddefmzmhgy0x69pnp2wv');
+    });
+
     test('fromAsm - Unknown program type', () {
       const asm = 'OP_RETURN';
       expect(
@@ -29,6 +36,6 @@ void main() {
       );
     });
 
-    //TODO - Implement P2WPKH, P2WSH and P2TR
+    //TODO - Implement P2WSH and P2TR
   });
 }
