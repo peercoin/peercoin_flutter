@@ -25,17 +25,18 @@ class _ROASTWalletDashboardScreenState
 
       _roastClient.events.listen((event) {
         print('Event: $event');
+        print(_roastClient.signaturesRequests);
+        print('requests:');
+        print(_roastClient.dkgRequests);
+        print('accepted:');
+        print(_roastClient.acceptedDkgs);
+        print('keys:');
+        print(_roastClient.keys);
 
         setState(() {
           _lastUpdate = DateTime.now();
         });
       });
-
-      print(_roastClient.signaturesRequests);
-      print('requests:');
-      print(_roastClient.dkgRequests);
-      print('accepted:');
-      print(_roastClient.acceptedDkgs);
 
       setState(() {
         _initial = false;
@@ -82,6 +83,8 @@ class _ROASTWalletDashboardScreenState
                           });
                         },
                       ),
+                      const SizedBox(height: 20),
+                      const Text('Signatures Requests'), // TODO i18n
                       ..._roastClient.dkgRequests.map((request) {
                         return Column(
                           children: [
@@ -103,6 +106,18 @@ class _ROASTWalletDashboardScreenState
                                     .acceptDkg(request.details.name);
                               },
                             ),
+                          ],
+                        );
+                      }),
+                      const SizedBox(height: 20),
+                      const Text('Signatures Accepted'), // TODO i18n
+                      ..._roastClient.acceptedDkgs.map((accepted) {
+                        return Column(
+                          children: [
+                            Text('Name: ${accepted.details.name}'),
+                            Text(
+                                'Description: ${accepted.details.description}'),
+                            Text('Threshold: ${accepted.details.threshold}'),
                           ],
                         );
                       }),

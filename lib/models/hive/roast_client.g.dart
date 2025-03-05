@@ -25,10 +25,10 @@ class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
       .._serverUrl = fields[3] as String?
       .._groupId = fields[4] as String?
       .._participantNames = (fields[5] as Map).cast<String, String>()
-      ..keys = (fields[6] as Map).cast<ECPublicKey, FrostKeyWithDetails>()
-      ..sigNonces =
+      .._keys = (fields[6] as Map).cast<ECPublicKey, FrostKeyWithDetails>()
+      .._sigNonces =
           (fields[7] as Map).cast<SignaturesRequestId, SignaturesNonces>()
-      ..sigsRejected =
+      .._sigsRejected =
           (fields[8] as Map).cast<SignaturesRequestId, FinalExpirable>()
       .._ourName = fields[9] as String?;
   }
@@ -50,11 +50,11 @@ class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
       ..writeByte(5)
       ..write(obj._participantNames)
       ..writeByte(6)
-      ..write(obj.keys)
+      ..write(obj._keys)
       ..writeByte(7)
-      ..write(obj.sigNonces)
+      ..write(obj._sigNonces)
       ..writeByte(8)
-      ..write(obj.sigsRejected)
+      ..write(obj._sigsRejected)
       ..writeByte(9)
       ..write(obj._ourName)
       ..writeByte(10)
