@@ -9,8 +9,9 @@ class ROASTStorage implements ClientStorageInterface {
   Future<void> addOrReplaceAck(SignedDkgAck ack) async {
     final groupKey = ack.signed.obj.groupKey;
     final key = roastClient.keys[groupKey]!;
+    final ourKeys = roastClient.keys;
 
-    roastClient.keys[groupKey] = FrostKeyWithDetails(
+    ourKeys[groupKey] = FrostKeyWithDetails(
       keyInfo: key.keyInfo,
       name: key.name,
       description: key.description,
@@ -19,11 +20,15 @@ class ROASTStorage implements ClientStorageInterface {
         ack,
       },
     );
+
+    roastClient.keys = ourKeys;
   }
 
   @override
   Future<void> addNewFrostKey(FrostKeyWithDetails newKey) async {
-    roastClient.keys[newKey.groupKey] = newKey;
+    final ourKeys = roastClient.keys;
+    ourKeys[newKey.groupKey] = newKey;
+    roastClient.keys = ourKeys;
   }
 
   @override
@@ -31,7 +36,9 @@ class ROASTStorage implements ClientStorageInterface {
     SignaturesRequestId id,
     FinalExpirable expirable,
   ) async {
-    roastClient.sigsRejected[id] = expirable;
+    final ourSigsRejected = roastClient.sigsRejected;
+    ourSigsRejected[id] = expirable;
+    roastClient.sigsRejected = ourSigsRejected;
   }
 
   @override
@@ -40,7 +47,6 @@ class ROASTStorage implements ClientStorageInterface {
     SignaturesNonces nonces,
     int capacity,
   ) async {
-    // TODO capacity?
     final sigNonces = roastClient.sigNonces;
 
     if (sigNonces.containsKey(id)) {
@@ -48,6 +54,8 @@ class ROASTStorage implements ClientStorageInterface {
     } else {
       sigNonces[id] = nonces;
     }
+
+    roastClient.sigNonces = sigNonces;
   }
 
   @override
