@@ -1,12 +1,17 @@
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:peercoin/models/hive/adapters/base_writable_adapter.dart';
 
-class HiveROASTClientConfigAdapter extends BaseWritableAdapter {
-  HiveROASTClientConfigAdapter() : super(0);
+class HiveROASTClientConfigAdapter extends TypeAdapter<ClientConfig> {
+  @override
+  final typeId = 15;
 
   @override
   ClientConfig read(BinaryReader reader) {
     return ClientConfig.fromBytes(reader.readByteList());
+  }
+
+  @override
+  void write(BinaryWriter writer, ClientConfig obj) {
+    writer.writeByteList(obj.toBytes());
   }
 }

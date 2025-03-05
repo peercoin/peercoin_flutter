@@ -1,12 +1,17 @@
 import 'package:frost_noosphere/frost_noosphere.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:peercoin/models/hive/adapters/base_writable_adapter.dart';
 
-class HiveFrostKeyWithDetailsAdapter extends BaseWritableAdapter {
-  HiveFrostKeyWithDetailsAdapter() : super(11);
+class HiveFrostKeyWithDetailsAdapter extends TypeAdapter<FrostKeyWithDetails> {
+  @override
+  final typeId = 11;
 
   @override
   FrostKeyWithDetails read(BinaryReader reader) {
     return FrostKeyWithDetails.fromBytes(reader.readByteList());
+  }
+
+  @override
+  void write(BinaryWriter writer, FrostKeyWithDetails obj) {
+    writer.writeByteList(obj.toBytes());
   }
 }
