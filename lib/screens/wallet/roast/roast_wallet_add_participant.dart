@@ -55,7 +55,7 @@ class _ROASTWalletAddParticipantScreenState
     if (_formKey.currentState!.validate()) {
       final id = _type == ParticipantType.id
           ? Identifier.fromHex(_nameController.text)
-          : Identifier.fromString(_nameController.text);
+          : Identifier.fromSeed(_nameController.text);
 
       // persist name
       _roastClient.participantNames[id.toString()] = _nameController.text;

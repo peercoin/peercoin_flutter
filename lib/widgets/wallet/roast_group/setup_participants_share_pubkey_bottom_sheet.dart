@@ -19,7 +19,7 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final id = Identifier.fromString(ourName);
+    final id = Identifier.fromSeed(ourName);
 
     return ModalBottomSheetContainer(
       child: SingleChildScrollView(

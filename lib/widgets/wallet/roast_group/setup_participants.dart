@@ -42,7 +42,7 @@ class _ROASTGroupSetupParticipantsState
             .addAll(widget.roastClient.clientConfig!.group.participants);
       } else {
         // add self to uncompleted group
-        final id = Identifier.fromString(widget.roastClient.ourName);
+        final id = Identifier.fromSeed(widget.roastClient.ourName);
         _participants[id] =
             ECCompressedPublicKey.fromPubkey(widget.roastClient.ourKey.pubkey);
         widget.roastClient.participantNames[id.toString()] =
@@ -132,7 +132,7 @@ class _ROASTGroupSetupParticipantsState
   void _showFingerprint() async {
     // save group
     widget.roastClient.clientConfig = ClientConfig(
-      id: Identifier.fromString(widget.roastClient.ourName),
+      id: Identifier.fromSeed(widget.roastClient.ourName),
       group: GroupConfig(
         id: widget.roastClient.groupId,
         participants: _participants,
