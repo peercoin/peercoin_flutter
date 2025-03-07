@@ -59,10 +59,6 @@ class _ROASTGroupLandingConfiguredState
           'roastClient': client,
         },
       );
-
-      setState(() {
-        _loginInProgress = false;
-      });
     } catch (e) {
       LoggerWrapper.logError(
         'ROASTGroupLandingConfigured',
@@ -98,6 +94,12 @@ class _ROASTGroupLandingConfiguredState
           duration: const Duration(seconds: 5),
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loginInProgress = false;
+        });
+      }
     }
   }
 
