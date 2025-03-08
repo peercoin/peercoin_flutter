@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:peercoin/models/buildresult.dart';
+import 'package:peercoin/models/hive/roast_client.dart';
 
 import '../exceptions/exceptions.dart';
 import '../models/available_coins.dart';
@@ -134,6 +135,21 @@ class WalletProvider with ChangeNotifier {
       ),
     );
 
+    if (isROAST) {
+      LoggerWrapper.logInfo(
+        'WalletProvider',
+        'addWallet',
+        'writing $name - ROAST Group',
+      );
+      await _vaultBox.put(
+        name,
+        ROASTClient(
+          name,
+          false,
+          ECPrivateKey.generate(),
+        ),
+      );
+    }
     notifyListeners();
   }
 
@@ -664,6 +680,14 @@ class WalletProvider with ChangeNotifier {
       }
     }
     return answerMap;
+  }
+
+  Future<ROASTClient> getROASTClient(String identifier) async {
+    final res = _vaultBox.get(identifier);
+    if (res == null) {
+      throw Exception('ROASTClient not found');
+    }
+    return res;
   }
 
   Future<HDPrivateKey> getHdWallet(String identifier) async {
