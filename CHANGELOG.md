@@ -1,3 +1,7 @@
+### **1.3.5** (2025-03-08)
+
+- Fix for transaction list misbehaviour caused by sending addresses
+
 ### **1.3.4** (2025-03-02)
 
 - Fix for some devices that experienced problems with message signing

@@ -904,7 +904,7 @@ class WalletProvider with ChangeNotifier {
     for (final recipientAddr in buildResult.recipients.keys) {
       if (recipientAddr != changeAddress) {
         if (openWallet.addresses.firstWhereOrNull(
-              (element) => element.address == recipientAddr,
+              (element) => element.address == recipientAddr && element.isOurs,
             ) !=
             null) {
           //found recipient in the transaction that is not the changeAddress but our address
