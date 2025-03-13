@@ -154,7 +154,7 @@ class _WalletSignTransactionScreenState
       for (var i in tx.inputs) {
         final index = tx.inputs.indexOf(i);
         try {
-          txToSign = txToSign.sign(
+          txToSign = txToSign.signLegacy(
             inputN: index,
             key: privKey,
           );

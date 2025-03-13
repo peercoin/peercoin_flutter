@@ -405,7 +405,7 @@ class WalletProvider with ChangeNotifier {
               "signing - ${value["addr"]} at vin $i",
             );
 
-            tx = tx.sign(
+            tx = tx.signLegacy(
               inputN: i,
               key: WIF.fromString(value['wif']).privkey,
             );
