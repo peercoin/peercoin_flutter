@@ -245,10 +245,10 @@ packages:
     dependency: transitive
     description:
       name: coinlib
-      sha256: bf7caa3fb7e3965766f58c380de187ed8a386375181accbd6ee37e778ca96ee8
+      sha256: "0227dcf951d6af71f928b5a28494e5d434e14be6a0adc4f87e3d4009911be517"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   coinlib_flutter:
     dependency: "direct main"
     description:
