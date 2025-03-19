@@ -58,9 +58,7 @@ dependencies:
   decimal: ^2.3.3
   characters: ^1.2.0
   coinlib_flutter: ^3.0.0
-  frosty:
-    path: ../frosty/frosty
-    # TODO move to git
+  frosty: ^1.0.0
   frost_noosphere:
     path: ../frost-noosphere/frost_noosphere
     # TODO move to git
