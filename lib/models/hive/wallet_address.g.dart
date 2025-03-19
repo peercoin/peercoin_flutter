@@ -26,7 +26,8 @@ class WalletAddressAdapter extends TypeAdapter<WalletAddress> {
       isWatchOnly: fields[9] == null ? false : fields[9] as bool,
     )
       .._isChangeAddr = fields[6] as bool?
-      ..notificationBackendCount = fields[7] == null ? 0 : fields[7] as int
+      ..notificationBackendCount =
+          fields[7] == null ? 0 : (fields[7] as num).toInt()
       ..isWatched = fields[8] == null ? false : fields[8] as bool;
   }
 
