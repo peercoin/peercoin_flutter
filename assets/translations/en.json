@@ -580,5 +580,9 @@
   "roast_landing_configured_login_failed_snack_fallback": "Login failed. Something went wrong.",
   "roast_landing_configured_login_failed_snack_14": "Login failed. Could not look up host.",
   "roast_landing_configured_edit_server_url_empty": "Please enter a server URL",
-  "roast_landing_configured_edit_server_url_error": "Please enter a valid URL with leading https://"
+  "roast_landing_configured_edit_server_url_error": "Please enter a valid URL with leading https://",
+  "roast_wallet_bottom_nav_reject": "Rejected",
+  "roast_wallet_bottom_open": "Requests",
+  "roast_wallet_bottom_keys": "Keys",
+  "roast_wallet_bottom_new": "New"
 }

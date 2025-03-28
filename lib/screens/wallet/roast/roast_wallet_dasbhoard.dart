@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/buttons.dart';
-import 'package:peercoin/widgets/service_container.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
+import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
+import 'package:peercoin/widgets/wallet/roast_group/tabs/open_request_tab.dart';
+import 'package:peercoin/widgets/wallet/roast_group/tabs/request_dkg_tab.dart';
 
 class ROASTWalletDashboardScreen extends StatefulWidget {
   const ROASTWalletDashboardScreen({super.key});
@@ -15,15 +18,15 @@ class ROASTWalletDashboardScreen extends StatefulWidget {
 enum ROASTWalletTab {
   rejectedRequests,
   openRequests,
-  completeDKGs,
+  generatedKeys,
   newDKG,
 }
 
 class _ROASTWalletDashboardScreenState
     extends State<ROASTWalletDashboardScreen> {
   bool _initial = true;
-  DateTime _lastUpdate = DateTime.now();
   late Client _roastClient;
+  DateTime _lastUpdate = DateTime.now();
   ROASTWalletTab _selectedTab = ROASTWalletTab.openRequests;
 
   @override
@@ -33,14 +36,11 @@ class _ROASTWalletDashboardScreenState
       _roastClient = arguments['roastClient'];
 
       _roastClient.events.listen((event) {
-        print('Event: $event');
-        print(_roastClient.signaturesRequests);
-        print('requests:');
-        print(_roastClient.dkgRequests);
-        print('accepted:');
-        print(_roastClient.acceptedDkgs);
-        print('keys:');
-        print(_roastClient.keys);
+        LoggerWrapper.logInfo(
+          'ROASTWalletDashboardScreen',
+          'eventStream',
+          event.toString(),
+        );
 
         setState(() {
           _lastUpdate = DateTime.now();
@@ -67,6 +67,39 @@ class _ROASTWalletDashboardScreenState
     });
   }
 
+  Widget _calcBody() {
+    Widget body;
+    switch (_selectedTab) {
+      case ROASTWalletTab.rejectedRequests:
+        body = const Expanded(
+          child: SizedBox(),
+        );
+        break;
+      case ROASTWalletTab.openRequests:
+        body = Expanded(
+          child: OpenRequestTab(
+            roastClient: _roastClient,
+          ),
+        );
+        break;
+      case ROASTWalletTab.generatedKeys:
+        body = Expanded(
+          child: CompletedKeysTab(
+            roastClient: _roastClient,
+          ),
+        );
+        break;
+      case ROASTWalletTab.newDKG:
+        body = Expanded(
+          child: RequestDKGTab(
+            roastClient: _roastClient,
+          ),
+        );
+        break;
+    }
+    return body;
+  }
+
   BottomNavigationBar _calcBottomNavBar(BuildContext context) {
     final bgColor = Theme.of(context).primaryColor;
     return BottomNavigationBar(
@@ -78,26 +111,30 @@ class _ROASTWalletDashboardScreenState
       currentIndex: _selectedTab.index,
       items: [
         BottomNavigationBarItem(
-          icon: const Icon(Icons.download_rounded),
-          label:
-              AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
+          icon: const Icon(Icons.do_not_disturb),
+          tooltip: 'Rejected DKGs',
+          label: AppLocalizations.instance
+              .translate('roast_wallet_bottom_nav_reject'),
           backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list_rounded),
-          tooltip: 'Transactions',
-          label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
+          tooltip: 'Requested DKGs',
+          label:
+              AppLocalizations.instance.translate('roast_wallet_bottom_open'),
           backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
-          tooltip: 'Address Book',
-          icon: const Icon(Icons.menu_book_rounded),
-          label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
+          icon: const Icon(Icons.key),
+          tooltip: 'Generated Keys',
+          label:
+              AppLocalizations.instance.translate('roast_wallet_bottom_keys'),
           backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.upload_rounded),
-          label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
+          icon: const Icon(Icons.note_add),
+          tooltip: 'Request new DKG',
+          label: AppLocalizations.instance.translate('roast_wallet_bottom_new'),
           backgroundColor: bgColor,
         ),
       ],
@@ -111,78 +148,46 @@ class _ROASTWalletDashboardScreenState
         title: const Text('ROAST Wallet Dashboard'), // TODO i18n
       ),
       bottomNavigationBar: _calcBottomNavBar(context),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Align(
-                child: PeerContainer(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      PeerButton(
-                        text: 'Request DKG',
-                        action: () async {
-                          await _roastClient.requestDkg(
-                            NewDkgDetails(
-                              name: 'test${DateTime.now()}',
-                              description: 'test',
-                              threshold: 2,
-                              expiry: Expiry(const Duration(days: 1)),
-                            ),
-                          );
-                          setState(() {
-                            _lastUpdate = DateTime.now();
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Signatures Requests'), // TODO i18n
-                      ..._roastClient.dkgRequests.map((request) {
-                        return Column(
-                          children: [
-                            Text(
-                              request.completed.length <
-                                      request.details.threshold
-                                  ? 'Pending'
-                                  : 'Completed',
-                            ),
-                            Text('Name: ${request.details.name}'),
-                            Text(
-                              'Description: ${request.details.description}',
-                            ),
-                            Text('Threshold: ${request.details.threshold}'),
-                            PeerButton(
-                              text: 'Ack',
-                              action: () async {
-                                await _roastClient
-                                    .acceptDkg(request.details.name);
-                              },
-                            ),
-                          ],
-                        );
-                      }),
-                      const SizedBox(height: 20),
-                      const Text('Signatures Accepted'), // TODO i18n
-                      ..._roastClient.acceptedDkgs.map((accepted) {
-                        return Column(
-                          children: [
-                            Text('Name: ${accepted.details.name}'),
-                            Text(
-                                'Description: ${accepted.details.description}'),
-                            Text('Threshold: ${accepted.details.threshold}'),
-                          ],
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Text(_lastUpdate.toIso8601String())
-        ],
+      body: Container(
+        color: Theme.of(context).primaryColor,
+        child: Column(
+          key: Key(_lastUpdate.toString()),
+          children: [
+            _calcBody(),
+          ],
+        ),
       ),
+      // body: Column(
+      //   children: [
+      //     Expanded(
+      //       child: SingleChildScrollView(
+      //         child: Align(
+      //           child: PeerContainer(
+      //             child: Column(
+      //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //               children: [
+      //
+      //                 const SizedBox(height: 20),
+      //                 const Text('Signatures Accepted'), // TODO i18n
+      //                 ..._roastClient.acceptedDkgs.map((accepted) {
+      //                   return Column(
+      //                     children: [
+      //                       Text('Name: ${accepted.details.name}'),
+      //                       Text(
+      //                           'Description: ${accepted.details.description}'),
+      //                       Text('Threshold: ${accepted.details.threshold}'),
+      //                     ],
+      //                   );
+      //                 }),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     Text(_lastUpdate.toIso8601String())
+      //   ],
+      // ),
     );
   }
 }
