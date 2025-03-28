@@ -7,7 +7,6 @@ class CompletedKeysTab extends StatelessWidget {
   const CompletedKeysTab({required this.roastClient, super.key});
   @override
   Widget build(BuildContext context) {
-    print(roastClient.keys);
     return Column(
       children: [
         ...roastClient.keys.entries.map(

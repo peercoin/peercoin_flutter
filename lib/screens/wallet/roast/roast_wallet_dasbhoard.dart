@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
@@ -79,6 +78,11 @@ class _ROASTWalletDashboardScreenState
         body = Expanded(
           child: OpenRequestTab(
             roastClient: _roastClient,
+            forceRender: () {
+              setState(() {
+                _lastUpdate = DateTime.now();
+              });
+            },
           ),
         );
         break;
