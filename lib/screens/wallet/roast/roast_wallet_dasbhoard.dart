@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
@@ -11,11 +12,19 @@ class ROASTWalletDashboardScreen extends StatefulWidget {
       _ROASTWalletDashboardScreenState();
 }
 
+enum ROASTWalletTab {
+  rejectedRequests,
+  openRequests,
+  completeDKGs,
+  newDKG,
+}
+
 class _ROASTWalletDashboardScreenState
     extends State<ROASTWalletDashboardScreen> {
   bool _initial = true;
   DateTime _lastUpdate = DateTime.now();
   late Client _roastClient;
+  ROASTWalletTab _selectedTab = ROASTWalletTab.openRequests;
 
   @override
   void didChangeDependencies() async {
@@ -52,12 +61,56 @@ class _ROASTWalletDashboardScreenState
     super.dispose();
   }
 
+  void changeTab(ROASTWalletTab t, [String? addr, String? lab]) {
+    setState(() {
+      _selectedTab = t;
+    });
+  }
+
+  BottomNavigationBar _calcBottomNavBar(BuildContext context) {
+    final bgColor = Theme.of(context).primaryColor;
+    return BottomNavigationBar(
+      unselectedItemColor: Theme.of(context).disabledColor,
+      selectedItemColor: Colors.white,
+      onTap: (index) {
+        changeTab(ROASTWalletTab.values[index]);
+      },
+      currentIndex: _selectedTab.index,
+      items: [
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.download_rounded),
+          label:
+              AppLocalizations.instance.translate('wallet_bottom_nav_receive'),
+          backgroundColor: bgColor,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.list_rounded),
+          tooltip: 'Transactions',
+          label: AppLocalizations.instance.translate('wallet_bottom_nav_tx'),
+          backgroundColor: bgColor,
+        ),
+        BottomNavigationBarItem(
+          tooltip: 'Address Book',
+          icon: const Icon(Icons.menu_book_rounded),
+          label: AppLocalizations.instance.translate('wallet_bottom_nav_addr'),
+          backgroundColor: bgColor,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.upload_rounded),
+          label: AppLocalizations.instance.translate('wallet_bottom_nav_send'),
+          backgroundColor: bgColor,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ROAST Wallet Dashboard'), // TODO i18n
       ),
+      bottomNavigationBar: _calcBottomNavBar(context),
       body: Column(
         children: [
           Expanded(

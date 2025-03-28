@@ -1,21 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:peercoin/widgets/wallet/address_tab/dialogs.dart';
+import 'package:peercoin/widgets/wallet/tabs/address_tab/dialogs.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/available_coins.dart';
-import '../../../models/coin.dart';
-import '../../../models/hive/wallet_address.dart';
-import '../../../providers/app_settings_provider.dart';
-import '../../../providers/connection_provider.dart';
-import '../../../providers/wallet_provider.dart';
-import '../../../screens/wallet/standard_and_watch_only_wallet_home.dart';
-import '../../../tools/app_localizations.dart';
-import '../../../tools/auth.dart';
-import '../../../tools/logger_wrapper.dart';
-import '../../double_tab_to_clipboard.dart';
-import '../wallet_home/wallet_home_qr.dart';
+import '../../../../models/available_coins.dart';
+import '../../../../models/coin.dart';
+import '../../../../models/hive/wallet_address.dart';
+import '../../../../providers/app_settings_provider.dart';
+import '../../../../providers/connection_provider.dart';
+import '../../../../providers/wallet_provider.dart';
+import '../../../../screens/wallet/standard_and_watch_only_wallet_home.dart';
+import '../../../../tools/app_localizations.dart';
+import '../../../../tools/auth.dart';
+import '../../../../tools/logger_wrapper.dart';
+import '../../../double_tab_to_clipboard.dart';
+import '../../wallet_home/wallet_home_qr.dart';
 
 class AddressTab extends StatefulWidget {
   final String walletName;

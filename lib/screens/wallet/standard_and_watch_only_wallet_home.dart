@@ -7,7 +7,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/data_sources/electrum_backend.dart';
 import 'package:peercoin/providers/server_provider.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
-import 'package:peercoin/widgets/wallet/address_tab/addresses_tab_watch_only.dart';
+import 'package:peercoin/widgets/wallet/tabs/address_tab/addresses_tab_watch_only.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_delete_watch_only_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_hide_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_reset_bottom_sheet.dart';
@@ -26,10 +26,10 @@ import '../../tools/auth.dart';
 import '../../tools/logger_wrapper.dart';
 import '../../tools/price_ticker.dart';
 import '../../widgets/loading_indicator.dart';
-import '../../widgets/wallet/address_tab/addresses_tab.dart';
-import '../../widgets/wallet/receive_tab.dart';
-import '../../widgets/wallet/send_tab.dart';
-import '../../widgets/wallet/transactions_list.dart';
+import '../../widgets/wallet/tabs/address_tab/addresses_tab.dart';
+import '../../widgets/wallet/tabs/receive_tab.dart';
+import '../../widgets/wallet/tabs/send_tab.dart';
+import '../../widgets/wallet/tabs/transactions_list.dart';
 import '../../widgets/wallet/wallet_home/wallet_rescan_bottom_sheet.dart';
 
 class StandardAndWatchOnlyWalletHomeScreen extends StatefulWidget {

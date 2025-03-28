@@ -12,18 +12,18 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:peercoin/exceptions/exceptions.dart';
 import 'package:peercoin/models/buildresult.dart';
 import 'package:peercoin/tools/validators.dart';
-import 'package:peercoin/widgets/wallet/send_tab_management.dart';
-import 'package:peercoin/widgets/wallet/send_tab_navigator.dart';
+import 'package:peercoin/widgets/wallet/tabs/send_tab_management.dart';
+import 'package:peercoin/widgets/wallet/tabs/send_tab_navigator.dart';
 import 'package:provider/provider.dart';
 
 import '/../models/available_coins.dart';
 import '/../models/coin.dart';
 import '/../models/hive/coin_wallet.dart';
 import '/../models/hive/wallet_address.dart';
-import '../../providers/wallet_provider.dart';
-import '../../providers/app_settings_provider.dart';
-import '../../providers/connection_provider.dart';
-import '../../screens/wallet/standard_and_watch_only_wallet_home.dart';
+import '../../../providers/wallet_provider.dart';
+import '../../../providers/app_settings_provider.dart';
+import '../../../providers/connection_provider.dart';
+import '../../../screens/wallet/standard_and_watch_only_wallet_home.dart';
 import '/../tools/app_localizations.dart';
 import '/../tools/app_routes.dart';
 import '/../tools/auth.dart';
@@ -31,9 +31,9 @@ import '/../tools/utf8_text_field.dart';
 import '/../widgets/buttons.dart';
 import '/../widgets/service_container.dart';
 import '/../widgets/wallet/wallet_balance_header.dart';
-import '../../screens/wallet/transaction_confirmation.dart';
-import '../../tools/logger_wrapper.dart';
-import '../../tools/price_ticker.dart';
+import '../../../screens/wallet/transaction_confirmation.dart';
+import '../../../tools/logger_wrapper.dart';
+import '../../../tools/price_ticker.dart';
 
 class SendTab extends StatefulWidget {
   final Function changeTab;
