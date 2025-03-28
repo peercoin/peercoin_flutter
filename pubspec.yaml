@@ -59,9 +59,7 @@ dependencies:
   characters: ^1.2.0
   coinlib_flutter: ^3.0.0
   frosty: ^1.0.0
-  frost_noosphere:
-    path: ../frost-noosphere/frost_noosphere
-    # TODO move to git
+  noosphere_roast_client: ^1.0.0
   web: ^1.1.0
   
 dev_dependencies:

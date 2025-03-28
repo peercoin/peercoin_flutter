@@ -1,7 +1,7 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frost_noosphere/frost_noosphere.dart';
+import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/service_container.dart';

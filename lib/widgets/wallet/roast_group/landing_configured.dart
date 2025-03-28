@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frost_noosphere/frost_noosphere.dart' as frost;
+import 'package:noosphere_roast_client/noosphere_roast_client.dart' as frost;
 import 'package:grpc/grpc.dart';
 import 'package:peercoin/models/hive/roast_client.dart';
 import 'package:peercoin/models/roast_storage.dart';
@@ -184,7 +184,7 @@ class _ROASTGroupLandingConfiguredState
     }
 
     Share.share(
-      frost.ServerConfig(group: widget.roastClient.clientConfig!.group).yaml,
+      widget.roastClient.clientConfig!.group.yaml,
     );
   }
 
@@ -205,7 +205,7 @@ class _ROASTGroupLandingConfiguredState
                     ),
                     const SizedBox(height: 20),
                     PeerButton(
-                      text: 'Export server configuration',
+                      text: 'Export group configuration',
                       action: () => _exportConfiguration(),
                     ),
                     const SizedBox(height: 20),

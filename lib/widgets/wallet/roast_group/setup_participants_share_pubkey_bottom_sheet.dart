@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frost_noosphere/frost_noosphere.dart';
+import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';

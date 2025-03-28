@@ -643,13 +643,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  frost_noosphere:
-    dependency: "direct main"
-    description:
-      path: "../frost-noosphere/frost_noosphere"
-      relative: true
-    source: path
-    version: "1.0.0"
   frosty:
     dependency: "direct main"
     description:
@@ -980,6 +973,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  noosphere_roast_client:
+    dependency: "direct main"
+    description:
+      name: noosphere_roast_client
+      sha256: "6b58ec14a8e6495988cd434cdbafa9287e187379420c1f0a09fee6d21e14a78f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   package_config:
     dependency: transitive
     description:

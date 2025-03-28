@@ -1,4 +1,4 @@
-import 'package:frost_noosphere/frost_noosphere.dart';
+import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:hive_ce/hive.dart';
 
 class HiveSignaturesNoncesAdapter extends TypeAdapter<SignaturesNonces> {
