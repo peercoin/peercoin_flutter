@@ -18,16 +18,16 @@ class WalletTransactionAdapter extends TypeAdapter<WalletTransaction> {
     };
     return WalletTransaction(
       txid: fields[0] as String,
-      timestamp: fields[1] == null ? 0 : fields[1] as int,
-      value: fields[2] as int,
-      fee: fields[3] as int,
+      timestamp: fields[1] == null ? 0 : (fields[1] as num).toInt(),
+      value: (fields[2] as num).toInt(),
+      fee: (fields[3] as num).toInt(),
       address: fields[4] as String,
       recipients:
           fields[10] == null ? {} : (fields[10] as Map).cast<String, int>(),
       direction: fields[5] as String,
       broadCasted: fields[7] as bool,
       broadcastHex: fields[8] as String,
-      confirmations: fields[6] as int,
+      confirmations: (fields[6] as num).toInt(),
       opReturn: fields[9] == null ? '' : fields[9] as String,
     );
   }
