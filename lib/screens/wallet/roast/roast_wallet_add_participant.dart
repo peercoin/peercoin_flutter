@@ -73,7 +73,6 @@ class _ROASTWalletAddParticipantScreenState
 
   @override
   Widget build(BuildContext context) {
-    print(_participants);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
