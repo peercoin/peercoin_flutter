@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
-  final ROASTClient roastClient;
+  final ROASTWallet roastClient;
   const ROASTGroupSetupLanding({
     required this.roastClient,
     super.key,

@@ -1,10 +1,10 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:hive_ce/hive.dart';
-part 'roast_client.g.dart';
+part 'roast_wallet.g.dart';
 
 @HiveType(typeId: 8)
-class ROASTClient extends HiveObject {
+class ROASTWallet extends HiveObject {
   @HiveField(0)
   final String _title;
 
@@ -38,7 +38,7 @@ class ROASTClient extends HiveObject {
   @HiveField(10)
   final ECPrivateKey _ourKey;
 
-  ROASTClient(
+  ROASTWallet(
     this._title,
     this._isCompleted,
     this._ourKey,

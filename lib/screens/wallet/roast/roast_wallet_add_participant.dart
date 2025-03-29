@@ -2,7 +2,7 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
@@ -30,7 +30,7 @@ class _ROASTWalletAddParticipantScreenState
     extends State<ROASTWalletAddParticipantScreen> {
   bool _initial = true;
   ParticipantType _type = ParticipantType.name;
-  late ROASTClient _roastClient;
+  late ROASTWallet _roastWallet;
   final _formKey = GlobalKey<FormState>();
   final _nameKey = GlobalKey<FormFieldState>();
   final _nameController = TextEditingController();
@@ -42,7 +42,7 @@ class _ROASTWalletAddParticipantScreenState
   void didChangeDependencies() async {
     if (_initial) {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _roastClient = arguments['roastClient'];
+      _roastWallet = arguments['roastWallet'];
       _participants = arguments['participants'];
       setState(() {
         _initial = false;
@@ -60,7 +60,7 @@ class _ROASTWalletAddParticipantScreenState
           : Identifier.fromSeed(_nameController.text);
 
       // persist name
-      _roastClient.participantNames[id.toString()] = _nameController.text;
+      _roastWallet.participantNames[id.toString()] = _nameController.text;
 
       Navigator.of(context).pop(
         ParticpantNavigatorPopDTO(

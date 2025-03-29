@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart' as frost;
 import 'package:grpc/grpc.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/models/roast_storage.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -11,7 +11,7 @@ import 'package:peercoin/widgets/service_container.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ROASTGroupLandingConfigured extends StatefulWidget {
-  final ROASTClient roastClient;
+  final ROASTWallet roastClient;
   const ROASTGroupLandingConfigured({required this.roastClient, super.key});
 
   @override

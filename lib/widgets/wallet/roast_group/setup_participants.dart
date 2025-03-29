@@ -1,7 +1,7 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
@@ -15,7 +15,7 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_particip
 
 class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
-  final ROASTClient roastClient;
+  final ROASTWallet roastClient;
 
   const ROASTGroupSetupParticipants({
     required this.changeStep,

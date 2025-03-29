@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
@@ -20,7 +20,7 @@ class ROASTWalletHomeScreen extends StatefulWidget {
 class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   bool _initial = true;
   late CoinWallet _wallet;
-  late ROASTClient _roastClient;
+  late ROASTWallet _roastWallet;
 
   @override
   void didChangeDependencies() async {
@@ -30,7 +30,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
       final walletProvider =
           Provider.of<WalletProvider>(context, listen: false);
-      _roastClient = await walletProvider.getROASTClient(_wallet.name);
+      _roastWallet = await walletProvider.getROASTWallet(_wallet.name);
 
       setState(() {
         _initial = false;
@@ -138,12 +138,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _roastClient.isCompleted
+          : _roastWallet.isCompleted
               ? ROASTGroupLandingConfigured(
-                  roastClient: _roastClient,
+                  roastClient: _roastWallet,
                 )
               : ROASTGroupSetupLanding(
-                  roastClient: _roastClient,
+                  roastClient: _roastWallet,
                 ),
     );
   }

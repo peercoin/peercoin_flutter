@@ -1,8 +1,8 @@
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 
 class ROASTStorage implements ClientStorageInterface {
-  final ROASTClient roastClient;
+  final ROASTWallet roastClient;
   ROASTStorage(this.roastClient);
 
   @override

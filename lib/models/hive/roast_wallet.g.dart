@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'roast_client.dart';
+part of 'roast_wallet.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
+class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
   @override
   final int typeId = 8;
 
   @override
-  ROASTClient read(BinaryReader reader) {
+  ROASTWallet read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ROASTClient(
+    return ROASTWallet(
       fields[0] as String,
       fields[1] as bool,
       fields[10] as ECPrivateKey,
@@ -34,7 +34,7 @@ class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
   }
 
   @override
-  void write(BinaryWriter writer, ROASTClient obj) {
+  void write(BinaryWriter writer, ROASTWallet obj) {
     writer
       ..writeByte(11)
       ..writeByte(0)
@@ -67,7 +67,7 @@ class ROASTClientAdapter extends TypeAdapter<ROASTClient> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ROASTClientAdapter &&
+      other is ROASTWalletAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

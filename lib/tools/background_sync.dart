@@ -15,7 +15,7 @@ import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/frost_key_with_details_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/signature_request_id_hive_adapter.dart';
-import 'package:peercoin/models/hive/roast_client.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/marisma.pbgrpc.dart';
@@ -127,7 +127,7 @@ class BackgroundSync {
       Hive.registerAdapter(AppOptionsStoreAdapter());
       Hive.registerAdapter(ServerAdapter());
       Hive.registerAdapter(PendingNotificationAdapter());
-      Hive.registerAdapter(ROASTClientAdapter());
+      Hive.registerAdapter(ROASTWalletAdapter());
       Hive.registerAdapter(HiveROASTClientConfigAdapter());
       Hive.registerAdapter(HiveECPrivateKeyAdapter());
       Hive.registerAdapter(HiveECPublicKeyAdapter());
