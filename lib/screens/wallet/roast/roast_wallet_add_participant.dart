@@ -36,12 +36,14 @@ class _ROASTWalletAddParticipantScreenState
   final _nameController = TextEditingController();
   final _ecPubKeyKey = GlobalKey<FormFieldState>();
   final _ecPubKeyController = TextEditingController();
+  late Map<Identifier, ECCompressedPublicKey> _participants = {};
 
   @override
   void didChangeDependencies() async {
     if (_initial) {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _roastClient = arguments['roastClient'];
+      _participants = arguments['participants'];
       setState(() {
         _initial = false;
       });
@@ -71,6 +73,7 @@ class _ROASTWalletAddParticipantScreenState
 
   @override
   Widget build(BuildContext context) {
+    print(_participants);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -134,16 +137,27 @@ class _ROASTWalletAddParticipantScreenState
                         return AppLocalizations.instance.translate(
                           'roast_setup_group_member_input_name_empty_error',
                         );
-                      } else if (_type == ParticipantType.id) {
-                        try {
-                          // try to convert input value to Identifier
-                          Identifier.fromHex(_nameController.text);
-                        } catch (e) {
+                      }
+                      try {
+                        // try to convert input value to Identifier
+                        final identifier = _type == ParticipantType.name
+                            ? Identifier.fromSeed(_nameController.text)
+                            : Identifier.fromHex(_nameController.text);
+
+                        // check if identifier is already in use
+                        if (_participants.containsKey(identifier)) {
+                          return AppLocalizations.instance.translate(
+                            'roast_setup_group_member_input_name_already_in_use_error',
+                          );
+                        }
+                      } catch (e) {
+                        if (_type == ParticipantType.id) {
                           return AppLocalizations.instance.translate(
                             'roast_setup_group_member_input_name_invalid_error',
                           );
                         }
                       }
+
                       return null;
                     },
                   ),

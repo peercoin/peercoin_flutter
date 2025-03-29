@@ -8,12 +8,14 @@ class PeerButton extends StatelessWidget {
   final String text;
   final bool small;
   final bool active;
+  final bool disabled;
   const PeerButton({
     super.key,
     required this.text,
     required this.action,
     this.small = false,
     this.active = true,
+    this.disabled = false,
   });
 
   @override
@@ -31,7 +33,7 @@ class PeerButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         elevation: 0,
       ),
-      onPressed: action,
+      onPressed: disabled ? null : action,
       child: AutoSizeText(
         text,
         minFontSize: 10,

@@ -131,12 +131,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return AppLocalizations.instance.translate(
-                                  'roast_setup_landing_server_url_input_empty',
-                                );
-                              }
-                              if (Uri.tryParse(value) == null) {
-                                return AppLocalizations.instance.translate(
-                                  'roast_setup_landing_server_url_input_error',
+                                  'roast_setup_landing_group_name_input_error',
                                 );
                               }
                               return null;

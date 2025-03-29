@@ -88,6 +88,7 @@ class _ROASTGroupSetupParticipantsState
       Routes.roastWalletAddParticipant,
       arguments: {
         'roastClient': widget.roastClient,
+        'participants': _participants,
       },
     );
     if (res.runtimeType != ParticpantNavigatorPopDTO) {
@@ -167,9 +168,6 @@ class _ROASTGroupSetupParticipantsState
   }
 
   void _sharePubKey() async {
-    //TODO check if we enforce / hint unique names
-    //TODO add member form should probably discrimnate if name OR id is provided
-
     // show bottom sheet
     await showModalBottomSheet(
       shape: RoundedRectangleBorder(
@@ -312,6 +310,7 @@ class _ROASTGroupSetupParticipantsState
                       text: AppLocalizations.instance.translate(
                         'roast_setup_group_cta',
                       ),
+                      disabled: _participants.length < 2,
                       action: () => _showFingerprint(),
                     ),
                     const SizedBox(
