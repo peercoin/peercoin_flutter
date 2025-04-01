@@ -6,9 +6,9 @@ import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
-  final ROASTWallet roastClient;
+  final ROASTWallet roastWallet;
   const ROASTGroupSetupLanding({
-    required this.roastClient,
+    required this.roastWallet,
     super.key,
   });
 
@@ -30,8 +30,8 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   @override
   void didChangeDependencies() {
     if (!_initial) {
-      _groupIdController.text = widget.roastClient.groupId;
-      _nameController.text = widget.roastClient.ourName;
+      _groupIdController.text = widget.roastWallet.groupId;
+      _nameController.text = widget.roastWallet.ourName;
       setState(() {
         _initial = true;
       });
@@ -47,8 +47,8 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
 
   Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
-      widget.roastClient.groupId = _groupIdController.text;
-      widget.roastClient.ourName = _nameController.text;
+      widget.roastWallet.groupId = _groupIdController.text;
+      widget.roastWallet.ourName = _nameController.text;
       _changeStep(ROASTSetupStep.pubkey);
     }
   }
@@ -57,7 +57,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   Widget build(BuildContext context) {
     if (_step == ROASTSetupStep.pubkey) {
       return ROASTGroupSetupParticipants(
-        roastClient: widget.roastClient,
+        roastClient: widget.roastWallet,
         changeStep: _changeStep,
       );
     }
@@ -96,7 +96,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                         children: [
                           TextFormField(
                             textInputAction: TextInputAction.done,
-                            enabled: widget.roastClient.clientConfig == null,
+                            enabled: widget.roastWallet.clientConfig == null,
                             key: _groupIdKey,
                             autocorrect: false,
                             validator: (value) => value!.isEmpty

@@ -2,14 +2,14 @@ import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 
 class ROASTStorage implements ClientStorageInterface {
-  final ROASTWallet roastClient;
-  ROASTStorage(this.roastClient);
+  final ROASTWallet roastWallet;
+  ROASTStorage(this.roastWallet);
 
   @override
   Future<void> addOrReplaceAck(SignedDkgAck ack) async {
     final groupKey = ack.signed.obj.groupKey;
-    final key = roastClient.keys[groupKey]!;
-    final ourKeys = roastClient.keys;
+    final key = roastWallet.keys[groupKey]!;
+    final ourKeys = roastWallet.keys;
 
     ourKeys[groupKey] = FrostKeyWithDetails(
       keyInfo: key.keyInfo,
@@ -21,14 +21,14 @@ class ROASTStorage implements ClientStorageInterface {
       },
     );
 
-    roastClient.keys = ourKeys;
+    roastWallet.keys = ourKeys;
   }
 
   @override
   Future<void> addNewFrostKey(FrostKeyWithDetails newKey) async {
-    final ourKeys = roastClient.keys;
+    final ourKeys = roastWallet.keys;
     ourKeys[newKey.groupKey] = newKey;
-    roastClient.keys = ourKeys;
+    roastWallet.keys = ourKeys;
   }
 
   @override
@@ -36,9 +36,9 @@ class ROASTStorage implements ClientStorageInterface {
     SignaturesRequestId id,
     FinalExpirable expirable,
   ) async {
-    final ourSigsRejected = roastClient.sigsRejected;
+    final ourSigsRejected = roastWallet.sigsRejected;
     ourSigsRejected[id] = expirable;
-    roastClient.sigsRejected = ourSigsRejected;
+    roastWallet.sigsRejected = ourSigsRejected;
   }
 
   @override
@@ -47,7 +47,7 @@ class ROASTStorage implements ClientStorageInterface {
     SignaturesNonces nonces,
     int capacity,
   ) async {
-    final sigNonces = roastClient.sigNonces;
+    final sigNonces = roastWallet.sigNonces;
 
     if (sigNonces.containsKey(id)) {
       sigNonces[id]!.map.addEntries(nonces.map.entries);
@@ -55,29 +55,29 @@ class ROASTStorage implements ClientStorageInterface {
       sigNonces[id] = nonces;
     }
 
-    roastClient.sigNonces = sigNonces;
+    roastWallet.sigNonces = sigNonces;
   }
 
   @override
   Future<Set<FrostKeyWithDetails>> loadKeys() async =>
-      roastClient.keys.values.toSet();
+      roastWallet.keys.values.toSet();
 
   @override
   Future<Map<SignaturesRequestId, FinalExpirable>>
-      loadRejectedSigsRequests() async => roastClient.sigsRejected;
+      loadRejectedSigsRequests() async => roastWallet.sigsRejected;
 
   @override
   Future<Map<SignaturesRequestId, SignaturesNonces>> loadSigNonces() async =>
-      roastClient.sigNonces;
+      roastWallet.sigNonces;
 
   @override
   Future<void> removeRejectionOfSigsRequest(SignaturesRequestId id) async {
-    roastClient.sigsRejected.remove(id);
+    roastWallet.sigsRejected.remove(id);
   }
 
   @override
   Future<void> removeSigsRequest(SignaturesRequestId id) async {
-    roastClient.sigNonces.remove(id);
-    roastClient.sigsRejected.remove(id);
+    roastWallet.sigNonces.remove(id);
+    roastWallet.sigsRejected.remove(id);
   }
 }
