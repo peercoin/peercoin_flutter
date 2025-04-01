@@ -585,5 +585,6 @@
   "roast_wallet_bottom_nav_reject": "Rejected",
   "roast_wallet_bottom_open": "Requests",
   "roast_wallet_bottom_keys": "Keys",
-  "roast_wallet_bottom_new": "New"
+  "roast_wallet_bottom_new": "New",
+  "roast_wallet_share_group_config": "Share configuration"
 }

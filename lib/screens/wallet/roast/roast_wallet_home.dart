@@ -215,7 +215,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 ),
                 title: Text(
                   AppLocalizations.instance.translate(
-                    'delete_wallet', // TODO
+                    'roast_wallet_share_group_config',
                   ),
                 ),
               ),
@@ -229,7 +229,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 ),
                 title: Text(
                   AppLocalizations.instance.translate(
-                    'delete_wallet', // TODO
+                    'roast_landing_configured_edit_server_url_title',
                   ),
                 ),
               ),
