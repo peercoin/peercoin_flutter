@@ -586,5 +586,12 @@
   "roast_wallet_bottom_open": "Requests",
   "roast_wallet_bottom_keys": "Keys",
   "roast_wallet_bottom_new": "New",
-  "roast_wallet_share_group_config": "Share configuration"
+  "roast_wallet_share_group_config": "Share configuration",
+  "roast_wallet_request_dkg_title": "Request DKG",
+  "roast_wallet_request_dkg_name": "Name",
+  "roast_wallet_request_dkg_description": "Description",
+  "roast_wallet_request_dkg_cta": "Request",
+  "roast_wallet_request_dkg_sent_success_snack": "DKG Request sent succesfully",
+  "roast_wallet_open_requests": "Open Requests",
+  "roast_wallet_open_requests_empty": "No open requests"
 }

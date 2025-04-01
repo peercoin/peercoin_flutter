@@ -54,7 +54,16 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       body: _initial
           ? const SizedBox()
           : _walletIsComplete
-              ? Container(key: Key(_lastUpdate.toString()), child: _calcBody())
+              ? Container(
+                  key: Key(_lastUpdate.toString()),
+                  color: Theme.of(context).primaryColor,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 30),
+                      _calcBody(),
+                    ],
+                  ),
+                )
               : ROASTGroupSetupLanding(
                   roastWallet: _roastWallet,
                 ),
@@ -103,7 +112,9 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
   @override
   void dispose() {
-    _roastClient.logout();
+    if (_walletIsComplete) {
+      _roastClient.logout();
+    }
     super.dispose();
   }
 
