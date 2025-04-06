@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
 class OpenRequestTab extends StatelessWidget {
@@ -32,14 +31,12 @@ class OpenRequestTab extends StatelessWidget {
                             ),
                           )
                         : const SizedBox(),
-                    ...roastClient.dkgRequests.map((request) {
+                    ...roastClient.dkgRequests.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final request = entry.value;
                       return Column(
                         children: [
-                          Text(
-                            request.completed.length < request.details.threshold
-                                ? 'Pending'
-                                : 'Completed',
-                          ),
+                          index > 0 ? const Divider() : const SizedBox(),
                           Text('Name: ${request.details.name}'),
                           Text(
                             'Description: ${request.details.description}',
@@ -71,7 +68,7 @@ class OpenRequestTab extends StatelessWidget {
                                 },
                               ),
                             ],
-                          )
+                          ),
                         ],
                       );
                     }),

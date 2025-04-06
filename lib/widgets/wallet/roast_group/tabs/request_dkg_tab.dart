@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
@@ -12,6 +13,83 @@ class RequestDKGTab extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _nameController = TextEditingController();
+
+  Future<void> _handeSubmit(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      FocusScope.of(context).unfocus(); //hide keyboard
+
+      try {
+        await roastClient.requestDkg(
+          NewDkgDetails(
+            name: _nameController.text,
+            description: _descriptionController.text,
+            threshold: 2,
+            expiry: Expiry(const Duration(days: 1)),
+          ),
+        );
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.instance.translate(
+                  'roast_wallet_request_dkg_sent_success_snack',
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Clear the form fields
+        _descriptionController.clear();
+        _nameController.clear();
+
+        // TODO enforce unique name
+      } catch (e) {
+        LoggerWrapper.logError(
+          'RequestDKGTab',
+          'handleRequestDKG',
+          e.toString(),
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.instance.translate(
+                  'roast_wallet_request_dkg_sent_error_snack',
+                ),
+              ),
+            ),
+          );
+        }
+      }
+
+      //check for required auth TODO
+      // if (_appSettings
+      //     .authenticationOptions!['sendTransaction']!) {
+      //   await Auth.requireAuth(
+      //     context: context,
+      //     biometricsAllowed:
+      //         _appSettings.biometricsAllowed,
+      //     callback: () =>
+      //         _showTransactionConfirmation(context),
+      //   );
+      // } else {
+      //   _showTransactionConfirmation(context);
+      // }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate(
+              'send_errors_solve',
+            ),
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,59 +168,7 @@ class RequestDKGTab extends StatelessWidget {
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('roast_wallet_request_dkg_cta'),
-                        action: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            FocusScope.of(context).unfocus(); //hide keyboard
-
-                            await roastClient.requestDkg(
-                              NewDkgDetails(
-                                name: _nameController.text,
-                                description: _descriptionController.text,
-                                threshold: 2,
-                                expiry: Expiry(const Duration(days: 1)),
-                              ),
-                            );
-
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    AppLocalizations.instance.translate(
-                                      'roast_wallet_request_dkg_sent_success_snack',
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-
-                            // TODO enforce unique name
-
-                            //check for required auth TODO
-                            // if (_appSettings
-                            //     .authenticationOptions!['sendTransaction']!) {
-                            //   await Auth.requireAuth(
-                            //     context: context,
-                            //     biometricsAllowed:
-                            //         _appSettings.biometricsAllowed,
-                            //     callback: () =>
-                            //         _showTransactionConfirmation(context),
-                            //   );
-                            // } else {
-                            //   _showTransactionConfirmation(context);
-                            // }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.instance.translate(
-                                    'send_errors_solve',
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        },
+                        action: () async => await _handeSubmit(context),
                       ),
                     ],
                   ),
