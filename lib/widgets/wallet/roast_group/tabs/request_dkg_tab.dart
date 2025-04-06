@@ -7,12 +7,18 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
 class RequestDKGTab extends StatelessWidget {
-  RequestDKGTab({required this.roastClient, super.key});
+  RequestDKGTab({
+    required this.roastClient,
+    required this.groupSize,
+    super.key,
+  });
 
   final Client roastClient;
+  final int groupSize;
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _nameController = TextEditingController();
+  final _thresholdController = TextEditingController();
 
   Future<void> _handeSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -44,6 +50,7 @@ class RequestDKGTab extends StatelessWidget {
         // Clear the form fields
         _descriptionController.clear();
         _nameController.clear();
+        _thresholdController.clear();
 
         // TODO enforce unique name
       } catch (e) {
@@ -136,7 +143,6 @@ class RequestDKGTab extends StatelessWidget {
                         ),
                       ),
                       TextFormField(
-                        textInputAction: TextInputAction.done,
                         controller: _descriptionController,
                         autocorrect: false,
                         maxLength: 1000,
@@ -163,7 +169,37 @@ class RequestDKGTab extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // TODO threshold input / slider
+                      groupSize == 2
+                          ? const SizedBox()
+                          : TextFormField(
+                              textInputAction: TextInputAction.done,
+                              controller: _thresholdController,
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.group,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                labelText: AppLocalizations.instance.translate(
+                                  'roast_wallet_request_dkg_threshold',
+                                ),
+                              ),
+                            ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Text(
+                          AppLocalizations.instance.translate(
+                            groupSize == 2
+                                ? 'roast_wallet_request_dkg_groupsize_equals_two_hint'
+                                : 'roast_wallet_request_dkg_threshold_hint',
+                          ),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       PeerButton(
                         text: AppLocalizations.instance

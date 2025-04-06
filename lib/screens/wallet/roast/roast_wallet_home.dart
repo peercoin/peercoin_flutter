@@ -149,6 +149,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         body = Expanded(
           child: RequestDKGTab(
             roastClient: _roastClient,
+            groupSize: _roastWallet.clientConfig!.group.participants.length,
           ),
         );
         break;
