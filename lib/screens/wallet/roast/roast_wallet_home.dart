@@ -118,6 +118,23 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     super.dispose();
   }
 
+  List<String> _getUsedDKGNames() {
+    final usedDKGNames = <String>[];
+    for (final request in _roastClient.dkgRequests) {
+      usedDKGNames.add(request.details.name);
+    }
+
+    for (final key in _roastClient.acceptedDkgs) {
+      usedDKGNames.add(key.details.name);
+    }
+
+    for (final key in _roastWallet.keys.values) {
+      usedDKGNames.add(key.name);
+    }
+
+    return usedDKGNames;
+  }
+
   Widget _calcBody() {
     Widget body;
     switch (_selectedTab) {
@@ -150,10 +167,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           child: RequestDKGTab(
             roastClient: _roastClient,
             groupSize: _roastWallet.clientConfig!.group.participants.length,
+            usedDKGNames: _getUsedDKGNames(),
           ),
         );
         break;
     }
+
     return body;
   }
 

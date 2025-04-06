@@ -10,11 +10,13 @@ class RequestDKGTab extends StatelessWidget {
   RequestDKGTab({
     required this.roastClient,
     required this.groupSize,
+    required this.usedDKGNames,
     super.key,
   });
 
   final Client roastClient;
   final int groupSize;
+  final List<String> usedDKGNames;
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _nameController = TextEditingController();
@@ -100,6 +102,8 @@ class RequestDKGTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool thresholdDisabled = groupSize == 2;
+
     return Stack(
       children: [
         ListView(
@@ -169,7 +173,7 @@ class RequestDKGTab extends StatelessWidget {
                           ),
                         ),
                       ),
-                      groupSize == 2
+                      thresholdDisabled
                           ? const SizedBox()
                           : TextFormField(
                               textInputAction: TextInputAction.done,
@@ -189,7 +193,7 @@ class RequestDKGTab extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
                           AppLocalizations.instance.translate(
-                            groupSize == 2
+                            thresholdDisabled
                                 ? 'roast_wallet_request_dkg_groupsize_equals_two_hint'
                                 : 'roast_wallet_request_dkg_threshold_hint',
                           ),
