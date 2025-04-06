@@ -53,8 +53,6 @@ class RequestDKGTab extends StatelessWidget {
         _descriptionController.clear();
         _nameController.clear();
         _thresholdController.clear();
-
-        // TODO enforce unique name
       } catch (e) {
         LoggerWrapper.logError(
           'RequestDKGTab',
@@ -132,6 +130,24 @@ class RequestDKGTab extends StatelessWidget {
                             'roast_wallet_request_dkg_name',
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.instance.translate(
+                              'roast_wallet_request_dkg_name_empty_error',
+                            );
+                          }
+                          if (value.length < 3) {
+                            return AppLocalizations.instance.translate(
+                              'roast_wallet_request_dkg_name_too_short_error',
+                            );
+                          }
+                          if (usedDKGNames.contains(value)) {
+                            return AppLocalizations.instance.translate(
+                              'roast_wallet_request_dkg_name_used_error',
+                            );
+                          }
+                          return null;
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
