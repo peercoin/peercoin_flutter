@@ -204,6 +204,7 @@ class RequestDKGTab extends StatelessWidget {
                                   'roast_wallet_request_dkg_threshold',
                                 ),
                               ),
+                              // TODO implement threshold validation
                             ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),

@@ -15,11 +15,11 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_particip
 
 class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
-  final ROASTWallet roastClient;
+  final ROASTWallet roastWallet;
 
   const ROASTGroupSetupParticipants({
     required this.changeStep,
-    required this.roastClient,
+    required this.roastWallet,
     super.key,
   });
 
@@ -36,17 +36,17 @@ class _ROASTGroupSetupParticipantsState
   @override
   void didChangeDependencies() {
     if (_initial) {
-      if (widget.roastClient.clientConfig != null) {
+      if (widget.roastWallet.clientConfig != null) {
         // finalized group
         _participants
-            .addAll(widget.roastClient.clientConfig!.group.participants);
+            .addAll(widget.roastWallet.clientConfig!.group.participants);
       } else {
         // add self to uncompleted group
-        final id = Identifier.fromSeed(widget.roastClient.ourName);
+        final id = Identifier.fromSeed(widget.roastWallet.ourName);
         _participants[id] =
-            ECCompressedPublicKey.fromPubkey(widget.roastClient.ourKey.pubkey);
-        widget.roastClient.participantNames[id.toString()] =
-            widget.roastClient.ourName;
+            ECCompressedPublicKey.fromPubkey(widget.roastWallet.ourKey.pubkey);
+        widget.roastWallet.participantNames[id.toString()] =
+            widget.roastWallet.ourName;
       }
 
       setState(() {
@@ -87,7 +87,7 @@ class _ROASTGroupSetupParticipantsState
     final res = await Navigator.of(context).pushNamed(
       Routes.roastWalletAddParticipant,
       arguments: {
-        'roastClient': widget.roastClient,
+        'roastWallet': widget.roastWallet,
         'participants': _participants,
       },
     );
@@ -110,7 +110,7 @@ class _ROASTGroupSetupParticipantsState
     Navigator.of(context).pop();
 
     // remove participant from group
-    widget.roastClient.clientConfig!.group.participants
+    widget.roastWallet.clientConfig!.group.participants
         .removeWhere((key, value) => value.hex == participantPubKey);
 
     setState(() {
@@ -125,23 +125,29 @@ class _ROASTGroupSetupParticipantsState
   }
 
   void _completeROASTClient() {
-    widget.roastClient.isCompleted = true;
+    widget.roastWallet.isCompleted = true;
     Navigator.of(context).pop();
-    // change step
+    Navigator.of(context).pushReplacementNamed(
+      Routes.roastWalletHome,
+      arguments: {
+        'roastWallet': widget.roastWallet,
+        'isCompleted': true,
+      },
+    );
   }
 
   void _showFingerprint() async {
     // save group
-    widget.roastClient.clientConfig = ClientConfig(
-      id: Identifier.fromSeed(widget.roastClient.ourName),
+    widget.roastWallet.clientConfig = ClientConfig(
+      id: Identifier.fromSeed(widget.roastWallet.ourName),
       group: GroupConfig(
-        id: widget.roastClient.groupId,
+        id: widget.roastWallet.groupId,
         participants: _participants,
       ),
     );
 
     final fingerPrint =
-        bytesToHex(widget.roastClient.clientConfig!.group.fingerprint);
+        bytesToHex(widget.roastWallet.clientConfig!.group.fingerprint);
     LoggerWrapper.logInfo(
       'ROASTGroupSetupParticipants',
       '_showFingerprint',
@@ -174,8 +180,8 @@ class _ROASTGroupSetupParticipantsState
       enableDrag: false,
       builder: (BuildContext context) {
         return SetupParticipantsSharePubKeyBottomSheet(
-          pubKey: widget.roastClient.ourKey.pubkey.hex,
-          ourName: widget.roastClient.ourName,
+          pubKey: widget.roastWallet.ourKey.pubkey.hex,
+          ourName: widget.roastWallet.ourName,
           action: () => _completeROASTClient(),
         );
       },
@@ -239,7 +245,7 @@ class _ROASTGroupSetupParticipantsState
                     ),
                     Column(
                       children: _participants.entries.map((entry) {
-                        String participantName = widget.roastClient
+                        String participantName = widget.roastWallet
                                 .participantNames[entry.key.toString()] ??
                             '';
                         String ecPubkey = entry.value.hex;
@@ -259,7 +265,7 @@ class _ROASTGroupSetupParticipantsState
                               ],
                             ),
                             trailing:
-                                participantName == widget.roastClient.ourName
+                                participantName == widget.roastWallet.ourName
                                     ? const SizedBox()
                                     : IconButton(
                                         onPressed: () =>

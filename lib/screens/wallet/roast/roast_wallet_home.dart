@@ -34,6 +34,7 @@ enum ROASTWalletTab {
 class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   bool _initial = true;
   bool _walletIsComplete = false;
+  bool _loginSuccess = false;
   DateTime _lastUpdate = DateTime.now();
   ROASTWalletTab _selectedTab = ROASTWalletTab.openRequests;
   late ROASTWallet _roastWallet;
@@ -82,19 +83,21 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
       // only try to login if we have a completed configuration
       if (_roastWallet.isCompleted) {
-        await _tryLogin();
+        final loginRes = await _tryLogin();
+        if (loginRes) {
+          // listen to events
+          _roastClient.events.listen((event) {
+            LoggerWrapper.logInfo(
+              'ROASTWalletHomeScreen',
+              'eventStream',
+              event.toString(),
+            );
 
-        _roastClient.events.listen((event) {
-          LoggerWrapper.logInfo(
-            'ROASTWalletHomeScreen',
-            'eventStream',
-            event.toString(),
-          );
-
-          setState(() {
-            _lastUpdate = DateTime.now();
+            setState(() {
+              _lastUpdate = DateTime.now();
+            });
           });
-        });
+        }
       }
 
       setState(() {
@@ -112,7 +115,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
   @override
   void dispose() {
-    if (_walletIsComplete) {
+    if (_walletIsComplete && _loginSuccess) {
       _roastClient.logout();
     }
     super.dispose();
@@ -137,6 +140,11 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
   Widget _calcBody() {
     Widget body;
+    if (!_loginSuccess) {
+      return const Expanded(child: Text('Login failed'));
+      // TODO show login failed and cta for server config and retry button
+    }
+
     switch (_selectedTab) {
       case ROASTWalletTab.rejectedRequests:
         body = const Expanded(
@@ -423,7 +431,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     );
   }
 
-  Future<void> _tryLogin() async {
+  Future<bool> _tryLogin() async {
     final uri = Uri.parse(_roastWallet.serverUrl);
 
     try {
@@ -443,12 +451,18 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             _roastWallet.ourKey, // TODO request interface for key
       );
 
-      if (!mounted) return;
       LoggerWrapper.logInfo(
         'ROASTGroupLandingConfigured',
         '_tryLogin',
         'Logged in to server',
       );
+
+      setState(() {
+        _loginSuccess = true;
+        _lastUpdate = DateTime.now();
+      });
+
+      return true;
     } catch (e) {
       LoggerWrapper.logError(
         'ROASTGroupLandingConfigured',
@@ -474,16 +488,18 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       }
 
       // show snack bar
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.instance.translate(errorMessageTranslationKey),
-            textAlign: TextAlign.center,
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance.translate(errorMessageTranslationKey),
+              textAlign: TextAlign.center,
+            ),
+            duration: const Duration(seconds: 5),
           ),
-          duration: const Duration(seconds: 5),
-        ),
-      );
+        );
+      }
+      return false;
     }
   }
 }

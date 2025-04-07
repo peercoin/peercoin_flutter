@@ -57,7 +57,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
   Widget build(BuildContext context) {
     if (_step == ROASTSetupStep.pubkey) {
       return ROASTGroupSetupParticipants(
-        roastClient: widget.roastWallet,
+        roastWallet: widget.roastWallet,
         changeStep: _changeStep,
       );
     }
