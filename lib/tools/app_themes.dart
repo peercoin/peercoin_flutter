@@ -40,8 +40,11 @@ class MyTheme {
         ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: LightColors.green,
-        contentTextStyle: TextStyle(color: LightColors.white),
+        backgroundColor: LightColors.white,
+        contentTextStyle: TextStyle(
+          color: LightColors.green,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -111,7 +114,10 @@ class MyTheme {
       shadowColor: DarkColors.darkBlue,
       snackBarTheme: SnackBarThemeData(
         backgroundColor: DarkColors.darkBlue,
-        contentTextStyle: TextStyle(color: DarkColors.white),
+        contentTextStyle: TextStyle(
+          color: DarkColors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       sliderTheme: SliderThemeData(valueIndicatorColor: DarkColors.darkBlue),
       unselectedWidgetColor: DarkColors.white,

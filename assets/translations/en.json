@@ -600,5 +600,7 @@
   "roast_wallet_request_dkg_sent_success_snack": "DKG Request sent succesfully",
   "roast_wallet_request_dkg_sent_error_snack": "DKG Request could not be sent",
   "roast_wallet_open_requests": "Open Requests",
-  "roast_wallet_open_requests_empty": "No open requests"
+  "roast_wallet_open_requests_empty": "No open requests",
+  "roast_wallet_login_status_logged_out": "You are logged out",
+  "roast_wallet_login_status_no_server": "No server configured"
 }

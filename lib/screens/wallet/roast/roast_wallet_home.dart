@@ -9,6 +9,7 @@ import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
+import 'package:peercoin/widgets/wallet/roast_group/login_status.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/open_request_tab.dart';
@@ -31,10 +32,16 @@ enum ROASTWalletTab {
   newDKG,
 }
 
+enum ROASTLoginStatus {
+  loggedIn,
+  loggedOut,
+  noServer,
+}
+
 class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   bool _initial = true;
   bool _walletIsComplete = false;
-  bool _loginSuccess = false;
+  ROASTLoginStatus _loginStatus = ROASTLoginStatus.loggedOut;
   DateTime _lastUpdate = DateTime.now();
   ROASTWalletTab _selectedTab = ROASTWalletTab.openRequests;
   late ROASTWallet _roastWallet;
@@ -83,20 +90,40 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
       // only try to login if we have a completed configuration
       if (_roastWallet.isCompleted) {
-        final loginRes = await _tryLogin();
-        if (loginRes) {
+        final logginResult = await _tryLogin();
+        if (logginResult) {
           // listen to events
-          _roastClient.events.listen((event) {
-            LoggerWrapper.logInfo(
-              'ROASTWalletHomeScreen',
-              'eventStream',
-              event.toString(),
-            );
+          _roastClient.events.listen(
+            (event) {
+              LoggerWrapper.logInfo(
+                'ROASTWalletHomeScreen',
+                'eventStream',
+                event.toString(),
+              );
 
-            setState(() {
-              _lastUpdate = DateTime.now();
-            });
-          });
+              setState(() {
+                _lastUpdate = DateTime.now();
+              });
+            },
+            onError: (error) {
+              LoggerWrapper.logError(
+                'ROASTWalletHomeScreen',
+                'eventStream',
+                error.toString(),
+              );
+            },
+            onDone: () {
+              LoggerWrapper.logInfo(
+                'ROASTWalletHomeScreen',
+                'eventStream',
+                'Event stream closed',
+              );
+              setState(() {
+                _loginStatus = ROASTLoginStatus.loggedOut;
+              });
+            },
+            // TODO events not working
+          );
         }
       }
 
@@ -115,7 +142,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
   @override
   void dispose() {
-    if (_walletIsComplete && _loginSuccess) {
+    if (_walletIsComplete && _loginStatus == ROASTLoginStatus.loggedIn) {
       _roastClient.logout();
     }
     super.dispose();
@@ -140,9 +167,16 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
   Widget _calcBody() {
     Widget body;
-    if (!_loginSuccess) {
-      return const Expanded(child: Text('Login failed'));
-      // TODO show login failed and cta for server config and retry button
+    if (_loginStatus == ROASTLoginStatus.loggedOut ||
+        _loginStatus == ROASTLoginStatus.noServer) {
+      return Expanded(
+        child: ROASTWalletLoginStatus(
+          status: _loginStatus,
+          retry: () async {
+            await _tryLogin();
+          },
+        ),
+      );
     }
 
     switch (_selectedTab) {
@@ -434,6 +468,13 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   Future<bool> _tryLogin() async {
     final uri = Uri.parse(_roastWallet.serverUrl);
 
+    if (uri.host.isEmpty) {
+      setState(() {
+        _loginStatus = ROASTLoginStatus.noServer;
+      });
+      return false;
+    }
+
     try {
       _roastClient = await frost.Client.login(
         config: _roastWallet.clientConfig!,
@@ -458,7 +499,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       );
 
       setState(() {
-        _loginSuccess = true;
+        _loginStatus = ROASTLoginStatus.loggedIn;
         _lastUpdate = DateTime.now();
       });
 
