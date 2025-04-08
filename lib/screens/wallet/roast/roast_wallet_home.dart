@@ -105,24 +105,6 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 _lastUpdate = DateTime.now();
               });
             },
-            onError: (error) {
-              LoggerWrapper.logError(
-                'ROASTWalletHomeScreen',
-                'eventStream',
-                error.toString(),
-              );
-            },
-            onDone: () {
-              LoggerWrapper.logInfo(
-                'ROASTWalletHomeScreen',
-                'eventStream',
-                'Event stream closed',
-              );
-              setState(() {
-                _loginStatus = ROASTLoginStatus.loggedOut;
-              });
-            },
-            // TODO events not working
           );
         }
       }
@@ -490,6 +472,16 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         store: ROASTStorage(_roastWallet),
         getPrivateKey: (_) async =>
             _roastWallet.ourKey, // TODO request interface for key
+        onDisconnect: () {
+          LoggerWrapper.logInfo(
+            'ROASTGroupLandingConfigured',
+            '_tryLogin',
+            'Disconnected from server',
+          );
+          setState(() {
+            _loginStatus = ROASTLoginStatus.loggedOut;
+          });
+        },
       );
 
       LoggerWrapper.logInfo(
