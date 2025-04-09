@@ -195,6 +195,10 @@ class RequestDKGTab extends StatelessWidget {
                               textInputAction: TextInputAction.done,
                               controller: _thresholdController,
                               autocorrect: false,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
                               decoration: InputDecoration(
                                 icon: Icon(
                                   Icons.group,
@@ -204,7 +208,36 @@ class RequestDKGTab extends StatelessWidget {
                                   'roast_wallet_request_dkg_threshold',
                                 ),
                               ),
-                              // TODO implement threshold validation
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.instance.translate(
+                                    'roast_wallet_request_dkg_threshold_empty_error',
+                                  );
+                                }
+
+                                final int? threshold = int.tryParse(value);
+                                if (threshold == null) {
+                                  return AppLocalizations.instance.translate(
+                                    'roast_wallet_request_dkg_threshold_not_number_error',
+                                  );
+                                }
+
+                                if (threshold < 2) {
+                                  return AppLocalizations.instance.translate(
+                                    'roast_wallet_request_dkg_threshold_too_small_error',
+                                  );
+                                }
+
+                                if (threshold > groupSize) {
+                                  return AppLocalizations.instance.translate(
+                                      'roast_wallet_request_dkg_threshold_too_large_error',
+                                      {
+                                        'max': groupSize.toString(),
+                                      });
+                                }
+
+                                return null;
+                              },
                             ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
