@@ -20,7 +20,7 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       fields[0] as String,
       fields[6] as String,
       fields[1] as String,
-      fields[9] == null ? 0 : fields[9] as int,
+      fields[9] == null ? 0 : (fields[9] as num).toInt(),
       fields[10] == null ? false : fields[10] as bool,
       fields[11] == null ? false : fields[11] as bool,
       fields[13] == null ? false : fields[13] as bool,
@@ -28,8 +28,8 @@ class CoinWalletAdapter extends TypeAdapter<CoinWallet> {
       .._addresses = (fields[2] as List).cast<WalletAddress>()
       .._transactions = (fields[3] as List).cast<WalletTransaction>()
       .._utxos = (fields[4] as List).cast<WalletUtxo>()
-      .._balance = fields[5] as int
-      .._unconfirmedBalance = fields[7] as int
+      .._balance = (fields[5] as num).toInt()
+      .._unconfirmedBalance = (fields[7] as num).toInt()
       .._pendingTransactionNotifications =
           (fields[8] as List?)?.cast<PendingNotification>()
       .._hidden = fields[12] == null ? false : fields[12] as bool;

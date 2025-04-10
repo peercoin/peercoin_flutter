@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tools/app_localizations.dart';
+import '../../../tools/app_localizations.dart';
 
 class SendTabAddressManagement extends StatelessWidget {
   const SendTabAddressManagement({

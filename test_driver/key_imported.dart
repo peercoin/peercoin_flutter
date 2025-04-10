@@ -348,3 +348,5 @@ void main() {
     },
   );
 }
+
+// TODO test sendaddress in address book not causing tx to appear twice (incoming tx, even though address not owned)

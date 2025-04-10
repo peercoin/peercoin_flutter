@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
@@ -62,7 +64,6 @@ class Routes {
   static const String roastWalletHome = '/roast-wallet-home';
   static const String roastWalletAddParticipant =
       '/roast-wallet-add-participant';
-  static const String roastWalletDashboard = '/roast-dashboard';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -212,6 +213,14 @@ class Routes {
       Routes.walletTransactionSigningConfirmation: (context) =>
           const RouterMaster(
             widget: WalletSignTransactionConfirmationScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletHome: (context) => const RouterMaster(
+            widget: ROASTWalletHomeScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletAddParticipant: (context) => const RouterMaster(
+            widget: ROASTWalletAddParticipantScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
     };
