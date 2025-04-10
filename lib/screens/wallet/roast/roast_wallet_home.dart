@@ -157,6 +157,9 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           retry: () async {
             await _tryLogin();
           },
+          openServerEditDialog: () {
+            _serverURLEditDialog();
+          },
         ),
       );
     }

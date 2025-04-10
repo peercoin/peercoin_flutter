@@ -606,5 +606,8 @@
   "roast_wallet_open_requests": "Open Requests",
   "roast_wallet_open_requests_empty": "No open requests",
   "roast_wallet_login_status_logged_out": "You are logged out",
-  "roast_wallet_login_status_no_server": "No server configured"
+  "roast_wallet_login_status_no_server": "No server configured",
+  "roast_wallet_login_status_no_server_cta": "Configure server",
+  "roast_wallet_login_status_no_server_roast_host_nudge": "You may use the 3rd party service roast.host to create a free server.",
+  "roast_wallet_login_status_no_server_roast_host_nudge_cta": "Open roast.host"
 }
