@@ -414,6 +414,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 }
                 _roastWallet.setServerUrl = textFieldController.text;
                 Navigator.pop(context);
+                _tryLogin();
               },
               child: Text(
                 AppLocalizations.instance.translate('jail_dialog_button'),
