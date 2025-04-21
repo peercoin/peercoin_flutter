@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({
@@ -90,7 +90,6 @@ class _QRScannerState extends State<QRScanner> {
 
     controller.scannedDataStream.listen(
       (scanData) async {
-        controller.dispose();
         if (!mounted) return;
         await Navigator.maybeOf(context)!.maybePop(scanData.code);
       },

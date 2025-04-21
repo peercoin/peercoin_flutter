@@ -128,34 +128,60 @@ class _SendTabState extends State<SendTab> {
                               ),
                             )
                           : const SizedBox(),
-                      TypeAheadFormField(
+                      TypeAheadField(
                         hideOnEmpty: true,
                         key: _addressKeyList[_currentAddressIndex],
-                        textFieldConfiguration: TextFieldConfiguration(
-                          controller:
-                              _addressControllerList[_currentAddressIndex],
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.shuffle,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            labelText: AppLocalizations.instance
-                                .translate('tx_address'),
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                var data =
-                                    await Clipboard.getData('text/plain');
-                                _addressControllerList[_currentAddressIndex]
-                                    .text = data!.text!.trim();
-                              },
+                        builder: (context, controller, focusNode) {
+                          return TextFormField(
+                            controller:
+                                _addressControllerList[_currentAddressIndex],
+                            autocorrect: false,
+                            focusNode: focusNode,
+                            decoration: InputDecoration(
                               icon: Icon(
-                                Icons.paste_rounded,
+                                Icons.shuffle,
                                 color: Theme.of(context).primaryColor,
                               ),
+                              labelText: AppLocalizations.instance
+                                  .translate('tx_address'),
+                              suffixIcon: IconButton(
+                                onPressed: () async {
+                                  var data =
+                                      await Clipboard.getData('text/plain');
+                                  _addressControllerList[_currentAddressIndex]
+                                      .text = data!.text!.trim();
+                                },
+                                icon: Icon(
+                                  Icons.paste_rounded,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.instance
+                                    .translate('send_enter_address');
+                              }
+                              if (_addressControllerList
+                                      .where((element) => element.text == value)
+                                      .length >
+                                  1) {
+                                return AppLocalizations.instance
+                                    .translate('send_address_already_exists');
+                              }
+                              var sanitized = value.trim();
+                              if (validateAddress(
+                                    sanitized,
+                                    _availableCoin.networkType,
+                                  ) ==
+                                  false) {
+                                return AppLocalizations.instance
+                                    .translate('send_invalid_address');
+                              }
+                              return null;
+                            },
+                          );
+                        },
                         suggestionsCallback: (pattern) {
                           return _getSuggestions(pattern);
                         },
@@ -165,38 +191,11 @@ class _SendTabState extends State<SendTab> {
                             subtitle: Text(suggestion.address),
                           );
                         },
-                        transitionBuilder:
-                            (context, suggestionsBox, controller) {
-                          return suggestionsBox;
-                        },
-                        onSuggestionSelected: (dynamic suggestion) {
+                        onSelected: (dynamic suggestion) {
                           _addressControllerList[_currentAddressIndex].text =
                               suggestion.address;
                           _labelControllerList[_currentAddressIndex].text =
                               suggestion.addressBookName;
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return AppLocalizations.instance
-                                .translate('send_enter_address');
-                          }
-                          if (_addressControllerList
-                                  .where((element) => element.text == value)
-                                  .length >
-                              1) {
-                            return AppLocalizations.instance
-                                .translate('send_address_already_exists');
-                          }
-                          var sanitized = value.trim();
-                          if (validateAddress(
-                                sanitized,
-                                _availableCoin.networkType,
-                              ) ==
-                              false) {
-                            return AppLocalizations.instance
-                                .translate('send_invalid_address');
-                          }
-                          return null;
                         },
                       ),
                       TextFormField(
@@ -687,8 +686,8 @@ class _SendTabState extends State<SendTab> {
     });
   }
 
-  Future<Iterable> _getSuggestions(String pattern) async {
-    return _availableAddresses.where((element) {
+  Future<List> _getSuggestions(String pattern) async {
+    final res = _availableAddresses.where((element) {
       if (element.isOurs == false && element.address.contains(pattern)) {
         return true;
       } else if (element.isOurs == false &&
@@ -696,7 +695,8 @@ class _SendTabState extends State<SendTab> {
         return true;
       }
       return false;
-    });
+    }).toList();
+    return res;
   }
 
   RegExp _getValidator(int fractions) {
