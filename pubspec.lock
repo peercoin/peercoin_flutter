@@ -245,18 +245,18 @@ packages:
     dependency: transitive
     description:
       name: coinlib
-      sha256: "0227dcf951d6af71f928b5a28494e5d434e14be6a0adc4f87e3d4009911be517"
+      sha256: cf8bf904f49339fd5ccd8c51dbdb099c5a616072507076bab724239d2e34b97e
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "4.0.0"
   coinlib_flutter:
     dependency: "direct main"
     description:
       name: coinlib_flutter
-      sha256: "185c622986d12d2ccda98f151ce047360464dd7a6cbb6877781a9816d14bb8c4"
+      sha256: "15f385bd11559087e11df73acfdc45d34fef54c7a19b20b598572c7ba9d9d112"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "4.0.0"
   collection:
     dependency: "direct main"
     description:
@@ -647,10 +647,10 @@ packages:
     dependency: "direct main"
     description:
       name: frosty
-      sha256: "1d9ca4004128e46cd585b18327e5407c79506bbea2bb146b2a82f82affee50dc"
+      sha256: "486c81c9980d4ae2b254d898c347733e017e723c7ca10bdf4c1c0c55185a6e1c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -684,10 +684,10 @@ packages:
     dependency: "direct main"
     description:
       name: grpc
-      sha256: "5b99b7a420937d4361ece68b798c9af8e04b5bc128a7859f2a4be87427694813"
+      sha256: "30e1edae6846b163a64f6d8716e3443980fe1f7d2d1f086f011d24ea186f2582"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.4"
   hex:
     dependency: transitive
     description:
@@ -977,10 +977,10 @@ packages:
     dependency: "direct main"
     description:
       name: noosphere_roast_client
-      sha256: "6b58ec14a8e6495988cd434cdbafa9287e187379420c1f0a09fee6d21e14a78f"
+      sha256: "1dc65c5798e7e8bfff00fa28e5ad1c6ce456c163492110fd47e23fd912f6ee9b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   package_config:
     dependency: transitive
     description:
@@ -1121,10 +1121,10 @@ packages:
     dependency: "direct main"
     description:
       name: protobuf
-      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
+      sha256: fbb0c37d435641d0b84813c1dad41e6fa61ddc880a320bce16b3063ecec35aa6
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "4.0.0"
   provider:
     dependency: "direct main"
     description:
