@@ -580,6 +580,7 @@
   "roast_landing_configured_edit_server_url_placeholder": "Server URL",
   "roast_landing_configured_login_failed_snack_fallback": "Login failed. Something went wrong.",
   "roast_landing_configured_login_failed_snack_14": "Login failed. Could not look up host.",
+  "roast_landing_configured_login_failed_snack_fingerprint_mismatch": "Login failed. Fingerprint mismatch.",
   "roast_landing_configured_edit_server_url_empty": "Please enter a server URL",
   "roast_landing_configured_edit_server_url_error": "Please enter a valid URL with leading https://",
   "roast_wallet_bottom_nav_reject": "Rejected",
@@ -609,5 +610,6 @@
   "roast_wallet_login_status_no_server": "No server configured",
   "roast_wallet_login_status_no_server_cta": "Configure server",
   "roast_wallet_login_status_no_server_roast_host_nudge": "You may use the 3rd party service roast.host to create a free server.",
-  "roast_wallet_login_status_no_server_roast_host_nudge_cta": "Open roast.host"
+  "roast_wallet_login_status_no_server_roast_host_nudge_cta": "Open roast.host",
+  "roast_wallet_number_of_participants": "$n participants online"
 }

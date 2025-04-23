@@ -44,6 +44,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   ROASTLoginStatus _loginStatus = ROASTLoginStatus.loggedOut;
   DateTime _lastUpdate = DateTime.now();
   ROASTWalletTab _selectedTab = ROASTWalletTab.openRequests;
+  int _numberOfOnlineParticipants = 0;
   late ROASTWallet _roastWallet;
   late CoinWallet _wallet;
   late frost.Client _roastClient;
@@ -67,6 +68,38 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                   color: Theme.of(context).primaryColor,
                   child: Column(
                     children: [
+                      _loginStatus == ROASTLoginStatus.loggedIn
+                          ? Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.people,
+                                      color:
+                                          Theme.of(context).colorScheme.surface,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      AppLocalizations.instance.translate(
+                                          'roast_wallet_number_of_participants',
+                                          {
+                                            'n': _numberOfOnlineParticipants
+                                                .toString(),
+                                          }),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          : const SizedBox(),
                       const SizedBox(height: 30),
                       _calcBody(),
                     ],
@@ -103,6 +136,8 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
               setState(() {
                 _lastUpdate = DateTime.now();
+                _numberOfOnlineParticipants =
+                    _roastClient.onlineParticipants.length + 1;
               });
             },
           );
@@ -497,6 +532,8 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       setState(() {
         _loginStatus = ROASTLoginStatus.loggedIn;
         _lastUpdate = DateTime.now();
+        _numberOfOnlineParticipants =
+            _roastClient.onlineParticipants.length + 1;
       });
 
       return true;
@@ -519,9 +556,10 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           default:
             errorMessageTranslationKey =
                 'roast_landing_configured_login_failed_snack_fallback';
-          // TODO unauthorized
-          // TODO 404
         }
+      } else if (e is frost.InvalidRequest) {
+        errorMessageTranslationKey =
+            'roast_landing_configured_login_failed_snack_fingerprint_mismatch';
       }
 
       // show snack bar
