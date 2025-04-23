@@ -11,6 +11,17 @@ class CompletedKeysTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text(
+          AppLocalizations.instance.translate(
+            'roast_wallet_completed_keys',
+          ),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.surface,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        const SizedBox(height: 30),
         ...roastClient.keys.entries.map(
           (entry) {
             return Card(

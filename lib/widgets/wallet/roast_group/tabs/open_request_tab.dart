@@ -116,10 +116,28 @@ class OpenRequestTab extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'roast_wallet_open_requests',
+                    ),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
                   roastClient.dkgRequests.isEmpty
                       ? Text(
                           AppLocalizations.instance.translate(
                             'roast_wallet_open_requests_empty',
+                          ),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.surface,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.fontSize,
                           ),
                         )
                       : const SizedBox(),

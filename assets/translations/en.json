@@ -629,5 +629,6 @@
   "roast_wallet_key_detail_participants": "Participants",
   "roast_wallet_key_detail_group_key": "Group Key",
   "roast_wallet_key_detail_share_group_key": "Share Group Key",
-  "roast_wallet_key_detail_description": "Description"
+  "roast_wallet_key_detail_description": "Description",
+  "roast_wallet_completed_keys": "Completed Keys"
 }
