@@ -182,6 +182,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     return usedDKGNames;
   }
 
+  void _forceRender() {
+    setState(() {
+      _lastUpdate = DateTime.now();
+    });
+  }
+
   Widget _calcBody() {
     Widget body;
     if (_loginStatus == ROASTLoginStatus.loggedOut ||
@@ -208,12 +214,9 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       case ROASTWalletTab.openRequests:
         body = Expanded(
           child: OpenRequestTab(
+            key: Key('$_lastUpdate-openrequests'),
             roastClient: _roastClient,
-            forceRender: () {
-              setState(() {
-                _lastUpdate = DateTime.now();
-              });
-            },
+            forceRender: _forceRender,
           ),
         );
         break;
@@ -230,6 +233,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             roastClient: _roastClient,
             groupSize: _roastWallet.clientConfig!.group.participants.length,
             usedDKGNames: _getUsedDKGNames(),
+            forceRender: _forceRender,
           ),
         );
         break;

@@ -11,9 +11,11 @@ class RequestDKGTab extends StatelessWidget {
     required this.roastClient,
     required this.groupSize,
     required this.usedDKGNames,
+    required this.forceRender,
     super.key,
   });
 
+  final Function forceRender;
   final Client roastClient;
   final int groupSize;
   final List<String> usedDKGNames;
@@ -53,6 +55,9 @@ class RequestDKGTab extends StatelessWidget {
         _descriptionController.clear();
         _nameController.clear();
         _thresholdController.clear();
+
+        // Force a re-render of the widget
+        forceRender();
       } catch (e) {
         LoggerWrapper.logError(
           'RequestDKGTab',
