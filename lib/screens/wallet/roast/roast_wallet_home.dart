@@ -580,3 +580,4 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   }
 }
 // TODO allow ROAST key export and import, since the key is not derived from the seed
+// TODO background notification for new DKG requests

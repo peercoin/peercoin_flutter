@@ -8,7 +8,8 @@ class HiveSignaturesNoncesAdapter extends TypeAdapter<SignaturesNonces> {
   @override
   SignaturesNonces read(BinaryReader reader) {
     return SignaturesNonces(
-      reader.readMap as Map<int, SigningNonces>, // FIXME this will not work !?
+      reader.readMap as Map<int,
+          SigningNonces>, // FIXME this does seems to work but if we are bug hunting, this is a good place to start
       Expiry.fromBytes(reader.readByteList()),
     );
   }
