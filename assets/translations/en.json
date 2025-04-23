@@ -625,5 +625,9 @@
   "roast_wallet_dkg_modal_accept_description": "Are you sure you want to accept the DKG request?",
   "roast_wallet_dkg_modal_accept_cta": "Accept",
   "roast_wallet_dkg_modal_accept_snack": "DKG request accepted",
-  "roast_wallet_dkg_modal_accept_snack_error": "DKG request could not be accepted"
+  "roast_wallet_dkg_modal_accept_snack_error": "DKG request could not be accepted",
+  "roast_wallet_key_detail_participants": "Participants",
+  "roast_wallet_key_detail_group_key": "Group Key",
+  "roast_wallet_key_detail_share_group_key": "Share Group Key",
+  "roast_wallet_key_detail_description": "Description"
 }

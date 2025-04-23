@@ -169,7 +169,7 @@ class OpenRequestTab extends StatelessWidget {
                                 {
                                   'n': request.details.expiry.time
                                       .toString()
-                                      .split('.')[0]
+                                      .split('.')[0],
                                 },
                               ),
                             ),

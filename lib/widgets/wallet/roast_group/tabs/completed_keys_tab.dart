@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 
 class CompletedKeysTab extends StatelessWidget {
   final Client roastClient;
@@ -16,15 +18,33 @@ class CompletedKeysTab extends StatelessWidget {
                 title: Text(
                   entry.value.name,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
                     fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  entry.value.description,
+                  entry.value.description.isNotEmpty
+                      ? entry.value.description
+                      : AppLocalizations.instance.translate(
+                          'roast_wallet_open_requests_description_empty',
+                        ),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
+                  ),
+                ),
+                trailing: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      Routes.roastWalletKeyDetail,
+                      arguments: {
+                        'frostKeyEntry': entry,
+                      },
+                    );
+                  },
+                  child: Icon(
+                    Icons.open_in_new,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),

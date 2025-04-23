@@ -95,7 +95,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             )
                           : const SizedBox(),
