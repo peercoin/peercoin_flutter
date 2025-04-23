@@ -46,6 +46,7 @@ class RequestDKGTab extends StatelessWidget {
                 AppLocalizations.instance.translate(
                   'roast_wallet_request_dkg_sent_success_snack',
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           );
