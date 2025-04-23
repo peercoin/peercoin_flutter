@@ -11,7 +11,24 @@ class CompletedKeysTab extends StatelessWidget {
       children: [
         ...roastClient.keys.entries.map(
           (entry) {
-            return Text(entry.key.hex);
+            return Card(
+              child: ListTile(
+                title: Text(
+                  entry.value.name,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
+                  ),
+                ),
+                subtitle: Text(
+                  entry.value.description,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
+                  ),
+                ),
+              ),
+            );
           },
         ),
       ],

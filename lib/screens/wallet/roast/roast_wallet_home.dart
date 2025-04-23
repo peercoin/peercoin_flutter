@@ -26,7 +26,6 @@ class ROASTWalletHomeScreen extends StatefulWidget {
 }
 
 enum ROASTWalletTab {
-  rejectedRequests,
   openRequests,
   generatedKeys,
   newDKG,
@@ -206,11 +205,11 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     }
 
     switch (_selectedTab) {
-      case ROASTWalletTab.rejectedRequests:
-        body = const Expanded(
-          child: SizedBox(),
-        );
-        break;
+      // case ROASTWalletTab.rejectedRequests:
+      //   body = const Expanded(
+      //     child: SizedBox(),
+      //   );
+      //   break; // TODO is this needed?
       case ROASTWalletTab.openRequests:
         body = Expanded(
           child: OpenRequestTab(
@@ -251,33 +250,31 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         _changeTab(ROASTWalletTab.values[index]);
       },
       currentIndex: _selectedTab.index,
+      backgroundColor: bgColor,
       items: [
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.do_not_disturb),
-          tooltip: 'Rejected DKGs',
-          label: AppLocalizations.instance
-              .translate('roast_wallet_bottom_nav_reject'),
-          backgroundColor: bgColor,
-        ),
+        // BottomNavigationBarItem(
+        //   icon: const Icon(Icons.do_not_disturb),
+        //   tooltip: 'Rejected DKGs',
+        //   label: AppLocalizations.instance
+        //       .translate('roast_wallet_bottom_nav_reject'),
+        //   backgroundColor: bgColor,
+        // ), // TODO is this needed?
         BottomNavigationBarItem(
           icon: const Icon(Icons.list_rounded),
           tooltip: 'Requested DKGs',
           label:
               AppLocalizations.instance.translate('roast_wallet_bottom_open'),
-          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.key),
           tooltip: 'Generated Keys',
           label:
               AppLocalizations.instance.translate('roast_wallet_bottom_keys'),
-          backgroundColor: bgColor,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.note_add),
           tooltip: 'Request new DKG',
           label: AppLocalizations.instance.translate('roast_wallet_bottom_new'),
-          backgroundColor: bgColor,
         ),
       ],
     );

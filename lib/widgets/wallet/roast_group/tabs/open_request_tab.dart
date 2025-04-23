@@ -148,9 +148,31 @@ class OpenRequestTab extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Description: ${request.details.description}',
+                              request.details.description.isEmpty
+                                  ? AppLocalizations.instance.translate(
+                                      'roast_wallet_open_requests_description_empty',
+                                    )
+                                  : AppLocalizations.instance.translate(
+                                      'roast_wappet_open_requests_description',
+                                      {'text': request.details.description},
+                                    ),
                             ),
-                            Text('Threshold: ${request.details.threshold}'),
+                            Text(
+                              AppLocalizations.instance.translate(
+                                'roast_wallet_open_requests_threshold',
+                                {'n': request.details.threshold.toString()},
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.instance.translate(
+                                'roast_wallet_open_requests_expiry',
+                                {
+                                  'n': request.details.expiry.time
+                                      .toString()
+                                      .split('.')[0]
+                                },
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
