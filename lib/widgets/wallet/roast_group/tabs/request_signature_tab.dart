@@ -6,11 +6,10 @@ import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
-class RequestDkgTab extends StatelessWidget {
-  RequestDkgTab({
+class RequestSignatureTab extends StatelessWidget {
+  RequestSignatureTab({
     required this.roastClient,
     required this.groupSize,
-    required this.usedDKGNames,
     required this.forceRender,
     super.key,
   });
@@ -18,7 +17,6 @@ class RequestDkgTab extends StatelessWidget {
   final Function forceRender;
   final Client roastClient;
   final int groupSize;
-  final List<String> usedDKGNames;
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _nameController = TextEditingController();
@@ -30,11 +28,9 @@ class RequestDkgTab extends StatelessWidget {
       FocusScope.of(context).unfocus(); //hide keyboard
 
       try {
-        await roastClient.requestDkg(
-          NewDkgDetails(
-            name: _nameController.text,
-            description: _descriptionController.text,
-            threshold: 2,
+        await roastClient.requestSignatures(
+          SignaturesRequestDetails(
+            requiredSigs: [],
             expiry: Expiry(const Duration(days: 1)),
           ),
         );
@@ -145,11 +141,6 @@ class RequestDkgTab extends StatelessWidget {
                           if (value.length < 3) {
                             return AppLocalizations.instance.translate(
                               'roast_wallet_request_dkg_name_too_short_error',
-                            );
-                          }
-                          if (usedDKGNames.contains(value)) {
-                            return AppLocalizations.instance.translate(
-                              'roast_wallet_request_dkg_name_used_error',
                             );
                           }
                           return null;

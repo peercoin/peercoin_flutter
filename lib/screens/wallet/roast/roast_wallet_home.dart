@@ -14,6 +14,7 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/open_request_tab.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/request_dkg_tab.dart';
+import 'package:peercoin/widgets/wallet/roast_group/tabs/request_signature_tab.dart';
 import 'package:peercoin/widgets/wallet/wallet_home/wallet_delete_watch_only_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -25,11 +26,7 @@ class ROASTWalletHomeScreen extends StatefulWidget {
   State<ROASTWalletHomeScreen> createState() => _ROASTWalletHomeScreenState();
 }
 
-enum ROASTWalletTab {
-  openRequests,
-  generatedKeys,
-  newDKG,
-}
+enum ROASTWalletTab { openRequests, generatedKeys, newDKG, newSignature }
 
 enum ROASTLoginStatus {
   loggedIn,
@@ -205,11 +202,6 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     }
 
     switch (_selectedTab) {
-      // case ROASTWalletTab.rejectedRequests:
-      //   body = const Expanded(
-      //     child: SizedBox(),
-      //   );
-      //   break; // TODO is this needed?
       case ROASTWalletTab.openRequests:
         body = Expanded(
           child: OpenRequestTab(
@@ -228,10 +220,19 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         break;
       case ROASTWalletTab.newDKG:
         body = Expanded(
-          child: RequestDKGTab(
+          child: RequestDkgTab(
             roastClient: _roastClient,
             groupSize: _roastWallet.clientConfig!.group.participants.length,
             usedDKGNames: _getUsedDKGNames(),
+            forceRender: _forceRender,
+          ),
+        );
+        break;
+      case ROASTWalletTab.newSignature:
+        body = Expanded(
+          child: RequestSignatureTab(
+            roastClient: _roastClient,
+            groupSize: _roastWallet.clientConfig!.group.participants.length,
             forceRender: _forceRender,
           ),
         );
@@ -250,31 +251,35 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         _changeTab(ROASTWalletTab.values[index]);
       },
       currentIndex: _selectedTab.index,
-      backgroundColor: bgColor,
       items: [
-        // BottomNavigationBarItem(
-        //   icon: const Icon(Icons.do_not_disturb),
-        //   tooltip: 'Rejected DKGs',
-        //   label: AppLocalizations.instance
-        //       .translate('roast_wallet_bottom_nav_reject'),
-        //   backgroundColor: bgColor,
-        // ), // TODO is this needed?
         BottomNavigationBarItem(
           icon: const Icon(Icons.list_rounded),
-          tooltip: 'Requested DKGs',
+          backgroundColor: bgColor,
+          tooltip: AppLocalizations.instance
+              .translate('roast_wallet_bototm_open_tooltip'),
           label:
               AppLocalizations.instance.translate('roast_wallet_bottom_open'),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.key),
-          tooltip: 'Generated Keys',
+          tooltip: AppLocalizations.instance
+              .translate('roast_wallet_bototm_keys_tooltip'),
           label:
               AppLocalizations.instance.translate('roast_wallet_bottom_keys'),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.note_add),
-          tooltip: 'Request new DKG',
-          label: AppLocalizations.instance.translate('roast_wallet_bottom_new'),
+          tooltip: AppLocalizations.instance
+              .translate('roast_wallet_bototm_new_dkg_tooltip'),
+          label: AppLocalizations.instance
+              .translate('roast_wallet_bottom_new_dkg'),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.drive_file_rename_outline),
+          tooltip: AppLocalizations.instance
+              .translate('roast_wallet_bototm_new_signature_tooltip'),
+          label: AppLocalizations.instance
+              .translate('roast_wallet_bottom_new_signature'),
         ),
       ],
     );
