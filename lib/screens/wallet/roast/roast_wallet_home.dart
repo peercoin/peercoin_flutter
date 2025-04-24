@@ -247,20 +247,22 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     return BottomNavigationBar(
       unselectedItemColor: Theme.of(context).disabledColor,
       selectedItemColor: Colors.white,
+      backgroundColor: bgColor,
       onTap: (index) {
         _changeTab(ROASTWalletTab.values[index]);
       },
       currentIndex: _selectedTab.index,
       items: [
         BottomNavigationBarItem(
-          icon: const Icon(Icons.list_rounded),
           backgroundColor: bgColor,
+          icon: const Icon(Icons.list_rounded),
           tooltip: AppLocalizations.instance
               .translate('roast_wallet_bototm_open_tooltip'),
           label:
               AppLocalizations.instance.translate('roast_wallet_bottom_open'),
         ),
         BottomNavigationBarItem(
+          backgroundColor: bgColor,
           icon: const Icon(Icons.key),
           tooltip: AppLocalizations.instance
               .translate('roast_wallet_bototm_keys_tooltip'),
@@ -268,6 +270,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
               AppLocalizations.instance.translate('roast_wallet_bottom_keys'),
         ),
         BottomNavigationBarItem(
+          backgroundColor: bgColor,
           icon: const Icon(Icons.note_add),
           tooltip: AppLocalizations.instance
               .translate('roast_wallet_bototm_new_dkg_tooltip'),
@@ -275,6 +278,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
               .translate('roast_wallet_bottom_new_dkg'),
         ),
         BottomNavigationBarItem(
+          backgroundColor: bgColor,
           icon: const Icon(Icons.drive_file_rename_outline),
           tooltip: AppLocalizations.instance
               .translate('roast_wallet_bototm_new_signature_tooltip'),

@@ -614,6 +614,8 @@
   "roast_wallet_open_requests_description_empty": "No description",
   "roast_wallet_open_requests_expiry": "Expiry: $n",
   "roast_wallet_open_requests_threshold": "Threshold: $n",
+  "roast_wallet_pending_requests": "Pending Requests",
+  "roast_wallet_accepted_requests": "Accepted Requests",
   "roast_wallet_login_status_logged_out": "You are logged out",
   "roast_wallet_login_status_no_server": "No server configured",
   "roast_wallet_login_status_no_server_cta": "Configure server",

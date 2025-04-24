@@ -30,7 +30,22 @@ class RequestSignatureTab extends StatelessWidget {
       try {
         await roastClient.requestSignatures(
           SignaturesRequestDetails(
-            requiredSigs: [],
+            requiredSigs: [
+              // TODO check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
+              SingleSignatureDetails(
+                signDetails: SignDetails(
+                  message: Uint8List.fromList(
+                    _descriptionController.text.codeUnits,
+                  ),
+                  mastHash: Uint8List.fromList(
+                    _descriptionController.text.codeUnits, // TODO get real hash
+                  ),
+                ),
+                groupKey: roastClient
+                    .keys.entries.first.key, // TODO get from dropdown
+                hdDerivation: [0], // TODO get from free text input?
+              ),
+            ],
             expiry: Expiry(const Duration(days: 1)),
           ),
         );
