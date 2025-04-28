@@ -1,13 +1,13 @@
+import "package:coinlib_flutter/coinlib_flutter.dart" as cl;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
-class RequestSignatureTab extends StatelessWidget {
-  RequestSignatureTab({
+class RequestSignatureTab extends StatefulWidget {
+  const RequestSignatureTab({
     required this.roastClient,
     required this.groupSize,
     required this.forceRender,
@@ -17,45 +17,108 @@ class RequestSignatureTab extends StatelessWidget {
   final Function forceRender;
   final Client roastClient;
   final int groupSize;
-  final _formKey = GlobalKey<FormState>();
-  final _descriptionController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _thresholdController = TextEditingController();
 
-  Future<void> _handeSubmit(BuildContext context) async {
+  @override
+  State<RequestSignatureTab> createState() => _RequestSignatureTabState();
+}
+
+class _RequestSignatureTabState extends State<RequestSignatureTab> {
+  final _formKey = GlobalKey<FormState>();
+  final _messageController = TextEditingController();
+  final _derivationController = TextEditingController();
+
+  // Track selected group key
+  cl.ECCompressedPublicKey? _selectedGroupKey;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with first key if available
+    if (widget.roastClient.keys.isNotEmpty) {
+      _selectedGroupKey = widget.roastClient.keys.entries.first.key;
+    }
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _derivationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       FocusScope.of(context).unfocus(); //hide keyboard
 
-      try {
-        await roastClient.requestSignatures(
-          SignaturesRequestDetails(
-            requiredSigs: [
-              // TODO check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
-              SingleSignatureDetails(
-                signDetails: SignDetails(
-                  message: Uint8List.fromList(
-                    _descriptionController.text.codeUnits,
-                  ),
-                  mastHash: Uint8List.fromList(
-                    _descriptionController.text.codeUnits, // TODO get real hash
-                  ),
-                ),
-                groupKey: roastClient
-                    .keys.entries.first.key, // TODO get from dropdown
-                hdDerivation: [0], // TODO get from free text input?
+      // Validate that a key is selected
+      if (_selectedGroupKey == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_request_signature_no_key_error',
               ),
-            ],
-            expiry: Expiry(const Duration(days: 1)),
+            ),
           ),
         );
+        return;
+      }
+
+      try {
+        // check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
+        final derivedKeyInfo = HDGroupKeyInfo.master(
+          groupKey: _selectedGroupKey!,
+          threshold: 3,
+        ).derive(0).derive(0x7fffffff);
+
+        final derivedPubkey = derivedKeyInfo.groupKey;
+
+        print("\nGenerated key ${_selectedGroupKey!.hex}");
+        print("HD Derived key ${derivedPubkey.hex}");
+
+        final taproot = cl.Taproot(internalKey: derivedPubkey);
+        final testnetAddr = cl.P2TRAddress.fromTaproot(
+          taproot,
+          hrp: cl.Network.testnet.bech32Hrp,
+        );
+        final mainnetAddr = cl.P2TRAddress.fromTaproot(
+          taproot,
+          hrp: cl.Network.mainnet.bech32Hrp,
+        );
+        print("Testnet Taproot address: $testnetAddr");
+        print("Mainnet Taproot address: $mainnetAddr");
+
+        // final trDetails = cl.TaprootKeySignDetails(
+        //   tx: unsignedTx,
+        //   inputN: 0,
+        //   prevOuts: [
+        //     cl.Output.fromProgram(cl.CoinUnit.coin.toSats("0.02"), program)
+        //   ],
+        // );
+
+        // await widget.roastClient.requestSignatures(
+        //   SignaturesRequestDetails(
+        //     requiredSigs: [
+        //       SingleSignatureDetails(
+        //         signDetails: SignDetails.scriptSpend(
+        //           message:
+        //               cl.TaprootSignatureHasher(_messageController.text).hash,
+        //         ),
+        //         groupKey: _selectedGroupKey!, // Use selected key
+        //         hdDerivation: [0, 1],
+        //       ),
+        //     ],
+        //     expiry: Expiry(const Duration(days: 1)),
+        //   ),
+        // );
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
                 AppLocalizations.instance.translate(
-                  'roast_wallet_request_dkg_sent_success_snack',
+                  'roast_wallet_request_signature_success_snack',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -64,16 +127,15 @@ class RequestSignatureTab extends StatelessWidget {
         }
 
         // Clear the form fields
-        _descriptionController.clear();
-        _nameController.clear();
-        _thresholdController.clear();
+        _messageController.clear();
+        _derivationController.clear();
 
         // Force a re-render of the widget
-        forceRender();
+        widget.forceRender();
       } catch (e) {
         LoggerWrapper.logError(
-          'RequestDKGTab',
-          'handleRequestDKG',
+          'RequestSignatureTab',
+          'handleSubmit',
           e.toString(),
         );
         if (context.mounted) {
@@ -81,27 +143,13 @@ class RequestSignatureTab extends StatelessWidget {
             SnackBar(
               content: Text(
                 AppLocalizations.instance.translate(
-                  'roast_wallet_request_dkg_sent_error_snack',
+                  'roast_wallet_request_signature_error_snack',
                 ),
               ),
             ),
           );
         }
       }
-
-      //check for required auth TODO
-      // if (_appSettings
-      //     .authenticationOptions!['sendTransaction']!) {
-      //   await Auth.requireAuth(
-      //     context: context,
-      //     biometricsAllowed:
-      //         _appSettings.biometricsAllowed,
-      //     callback: () =>
-      //         _showTransactionConfirmation(context),
-      //   );
-      // } else {
-      //   _showTransactionConfirmation(context);
-      // }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -117,7 +165,9 @@ class RequestSignatureTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool thresholdDisabled = groupSize == 2;
+    // Get list of available keys and their details
+    final keyEntries = widget.roastClient.keys.entries.toList();
+    final bool hasKeys = keyEntries.isNotEmpty;
 
     return Stack(
       children: [
@@ -132,132 +182,84 @@ class RequestSignatureTab extends StatelessWidget {
                     children: [
                       PeerServiceTitle(
                         title: AppLocalizations.instance.translate(
-                          'roast_wallet_request_dkg_title',
+                          'roast_wallet_request_signature_title',
                         ),
                       ),
-                      TextFormField(
-                        controller: _nameController,
-                        maxLength: 40,
+
+                      // Group key dropdown
+                      DropdownButtonFormField<cl.ECCompressedPublicKey>(
+                        value: _selectedGroupKey,
                         decoration: InputDecoration(
                           icon: Icon(
-                            Icons.bookmark,
+                            Icons.key,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance.translate(
-                            'roast_wallet_request_dkg_name',
+                            'roast_wallet_request_signature_group_key',
                           ),
                         ),
+                        hint: Text(
+                          AppLocalizations.instance.translate(
+                            'roast_wallet_request_signature_select_key',
+                          ),
+                        ),
+                        isExpanded: true,
+                        items: keyEntries.map((entry) {
+                          return DropdownMenuItem<cl.ECCompressedPublicKey>(
+                            value: entry.key,
+                            child: Text(
+                              entry.value.name,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: hasKeys
+                            ? (value) {
+                                setState(() {
+                                  _selectedGroupKey = value;
+                                });
+                              }
+                            : null,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null) {
                             return AppLocalizations.instance.translate(
-                              'roast_wallet_request_dkg_name_empty_error',
-                            );
-                          }
-                          if (value.length < 3) {
-                            return AppLocalizations.instance.translate(
-                              'roast_wallet_request_dkg_name_too_short_error',
+                              'roast_wallet_request_signature_group_key_empty_error',
                             );
                           }
                           return null;
                         },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          AppLocalizations.instance.translate(
-                            'roast_setup_group_member_name_input_hint',
-                          ),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      ),
+
+                      const SizedBox(height: 20),
+
                       TextFormField(
-                        controller: _descriptionController,
-                        autocorrect: false,
-                        maxLength: 1000,
-                        minLines: 2,
-                        maxLines: 5,
+                        controller: _messageController,
+                        maxLength: 40,
                         decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () async {
-                              final data =
-                                  await Clipboard.getData('text/plain');
-                              _descriptionController.text = data!.text!.trim();
-                            },
-                            icon: Icon(
-                              Icons.paste_rounded,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
                           icon: Icon(
                             Icons.message,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance.translate(
-                            'roast_wallet_request_dkg_description',
+                            'roast_wallet_request_signature_message',
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.instance.translate(
+                              'roast_wallet_request_signature_message_empty_error',
+                            );
+                          }
+                          // TODO must be 32 bytes?!
+                          return null;
+                        },
                       ),
-                      thresholdDisabled
-                          ? const SizedBox()
-                          : TextFormField(
-                              textInputAction: TextInputAction.done,
-                              controller: _thresholdController,
-                              autocorrect: false,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              decoration: InputDecoration(
-                                icon: Icon(
-                                  Icons.group,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                labelText: AppLocalizations.instance.translate(
-                                  'roast_wallet_request_dkg_threshold',
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppLocalizations.instance.translate(
-                                    'roast_wallet_request_dkg_threshold_empty_error',
-                                  );
-                                }
 
-                                final int? threshold = int.tryParse(value);
-                                if (threshold == null) {
-                                  return AppLocalizations.instance.translate(
-                                    'roast_wallet_request_dkg_threshold_not_number_error',
-                                  );
-                                }
-
-                                if (threshold < 2) {
-                                  return AppLocalizations.instance.translate(
-                                    'roast_wallet_request_dkg_threshold_too_small_error',
-                                  );
-                                }
-
-                                if (threshold > groupSize) {
-                                  return AppLocalizations.instance.translate(
-                                      'roast_wallet_request_dkg_threshold_too_large_error',
-                                      {
-                                        'max': groupSize.toString(),
-                                      });
-                                }
-
-                                return null;
-                              },
-                            ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
                           AppLocalizations.instance.translate(
-                            thresholdDisabled
-                                ? 'roast_wallet_request_dkg_groupsize_equals_two_hint'
-                                : 'roast_wallet_request_dkg_threshold_hint',
+                            'roast_wallet_request_signature_message_hint',
                           ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -266,11 +268,63 @@ class RequestSignatureTab extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+
+                      // TextFormField(
+                      //   textInputAction: TextInputAction.done,
+                      //   controller: _derivationController,
+                      //   autocorrect: false,
+                      //   keyboardType: TextInputType.number,
+                      //   inputFormatters: [
+                      //     FilteringTextInputFormatter.digitsOnly,
+                      //   ],
+                      //   decoration: InputDecoration(
+                      //     icon: Icon(
+                      //       Icons.group,
+                      //       color: Theme.of(context).primaryColor,
+                      //     ),
+                      //     labelText: AppLocalizations.instance.translate(
+                      //       'roast_wallet_request_dkg_threshold',
+                      //     ),
+                      //   ),
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return AppLocalizations.instance.translate(
+                      //         'roast_wallet_request_dkg_threshold_empty_error',
+                      //       );
+                      //     }
+
+                      //     final int? threshold = int.tryParse(value);
+                      //     if (threshold == null) {
+                      //       return AppLocalizations.instance.translate(
+                      //         'roast_wallet_request_dkg_threshold_not_number_error',
+                      //       );
+                      //     }
+
+                      //     if (threshold < 2) {
+                      //       return AppLocalizations.instance.translate(
+                      //         'roast_wallet_request_dkg_threshold_too_small_error',
+                      //       );
+                      //     }
+
+                      //     if (threshold > widget.groupSize) {
+                      //       return AppLocalizations.instance.translate(
+                      //           'roast_wallet_request_dkg_threshold_too_large_error',
+                      //           {
+                      //             'max': widget.groupSize.toString(),
+                      //           });
+                      //     }
+
+                      //     return null;
+                      //   },
+                      // ),
+
+                      const SizedBox(height: 20),
+
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('roast_wallet_request_dkg_cta'),
-                        action: () async => await _handeSubmit(context),
+                        action: () async => await _handleSubmit(context),
+                        disabled: !hasKeys,
                       ),
                     ],
                   ),
