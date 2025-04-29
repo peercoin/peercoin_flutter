@@ -30,13 +30,15 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
           (fields[7] as Map).cast<SignaturesRequestId, SignaturesNonces>()
       .._sigsRejected =
           (fields[8] as Map).cast<SignaturesRequestId, FinalExpirable>()
-      .._ourName = fields[9] as String?;
+      .._ourName = fields[9] as String?
+      .._pendingSignatureRequest =
+          fields[11] as ROASTWalletPendingSignatureRequest?;
   }
 
   @override
   void write(BinaryWriter writer, ROASTWallet obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj._title)
       ..writeByte(1)
@@ -58,7 +60,9 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
       ..writeByte(9)
       ..write(obj._ourName)
       ..writeByte(10)
-      ..write(obj._ourKey);
+      ..write(obj._ourKey)
+      ..writeByte(11)
+      ..write(obj._pendingSignatureRequest);
   }
 
   @override

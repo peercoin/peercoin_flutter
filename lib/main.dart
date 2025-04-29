@@ -9,6 +9,7 @@ import 'package:frosty/frosty.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/models/hive/adapters/ec_compressed_public_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/frost_key_with_details_hive_adapter.dart';
@@ -77,6 +78,7 @@ void main() async {
   Hive.registerAdapter(HiveROASTClientConfigAdapter());
   Hive.registerAdapter(HiveECPrivateKeyAdapter());
   Hive.registerAdapter(HiveECPublicKeyAdapter());
+  Hive.registerAdapter(HiveECCompressedPublicKeyAdapter());
   Hive.registerAdapter(HiveFrostKeyWithDetailsAdapter());
   Hive.registerAdapter(HiveSignaturesRequestIdAdapter());
 
