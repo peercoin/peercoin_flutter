@@ -1,5 +1,6 @@
 import "package:coinlib_flutter/coinlib_flutter.dart" as cl;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
@@ -230,10 +231,16 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                       const SizedBox(height: 20),
 
                       TextFormField(
+                        textInputAction: TextInputAction.done,
                         controller: _derivationController,
+                        autocorrect: false,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         decoration: InputDecoration(
                           icon: Icon(
-                            Icons.polyline,
+                            Icons.group,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance.translate(
@@ -246,7 +253,21 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                               'roast_wallet_request_signature_derivation_path_empty_error',
                             );
                           }
-                          // TODO validate / sanitize derivation path
+                          // Parse the input value
+                          final intValue = int.tryParse(value);
+                          if (intValue == null) {
+                            return AppLocalizations.instance.translate(
+                              'roast_wallet_request_signature_derivation_path_invalid_error',
+                            );
+                          }
+
+                          // Check if it's within 32-bit unsigned integer range (0 to 2^32-1)
+                          if (intValue < 0 || intValue > 0xFFFFFFFF) {
+                            return AppLocalizations.instance.translate(
+                              'roast_wallet_request_signature_derivation_path_range_error',
+                            );
+                          }
+
                           return null;
                         },
                       ),
@@ -264,55 +285,6 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                           ),
                         ),
                       ),
-
-                      // TextFormField(
-                      //   textInputAction: TextInputAction.done,
-                      //   controller: _derivationController,
-                      //   autocorrect: false,
-                      //   keyboardType: TextInputType.number,
-                      //   inputFormatters: [
-                      //     FilteringTextInputFormatter.digitsOnly,
-                      //   ],
-                      //   decoration: InputDecoration(
-                      //     icon: Icon(
-                      //       Icons.group,
-                      //       color: Theme.of(context).primaryColor,
-                      //     ),
-                      //     labelText: AppLocalizations.instance.translate(
-                      //       'roast_wallet_request_dkg_threshold',
-                      //     ),
-                      //   ),
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return AppLocalizations.instance.translate(
-                      //         'roast_wallet_request_dkg_threshold_empty_error',
-                      //       );
-                      //     }
-
-                      //     final int? threshold = int.tryParse(value);
-                      //     if (threshold == null) {
-                      //       return AppLocalizations.instance.translate(
-                      //         'roast_wallet_request_dkg_threshold_not_number_error',
-                      //       );
-                      //     }
-
-                      //     if (threshold < 2) {
-                      //       return AppLocalizations.instance.translate(
-                      //         'roast_wallet_request_dkg_threshold_too_small_error',
-                      //       );
-                      //     }
-
-                      //     if (threshold > widget.groupSize) {
-                      //       return AppLocalizations.instance.translate(
-                      //           'roast_wallet_request_dkg_threshold_too_large_error',
-                      //           {
-                      //             'max': widget.groupSize.toString(),
-                      //           });
-                      //     }
-
-                      //     return null;
-                      //   },
-                      // ),
 
                       const SizedBox(height: 20),
 
