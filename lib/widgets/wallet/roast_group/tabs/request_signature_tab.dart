@@ -231,7 +231,6 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
                       TextFormField(
                         controller: _derivationController,
-                        maxLength: 40,
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.polyline,
