@@ -24,7 +24,6 @@ class RequestSignatureTab extends StatefulWidget {
 
 class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
-  final _messageController = TextEditingController();
   final _derivationController = TextEditingController();
 
   // Track selected group key
@@ -41,7 +40,6 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
   @override
   void dispose() {
-    _messageController.dispose();
     _derivationController.dispose();
     super.dispose();
   }
@@ -127,7 +125,6 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
         }
 
         // Clear the form fields
-        _messageController.clear();
         _derivationController.clear();
 
         // Force a re-render of the widget
@@ -233,24 +230,24 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                       const SizedBox(height: 20),
 
                       TextFormField(
-                        controller: _messageController,
+                        controller: _derivationController,
                         maxLength: 40,
                         decoration: InputDecoration(
                           icon: Icon(
-                            Icons.message,
+                            Icons.polyline,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance.translate(
-                            'roast_wallet_request_signature_message',
+                            'roast_wallet_request_signature_derivation_path',
                           ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return AppLocalizations.instance.translate(
-                              'roast_wallet_request_signature_message_empty_error',
+                              'roast_wallet_request_signature_derivation_path_empty_error',
                             );
                           }
-                          // TODO must be 32 bytes?!
+                          // TODO validate / sanitize derivation path
                           return null;
                         },
                       ),
@@ -259,7 +256,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
                           AppLocalizations.instance.translate(
-                            'roast_wallet_request_signature_message_hint',
+                            'roast_wallet_request_signature_derivation_path_hint',
                           ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
