@@ -2,6 +2,7 @@ import "package:coinlib_flutter/coinlib_flutter.dart" as cl;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/generated/marisma.pbgrpc.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -12,12 +13,18 @@ class RequestSignatureTab extends StatefulWidget {
     required this.roastClient,
     required this.groupSize,
     required this.forceRender,
+    required this.isTestnet,
+    required this.walletName,
+    required this.marismaClient,
     super.key,
   });
 
   final Function forceRender;
   final Client roastClient;
   final int groupSize;
+  final bool isTestnet;
+  final String walletName;
+  final MarismaClient marismaClient;
 
   @override
   State<RequestSignatureTab> createState() => _RequestSignatureTabState();
@@ -66,27 +73,36 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
       try {
         // check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
+        // find threshold for group key
+        final threshold = widget
+            .roastClient.keys[_selectedGroupKey!]!.keyInfo.group.threshold;
+
         final derivedKeyInfo = HDGroupKeyInfo.master(
           groupKey: _selectedGroupKey!,
-          threshold: 3,
-        ).derive(0).derive(0x7fffffff);
+          threshold: threshold,
+        ).derive(int.parse(_derivationController.text));
 
         final derivedPubkey = derivedKeyInfo.groupKey;
 
-        print("\nGenerated key ${_selectedGroupKey!.hex}");
-        print("HD Derived key ${derivedPubkey.hex}");
-
         final taproot = cl.Taproot(internalKey: derivedPubkey);
-        final testnetAddr = cl.P2TRAddress.fromTaproot(
+        final address = cl.P2TRAddress.fromTaproot(
           taproot,
-          hrp: cl.Network.testnet.bech32Hrp,
+          hrp: widget.isTestnet
+              ? cl.Network.testnet.bech32Hrp
+              : cl.Network.mainnet.bech32Hrp,
         );
-        final mainnetAddr = cl.P2TRAddress.fromTaproot(
-          taproot,
-          hrp: cl.Network.mainnet.bech32Hrp,
+
+        // check if address has balance
+        final utxoRequest = await widget.marismaClient.getAddressUtxoList(
+          AddressListRequest(
+            address: address.toString(),
+          ),
         );
-        print("Testnet Taproot address: $testnetAddr");
-        print("Mainnet Taproot address: $mainnetAddr");
+
+        print(utxoRequest.utxos);
+
+        // empty? save show deposit information -> wait for deposit
+        // has utxos? continue to prev vin selector
 
         // final trDetails = cl.TaprootKeySignDetails(
         //   tx: unsignedTx,

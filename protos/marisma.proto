@@ -2,27 +2,28 @@ syntax = "proto3";
 package marisma;
 
 service Marisma {
-  rpc GetBlockHeight (BlockHeightRequest) returns (BlockHeightReply) {}
+  rpc GetBlockHeight (EmptyRequest) returns (BlockHeightReply) {}
   rpc GetAdressBalance (AddressRequest) returns (AddressBalanceReply) {}
   rpc GetAddressUtxoList (AddressListRequest) returns (AddressUtxoListReply) {}
   rpc GetAddressHasUtxos (AddressRequest) returns (AddressHasUtxosReply) {}
   rpc GetAddressIsKnown (AddressRequest) returns (AddressIsKnownReply) {}
   rpc GetAddressNumberOfUtxos (AddressRequest) returns (AddressNumberOfUtxosReply) {}
-  rpc GetAddressHistory (AddressListRequest) returns (AddressHistoryReply) {}
+  rpc GetAddressUtxoHistoryList (AddressListRequest) returns (AddressUtxoHistoryReply) {}
   rpc GetTransaction (TxRequest) returns (TxReply) {}
   rpc GetEstimateFeePerKb (EstimateFeeRequest) returns (EstimateFeeReply) {}
   rpc BroadCastTransaction (BroadCastTransactionRequest) returns (BroadCastTransactionReply) {}
-  rpc SubscribeTestStream(TestStreamRequest) returns (stream TestStreamReply) {} //not functional yet, don't use
-  //TODO STREAM block subscription
-  //TODO STREAM address subscription
-  //TODO STREAM address hasUtos scan
+  rpc BlockHashStream(BlockHashStreamRequest) returns (stream BlockHashStreamReply) {} //server side streaming
+  rpc AddressStatusStream(stream AddressRequest) returns (stream AddressStatusStreamReply) {}  //bi-directional streaming
+  rpc AddressScanStream(stream AddressRequest) returns (stream AddressScanStreamReply) {}  //bi-directional streaming
+  rpc AddressUtxosStream(stream AddressListRequest) returns (stream AddressUtxosStreamReply) {}  //bi-directional streaming
 }
 
-message BlockHeightRequest {
+message EmptyRequest {
 }
 
 message BlockHeightReply {
   uint32 height = 1;
+  optional string rpc_error = 2;
 }
 
 message EstimateFeeRequest {
@@ -32,6 +33,7 @@ message EstimateFeeRequest {
 
 message EstimateFeeReply {
   uint64 feePerKb = 1;
+  optional string rpc_error = 2;
 }
 
 message BroadCastTransactionRequest {
@@ -40,39 +42,49 @@ message BroadCastTransactionRequest {
 
 message BroadCastTransactionReply {
   string txid = 1;
-  optional string rpcError = 2;
+  optional string rpc_error = 2;
 }
 
 message AddressRequest {
   string address = 1;
+  optional string ping = 2;
 }
 
 message AddressListRequest {
   string address = 1;
-  bool ascending = 2;
+  optional int32 minimum_height = 2;
+  optional bool ascending = 3;
 }
 
 message AddressBalanceReply {
-  uint64 balance = 1;
-}
-message AddressUtxoListReply {
- string utxos = 1;
+  uint64 confirmed = 1;
+  uint64 unconfirmed = 2;
+  optional string rpc_error = 3;
 }
 
-message AddressHistoryReply {
- repeated string history = 1;
+message AddressUtxoListReply {
+  repeated string utxos = 1;
+  optional string rpc_error = 2;
+}
+
+message AddressUtxoHistoryReply {
+  repeated string history = 1;
+  optional string rpc_error = 2;
 }
 
 message AddressHasUtxosReply {
- bool has_utxos = 1;
+  bool has_utxos = 1;
+  optional string rpc_error = 2;
 }
 
 message AddressNumberOfUtxosReply {
   uint32 n = 1;
+  optional string rpc_error = 2;
 }
 
 message AddressIsKnownReply {
   bool is_known = 1;
+  optional string rpc_error = 2;
 }
 
 message TxRequest {
@@ -81,11 +93,36 @@ message TxRequest {
 
 message TxReply {
   string tx = 1;
+  optional string rpc_error = 2;
 }
 
-message TestStreamRequest {
+message BlockHashStreamRequest {
 }
 
-message TestStreamReply {
-  string name = 1;
+message BlockHashStreamReply {
+  string hash = 1;
+  uint32 height = 2;
+  optional string rpc_error = 3;
+  optional string pong = 4;
+}
+
+message AddressStatusStreamReply {
+  string address = 1;
+  string status = 2;
+  optional string rpc_error = 3;
+  optional string pong = 4;
+}
+
+message AddressScanStreamReply {
+  string address = 1;
+  bool is_known = 2;
+  optional string rpc_error = 3;
+  //NOTE: no pong here, as we don't want the scan to last forever
+}
+
+message AddressUtxosStreamReply {
+  string address = 1;
+  repeated string utxos = 2;
+  optional string rpc_error = 3;
+  //NOTE: no pong here, as we don't want the utxo stream to last forever
 }

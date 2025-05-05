@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart' as frost;
+import 'package:peercoin/generated/marisma.pbgrpc.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/models/roast_storage.dart';
@@ -9,6 +10,7 @@ import 'package:peercoin/providers/wallet_provider.dart';
 import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
+import 'package:peercoin/tools/marisma_client.dart';
 import 'package:peercoin/widgets/wallet/roast_group/login_status.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
@@ -44,6 +46,8 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   late ROASTWallet _roastWallet;
   late CoinWallet _wallet;
   late frost.Client _roastClient;
+  late MarismaClient _marismaClient;
+  late Future<void> Function() _shutdownMarismaClient;
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +141,13 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
               });
             },
           );
+
+          // init marisma client
+          final (cli, shutdown) = getMarismaClient(
+            _wallet.name,
+          );
+          _marismaClient = cli;
+          _shutdownMarismaClient = shutdown;
         }
       }
 
@@ -157,6 +168,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   void dispose() {
     if (_walletIsComplete && _loginStatus == ROASTLoginStatus.loggedIn) {
       _roastClient.logout();
+      _shutdownMarismaClient();
     }
     super.dispose();
   }
@@ -234,6 +246,9 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             roastClient: _roastClient,
             groupSize: _roastWallet.clientConfig!.group.participants.length,
             forceRender: _forceRender,
+            isTestnet: _wallet.letterCode == 'tPPC',
+            walletName: _wallet.name,
+            marismaClient: _marismaClient,
           ),
         );
         break;
@@ -590,3 +605,4 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 }
 // TODO allow ROAST key export and import, since the key is not derived from the seed
 // TODO background notification for new DKG requests
+// TODO expiries for all requests default to 1 day and should be configurable
