@@ -529,5 +529,17 @@
     "sign_transaction_confirmation_dialog_title": "Transacción de transmisión",
     "sign_transaction_confirmation_dialog_content": "Por favor, confirme que desea emitir esta transacción.",
     "sign_transaction_confirmation_transaction_id": "Id de transacción",
-    "double_tap_to_copy": "Puede pulsar dos veces para copiar el texto."
+    "double_tap_to_copy": "Puede pulsar dos veces para copiar el texto.",
+    "setup_legal_switch_tile_ack": "Reconozco y acepto",
+    "roast_setup_landing_create_group": "Crear grupo",
+    "app_settings_experimental_feature_roast": "Grupos ROAST",
+    "roast_setup_landing_title": "Añade un nuevo Grupo ROAST",
+    "roast_setup_landing_description": "El esquema multifirma ROAST permite a un grupo de usuarios firmar colectivamente una transacción con sus claves individuales, garantizando que la transacción sólo sea válida si un número predefinido de ellos está de acuerdo.  Este método mejora la seguridad y la eficiencia al reducir el riesgo de un único punto de fallo y minimizar la carga computacional en comparación con las configuraciones tradicionales de multifirma.",
+    "roast_setup_landing_group_id_input": "ID del grupo",
+    "roast_setup_landing_group_id_input_hint": "Introduzca un ID para el grupo (Atención: tiene que ser el mismo para todos los firmantes)",
+    "roast_setup_landing_group_id_input_error": "Introduzca un ID de grupo",
+    "roast_setup_landing_group_name_input": "Su Nombre",
+    "roast_setup_landing_group_name_input_hint": "Introduce tu nombre en el grupo (¡Atención, tiene que ser único!)",
+    "roast_setup_landing_group_name_input_error": "Introduzca su nombre en el grupo",
+    "roast_setup_landing_server_url_input": "Servidor URL"
 }
