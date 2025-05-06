@@ -9,12 +9,14 @@ class ROASTWalletLoginStatus extends StatelessWidget {
   final ROASTLoginStatus status;
   final Function retry;
   final Function openServerEditDialog;
+  final Function shareConfiguration;
 
   const ROASTWalletLoginStatus({
     super.key,
     required this.status,
     required this.retry,
     required this.openServerEditDialog,
+    required this.shareConfiguration,
   });
 
   void _launchURL(String url) async {
@@ -60,7 +62,13 @@ class ROASTWalletLoginStatus extends StatelessWidget {
                       ),
                       action: () => openServerEditDialog(),
                     ),
-                    const SizedBox(height: 40),
+                    PeerButton(
+                      text: AppLocalizations.instance.translate(
+                        'roast_wallet_share_group_config',
+                      ),
+                      action: () => shareConfiguration(),
+                    ),
+                    const SizedBox(height: 30),
                     Text(
                       AppLocalizations.instance.translate(
                         'roast_wallet_login_status_no_server_roast_host_nudge',

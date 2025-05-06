@@ -234,6 +234,9 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           openServerEditDialog: () {
             _serverURLEditDialog();
           },
+          shareConfiguration: () {
+            _exportConfiguration();
+          },
         ),
       );
     }
