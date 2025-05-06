@@ -84,7 +84,9 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                                     const SizedBox(width: 10),
                                     Text(
                                       AppLocalizations.instance.translate(
-                                          'roast_wallet_number_of_participants',
+                                          _numberOfOnlineParticipants > 1
+                                              ? 'roast_wallet_number_of_participants_plural'
+                                              : 'roast_wallet_number_of_participants_singular',
                                           {
                                             'n': _numberOfOnlineParticipants
                                                 .toString(),
@@ -263,7 +265,8 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         body = Expanded(
           child: RequestSignatureTab(
             roastClient: _roastClient,
-            groupSize: _roastWallet.clientConfig!.group.participants.length,
+            threshold: _roastWallet.clientConfig!.group.participants.length,
+            derivedKeys: _roastWallet.derivedKeys,
             forceRender: _forceRender,
             isTestnet: isTestnet,
             walletName: _wallet.name,
@@ -625,4 +628,3 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 // TODO allow ROAST key export and import, since the key is not derived from the seed
 // TODO background notification for new DKG requests
 // TODO expiries for all requests default to 1 day and should be configurable
-// TODO

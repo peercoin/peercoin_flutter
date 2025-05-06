@@ -1,9 +1,9 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart' as cl;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/generated/marisma.pbgrpc.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/derive_key_to_taproot_address.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
@@ -11,20 +11,22 @@ import 'package:peercoin/widgets/service_container.dart';
 class RequestSignatureTab extends StatefulWidget {
   const RequestSignatureTab({
     required this.roastClient,
-    required this.groupSize,
+    required this.threshold,
     required this.forceRender,
     required this.isTestnet,
     required this.walletName,
     required this.marismaClient,
+    required this.derivedKeys,
     super.key,
   });
 
   final Function forceRender;
   final Client roastClient;
-  final int groupSize;
+  final int threshold;
   final bool isTestnet;
   final String walletName;
   final MarismaClient marismaClient;
+  final Map<cl.ECPublicKey, Set<int>> derivedKeys;
 
   @override
   State<RequestSignatureTab> createState() => _RequestSignatureTabState();
@@ -32,7 +34,7 @@ class RequestSignatureTab extends StatefulWidget {
 
 class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
-  final _derivationController = TextEditingController();
+  int? _selectedDerivationIndex;
 
   // Track selected group key
   cl.ECCompressedPublicKey? _selectedGroupKey;
@@ -43,13 +45,31 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
     // Initialize with first key if available
     if (widget.roastClient.keys.isNotEmpty) {
       _selectedGroupKey = widget.roastClient.keys.entries.first.key;
+      // Initialize derivation index if available for this key
+      final indices = _getDerivedIndicesForKey(_selectedGroupKey);
+      if (indices.isNotEmpty) {
+        _selectedDerivationIndex = indices.first;
+      }
     }
   }
 
-  @override
-  void dispose() {
-    _derivationController.dispose();
-    super.dispose();
+  List<int> _getDerivedIndicesForKey(cl.ECCompressedPublicKey? key) {
+    if (key == null) return [];
+
+    // Look up derivation indices for this key
+    final indices = widget.derivedKeys[key]?.toList() ?? [];
+    return indices..sort(); // Sort indices for better display
+  }
+
+  String _getAddressForDerivation(cl.ECCompressedPublicKey key, int index) {
+    // Derive the taproot address
+    final taprootAddress = deriveKeyToTapRootAddress(
+      groupKey: key,
+      index: index,
+      threshold: widget.threshold,
+      isTestnet: widget.isTestnet,
+    );
+    return taprootAddress.toString();
   }
 
   Future<void> _handleSubmit(BuildContext context) async {
@@ -64,6 +84,19 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
             content: Text(
               AppLocalizations.instance.translate(
                 'roast_wallet_request_signature_no_key_error',
+              ),
+            ),
+          ),
+        );
+        return;
+      }
+
+      if (_selectedDerivationIndex == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_request_signature_no_derivation_error',
               ),
             ),
           ),
@@ -123,9 +156,6 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
             ),
           );
         }
-
-        // Clear the form fields
-        _derivationController.clear();
 
         // Force a re-render of the widget
         widget.forceRender();
@@ -214,6 +244,11 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             ? (value) {
                                 setState(() {
                                   _selectedGroupKey = value;
+                                  // Reset and update derived address when group key changes
+                                  final indices =
+                                      _getDerivedIndicesForKey(value);
+                                  _selectedDerivationIndex =
+                                      indices.isNotEmpty ? indices.first : null;
                                 });
                               }
                             : null,
@@ -227,63 +262,77 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                         },
                       ),
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
-                      TextFormField(
-                        textInputAction: TextInputAction.done,
-                        controller: _derivationController,
-                        autocorrect: false,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
+                      // Derived address dropdown
+                      DropdownButtonFormField<int>(
+                        value: _selectedDerivationIndex,
                         decoration: InputDecoration(
                           icon: Icon(
-                            Icons.call_split,
+                            Icons.account_balance_wallet,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance.translate(
-                            'roast_wallet_request_signature_derivation_path',
+                            'roast_wallet_request_signature_derived_address',
                           ),
                         ),
+                        hint: Text(
+                          AppLocalizations.instance.translate(
+                            'roast_wallet_request_signature_select_address',
+                          ),
+                        ),
+                        isExpanded: true,
+                        items: _getDerivedIndicesForKey(_selectedGroupKey)
+                            .map((index) {
+                          final address = _selectedGroupKey != null
+                              ? _getAddressForDerivation(
+                                  _selectedGroupKey!, index)
+                              : '';
+
+                          return DropdownMenuItem<int>(
+                            value: index,
+                            child: Tooltip(
+                              message: address,
+                              child: Text(
+                                '${index.toString()} - $address',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: _selectedGroupKey != null &&
+                                _getDerivedIndicesForKey(_selectedGroupKey)
+                                    .isNotEmpty
+                            ? (value) {
+                                setState(() {
+                                  _selectedDerivationIndex = value;
+                                });
+                              }
+                            : null,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null) {
                             return AppLocalizations.instance.translate(
-                              'roast_wallet_request_signature_derivation_path_empty_error',
+                              'roast_wallet_request_signature_derived_address_empty_error',
                             );
                           }
-                          // Parse the input value
-                          final intValue = int.tryParse(value);
-                          if (intValue == null) {
-                            return AppLocalizations.instance.translate(
-                              'roast_wallet_request_signature_derivation_path_invalid_error',
-                            );
-                          }
-
-                          // Check if it's within 32-bit unsigned integer range (0 to 2^32-1)
-                          if (intValue < 0 || intValue > 0xFFFFFFFF) {
-                            return AppLocalizations.instance.translate(
-                              'roast_wallet_request_signature_derivation_path_range_error',
-                            );
-                          }
-
                           return null;
                         },
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          AppLocalizations.instance.translate(
-                            'roast_wallet_request_signature_derivation_path_hint',
-                          ),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.secondary,
+                      if (_selectedGroupKey != null &&
+                          _getDerivedIndicesForKey(_selectedGroupKey).isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            AppLocalizations.instance.translate(
+                              'roast_wallet_request_signature_no_derived_addresses',
+                            ),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                         ),
-                      ),
 
                       const SizedBox(height: 20),
 
