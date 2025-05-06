@@ -154,13 +154,6 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
               });
             },
           );
-
-          // init marisma client
-          final (cli, shutdown) = getMarismaClient(
-            _coinWallet.name,
-          );
-          _marismaClient = cli;
-          _shutdownMarismaClient = shutdown;
         }
       }
 
@@ -588,6 +581,13 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         '_tryLogin',
         'Logged in to server',
       );
+
+      // init marisma client
+      final (cli, shutdown) = getMarismaClient(
+        _coinWallet.name,
+      );
+      _marismaClient = cli;
+      _shutdownMarismaClient = shutdown;
 
       setState(() {
         _loginStatus = ROASTLoginStatus.loggedIn;

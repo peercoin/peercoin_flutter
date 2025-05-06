@@ -38,6 +38,7 @@ class _RoastWalletKeyDetailScreenState
   Set<int> _derivedKeys = {};
   late Function(ECPublicKey key, int index) _deriveNewAddress;
   late MapEntry<ECCompressedPublicKey, FrostKeyWithDetails> _frostKeyEntry;
+  late bool _isTestnet;
 
   @override
   void didChangeDependencies() {
@@ -47,6 +48,7 @@ class _RoastWalletKeyDetailScreenState
       _frostKeyEntry = arguments.frostKeyEntry;
       _derivedKeys = arguments.derivedKeys;
       _deriveNewAddress = arguments.deriveNewAddress;
+      _isTestnet = arguments.isTestnet;
 
       setState(() {
         _initial = false;
@@ -306,7 +308,7 @@ class _RoastWalletKeyDetailScreenState
                                   children: _derivedKeys.map((key) {
                                     final addr = deriveKeyToTapRootAddress(
                                       groupKey: _frostKeyEntry.value.groupKey,
-                                      isTestnet: false,
+                                      isTestnet: _isTestnet,
                                       threshold: threshold,
                                       index: key,
                                     ).toString();
