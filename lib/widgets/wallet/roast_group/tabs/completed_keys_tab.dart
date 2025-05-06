@@ -38,6 +38,17 @@ class CompletedKeysTab extends StatelessWidget {
           (entry) {
             return Card(
               child: ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    Routes.roastWalletKeyDetail,
+                    arguments: RoastWalletDetailScrenDTO(
+                      frostKeyEntry: entry,
+                      derivedKeys: derivedKeys[entry.key] ?? {},
+                      deriveNewAddress: deriveNewAddress,
+                      isTestnet: isTestnet,
+                    ),
+                  );
+                },
                 title: Text(
                   entry.value.name,
                   style: TextStyle(
@@ -57,17 +68,6 @@ class CompletedKeysTab extends StatelessWidget {
                   ),
                 ),
                 trailing: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                      Routes.roastWalletKeyDetail,
-                      arguments: RoastWalletDetailScrenDTO(
-                        frostKeyEntry: entry,
-                        derivedKeys: derivedKeys[entry.key] ?? {},
-                        deriveNewAddress: deriveNewAddress,
-                        isTestnet: isTestnet,
-                      ),
-                    );
-                  },
                   child: Icon(
                     Icons.open_in_new,
                     color: Theme.of(context).colorScheme.primary,
