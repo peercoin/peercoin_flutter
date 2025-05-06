@@ -33,8 +33,10 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
       .._ourName = fields[9] as String?
       .._derivedKeys = fields[13] == null
           ? {}
-          : (fields[13] as Map).map((dynamic k, dynamic v) =>
-              MapEntry(k as ECPublicKey, (v as Set).cast<int>()));
+          : (fields[13] as Map).map(
+              (dynamic k, dynamic v) =>
+                  MapEntry(k as ECPublicKey, (v as Set).cast<int>()),
+            );
   }
 
   @override

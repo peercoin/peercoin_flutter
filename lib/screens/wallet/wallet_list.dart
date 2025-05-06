@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -234,9 +235,13 @@ class _WalletListScreenState extends State<WalletListScreen>
                                                 ? Routes.roastWalletHome
                                                 : Routes
                                                     .standardAndWatchOnlyWalletHome,
-                                            arguments: {
-                                              'wallet': wallet,
-                                            },
+                                            arguments: wallet.isROAST
+                                                ? RoastWalletHomeScreenArguments(
+                                                    coinWallet: wallet,
+                                                  )
+                                                : {
+                                                    'wallet': wallet,
+                                                  },
                                           );
                                         },
                                         child: ListTile(
@@ -468,9 +473,9 @@ class _WalletListScreenState extends State<WalletListScreen>
             _activeWalletsOrdered.first.isROAST
                 ? await navigator.pushNamed(
                     Routes.roastWalletHome,
-                    arguments: {
-                      'wallet': _activeWalletsOrdered.first,
-                    },
+                    arguments: RoastWalletHomeScreenArguments(
+                      coinWallet: _activeWalletsOrdered.first,
+                    ),
                   )
                 : await navigator.pushNamed(
                     Routes.standardAndWatchOnlyWalletHome,
@@ -489,7 +494,9 @@ class _WalletListScreenState extends State<WalletListScreen>
               defaultWallet.isROAST
                   ? await navigator.pushNamed(
                       Routes.roastWalletHome,
-                      arguments: {'wallet': defaultWallet},
+                      arguments: RoastWalletHomeScreenArguments(
+                        coinWallet: defaultWallet,
+                      ),
                     )
                   : await navigator.pushNamed(
                       Routes.standardAndWatchOnlyWalletHome,

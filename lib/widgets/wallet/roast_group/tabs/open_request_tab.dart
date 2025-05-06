@@ -150,7 +150,9 @@ class OpenRequestTab extends StatelessWidget {
                   // Render pending DKG requests
                   if (roastClient.dkgRequests.isNotEmpty)
                     _renderSectionHeader(
-                        context, 'roast_wallet_pending_requests'),
+                      context,
+                      'roast_wallet_pending_requests',
+                    ),
 
                   ...roastClient.dkgRequests.asMap().entries.map((entry) {
                     final request = entry.value;
@@ -170,7 +172,9 @@ class OpenRequestTab extends StatelessWidget {
                   // Render accepted DKG requests
                   if (roastClient.acceptedDkgs.isNotEmpty)
                     _renderSectionHeader(
-                        context, 'roast_wallet_accepted_requests'),
+                      context,
+                      'roast_wallet_accepted_requests',
+                    ),
 
                   ...roastClient.acceptedDkgs.asMap().entries.map((entry) {
                     final request = entry.value;
@@ -206,8 +210,12 @@ class OpenRequestTab extends StatelessWidget {
   }
 
 // Helper method to build a DKG request/accepted card
-  Widget _buildDkgCard(BuildContext context, DkgInProgress request,
-      {required bool showAcceptButton, required bool showRejectButton}) {
+  Widget _buildDkgCard(
+    BuildContext context,
+    DkgInProgress request, {
+    required bool showAcceptButton,
+    required bool showRejectButton,
+  }) {
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(

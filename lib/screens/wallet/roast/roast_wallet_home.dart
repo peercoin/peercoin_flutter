@@ -22,6 +22,14 @@ import 'package:peercoin/widgets/wallet/wallet_home/wallet_delete_watch_only_bot
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+class RoastWalletHomeScreenArguments {
+  CoinWallet coinWallet;
+
+  RoastWalletHomeScreenArguments({
+    required this.coinWallet,
+  });
+}
+
 class ROASTWalletHomeScreen extends StatefulWidget {
   const ROASTWalletHomeScreen({super.key});
 
@@ -45,7 +53,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   ROASTWalletTab _selectedTab = ROASTWalletTab.openRequests;
   int _numberOfOnlineParticipants = 0;
   late ROASTWallet _roastWallet;
-  late CoinWallet _wallet;
+  late CoinWallet _coinWallet;
   late frost.Client _roastClient;
   late MarismaClient _marismaClient;
   late Future<void> Function() _shutdownMarismaClient;
@@ -56,7 +64,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 1,
-        title: Text(_wallet.title),
+        title: Text(_coinWallet.title),
         actions: _calcPopupMenuItems(context),
       ),
       bottomNavigationBar:
@@ -110,6 +118,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 )
               : ROASTGroupSetupLanding(
                   roastWallet: _roastWallet,
+                  coinWallet: _coinWallet,
                 ),
     );
   }
@@ -117,12 +126,13 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   @override
   void didChangeDependencies() async {
     if (_initial) {
-      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _wallet = arguments['wallet'];
+      final arguments = ModalRoute.of(context)!.settings.arguments!
+          as RoastWalletHomeScreenArguments;
+      _coinWallet = arguments.coinWallet;
 
       final walletProvider =
           Provider.of<WalletProvider>(context, listen: false);
-      _roastWallet = await walletProvider.getROASTWallet(_wallet.name);
+      _roastWallet = await walletProvider.getROASTWallet(_coinWallet.name);
 
       // only try to login if we have a completed configuration
       if (_roastWallet.isCompleted) {
@@ -147,7 +157,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
           // init marisma client
           final (cli, shutdown) = getMarismaClient(
-            _wallet.name,
+            _coinWallet.name,
           );
           _marismaClient = cli;
           _shutdownMarismaClient = shutdown;
@@ -228,7 +238,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       );
     }
 
-    final isTestnet = _wallet.letterCode == 'tPPC';
+    final isTestnet = _coinWallet.letterCode == 'tPPC';
 
     switch (_selectedTab) {
       case ROASTWalletTab.openRequests:
@@ -269,7 +279,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             derivedKeys: _roastWallet.derivedKeys,
             forceRender: _forceRender,
             isTestnet: isTestnet,
-            walletName: _wallet.name,
+            walletName: _coinWallet.name,
             marismaClient: _marismaClient,
           ),
         );
@@ -420,13 +430,13 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   void _selectPopUpMenuItem(String value) {
     switch (value) {
       case 'change_title':
-        titleEditDialog(context, _wallet);
+        titleEditDialog(context, _coinWallet);
         break;
       case 'delete_roast_group':
         _triggerDeleteROASTGroupBottomSheet(
           context: context,
           walletProvider: Provider.of<WalletProvider>(context, listen: false),
-          wallet: _wallet,
+          wallet: _coinWallet,
         );
         break;
       case 'export_roast_group':
@@ -522,7 +532,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       builder: (BuildContext context) {
         return WalletDeleteWatchOnlyBottomSheet(
           action: () async {
-            await walletProvider.deleteROASTWallet(_wallet.name);
+            await walletProvider.deleteROASTWallet(_coinWallet.name);
             if (context.mounted) {
               Navigator.of(context).popUntil((route) => route.isFirst);
             }

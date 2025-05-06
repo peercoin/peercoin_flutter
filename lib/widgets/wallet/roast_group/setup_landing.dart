@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -7,8 +8,11 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
   final ROASTWallet roastWallet;
+  final CoinWallet coinWallet;
+
   const ROASTGroupSetupLanding({
     required this.roastWallet,
+    required this.coinWallet,
     super.key,
   });
 
@@ -58,6 +62,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
     if (_step == ROASTSetupStep.pubkey) {
       return ROASTGroupSetupParticipants(
         roastWallet: widget.roastWallet,
+        coinWallet: widget.coinWallet,
         changeStep: _changeStep,
       );
     }

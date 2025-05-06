@@ -1,8 +1,10 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
@@ -16,10 +18,12 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_particip
 class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
   final ROASTWallet roastWallet;
+  final CoinWallet coinWallet;
 
   const ROASTGroupSetupParticipants({
     required this.changeStep,
     required this.roastWallet,
+    required this.coinWallet,
     super.key,
   });
 
@@ -129,10 +133,7 @@ class _ROASTGroupSetupParticipantsState
     Navigator.of(context).pop();
     Navigator.of(context).pushReplacementNamed(
       Routes.roastWalletHome,
-      arguments: {
-        'roastWallet': widget.roastWallet,
-        'isCompleted': true,
-      },
+      arguments: RoastWalletHomeScreenArguments(coinWallet: widget.coinWallet),
     );
   }
 

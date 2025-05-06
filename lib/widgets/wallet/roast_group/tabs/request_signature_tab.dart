@@ -35,8 +35,6 @@ class RequestSignatureTab extends StatefulWidget {
 class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
   int? _selectedDerivationIndex;
-
-  // Track selected group key
   cl.ECCompressedPublicKey? _selectedGroupKey;
 
   @override
@@ -286,7 +284,9 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             .map((index) {
                           final address = _selectedGroupKey != null
                               ? _getAddressForDerivation(
-                                  _selectedGroupKey!, index)
+                                  _selectedGroupKey!,
+                                  index,
+                                )
                               : '';
 
                           return DropdownMenuItem<int>(

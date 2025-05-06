@@ -312,7 +312,8 @@ class _RoastWalletKeyDetailScreenState
                                     ).toString();
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
+                                        vertical: 5,
+                                      ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
