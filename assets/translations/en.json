@@ -618,6 +618,7 @@
   "roast_wallet_request_signature_success_snack": "Signature request sent successfully",
   "roast_wallet_request_signature_error_snack": "Signature request could not be sent",
   "roast_wallet_request_signature_no_key_error": "No group key selected",
+  "roast_wallet_request_signature_derivation_path_already_exists_error": "Derivation index already exists",
   "roast_wallet_open_requests": "Open Requests",
   "roast_wallet_open_requests_empty": "No open requests for you",
   "roast_wappet_open_requests_description": "Description: $text",
@@ -646,5 +647,9 @@
   "roast_wallet_key_detail_group_key": "Group Key",
   "roast_wallet_key_detail_share_group_key": "Share Group Key",
   "roast_wallet_key_detail_description": "Description",
+  "roast_wallet_key_detail_derived_addresses": "Derived Addresses",
+  "roast_wallet_key_detail_derived_addresses_empty": "No derived addresses",
+  "roast_wallet_key_detail_derived_addresses_hint": "The derived addresses are the addresses that can be used to sign transactions. They are derived from the group key and the derivation index.",
+  "roast_wallet_key_detail_derived_addresses_cta": "Derive New Address",
   "roast_wallet_completed_keys": "Completed Keys"
 }

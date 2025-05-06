@@ -31,8 +31,10 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
       .._sigsRejected =
           (fields[8] as Map).cast<SignaturesRequestId, FinalExpirable>()
       .._ourName = fields[9] as String?
-      .._pendingSignatureRequest =
-          fields[11] as ROASTWalletPendingSignatureRequest?;
+      .._derivedKeys = fields[13] == null
+          ? {}
+          : (fields[13] as Map).map((dynamic k, dynamic v) =>
+              MapEntry(k as ECPublicKey, (v as Set).cast<int>()));
   }
 
   @override
@@ -61,8 +63,8 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
       ..write(obj._ourName)
       ..writeByte(10)
       ..write(obj._ourKey)
-      ..writeByte(11)
-      ..write(obj._pendingSignatureRequest);
+      ..writeByte(13)
+      ..write(obj._derivedKeys);
   }
 
   @override

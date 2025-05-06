@@ -1,7 +1,6 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:peercoin/models/hive/roast_wallet_pending_signature_request.dart';
 part 'roast_wallet.g.dart';
 
 @HiveType(typeId: 8)
@@ -39,8 +38,9 @@ class ROASTWallet extends HiveObject {
   @HiveField(10)
   final ECPrivateKey _ourKey;
 
-  @HiveField(11, defaultValue: null)
-  ROASTWalletPendingSignatureRequest? _pendingSignatureRequest;
+  @HiveField(13, defaultValue: {}) //deliberately skipped 11 and 12
+  Map<ECPublicKey, Set<int>> _derivedKeys =
+      {}; // list of group keys and their deriviation path indices
 
   ROASTWallet(
     this._title,
@@ -119,11 +119,9 @@ class ROASTWallet extends HiveObject {
     save();
   }
 
-  ROASTWalletPendingSignatureRequest? get pendingSignatureRequest =>
-      _pendingSignatureRequest;
-
-  set pendingSignatureRequest(ROASTWalletPendingSignatureRequest? value) {
-    _pendingSignatureRequest = value;
+  Map<ECPublicKey, Set<int>> get derivedKeys => _derivedKeys;
+  set derivedKeys(Map<ECPublicKey, Set<int>> newDerivedKeys) {
+    _derivedKeys = newDerivedKeys;
     save();
   }
 }

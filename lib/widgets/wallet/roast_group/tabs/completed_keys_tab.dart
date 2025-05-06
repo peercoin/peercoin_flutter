@@ -1,14 +1,25 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_key_detail.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 
 class CompletedKeysTab extends StatelessWidget {
   final Client roastClient;
+  final Map<ECPublicKey, Set<int>> derivedKeys;
+  final Function(ECPublicKey key, int index) deriveNewAddress;
 
-  const CompletedKeysTab({required this.roastClient, super.key});
+  const CompletedKeysTab({
+    required this.roastClient,
+    required this.derivedKeys,
+    required this.deriveNewAddress,
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
+    print('build');
     return Column(
       children: [
         Text(
@@ -48,9 +59,11 @@ class CompletedKeysTab extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       Routes.roastWalletKeyDetail,
-                      arguments: {
-                        'frostKeyEntry': entry,
-                      },
+                      arguments: RoastWalletDetailScrenDTO(
+                        frostKeyEntry: entry,
+                        derivedKeys: derivedKeys[entry.key] ?? {},
+                        deriveNewAddress: deriveNewAddress,
+                      ),
                     );
                   },
                   child: Icon(

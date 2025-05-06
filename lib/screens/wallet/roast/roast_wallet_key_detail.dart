@@ -3,10 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/taproot_derive_key_to_address.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:share_plus/share_plus.dart';
+
+class RoastWalletDetailScrenDTO {
+  MapEntry<ECCompressedPublicKey, FrostKeyWithDetails> frostKeyEntry;
+  Set<int> derivedKeys;
+  Function(ECPublicKey key, int index) deriveNewAddress;
+
+  RoastWalletDetailScrenDTO({
+    required this.frostKeyEntry,
+    required this.derivedKeys,
+    required this.deriveNewAddress,
+  });
+}
 
 class RoastWalletKeyDetailScreen extends StatefulWidget {
   const RoastWalletKeyDetailScreen({super.key});
@@ -19,13 +32,18 @@ class RoastWalletKeyDetailScreen extends StatefulWidget {
 class _RoastWalletKeyDetailScreenState
     extends State<RoastWalletKeyDetailScreen> {
   bool _initial = true;
+  Set<int> _derivedKeys = {};
+  late Function(ECPublicKey key, int index) _deriveNewAddress;
   late MapEntry<ECCompressedPublicKey, FrostKeyWithDetails> _frostKeyEntry;
 
   @override
   void didChangeDependencies() {
     if (_initial) {
-      final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      _frostKeyEntry = arguments['frostKeyEntry'];
+      final arguments = ModalRoute.of(context)!.settings.arguments
+          as RoastWalletDetailScrenDTO;
+      _frostKeyEntry = arguments.frostKeyEntry;
+      _derivedKeys = arguments.derivedKeys;
+      _deriveNewAddress = arguments.deriveNewAddress;
 
       setState(() {
         _initial = false;
@@ -36,6 +54,109 @@ class _RoastWalletKeyDetailScreenState
 
   void _shareGroupKey() {
     Share.share(_frostKeyEntry.value.groupKey.hex);
+  }
+
+  Future<void> _deriveKeyDialog() {
+    final textFieldController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate(
+              'roast_wallet_key_detail_derived_addresses_cta',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              textInputAction: TextInputAction.done,
+              controller: textFieldController,
+              autocorrect: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              decoration: InputDecoration(
+                icon: Icon(
+                  Icons.call_split,
+                  color: Theme.of(context).primaryColor,
+                ),
+                labelText: AppLocalizations.instance.translate(
+                  'roast_wallet_request_signature_derivation_path',
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.instance.translate(
+                    'roast_wallet_request_signature_derivation_path_empty_error',
+                  );
+                }
+                // Parse the input value
+                final intValue = int.tryParse(value);
+                if (intValue == null) {
+                  return AppLocalizations.instance.translate(
+                    'roast_wallet_request_signature_derivation_path_invalid_error',
+                  );
+                }
+
+                // Check if it's within 32-bit unsigned integer range (0 to 2^32-1)
+                if (intValue < 0 || intValue > 0xFFFFFFFF) {
+                  return AppLocalizations.instance.translate(
+                    'roast_wallet_request_signature_derivation_path_range_error',
+                  );
+                }
+
+                // Check if key is already in set
+                if (_derivedKeys.contains(intValue)) {
+                  return AppLocalizations.instance.translate(
+                    'roast_wallet_request_signature_derivation_path_already_exists_error',
+                  );
+                }
+
+                return null;
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance
+                    .translate('server_settings_alert_cancel'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
+
+                // add to derived keys persistent storage
+                final val = int.parse(textFieldController.text);
+                _deriveNewAddress(
+                  _frostKeyEntry.value.groupKey,
+                  val,
+                );
+
+                // add locally
+                _derivedKeys.add(val);
+
+                Navigator.pop(context);
+              },
+              child: Text(
+                AppLocalizations.instance.translate('jail_dialog_button'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _copyToClipboard(String text) {
@@ -148,7 +269,7 @@ class _RoastWalletKeyDetailScreenState
                         ],
                       ),
 
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 10),
 
                       // Share Button
                       Center(
@@ -158,6 +279,58 @@ class _RoastWalletKeyDetailScreenState
                           ),
                           action: _shareGroupKey,
                         ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      const Divider(),
+
+                      // Derived Keys Section
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'roast_wallet_key_detail_derived_addresses',
+                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          _derivedKeys.isEmpty
+                              ? Text(
+                                  AppLocalizations.instance.translate(
+                                    'roast_wallet_key_detail_derived_addresses_empty',
+                                  ),
+                                )
+                              : Column(
+                                  children: _derivedKeys
+                                      .map(
+                                        (key) => SelectableText(
+                                          tapRootDeriveKeyToAddress(key),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                          const SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'roast_wallet_key_detail_derived_addresses_hint',
+                            ),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: PeerButton(
+                              text: AppLocalizations.instance.translate(
+                                'roast_wallet_key_detail_derived_addresses_cta',
+                              ),
+                              action: () => _deriveKeyDialog(),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
                       ),
                     ],
                   ),

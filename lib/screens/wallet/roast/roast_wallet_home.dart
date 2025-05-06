@@ -1,3 +1,4 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -173,6 +174,18 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     super.dispose();
   }
 
+  void _deriveNewAddress(ECPublicKey key, int index) {
+    final currentDerivedKeys = _roastWallet.derivedKeys;
+    final existingIndices = currentDerivedKeys[key] ?? <int>{};
+    final updatedDerivedKeys =
+        Map<ECPublicKey, Set<int>>.from(currentDerivedKeys);
+
+    updatedDerivedKeys[key] = {...existingIndices, index};
+
+    _roastWallet.derivedKeys = updatedDerivedKeys;
+    _roastWallet.save();
+  }
+
   List<String> _getUsedDKGNames() {
     final usedDKGNames = <String>[];
     for (final request in _roastClient.dkgRequests) {
@@ -226,7 +239,10 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       case ROASTWalletTab.generatedKeys:
         body = Expanded(
           child: CompletedKeysTab(
+            key: Key('$_lastUpdate-completedkeys'),
             roastClient: _roastClient,
+            derivedKeys: _roastWallet.derivedKeys,
+            deriveNewAddress: _deriveNewAddress,
           ),
         );
         break;
@@ -606,3 +622,4 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 // TODO allow ROAST key export and import, since the key is not derived from the seed
 // TODO background notification for new DKG requests
 // TODO expiries for all requests default to 1 day and should be configurable
+// TODO

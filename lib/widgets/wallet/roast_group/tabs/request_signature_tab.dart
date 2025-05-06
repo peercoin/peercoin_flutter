@@ -256,7 +256,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                         ],
                         decoration: InputDecoration(
                           icon: Icon(
-                            Icons.group,
+                            Icons.call_split,
                             color: Theme.of(context).primaryColor,
                           ),
                           labelText: AppLocalizations.instance.translate(
