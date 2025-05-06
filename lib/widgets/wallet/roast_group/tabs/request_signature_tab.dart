@@ -1,4 +1,4 @@
-import "package:coinlib_flutter/coinlib_flutter.dart" as cl;
+import 'package:coinlib_flutter/coinlib_flutter.dart' as cl;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
@@ -74,32 +74,15 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       try {
         // check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
         // find threshold for group key
-        final threshold = widget
-            .roastClient.keys[_selectedGroupKey!]!.keyInfo.group.threshold;
-
-        final derivedKeyInfo = HDGroupKeyInfo.master(
-          groupKey: _selectedGroupKey!,
-          threshold: threshold,
-        ).derive(int.parse(_derivationController.text));
-
-        final derivedPubkey = derivedKeyInfo.groupKey;
-
-        final taproot = cl.Taproot(internalKey: derivedPubkey);
-        final address = cl.P2TRAddress.fromTaproot(
-          taproot,
-          hrp: widget.isTestnet
-              ? cl.Network.testnet.bech32Hrp
-              : cl.Network.mainnet.bech32Hrp,
-        );
 
         // check if address has balance
-        final utxoRequest = await widget.marismaClient.getAddressUtxoList(
-          AddressListRequest(
-            address: address.toString(),
-          ),
-        );
+        // final utxoRequest = await widget.marismaClient.getAddressUtxoList(
+        //   AddressListRequest(
+        //     address: address.toString(),
+        //   ),
+        // );
 
-        print(utxoRequest.utxos);
+        // print(utxoRequest.utxos);
 
         // empty? save show deposit information -> wait for deposit
         // has utxos? continue to prev vin selector

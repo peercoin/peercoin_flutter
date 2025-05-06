@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/taproot_derive_key_to_address.dart';
+import 'package:peercoin/tools/derive_key_to_taproot_address.dart';
+import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -13,11 +14,13 @@ class RoastWalletDetailScrenDTO {
   MapEntry<ECCompressedPublicKey, FrostKeyWithDetails> frostKeyEntry;
   Set<int> derivedKeys;
   Function(ECPublicKey key, int index) deriveNewAddress;
+  bool isTestnet;
 
   RoastWalletDetailScrenDTO({
     required this.frostKeyEntry,
     required this.derivedKeys,
     required this.deriveNewAddress,
+    required this.isTestnet,
   });
 }
 
@@ -173,6 +176,8 @@ class _RoastWalletKeyDetailScreenState
 
   @override
   Widget build(BuildContext context) {
+    final threshold = _frostKeyEntry.value.keyInfo.group.threshold;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -220,13 +225,11 @@ class _RoastWalletKeyDetailScreenState
                         children: [
                           Text(
                             AppLocalizations.instance.translate(
-                              'roast_wallet_key_detail_participants',
+                              'roast_wallet_request_dkg_threshold',
                             ),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          SelectableText(
-                            _frostKeyEntry.value.acceptedAcks.toString(),
-                          ),
+                          SelectableText(threshold.toString()),
                         ],
                       ),
                       const Divider(),
@@ -248,10 +251,8 @@ class _RoastWalletKeyDetailScreenState
                               Expanded(
                                 child: SelectableText(
                                   _frostKeyEntry.value.groupKey.hex,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 13,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               ),
@@ -302,13 +303,36 @@ class _RoastWalletKeyDetailScreenState
                                   ),
                                 )
                               : Column(
-                                  children: _derivedKeys
-                                      .map(
-                                        (key) => SelectableText(
-                                          tapRootDeriveKeyToAddress(key),
-                                        ),
-                                      )
-                                      .toList(),
+                                  children: _derivedKeys.map((key) {
+                                    final addr = deriveKeyToTapRootAddress(
+                                      groupKey: _frostKeyEntry.value.groupKey,
+                                      isTestnet: false,
+                                      threshold: threshold,
+                                      index: key,
+                                    ).toString();
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(key.toString()),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: DoubleTabToClipboard(
+                                              clipBoardData: addr,
+                                              withHintText:
+                                                  key == _derivedKeys.last,
+                                              child: Text(addr),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
                           const SizedBox(height: 10),
                           Text(

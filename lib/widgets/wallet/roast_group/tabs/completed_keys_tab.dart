@@ -9,17 +9,18 @@ class CompletedKeysTab extends StatelessWidget {
   final Client roastClient;
   final Map<ECPublicKey, Set<int>> derivedKeys;
   final Function(ECPublicKey key, int index) deriveNewAddress;
+  final bool isTestnet;
 
   const CompletedKeysTab({
     required this.roastClient,
     required this.derivedKeys,
     required this.deriveNewAddress,
+    required this.isTestnet,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Column(
       children: [
         Text(
@@ -63,6 +64,7 @@ class CompletedKeysTab extends StatelessWidget {
                         frostKeyEntry: entry,
                         derivedKeys: derivedKeys[entry.key] ?? {},
                         deriveNewAddress: deriveNewAddress,
+                        isTestnet: isTestnet,
                       ),
                     );
                   },

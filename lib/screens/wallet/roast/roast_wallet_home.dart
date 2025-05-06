@@ -226,6 +226,8 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       );
     }
 
+    final isTestnet = _wallet.letterCode == 'tPPC';
+
     switch (_selectedTab) {
       case ROASTWalletTab.openRequests:
         body = Expanded(
@@ -243,6 +245,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             roastClient: _roastClient,
             derivedKeys: _roastWallet.derivedKeys,
             deriveNewAddress: _deriveNewAddress,
+            isTestnet: isTestnet,
           ),
         );
         break;
@@ -262,7 +265,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             roastClient: _roastClient,
             groupSize: _roastWallet.clientConfig!.group.participants.length,
             forceRender: _forceRender,
-            isTestnet: _wallet.letterCode == 'tPPC',
+            isTestnet: isTestnet,
             walletName: _wallet.name,
             marismaClient: _marismaClient,
           ),
