@@ -13,7 +13,9 @@ import 'package:peercoin/models/hive/adapters/ec_compressed_public_key_hive_adap
 import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/frost_key_with_details_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/signature_nonces_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/signature_request_id_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/signing_nonces_hive_adapter.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/tools/marisma_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -134,6 +136,8 @@ class BackgroundSync {
       Hive.registerAdapter(HiveECCompressedPublicKeyAdapter());
       Hive.registerAdapter(HiveFrostKeyWithDetailsAdapter());
       Hive.registerAdapter(HiveSignaturesRequestIdAdapter());
+      Hive.registerAdapter(HiveSignaturesNoncesAdapter());
+      Hive.registerAdapter(HiveSigingNoncesAdapter());
     }
 
     //open wallet box
