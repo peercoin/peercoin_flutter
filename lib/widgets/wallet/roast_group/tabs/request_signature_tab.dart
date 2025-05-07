@@ -39,10 +39,10 @@ class RequestSignatureTab extends StatefulWidget {
 
 class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
+  final _recipientController = TextEditingController();
+  bool _enterRecipient = false;
   int? _selectedDerivationIndex;
   cl.ECCompressedPublicKey? _selectedGroupKey;
-  bool _enterRecipient = false;
-  final _recipientController = TextEditingController();
   UtxoFromMarisma? _selectedUtxo;
 
   @override
@@ -207,7 +207,6 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       );
 
       // Sign signature hash
-
       final requestDetails = SignaturesRequestDetails(
         requiredSigs: [
           SingleSignatureDetails(
@@ -215,7 +214,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
               message: cl.TaprootSignatureHasher(trDetails).hash,
             ),
             groupKey: _selectedGroupKey!,
-            hdDerivation: [1], // TODO
+            hdDerivation: [_selectedDerivationIndex!],
           ),
         ],
         expiry: Expiry(Duration(minutes: 3)), //TODO make this configurable
