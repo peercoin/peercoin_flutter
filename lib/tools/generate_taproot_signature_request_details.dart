@@ -59,9 +59,12 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
 
   final trDetails = cl.TaprootKeySignDetails(
     tx: unsignedTx,
-    inputN: selectedUtxo.vout,
+    inputN: 0,
     prevOuts: [
-      cl.Output.fromProgram(BigInt.from(selectedUtxo.amount), program),
+      cl.Output.fromProgram(
+        BigInt.from(selectedUtxo.amount),
+        program,
+      ), // FIXME likely wrong?
     ],
   );
 
