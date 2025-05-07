@@ -2,11 +2,14 @@ import 'package:coinlib_flutter/coinlib_flutter.dart' as cl;
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/generated/marisma.pbgrpc.dart';
+import 'package:peercoin/models/available_coins.dart';
+import 'package:peercoin/models/marisma_utxo.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_input_selector.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/derive_key_to_taproot_address.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
+import 'package:peercoin/tools/validators.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 
@@ -38,6 +41,15 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
   int? _selectedDerivationIndex;
   cl.ECCompressedPublicKey? _selectedGroupKey;
+  bool _enterRecipient = false;
+  final _recipientController = TextEditingController();
+  UtxoFromMarisma? _selectedUtxo;
+
+  @override
+  void dispose() {
+    _recipientController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -72,7 +84,9 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
     return taprootAddress.toString();
   }
 
-  Future<void> _handleSubmit(BuildContext context) async {
+  Future<void> _handleSubmitOfGroupKeyAndDerivedAddress(
+    BuildContext context,
+  ) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       FocusScope.of(context).unfocus(); //hide keyboard
@@ -115,61 +129,12 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
             walletName: widget.walletName,
           ),
         );
-        print(res);
-        // check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
-        // find threshold for group key
-
-        // check if address has balance
-        // final utxoRequest = await widget.marismaClient.getAddressUtxoList(
-        //   AddressListRequest(
-        //     address: address.toString(),
-        //   ),
-        // );
-
-        // print(utxoRequest.utxos);
-
-        // empty? save show deposit information -> wait for deposit
-        // has utxos? continue to prev vin selector
-
-        // final trDetails = cl.TaprootKeySignDetails(
-        //   tx: unsignedTx,
-        //   inputN: 0,
-        //   prevOuts: [
-        //     cl.Output.fromProgram(cl.CoinUnit.coin.toSats("0.02"), program)
-        //   ],
-        // );
-
-        // await widget.roastClient.requestSignatures(
-        //   SignaturesRequestDetails(
-        //     requiredSigs: [
-        //       SingleSignatureDetails(
-        //         signDetails: SignDetails.scriptSpend(
-        //           message:
-        //               cl.TaprootSignatureHasher(_messageController.text).hash,
-        //         ),
-        //         groupKey: _selectedGroupKey!, // Use selected key
-        //         hdDerivation: [0, 1],
-        //       ),
-        //     ],
-        //     expiry: Expiry(const Duration(days: 1)),
-        //   ),
-        // );
-
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                AppLocalizations.instance.translate(
-                  'roast_wallet_request_signature_success_snack',
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+        if (res is UtxoFromMarisma) {
+          setState(() {
+            _enterRecipient = true;
+            _selectedUtxo = res;
+          });
         }
-
-        // Force a re-render of the widget
-        widget.forceRender();
       } catch (e) {
         LoggerWrapper.logError(
           'RequestSignatureTab',
@@ -198,6 +163,15 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
           ),
         ),
       );
+    }
+  }
+
+  Future<void> _handleRequestSignature(BuildContext ctx) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      FocusScope.of(context).unfocus(); //hide keyboard
+
+      // we have everything we need at this point
     }
   }
 
@@ -251,7 +225,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             ),
                           );
                         }).toList(),
-                        onChanged: hasKeys
+                        onChanged: hasKeys && !_enterRecipient
                             ? (value) {
                                 setState(() {
                                   _selectedGroupKey = value;
@@ -313,9 +287,10 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             ),
                           );
                         }).toList(),
-                        onChanged: _selectedGroupKey != null &&
+                        onChanged: (_selectedGroupKey != null &&
                                 _getDerivedIndicesForKey(_selectedGroupKey)
-                                    .isNotEmpty
+                                    .isNotEmpty &&
+                                !_enterRecipient)
                             ? (value) {
                                 setState(() {
                                   _selectedDerivationIndex = value;
@@ -331,6 +306,92 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                           return null;
                         },
                       ),
+
+                      if (_enterRecipient)
+                        Column(
+                          children: [
+                            const SizedBox(height: 16),
+
+                            // Visual indicator that we're moving to the next step
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Divider(thickness: 2),
+                            ),
+
+                            // UTXO info section
+                            if (_selectedUtxo != null)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Card(
+                                  elevation: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          AppLocalizations.instance.translate(
+                                            'roast_wallet_request_signature_selected_utxo',
+                                          ),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text('TXID: ${_selectedUtxo!.txid}'),
+                                        Text('VOUT: ${_selectedUtxo!.vout}'),
+                                        Text(
+                                          'Amount: ${(_selectedUtxo!.amount / AvailableCoins.getDecimalProduct(identifier: widget.walletName)).toStringAsFixed(8)} ${AvailableCoins.getSpecificCoin(widget.walletName).letterCode}',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                            const SizedBox(height: 16),
+
+                            // Recipient address field
+                            TextFormField(
+                              controller: _recipientController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.send,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                labelText: AppLocalizations.instance.translate(
+                                  'roast_wallet_request_signature_recipient_address',
+                                ),
+                                hintText: AppLocalizations.instance.translate(
+                                  'roast_wallet_request_signature_recipient_address_hint',
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.instance.translate(
+                                    'roast_wallet_request_signature_recipient_empty_error',
+                                  );
+                                }
+
+                                if (validateAddress(
+                                      value,
+                                      widget.isTestnet
+                                          ? cl.Network.testnet
+                                          : cl.Network.mainnet,
+                                    ) !=
+                                    true) {
+                                  return AppLocalizations.instance.translate(
+                                    'send_invalid_address',
+                                  );
+                                }
+
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
 
                       if (_selectedGroupKey != null &&
                           _getDerivedIndicesForKey(_selectedGroupKey).isEmpty)
@@ -352,7 +413,11 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('roast_wallet_request_dkg_cta'),
-                        action: () async => await _handleSubmit(context),
+                        action: () async => _enterRecipient
+                            ? await _handleRequestSignature(context)
+                            : await _handleSubmitOfGroupKeyAndDerivedAddress(
+                                context,
+                              ),
                         disabled: !hasKeys,
                       ),
                     ],

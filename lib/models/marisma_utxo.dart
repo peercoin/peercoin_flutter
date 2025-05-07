@@ -14,7 +14,9 @@ class UtxoFromMarisma {
   });
 
   factory UtxoFromMarisma.fromJson(
-      Map<String, dynamic> json, String identifier) {
+    Map<String, dynamic> json,
+    String identifier,
+  ) {
     final decimalProduct = AvailableCoins.getDecimalProduct(
       identifier: identifier,
     );
