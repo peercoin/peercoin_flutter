@@ -109,7 +109,10 @@ class OpenRequestTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool hasAnyRequests = roastClient.dkgRequests.isNotEmpty ||
-        roastClient.acceptedDkgs.isNotEmpty;
+        roastClient.acceptedDkgs.isNotEmpty ||
+        roastClient.signaturesRequests.isNotEmpty;
+
+// TODO display signature requests here too
 
     return Stack(
       children: [
@@ -296,5 +299,3 @@ class OpenRequestTab extends StatelessWidget {
     );
   }
 }
-
-// TODO add signature requests here too

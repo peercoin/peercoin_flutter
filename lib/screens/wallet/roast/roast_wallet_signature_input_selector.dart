@@ -230,3 +230,4 @@ class _ROASTWalletSignatureInputSelectorState
 }
 
 // TODO allow manual input of txid and vout
+// TODO don't allow selection of UTXOs under dust limit
