@@ -7,9 +7,16 @@ class HiveSignaturesNoncesAdapter extends TypeAdapter<SignaturesNonces> {
 
   @override
   SignaturesNonces read(BinaryReader reader) {
+    // Read the map and convert it to Map<int, SigningNonces>
+    final rawMap = reader.readMap();
+    final typedMap = Map<int, SigningNonces>.fromEntries(
+      rawMap.entries.map(
+        (entry) => MapEntry(entry.key as int, entry.value as SigningNonces),
+      ),
+    );
+
     return SignaturesNonces(
-      reader.readMap as Map<int,
-          SigningNonces>, // FIXME this does seems to work but if we are bug hunting, this is a good place to start
+      typedMap,
       Expiry.fromBytes(reader.readByteList()),
     );
   }

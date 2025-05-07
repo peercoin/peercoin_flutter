@@ -41,7 +41,8 @@ class RequestSignatureTab extends StatefulWidget {
 class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
   final _recipientController = TextEditingController();
-  bool _enterRecipient = false;
+  final _amountController = TextEditingController();
+  bool _enterRecipientAndAmount = false;
   int? _selectedDerivationIndex;
   cl.ECCompressedPublicKey? _selectedGroupKey;
   UtxoFromMarisma? _selectedUtxo;
@@ -49,6 +50,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
   @override
   void dispose() {
     _recipientController.dispose();
+    _amountController.dispose();
     super.dispose();
   }
 
@@ -132,7 +134,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
         );
         if (res is UtxoFromMarisma) {
           setState(() {
-            _enterRecipient = true;
+            _enterRecipientAndAmount = true;
             _selectedUtxo = res;
           });
         }
@@ -173,18 +175,47 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       FocusScope.of(context).unfocus(); //hide keyboard
 
       // we have everything we need at this point
+      final double parsedAmount = double.parse(_amountController.text);
+      final decimalProduct =
+          AvailableCoins.getDecimalProduct(identifier: widget.walletName);
+      final amountInSatoshis = (parsedAmount * decimalProduct).round();
+
       final details = await generateTaprootSignatureRequestDetails(
         groupKey: _selectedGroupKey!,
         groupKeyIndex: _selectedDerivationIndex!,
         selectedUtxo: _selectedUtxo!,
         recipientAddress: _recipientController.text,
-        txAmount: 10000000, // TODO: Use the actual amount from UI
+        txAmount: amountInSatoshis,
         expiry: const Duration(
-          minutes: 3,
+          minutes: 1,
         ), // TODO: Use the actual expiry from UI
         coinIdentifier: widget.walletName,
       );
+
       await widget.roastClient.requestSignatures(details);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_request_signature_success_snack',
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+
+        // Reset the form
+        setState(() {
+          _enterRecipientAndAmount = false;
+          _selectedUtxo = null;
+          _recipientController.clear();
+          _amountController.clear();
+        });
+
+        widget.forceRender();
+      }
     }
   }
 
@@ -193,6 +224,8 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
     // Get list of available keys and their details
     final keyEntries = widget.roastClient.keys.entries.toList();
     final bool hasKeys = keyEntries.isNotEmpty;
+    final decimalProduct =
+        AvailableCoins.getDecimalProduct(identifier: widget.walletName);
 
     return Stack(
       children: [
@@ -238,7 +271,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             ),
                           );
                         }).toList(),
-                        onChanged: hasKeys && !_enterRecipient
+                        onChanged: hasKeys && !_enterRecipientAndAmount
                             ? (value) {
                                 setState(() {
                                   _selectedGroupKey = value;
@@ -303,7 +336,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                         onChanged: (_selectedGroupKey != null &&
                                 _getDerivedIndicesForKey(_selectedGroupKey)
                                     .isNotEmpty &&
-                                !_enterRecipient)
+                                !_enterRecipientAndAmount)
                             ? (value) {
                                 setState(() {
                                   _selectedDerivationIndex = value;
@@ -320,7 +353,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                         },
                       ),
 
-                      if (_enterRecipient)
+                      if (_enterRecipientAndAmount)
                         Column(
                           children: [
                             const SizedBox(height: 16),
@@ -405,6 +438,52 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             ),
                           ],
                         ),
+                      const SizedBox(height: 16),
+                      if (_enterRecipientAndAmount)
+
+                        // Amount input field
+                        TextFormField(
+                          controller: _amountController,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.attach_money,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            labelText: AppLocalizations.instance.translate(
+                              'send_amount',
+                            ),
+                            suffixText: AvailableCoins.getSpecificCoin(
+                              widget.walletName,
+                            ).letterCode,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.instance.translate(
+                                'send_enter_amount',
+                              );
+                            }
+
+                            // Parse and validate the amount
+                            final double? parsedAmount = double.tryParse(value);
+                            if (parsedAmount == null || parsedAmount <= 0) {
+                              return AppLocalizations.instance.translate(
+                                'send_amount_small',
+                              );
+                            }
+
+                            if (parsedAmount >
+                                _selectedUtxo!.amount / decimalProduct) {
+                              return AppLocalizations.instance.translate(
+                                'send_amount_exceeds',
+                              );
+                            }
+
+                            return null;
+                          },
+                        ),
 
                       if (_selectedGroupKey != null &&
                           _getDerivedIndicesForKey(_selectedGroupKey).isEmpty)
@@ -426,7 +505,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('roast_wallet_request_dkg_cta'),
-                        action: () async => _enterRecipient
+                        action: () async => _enterRecipientAndAmount
                             ? await _handleRequestSignature(context)
                             : await _handleSubmitOfGroupKeyAndDerivedAddress(
                                 context,
