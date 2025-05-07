@@ -8,6 +8,7 @@ import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_input_selec
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/derive_key_to_taproot_address.dart';
+import 'package:peercoin/tools/generate_taproot_signature_request_details.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/tools/validators.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -172,59 +173,18 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       FocusScope.of(context).unfocus(); //hide keyboard
 
       // we have everything we need at this point
-      final taproot = cl.Taproot(internalKey: _selectedGroupKey!);
-      final program = cl.P2TR.fromTaproot(taproot);
-
-      final unsignedInput = cl.TaprootKeyInput(
-        prevOut: cl.OutPoint.fromHex(
-          _selectedUtxo!.txid,
-          _selectedUtxo!.vout,
-        ), // selected utxo is required at this point
+      final details = await generateTaprootSignatureRequestDetails(
+        groupKey: _selectedGroupKey!,
+        groupKeyIndex: _selectedDerivationIndex!,
+        selectedUtxo: _selectedUtxo!,
+        recipientAddress: _recipientController.text,
+        txAmount: 10000000, // TODO: Use the actual amount from UI
+        expiry: const Duration(
+          minutes: 3,
+        ), // TODO: Use the actual expiry from UI
+        coinIdentifier: widget.walletName,
       );
-      final unsignedTx = cl.Transaction(
-        inputs: [unsignedInput],
-        outputs: [
-          cl.Output.fromAddress(
-            // TODO
-            // Gives 0.01 PPC as fee. Use CoinSelection to construct transactions
-            // with proper fee handling and input selection.
-            cl.CoinUnit.coin.toSats("0.01"),
-            cl.Address.fromString(
-              _recipientController.text,
-              widget.isTestnet ? cl.Network.testnet : cl.Network.mainnet,
-            ),
-          ),
-        ],
-      );
-
-      final trDetails = cl.TaprootKeySignDetails(
-        tx: unsignedTx,
-        inputN: 0,
-        prevOuts: [
-          cl.Output.fromProgram(
-              cl.CoinUnit.coin.toSats("0.02"), program) // TODO
-        ],
-      );
-
-      // Sign signature hash
-      final requestDetails = SignaturesRequestDetails(
-        requiredSigs: [
-          SingleSignatureDetails(
-            signDetails: SignDetails.keySpend(
-              message: cl.TaprootSignatureHasher(trDetails).hash,
-            ),
-            groupKey: _selectedGroupKey!,
-            hdDerivation: [_selectedDerivationIndex!],
-          ),
-        ],
-        expiry: Expiry(Duration(minutes: 3)), //TODO make this configurable
-        metadata: TaprootTransactionSignatureMetadata(
-          transaction: unsignedTx,
-          signDetails: [trDetails],
-        ),
-      );
-
-      await widget.roastClient.requestSignatures(requestDetails);
+      await widget.roastClient.requestSignatures(details);
     }
   }
 
