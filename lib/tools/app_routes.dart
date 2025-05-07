@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_key_detail.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_input_selector.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
@@ -66,6 +67,8 @@ class Routes {
   static const String roastWalletAddParticipant =
       '/roast-wallet-add-participant';
   static const String roastWalletKeyDetail = '/roast-wallet-key-detail';
+  static const String roastWalletSignatureInputSelector =
+      '/roast-wallet-signature-input-selector';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -227,6 +230,10 @@ class Routes {
           ),
       Routes.roastWalletKeyDetail: (context) => const RouterMaster(
             widget: RoastWalletKeyDetailScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletSignatureInputSelector: (context) => const RouterMaster(
+            widget: ROASTWalletSignatureInputSelector(),
             routeType: RouteTypes.requiresArguments,
           ),
     };

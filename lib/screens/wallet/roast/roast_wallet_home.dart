@@ -638,6 +638,8 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
     }
   }
 }
+
+// TODO marisma consent?
 // TODO allow ROAST key export and import, since the key is not derived from the seed
 // TODO background notification for new DKG requests
 // TODO expiries for all requests default to 1 day and should be configurable

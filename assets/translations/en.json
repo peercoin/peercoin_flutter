@@ -592,6 +592,7 @@
   "roast_wallet_bototm_new_dkg_tooltip": "New Dkg",
   "roast_wallet_bototm_new_signature_tooltip": "New Signature",
   "roast_wallet_share_group_config": "Share configuration",
+  "roast_wallet_signature_input_selector_title": "Select which inputs to sign",
   "roast_wallet_request_dkg_title": "Request DKG",
   "roast_wallet_request_dkg_name": "Name",
   "roast_wallet_request_dkg_description": "Description",

@@ -2,7 +2,9 @@ import 'package:coinlib_flutter/coinlib_flutter.dart' as cl;
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/generated/marisma.pbgrpc.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_input_selector.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 import 'package:peercoin/tools/derive_key_to_taproot_address.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/buttons.dart';
@@ -103,6 +105,17 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       }
 
       try {
+        final res = await Navigator.of(context).pushNamed(
+          Routes.roastWalletSignatureInputSelector,
+          arguments: ROASTWalletSignatureInputSelectorArguments(
+            address: _getAddressForDerivation(
+              _selectedGroupKey!,
+              _selectedDerivationIndex!,
+            ),
+            walletName: widget.walletName,
+          ),
+        );
+        print(res);
         // check https://github.com/peercoin/noosphere_roast_server/blob/master/example/taproot_example.dart#L209
         // find threshold for group key
 
