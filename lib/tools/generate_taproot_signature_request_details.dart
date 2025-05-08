@@ -1,5 +1,4 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart' as cl;
-import 'package:flutter/foundation.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/marisma_utxo.dart';
@@ -25,36 +24,43 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
     ),
   );
 
-  final coinSelection = cl.CoinSelection.optimal(
-    candidates: [
-      cl.InputCandidate(
-        input: cl.Input.match(
-          cl.RawInput(
-            prevOut: cl.OutPoint.fromHex(
-              selectedUtxo.txid,
-              selectedUtxo.vout,
-            ),
-            scriptSig: Uint8List(0), // FIXME definetly wrong
-          ),
-        ),
-        value: BigInt.from(selectedUtxo.amount),
-      ),
-    ],
-    recipients: [
-      cl.Output.fromAddress(
-        BigInt.from(txAmount),
-        cl.Address.fromString(recipientAddress, network),
-      ),
-    ],
-    changeProgram: program, // FIXME probably wrong
-    feePerKb: BigInt.from(coin.fixedFeePerKb),
-    minFee: BigInt.from(coin.fixedFeePerKb),
-    minChange: BigInt.from(coin.minimumTxValue),
-  );
+  // final coinSelection = cl.CoinSelection.optimal(
+  //   candidates: [
+  //     cl.InputCandidate(
+  //       input: cl.Input.match(
+  //         cl.RawInput(
+  //           prevOut: cl.OutPoint.fromHex(
+  //             selectedUtxo.txid,
+  //             selectedUtxo.vout,
+  //           ),
+  //           scriptSig: Uint8List(0), // FIXME definetly wrong
+  //         ),
+  //       ),
+  //       value: BigInt.from(selectedUtxo.amount),
+  //     ),
+  //   ],
+  //   recipients: [
+  //     cl.Output.fromAddress(
+  //       BigInt.from(txAmount),
+  //       cl.Address.fromString(recipientAddress, network),
+  //     ),
+  //   ],
+  //   changeProgram: program, // FIXME probably wrong
+  //   feePerKb: BigInt.from(coin.fixedFeePerKb),
+  //   minFee: BigInt.from(coin.fixedFeePerKb),
+  //   minChange: BigInt.from(coin.minimumTxValue),
+  // );
 
   final unsignedTx = cl.Transaction(
     inputs: [unsignedInput],
-    outputs: coinSelection.recipients,
+    outputs: [
+      cl.Output.fromAddress(
+        // Gives 0.01 PPC as fee. Use CoinSelection to construct transactions
+        // with proper fee handling and input selection.
+        cl.CoinUnit.coin.toSats('0.01'),
+        cl.Address.fromString(recipientAddress, network),
+      ),
+    ],
   );
 
   final trDetails = cl.TaprootKeySignDetails(

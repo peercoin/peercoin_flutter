@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+
+class ROASTWalletSignatureRequestConfirmationScreenArguments {
+  final SignaturesRequest request;
+
+  const ROASTWalletSignatureRequestConfirmationScreenArguments({
+    required this.request,
+  });
+}
 
 class ROASTWalletSignatureRequestConfirmationScreen extends StatefulWidget {
   const ROASTWalletSignatureRequestConfirmationScreen({super.key});

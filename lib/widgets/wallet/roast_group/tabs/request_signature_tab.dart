@@ -187,7 +187,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
         recipientAddress: _recipientController.text,
         txAmount: amountInSatoshis,
         expiry: const Duration(
-          minutes: 1,
+          days: 1,
         ), // TODO: Use the actual expiry from UI
         coinIdentifier: widget.walletName,
       );

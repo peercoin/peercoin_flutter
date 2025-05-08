@@ -243,6 +243,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             key: Key('$_lastUpdate-openrequests'),
             roastClient: _roastClient,
             forceRender: _forceRender,
+            participantNames: _roastWallet.participantNames,
           ),
         );
         break;

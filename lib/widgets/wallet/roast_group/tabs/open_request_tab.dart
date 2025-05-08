@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_request_confirmation.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
 
 enum DialogType {
   accept,
@@ -10,10 +12,12 @@ enum DialogType {
 class OpenRequestTab extends StatelessWidget {
   final Client roastClient;
   final Function forceRender;
+  final Map<String, String> participantNames;
 
   const OpenRequestTab({
     required this.roastClient,
     required this.forceRender,
+    required this.participantNames,
     super.key,
   });
 
@@ -134,7 +138,7 @@ class OpenRequestTab extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  // Show message when both lists are empty
+                  // Show message when all lists are empty
                   !hasAnyRequests
                       ? Text(
                           AppLocalizations.instance.translate(
@@ -167,9 +171,10 @@ class OpenRequestTab extends StatelessWidget {
                     );
                   }),
 
-                  // Add spacing between sections if both have items
+                  // Add spacing between sections if all lists have items
                   if (roastClient.dkgRequests.isNotEmpty &&
-                      roastClient.acceptedDkgs.isNotEmpty)
+                      (roastClient.acceptedDkgs.isNotEmpty ||
+                          roastClient.signaturesRequests.isNotEmpty))
                     const SizedBox(height: 20),
 
                   // Render accepted DKG requests
@@ -186,6 +191,32 @@ class OpenRequestTab extends StatelessWidget {
                       request,
                       showAcceptButton: false,
                       showRejectButton: true,
+                    );
+                  }),
+
+                  // Add spacing before signature requests if needed
+                  if ((roastClient.dkgRequests.isNotEmpty ||
+                          roastClient.acceptedDkgs.isNotEmpty) &&
+                      roastClient.signaturesRequests.isNotEmpty)
+                    const SizedBox(height: 20),
+
+                  // NEW: Render signature requests
+                  if (roastClient.signaturesRequests.isNotEmpty)
+                    _renderSectionHeader(
+                      context,
+                      'roast_wallet_signature_requests',
+                    ),
+
+                  ...roastClient.signaturesRequests
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    final request = entry.value;
+                    return _buildSignatureRequestCard(
+                      context,
+                      request,
+                      participantNames[request.creator.toString()] ??
+                          request.creator.toString(),
                     );
                   }),
                 ],
@@ -234,10 +265,19 @@ class OpenRequestTab extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              request.details.name,
+              AppLocalizations.instance.translate(
+                'roast_wallet_open_requests_dkg_request_title',
+              ),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_open_request_dkg_request_name',
+                {'name': request.details.name},
               ),
             ),
             Text(
@@ -298,4 +338,80 @@ class OpenRequestTab extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildSignatureRequestCard(
+  BuildContext ctx,
+  SignaturesRequest request,
+  String resolvedCreator,
+) {
+  return Card(
+    elevation: 0,
+    margin: const EdgeInsets.symmetric(
+      vertical: 8,
+      horizontal: 16,
+    ),
+    color: Theme.of(ctx).colorScheme.surface,
+    child: InkWell(
+      onTap: () {
+        Navigator.of(ctx).pushNamed(
+          Routes.roastWalletSignatureRequestConfirmation,
+          arguments: ROASTWalletSignatureRequestConfirmationScreenArguments(
+            request: request,
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 8,
+        ),
+        child: Column(
+          children: [
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_open_requests_signature_request_title',
+              ),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_open_requests_creator',
+                {'name': resolvedCreator},
+              ),
+            ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_open_requests_required_signatures',
+                {'n': request.details.requiredSigs.length.toString()},
+              ),
+            ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_wallet_open_requests_expiry',
+                {
+                  'n': request.details.expiry.time.toString().split('.')[0],
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.open_in_full,
+                  color: Theme.of(ctx).colorScheme.primary,
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
