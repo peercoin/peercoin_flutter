@@ -6,7 +6,7 @@ import 'package:peercoin/models/marisma_utxo.dart';
 Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   required cl.ECCompressedPublicKey groupKey,
   required int groupKeyIndex,
-  required UtxoFromMarisma selectedUtxo,
+  required List<UtxoFromMarisma> selectedUtxo,
   required String recipientAddress,
   required int txAmount,
   required Duration expiry,
@@ -19,8 +19,8 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
 
   final unsignedInput = cl.TaprootKeyInput(
     prevOut: cl.OutPoint.fromHex(
-      selectedUtxo.txid,
-      selectedUtxo.vout,
+      selectedUtxo.first.txid, // TODO don't assume first
+      selectedUtxo.first.vout, // TODO don't assume first
     ),
   );
 
@@ -68,7 +68,7 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
     inputN: 0,
     prevOuts: [
       cl.Output.fromProgram(
-        BigInt.from(selectedUtxo.amount),
+        BigInt.from(selectedUtxo.first.amount), // TODO don't assume first
         program,
       ), // FIXME likely wrong?
     ],

@@ -406,7 +406,7 @@ Widget _buildSignatureRequestCard(
                 Icon(
                   Icons.open_in_full,
                   color: Theme.of(ctx).colorScheme.primary,
-                )
+                ),
               ],
             ),
           ],

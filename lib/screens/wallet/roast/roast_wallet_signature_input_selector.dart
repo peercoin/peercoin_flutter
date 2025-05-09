@@ -29,11 +29,14 @@ class _ROASTWalletSignatureInputSelectorState
   bool _initial = true;
   int _balance = 0;
   List<UtxoFromMarisma> _utxos = [];
-  UtxoFromMarisma? _selectedUtxo;
+  List<UtxoFromMarisma> _selectedUtxos = [];
   late String _address;
   late String _walletName;
   late MarismaClient _marismaClient;
   late Future<void> Function() _closeMarismaClient;
+
+  int get _selectedAmount =>
+      _selectedUtxos.fold(0, (prev, utxo) => prev + utxo.amount);
 
   @override
   void didChangeDependencies() async {
@@ -57,10 +60,8 @@ class _ROASTWalletSignatureInputSelectorState
         _walletName,
       );
 
-      // Set first UTXO as selected if available
-      if (_utxos.isNotEmpty) {
-        _selectedUtxo = _utxos.first;
-      }
+      // Initialize selected UTXOs as empty list
+      _selectedUtxos = [];
 
       _balance = _utxos.fold(
         0,
@@ -90,8 +91,35 @@ class _ROASTWalletSignatureInputSelectorState
     );
   }
 
+  // Toggle selection of a UTXO
+  void _toggleUtxoSelection(UtxoFromMarisma utxo) {
+    setState(() {
+      if (_selectedUtxos.contains(utxo)) {
+        _selectedUtxos.remove(utxo);
+      } else {
+        _selectedUtxos.add(utxo);
+      }
+    });
+  }
+
+  // Select all UTXOs
+  void _selectAllUtxos() {
+    setState(() {
+      _selectedUtxos = List.from(_utxos);
+    });
+  }
+
+  // Clear all selected UTXOs
+  void _clearSelection() {
+    setState(() {
+      _selectedUtxos = [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final coin = AvailableCoins.getSpecificCoin(_walletName);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -130,13 +158,69 @@ class _ROASTWalletSignatureInputSelectorState
                         ),
                       ),
                       Text(
-                        '${_formatAmount(_balance)} ${AvailableCoins.getSpecificCoin(_walletName).letterCode}',
+                        '${_formatAmount(_balance)} ${coin.letterCode}',
                       ),
                     ],
                   ),
                 ),
 
                 const Divider(),
+
+                // Selection info with actions
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Selected amount
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'roast_wallet_signature_input_selector_selected',
+                            ),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${_formatAmount(_selectedAmount)} ${coin.letterCode}',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Selection actions
+                      Row(
+                        children: [
+                          TextButton.icon(
+                            onPressed: _utxos.isEmpty ? null : _selectAllUtxos,
+                            icon: const Icon(Icons.select_all),
+                            label: Text(
+                              AppLocalizations.instance.translate(
+                                'roast_wallet_signature_input_selector_select_all',
+                              ),
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed:
+                                _selectedUtxos.isEmpty ? null : _clearSelection,
+                            icon: const Icon(Icons.clear_all),
+                            label: Text(
+                              AppLocalizations.instance.translate(
+                                'roast_wallet_signature_input_selector_clear',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
 
                 // Available UTXOs header
                 Padding(
@@ -169,15 +253,14 @@ class _ROASTWalletSignatureInputSelectorState
                     ),
                   ),
 
-                // UTXO radio list
+                // UTXO checkbox list
                 Expanded(
                   child: ListView.builder(
                     itemCount: _utxos.length,
                     itemBuilder: (context, index) {
                       final utxo = _utxos[index];
-                      final coin = AvailableCoins.getSpecificCoin(_walletName);
 
-                      return RadioListTile<UtxoFromMarisma>(
+                      return CheckboxListTile(
                         title: Text(
                           '${_formatAmount(utxo.amount)} ${coin.letterCode}',
                           style: const TextStyle(
@@ -188,7 +271,7 @@ class _ROASTWalletSignatureInputSelectorState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'TXID: ${utxo.txid}',
+                              'TXID: ${utxo.txid.substring(0, 8)}...${utxo.txid.substring(utxo.txid.length - 8)}',
                               style: const TextStyle(fontSize: 12),
                             ),
                             Text(
@@ -197,13 +280,14 @@ class _ROASTWalletSignatureInputSelectorState
                             ),
                           ],
                         ),
-                        value: utxo,
-                        groupValue: _selectedUtxo,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedUtxo = value;
-                          });
-                        },
+                        value: _selectedUtxos.contains(utxo),
+                        onChanged: (_) => _toggleUtxoSelection(utxo),
+                        secondary: Icon(
+                          Icons.account_balance_wallet,
+                          color: _selectedUtxos.contains(utxo)
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).disabledColor,
+                        ),
                       );
                     },
                   ),
@@ -213,13 +297,12 @@ class _ROASTWalletSignatureInputSelectorState
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: PeerButton(
-                    active:
-                        _utxos.isEmpty || _selectedUtxo == null ? false : true,
+                    active: _selectedUtxos.isNotEmpty,
                     action: () {
-                      Navigator.of(context).pop(_selectedUtxo);
+                      Navigator.of(context).pop(_selectedUtxos);
                     },
                     text: AppLocalizations.instance.translate(
-                      'roast_wallet_signature_input_select_utxo',
+                      'roast_wallet_signature_input_selector_use_selected',
                     ),
                   ),
                 ),
@@ -228,6 +311,5 @@ class _ROASTWalletSignatureInputSelectorState
     );
   }
 }
-
 // TODO allow manual input of txid and vout
 // TODO don't allow selection of UTXOs under dust limit

@@ -45,7 +45,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
   bool _enterRecipientAndAmount = false;
   int? _selectedDerivationIndex;
   cl.ECCompressedPublicKey? _selectedGroupKey;
-  UtxoFromMarisma? _selectedUtxo;
+  List<UtxoFromMarisma>? _selectedUtxos;
 
   @override
   void dispose() {
@@ -132,10 +132,10 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
             walletName: widget.walletName,
           ),
         );
-        if (res is UtxoFromMarisma) {
+        if (res is List<UtxoFromMarisma>) {
           setState(() {
             _enterRecipientAndAmount = true;
-            _selectedUtxo = res;
+            _selectedUtxos = res;
           });
         }
       } catch (e) {
@@ -183,7 +183,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       final details = await generateTaprootSignatureRequestDetails(
         groupKey: _selectedGroupKey!,
         groupKeyIndex: _selectedDerivationIndex!,
-        selectedUtxo: _selectedUtxo!,
+        selectedUtxo: _selectedUtxos!,
         recipientAddress: _recipientController.text,
         txAmount: amountInSatoshis,
         expiry: const Duration(
@@ -209,7 +209,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
         // Reset the form
         setState(() {
           _enterRecipientAndAmount = false;
-          _selectedUtxo = null;
+          _selectedUtxos = null;
           _recipientController.clear();
           _amountController.clear();
         });
@@ -365,7 +365,8 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             ),
 
                             // UTXO info section
-                            if (_selectedUtxo != null)
+                            if (_selectedUtxos != null &&
+                                _selectedUtxos!.isNotEmpty)
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
@@ -379,17 +380,44 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                                       children: [
                                         Text(
                                           AppLocalizations.instance.translate(
-                                            'roast_wallet_request_signature_selected_utxo',
+                                            'roast_wallet_request_signature_selected_utxos_summary',
+                                            {
+                                              'count': _selectedUtxos!.length
+                                                  .toString(),
+                                            },
                                           ),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         const SizedBox(height: 4),
-                                        Text('TXID: ${_selectedUtxo!.txid}'),
-                                        Text('VOUT: ${_selectedUtxo!.vout}'),
                                         Text(
-                                          'Amount: ${(_selectedUtxo!.amount / AvailableCoins.getDecimalProduct(identifier: widget.walletName)).toStringAsFixed(8)} ${AvailableCoins.getSpecificCoin(widget.walletName).letterCode}',
+                                          AppLocalizations.instance.translate(
+                                            'roast_wallet_request_signature_total_amount',
+                                            {
+                                              'amount': (_selectedUtxos!.fold(
+                                                        0,
+                                                        (sum, utxo) =>
+                                                            sum + utxo.amount,
+                                                      ) /
+                                                      AvailableCoins
+                                                          .getDecimalProduct(
+                                                        identifier:
+                                                            widget.walletName,
+                                                      ))
+                                                  .toStringAsFixed(8),
+                                              'letterCode': AvailableCoins
+                                                  .getSpecificCoin(
+                                                widget.walletName,
+                                              ).letterCode,
+                                            },
+                                          ),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -475,7 +503,11 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             }
 
                             if (parsedAmount >
-                                _selectedUtxo!.amount / decimalProduct) {
+                                _selectedUtxos!.fold(
+                                      0,
+                                      (sum, utxo) => sum + utxo.amount,
+                                    ) /
+                                    decimalProduct) {
                               return AppLocalizations.instance.translate(
                                 'send_amount_exceeds',
                               );
