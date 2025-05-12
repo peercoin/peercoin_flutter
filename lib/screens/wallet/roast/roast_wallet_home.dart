@@ -150,10 +150,21 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
               // check for SignaturesCompleteClientEvent and broadcast
               if (event is frost.SignaturesCompleteClientEvent) {
-                final builtTx = await taprootTransactionFinalAssembly(event);
-                await _marismaClient.broadCastTransaction(
-                  BroadCastTransactionRequest(hex: builtTx.hashHex),
-                );
+                try {
+                  final builtTx = await taprootTransactionFinalAssembly(
+                    event,
+                    _roastClient,
+                  );
+                  await _marismaClient.broadCastTransaction(
+                    BroadCastTransactionRequest(hex: builtTx.hashHex),
+                  );
+                } catch (e) {
+                  LoggerWrapper.logError(
+                    'ROASTWalletHomeScreen',
+                    'eventStream',
+                    'Failed to broadcast transaction: $e',
+                  );
+                }
               }
 
               setState(() {
