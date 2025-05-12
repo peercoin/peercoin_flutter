@@ -153,10 +153,14 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 try {
                   final builtTx = await taprootTransactionFinalAssembly(
                     event,
-                    _roastClient,
+                  );
+                  LoggerWrapper.logInfo(
+                    'ROASTWalletHomeScreen',
+                    'eventStream',
+                    'Broadcasting transaction: ${builtTx.toHex()}',
                   );
                   await _marismaClient.broadCastTransaction(
-                    BroadCastTransactionRequest(hex: builtTx.hashHex),
+                    BroadCastTransactionRequest(hex: builtTx.toHex()),
                   );
                 } catch (e) {
                   LoggerWrapper.logError(

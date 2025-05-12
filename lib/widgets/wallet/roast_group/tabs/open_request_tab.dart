@@ -217,6 +217,7 @@ class OpenRequestTab extends StatelessWidget {
                       request,
                       participantNames[request.creator.toString()] ??
                           request.creator.toString(),
+                      roastClient,
                     );
                   }),
                 ],
@@ -344,6 +345,7 @@ Widget _buildSignatureRequestCard(
   BuildContext ctx,
   SignaturesRequest request,
   String resolvedCreator,
+  Client roastClient,
 ) {
   return Card(
     elevation: 0,
@@ -358,6 +360,7 @@ Widget _buildSignatureRequestCard(
           Routes.roastWalletSignatureRequestConfirmation,
           arguments: ROASTWalletSignatureRequestConfirmationScreenArguments(
             request: request,
+            roastClient: roastClient,
           ),
         );
       },

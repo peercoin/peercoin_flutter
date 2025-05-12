@@ -1,21 +1,14 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart';
-import 'package:noosphere_roast_client/noosphere_roast_client.dart' as frost;
+import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 
 Future<Transaction> taprootTransactionFinalAssembly(
-  frost.SignaturesCompleteClientEvent event,
-  frost.Client roastClient,
+  SignaturesCompleteClientEvent event,
 ) async {
   final signatures = event.signatures;
-  final request = roastClient.signaturesRequests.firstWhere(
-    (request) => request.details.id == event.details.id,
-    orElse: () => throw Exception(
-      'No request found for ${event.details.id} in ${roastClient.signaturesRequests}',
-    ),
-  );
-  final metadata = request.details.metadata;
+  final metadata = event.details.metadata;
 
   switch (metadata) {
-    case frost.TaprootTransactionSignatureMetadata():
+    case TaprootTransactionSignatureMetadata():
       final signDetails = metadata.signDetails;
       var tx = metadata.transaction;
       var i = 0;
@@ -35,10 +28,10 @@ Future<Transaction> taprootTransactionFinalAssembly(
         }
       }
       break;
-    case frost.EmptySignatureMetadata():
+    case EmptySignatureMetadata():
       //TODO
       break;
-    case frost.UnknownSignatureMetadata():
+    case UnknownSignatureMetadata():
       throw Exception(
         'Unknown metadata type ${metadata.type} for ${event.details.id}',
       );
@@ -49,6 +42,6 @@ Future<Transaction> taprootTransactionFinalAssembly(
   }
 
   throw Exception(
-    'No signatures found for ${event.details.id} in ${roastClient.signaturesRequests}',
+    'No transaction found for ${event.details.id}',
   );
 }
