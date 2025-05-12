@@ -183,9 +183,9 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
       final details = await generateTaprootSignatureRequestDetails(
         groupKey: _selectedGroupKey!,
         groupKeyIndex: _selectedDerivationIndex!,
-        selectedUtxo: _selectedUtxos!,
+        selectedUtxos: _selectedUtxos!,
         recipientAddress: _recipientController.text,
-        txAmount: amountInSatoshis,
+        txAmount: BigInt.from(amountInSatoshis),
         expiry: const Duration(
           days: 1,
         ), // TODO: Use the actual expiry from UI

@@ -3,12 +3,22 @@ import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/marisma_utxo.dart';
 
+class UnsignedInput extends cl.InputCandidate {
+  final int n;
+
+  UnsignedInput({
+    required this.n,
+    required super.input,
+    required super.value,
+  });
+}
+
 Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   required cl.ECCompressedPublicKey groupKey,
   required int groupKeyIndex,
-  required List<UtxoFromMarisma> selectedUtxo,
+  required List<UtxoFromMarisma> selectedUtxos,
   required String recipientAddress,
-  required int txAmount,
+  required BigInt txAmount,
   required Duration expiry,
   required String coinIdentifier,
 }) async {
@@ -17,78 +27,68 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   final coin = AvailableCoins.getSpecificCoin(coinIdentifier);
   final network = coin.networkType;
 
-  final unsignedInput = cl.TaprootKeyInput(
-    prevOut: cl.OutPoint.fromHex(
-      selectedUtxo.first.txid, // TODO don't assume first
-      selectedUtxo.first.vout, // TODO don't assume first
-    ),
-  );
+  final unsignedInputs =
+      List<UnsignedInput>.generate(selectedUtxos.length, (i) {
+    final input = selectedUtxos[i];
+    return UnsignedInput(
+      input: cl.TaprootKeyInput(
+        prevOut: cl.OutPoint.fromHex(
+          input.txid,
+          input.vout,
+        ),
+      ),
+      value: BigInt.from(input.amount),
+      n: i,
+    );
+  });
 
-  // final coinSelection = cl.CoinSelection.optimal(
-  //   candidates: [
-  //     cl.InputCandidate(
-  //       input: cl.Input.match(
-  //         cl.RawInput(
-  //           prevOut: cl.OutPoint.fromHex(
-  //             selectedUtxo.txid,
-  //             selectedUtxo.vout,
-  //           ),
-  //           scriptSig: Uint8List(0), // FIXME definetly wrong
-  //         ),
-  //       ),
-  //       value: BigInt.from(selectedUtxo.amount),
-  //     ),
-  //   ],
-  //   recipients: [
-  //     cl.Output.fromAddress(
-  //       BigInt.from(txAmount),
-  //       cl.Address.fromString(recipientAddress, network),
-  //     ),
-  //   ],
-  //   changeProgram: program, // FIXME probably wrong
-  //   feePerKb: BigInt.from(coin.fixedFeePerKb),
-  //   minFee: BigInt.from(coin.fixedFeePerKb),
-  //   minChange: BigInt.from(coin.minimumTxValue),
-  // );
-
-  final unsignedTx = cl.Transaction(
-    inputs: [unsignedInput],
-    outputs: [
+  final coinSelection = cl.CoinSelection.optimal(
+    candidates: unsignedInputs,
+    recipients: [
       cl.Output.fromAddress(
-        // Gives 0.01 PPC as fee. Use CoinSelection to construct transactions
-        // with proper fee handling and input selection.
-        cl.CoinUnit.coin.toSats('0.01'),
+        txAmount,
         cl.Address.fromString(recipientAddress, network),
       ),
     ],
+    changeProgram: program,
+    feePerKb: BigInt.from(coin.fixedFeePerKb),
+    minFee: BigInt.from(coin.fixedFeePerKb),
+    minChange: BigInt.from(coin.minimumTxValue),
   );
 
-  final trDetails = cl.TaprootKeySignDetails(
-    tx: unsignedTx,
-    inputN: 0,
-    prevOuts: [
-      cl.Output.fromProgram(
-        BigInt.from(selectedUtxo.first.amount), // TODO don't assume first
-        program,
-      ), // FIXME likely wrong?
-    ],
+  // Create signing details for each selected input
+  final trDetails = List<cl.TaprootKeySignDetails>.generate(
+    coinSelection.selected.length,
+    (i) {
+      final input = coinSelection.selected[i];
+      return cl.TaprootKeySignDetails(
+        tx: coinSelection.transaction,
+        inputN: i,
+        prevOuts: [cl.Output.fromProgram(input.value, program)],
+      );
+    },
   );
 
-  // Sign signature hash
+  // Create the signature request
   return SignaturesRequestDetails(
-    requiredSigs: [
-      SingleSignatureDetails(
-        signDetails: SignDetails.keySpend(
-          message: cl.TaprootSignatureHasher(trDetails).hash,
-        ),
-        groupKey: groupKey,
-        hdDerivation: [groupKeyIndex],
-      ),
-    ],
+    requiredSigs: List<SingleSignatureDetails>.generate(
+      coinSelection.selected.length,
+      (i) {
+        return SingleSignatureDetails(
+          signDetails: SignDetails.keySpend(
+            message: cl.TaprootSignatureHasher(
+              trDetails[i],
+            ).hash,
+          ),
+          groupKey: groupKey,
+          hdDerivation: [groupKeyIndex],
+        );
+      },
+    ),
     expiry: Expiry(expiry),
     metadata: TaprootTransactionSignatureMetadata(
-      transaction: unsignedTx,
-      signDetails: [trDetails],
+      transaction: coinSelection.transaction,
+      signDetails: trDetails,
     ),
   );
 }
