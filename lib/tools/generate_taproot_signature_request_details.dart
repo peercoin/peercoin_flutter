@@ -45,9 +45,9 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
       ),
     ],
     changeProgram: program,
-    feePerKb: BigInt.from(coin.fixedFeePerKb),
-    minFee: BigInt.from(coin.fixedFeePerKb),
-    minChange: BigInt.from(coin.minimumTxValue),
+    feePerKb: network.feePerKb,
+    minFee: network.minFee,
+    minChange: network.minOutput,
   );
 
   final transaction = coinSelection.transaction;
