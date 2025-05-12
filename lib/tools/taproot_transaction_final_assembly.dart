@@ -19,6 +19,7 @@ Future<Transaction> taprootTransactionFinalAssembly(
       final signDetails = metadata.signDetails;
       var tx = metadata.transaction;
       var i = 0;
+
       for (var input in tx.inputs) {
         if (input is TaprootKeyInput) {
           final inputDetails = signDetails[i];
