@@ -12,6 +12,7 @@ import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/tools/marisma_client.dart';
+import 'package:peercoin/tools/taproot_transaction_final_assembly.dart';
 import 'package:peercoin/widgets/wallet/roast_group/login_status.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
@@ -140,12 +141,20 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
         if (logginResult) {
           // listen to events
           _roastClient.events.listen(
-            (event) {
+            (event) async {
               LoggerWrapper.logInfo(
                 'ROASTWalletHomeScreen',
                 'eventStream',
                 event.toString(),
               );
+
+              // check for SignaturesCompleteClientEvent and broadcast
+              if (event is frost.SignaturesCompleteClientEvent) {
+                final builtTx = await taprootTransactionFinalAssembly(event);
+                await _marismaClient.broadCastTransaction(
+                  BroadCastTransactionRequest(hex: builtTx.hashHex),
+                );
+              }
 
               setState(() {
                 _lastUpdate = DateTime.now();
