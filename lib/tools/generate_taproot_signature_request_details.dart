@@ -3,16 +3,6 @@ import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/available_coins.dart';
 import 'package:peercoin/models/marisma_utxo.dart';
 
-class UnsignedInput extends cl.InputCandidate {
-  final int n;
-
-  UnsignedInput({
-    required this.n,
-    required super.input,
-    required super.value,
-  });
-}
-
 Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   required cl.ECCompressedPublicKey groupKey,
   required int groupKeyIndex,
@@ -28,9 +18,9 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   final network = coin.networkType;
 
   final unsignedInputs =
-      List<UnsignedInput>.generate(selectedUtxos.length, (i) {
+      List<cl.InputCandidate>.generate(selectedUtxos.length, (i) {
     final input = selectedUtxos[i];
-    return UnsignedInput(
+    return cl.InputCandidate(
       input: cl.TaprootKeyInput(
         prevOut: cl.OutPoint.fromHex(
           input.txid,
@@ -38,7 +28,6 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
         ),
       ),
       value: BigInt.from(input.amount),
-      n: i,
     );
   });
 
