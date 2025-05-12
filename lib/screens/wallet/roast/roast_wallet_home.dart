@@ -159,9 +159,24 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                     'eventStream',
                     'Broadcasting transaction: ${builtTx.hashHex} - ${builtTx.toHex()} ',
                   );
-                  await _marismaClient.broadCastTransaction(
+                  final res = await _marismaClient.broadCastTransaction(
                     BroadCastTransactionRequest(hex: builtTx.toHex()),
                   );
+                  if (res.rpcError.isNotEmpty) {
+                    LoggerWrapper.logError(
+                      'ROASTWalletHomeScreen',
+                      'eventStream',
+                      'Failed to broadcast transaction: ${res.rpcError}',
+                    );
+                  } else {
+                    LoggerWrapper.logInfo(
+                      'ROASTWalletHomeScreen',
+                      'eventStream',
+                      'Transaction broadcasted successfully: ${builtTx.hashHex}',
+                    );
+                    // TODO show success snackbar
+                    // TODO remove from sigNonces?1
+                  }
                 } catch (e) {
                   LoggerWrapper.logError(
                     'ROASTWalletHomeScreen',
