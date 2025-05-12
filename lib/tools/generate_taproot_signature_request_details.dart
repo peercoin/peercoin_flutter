@@ -6,13 +6,18 @@ import 'package:peercoin/models/marisma_utxo.dart';
 Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   required cl.ECCompressedPublicKey groupKey,
   required int groupKeyIndex,
+  required int threshold,
   required List<UtxoFromMarisma> selectedUtxos,
   required String recipientAddress,
   required BigInt txAmount,
   required Duration expiry,
   required String coinIdentifier,
 }) async {
-  final taproot = cl.Taproot(internalKey: groupKey);
+  final derivedKeyInfo = HDGroupKeyInfo.master(
+    groupKey: groupKey,
+    threshold: threshold,
+  ).derive(groupKeyIndex);
+  final taproot = cl.Taproot(internalKey: derivedKeyInfo.groupKey);
   final program = cl.P2TR.fromTaproot(taproot);
   final coin = AvailableCoins.getSpecificCoin(coinIdentifier);
   final network = coin.networkType;
@@ -45,39 +50,64 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
     minChange: BigInt.from(coin.minimumTxValue),
   );
 
-  // Create signing details for each selected input
-  final trDetails = List<cl.TaprootKeySignDetails>.generate(
-    coinSelection.selected.length,
-    (i) {
-      final input = coinSelection.selected[i];
-      return cl.TaprootKeySignDetails(
-        tx: coinSelection.transaction,
-        inputN: i,
-        prevOuts: [cl.Output.fromProgram(input.value, program)],
-      );
-    },
-  );
+  final transaction = coinSelection.transaction;
+  final inputMap = <cl.OutPoint, cl.Output>{};
 
-  // Create the signature request
-  return SignaturesRequestDetails(
-    requiredSigs: List<SingleSignatureDetails>.generate(
-      coinSelection.selected.length,
-      (i) {
-        return SingleSignatureDetails(
+  final allPreviousOutputs = coinSelection.selected
+      .map((candidate) => cl.Output.fromProgram(candidate.value, program))
+      .toList();
+
+  final prevOutputs = <cl.OutPoint, List<cl.Output>>{};
+
+  for (var input in coinSelection.selected) {
+    final outpoint = (input.input as cl.TaprootKeyInput).prevOut;
+    final prevOutput = cl.Output.fromProgram(
+      input.value,
+      program,
+    );
+
+    inputMap[outpoint] = prevOutput;
+    prevOutputs[outpoint] = allPreviousOutputs;
+  }
+
+  // Create a list of signing details
+  final signDetails = <cl.TaprootKeySignDetails>[];
+  for (var i = 0; i < transaction.inputs.length; i++) {
+    final txInput = transaction.inputs[i];
+
+    // Check if this input is one of our taproot inputs that needs signing
+    if (inputMap.containsKey(txInput.prevOut)) {
+      final allPrevOuts = prevOutputs[txInput.prevOut]!;
+
+      signDetails.add(
+        cl.TaprootKeySignDetails(
+          tx: transaction,
+          inputN: i,
+          prevOuts: allPrevOuts,
+        ),
+      );
+    }
+  }
+
+  // Convert signing details to signature request details
+  final requiredSigs = signDetails
+      .map(
+        (detail) => SingleSignatureDetails(
           signDetails: SignDetails.keySpend(
-            message: cl.TaprootSignatureHasher(
-              trDetails[i],
-            ).hash,
+            message: cl.TaprootSignatureHasher(detail).hash,
           ),
           groupKey: groupKey,
-          hdDerivation: [groupKeyIndex],
-        );
-      },
-    ),
+          hdDerivation: [0, groupKeyIndex],
+        ),
+      )
+      .toList();
+
+  return SignaturesRequestDetails(
+    requiredSigs: requiredSigs,
     expiry: Expiry(expiry),
     metadata: TaprootTransactionSignatureMetadata(
-      transaction: coinSelection.transaction,
-      signDetails: trDetails,
+      transaction: transaction,
+      signDetails: signDetails,
     ),
   );
 }

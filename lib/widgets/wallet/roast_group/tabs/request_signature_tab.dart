@@ -190,6 +190,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
           days: 1,
         ), // TODO: Use the actual expiry from UI
         coinIdentifier: widget.walletName,
+        threshold: widget.threshold,
       );
 
       await widget.roastClient.requestSignatures(details);
