@@ -157,7 +157,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                   LoggerWrapper.logInfo(
                     'ROASTWalletHomeScreen',
                     'eventStream',
-                    'Broadcasting transaction: ${builtTx.toHex()}',
+                    'Broadcasting transaction: ${builtTx.hashHex} - ${builtTx.toHex()} ',
                   );
                   await _marismaClient.broadCastTransaction(
                     BroadCastTransactionRequest(hex: builtTx.toHex()),
