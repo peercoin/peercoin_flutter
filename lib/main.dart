@@ -12,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/models/hive/adapters/ec_compressed_public_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/final_expirable_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/frost_key_with_details_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/signature_nonces_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/signature_request_id_hive_adapter.dart';
@@ -85,6 +86,7 @@ void main() async {
   Hive.registerAdapter(HiveSignaturesRequestIdAdapter());
   Hive.registerAdapter(HiveSignaturesNoncesAdapter());
   Hive.registerAdapter(HiveSigingNoncesAdapter());
+  Hive.registerAdapter(HiveFinalExpirableAdapter());
 
   //init coinlib
   await loadCoinlib();
