@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/tools/app_localizations.dart';
-import 'package:peercoin/tools/derive_key_to_taproot_address.dart';
+import 'package:peercoin/tools/roast/derive_key_to_taproot_address.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/loading_indicator.dart';
 import 'package:peercoin/widgets/service_container.dart';

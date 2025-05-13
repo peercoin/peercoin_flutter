@@ -12,7 +12,7 @@ import 'package:peercoin/screens/wallet/standard_and_watch_only_wallet_home.dart
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/tools/marisma_client.dart';
-import 'package:peercoin/tools/taproot_transaction_final_assembly.dart';
+import 'package:peercoin/tools/roast/assemble_transaction_and_broadcast.dart';
 import 'package:peercoin/widgets/wallet/roast_group/login_status.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/tabs/completed_keys_tab.dart';
@@ -150,40 +150,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
               // check for SignaturesCompleteClientEvent and broadcast
               if (event is frost.SignaturesCompleteClientEvent) {
-                try {
-                  final builtTx = await taprootTransactionFinalAssembly(
-                    event,
-                  );
-                  LoggerWrapper.logInfo(
-                    'ROASTWalletHomeScreen',
-                    'eventStream',
-                    'Broadcasting transaction: ${builtTx.hashHex} - ${builtTx.toHex()} ',
-                  );
-                  final res = await _marismaClient.broadCastTransaction(
-                    BroadCastTransactionRequest(hex: builtTx.toHex()),
-                  );
-                  if (res.rpcError.isNotEmpty) {
-                    LoggerWrapper.logError(
-                      'ROASTWalletHomeScreen',
-                      'eventStream',
-                      'Failed to broadcast transaction: ${res.rpcError}',
-                    );
-                  } else {
-                    LoggerWrapper.logInfo(
-                      'ROASTWalletHomeScreen',
-                      'eventStream',
-                      'Transaction broadcasted successfully: ${builtTx.hashHex}',
-                    );
-                    // TODO show success snackbar
-                    // TODO remove from sigNonces?1
-                  }
-                } catch (e) {
-                  LoggerWrapper.logError(
-                    'ROASTWalletHomeScreen',
-                    'eventStream',
-                    'Failed to broadcast transaction: $e',
-                  );
-                }
+                if (!mounted) return;
+                await assembleTransactionAndBroadcast(
+                  context,
+                  _marismaClient,
+                  event,
+                );
               }
 
               setState(() {
