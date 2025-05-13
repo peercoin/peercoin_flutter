@@ -677,5 +677,8 @@
   "roast_wallet_key_detail_derived_addresses_empty": "No derived addresses",
   "roast_wallet_key_detail_derived_addresses_hint": "The derived addresses are the addresses that can be used to sign transactions. They are derived from the group key and the derivation index.",
   "roast_wallet_key_detail_derived_addresses_cta": "Derive New Address",
-  "roast_wallet_completed_keys": "Completed Keys"
+  "roast_wallet_completed_keys": "Completed Keys",
+  "roast_wallet_signature_request_rejected": "Signature request rejected",
+  "roast_wallet_signature_request_error": "Error processing signature request",
+  "roast_wallet_signature_request_accepted": "Signature request accepted"
 }

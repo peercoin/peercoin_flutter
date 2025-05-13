@@ -255,6 +255,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             roastClient: _roastClient,
             forceRender: _forceRender,
             participantNames: _roastWallet.participantNames,
+            walletName: _coinWallet.name,
           ),
         );
         break;

@@ -13,11 +13,13 @@ class OpenRequestTab extends StatelessWidget {
   final Client roastClient;
   final Function forceRender;
   final Map<String, String> participantNames;
+  final String walletName;
 
   const OpenRequestTab({
     required this.roastClient,
     required this.forceRender,
     required this.participantNames,
+    required this.walletName,
     super.key,
   });
 
@@ -218,6 +220,7 @@ class OpenRequestTab extends StatelessWidget {
                       participantNames[request.creator.toString()] ??
                           request.creator.toString(),
                       roastClient,
+                      walletName,
                     );
                   }),
                 ],
@@ -346,6 +349,7 @@ Widget _buildSignatureRequestCard(
   SignaturesRequest request,
   String resolvedCreator,
   Client roastClient,
+  String walletName,
 ) {
   return Card(
     elevation: 0,
@@ -361,6 +365,7 @@ Widget _buildSignatureRequestCard(
           arguments: ROASTWalletSignatureRequestConfirmationScreenArguments(
             request: request,
             roastClient: roastClient,
+            walletName: walletName,
           ),
         );
       },
