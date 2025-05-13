@@ -421,7 +421,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 
   void _exportConfiguration() {
     LoggerWrapper.logInfo(
-      'ROASTGroupLandingConfigured',
+      'ROASTWalletHomeScreen',
       '_exportConfiguration',
       'Exporting server configuration',
     );
@@ -579,7 +579,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
             _roastWallet.ourKey, // TODO request interface for key
         onDisconnect: () {
           LoggerWrapper.logInfo(
-            'ROASTGroupLandingConfigured',
+            'ROASTWalletHomeScreen',
             '_tryLogin',
             'Disconnected from server',
           );
@@ -590,7 +590,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       );
 
       LoggerWrapper.logInfo(
-        'ROASTGroupLandingConfigured',
+        'ROASTWalletHomeScreen',
         '_tryLogin',
         'Logged in to server',
       );
@@ -612,7 +612,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       return true;
     } catch (e) {
       LoggerWrapper.logError(
-        'ROASTGroupLandingConfigured',
+        'ROASTWalletHomeScreen',
         '_tryLogin',
         'Failed to login to server: $e',
       );
