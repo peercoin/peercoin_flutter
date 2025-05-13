@@ -1,4 +1,6 @@
 {
+  "assemble_transaction_an_broadcast_success_snack": "Transaction broadcasted successfully: $hashHex",
+  "assemble_transaction_an_broadcast_failed_snack": "Failed to broadcast transaction $hashHex",
   "about": "About",
   "about_developers": "© $year The peercoin_flutter Developers",
   "about_license": "Licensed under AGPL-3.0",
