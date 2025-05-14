@@ -633,6 +633,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       } else if (e is frost.InvalidRequest) {
         errorMessageTranslationKey =
             'roast_landing_configured_login_failed_snack_fingerprint_mismatch';
+      } else if (e is ArgumentError) {
+        LoggerWrapper.logError(
+          'ROASTWalletHomeScreen',
+          '_tryLogin',
+          'Failed to login to server (ArgumentError): ${e.message} ${e.stackTrace}',
+        );
       }
 
       // show snack bar
