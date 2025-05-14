@@ -65,6 +65,10 @@ class _AppSettingsServerHomeState extends State<AppSettingsServerHome> {
                     ]
                   : _availableWallets.map(
                       (wallet) {
+                        if (wallet.isROAST) {
+                          return const SizedBox
+                              .shrink(); //TODO allow Marisma servers to be configurable
+                        }
                         return ListTile(
                           onTap: () => Navigator.of(context).pushNamed(
                             Routes.serverSettingsDetail,
