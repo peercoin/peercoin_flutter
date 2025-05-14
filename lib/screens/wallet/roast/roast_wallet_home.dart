@@ -639,6 +639,12 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
           '_tryLogin',
           'Failed to login to server (ArgumentError): ${e.message} ${e.stackTrace}',
         );
+      } else if (e is Error) {
+        LoggerWrapper.logError(
+          'ROASTWalletHomeScreen',
+          '_tryLogin',
+          'Failed to login to server (Error): ${e.stackTrace}',
+        );
       }
 
       // show snack bar
