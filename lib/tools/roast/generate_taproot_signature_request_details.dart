@@ -49,42 +49,21 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   );
 
   final transaction = coinSelection.transaction;
-  final inputMap = <cl.OutPoint, cl.Output>{};
 
   final allPreviousOutputs = coinSelection.selected
       .map((candidate) => cl.Output.fromProgram(candidate.value, program))
       .toList();
 
-  final prevOutputs = <cl.OutPoint, List<cl.Output>>{};
-
-  for (var input in coinSelection.selected) {
-    final outpoint = (input.input as cl.TaprootKeyInput).prevOut;
-    final prevOutput = cl.Output.fromProgram(
-      input.value,
-      program,
-    );
-
-    inputMap[outpoint] = prevOutput;
-    prevOutputs[outpoint] = allPreviousOutputs;
-  }
-
   // Create a list of signing details
   final signDetails = <cl.TaprootKeySignDetails>[];
   for (var i = 0; i < transaction.inputs.length; i++) {
-    final txInput = transaction.inputs[i];
-
-    // Check if this input is one of our taproot inputs that needs signing
-    if (inputMap.containsKey(txInput.prevOut)) {
-      final allPrevOuts = prevOutputs[txInput.prevOut]!;
-
-      signDetails.add(
-        cl.TaprootKeySignDetails(
-          tx: transaction,
-          inputN: i,
-          prevOuts: allPrevOuts,
-        ),
-      );
-    }
+    signDetails.add(
+      cl.TaprootKeySignDetails(
+        tx: transaction,
+        inputN: i,
+        prevOuts: allPreviousOutputs,
+      ),
+    );
   }
 
   // Convert signing details to signature request details
@@ -109,3 +88,5 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
     ),
   );
 }
+
+// TODO prefer GroupKeyInfo instead of passing EcCompressedPublicKey and threshold
