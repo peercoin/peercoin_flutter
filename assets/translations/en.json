@@ -680,5 +680,17 @@
   "roast_wallet_completed_keys": "Completed Keys",
   "roast_wallet_signature_request_rejected": "Signature request rejected",
   "roast_wallet_signature_request_error": "Error processing signature request",
-  "roast_wallet_signature_request_accepted": "Signature request accepted"
+  "roast_wallet_signature_request_accepted": "Signature request accepted",
+  "roast_key_generation_title": "ROAST Key Generation",
+  "roast_key_generation_prompt": "Do you want to generate a new key or reuse an existing key?",
+  "roast_generate_new_key": "Generate New Key",
+  "roast_reuse_existing_key": "Reuse Existing Key",
+  "roast_hd_index_title": "HD Index Selection",
+  "roast_hd_index_label": "HD Index",
+  "roast_hd_index_hint": "Enter a number greater or equal to 0",
+  "roast_hd_index_empty_error": "HD index cannot be empty",
+  "roast_hd_index_invalid_error": "Please enter a valid number",
+  "roast_hd_index_range_error": "Index must be greater or equal to 0",
+  "confirm": "Confirm",
+  "cancel": "Cancel"
 }

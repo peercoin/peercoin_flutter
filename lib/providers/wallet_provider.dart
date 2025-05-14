@@ -107,12 +107,14 @@ class WalletProvider with ChangeNotifier {
     required bool isImportedSeed,
     required bool watchOnly,
     required bool isROAST,
+    int? reusedIndexForROAST,
   }) async {
     final box = await _encryptedBox.getWalletBox();
     final nOfWalletOfLetterCode = availableWalletValues
         .where(
-          (element) =>
-              element.letterCode == letterCode && element.watchOnly == false,
+          (element) => isROAST == true
+              ? element.letterCode == letterCode && element.isROAST
+              : element.letterCode == letterCode && element.watchOnly == false,
         )
         .length;
 
@@ -139,14 +141,24 @@ class WalletProvider with ChangeNotifier {
       LoggerWrapper.logInfo(
         'WalletProvider',
         'addWallet',
-        'writing $name - ROAST Group',
+        'writing $name - ROAST Group ($letterCode) - number $nOfWalletOfLetterCode',
       );
+      final newKey = (await deriveHDKeyFromSeed(
+        account: reusedIndexForROAST ?? nOfWalletOfLetterCode,
+        chain: 0,
+        address: 0,
+        identifier: name,
+      ))
+          .privateKey;
+
+      print(newKey.pubkey.xhex);
+
       await _vaultBox.put(
         name,
         ROASTWallet(
           name,
           false,
-          ECPrivateKey.generate(),
+          newKey,
         ),
       );
     }
@@ -514,6 +526,19 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteROASTWallet(String identifier) async {
+    final openWallet = getSpecificCoinWallet(identifier);
+    if (openWallet.isROAST == false) {
+      throw Exception('Wallet is not ROAST');
+    }
+
+    await _walletBox.delete(identifier);
+    await _vaultBox.delete(identifier);
+
+    closeWallet(identifier);
+    notifyListeners();
+  }
+
   Future<void> deleteWatchOnlyWallet(String identifier) async {
     final openWallet = getSpecificCoinWallet(identifier);
     if (openWallet.watchOnly == false) {
@@ -526,17 +551,18 @@ class WalletProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteROASTWallet(String identifier) async {
-    final openWallet = getSpecificCoinWallet(identifier);
-    if (openWallet.isROAST == false) {
-      throw Exception('Wallet is not ROAST');
-    }
+  Future<HDPrivateKey> deriveHDKeyFromSeed({
+    required int account,
+    required int chain,
+    required int address,
+    required String identifier,
+  }) async {
+    final hdwallet = await getHdWallet(identifier);
+    final key = hdwallet.derivePath(
+      "m/69'/$account/$chain/$address",
+    ); // 69 is ROAST group designator
 
-    await _walletBox.delete(identifier);
-    await _vaultBox.delete(identifier);
-
-    closeWallet(identifier);
-    notifyListeners();
+    return key;
   }
 
   Future<void> generateUnusedAddress(String identifier) async {
@@ -682,14 +708,6 @@ class WalletProvider with ChangeNotifier {
     return answerMap;
   }
 
-  Future<ROASTWallet> getROASTWallet(String identifier) async {
-    final res = _vaultBox.get(identifier);
-    if (res == null) {
-      throw Exception('ROASTClient not found');
-    }
-    return res;
-  }
-
   Future<HDPrivateKey> getHdWallet(String identifier) async {
     if (_hdWalletCache.containsKey(identifier)) {
       return _hdWalletCache[identifier]!;
@@ -708,6 +726,14 @@ class WalletProvider with ChangeNotifier {
     );
     if (addr == null) return '';
     return addr.addressBookName;
+  }
+
+  Future<ROASTWallet> getROASTWallet(String identifier) async {
+    final res = _vaultBox.get(identifier);
+    if (res == null) {
+      throw Exception('ROASTWallet not found');
+    }
+    return res;
   }
 
   String getScriptHash(String identifier, String address) {
