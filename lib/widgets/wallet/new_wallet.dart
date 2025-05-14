@@ -145,7 +145,8 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           ),
         );
         // inject ROAST
-        if (_appSettings.activatedExperimentalFeatures.contains('roast')) {
+        if (_appSettings.activatedExperimentalFeatures.contains('roast') &&
+            _watchOnly == false) {
           list.add(
             SimpleDialogOption(
               onPressed: () {
