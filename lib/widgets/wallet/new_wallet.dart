@@ -25,7 +25,10 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   bool _watchOnly = false;
   late AppSettingsProvider _appSettings;
 
-  Future<void> addWallet({required isROAST}) async {
+  Future<void> addWallet({
+    required bool isROAST,
+    required bool isTestnet,
+  }) async {
     try {
       var appSettings = context.read<AppSettingsProvider>();
       final navigator = Navigator.of(context);
@@ -53,6 +56,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       if (isROAST) {
         title =
             'ROAST Group ${nOfWalletOfLetterCodeROAST == 0 ? "" : nOfWalletOfLetterCodeROAST + 1}';
+        if (isTestnet) {
+          title = 'Test $title';
+        }
       }
 
       final prefs = await SharedPreferences.getInstance();
@@ -129,7 +135,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           SimpleDialogOption(
             onPressed: () {
               _coin = wallet;
-              addWallet(isROAST: false);
+              addWallet(isROAST: false, isTestnet: isTestnet);
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -151,7 +157,7 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             SimpleDialogOption(
               onPressed: () {
                 _coin = wallet;
-                addWallet(isROAST: true);
+                addWallet(isROAST: true, isTestnet: isTestnet);
               },
               child: ListTile(
                 leading: CircleAvatar(
@@ -172,7 +178,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     } else {
       list.add(
         Center(
-          child: Text(AppLocalizations.instance.translate('no_new_wallet')),
+          child: Text(
+            AppLocalizations.instance.translate('no_new_wallet'),
+          ),
         ),
       );
     }
