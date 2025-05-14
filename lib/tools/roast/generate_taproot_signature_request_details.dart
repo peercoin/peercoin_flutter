@@ -22,9 +22,7 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
   final coin = AvailableCoins.getSpecificCoin(coinIdentifier);
   final network = coin.networkType;
 
-  final unsignedInputs =
-      List<cl.InputCandidate>.generate(selectedUtxos.length, (i) {
-    final input = selectedUtxos[i];
+  final unsignedInputs = selectedUtxos.map((input) {
     return cl.InputCandidate(
       input: cl.TaprootKeyInput(
         prevOut: cl.OutPoint.fromHex(
