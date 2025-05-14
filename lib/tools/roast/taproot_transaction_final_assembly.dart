@@ -11,20 +11,16 @@ Future<Transaction> taprootTransactionFinalAssembly(
     case TaprootTransactionSignatureMetadata():
       final signDetails = metadata.signDetails;
       var tx = metadata.transaction;
-      var i = 0;
 
-      for (var input in tx.inputs) {
+      for (int i = 0; i < signatures.length; i++) {
+        final inputN = signDetails[i].inputN;
+        final input = tx.inputs[inputN];
+
         if (input is TaprootKeyInput) {
-          final inputDetails = signDetails[i];
-          final sig = signatures[inputDetails.inputN];
-
           tx = tx.replaceInput(
-            input.addSignature(SchnorrInputSignature(sig)),
-            i,
+            input.addSignature(SchnorrInputSignature(signatures[i])),
+            inputN,
           );
-          i++;
-
-          return tx;
         }
       }
       break;
