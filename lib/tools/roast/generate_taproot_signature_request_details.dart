@@ -74,7 +74,7 @@ Future<SignaturesRequestDetails> generateTaprootSignatureRequestDetails({
             message: cl.TaprootSignatureHasher(detail).hash,
           ),
           groupKey: groupKey,
-          hdDerivation: [0, groupKeyIndex],
+          hdDerivation: [groupKeyIndex],
         ),
       )
       .toList();
