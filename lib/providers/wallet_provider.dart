@@ -151,8 +151,6 @@ class WalletProvider with ChangeNotifier {
       ))
           .privateKey;
 
-      print(newKey.pubkey.xhex);
-
       await _vaultBox.put(
         name,
         ROASTWallet(
