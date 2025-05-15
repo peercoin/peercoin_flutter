@@ -162,6 +162,19 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                           const SizedBox(
                             height: 20,
                           ),
+                          Text(
+                            AppLocalizations.instance.translate(
+                              'roast_setup_landing_experimental_warning',
+                            ),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           PeerButton(
                             text: AppLocalizations.instance
                                 .translate('roast_setup_landing_create_group'),

@@ -664,6 +664,5 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
   }
 }
 
-// TODO marisma consent?
 // TODO background notification for new DKG requests
 // TODO expiries for all requests default to 1 day and should be configurable
