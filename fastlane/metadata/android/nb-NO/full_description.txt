@@ -1,0 +1,19 @@
+Send og motta peercoin, pioneren innen Proof-of-Stake, på telefonen din.
+
+Hold gjenopprettingsfrasen din beskyttet.
+Denne appen kommer med absolutt ingen garanti.
+Bruk på egen risiko.
+
+Funksjoner:
+- Basert på Electrum sin protokoll.
+- Send og motta peercoin.
+- Klar til å utføre transaksjoner etter installasjon (ingen venting).
+- Peercoin-lommebøker for mainnett og testnett .
+- Organisering ved hjelp av adressebok.
+- Importer papirlommebøker.
+- Importer & eksporter private nøkler (WIF).
+- Serveradministrasjon.
+- Flerspråklig støtte.
+- Bakgrunnsvarsler.
+
+Kjente begrensninger kan bli funnet i GitHub-depotet.
