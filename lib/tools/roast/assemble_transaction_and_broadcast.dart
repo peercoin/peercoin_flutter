@@ -32,11 +32,6 @@ Future<void> assembleTransactionAndBroadcast(
       );
       isBroadcasted = true;
       return;
-    } else {
-      //add txId to broadcastedTxIds
-      final ourList = wallet.broadcastedTxIds;
-      ourList.add(txId);
-      wallet.broadcastedTxIds = ourList;
     }
 
     LoggerWrapper.logInfo(
@@ -62,7 +57,10 @@ Future<void> assembleTransactionAndBroadcast(
         'Transaction broadcasted successfully: $txId',
       );
 
-      // TODO remove from sigNonces?1
+      //add txId to broadcastedTxIds
+      final ourList = wallet.broadcastedTxIds;
+      ourList.add(txId);
+      wallet.broadcastedTxIds = ourList;
     }
   } catch (e) {
     LoggerWrapper.logError(
