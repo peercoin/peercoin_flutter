@@ -1,5 +1,6 @@
 import 'package:coinlib_flutter/coinlib_flutter.dart' as cl;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/generated/marisma.pbgrpc.dart';
 import 'package:peercoin/models/available_coins.dart';
@@ -432,6 +433,18 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                             TextFormField(
                               controller: _recipientController,
                               decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  onPressed: () async {
+                                    var data =
+                                        await Clipboard.getData('text/plain');
+                                    _recipientController.text =
+                                        data!.text!.trim();
+                                  },
+                                  icon: Icon(
+                                    Icons.paste_rounded,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
                                 icon: Icon(
                                   Icons.send,
                                   color: Theme.of(context).primaryColor,
