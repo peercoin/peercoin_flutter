@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/hive/wallet_address.dart';
-import '../../../providers/wallet_provider.dart';
-import '../../../tools/app_localizations.dart';
-import '../../double_tab_to_clipboard.dart';
-import '../wallet_home/wallet_home_qr.dart';
+import '../../../../models/hive/wallet_address.dart';
+import '../../../../providers/wallet_provider.dart';
+import '../../../../tools/app_localizations.dart';
+import '../../../double_tab_to_clipboard.dart';
+import '../../wallet_home/wallet_home_qr.dart';
 import 'addresses_tab_expandable_icon.dart';
 
 class AddressTabExpandable extends StatelessWidget {

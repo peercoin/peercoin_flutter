@@ -65,7 +65,6 @@ Please follow the build instructions for your OS here:
 `flutter pub global activate peanut`  
 `flutter pub global run peanut -b production`  
 Web files are now on the production branch and ready to be deployed.  
-This will use the html renderer by default. Add _--web-renderer canvas_ to peanut if you want to switch to the canvas renderer.
 
 ## Run e2e tests
 

@@ -56,13 +56,13 @@ class ElectrumBackend extends DataSource {
 
     var connectivityResult = await (Connectivity().checkConnectivity());
 
-    if (connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult.contains(ConnectivityResult.none)) {
       updateConnectionState = BackendConnectionState.offline;
 
       _offlineSubscription = Connectivity().onConnectivityChanged.listen((
-        ConnectivityResult result,
+        List<ConnectivityResult> result,
       ) async {
-        if (result != ConnectivityResult.none) {
+        if (!result.contains(ConnectivityResult.none)) {
           //connection re-established
           _offlineSubscription!.cancel();
           await closeConnection();
@@ -72,7 +72,7 @@ class ElectrumBackend extends DataSource {
             requestedFromWalletHome: requestedFromWalletHome,
             fromConnectivityChangeOrLifeCycle: true,
           );
-        } else if (result == ConnectivityResult.none) {
+        } else if (result.contains(ConnectivityResult.none)) {
           updateConnectionState = BackendConnectionState.offline;
         }
       });

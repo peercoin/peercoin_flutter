@@ -15,11 +15,12 @@ The price ticker for PPC and FIAT exchange rates can be enabled or disabled opti
 **Optional Background Notifications**  
 Background notifications can be enabled or disabled optionally during setup or in "App Settings."
 
-The ticker and background notifications API are hosted as "Cloudflare Workers" on Cloudflare.  
+The price ticker API is hosted as "Cloudflare Workers" on Cloudflare.  
 Cloudflare Privacy Policy: https://www.cloudflare.com/privacypolicy/
 
 Ticker source code: 
 https://github.com/bananenwilly/ppc-worker-ticker
 
-Background Notification API source code:
-https://github.com/bananenwilly/ppc-worker-address-status
+**Optional ROAST Group**
+Using the experimental ROAST Feature requires a connection to a Marisma-protocol gRPC server, hosted by the peercoin_flutter team. The hardcoded URLs (marisma.ppc.lol) can not be configured so at time of writing.
+Marisma's source code is going to be released soon.

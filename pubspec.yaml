@@ -1,8 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 1.3.5+148
-
+version: 1.4.0+148
 environment:
   sdk: '>=3.2.0 <4.0.0'
   
@@ -25,7 +24,7 @@ dependencies:
   qr_flutter: ^4.0.0
   intl: ^0.19.0
   step_progress_indicator: ^1.0.0
-  qr_code_scanner: ^1.0.0
+  qr_code_scanner_plus: ^2.0.10+1
   url_launcher: ^6.1.4
   flutter_local_notifications: ^17.0.0
   flutter_screen_lock: ^9.0.3
@@ -34,8 +33,8 @@ dependencies:
   package_info_plus: ^4.1.0
   mailto: ^2.0.0
   flutter_slidable: ^4.0.0
-  flutter_typeahead: ^4.0.0
-  connectivity_plus: ^3.0.2
+  flutter_typeahead: ^5.2.0
+  connectivity_plus: ^6.1.3
   theme_mode_handler: ^3.0.0
   http: ^0.13.3
   collection: ^1.15.0-nullsafety.4
@@ -51,16 +50,18 @@ dependencies:
   path_provider: ^2.0.11
   file_picker: ^9.0.1
   fast_csv: ^0.1.44
-  protobuf: ^3.1.0
+  protobuf: ^4.0.0
   grpc: ^4.0.0
   mockito: ^5.3.2
   loader_overlay: ^2.1.0
   app_bar_with_search_switch: ^1.5.4
   decimal: ^2.3.3
   characters: ^1.2.0
-  coinlib_flutter: ^2.2.0
-  web: ^1.0.0
-
+  coinlib_flutter: ^4.0.0
+  frosty: ^1.0.0
+  noosphere_roast_client: ^1.1.0
+  web: ^1.1.0
+  
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -70,8 +71,8 @@ dev_dependencies:
     sdk: flutter
   test: any
   build_runner: ^2.0.4
-  flutter_launcher_icons: ^0.11.0
-  flutter_native_splash: ^2.2.7
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.6
   flutter_lints: ^4.0.0
   hive_ce_generator: ^1.8.2
 

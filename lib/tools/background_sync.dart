@@ -6,12 +6,19 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:grpc/grpc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:peercoin/models/available_coins.dart';
+import 'package:peercoin/models/hive/adapters/client_config_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/ec_compressed_public_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_private_key_hive_adapter.dart';
 import 'package:peercoin/models/hive/adapters/ec_public_key_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/final_expirable_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/frost_key_with_details_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/signature_nonces_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/signature_request_id_hive_adapter.dart';
+import 'package:peercoin/models/hive/adapters/signing_nonces_hive_adapter.dart';
+import 'package:peercoin/models/hive/roast_wallet.dart';
+import 'package:peercoin/tools/marisma_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/marisma.pbgrpc.dart';
@@ -123,8 +130,16 @@ class BackgroundSync {
       Hive.registerAdapter(AppOptionsStoreAdapter());
       Hive.registerAdapter(ServerAdapter());
       Hive.registerAdapter(PendingNotificationAdapter());
+      Hive.registerAdapter(ROASTWalletAdapter());
+      Hive.registerAdapter(HiveROASTClientConfigAdapter());
       Hive.registerAdapter(HiveECPrivateKeyAdapter());
       Hive.registerAdapter(HiveECPublicKeyAdapter());
+      Hive.registerAdapter(HiveECCompressedPublicKeyAdapter());
+      Hive.registerAdapter(HiveFrostKeyWithDetailsAdapter());
+      Hive.registerAdapter(HiveSignaturesRequestIdAdapter());
+      Hive.registerAdapter(HiveSignaturesNoncesAdapter());
+      Hive.registerAdapter(HiveSigingNoncesAdapter());
+      Hive.registerAdapter(HiveFinalExpirableAdapter());
     }
 
     //open wallet box
@@ -252,29 +267,17 @@ class BackgroundSync {
     }
   }
 
-  static MarismaClient getMarismaClient(String walletName) {
-    final (url, port) =
-        AvailableCoins.getSpecificCoin(walletName).marismaServers.first;
-
-    return MarismaClient(
-      ClientChannel(
-        url,
-        port: port,
-      ),
-    );
-  }
-
   static Future<Map<String, int>> getNumberOfUtxosFromMarisma({
     required String walletName,
     required Map<String, int> addressesToQuery,
     bool fromScan = false,
   }) async {
-    var grpcClient = getMarismaClient(walletName);
+    final (grpcClient, close) = getMarismaClient(walletName);
 
     Map<String, int> answerMap = {};
 
     try {
-      await grpcClient.getBlockHeight(BlockHeightRequest());
+      await grpcClient.getBlockHeight(EmptyRequest());
     } catch (e) {
       //client not available
       return answerMap;
@@ -285,11 +288,11 @@ class BackgroundSync {
       (String addr) async {
         int n = addressesToQuery[addr]!;
 
-        var isKnownRes = await grpcClient.getAddressIsKnown(
+        final isKnownRes = await grpcClient.getAddressIsKnown(
           AddressRequest(address: addr),
         );
         if (isKnownRes.isKnown == true) {
-          var addressNumberOfUtxosReply =
+          final addressNumberOfUtxosReply =
               await grpcClient.getAddressNumberOfUtxos(
             AddressRequest(
               address: addr,
@@ -303,6 +306,9 @@ class BackgroundSync {
         }
       },
     );
+
+    //close client
+    await close();
 
     return answerMap;
   }

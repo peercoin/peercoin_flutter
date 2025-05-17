@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,9 +26,12 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
   bool _watchOnly = false;
   late AppSettingsProvider _appSettings;
 
-  Future<void> addWallet({required isROAST}) async {
+  Future<void> addWallet({
+    required bool isROAST,
+    required bool isTestnet,
+  }) async {
     try {
-      var appSettings = context.read<AppSettingsProvider>();
+      final appSettings = context.read<AppSettingsProvider>();
       final navigator = Navigator.of(context);
       final WalletProvider walletProvider = context.read<WalletProvider>();
       final letterCode = _availableCoins[_coin]!.letterCode;
@@ -39,6 +43,139 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
             (element) => element.letterCode == letterCode && element.isROAST,
           )
           .length;
+
+      // If this is a ROAST wallet, prompt for key generation options
+      int? reusedIndexForROAST;
+      if (isROAST) {
+        final keyGenerationChoice = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                AppLocalizations.instance.translate(
+                  'roast_key_generation_title',
+                ),
+              ),
+              content: Text(
+                AppLocalizations.instance.translate(
+                  'roast_key_generation_prompt',
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(
+                    AppLocalizations.instance.translate(
+                      'roast_generate_new_key',
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(
+                    AppLocalizations.instance.translate(
+                      'roast_reuse_existing_key',
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+
+        // If dialog was dismissed or user chose to reuse key
+        if (keyGenerationChoice == false) {
+          // Show dialog to input HD index
+          final TextEditingController indexController = TextEditingController();
+          final formKey = GlobalKey<FormState>();
+
+          if (!mounted) return;
+          final hdIndex = await showDialog<int>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'roast_hd_index_title',
+                  ),
+                ),
+                content: Form(
+                  key: formKey,
+                  child: TextFormField(
+                    controller: indexController,
+                    autocorrect: false,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.instance.translate(
+                        'roast_hd_index_label',
+                      ),
+                      hintText: AppLocalizations.instance.translate(
+                        'roast_hd_index_hint',
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.instance.translate(
+                          'roast_hd_index_empty_error',
+                        );
+                      }
+                      int? index = int.tryParse(value);
+                      if (index == null) {
+                        return AppLocalizations.instance.translate(
+                          'roast_hd_index_invalid_error',
+                        );
+                      }
+                      if (index < 0) {
+                        return AppLocalizations.instance.translate(
+                          'roast_hd_index_range_error',
+                        );
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      AppLocalizations.instance.translate('cancel'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        Navigator.of(context).pop(
+                          int.parse(indexController.text),
+                        );
+                      }
+                    },
+                    child: Text(
+                      AppLocalizations.instance.translate('confirm'),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+
+          // If user cancelled HD index dialog, cancel wallet creation
+          if (hdIndex == null) {
+            return;
+          }
+
+          reusedIndexForROAST = hdIndex;
+        }
+        // If user cancelled the first dialog, abort wallet creation
+        else if (keyGenerationChoice == null) {
+          return;
+        }
+        // If keyGenerationChoice is true, we'll generate a new key (reusedIndexForROAST remains null)
+      }
 
       // generate identifier
       final walletName = isROAST
@@ -53,6 +190,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
       if (isROAST) {
         title =
             'ROAST Group ${nOfWalletOfLetterCodeROAST == 0 ? "" : nOfWalletOfLetterCodeROAST + 1}';
+        if (isTestnet) {
+          title = 'Test $title';
+        }
       }
 
       final prefs = await SharedPreferences.getInstance();
@@ -64,13 +204,14 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
         isImportedSeed: prefs.getBool('importedSeed') == true,
         watchOnly: _watchOnly,
         isROAST: isROAST,
+        reusedIndexForROAST: reusedIndexForROAST,
       );
 
       //add to order list
       _appSettings.setWalletOrder(_appSettings.walletOrder..add(walletName));
 
       //enable notifications
-      var notificationList = appSettings.notificationActiveWallets;
+      final notificationList = appSettings.notificationActiveWallets;
       notificationList.add(walletName);
       appSettings.setNotificationActiveWallets(notificationList);
 
@@ -123,13 +264,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     final actualAvailableWallets = _availableCoins.keys;
 
     if (actualAvailableWallets.isNotEmpty) {
-      for (var wallet in actualAvailableWallets) {
+      for (final wallet in actualAvailableWallets) {
         bool isTestnet = _availableCoins[wallet]!.letterCode == 'tPPC';
         list.add(
           SimpleDialogOption(
             onPressed: () {
               _coin = wallet;
-              addWallet(isROAST: false);
+              addWallet(isROAST: false, isTestnet: isTestnet);
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -145,12 +286,13 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
           ),
         );
         // inject ROAST
-        if (_appSettings.activatedExperimentalFeatures.contains('roast')) {
+        if (_appSettings.activatedExperimentalFeatures.contains('roast') &&
+            _watchOnly == false) {
           list.add(
             SimpleDialogOption(
               onPressed: () {
                 _coin = wallet;
-                addWallet(isROAST: true);
+                addWallet(isROAST: true, isTestnet: isTestnet);
               },
               child: ListTile(
                 leading: CircleAvatar(
@@ -171,7 +313,9 @@ class _NewWalletDialogState extends State<NewWalletDialog> {
     } else {
       list.add(
         Center(
-          child: Text(AppLocalizations.instance.translate('no_new_wallet')),
+          child: Text(
+            AppLocalizations.instance.translate('no_new_wallet'),
+          ),
         ),
       );
     }

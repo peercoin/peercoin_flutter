@@ -3,6 +3,10 @@ import 'package:coinlib_flutter/coinlib_flutter.dart';
 class GenericAddress {
   static Address fromAsm(String asm, Network network) {
     final program = Program.fromAsm(asm);
+    return fromProgram(program, network);
+  }
+
+  static Address fromProgram(Program program, Network network) {
     if (program is P2PKH) {
       return P2PKHAddress.fromHash(
         program.pkHash,

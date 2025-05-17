@@ -29,8 +29,9 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion "26.3.11579264"
+    namespace "com.coinerella.peercoin"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -43,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.coinerella.peercoin"
         minSdkVersion 26
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -52,9 +53,9 @@ android {
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
-        // Sets Java compatibility to Java 8
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        // Sets Java compatibility to Java 17
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
    signingConfigs {

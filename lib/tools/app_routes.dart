@@ -1,4 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_add_participant.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_key_detail.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_input_selector.dart';
+import 'package:peercoin/screens/wallet/roast/roast_wallet_signature_request_confirmation.dart';
 import 'package:peercoin/screens/wallet/transaction_confirmation.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction.dart';
 import 'package:peercoin/screens/wallet/wallet_sign_transaction_confirmation.dart';
@@ -62,7 +67,11 @@ class Routes {
   static const String roastWalletHome = '/roast-wallet-home';
   static const String roastWalletAddParticipant =
       '/roast-wallet-add-participant';
-  static const String roastWalletDashboard = '/roast-dashboard';
+  static const String roastWalletKeyDetail = '/roast-wallet-key-detail';
+  static const String roastWalletSignatureInputSelector =
+      '/roast-wallet-signature-input-selector';
+  static const String roastWalletSignatureRequestConfirmation =
+      '/roast-wallet-signature-request-confirmation';
   static const String walletMessageSigning = '/wallet-message-signing';
   static const String walletMessageVerification =
       '/wallet-message-verification';
@@ -212,6 +221,27 @@ class Routes {
       Routes.walletTransactionSigningConfirmation: (context) =>
           const RouterMaster(
             widget: WalletSignTransactionConfirmationScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletHome: (context) => const RouterMaster(
+            widget: ROASTWalletHomeScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletAddParticipant: (context) => const RouterMaster(
+            widget: ROASTWalletAddParticipantScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletKeyDetail: (context) => const RouterMaster(
+            widget: RoastWalletKeyDetailScreen(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletSignatureInputSelector: (context) => const RouterMaster(
+            widget: ROASTWalletSignatureInputSelector(),
+            routeType: RouteTypes.requiresArguments,
+          ),
+      Routes.roastWalletSignatureRequestConfirmation: (context) =>
+          const RouterMaster(
+            widget: ROASTWalletSignatureRequestConfirmationScreen(),
             routeType: RouteTypes.requiresArguments,
           ),
     };
