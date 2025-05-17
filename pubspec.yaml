@@ -1,7 +1,7 @@
 name: peercoin
 description: A new Peercoin wallet.
 
-version: 1.4.0+148
+version: 1.4.0+149
 environment:
   sdk: '>=3.2.0 <4.0.0'
   
