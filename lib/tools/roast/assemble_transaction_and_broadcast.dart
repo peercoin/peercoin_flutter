@@ -10,7 +10,7 @@ Future<void> assembleTransactionAndBroadcast(
   MarismaClient marismaClient,
   SignaturesCompleteClientEvent event,
 ) async {
-  String? hashHex;
+  String? txId;
   bool isError = false;
 
   try {
@@ -18,12 +18,12 @@ Future<void> assembleTransactionAndBroadcast(
       event,
     );
     final txHex = builtTx.toHex();
-    hashHex = builtTx.hashHex;
+    txId = builtTx.txid;
 
     LoggerWrapper.logInfo(
       'ROASTWalletHomeScreen',
       'eventStream',
-      'Broadcasting transaction: $hashHex - $txHex',
+      'Broadcasting transaction: $txId - $txHex',
     );
 
     final res = await marismaClient.broadCastTransaction(
@@ -40,7 +40,7 @@ Future<void> assembleTransactionAndBroadcast(
       LoggerWrapper.logInfo(
         'ROASTWalletHomeScreen',
         'eventStream',
-        'Transaction broadcasted successfully: $hashHex',
+        'Transaction broadcasted successfully: $txId',
       );
 
       // TODO remove from sigNonces?1
@@ -62,7 +62,7 @@ Future<void> assembleTransactionAndBroadcast(
                   ? 'assemble_transaction_an_broadcast_success_snack'
                   : 'assemble_transaction_an_broadcast_failed_snack',
               {
-                'hashHex': hashHex ?? '',
+                'txId': txId ?? '',
               },
             ),
           ),
