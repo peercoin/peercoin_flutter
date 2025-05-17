@@ -1,3 +1,7 @@
+### **1.4.0** (2025-05-17)
+* Add experimental feature: ROAST
+* A lot of tiny upgrades under the hood to ensure forward compatability
+
 ### **1.3.5** (2025-03-08)
 
 - Fix for transaction list misbehaviour caused by sending addresses
