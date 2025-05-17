@@ -666,4 +666,5 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
 }
 
 // TODO background notification for new DKG requests
+// TODO show key info (deriviation path) somewhere to allow restoring the key more effectively
 // TODO expiries for all requests default to 1 day and should be configurable
