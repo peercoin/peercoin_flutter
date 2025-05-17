@@ -1,6 +1,6 @@
 ### **1.4.0** (2025-05-17)
 * Add experimental feature: ROAST
-* A lot of tiny upgrades under the hood to ensure forward compatability
+* A lot of tiny upgrades under the hood to ensure forward compatibility
 
 ### **1.3.5** (2025-03-08)
 
