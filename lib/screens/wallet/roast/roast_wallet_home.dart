@@ -154,6 +154,7 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 await assembleTransactionAndBroadcast(
                   context,
                   _marismaClient,
+                  _roastWallet,
                   event,
                 );
               }

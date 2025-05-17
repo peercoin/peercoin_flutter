@@ -36,13 +36,15 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
           : (fields[13] as Map).map(
               (dynamic k, dynamic v) =>
                   MapEntry(k as ECPublicKey, (v as Set).cast<int>()),
-            );
+            )
+      .._broadcastedTxIds =
+          fields[14] == null ? [] : (fields[14] as List).cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, ROASTWallet obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj._title)
       ..writeByte(1)
@@ -66,7 +68,9 @@ class ROASTWalletAdapter extends TypeAdapter<ROASTWallet> {
       ..writeByte(10)
       ..write(obj._ourKey)
       ..writeByte(13)
-      ..write(obj._derivedKeys);
+      ..write(obj._derivedKeys)
+      ..writeByte(14)
+      ..write(obj._broadcastedTxIds);
   }
 
   @override

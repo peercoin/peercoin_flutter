@@ -42,6 +42,9 @@ class ROASTWallet extends HiveObject {
   Map<ECPublicKey, Set<int>> _derivedKeys =
       {}; // list of group keys and their deriviation path indices
 
+  @HiveField(14, defaultValue: [])
+  List<String> _broadcastedTxIds = [];
+
   ROASTWallet(
     this._title,
     this._isCompleted,
@@ -122,6 +125,12 @@ class ROASTWallet extends HiveObject {
   Map<ECPublicKey, Set<int>> get derivedKeys => _derivedKeys;
   set derivedKeys(Map<ECPublicKey, Set<int>> newDerivedKeys) {
     _derivedKeys = newDerivedKeys;
+    save();
+  }
+
+  List<String> get broadcastedTxIds => _broadcastedTxIds;
+  set broadcastedTxIds(List<String> newBroadcastedTxIds) {
+    _broadcastedTxIds = newBroadcastedTxIds;
     save();
   }
 }
