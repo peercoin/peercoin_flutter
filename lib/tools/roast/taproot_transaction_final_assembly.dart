@@ -23,7 +23,8 @@ Future<Transaction> taprootTransactionFinalAssembly(
           );
         }
       }
-      break;
+      return tx;
+
     case EmptySignatureMetadata():
       //TODO
       break;
