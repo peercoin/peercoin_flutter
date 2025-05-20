@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 35
-    ndkVersion "26.3.11579264"
+    ndkVersion "27.2.12479018"
     namespace "com.coinerella.peercoin"
 
     sourceSets {
@@ -58,19 +58,23 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-   signingConfigs {
-       release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
-       }
-   }
-   buildTypes {
-       release {
-           signingConfig signingConfigs.release
-       }
-   }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 flutter {
@@ -79,5 +83,5 @@ flutter {
 
 dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.7.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }

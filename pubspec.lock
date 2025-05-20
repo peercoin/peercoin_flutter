@@ -517,10 +517,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "407929c60becc36c3fb2a69b3f51e348f26f806a"
+      resolved-ref: "42949f2d7b4f5d8f5d7771d40d5497517da0a884"
       url: "https://github.com/ced1check/flutter_logs"
     source: git
-    version: "2.1.12"
+    version: "2.2.1"
   flutter_markdown:
     dependency: "direct main"
     description:
