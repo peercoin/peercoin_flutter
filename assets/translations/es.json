@@ -504,7 +504,7 @@
     "unhide_wallet": "Desocultar Billetera",
     "unhide_wallet_action": "Desocultar",
     "unhide_wallet_description": "Esto mostrará la billetera y estará disponible nuevamente en la lista de billeteras.",
-    "hide_hidden_wallets_list": "Escondite de Billeteras Escondite de Billeteras",
+    "hide_hidden_wallets_list": "Escondite $nOfHiddenWallets Billeteras Ocultas",
     "show_hidden_wallets_list": "Mostrar $nOfHiddenWallets Billeteras Ocultas",
     "delete_wallet": "Borrar Billetera",
     "wallet_pop_menu_signing_transactions": "Firmar transacción",
