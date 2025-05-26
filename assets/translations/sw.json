@@ -346,5 +346,6 @@
     "setup_auth_subtitle_singular": "Muda wako wa matumizi utaisha baada ya siku $days.",
     "setup_auth_hint": "Unapaswa kuingiza mbegu yako tena baada ya kipindi kuisha.",
     "about_donate_button": "Changia PPC sasa",
-    "app_settings_delete": "Futa akaunti"
+    "app_settings_delete": "Futa akaunti",
+    "assemble_transaction_an_broadcast_success_snack": "Transaktionen sändes: $txId"
 }
