@@ -1,6 +1,11 @@
+### **1.4.1** (2025-05-26)
+
+- Add support for ROAST on more devices
+
 ### **1.4.0** (2025-05-17)
-* Add experimental feature: ROAST
-* A lot of tiny upgrades under the hood to ensure forward compatibility
+
+- Add experimental feature: ROAST
+- A lot of tiny upgrades under the hood to ensure forward compatibility
 
 ### **1.3.5** (2025-03-08)
 

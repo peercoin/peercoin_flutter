@@ -18,7 +18,7 @@ class MyTheme {
           color: DarkColors.white,
         ),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: LightColors.white,
         shape: RoundedRectangleBorder(
           //to set border radius to button
@@ -29,7 +29,7 @@ class MyTheme {
         color: LightColors.green,
         foregroundColor: LightColors.white,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shadowColor: LightColors.darkGreen,
         color: LightColors.white,
@@ -141,14 +141,14 @@ class MyTheme {
           color: DarkColors.white,
         ),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: DarkColors.green,
         shape: RoundedRectangleBorder(
           //to set border radius to button
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         color: DarkColors.green,
         margin: const EdgeInsets.fromLTRB(24, 0, 24, 12),
