@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_fetch
-      sha256: e9f26ae54d88310b7ac2a68f2f9fcee0081a4d5f11100f233a70702021e7ac4f
+      sha256: "442e82f508708be89fd0cc7e1dc3b27bc7c6c8c39a47967ccb7ed1c57b9108b5"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.7"
+    version: "1.3.8"
   bip39:
     dependency: "direct main"
     description:
@@ -671,10 +671,10 @@ packages:
     dependency: "direct main"
     description:
       name: frosty_flutter
-      sha256: "1a4880f0af956c0f81c783bc3193ca35c06744f6c9f800e933afdf0dc9c23bc9"
+      sha256: "10d9f9eca95479000f964d50f99e5799ac6aa60cd5c73cf40cd0f67e26a4f6ad"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
