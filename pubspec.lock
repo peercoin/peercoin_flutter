@@ -655,10 +655,18 @@ packages:
     dependency: "direct main"
     description:
       name: frosty
-      sha256: "486c81c9980d4ae2b254d898c347733e017e723c7ca10bdf4c1c0c55185a6e1c"
+      sha256: "59e09eb826628586039da50beeaebb377bc77f81a426435deea19876e6919cf5"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.0"
+  frosty_flutter:
+    dependency: "direct main"
+    description:
+      name: frosty_flutter
+      sha256: "1a4880f0af956c0f81c783bc3193ca35c06744f6c9f800e933afdf0dc9c23bc9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -985,10 +993,10 @@ packages:
     dependency: "direct main"
     description:
       name: noosphere_roast_client
-      sha256: "1dc65c5798e7e8bfff00fa28e5ad1c6ce456c163492110fd47e23fd912f6ee9b"
+      sha256: "20fb5bee79901d095b66d56e85984f518b38c280a58e70813b7f778c42ca1531"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.0"
   package_config:
     dependency: transitive
     description:
