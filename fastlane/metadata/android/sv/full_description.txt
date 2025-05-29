@@ -1,0 +1,19 @@
+Skicka och ta emot peercoin, pionjären inom Proof-of-Stake, på din telefon.
+
+Håll din återställningsfras skyddad.
+Denna app kommer med absolut ingen garanti.
+Uanvänds på egen risk.
+
+Funktioner:
+- Baserat på Electrums protokoll.
+- Skicka och ta emot peercoin.
+- Redo att utföra transaktioner efter installation (ingen väntan).
+- Peercoin-plånböcker för mainnett och testnett.
+- Organisation med adressbok.
+- Importera pappersplånböcker.
+- Importera och exportera privata nycklar (WIF).
+- Serveradministration.
+- Flerspråkigt stöd.
+- Bakgrundsaviseringar.
+
+Kända begränsningar kan hittas i GitHub-förrådet.
