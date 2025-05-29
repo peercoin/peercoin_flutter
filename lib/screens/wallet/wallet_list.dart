@@ -293,44 +293,50 @@ class _WalletListScreenState extends State<WalletListScreen>
                                             ),
                                           ),
                                           subtitle: Row(
-                                            children: [
-                                              Flexible(
-                                                flex: 2,
-                                                child: Text(
-                                                  '$balance ${wallet.letterCode}',
-                                                  style: const TextStyle(
-                                                    fontSize: 13,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              if (showFiat) const Text('|'),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              if (showFiat)
-                                                Flexible(
-                                                  child: Text(
-                                                    '${PriceTicker.renderPrice(
-                                                      double.parse(balance),
-                                                      _appSettings
-                                                          .selectedCurrency,
-                                                      wallet.letterCode,
-                                                      _appSettings
-                                                          .exchangeRates,
-                                                    ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
-                                                    style: const TextStyle(
-                                                      fontSize: 13,
+                                            children: wallet.isROAST
+                                                ? [] // TODO show ROAST balance or other info
+                                                : [
+                                                    Flexible(
+                                                      flex: 2,
+                                                      child: Text(
+                                                        '$balance ${wallet.letterCode}',
+                                                        style: const TextStyle(
+                                                          fontSize: 13,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .visible,
+                                                      ),
                                                     ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                            ],
+                                                    const SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    if (showFiat)
+                                                      const Text('|'),
+                                                    const SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    if (showFiat)
+                                                      Flexible(
+                                                        child: Text(
+                                                          '${PriceTicker.renderPrice(
+                                                            double.parse(
+                                                              balance,
+                                                            ),
+                                                            _appSettings
+                                                                .selectedCurrency,
+                                                            wallet.letterCode,
+                                                            _appSettings
+                                                                .exchangeRates,
+                                                          ).toStringAsFixed(2)} ${_appSettings.selectedCurrency}',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 13,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                  ],
                                           ),
                                           trailing: Icon(
                                             Icons.arrow_forward_ios_rounded,
