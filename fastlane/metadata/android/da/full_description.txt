@@ -1,0 +1,19 @@
+Send og modtag peercoin, pioneren inden for Proof-of-Stake, på din telefon.
+
+Hold din gendannelsessætning beskyttet.
+Denne app leveres med absolut ingen garanti.
+Brug på egen risiko.
+
+Funktioner:
+- Baseret på Electrums protokol.
+- Send og modtag peercoin.
+- Klar til at udføre transaktioner efter installation (ingen ventetid).
+- Peercoin tegnebøger til mainnet og testnet.
+- Organisation ved hjælp af adressebog.
+- Importer papirtegnebøger.
+- Import & eksport private nøgler (WIF).
+- Serveradministration.
+- Flersproget support.
+- Baggrundsmeddelelser.
+
+Kendte begrænsninger kan findes i GitHub-lageret.
