@@ -608,7 +608,7 @@
   "roast_wallet_request_dkg_name": "Name",
   "roast_wallet_request_dkg_description": "Description",
   "roast_wallet_request_dkg_threshold": "Threshold",
-  "roast_wallet_request_dkg_threshold_hint": "Number of required signatures",
+  "roast_wallet_request_dkg_threshold_hint": "Number of required accepting participants",
   "roast_wallet_request_dkg_threshold_empty_error": "Please enter a threshold",
   "roast_wallet_request_dkg_threshold_not_number_error": "Threshold must be a number",
   "roast_wallet_request_dkg_threshold_too_small_error": "Threshold must be at least 2",
