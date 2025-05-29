@@ -260,8 +260,7 @@ class _ROASTGroupSetupParticipantsState
                               children: [
                                 Icon(
                                   Icons.person,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ],
                             ),
@@ -278,21 +277,21 @@ class _ROASTGroupSetupParticipantsState
                                           Icons.delete,
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .onPrimary,
+                                              .tertiary,
                                         ),
                                       ),
                             tileColor: Theme.of(context).colorScheme.primary,
                             title: Text(
                               participantName,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.tertiary,
                               ),
                             ),
                             subtitle: Text(
                               ecPubkey,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.tertiary,
                               ),
                             ),
                           ),
