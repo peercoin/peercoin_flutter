@@ -1,0 +1,19 @@
+Sendu og móttaktu Peercoin, upphafsstökkir Proof-of-Stake, á símannum þínum.
+
+Hafðu aðgrófasetninguna þína varlega. 
+Þetta forrit fylgir engri ábyrgð. 
+Notaðu á eigin ábyrgð.
+
+Eiginleikar:
+- Byggir á electrum skilmálma.
+- Senda og móttaka peercoin.
+- Tilbúið til viðskipta strax eftir uppsetningu (engin bið).
+- Peercoin og Peercoin prófnet veski.
+- Stjórnun á heimilisfangabók.
+- Flutningur inn í pappírveski.
+- Flutningur & útflutningur dulnúmmara (WIF).
+- Stjórnun á þjónum.
+- Aðstoð með mörgum tungumálum.
+- Bakgrunnsuppfletti.
+
+Takmarkanir sem þekktar eru má finna í Github geymslunni.
