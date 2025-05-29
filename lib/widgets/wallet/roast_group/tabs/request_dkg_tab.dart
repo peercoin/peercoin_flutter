@@ -34,7 +34,7 @@ class RequestDkgTab extends StatelessWidget {
           NewDkgDetails(
             name: _nameController.text,
             description: _descriptionController.text,
-            threshold: 2,
+            threshold: int.parse(_thresholdController.text),
             expiry: Expiry(const Duration(days: 1)),
           ),
         );
