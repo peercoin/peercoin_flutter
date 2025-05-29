@@ -2,6 +2,7 @@
 
 - Fix DKG threshold not respected in requests
 - Various translation and wording updates for ROAST
+- Fixes for Dark Mode to make a specific set of users extra happy
 
 ### **1.4.1** (2025-05-26)
 
