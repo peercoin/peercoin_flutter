@@ -34,7 +34,7 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               style: TextStyle(
                 letterSpacing: 1.4,
                 fontSize: 24,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
             const SizedBox(
@@ -73,7 +73,7 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               style: TextStyle(
                 letterSpacing: 1.4,
                 fontSize: 24,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
             const SizedBox(
