@@ -320,7 +320,8 @@ class _WalletListScreenState extends State<WalletListScreen>
                                                         child: Text(
                                                           '${PriceTicker.renderPrice(
                                                             double.parse(
-                                                                balance),
+                                                              balance,
+                                                            ),
                                                             _appSettings
                                                                 .selectedCurrency,
                                                             wallet.letterCode,
