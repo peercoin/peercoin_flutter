@@ -315,7 +315,7 @@ class OpenRequestTab extends StatelessWidget {
                   IconButton(
                     icon: Icon(
                       Icons.check,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
                     onPressed: () => _toggleConfirmationAlert(
                       context,
