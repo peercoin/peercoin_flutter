@@ -61,7 +61,7 @@ dependencies:
   frosty: ^2.0.0
   noosphere_roast_client: ^2.0.0
   web: ^1.1.0
-  frosty_flutter: ^2.0.1
+  frosty_flutter: ^2.0.2
   
 dev_dependencies:
   integration_test:
