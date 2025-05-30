@@ -1,3 +1,7 @@
+### **1.4.3** (2025-05-30)
+
+- More dark mode fixes
+
 ### **1.4.2** (2025-05-29)
 
 - Fix DKG threshold not respected in requests
