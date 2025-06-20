@@ -620,7 +620,7 @@
     "roast_wallet_request_dkg_name": "Navn",
     "roast_wallet_request_dkg_description": "Beskrivelse",
     "roast_wallet_request_dkg_threshold": "Tærskel",
-    "roast_wallet_request_dkg_threshold_hint": "Antal påkrævede signaturer",
+    "roast_wallet_request_dkg_threshold_hint": "Antal obligatoriske deltagere, der accepterer",
     "roast_wallet_request_dkg_threshold_empty_error": "Indtast venligst en tærskel",
     "roast_wallet_request_dkg_threshold_not_number_error": "Tærsklen skal være et tal",
     "roast_wallet_request_dkg_threshold_too_large_error": "Tærsklen må højst være $max",

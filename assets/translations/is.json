@@ -586,7 +586,7 @@
     "roast_setup_landing_experimental_warning": "Þetta er tilraunaeiginleiki sem hefur ekki verið prófaður að fullu ennþá. Vinsamlegast notið þetta á eigin ábyrgð. \n Allar lokadagsetningar tengdar beiðnum eru sjálfgefnar eins dags og verða stillanlegar í framtíðinni. \n \nEf þú lendir í einhverjum vandræðum, vinsamlegast tilkynntu þau á GitHub. \n Notkun tilraunakennda ROAST-eiginleikans krefst tengingar við gRPC-þjón með Marisma-samskiptareglum, sem er hýst af peercoin_flutter teyminu. Ekki er hægt að stilla harðkóðuðu vefslóðirnar (marisma.ppc.lol) eins og er. Frumkóði Marisma verður gefinn út fljótlega. ",
     "roast_landing_configured_login_failed_snack_fingerprint_mismatch": "Innskráning mistókst. Fingrafarið passar ekki.",
     "roast_wallet_signature_input_selector_title": "Veldu hvaða inntak á að undirrita",
-    "roast_wallet_request_dkg_threshold_hint": "Fjöldi undirskrifta sem krafist er",
+    "roast_wallet_request_dkg_threshold_hint": "Fjöldi þátttakenda sem þarf að samþykkja",
     "roast_wallet_request_dkg_threshold_too_large_error": "Þröskuldurinn má ekki vera meira en $max",
     "roast_wallet_request_dkg_name_used_error": "Nafnið er þegar í notkun",
     "roast_wallet_request_signature_derivation_path_invalid_error": "Afleiðuvísitalan verður að vera tala",
