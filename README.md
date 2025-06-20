@@ -3,7 +3,7 @@
 <img src="https://weblate.ppc.lol/widgets/peercoin-flutter/-/translations/svg-badge.svg" alt="Übersetzungsstatus" /></a>
 [![Codemagic build status](https://api.codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/status_badge.svg)](https://codemagic.io/apps/61012a37d885ed7a8c3e8b25/61012a37d885ed7a8c3e8b24/latest_build)
 [![Static analysis and unit tests](https://github.com/peercoin/peercoin_flutter/actions/workflows/static_analysis_and_unit_test.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/static_analysis_and_unit_test.yml)
-[![E2E Tests](https://github.com/peercoin/peercoin_flutter/actions/workflows/e2e_tests.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions/workflows/e2e_tests.yml)
+[![Release Drafter](https://github.com/peercoin/peercoin_flutter/actions/workflows/release-drafter.yml/badge.svg)](https://github.com/peercoin/peercoin_flutter/actions)
 
 # peercoin_flutter
 
