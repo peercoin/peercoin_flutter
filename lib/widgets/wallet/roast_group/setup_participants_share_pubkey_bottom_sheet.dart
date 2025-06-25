@@ -5,6 +5,8 @@ import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/double_tab_to_clipboard.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'dart:convert';
 
 class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
   final Function action;
@@ -20,6 +22,13 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final id = Identifier.fromSeed(ourName);
+
+    // Create participant data in JSON format for QR code
+    final participantData = {
+      'name': ourName,
+      'publicKey': pubKey,
+    };
+    final participantJson = jsonEncode(participantData);
 
     return ModalBottomSheetContainer(
       child: SingleChildScrollView(
@@ -101,6 +110,57 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_share_participant_qr_title',
+              ),
+              style: TextStyle(
+                letterSpacing: 1.4,
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: QrImageView(
+                data: participantJson,
+                version: QrVersions.auto,
+                size: 200.0,
+                backgroundColor: Colors.white,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_share_participant_qr_description',
+              ),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            PeerButton(
+              text: AppLocalizations.instance.translate(
+                'roast_setup_share_participant_qr_share',
+              ),
+              action: () => Share.share(participantJson),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             PeerButtonBorder(
               text: AppLocalizations.instance.translate(
                 'wallet_scan_close',
@@ -113,5 +173,3 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
     );
   }
 }
-
-// TODO Show QR button
