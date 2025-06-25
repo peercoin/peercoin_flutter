@@ -551,7 +551,7 @@
     "roast_setup_group_fingerprint_description": "Verifique la huella digital con todos los miembros del grupo para asegurarse de que todas las claves públicas son correctas.",
     "roast_landing_configured_login_failed_snack_fingerprint_mismatch": "Error en el inicio de sesión. Huella digital no coincidente.",
     "roast_wallet_signature_input_selector_available_utxos": "Entradas Disponibles",
-    "roast_wallet_request_dkg_threshold_hint": "Número de firmas requeridas",
+    "roast_wallet_request_dkg_threshold_hint": "Número de participantes aceptantes requeridos",
     "roast_wallet_request_dkg_threshold_too_small_error": "El umbral debe ser de al menos 2",
     "roast_wallet_request_dkg_groupsize_equals_two_hint": "Sugerencia: El tamaño del grupo es demasiado pequeño para configurar el umbral.",
     "roast_wallet_request_signature_derivation_path_invalid_error": "El índice de derivación debe ser un número",

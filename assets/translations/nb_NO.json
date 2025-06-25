@@ -615,7 +615,7 @@
     "roast_wallet_request_dkg_name": "Navn",
     "roast_wallet_request_dkg_description": "Beskrivelse",
     "roast_wallet_request_dkg_threshold": "Terskel",
-    "roast_wallet_request_dkg_threshold_hint": "Antall nødvendige signaturer",
+    "roast_wallet_request_dkg_threshold_hint": "Antall påkrevde deltakere som aksepterer",
     "roast_wallet_request_dkg_threshold_empty_error": "Vennligst angi en terskel",
     "roast_wallet_request_dkg_threshold_not_number_error": "Terskelen må være et tall",
     "roast_wallet_request_dkg_threshold_too_small_error": "Terskelen må være minst 2",
