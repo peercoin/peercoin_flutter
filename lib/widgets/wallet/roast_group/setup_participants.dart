@@ -175,6 +175,7 @@ class _ROASTGroupSetupParticipantsState
   void _sharePubKey() async {
     // show bottom sheet
     await showModalBottomSheet(
+      context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -186,7 +187,6 @@ class _ROASTGroupSetupParticipantsState
           action: () => _completeROASTClient(),
         );
       },
-      context: context,
     );
   }
 
@@ -336,5 +336,3 @@ class _ROASTGroupSetupParticipantsState
     );
   }
 }
-
-// TODO add member: scan QR code

@@ -4,7 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/tools/app_localizations.dart';
+import 'package:peercoin/tools/app_routes.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:peercoin/widgets/service_container.dart';
+import 'package:peercoin/widgets/buttons.dart';
+import 'dart:convert';
 
 class ParticpantNavigatorPopDTO {
   final Identifier identifier;
@@ -71,6 +75,80 @@ class _ROASTWalletAddParticipantScreenState
     }
   }
 
+  void _scanQRCodeForParticipant() async {
+    LoggerWrapper.logInfo(
+      'ROASTWalletAddParticipantScreen',
+      '_scanQRCodeForParticipant',
+      'Scanning QR code for participant',
+    );
+
+    final result = await Navigator.of(context).pushNamed(
+      Routes.qrScan,
+      arguments:
+          AppLocalizations.instance.translate('roast_setup_qr_scan_title'),
+    );
+
+    if (result != null && result is String) {
+      try {
+        // Try to parse as JSON (individual participant)
+        final participantData = jsonDecode(result);
+
+        if (participantData['name'] != null &&
+            participantData['publicKey'] != null) {
+          final name = participantData['name'] as String;
+          final publicKeyHex = participantData['publicKey'] as String;
+
+          // Validate public key format
+          ECCompressedPublicKey.fromHex(publicKeyHex);
+
+          // Auto-fill the form with scanned data
+          setState(() {
+            _nameController.text = name;
+            _ecPubKeyController.text = publicKeyHex;
+            _type =
+                ParticipantType.name; // Default to name type for scanned data
+          });
+
+          LoggerWrapper.logInfo(
+            'ROASTWalletAddParticipantScreen',
+            '_scanQRCodeForParticipant',
+            'QR code data loaded: $name',
+          );
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.instance
+                      .translate('roast_setup_participant_data_loaded_from_qr'),
+                ),
+              ),
+            );
+          }
+        } else {
+          throw Exception('Missing name or publicKey in QR data');
+        }
+      } catch (e) {
+        LoggerWrapper.logError(
+          'ROASTWalletAddParticipantScreen',
+          '_scanQRCodeForParticipant',
+          'Failed to parse QR code: $e',
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.instance
+                    .translate('roast_setup_qr_invalid_format'),
+              ),
+            ),
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +183,19 @@ class _ROASTWalletAddParticipantScreenState
                   ),
                   const SizedBox(
                     height: 20,
+                  ),
+                  Text(
+                    AppLocalizations.instance.translate(
+                      'roast_setup_group_member_manual_entry_hint',
+                    ),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
                   ),
                   TextFormField(
                     textInputAction: TextInputAction.done,
@@ -225,6 +316,15 @@ class _ROASTWalletAddParticipantScreenState
                       return null;
                     },
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  PeerButton(
+                    text: AppLocalizations.instance.translate(
+                      'roast_setup_scan_qr_participant',
+                    ),
+                    action: () => _scanQRCodeForParticipant(),
+                  ),
                 ],
               ),
             ),
@@ -234,5 +334,3 @@ class _ROASTWalletAddParticipantScreenState
     );
   }
 }
-
-// TODO scan QR code

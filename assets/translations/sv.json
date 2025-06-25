@@ -636,7 +636,7 @@
     "roast_wallet_request_signature_success_snack": "Signaturförfrågan har skickats",
     "roast_wallet_request_signature_error_snack": "Kunde inte skicka signaturförfrågan",
     "roast_wallet_request_signature_no_key_error": "Ingen gruppnyckel vald",
-    "roast_wallet_request_dkg_threshold_hint": "Antal signaturer som krävs",
+    "roast_wallet_request_dkg_threshold_hint": "Antal obligatoriska deltagare som accepterar",
     "roast_wallet_request_signature_derived_address_empty_error": "Välj en härledd adress",
     "roast_wallet_request_signature_derived_address": "Härledd Adress",
     "roast_wallet_request_signature_select_address": "Välj Adress",
