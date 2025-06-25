@@ -1,3 +1,7 @@
+### **1.4.4** (2025-06-25)
+
+- UI Improvements for ROAST participant onboarding
+
 ### **1.4.3** (2025-05-30)
 
 - More dark mode fixes
