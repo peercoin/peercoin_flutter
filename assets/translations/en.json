@@ -701,5 +701,11 @@
   "roast_setup_share_participant_qr_description": "Others can scan this QR code to add you as a participant",
   "roast_setup_share_participant_qr_share": "Share QR Data",
   "roast_setup_participant_data_loaded_from_qr": "Participant data loaded from QR code",
-  "roast_setup_group_member_manual_entry_hint": "Or enter participant details manually:"
+  "roast_setup_group_member_manual_entry_hint": "Or enter participant details manually:",
+  "roast_setup_share_participant_details_title": "Share Participant Details",
+  "roast_setup_share_participant_name_title": "Name",
+  "roast_setup_share_participant_identifier_title": "Identifier",
+  "roast_setup_share_participant_identifier_description": "Unique identifier generated from your name",
+  "roast_setup_share_participant_pubkey_title": "Public Key",
+  "roast_setup_share_participant_pubkey_description": "Your cryptographic public key (hex format)"
 }

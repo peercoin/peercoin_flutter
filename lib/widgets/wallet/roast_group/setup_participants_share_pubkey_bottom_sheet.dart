@@ -38,33 +38,117 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
           children: <Widget>[
             Text(
               AppLocalizations.instance.translate(
-                'roast_setup_group_share_pubkey_id',
+                'roast_setup_share_participant_details_title',
               ),
               style: TextStyle(
                 letterSpacing: 1.4,
                 fontSize: 24,
                 color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
-            DoubleTabToClipboard(
-              clipBoardData: id.toString(),
-              withHintText: true,
-              child: Text(
-                id.toString(),
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
+            // Name Section
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_share_participant_name_title',
+              ),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(ourName),
+            DoubleTabToClipboard(
+              clipBoardData: ourName,
+              withHintText: true,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color:
+                        Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  ),
+                ),
+                child: Text(
+                  ourName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            PeerButton(
+              text: AppLocalizations.instance.translate(
+                'addressbook_swipe_share',
+              ),
+              action: () => Share.share(ourName),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            // Identifier Section
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_share_participant_identifier_title',
+              ),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
             const SizedBox(
               height: 5,
+            ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_share_participant_identifier_description',
+              ),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            DoubleTabToClipboard(
+              clipBoardData: id.toString(),
+              withHintText: true,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color:
+                        Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  ),
+                ),
+                child: Text(
+                  id.toString(),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
             ),
             PeerButton(
               text: AppLocalizations.instance.translate(
@@ -73,33 +157,59 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               action: () => Share.share(id.toString()),
             ),
             const SizedBox(
-              height: 20,
+              height: 25,
             ),
+            // Public Key Section
             Text(
               AppLocalizations.instance.translate(
-                'roast_setup_group_share_pubkey_key',
+                'roast_setup_share_participant_pubkey_title',
               ),
               style: TextStyle(
-                letterSpacing: 1.4,
-                fontSize: 24,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            DoubleTabToClipboard(
-              clipBoardData: pubKey,
-              withHintText: true,
-              child: Text(
-                pubKey,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(
               height: 5,
+            ),
+            Text(
+              AppLocalizations.instance.translate(
+                'roast_setup_share_participant_pubkey_description',
+              ),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            DoubleTabToClipboard(
+              clipBoardData: pubKey,
+              withHintText: true,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color:
+                        Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  ),
+                ),
+                child: Text(
+                  pubKey,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
             ),
             PeerButton(
               text: AppLocalizations.instance.translate(
@@ -108,7 +218,7 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               action: () => Share.share(pubKey),
             ),
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
             Text(
               AppLocalizations.instance.translate(
