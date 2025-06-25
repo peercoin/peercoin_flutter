@@ -693,5 +693,19 @@
     "roast_hd_index_empty_error": "HD-indexet kan inte vara tomt",
     "roast_hd_index_invalid_error": "Var vänlig ange ett giltigt nummer",
     "confirm": "Bekräfta",
-    "cancel": "Avboka"
+    "cancel": "Avboka",
+    "roast_setup_qr_scan_title": "Skanna Deltagarens QR-kod",
+    "roast_setup_share_participant_qr_title": "Dela som QR-kod",
+    "roast_setup_share_participant_qr_description": "Andra kan skanna den här QR-koden för att lägga till dig som deltagare",
+    "roast_setup_share_participant_qr_share": "Dela QR-data",
+    "roast_setup_group_member_manual_entry_hint": "Eller ange deltagaruppgifter manuellt:",
+    "roast_setup_share_participant_details_title": "Dela Deltagaruppgifter",
+    "roast_setup_share_participant_name_title": "Namn",
+    "roast_setup_share_participant_identifier_title": "Identifierare",
+    "roast_setup_share_participant_identifier_description": "Unik identifierare genererad från ditt namn",
+    "roast_setup_share_participant_pubkey_title": "Offentlig Nyckel",
+    "roast_setup_scan_qr_participant": "Skanna QR-koden För Deltagaren",
+    "roast_setup_qr_invalid_format": "Ogiltigt format för QR-kod",
+    "roast_setup_participant_data_loaded_from_qr": "Deltagardata laddad från QR-kod",
+    "roast_setup_share_participant_pubkey_description": "Din kryptografiska offentliga nyckel (hexadecimalt format)"
 }
