@@ -388,7 +388,8 @@ class _ROASTGroupSetupParticipantsState
       await ROASTGroupExportConfig.shareExportedFile(filePath);
 
       if (mounted) {
-        final successMessage = AppLocalizations.instance.translate('roast_export_success');
+        final successMessage =
+            AppLocalizations.instance.translate('roast_export_success');
         LoggerWrapper.logInfo(
           'ROASTGroupSetupParticipants',
           '_exportConfiguration',
@@ -397,9 +398,8 @@ class _ROASTGroupSetupParticipantsState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              successMessage.isEmpty ? 'Group configuration exported successfully' : successMessage,
+              successMessage,
             ),
-            backgroundColor: Colors.green,
           ),
         );
       }
