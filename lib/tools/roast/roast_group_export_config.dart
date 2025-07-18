@@ -228,32 +228,33 @@ class ROASTGroupExportConfig {
   }
 
   static String _formatYamlValue(dynamic value) {
-    if (value is String) {
-      // Remove any non-printable characters and escape sequences
-      final cleanedValue = value.replaceAll(RegExp(r'[\x00-\x1F\x7F-\x9F]'), '');
-      
-      // Check if the value needs to be quoted
-      if (cleanedValue.isEmpty ||
-          cleanedValue.contains(':') ||
-          cleanedValue.contains('#') ||
-          cleanedValue.contains('[') ||
-          cleanedValue.contains(']') ||
-          cleanedValue.contains('{') ||
-          cleanedValue.contains('}') ||
-          cleanedValue.contains('"') ||
-          cleanedValue.contains("'") ||
-          cleanedValue.contains('\n') ||
-          cleanedValue.contains('\r') ||
-          cleanedValue.contains('\t') ||
-          cleanedValue.startsWith(' ') ||
-          cleanedValue.endsWith(' ')) {
-        // Escape any quotes in the string
-        final escapedValue = cleanedValue.replaceAll('"', '\\"');
-        return '"$escapedValue"';
-      }
-      return cleanedValue;
+    if (value == null) return '~'; // YAML null
+
+    // For non-string values, just return as-is
+    if (value is! String) {
+      return value.toString();
     }
-    return value.toString();
+
+    // For empty strings
+    if (value.isEmpty) return '""';
+
+    // For strings that don't need quoting, return as-is
+    // This regex matches strings that are safe to use unquoted in YAML
+    // Including ISO date strings (with colons and dashes)
+    if (RegExp(r'^[a-zA-Z0-9._/:+-]+$').hasMatch(value)) {
+      return value;
+    }
+
+    // For everything else, use double quotes and escape properly
+    // Escape backslashes and double quotes
+    final escaped = value
+        .replaceAll('\\', '\\\\')
+        .replaceAll('"', '\\"')
+        .replaceAll('\n', '\\n')
+        .replaceAll('\r', '\\r')
+        .replaceAll('\t', '\\t');
+
+    return '"$escaped"';
   }
 
   static Future<void> _writeYamlFile(
@@ -297,6 +298,11 @@ class ROASTGroupExportConfig {
         created: exportConfig.created,
       );
     } catch (e) {
+      LoggerWrapper.logError(
+        'ROASTGroupExportConfig',
+        'importGroupConfiguration',
+        'Error importing group configuration: ${e.toString()}',
+      );
       if (e is ROASTConfigException) rethrow;
       throw FileOperationException(
         'import',
@@ -360,7 +366,11 @@ class ROASTGroupExportConfig {
           'Configuration file contains no data. Please select a valid YAML file.',
         );
       }
-      return content;
+      // Clean any invisible control characters that might have been inserted
+      // This removes all control characters except newline, carriage return, and tab
+      final cleanedContent = content.replaceAll(
+          RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]'), '');
+      return cleanedContent;
     } catch (e) {
       if (e is ROASTConfigException) rethrow;
       if (e.toString().contains('Permission denied')) {
@@ -405,7 +415,7 @@ class ROASTGroupExportConfig {
           'Invalid YAML structure. Expected a configuration object at root level.',
         );
       }
-      return Map<String, dynamic>.from(yamlDoc);
+      return _convertYamlToMap(yamlDoc);
     } catch (e) {
       LoggerWrapper.logError(
         'ROASTGroupExportConfig',
@@ -429,6 +439,32 @@ class ROASTGroupExportConfig {
       throw InvalidYAMLFormatException(
         'Failed to parse YAML content: ${e.toString()}',
       );
+    }
+  }
+
+  /// Recursively convert YAML objects to regular Dart collections
+  static Map<String, dynamic> _convertYamlToMap(dynamic yamlObj) {
+    if (yamlObj is Map) {
+      final result = <String, dynamic>{};
+      yamlObj.forEach((key, value) {
+        result[key.toString()] = _convertYamlValue(value);
+      });
+      return result;
+    }
+    throw ArgumentError('Expected Map but got ${yamlObj.runtimeType}');
+  }
+
+  static dynamic _convertYamlValue(dynamic value) {
+    if (value is Map) {
+      final result = <String, dynamic>{};
+      value.forEach((key, val) {
+        result[key.toString()] = _convertYamlValue(val);
+      });
+      return result;
+    } else if (value is List) {
+      return value.map(_convertYamlValue).toList();
+    } else {
+      return value;
     }
   }
 
