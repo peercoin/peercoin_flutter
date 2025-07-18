@@ -1,10 +1,14 @@
+import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
+import 'package:peercoin/tools/roast/roast_group_export_config.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
+import 'package:peercoin/exceptions/roast_config_exceptions.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
   final ROASTWallet roastWallet;
@@ -57,6 +61,98 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
     }
   }
 
+  bool _isImporting = false;
+  Map<Identifier, ECCompressedPublicKey>? _importedParticipants;
+
+  Future<void> _importConfiguration() async {
+    if (_isImporting) return;
+
+    // Show confirmation dialog
+    final bool? shouldImport = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.instance.translate('roast_import_confirm_title'),
+          ),
+          content: Text(
+            AppLocalizations.instance
+                .translate('roast_import_confirm_description'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.instance.translate('cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                AppLocalizations.instance
+                    .translate('roast_import_confirm_button'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldImport != true) return;
+
+    setState(() {
+      _isImporting = true;
+    });
+
+    try {
+      final result = await ROASTGroupExportConfig.importGroupConfiguration();
+
+      // Apply imported configuration to the wallet
+      result.applyToROASTWallet(widget.roastWallet);
+
+      // Store imported participants data for the participants screen
+      _importedParticipants = result.participants;
+
+      // Update the UI controllers
+      _groupIdController.text = result.groupId;
+      _nameController.text = widget.roastWallet.ourName;
+
+      // Show success message and proceed to participants screen
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.instance
+                  .translate('roast_import_success')
+                  .replaceAll('%count%', result.participantCount.toString()),
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+        _changeStep(ROASTSetupStep.pubkey);
+      }
+    } catch (e) {
+      if (mounted) {
+        String errorMessage =
+            AppLocalizations.instance.translate('roast_import_error');
+        if (e is ROASTConfigException) {
+          errorMessage = e.message;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isImporting = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_step == ROASTSetupStep.pubkey) {
@@ -64,6 +160,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
         roastWallet: widget.roastWallet,
         coinWallet: widget.coinWallet,
         changeStep: _changeStep,
+        importedParticipants: _importedParticipants,
       );
     }
 
@@ -179,6 +276,18 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
                             text: AppLocalizations.instance
                                 .translate('roast_setup_landing_create_group'),
                             action: () => _save(),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          PeerButton(
+                            text: _isImporting
+                                ? AppLocalizations.instance
+                                    .translate('roast_import_importing')
+                                : AppLocalizations.instance
+                                    .translate('roast_import_button'),
+                            disabled: _isImporting,
+                            action: () => _importConfiguration(),
                           ),
                         ],
                       ),

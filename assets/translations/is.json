@@ -693,5 +693,19 @@
     "roast_hd_index_empty_error": "HD vísitalan má ekki vera tóm",
     "roast_hd_index_range_error": "Vísitala verður að vera meiri en eða jöfn 0",
     "confirm": "Staðfesta",
-    "cancel": "Hætta Við"
+    "cancel": "Hætta Við",
+    "roast_setup_qr_scan_title": "Skannaðu QR Kóða Þátttakandans",
+    "roast_setup_qr_invalid_format": "Ógilt snið QR kóða",
+    "roast_setup_share_participant_qr_title": "Deila sem QR kóða",
+    "roast_setup_share_participant_qr_share": "Deila QR Gögnum",
+    "roast_setup_participant_data_loaded_from_qr": "Þátttakandagögn sótt úr QR kóða",
+    "roast_setup_group_member_manual_entry_hint": "Eða sláðu inn upplýsingar um þátttakanda handvirkt:",
+    "roast_setup_share_participant_details_title": "Deila Upplýsingum Um Þátttakanda",
+    "roast_setup_share_participant_name_title": "Nafn",
+    "roast_setup_share_participant_identifier_title": "Auðkenni",
+    "roast_setup_scan_qr_participant": "Skannaðu QR Kóða Fyrir Þátttakanda",
+    "roast_setup_share_participant_qr_description": "Aðrir geta skannað þennan QR kóða til að bæta þér við sem þátttakanda",
+    "roast_setup_share_participant_identifier_description": "Einkvæmt auðkenni búið til úr nafni þínu",
+    "roast_setup_share_participant_pubkey_title": "Opinber Lykill",
+    "roast_setup_share_participant_pubkey_description": "Dulkóðunarlykillinn þinn (sextándakerfisform)"
 }

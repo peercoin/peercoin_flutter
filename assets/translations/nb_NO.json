@@ -693,5 +693,19 @@
     "roast_hd_index_invalid_error": "Vennligst skriv inn et gyldig nummer",
     "roast_hd_index_range_error": "Indeksen må være større enn eller lik 0",
     "confirm": "Bekreft",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "roast_setup_qr_scan_title": "Skann Deltakerens QR-kode",
+    "roast_setup_qr_invalid_format": "Ugyldig format for QR-kode",
+    "roast_setup_share_participant_qr_title": "Del som QR-kode",
+    "roast_setup_share_participant_qr_share": "Del QR-data",
+    "roast_setup_participant_data_loaded_from_qr": "Deltakerdata lastet inn fra QR-kode",
+    "roast_setup_group_member_manual_entry_hint": "Eller skriv inn detaljer for deltaker manuelt:",
+    "roast_setup_share_participant_details_title": "Del Detaljer For Deltaker",
+    "roast_setup_share_participant_name_title": "Navn",
+    "roast_setup_share_participant_identifier_title": "Identifikator",
+    "roast_setup_share_participant_identifier_description": "Unik identifikator generert fra navnet ditt",
+    "roast_setup_share_participant_pubkey_title": "Offentlig Nøkkel",
+    "roast_setup_scan_qr_participant": "Skann QR-kode For Deltaker",
+    "roast_setup_share_participant_qr_description": "Andre kan skanne denne QR-koden for å legge deg til som deltaker",
+    "roast_setup_share_participant_pubkey_description": "Din kryptografiske offentlige nøkkel (heksadesimalt format)"
 }
