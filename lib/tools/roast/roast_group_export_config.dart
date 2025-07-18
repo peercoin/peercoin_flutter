@@ -369,7 +369,9 @@ class ROASTGroupExportConfig {
       // Clean any invisible control characters that might have been inserted
       // This removes all control characters except newline, carriage return, and tab
       final cleanedContent = content.replaceAll(
-          RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]'), '');
+        RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]'),
+        '',
+      );
       return cleanedContent;
     } catch (e) {
       if (e is ROASTConfigException) rethrow;

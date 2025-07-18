@@ -33,6 +33,7 @@ class ROASTConfigUtils {
   /// Get the full file path for a temporary export file
   /// Combines temp directory with generated filename
   static Future<String> getTempExportFilePath() async {
+    await cleanupOldTempFiles();
     final tempPath = await getTempDirectoryPath();
     final filename = generateExportFilename();
     return '$tempPath/$filename';
