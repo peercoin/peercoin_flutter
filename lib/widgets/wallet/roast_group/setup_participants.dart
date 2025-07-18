@@ -14,16 +14,20 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_finger_print_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_share_pubkey_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_participant_bottom_sheet.dart';
+import 'package:peercoin/tools/roast_config_export.dart';
+import 'package:peercoin/exceptions/roast_config_exceptions.dart';
 
 class ROASTGroupSetupParticipants extends StatefulWidget {
   final Function changeStep;
   final ROASTWallet roastWallet;
   final CoinWallet coinWallet;
+  final Map<Identifier, ECCompressedPublicKey>? importedParticipants;
 
   const ROASTGroupSetupParticipants({
     required this.changeStep,
     required this.roastWallet,
     required this.coinWallet,
+    this.importedParticipants,
     super.key,
   });
 
@@ -35,6 +39,7 @@ class ROASTGroupSetupParticipants extends StatefulWidget {
 class _ROASTGroupSetupParticipantsState
     extends State<ROASTGroupSetupParticipants> {
   bool _initial = true;
+  bool _isExporting = false;
   final Map<Identifier, ECCompressedPublicKey> _participants = {};
 
   @override
@@ -44,6 +49,9 @@ class _ROASTGroupSetupParticipantsState
         // finalized group
         _participants
             .addAll(widget.roastWallet.clientConfig!.group.participants);
+      } else if (widget.importedParticipants != null) {
+        // imported group configuration
+        _participants.addAll(widget.importedParticipants!);
       } else {
         // add self to uncompleted group
         final id = Identifier.fromSeed(widget.roastWallet.ourName);
@@ -190,6 +198,191 @@ class _ROASTGroupSetupParticipantsState
     );
   }
 
+  Widget _buildImportValidationStatus() {
+    if (widget.importedParticipants == null) return const SizedBox.shrink();
+
+    final participantCount = _participants.length;
+    final isValidForROAST = participantCount >= 2;
+    final hasOurself = _participants.keys.any((id) => 
+        widget.roastWallet.participantNames[id.toString()] == widget.roastWallet.ourName);
+    
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.blue.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.blue.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.info_outline,
+                color: Colors.blue,
+                size: 16,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalizations.instance.translate('roast_import_validation_status'),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.blue[700],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          _buildValidationItem(
+            icon: participantCount >= 2 ? Icons.check_circle : Icons.warning,
+            color: participantCount >= 2 ? Colors.green : Colors.orange,
+            text: AppLocalizations.instance.translate('roast_import_validation_min_participants')
+                .replaceAll('%count%', participantCount.toString())
+                .replaceAll('%min%', '2'),
+          ),
+          const SizedBox(height: 4),
+          _buildValidationItem(
+            icon: hasOurself ? Icons.check_circle : Icons.info,
+            color: hasOurself ? Colors.green : Colors.blue,
+            text: hasOurself 
+                ? AppLocalizations.instance.translate('roast_import_validation_includes_you')
+                : AppLocalizations.instance.translate('roast_import_validation_add_yourself'),
+          ),
+          const SizedBox(height: 4),
+          _buildValidationItem(
+            icon: isValidForROAST ? Icons.check_circle : Icons.warning,
+            color: isValidForROAST ? Colors.green : Colors.orange,
+            text: isValidForROAST
+                ? AppLocalizations.instance.translate('roast_import_validation_ready')
+                : AppLocalizations.instance.translate('roast_import_validation_not_ready'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildValidationItem({
+    required IconData icon,
+    required Color color,
+    required String text,
+  }) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: color,
+          size: 14,
+        ),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 11,
+              color: color,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _exportConfiguration() async {
+    if (_isExporting) return;
+    
+    // Show confirmation dialog with export preview
+    final bool? shouldExport = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        final preview = ROASTConfigExport.getExportPreview(
+          widget.roastWallet,
+          _participants,
+        );
+        
+        return AlertDialog(
+          title: Text(AppLocalizations.instance.translate('roast_export_confirm_title')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(AppLocalizations.instance.translate('roast_export_confirm_description')),
+              const SizedBox(height: 12),
+              Text(
+                AppLocalizations.instance.translate('roast_export_preview_title'),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text('${AppLocalizations.instance.translate('roast_export_preview_participants')}: ${preview['participantCount']}'),
+              Text('${AppLocalizations.instance.translate('roast_export_preview_filename')}: ${preview['filename']}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.instance.translate('cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(AppLocalizations.instance.translate('roast_export_confirm_button')),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldExport != true) return;
+    
+    setState(() {
+      _isExporting = true;
+    });
+
+    try {
+      // Export the configuration
+      final filePath = await ROASTConfigExport.exportGroupConfiguration(
+        widget.roastWallet,
+        _participants,
+      );
+      
+      // Share the exported file
+      await ROASTConfigExport.shareExportedFile(filePath);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.instance.translate('roast_export_success')),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        String errorMessage = AppLocalizations.instance.translate('roast_export_error');
+        if (e is ROASTConfigException) {
+          errorMessage = e.message;
+        }
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isExporting = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -241,6 +434,58 @@ class _ROASTGroupSetupParticipantsState
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
+                    if (widget.importedParticipants != null) ...[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.green.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.instance.translate('roast_import_config_loaded'),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green[700],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    AppLocalizations.instance.translate('roast_import_participant_count')
+                                        .replaceAll('%count%', _participants.length.toString()),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.green[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    _buildImportValidationStatus(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -306,6 +551,16 @@ class _ROASTGroupSetupParticipantsState
                         'roast_setup_group_member_add',
                       ),
                       action: () => _addParticipant(),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    PeerButton(
+                      text: _isExporting 
+                          ? AppLocalizations.instance.translate('roast_export_exporting')
+                          : AppLocalizations.instance.translate('roast_export_button'),
+                      disabled: _participants.length < 2 || _isExporting,
+                      action: () => _exportConfiguration(),
                     ),
                     const SizedBox(
                       height: 20,
