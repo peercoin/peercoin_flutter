@@ -732,5 +732,7 @@
   "roast_export_confirm_button": "Export",
   "roast_export_preview_title": "Export Preview",
   "roast_export_preview_participants": "Participants",
-  "roast_export_preview_filename": "Filename"
+  "roast_export_preview_filename": "Filename",
+  "roast_wallet_show_key_info": "Show Key Information",
+  "roast_wallet_show_key_info_title": "Your HD Key Index"
 }

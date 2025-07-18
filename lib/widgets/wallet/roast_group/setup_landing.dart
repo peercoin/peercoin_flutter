@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
+import 'package:peercoin/models/roast_group_export_config.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants.dart';
-import 'package:peercoin/tools/roast_config_import.dart';
 import 'package:peercoin/exceptions/roast_config_exceptions.dart';
 
 class ROASTGroupSetupLanding extends StatefulWidget {
@@ -66,14 +66,19 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
 
   Future<void> _importConfiguration() async {
     if (_isImporting) return;
-    
+
     // Show confirmation dialog
     final bool? shouldImport = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.instance.translate('roast_import_confirm_title')),
-          content: Text(AppLocalizations.instance.translate('roast_import_confirm_description')),
+          title: Text(
+            AppLocalizations.instance.translate('roast_import_confirm_title'),
+          ),
+          content: Text(
+            AppLocalizations.instance
+                .translate('roast_import_confirm_description'),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -81,7 +86,10 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text(AppLocalizations.instance.translate('roast_import_confirm_button')),
+              child: Text(
+                AppLocalizations.instance
+                    .translate('roast_import_confirm_button'),
+              ),
             ),
           ],
         );
@@ -95,7 +103,7 @@ class _ROASTGroupSetupLandingState extends State<ROASTGroupSetupLanding> {
     });
 
     try {
-      final result = await ROASTConfigImport.importGroupConfiguration();
+      final result = await ROASTGroupExportConfig.importGroupConfiguration();
 
       // Apply imported configuration to the wallet
       result.applyToROASTWallet(widget.roastWallet);

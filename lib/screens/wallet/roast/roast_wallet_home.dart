@@ -408,6 +408,20 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 ),
               ),
             ),
+            PopupMenuItem(
+              value: 'show_key_info',
+              child: ListTile(
+                leading: Icon(
+                  Icons.key,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                title: Text(
+                  AppLocalizations.instance.translate(
+                    'roast_wallet_show_key_info',
+                  ),
+                ),
+              ),
+            ),
           ];
         },
       ),
@@ -455,7 +469,23 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       case 'change_server_url':
         _serverURLEditDialog();
         break;
-      default:
+      case 'show_key_info':
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(
+              AppLocalizations.instance
+                  .translate('roast_wallet_show_key_info_title'),
+            ),
+            content: Text(_coinWallet.walletIndex.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(AppLocalizations.instance.translate('close')),
+              ),
+            ],
+          ),
+        );
     }
   }
 

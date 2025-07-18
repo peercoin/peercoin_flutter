@@ -14,7 +14,7 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_finger_print_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_share_pubkey_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_participant_bottom_sheet.dart';
-import 'package:peercoin/tools/roast_config_export.dart';
+import 'package:peercoin/models/roast_group_export_config.dart';
 import 'package:peercoin/exceptions/roast_config_exceptions.dart';
 
 class ROASTGroupSetupParticipants extends StatefulWidget {
@@ -203,9 +203,12 @@ class _ROASTGroupSetupParticipantsState
 
     final participantCount = _participants.length;
     final isValidForROAST = participantCount >= 2;
-    final hasOurself = _participants.keys.any((id) => 
-        widget.roastWallet.participantNames[id.toString()] == widget.roastWallet.ourName);
-    
+    final hasOurself = _participants.keys.any(
+      (id) =>
+          widget.roastWallet.participantNames[id.toString()] ==
+          widget.roastWallet.ourName,
+    );
+
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(12),
@@ -229,7 +232,8 @@ class _ROASTGroupSetupParticipantsState
               ),
               const SizedBox(width: 8),
               Text(
-                AppLocalizations.instance.translate('roast_import_validation_status'),
+                AppLocalizations.instance
+                    .translate('roast_import_validation_status'),
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.blue[700],
@@ -242,7 +246,8 @@ class _ROASTGroupSetupParticipantsState
           _buildValidationItem(
             icon: participantCount >= 2 ? Icons.check_circle : Icons.warning,
             color: participantCount >= 2 ? Colors.green : Colors.orange,
-            text: AppLocalizations.instance.translate('roast_import_validation_min_participants')
+            text: AppLocalizations.instance
+                .translate('roast_import_validation_min_participants')
                 .replaceAll('%count%', participantCount.toString())
                 .replaceAll('%min%', '2'),
           ),
@@ -250,17 +255,21 @@ class _ROASTGroupSetupParticipantsState
           _buildValidationItem(
             icon: hasOurself ? Icons.check_circle : Icons.info,
             color: hasOurself ? Colors.green : Colors.blue,
-            text: hasOurself 
-                ? AppLocalizations.instance.translate('roast_import_validation_includes_you')
-                : AppLocalizations.instance.translate('roast_import_validation_add_yourself'),
+            text: hasOurself
+                ? AppLocalizations.instance
+                    .translate('roast_import_validation_includes_you')
+                : AppLocalizations.instance
+                    .translate('roast_import_validation_add_yourself'),
           ),
           const SizedBox(height: 4),
           _buildValidationItem(
             icon: isValidForROAST ? Icons.check_circle : Icons.warning,
             color: isValidForROAST ? Colors.green : Colors.orange,
             text: isValidForROAST
-                ? AppLocalizations.instance.translate('roast_import_validation_ready')
-                : AppLocalizations.instance.translate('roast_import_validation_not_ready'),
+                ? AppLocalizations.instance
+                    .translate('roast_import_validation_ready')
+                : AppLocalizations.instance
+                    .translate('roast_import_validation_not_ready'),
           ),
         ],
       ),
@@ -295,31 +304,41 @@ class _ROASTGroupSetupParticipantsState
 
   Future<void> _exportConfiguration() async {
     if (_isExporting) return;
-    
+
     // Show confirmation dialog with export preview
     final bool? shouldExport = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        final preview = ROASTConfigExport.getExportPreview(
+        final preview = ROASTGroupExportConfig.getExportPreview(
           widget.roastWallet,
           _participants,
         );
-        
+
         return AlertDialog(
-          title: Text(AppLocalizations.instance.translate('roast_export_confirm_title')),
+          title: Text(
+            AppLocalizations.instance.translate('roast_export_confirm_title'),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.instance.translate('roast_export_confirm_description')),
+              Text(
+                AppLocalizations.instance
+                    .translate('roast_export_confirm_description'),
+              ),
               const SizedBox(height: 12),
               Text(
-                AppLocalizations.instance.translate('roast_export_preview_title'),
+                AppLocalizations.instance
+                    .translate('roast_export_preview_title'),
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text('${AppLocalizations.instance.translate('roast_export_preview_participants')}: ${preview['participantCount']}'),
-              Text('${AppLocalizations.instance.translate('roast_export_preview_filename')}: ${preview['filename']}'),
+              Text(
+                '${AppLocalizations.instance.translate('roast_export_preview_participants')}: ${preview['participantCount']}',
+              ),
+              Text(
+                '${AppLocalizations.instance.translate('roast_export_preview_filename')}: ${preview['filename']}',
+              ),
             ],
           ),
           actions: [
@@ -329,7 +348,10 @@ class _ROASTGroupSetupParticipantsState
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text(AppLocalizations.instance.translate('roast_export_confirm_button')),
+              child: Text(
+                AppLocalizations.instance
+                    .translate('roast_export_confirm_button'),
+              ),
             ),
           ],
         );
@@ -337,36 +359,43 @@ class _ROASTGroupSetupParticipantsState
     );
 
     if (shouldExport != true) return;
-    
+
     setState(() {
       _isExporting = true;
     });
 
     try {
       // Export the configuration
-      final filePath = await ROASTConfigExport.exportGroupConfiguration(
+      final filePath = await ROASTGroupExportConfig.exportGroupConfiguration(
         widget.roastWallet,
         _participants,
       );
-      
       // Share the exported file
-      await ROASTConfigExport.shareExportedFile(filePath);
-      
+      await ROASTGroupExportConfig.shareExportedFile(filePath);
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.instance.translate('roast_export_success')),
+            content: Text(
+              AppLocalizations.instance.translate('roast_export_success'),
+            ),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
       if (mounted) {
-        String errorMessage = AppLocalizations.instance.translate('roast_export_error');
+        String errorMessage =
+            AppLocalizations.instance.translate('roast_export_error');
         if (e is ROASTConfigException) {
+          LoggerWrapper.logError(
+            'ROASTGroupSetupParticipants',
+            '_exportConfiguration',
+            'ROASTConfigException: ${e.message}',
+          );
           errorMessage = e.message;
         }
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
@@ -462,7 +491,9 @@ class _ROASTGroupSetupParticipantsState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    AppLocalizations.instance.translate('roast_import_config_loaded'),
+                                    AppLocalizations.instance.translate(
+                                      'roast_import_config_loaded',
+                                    ),
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.green[700],
@@ -471,8 +502,14 @@ class _ROASTGroupSetupParticipantsState
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    AppLocalizations.instance.translate('roast_import_participant_count')
-                                        .replaceAll('%count%', _participants.length.toString()),
+                                    AppLocalizations.instance
+                                        .translate(
+                                          'roast_import_participant_count',
+                                        )
+                                        .replaceAll(
+                                          '%count%',
+                                          _participants.length.toString(),
+                                        ),
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: Colors.green[600],
@@ -556,9 +593,11 @@ class _ROASTGroupSetupParticipantsState
                       height: 10,
                     ),
                     PeerButton(
-                      text: _isExporting 
-                          ? AppLocalizations.instance.translate('roast_export_exporting')
-                          : AppLocalizations.instance.translate('roast_export_button'),
+                      text: _isExporting
+                          ? AppLocalizations.instance
+                              .translate('roast_export_exporting')
+                          : AppLocalizations.instance
+                              .translate('roast_export_button'),
                       disabled: _participants.length < 2 || _isExporting,
                       action: () => _exportConfiguration(),
                     ),
