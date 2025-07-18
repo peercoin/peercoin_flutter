@@ -229,18 +229,29 @@ class ROASTGroupExportConfig {
 
   static String _formatYamlValue(dynamic value) {
     if (value is String) {
-      if (value.isEmpty ||
-          value.contains(':') ||
-          value.contains('#') ||
-          value.contains('[') ||
-          value.contains(']') ||
-          value.contains('{') ||
-          value.contains('}') ||
-          value.startsWith(' ') ||
-          value.endsWith(' ')) {
-        return '"$value"';
+      // Remove any non-printable characters and escape sequences
+      final cleanedValue = value.replaceAll(RegExp(r'[\x00-\x1F\x7F-\x9F]'), '');
+      
+      // Check if the value needs to be quoted
+      if (cleanedValue.isEmpty ||
+          cleanedValue.contains(':') ||
+          cleanedValue.contains('#') ||
+          cleanedValue.contains('[') ||
+          cleanedValue.contains(']') ||
+          cleanedValue.contains('{') ||
+          cleanedValue.contains('}') ||
+          cleanedValue.contains('"') ||
+          cleanedValue.contains("'") ||
+          cleanedValue.contains('\n') ||
+          cleanedValue.contains('\r') ||
+          cleanedValue.contains('\t') ||
+          cleanedValue.startsWith(' ') ||
+          cleanedValue.endsWith(' ')) {
+        // Escape any quotes in the string
+        final escapedValue = cleanedValue.replaceAll('"', '\\"');
+        return '"$escapedValue"';
       }
-      return value;
+      return cleanedValue;
     }
     return value.toString();
   }
@@ -396,6 +407,12 @@ class ROASTGroupExportConfig {
       }
       return Map<String, dynamic>.from(yamlDoc);
     } catch (e) {
+      LoggerWrapper.logError(
+        'ROASTGroupExportConfig',
+        '_parseYamlContent',
+        'Error parsing YAML content: ${e.toString()}',
+      );
+
       if (e is YamlException) {
         final String specificError = _parseYamlError(e);
         LoggerWrapper.logError(
