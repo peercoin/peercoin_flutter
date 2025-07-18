@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
 import 'package:peercoin/models/hive/coin_wallet.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
-import 'package:peercoin/models/roast_group_export_config.dart';
+import 'package:peercoin/tools/roast/roast_group_export_config.dart';
 import 'package:peercoin/tools/app_localizations.dart';
 import 'package:peercoin/widgets/buttons.dart';
 import 'package:peercoin/widgets/service_container.dart';

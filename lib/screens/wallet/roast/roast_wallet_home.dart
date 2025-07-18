@@ -366,20 +366,21 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
                 ),
               ),
             ),
-            PopupMenuItem(
-              value: 'export_roast_group',
-              child: ListTile(
-                leading: Icon(
-                  Icons.share,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                title: Text(
-                  AppLocalizations.instance.translate(
-                    'roast_wallet_share_group_config',
+            if (_roastWallet.isCompleted)
+              PopupMenuItem(
+                value: 'export_roast_group',
+                child: ListTile(
+                  leading: Icon(
+                    Icons.share,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text(
+                    AppLocalizations.instance.translate(
+                      'roast_wallet_share_group_config',
+                    ),
                   ),
                 ),
               ),
-            ),
             PopupMenuItem(
               value: 'change_server_url',
               child: ListTile(

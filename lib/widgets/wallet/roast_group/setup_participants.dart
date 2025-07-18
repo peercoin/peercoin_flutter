@@ -14,7 +14,7 @@ import 'package:peercoin/widgets/wallet/roast_group/setup_landing.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_finger_print_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_participants_share_pubkey_bottom_sheet.dart';
 import 'package:peercoin/widgets/wallet/roast_group/setup_pubkey_remove_participant_bottom_sheet.dart';
-import 'package:peercoin/models/roast_group_export_config.dart';
+import 'package:peercoin/tools/roast/roast_group_export_config.dart';
 import 'package:peercoin/exceptions/roast_config_exceptions.dart';
 
 class ROASTGroupSetupParticipants extends StatefulWidget {

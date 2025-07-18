@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:coinlib_flutter/coinlib_flutter.dart';
 import 'package:noosphere_roast_client/noosphere_roast_client.dart';
+import 'package:peercoin/tools/logger_wrapper.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:peercoin/models/hive/roast_wallet.dart';
 import 'package:peercoin/tools/roast_config_utils.dart';
@@ -205,7 +206,7 @@ class ROASTGroupExportConfig {
     buffer.writeln('metadata:');
     final metadata = yamlMap['metadata'] as Map<String, dynamic>;
     metadata.forEach((key, value) {
-      buffer.writeln('  $key: [${_formatYamlValue(value)}]');
+      buffer.writeln('  $key: ${_formatYamlValue(value)}');
     });
     buffer.writeln('');
     buffer.writeln('participants:');
@@ -397,6 +398,11 @@ class ROASTGroupExportConfig {
     } catch (e) {
       if (e is YamlException) {
         final String specificError = _parseYamlError(e);
+        LoggerWrapper.logError(
+          'ROASTGroupExportConfig',
+          '_parseYamlContent',
+          'YAML parsing error: $specificError',
+        );
         throw InvalidYAMLFormatException(
           'Invalid YAML format: $specificError',
           details: e.message,
