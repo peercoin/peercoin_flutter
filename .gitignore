@@ -43,3 +43,6 @@ app.*.map.json
 ios/build
 test.dart
 android/app/.cxx
+.claude
+CLAUDE.md
+tasks/
