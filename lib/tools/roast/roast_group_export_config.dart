@@ -492,9 +492,7 @@ class ROASTGroupExportConfig {
     ROASTGroupExportConfig config,
   ) async {
     final List<String> validationErrors = [];
-    if (config.serverUrl.isEmpty ||
-        config.groupId.isEmpty ||
-        config.participants.isEmpty) {
+    if (config.groupId.isEmpty || config.participants.isEmpty) {
       throw const ConfigValidationException(
         'Invalid configuration file',
         [
