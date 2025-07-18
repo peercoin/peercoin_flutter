@@ -103,19 +103,33 @@ class _ROASTGroupSetupParticipantsState
         'participants': _participants,
       },
     );
-    if (res.runtimeType != ParticpantNavigatorPopDTO) {
-      return;
-    }
-    final dto = res as ParticpantNavigatorPopDTO;
 
-    LoggerWrapper.logInfo(
-      'ROASTGroupSetupParticipants',
-      '_addParticipant',
-      'participant added',
-    );
-    setState(() {
-      _participants[dto.identifier] = dto.key;
-    });
+    try {
+      final dto = res as ParticpantNavigatorPopDTO;
+      LoggerWrapper.logInfo(
+        'ROASTGroupSetupParticipants',
+        '_addParticipant',
+        'participant added',
+      );
+      setState(() {
+        _participants[dto.identifier] = dto.key;
+      });
+    } catch (e) {
+      LoggerWrapper.logError(
+        'ROASTGroupSetupParticipants',
+        '_addParticipant',
+        'Error adding participant: $e',
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.instance.translate('roast_add_participant_error'),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void _removeParticipant(String participantPubKey) {
