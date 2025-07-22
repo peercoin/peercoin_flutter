@@ -313,11 +313,7 @@ class ROASTGroupExportConfig {
 
   static Future<String?> _selectYamlFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['yaml', 'yml'],
-        allowMultiple: false,
-      );
+      final result = await FilePicker.platform.pickFiles();
       if (result != null && result.files.isNotEmpty) {
         final file = result.files.first;
         if (file.path != null) {

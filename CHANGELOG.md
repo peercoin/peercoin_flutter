@@ -1,6 +1,9 @@
+### **1.4.6** (2025-07-22)
+- Fix file import for ROAST groups
+
 ### **1.4.5** (2025-07-16)
 
-- Allow import and export of unfinshed ROAST group data in YAML format  
+- Allow import and export of unfinished ROAST group data in YAML format  
 
 ### **1.4.4** (2025-06-25)
 
