@@ -1,3 +1,6 @@
+### **1.4.7** (2025-08-11)
+- Fix qr code scanning for addresses
+
 ### **1.4.6** (2025-07-22)
 - Fix file import for ROAST groups
 
