@@ -15,6 +15,7 @@ class QRScanner extends StatefulWidget {
 class _QRScannerState extends State<QRScanner> {
   late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  bool _hasScannedAndNavigated = false;
 
   @override
   void reassemble() {
@@ -90,7 +91,8 @@ class _QRScannerState extends State<QRScanner> {
 
     controller.scannedDataStream.listen(
       (scanData) async {
-        if (!mounted) return;
+        if (!mounted || _hasScannedAndNavigated) return;
+        _hasScannedAndNavigated = true;
         await Navigator.maybeOf(context)!.maybePop(scanData.code);
       },
     );
