@@ -82,14 +82,8 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
               address.addressBookName,
               textAlign: TextAlign.center,
             ),
-            leading: Radio(
+            leading: Radio<String>(
               value: address.address,
-              groupValue: _selectedAddress,
-              onChanged: (_) => setState(
-                () {
-                  _selectedAddress = address.address;
-                },
-              ),
             ),
           ),
         );
@@ -168,8 +162,17 @@ class _AddressSelectorScreenState extends State<AddressSelectorScreen> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
-            child: Column(
-              children: generateAddressInkwells(),
+            child: RadioGroup<String>(
+              groupValue: _selectedAddress.isEmpty ? null : _selectedAddress,
+              onChanged: (value) {
+                if (value == null) return;
+                setState(() {
+                  _selectedAddress = value;
+                });
+              },
+              child: Column(
+                children: generateAddressInkwells(),
+              ),
             ),
           ),
         ),

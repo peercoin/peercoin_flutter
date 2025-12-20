@@ -120,7 +120,7 @@ class _SetupLegalScreenState extends State<SetupLegalScreen> {
                                   ),
                                 ),
                                 value: _termsAgreed,
-                                activeColor: Colors.white,
+                                activeThumbColor: Colors.white,
                                 inactiveThumbColor: Colors.grey,
                                 onChanged: (newState) =>
                                     toggleTermsHandler(newState),

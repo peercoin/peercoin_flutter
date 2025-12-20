@@ -103,25 +103,31 @@ class _LanguageSelectorScreenState extends State<LanguageSelectorScreen> {
         child: Align(
           child: PeerContainer(
             noSpacers: true,
-            child: Column(
-              children: _filteredLanguages.map((lang) {
-                final (locale, langTitle) =
-                    AppLocalizations.availableLocales[lang]!;
-                final countryCode = locale.countryCode ?? '';
-                return InkWell(
-                  onTap: () => _saveLang(lang),
-                  child: ListTile(
-                    title: Text(langTitle),
-                    subtitle: Text('${locale.languageCode} $countryCode'),
-                    key: Key(lang),
-                    leading: Radio(
-                      value: lang,
-                      groupValue: widget.selectedLang,
-                      onChanged: (_) => _saveLang(lang),
+            child: RadioGroup<String>(
+              groupValue: widget.selectedLang,
+              onChanged: (value) {
+                if (value != null) {
+                  _saveLang(value);
+                }
+              },
+              child: Column(
+                children: _filteredLanguages.map((lang) {
+                  final (locale, langTitle) =
+                      AppLocalizations.availableLocales[lang]!;
+                  final countryCode = locale.countryCode ?? '';
+                  return InkWell(
+                    onTap: () => _saveLang(lang),
+                    child: ListTile(
+                      title: Text(langTitle),
+                      subtitle: Text('${locale.languageCode} $countryCode'),
+                      key: Key(lang),
+                      leading: Radio<String>(
+                        value: lang,
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ),

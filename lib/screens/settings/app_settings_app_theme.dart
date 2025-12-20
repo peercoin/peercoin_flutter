@@ -16,7 +16,7 @@ class AppSettingsAppThemeScreen extends StatefulWidget {
 class _AppSettingsAppThemeScreenState extends State<AppSettingsAppThemeScreen> {
   bool _initial = true;
   String _selectedTheme = '';
-  final Map _availableThemes = {
+  final Map<String, ThemeMode> _availableThemes = {
     'system': ThemeMode.system,
     'light': ThemeMode.light,
     'dark': ThemeMode.dark,
@@ -70,24 +70,29 @@ class _AppSettingsAppThemeScreenState extends State<AppSettingsAppThemeScreen> {
         child: Align(
           child: PeerContainer(
             noSpacers: true,
-            child: Column(
-              children: _availableThemes.keys.map((theme) {
-                return InkWell(
-                  onTap: () => saveTheme(theme, _availableThemes[theme]),
-                  child: ListTile(
-                    title: Text(
-                      AppLocalizations.instance
-                          .translate('app_settings_theme_$theme'),
+            child: RadioGroup<String>(
+              groupValue: _selectedTheme,
+              onChanged: (value) {
+                if (value != null) {
+                  saveTheme(value, _availableThemes[value]!);
+                }
+              },
+              child: Column(
+                children: _availableThemes.keys.map((theme) {
+                  return InkWell(
+                    onTap: () => saveTheme(theme, _availableThemes[theme]!),
+                    child: ListTile(
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_theme_$theme'),
+                      ),
+                      leading: Radio<String>(
+                        value: theme,
+                      ),
                     ),
-                    leading: Radio(
-                      value: theme,
-                      groupValue: _selectedTheme,
-                      onChanged: (dynamic _) =>
-                          saveTheme(theme, _availableThemes[theme]),
-                    ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ),

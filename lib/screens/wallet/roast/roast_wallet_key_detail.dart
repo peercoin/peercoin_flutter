@@ -58,7 +58,11 @@ class _RoastWalletKeyDetailScreenState
   }
 
   void _shareGroupKey() {
-    Share.share(_frostKeyEntry.value.groupKey.hex);
+    SharePlus.instance.share(
+      ShareParams(
+        text: _frostKeyEntry.value.groupKey.hex,
+      ),
+    );
   }
 
   Future<void> _deriveKeyDialog() {

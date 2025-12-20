@@ -53,10 +53,8 @@ class _AppSettingsDefaultWalletScreenState
         onTap: () => saveDefaultWallet(wallet.name),
         child: ListTile(
           title: Text(wallet.title),
-          leading: Radio(
+          leading: Radio<String>(
             value: wallet.name,
-            groupValue: _defaultWallet,
-            onChanged: (dynamic _) => saveDefaultWallet(wallet.name),
           ),
         ),
       );
@@ -99,16 +97,24 @@ class _AppSettingsDefaultWalletScreenState
         child: Align(
           child: PeerContainer(
             noSpacers: true,
-            child: Column(
-              children: _availableWallets.isEmpty
-                  ? [
-                      Text(
-                        AppLocalizations.instance.translate(
-                          'wallets_none',
+            child: RadioGroup<String>(
+              groupValue: _defaultWallet.isEmpty ? null : _defaultWallet,
+              onChanged: (value) {
+                if (value != null) {
+                  saveDefaultWallet(value);
+                }
+              },
+              child: Column(
+                children: _availableWallets.isEmpty
+                    ? [
+                        Text(
+                          AppLocalizations.instance.translate(
+                            'wallets_none',
+                          ),
                         ),
-                      ),
-                    ]
-                  : generateDefaultWallets(),
+                      ]
+                    : generateDefaultWallets(),
+              ),
             ),
           ),
         ),

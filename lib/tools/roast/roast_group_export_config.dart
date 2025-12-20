@@ -159,10 +159,12 @@ class ROASTGroupExportConfig {
         );
       }
       final filename = ROASTConfigUtils.extractFilename(filePath);
-      await Share.shareXFiles(
-        [XFile(filePath)],
-        text: 'ROAST Group Configuration',
-        subject: 'Share ROAST Group Configuration - $filename',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(filePath)],
+          text: 'ROAST Group Configuration',
+          subject: 'Share ROAST Group Configuration - $filename',
+        ),
       );
       await ROASTConfigUtils.deleteFile(filePath);
     } catch (e) {

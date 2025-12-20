@@ -41,6 +41,7 @@ class RequestSignatureTab extends StatefulWidget {
 
 class _RequestSignatureTabState extends State<RequestSignatureTab> {
   final _formKey = GlobalKey<FormState>();
+  final _derivedAddressFieldKey = GlobalKey<FormFieldState<int>>();
   final _recipientController = TextEditingController();
   final _amountController = TextEditingController();
   bool _enterRecipientAndAmount = false;
@@ -248,7 +249,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
                       // Group key dropdown
                       DropdownButtonFormField<cl.ECCompressedPublicKey>(
-                        value: _selectedGroupKey,
+                        initialValue: _selectedGroupKey,
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.key,
@@ -275,14 +276,18 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
                         }).toList(),
                         onChanged: hasKeys && !_enterRecipientAndAmount
                             ? (value) {
+                                final indices =
+                                    _getDerivedIndicesForKey(value);
+                                final nextIndex =
+                                    indices.isNotEmpty ? indices.first : null;
                                 setState(() {
                                   _selectedGroupKey = value;
                                   // Reset and update derived address when group key changes
-                                  final indices =
-                                      _getDerivedIndicesForKey(value);
                                   _selectedDerivationIndex =
-                                      indices.isNotEmpty ? indices.first : null;
+                                      nextIndex;
                                 });
+                                _derivedAddressFieldKey.currentState
+                                    ?.didChange(nextIndex);
                               }
                             : null,
                         validator: (value) {
@@ -299,7 +304,8 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
                       // Derived address dropdown
                       DropdownButtonFormField<int>(
-                        value: _selectedDerivationIndex,
+                        key: _derivedAddressFieldKey,
+                        initialValue: _selectedDerivationIndex,
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.account_balance_wallet,

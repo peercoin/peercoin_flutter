@@ -26,7 +26,7 @@ class MyTheme {
         ),
       ),
       appBarTheme: AppBarTheme(
-        color: LightColors.green,
+        backgroundColor: LightColors.green,
         foregroundColor: LightColors.white,
       ),
       cardTheme: CardThemeData(

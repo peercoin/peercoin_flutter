@@ -447,8 +447,10 @@ class _ROASTWalletHomeScreenState extends State<ROASTWalletHomeScreen> {
       return;
     }
 
-    Share.share(
-      _roastWallet.clientConfig!.group.yaml,
+    SharePlus.instance.share(
+      ShareParams(
+        text: _roastWallet.clientConfig!.group.yaml,
+      ),
     );
   }
 

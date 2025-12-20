@@ -137,7 +137,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                                   ),
                                 ),
                                 value: _dataFeedAllowed,
-                                activeColor: Colors.white,
+                                activeThumbColor: Colors.white,
                                 inactiveThumbColor: Colors.grey,
                                 onChanged: (newState) =>
                                     togglePriceTickerHandler(newState),
@@ -174,7 +174,7 @@ class _SetupDataFeedsScreenState extends State<SetupDataFeedsScreen> {
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   value: _bgSyncdAllowed,
-                                  activeColor: Colors.white,
+                                  activeThumbColor: Colors.white,
                                   inactiveThumbColor: Colors.grey,
                                   onChanged: (newState) =>
                                       toggleBGSyncHandler(newState),

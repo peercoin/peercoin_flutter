@@ -95,7 +95,9 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               text: AppLocalizations.instance.translate(
                 'addressbook_swipe_share',
               ),
-              action: () => Share.share(ourName),
+              action: () => SharePlus.instance.share(
+                ShareParams(text: ourName),
+              ),
             ),
             const SizedBox(
               height: 25,
@@ -158,7 +160,9 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               text: AppLocalizations.instance.translate(
                 'addressbook_swipe_share',
               ),
-              action: () => Share.share(id.toString()),
+              action: () => SharePlus.instance.share(
+                ShareParams(text: id.toString()),
+              ),
             ),
             const SizedBox(
               height: 25,
@@ -221,7 +225,9 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               text: AppLocalizations.instance.translate(
                 'addressbook_swipe_share',
               ),
-              action: () => Share.share(pubKey),
+              action: () => SharePlus.instance.share(
+                ShareParams(text: pubKey),
+              ),
             ),
             const SizedBox(
               height: 30,
@@ -272,7 +278,9 @@ class SetupParticipantsSharePubKeyBottomSheet extends StatelessWidget {
               text: AppLocalizations.instance.translate(
                 'roast_setup_share_participant_qr_share',
               ),
-              action: () => Share.share(participantJson),
+              action: () => SharePlus.instance.share(
+                ShareParams(text: participantJson),
+              ),
             ),
             const SizedBox(
               height: 20,
