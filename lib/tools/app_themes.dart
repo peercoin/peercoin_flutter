@@ -100,7 +100,7 @@ class MyTheme {
         brightness: Brightness.light,
         tertiary: LightColors.white,
       ).copyWith(surface: LightColors.white).copyWith(error: LightColors.red),
-      bottomAppBarTheme: const BottomAppBarTheme(color: Color(0x003cb054)),
+      bottomAppBarTheme: const BottomAppBarThemeData(color: Color(0x003cb054)),
     ),
     ThemeMode.dark: ThemeData.dark().copyWith(
       cardColor: DarkColors.green,
@@ -217,7 +217,7 @@ class MyTheme {
         brightness: Brightness.dark,
         tertiary: DarkColors.white,
       ).copyWith(surface: DarkColors.green).copyWith(error: DarkColors.red),
-      bottomAppBarTheme: const BottomAppBarTheme(color: Color(0x000D1821)),
+      bottomAppBarTheme: const BottomAppBarThemeData(color: Color(0x000D1821)),
     ),
   };
 
