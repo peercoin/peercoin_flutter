@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.0"
+  astute_logger:
+    dependency: "direct main"
+    description:
+      name: astute_logger
+      sha256: "84430c9ea97a73dbf62ef5e814e436fd8c9278d286794db7944df98f1836a684"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   async:
     dependency: transitive
     description:
@@ -520,15 +528,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_logs:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "42949f2d7b4f5d8f5d7771d40d5497517da0a884"
-      url: "https://github.com/ced1check/flutter_logs"
-    source: git
-    version: "2.2.1"
   flutter_markdown:
     dependency: "direct main"
     description:

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 
 import '../models/hive/app_options.dart';
+import '../tools/logger_wrapper.dart';
 import 'encrypted_box_provider.dart';
 
 class AppSettingsProvider with ChangeNotifier {
@@ -14,6 +15,7 @@ class AppSettingsProvider with ChangeNotifier {
   late SharedPreferences _sharedPrefs;
   String? _selectedLang;
   bool camerasAvailble = false;
+  bool _debugLogsEnabled = false;
   AppSettingsProvider(this._encryptedBox);
 
   Future<void> init([bool fromSetup = false]) async {
@@ -22,6 +24,9 @@ class AppSettingsProvider with ChangeNotifier {
       _appOptions = await optionsBox!.get('appOptions');
     }
     _sharedPrefs = await SharedPreferences.getInstance();
+    _debugLogsEnabled =
+        _sharedPrefs.getBool(LoggerWrapper.debugLogsPreferenceKey) ?? false;
+    await LoggerWrapper.setLoggingEnabled(_debugLogsEnabled);
 
     if (!kIsWeb) {
       try {
@@ -38,6 +43,9 @@ class AppSettingsProvider with ChangeNotifier {
         await _encryptedBox.getGenericBox('optionsBox') as Box<dynamic>;
     await optionsBox.put('appOptions', AppOptionsStore(allowBiometrics));
     await _sharedPrefs.setString('language_code', lang);
+    await _sharedPrefs.setBool(LoggerWrapper.debugLogsPreferenceKey, false);
+    _debugLogsEnabled = false;
+    await LoggerWrapper.setLoggingEnabled(false);
   }
 
   bool get biometricsAllowed {
@@ -51,6 +59,17 @@ class AppSettingsProvider with ChangeNotifier {
 
   Map<String, bool>? get authenticationOptions {
     return _appOptions.authenticationOptions;
+  }
+
+  bool get debugLogsEnabled {
+    return _debugLogsEnabled;
+  }
+
+  Future<void> setDebugLogsEnabled(bool enabled) async {
+    _debugLogsEnabled = enabled;
+    await _sharedPrefs.setBool(LoggerWrapper.debugLogsPreferenceKey, enabled);
+    await LoggerWrapper.setLoggingEnabled(enabled);
+    notifyListeners();
   }
 
   String? get selectedLang {

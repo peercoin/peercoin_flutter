@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_logs/flutter_logs.dart';
-
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +66,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_initial) return Container();
+
+    final logsEnabled = _settings.debugLogsEnabled;
 
     return Scaffold(
       appBar: AppBar(
@@ -157,24 +157,37 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 if (!kIsWeb)
                   ExpansionTile(
                     title: Text(
-                      AppLocalizations.instance.translate('app_settings_logs'),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    childrenPadding: const EdgeInsets.all(10),
-                    children: [
-                      Text(
-                        AppLocalizations.instance
-                            .translate('app_settings_description'),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      PeerButton(
-                        text: AppLocalizations.instance
-                            .translate('app_settings_logs_export'),
-                        action: () => FlutterLogs.exportLogs(),
-                      ),
-                    ],
+                    AppLocalizations.instance.translate('app_settings_logs'),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
+                  childrenPadding: const EdgeInsets.all(10),
+                  children: [
+                    SwitchListTile(
+                      title: Text(
+                        AppLocalizations.instance
+                            .translate('app_settings_logs_toggle'),
+                      ),
+                      value: logsEnabled,
+                      onChanged: (newValue) =>
+                          _settings.setDebugLogsEnabled(newValue),
+                    ),
+                    Text(
+                      AppLocalizations.instance.translate(
+                        logsEnabled
+                            ? 'app_settings_description'
+                            : 'app_settings_logs_disabled',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    PeerButton(
+                      text: AppLocalizations.instance
+                          .translate('app_settings_logs_export'),
+                      action: () => shareDebugLogs(),
+                      disabled: !logsEnabled,
+                    ),
+                  ],
+                ),
                 if (!kIsWeb)
                   if (Platform.isIOS)
                     ExpansionTile(

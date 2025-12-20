@@ -63,6 +63,8 @@
   "app_settings_language_restart": "Restarting the app is required.",
   "app_settings_logs": "Debug Logs",
   "app_settings_description": "These logs contain sensitive information.\nBesides them not containing private keys, be mindful who you might share these logs with.",
+  "app_settings_logs_toggle": "Enable debug logs",
+  "app_settings_logs_disabled": "Debug logging is off. Enable it to start collecting logs before exporting.",
   "app_settings_logs_export": "Export debug logs",
   "app_settings_newWallet": "Require to add new wallet",
   "app_settings_notifications": "Notifications",
