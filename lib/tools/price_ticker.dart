@@ -41,7 +41,6 @@ class PriceTicker {
     'BAM': 'KM',
     'BBD': '\$',
     'BDT': '৳',
-    'BGN': 'лв',
     'BHD': 'ب.د',
     'BIF': 'FBu',
     'BMD': '\$',
