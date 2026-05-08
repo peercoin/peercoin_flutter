@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 
 import 'package:flutter/material.dart';
 import 'package:peercoin/screens/settings/settings_helpers.dart';
@@ -11,7 +10,7 @@ import '../../providers/wallet_provider.dart';
 import '../../providers/app_settings_provider.dart';
 import '../../tools/app_localizations.dart';
 import '../../tools/auth.dart';
-import '../../tools/debug_log_handler.dart';
+import '../../tools/logger_wrapper.dart';
 import '../../tools/share_wrapper.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/double_tab_to_clipboard.dart';
@@ -39,8 +38,6 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
       await _settings.init(); //only required in home widget
       await _activeWallets.init();
-
-      await initDebugLogHandler();
 
       setState(() {
         _initial = false;
@@ -171,7 +168,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       PeerButton(
                         text: AppLocalizations.instance
                             .translate('app_settings_logs_export'),
-                        action: () => FlutterLogs.exportLogs(),
+                        action: () => LoggerWrapper.exportLogs(),
                       ),
                     ],
                   ),

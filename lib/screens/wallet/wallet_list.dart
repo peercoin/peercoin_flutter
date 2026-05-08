@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peercoin/screens/wallet/roast/roast_wallet_home.dart';
@@ -20,7 +19,6 @@ import '../../tools/app_localizations.dart';
 import '../../tools/app_routes.dart';
 import '../../tools/auth.dart';
 import '../../tools/background_sync.dart';
-import '../../tools/debug_log_handler.dart';
 import '../../tools/periodic_reminders.dart';
 import '../../tools/price_ticker.dart';
 import '../../tools/session_checker.dart';
@@ -557,9 +555,8 @@ class _WalletListScreenState extends State<WalletListScreen>
       e.toString(),
     );
 
-    //automatically toggle exportLogs for this event, since it is very likely app settings can not be accessed
-    await initDebugLogHandler();
-    FlutterLogs.exportLogs();
+    // Automatically export logs for this event, since app settings may be inaccessible.
+    await LoggerWrapper.exportLogs();
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

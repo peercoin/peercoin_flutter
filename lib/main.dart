@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frosty/frosty.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -176,21 +175,7 @@ void main() async {
 
   if (!kIsWeb) {
     //init logger
-    await FlutterLogs.initLogs(
-      logLevelsEnabled: [
-        LogLevel.INFO,
-        LogLevel.WARNING,
-        LogLevel.ERROR,
-        LogLevel.SEVERE,
-      ],
-      timeStampFormat: TimeStampFormat.TIME_FORMAT_READABLE,
-      directoryStructure: DirectoryStructure.FOR_DATE,
-      logFileExtension: LogFileExtension.LOG,
-      logsWriteDirectoryName: 'MyLogs',
-      logsExportDirectoryName: 'MyLogs/Exported',
-      debugFileOperations: true,
-      isDebuggable: true,
-    );
+    await LoggerWrapper.initLogs();
 
     LoggerWrapper.logInfo('main', 'initLogs', 'Init logs..');
 
