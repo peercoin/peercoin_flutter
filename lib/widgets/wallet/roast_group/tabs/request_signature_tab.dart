@@ -248,7 +248,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
                       // Group key dropdown
                       DropdownButtonFormField<cl.ECCompressedPublicKey>(
-                        value: _selectedGroupKey,
+                        initialValue: _selectedGroupKey,
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.key,
@@ -299,7 +299,7 @@ class _RequestSignatureTabState extends State<RequestSignatureTab> {
 
                       // Derived address dropdown
                       DropdownButtonFormField<int>(
-                        value: _selectedDerivationIndex,
+                        initialValue: _selectedDerivationIndex,
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.account_balance_wallet,
