@@ -1,17 +1,11 @@
-import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:peercoin/providers/wallet_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../models/available_periodic_reminder_items.dart';
 import '../models/periodic_reminder_item.dart';
 import '../providers/app_settings_provider.dart';
 import 'app_localizations.dart';
-import 'app_routes.dart';
 import 'logger_wrapper.dart';
 
 class PeriodicReminders {
@@ -19,9 +13,6 @@ class PeriodicReminders {
     BuildContext ctx,
     PeriodicReminderItem reminderItem,
   ) async {
-    final walletProvider = ctx.read<WalletProvider>();
-    final listOfAvailableWallets = walletProvider.availableWalletKeys;
-
     //show alert
     await showDialog(
       context: ctx,
@@ -35,46 +26,6 @@ class PeriodicReminders {
             AppLocalizations.instance.translate(reminderItem.body),
           ),
           actions: <Widget>[
-            if (reminderItem.id == 'donate')
-              TextButton(
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  var url = 'https://ppc.lol/fndtn/';
-                  await canLaunchUrlString(url)
-                      ? await launchUrlString(url)
-                      : throw 'Could not launch $url';
-                  navigator.pop();
-                },
-                child: Text(
-                  AppLocalizations.instance.translate(reminderItem.button),
-                ),
-              ),
-            if (reminderItem.id == 'donate' && !kIsWeb)
-              listOfAvailableWallets.contains('peercoin') && !Platform.isIOS
-                  ? TextButton(
-                      onPressed: () async {
-                        final navigator = Navigator.of(context);
-                        final values = walletProvider.availableWalletValues;
-                        final ppcWallet = values.firstWhere(
-                          (element) => element.name == 'peercoin',
-                        );
-
-                        await navigator.popAndPushNamed(
-                          Routes.standardAndWatchOnlyWalletHome,
-                          arguments: {
-                            'wallet': ppcWallet,
-                            'pushedAddress':
-                                'p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre',
-                          },
-                        );
-                      },
-                      child: Text(
-                        AppLocalizations.instance.translate(
-                          'about_donate_button',
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
