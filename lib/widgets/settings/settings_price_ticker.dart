@@ -117,10 +117,8 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
             subtitle: Text(
               '1 PPC = ${PriceTicker.renderPrice(1, currency, "PPC", widget._settings.exchangeRates).toStringAsFixed(6)} $currency',
             ),
-            leading: Radio(
+            leading: Radio<String>(
               value: currency,
-              groupValue: widget._settings.selectedCurrency,
-              onChanged: (dynamic _) => saveCurrency(ctx, currency),
             ),
             trailing: Text(
               PriceTicker.currencySymbols[currency] ?? '',
@@ -149,8 +147,18 @@ class _SettingsPriceTickerState extends State<SettingsPriceTicker> {
                 ),
               )
             : Container(),
-        Column(
-          children: renderCurrencies(context),
+        RadioGroup<String>(
+          groupValue: widget._settings.selectedCurrency.isEmpty
+              ? null
+              : widget._settings.selectedCurrency,
+          onChanged: (currency) {
+            if (currency != null) {
+              saveCurrency(context, currency);
+            }
+          },
+          child: Column(
+            children: renderCurrencies(context),
+          ),
         ),
         renderButton(context),
       ],

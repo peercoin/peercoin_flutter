@@ -389,7 +389,6 @@
     "wallet_scanner_message_scan_finished": "escaneo finalizado para $coinName en $accountNumber",
     "wallet_scanner_message_scan_failed": "el escaneo falló para $coinName en $accountNumber ($e)",
     "currency_BAM": "Marco Convertible de Bosnia y Herzegovina",
-    "currency_BGN": "Lev Búlgaro",
     "currency_BHD": "Dinar Bahreiní",
     "currency_BIF": "Franco Burundés",
     "currency_BND": "Dólar de Brunei",
