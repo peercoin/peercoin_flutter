@@ -95,11 +95,7 @@ class _AppSettingsWalletOrderScreenState
                   child: PeerContainer(
                     noSpacers: true,
                     child: ReorderableListView.builder(
-                      onReorder: (oldIndex, newIndex) async {
-                        if (oldIndex < newIndex) {
-                          newIndex -= 1;
-                        }
-
+                      onReorderItem: (oldIndex, newIndex) async {
                         setState(() {
                           final item = _walletOrder.removeAt(oldIndex);
                           _walletOrder.insert(newIndex, item);
