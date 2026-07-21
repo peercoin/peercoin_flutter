@@ -110,11 +110,8 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           child: _servers.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : ReorderableListView.builder(
-                  onReorder: (oldIndex, newIndex) {
+                  onReorderItem: (oldIndex, newIndex) {
                     if (_servers[oldIndex].connectable == false) return;
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
                     setState(() {
                       final item = _servers.removeAt(oldIndex);
                       _servers.insert(newIndex, item);
