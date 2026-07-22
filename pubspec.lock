@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_fetch
-      sha256: "442e82f508708be89fd0cc7e1dc3b27bc7c6c8c39a47967ccb7ed1c57b9108b5"
+      sha256: a185b471f6ff93c0074e2da98fbdf1e0c5af5a83adb97dfe924a9ef06c9e0175
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.8"
+    version: "1.7.0"
   bip39:
     dependency: "direct main"
     description:
@@ -1694,4 +1694,4 @@ packages:
     version: "2.1.0"
 sdks:
   dart: ">=3.10.0 <4.0.0"
-  flutter: ">=3.27.0"
+  flutter: ">=3.38.0"
