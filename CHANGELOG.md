@@ -1,3 +1,10 @@
+### **1.4.8** (2026-07-22)
+
+- Target Android 16 (API level 36)
+- Remove Bulgarian lev (Bulgaria adopted the euro in January 2026)
+- Remove periodic donation reminder (backup reminder kept)
+- Modernize UI for latest Flutter and fix deprecated APIs
+
 ### **1.4.7** (2025-08-11)
 - Fix qr code scanning for addresses
 
